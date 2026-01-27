@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAITRUST Auth Kit - Example</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="kaitrust-auth-kit.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: #000810;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* Optional: Add background effects */
+        .auth-bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Scanlines */
+        .auth-bg-effects::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 245, 255, 0.015) 2px,
+                rgba(0, 245, 255, 0.015) 4px
+            );
+        }
+
+        /* Grid */
+        .auth-bg-effects::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        #auth-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 440px;
+        }
+
+        /* Config Panel */
+        .config-panel {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 20, 40, 0.95);
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            z-index: 100;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .config-panel h3 {
+            color: #00f5ff;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .config-panel label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .config-panel input[type="checkbox"] {
+            accent-color: #00f5ff;
+        }
+
+        .config-panel button {
+            margin-top: 0.75rem;
+            width: 100%;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, #00f5ff, #0080ff);
+            border: none;
+            border-radius: 6px;
+            color: #000;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .config-panel {
+                position: static;
+                margin-bottom: 1rem;
+                max-width: 440px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-bg-effects"></div>
+
+    <!-- Configuration Panel (for demo) -->
+    <div class="config-panel">
+        <h3><i class="fas fa-cog"></i> Configuration</h3>
+        <label>
+            <input type="checkbox" id="cfg-google" checked> Google
+        </label>
+        <label>
+            <input type="checkbox" id="cfg-apple" checked> Apple
+        </label>
+        <label>
+            <input type="checkbox" id="cfg-microsoft" checked> Microsoft
+        </label>
+        <label>
+            <input type="checkbox" id="cfg-kakao"> Kakao (한국)
+        </label>
+        <label>
+            <input type="checkbox" id="cfg-naver"> Naver (한국)
+        </label>
+        <label>
+            <input type="checkbox" id="cfg-line"> LINE
+        </label>
+        <label>
+            <input type="checkbox" id="cfg-github"> GitHub
+        </label>
+        <hr style="margin: 0.5rem 0; border-color: rgba(0,245,255,0.2);">
+        <label>
+            <input type="checkbox" id="cfg-qr" checked> QR Tab
+        </label>
+        <label>
+            <input type="checkbox" id="cfg-advanced" checked> Advanced Auth
+        </label>
+        <label>
+            <input type="checkbox" id="cfg-dark" checked> Dark Mode
+        </label>
+        <button onclick="applyConfig()">Apply Changes</button>
+    </div>
+
+    <!-- Auth Container -->
+    <div id="auth-container"></div>
+
+    <script src="kaitrust-auth-kit.js"></script>
+    <script>
+        // Initialize with default config
+        let authKit = null;
+
+        function initAuth(config = {}) {
+            // Get selected providers
+            const providers = [];
+            if (document.getElementById('cfg-google').checked) providers.push('google');
+            if (document.getElementById('cfg-apple').checked) providers.push('apple');
+            if (document.getElementById('cfg-microsoft').checked) providers.push('microsoft');
+            if (document.getElementById('cfg-kakao').checked) providers.push('kakao');
+            if (document.getElementById('cfg-naver').checked) providers.push('naver');
+            if (document.getElementById('cfg-line').checked) providers.push('line');
+            if (document.getElementById('cfg-github').checked) providers.push('github');
+
+            // Destroy previous instance
+            if (authKit) {
+                authKit.destroy();
+            }
+
+            // Create new instance
+            authKit = new KaiAuthKit({
+                container: '#auth-container',
+                theme: document.getElementById('cfg-dark').checked ? 'dark' : 'light',
+                showQRTab: document.getElementById('cfg-qr').checked,
+                showAdvanced: document.getElementById('cfg-advanced').checked,
+                socialProviders: providers,
+
+                // Texts (customize for your app)
+                texts: {
+                    title: 'SECURE LOGIN',
+                    subtitle: 'Sign in to your account',
+                    securityLevel: 'SECURITY LEVEL: MAXIMUM',
+                    emailLabel: 'Email or Username',
+                    passwordLabel: 'Password',
+                    loginButton: 'Secure Login',
+                    socialDivider: 'SOCIAL AUTH',
+                    advancedTitle: 'ADVANCED AUTHENTICATION',
+                    passkey: 'Passkey / FIDO2',
+                    otp: 'OTP Verification',
+                    sso: 'Enterprise SSO (SAML/OIDC)',
+                    noAccount: "Don't have an account?",
+                    signUp: 'Sign up',
+                    qrTabLabel: 'QR Code',
+                    credentialsTabLabel: 'Login'
+                },
+
+                // Callbacks
+                onLogin: (data) => {
+                    console.log('Login attempt:', data);
+                    alert(`Login attempt:\nEmail: ${data.email}\nRemember: ${data.remember}`);
+                },
+
+                onSocialLogin: (provider) => {
+                    console.log('Social login:', provider);
+                    alert(`Social login with: ${provider}\n\nIn production, this would redirect to OAuth provider.`);
+
+                    // Example OAuth redirect (uncomment for production):
+                    // window.location.href = `/auth/${provider}`;
+                },
+
+                onPasskey: () => {
+                    console.log('Passkey authentication');
+                    alert('Passkey authentication requested.\n\nThis requires WebAuthn implementation on your server.');
+                },
+
+                onOTP: () => {
+                    console.log('OTP verification');
+                    const code = prompt('Enter your 6-digit OTP code:');
+                    if (code) {
+                        alert(`OTP Code entered: ${code}\n\nIn production, this would verify against your TOTP server.`);
+                    }
+                },
+
+                onSSO: () => {
+                    console.log('SSO login');
+                    const domain = prompt('Enter your company email domain (e.g., acme.com):');
+                    if (domain) {
+                        alert(`SSO for domain: ${domain}\n\nIn production, this would:\n1. Look up IdP config\n2. Redirect to company's IdP\n3. Handle SAML/OIDC callback`);
+                    }
+                },
+
+                onForgotPassword: () => {
+                    const email = document.getElementById('kai-auth-email')?.value || '';
+                    alert(`Password reset requested for: ${email || '(no email entered)'}\n\nIn production, this would send a reset email.`);
+                },
+
+                onSignUp: () => {
+                    alert('Sign up clicked!\n\nIn production, this would navigate to registration page.');
+                },
+
+                onQRGenerate: (container) => {
+                    // In production, generate real QR from server
+                    console.log('QR code container:', container);
+                }
+            });
+        }
+
+        function applyConfig() {
+            initAuth();
+        }
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            initAuth();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,733 @@
+/**
+ * ============================================================================
+ * KAITRUST AUTH KIT - Universal Authentication Component
+ * ============================================================================
+ * Version: 1.0.0
+ * Author: KAITRUST (Korea AI Trust Association)
+ * License: MIT
+ *
+ * Yandex-grade authentication UI component.
+ * Supports: Google, Apple, Microsoft, Kakao, Naver, LINE,
+ *           Passkey/FIDO2, OTP, SSO, QR Code
+ * ============================================================================
+ */
+
+/* ============================================================================
+   CSS VARIABLES - Customize these for your brand
+   ============================================================================ */
+:root {
+    /* Primary Colors */
+    --kai-auth-primary: #00f5ff;
+    --kai-auth-secondary: #0080ff;
+    --kai-auth-accent: #a855f7;
+
+    /* Status Colors */
+    --kai-auth-success: #22c55e;
+    --kai-auth-warning: #fbbf24;
+    --kai-auth-error: #ef4444;
+
+    /* Background */
+    --kai-auth-bg-dark: #000810;
+    --kai-auth-bg-panel: rgba(0, 20, 40, 0.9);
+    --kai-auth-border: rgba(0, 245, 255, 0.3);
+
+    /* Text Colors */
+    --kai-auth-text-primary: #e2e8f0;
+    --kai-auth-text-secondary: #94a3b8;
+    --kai-auth-text-muted: #64748b;
+
+    /* Social Brand Colors */
+    --kai-auth-google: #EA4335;
+    --kai-auth-apple: #ffffff;
+    --kai-auth-microsoft: #00A4EF;
+    --kai-auth-kakao: #FEE500;
+    --kai-auth-naver: #03C75A;
+    --kai-auth-line: #00B900;
+    --kai-auth-github: #ffffff;
+    --kai-auth-facebook: #1877F2;
+    --kai-auth-twitter: #1DA1F2;
+
+    /* Spacing */
+    --kai-auth-spacing-xs: 0.25rem;
+    --kai-auth-spacing-sm: 0.5rem;
+    --kai-auth-spacing-md: 1rem;
+    --kai-auth-spacing-lg: 1.5rem;
+    --kai-auth-spacing-xl: 2rem;
+
+    /* Border Radius */
+    --kai-auth-radius-sm: 8px;
+    --kai-auth-radius-md: 12px;
+    --kai-auth-radius-lg: 16px;
+
+    /* Transitions */
+    --kai-auth-transition: all 0.3s ease;
+}
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+.kai-auth-container {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--kai-auth-text-primary);
+    line-height: 1.5;
+}
+
+.kai-auth-container * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ============================================================================
+   BACKGROUND EFFECTS (Optional - for full-page auth)
+   ============================================================================ */
+.kai-auth-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--kai-auth-bg-dark);
+    z-index: -1;
+}
+
+.kai-auth-bg-scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 245, 255, 0.015) 2px,
+        rgba(0, 245, 255, 0.015) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.kai-auth-bg-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ============================================================================
+   AUTH BOX - Main Container
+   ============================================================================ */
+.kai-auth-box {
+    width: 100%;
+    max-width: 440px;
+    background: var(--kai-auth-bg-panel);
+    border: 1px solid var(--kai-auth-border);
+    border-radius: var(--kai-auth-radius-lg);
+    padding: var(--kai-auth-spacing-xl);
+    box-shadow:
+        0 0 40px rgba(0, 245, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    animation: kai-auth-glow-pulse 4s infinite;
+}
+
+@keyframes kai-auth-glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 245, 255, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(0, 245, 255, 0.4); }
+}
+
+/* Compact variant */
+.kai-auth-box.compact {
+    padding: var(--kai-auth-spacing-lg);
+    max-width: 380px;
+}
+
+/* No animation variant */
+.kai-auth-box.no-glow {
+    animation: none;
+}
+
+/* ============================================================================
+   AUTH HEADER
+   ============================================================================ */
+.kai-auth-header {
+    text-align: center;
+    margin-bottom: var(--kai-auth-spacing-xl);
+}
+
+.kai-auth-title {
+    font-family: 'Orbitron', 'JetBrains Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--kai-auth-primary), #fff, var(--kai-auth-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--kai-auth-spacing-sm);
+}
+
+.kai-auth-subtitle {
+    color: var(--kai-auth-text-muted);
+    font-size: 0.9rem;
+}
+
+.kai-auth-security-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--kai-auth-spacing-sm);
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--kai-auth-success);
+    margin-top: 0.75rem;
+}
+
+/* ============================================================================
+   TABS
+   ============================================================================ */
+.kai-auth-tabs {
+    display: flex;
+    gap: var(--kai-auth-spacing-sm);
+    margin-bottom: var(--kai-auth-spacing-lg);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--kai-auth-radius-sm);
+    padding: 4px;
+}
+
+.kai-auth-tab {
+    flex: 1;
+    padding: 0.7rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--kai-auth-text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--kai-auth-transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--kai-auth-spacing-sm);
+}
+
+.kai-auth-tab:hover:not(.active) {
+    color: var(--kai-auth-primary);
+}
+
+.kai-auth-tab.active {
+    background: linear-gradient(135deg, var(--kai-auth-primary), var(--kai-auth-secondary));
+    color: var(--kai-auth-bg-dark);
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+}
+
+/* ============================================================================
+   FORM ELEMENTS
+   ============================================================================ */
+.kai-auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.kai-auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--kai-auth-spacing-sm);
+}
+
+.kai-auth-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--kai-auth-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--kai-auth-spacing-sm);
+}
+
+.kai-auth-label i,
+.kai-auth-label svg {
+    color: var(--kai-auth-primary);
+    font-size: 0.75rem;
+}
+
+.kai-auth-input-wrap {
+    position: relative;
+}
+
+.kai-auth-input-wrap i,
+.kai-auth-input-wrap svg {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--kai-auth-text-muted);
+    transition: color 0.3s;
+    font-size: 0.9rem;
+}
+
+.kai-auth-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--kai-auth-radius-sm);
+    color: #fff;
+    font-size: 0.95rem;
+    transition: var(--kai-auth-transition);
+}
+
+.kai-auth-input:focus {
+    outline: none;
+    border-color: var(--kai-auth-primary);
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
+}
+
+.kai-auth-input:focus ~ i,
+.kai-auth-input-wrap:focus-within i {
+    color: var(--kai-auth-primary);
+}
+
+.kai-auth-input::placeholder {
+    color: #475569;
+}
+
+/* Form Options Row */
+.kai-auth-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.kai-auth-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--kai-auth-spacing-sm);
+    color: var(--kai-auth-text-secondary);
+    cursor: pointer;
+}
+
+.kai-auth-checkbox input {
+    accent-color: var(--kai-auth-primary);
+}
+
+.kai-auth-link {
+    color: var(--kai-auth-primary);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.kai-auth-link:hover {
+    color: var(--kai-auth-accent);
+}
+
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+.kai-auth-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--kai-auth-primary), var(--kai-auth-secondary));
+    border: none;
+    border-radius: var(--kai-auth-radius-sm);
+    color: var(--kai-auth-bg-dark);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--kai-auth-transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--kai-auth-spacing-sm);
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.3);
+}
+
+.kai-auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(0, 245, 255, 0.5);
+}
+
+.kai-auth-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Secondary button */
+.kai-auth-btn.secondary {
+    background: transparent;
+    border: 1px solid var(--kai-auth-border);
+    color: var(--kai-auth-text-primary);
+    box-shadow: none;
+}
+
+.kai-auth-btn.secondary:hover {
+    background: rgba(0, 245, 255, 0.1);
+    border-color: var(--kai-auth-primary);
+}
+
+/* ============================================================================
+   DIVIDER
+   ============================================================================ */
+.kai-auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: var(--kai-auth-spacing-lg) 0;
+}
+
+.kai-auth-divider::before,
+.kai-auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--kai-auth-border), transparent);
+}
+
+.kai-auth-divider span {
+    color: var(--kai-auth-text-muted);
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ============================================================================
+   SOCIAL LOGIN GRID
+   ============================================================================ */
+.kai-auth-social-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.kai-auth-social-grid.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.kai-auth-social-grid.cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Social Button */
+.kai-auth-social {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 1rem 0.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--kai-auth-radius-md);
+    color: var(--kai-auth-text-secondary);
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: var(--kai-auth-transition);
+}
+
+.kai-auth-social i,
+.kai-auth-social svg {
+    font-size: 1.4rem;
+}
+
+.kai-auth-social:hover {
+    border-color: var(--kai-auth-primary);
+    background: rgba(0, 245, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+/* Provider-specific styles */
+.kai-auth-social.google:hover { border-color: var(--kai-auth-google); }
+.kai-auth-social.google i { color: var(--kai-auth-google); }
+
+.kai-auth-social.apple:hover { border-color: var(--kai-auth-apple); }
+.kai-auth-social.apple i { color: var(--kai-auth-apple); }
+
+.kai-auth-social.microsoft:hover { border-color: var(--kai-auth-microsoft); }
+.kai-auth-social.microsoft i { color: var(--kai-auth-microsoft); }
+
+.kai-auth-social.kakao {
+    background: rgba(254, 229, 0, 0.1);
+}
+.kai-auth-social.kakao:hover {
+    border-color: var(--kai-auth-kakao);
+    background: rgba(254, 229, 0, 0.2);
+}
+.kai-auth-social.kakao i { color: var(--kai-auth-kakao); }
+
+.kai-auth-social.naver {
+    background: rgba(3, 199, 90, 0.1);
+}
+.kai-auth-social.naver:hover {
+    border-color: var(--kai-auth-naver);
+    background: rgba(3, 199, 90, 0.2);
+}
+.kai-auth-social.naver .naver-n {
+    color: var(--kai-auth-naver);
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+.kai-auth-social.line {
+    background: rgba(0, 185, 0, 0.1);
+}
+.kai-auth-social.line:hover { border-color: var(--kai-auth-line); }
+.kai-auth-social.line i { color: var(--kai-auth-line); }
+
+.kai-auth-social.github:hover { border-color: var(--kai-auth-github); }
+.kai-auth-social.github i { color: var(--kai-auth-github); }
+
+.kai-auth-social.facebook:hover { border-color: var(--kai-auth-facebook); }
+.kai-auth-social.facebook i { color: var(--kai-auth-facebook); }
+
+.kai-auth-social.twitter:hover { border-color: var(--kai-auth-twitter); }
+.kai-auth-social.twitter i { color: var(--kai-auth-twitter); }
+
+/* ============================================================================
+   ADVANCED AUTH METHODS
+   ============================================================================ */
+.kai-auth-advanced {
+    margin-top: var(--kai-auth-spacing-lg);
+}
+
+.kai-auth-advanced-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--kai-auth-text-muted);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: var(--kai-auth-spacing-sm);
+}
+
+.kai-auth-advanced-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--kai-auth-border);
+}
+
+.kai-auth-advanced-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.kai-auth-advanced-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    background: linear-gradient(135deg, rgba(0, 20, 40, 0.8), rgba(0, 40, 60, 0.6));
+    border: 1px solid var(--kai-auth-border);
+    border-radius: var(--kai-auth-radius-sm);
+    color: var(--kai-auth-text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--kai-auth-transition);
+}
+
+.kai-auth-advanced-btn i {
+    font-size: 1.1rem;
+    color: var(--kai-auth-primary);
+}
+
+.kai-auth-advanced-btn:hover {
+    border-color: var(--kai-auth-primary);
+    background: rgba(0, 245, 255, 0.1);
+    color: #fff;
+}
+
+/* Full-width variant */
+.kai-auth-advanced-btn.full-width {
+    grid-column: span 2;
+    justify-content: center;
+}
+
+/* Enterprise SSO variant */
+.kai-auth-advanced-btn.enterprise {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1));
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+.kai-auth-advanced-btn.enterprise i {
+    color: var(--kai-auth-accent);
+}
+
+.kai-auth-advanced-btn.enterprise:hover {
+    border-color: var(--kai-auth-accent);
+}
+
+/* ============================================================================
+   QR CODE
+   ============================================================================ */
+.kai-auth-qr {
+    text-align: center;
+    padding: var(--kai-auth-spacing-xl);
+}
+
+.kai-auth-qr-code {
+    width: 180px;
+    height: 180px;
+    background: #fff;
+    border-radius: var(--kai-auth-radius-md);
+    margin: 0 auto var(--kai-auth-spacing-lg);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kai-auth-qr-code img,
+.kai-auth-qr-code svg,
+.kai-auth-qr-code canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.kai-auth-qr-text {
+    color: var(--kai-auth-text-muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.kai-auth-qr-text strong {
+    color: var(--kai-auth-primary);
+}
+
+.kai-auth-qr-hint {
+    color: #475569;
+    font-size: 0.75rem;
+    margin-top: var(--kai-auth-spacing-md);
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+.kai-auth-footer {
+    text-align: center;
+    margin-top: var(--kai-auth-spacing-lg);
+    padding-top: var(--kai-auth-spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.kai-auth-footer p {
+    color: var(--kai-auth-text-muted);
+    font-size: 0.85rem;
+}
+
+.kai-auth-footer a {
+    color: var(--kai-auth-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.kai-auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Security badges */
+.kai-auth-badges {
+    display: flex;
+    justify-content: center;
+    gap: var(--kai-auth-spacing-lg);
+    margin-top: var(--kai-auth-spacing-lg);
+}
+
+.kai-auth-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--kai-auth-text-muted);
+}
+
+.kai-auth-badge i {
+    color: var(--kai-auth-success);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+@media (max-width: 768px) {
+    .kai-auth-box {
+        padding: var(--kai-auth-spacing-lg);
+        border-radius: var(--kai-auth-radius-md);
+    }
+
+    .kai-auth-social-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kai-auth-social-grid.cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kai-auth-badges {
+        flex-wrap: wrap;
+        gap: var(--kai-auth-spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .kai-auth-social-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kai-auth-advanced-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kai-auth-advanced-btn.full-width {
+        grid-column: span 1;
+    }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+.kai-auth-hidden { display: none !important; }
+.kai-auth-visible { display: block !important; }
+.kai-auth-center { text-align: center; }
+.kai-auth-mt-sm { margin-top: var(--kai-auth-spacing-sm); }
+.kai-auth-mt-md { margin-top: var(--kai-auth-spacing-md); }
+.kai-auth-mt-lg { margin-top: var(--kai-auth-spacing-lg); }
+.kai-auth-mb-sm { margin-bottom: var(--kai-auth-spacing-sm); }
+.kai-auth-mb-md { margin-bottom: var(--kai-auth-spacing-md); }
+.kai-auth-mb-lg { margin-bottom: var(--kai-auth-spacing-lg); }
+
+/* ============================================================================
+   DARK/LIGHT MODE SUPPORT
+   ============================================================================ */
+.kai-auth-box.light-mode {
+    --kai-auth-bg-panel: rgba(255, 255, 255, 0.95);
+    --kai-auth-text-primary: #1a1a2e;
+    --kai-auth-text-secondary: #475569;
+    --kai-auth-text-muted: #64748b;
+    --kai-auth-border: rgba(0, 128, 255, 0.3);
+    background: var(--kai-auth-bg-panel);
+    color: var(--kai-auth-text-primary);
+}
+
+.kai-auth-box.light-mode .kai-auth-input {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1a1a2e;
+}
+
+.kai-auth-box.light-mode .kai-auth-social {
+    background: rgba(0, 0, 0, 0.03);
+}
