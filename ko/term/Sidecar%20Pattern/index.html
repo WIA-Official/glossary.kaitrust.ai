@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidecar Pattern | KAITRUST AI 백과사전</title>
-    <meta name="description" content="메인 컨테이너와 함께 배포되는 보조 컨테이너 패턴">
-    <meta name="keywords" content="Sidecar Pattern, , AI 용어, KAITRUST, AI 백과사전, 아키텍처">
+    <title>Sidecar Pattern (사이드카 패턴) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Sidecar Pattern은 메인 애플리케이션 컨테이너 옆에 보조 컨테이너를 배치하여 로깅, 모니터링, 프록시 등의 기능을 분리하는 마이크로서비스 아키텍처 패턴입니다.">
+    <meta name="keywords" content="Sidecar Pattern, 사이드카 패턴, Kubernetes, Pod, Envoy, Service Mesh, Istio, 마이크로서비스, 컨테이너, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Sidecar%20Pattern/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Sidecar%20Pattern/">
-    <meta property="og:title" content="Sidecar Pattern | KAITRUST AI 백과사전">
-    <meta property="og:description" content="메인 컨테이너와 함께 배포되는 보조 컨테이너 패턴">
+    <meta property="og:title" content="Sidecar Pattern (사이드카 패턴) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Sidecar Pattern은 메인 애플리케이션 옆에 보조 컨테이너를 배치하여 부가 기능을 분리하는 아키텍처 패턴입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Sidecar Pattern | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="메인 컨테이너와 함께 배포되는 보조 컨테이너 패턴">
+    <meta name="twitter:title" content="Sidecar Pattern (사이드카 패턴) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Sidecar Pattern은 메인 애플리케이션 옆에 보조 컨테이너를 배치하여 부가 기능을 분리하는 아키텍처 패턴입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Sidecar Pattern",
-        "description": "메인 컨테이너와 함께 배포되는 보조 컨테이너 패턴",
+        "alternateName": "사이드카 패턴",
+        "description": "Sidecar Pattern은 메인 애플리케이션 컨테이너 옆에 보조 컨테이너를 배치하여 로깅, 모니터링, 프록시 등의 기능을 분리하는 마이크로서비스 아키텍처 패턴입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +276,9 @@
                 <span>아키텍처</span>
             </div>
             <h1 class="term-title">Sidecar Pattern</h1>
-            
+            <p class="term-english">사이드카 패턴</p>
             <div class="term-description">
-                <p>메인 컨테이너와 함께 배포되는 보조 컨테이너 패턴</p>
+                <p>메인 애플리케이션 컨테이너 옆에 보조 컨테이너(사이드카)를 배치하여 로깅, 모니터링, 프록시, 보안 등의 횡단 관심사(Cross-cutting Concerns)를 분리하는 마이크로서비스 아키텍처 패턴입니다. Kubernetes의 Pod에서 하나의 Pod 안에 여러 컨테이너를 배치하는 방식으로 구현됩니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,488 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>패턴 원리:</strong> 사이드카 패턴은 오토바이 옆에 부착된 사이드카에서 이름을 따왔습니다. 메인 애플리케이션(오토바이)은 비즈니스 로직에만 집중하고, 부가 기능(승객)은 사이드카 컨테이너가 담당합니다. 두 컨테이너는 같은 네트워크 네임스페이스와 스토리지를 공유하므로 localhost로 통신하고 파일 시스템을 공유할 수 있습니다.</p>
+                <p><strong>사용 시나리오:</strong> 가장 대표적인 사용 사례는 Service Mesh(Istio, Linkerd)에서 Envoy 프록시를 사이드카로 배치하는 것입니다. 모든 네트워크 트래픽이 사이드카를 통과하면서 mTLS 암호화, 트래픽 제어, 관측성(Observability)이 자동으로 적용됩니다. 로그 수집(Fluentd), 설정 동기화(Config Sync), 시크릿 주입(Vault Agent) 등도 사이드카로 구현합니다.</p>
+                <p><strong>장점:</strong> 애플리케이션 코드 수정 없이 기능을 추가할 수 있습니다. 언어/프레임워크에 독립적이므로 폴리글랏 환경에서 일관된 인프라 기능을 제공합니다. 사이드카만 업그레이드하면 되므로 유지보수가 쉽고, 관심사 분리로 테스트와 디버깅이 용이합니다.</p>
+                <p><strong>단점:</strong> 컨테이너 수가 늘어나 리소스 오버헤드가 발생합니다. Pod 내 컨테이너 간 시작 순서 관리가 복잡하고, 사이드카 장애가 메인 애플리케이션에 영향을 줄 수 있습니다. 네트워크 홉이 추가되어 지연 시간이 미세하게 증가합니다.</p>
+                <p>Kubernetes 1.28부터는 네이티브 사이드카 컨테이너가 지원되어 initContainer와 결합한 사이드카의 시작/종료 순서 문제가 해결되었습니다. AWS App Mesh, Google Cloud Traffic Director 등 클라우드 벤더도 사이드카 기반 서비스 메시를 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="k8s">Kubernetes Pod</button>
+                <button class="code-tab" data-lang="envoy">Envoy Sidecar</button>
+                <button class="code-tab" data-lang="logging">로깅 사이드카</button>
+            </div>
+            <div class="code-block active" data-lang="k8s">
+                <pre><code class="language-yaml"># Kubernetes Sidecar Pattern 기본 예제
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app-with-sidecar
+  labels:
+    app: web-app
+spec:
+  containers:
+    # 메인 애플리케이션 컨테이너
+    - name: main-app
+      image: my-web-app:v1.0
+      ports:
+        - containerPort: 8080
+      volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/app
+        - name: shared-data
+          mountPath: /data
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+
+    # 사이드카 컨테이너 1: 로그 수집
+    - name: log-collector
+      image: fluentd:v1.16
+      volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/app
+          readOnly: true
+        - name: fluentd-config
+          mountPath: /fluentd/etc
+      env:
+        - name: ELASTICSEARCH_HOST
+          value: "elasticsearch.logging.svc.cluster.local"
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "50m"
+        limits:
+          memory: "128Mi"
+          cpu: "100m"
+
+    # 사이드카 컨테이너 2: 프록시
+    - name: envoy-proxy
+      image: envoyproxy/envoy:v1.28.0
+      ports:
+        - containerPort: 9901  # Envoy admin
+        - containerPort: 10000 # Listener
+      volumeMounts:
+        - name: envoy-config
+          mountPath: /etc/envoy
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "50m"
+        limits:
+          memory: "128Mi"
+          cpu: "100m"
+
+  # Kubernetes 1.28+ 네이티브 사이드카 (restartPolicy: Always)
+  initContainers:
+    - name: vault-agent
+      image: hashicorp/vault:1.15
+      restartPolicy: Always  # 사이드카로 동작
+      volumeMounts:
+        - name: shared-data
+          mountPath: /data
+      env:
+        - name: VAULT_ADDR
+          value: "https://vault.default.svc.cluster.local:8200"
+
+  volumes:
+    - name: shared-logs
+      emptyDir: {}
+    - name: shared-data
+      emptyDir: {}
+    - name: fluentd-config
+      configMap:
+        name: fluentd-config
+    - name: envoy-config
+      configMap:
+        name: envoy-config
+
+---
+# Service - 메인 앱 포트만 노출
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="envoy">
+                <pre><code class="language-yaml"># Envoy Sidecar 설정 - Service Mesh 패턴
+# envoy-config.yaml
+
+static_resources:
+  listeners:
+    # 인바운드 트래픽 (외부 → 앱)
+    - name: inbound_listener
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 10000
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: inbound_http
+                access_log:
+                  - name: envoy.access_loggers.stdout
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                route_config:
+                  name: local_route
+                  virtual_hosts:
+                    - name: local_service
+                      domains: ["*"]
+                      routes:
+                        - match:
+                            prefix: "/"
+                          route:
+                            cluster: local_app
+                http_filters:
+                  # 분산 추적 (Tracing)
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+    # 아웃바운드 트래픽 (앱 → 외부)
+    - name: outbound_listener
+      address:
+        socket_address:
+          address: 127.0.0.1
+          port_value: 15001
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: outbound_http
+                route_config:
+                  name: outbound_route
+                  virtual_hosts:
+                    - name: external_services
+                      domains: ["*"]
+                      routes:
+                        - match:
+                            prefix: "/"
+                          route:
+                            cluster: external_service
+                            # 재시도 정책
+                            retry_policy:
+                              retry_on: "5xx,connect-failure"
+                              num_retries: 3
+                              per_try_timeout: 2s
+                            # 타임아웃
+                            timeout: 30s
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+  clusters:
+    # 로컬 애플리케이션
+    - name: local_app
+      type: STATIC
+      connect_timeout: 1s
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: local_app
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 127.0.0.1
+                      port_value: 8080
+      # 헬스체크
+      health_checks:
+        - timeout: 1s
+          interval: 10s
+          healthy_threshold: 2
+          unhealthy_threshold: 3
+          http_health_check:
+            path: /health
+
+    # 외부 서비스 (Circuit Breaker 적용)
+    - name: external_service
+      type: STRICT_DNS
+      connect_timeout: 5s
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: external_service
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: api.external.com
+                      port_value: 443
+      transport_socket:
+        name: envoy.transport_sockets.tls
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+      # Circuit Breaker 설정
+      circuit_breakers:
+        thresholds:
+          - priority: DEFAULT
+            max_connections: 100
+            max_pending_requests: 100
+            max_requests: 100
+            max_retries: 3
+
+admin:
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: 9901</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="logging">
+                <pre><code class="language-yaml"># 로깅 사이드카 패턴 - Fluentd 예제
+# 메인 앱이 파일로 로그를 쓰면, 사이드카가 수집하여 중앙 저장소로 전송
+
+---
+# Fluentd ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-sidecar-config
+data:
+  fluent.conf: |
+    # 애플리케이션 로그 수집
+    <source>
+      @type tail
+      path /var/log/app/*.log
+      pos_file /var/log/fluentd/app.log.pos
+      tag app.logs
+      <parse>
+        @type json
+        time_key timestamp
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
+      </parse>
+    </source>
+
+    # 액세스 로그 수집
+    <source>
+      @type tail
+      path /var/log/app/access.log
+      pos_file /var/log/fluentd/access.log.pos
+      tag app.access
+      <parse>
+        @type regexp
+        expression /^(?<remote_addr>[^ ]*) - (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+) (?<path>[^ ]*) (?<protocol>[^"]*)" (?<status>[^ ]*) (?<size>[^ ]*)/
+        time_format %d/%b/%Y:%H:%M:%S %z
+      </parse>
+    </source>
+
+    # 메타데이터 추가
+    <filter app.**>
+      @type record_transformer
+      <record>
+        hostname "#{Socket.gethostname}"
+        pod_name "#{ENV['POD_NAME']}"
+        namespace "#{ENV['POD_NAMESPACE']}"
+        container_name "#{ENV['CONTAINER_NAME']}"
+      </record>
+    </filter>
+
+    # Elasticsearch로 전송
+    <match app.**>
+      @type elasticsearch
+      host "#{ENV['ELASTICSEARCH_HOST']}"
+      port 9200
+      index_name fluentd-${tag}-%Y.%m.%d
+      <buffer tag, time>
+        @type file
+        path /var/log/fluentd/buffer
+        flush_interval 5s
+        chunk_limit_size 5MB
+        total_limit_size 500MB
+        retry_max_interval 30s
+        retry_forever true
+      </buffer>
+    </match>
+
+---
+# 실제 Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-with-logging-sidecar
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        # 메인 애플리케이션
+        - name: app
+          image: my-app:v1.0
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: log-volume
+              mountPath: /var/log/app
+          env:
+            - name: LOG_PATH
+              value: /var/log/app/app.log
+            - name: LOG_FORMAT
+              value: json
+
+        # Fluentd 사이드카
+        - name: fluentd-sidecar
+          image: fluent/fluentd-kubernetes-daemonset:v1.16-debian-elasticsearch8
+          volumeMounts:
+            - name: log-volume
+              mountPath: /var/log/app
+              readOnly: true
+            - name: fluentd-config
+              mountPath: /fluentd/etc
+            - name: fluentd-buffer
+              mountPath: /var/log/fluentd
+          env:
+            - name: ELASTICSEARCH_HOST
+              value: elasticsearch.logging.svc.cluster.local
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "100m"
+            limits:
+              memory: "200Mi"
+              cpu: "200m"
+
+      volumes:
+        - name: log-volume
+          emptyDir: {}
+        - name: fluentd-config
+          configMap:
+            name: fluentd-sidecar-config
+        - name: fluentd-buffer
+          emptyDir: {}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 서비스 메시 도입 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "Istio를 도입하면 모든 Pod에 Envoy 사이드카가 자동 주입됩니다. 애플리케이션 코드 수정 없이 mTLS, 트래픽 제어, 분산 추적이 가능해져요. 다만 사이드카당 메모리 50~100MB 정도 오버헤드가 있으니 리소스 계획에 반영하세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 로깅 아키텍처 설계 시</div>
+                    <blockquote class="conv-quote">
+                        "각 Pod에 Fluentd 사이드카를 붙여서 로그를 수집하는 방식과 DaemonSet으로 노드당 하나씩 배포하는 방식이 있습니다. 사이드카 방식이 격리성은 좋지만 리소스 사용량이 많아요. 로그 볼륨이 크지 않다면 DaemonSet 권장합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 Vault 시크릿 관리 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "Vault Agent를 사이드카로 배포하면 시크릿을 자동으로 갱신해서 공유 볼륨에 써줍니다. 애플리케이션은 파일만 읽으면 되니까 Vault SDK 없이도 시크릿을 사용할 수 있어요. 시크릿 갱신 시 앱 재시작도 필요 없습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>시작 순서 미관리</strong>
+                        <p>사이드카가 준비되기 전에 메인 앱이 시작하면 문제가 됩니다. Kubernetes 1.28+ 네이티브 사이드카나 initContainer 활용, 앱 레벨 재시도 로직을 구현하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>리소스 과할당</strong>
+                        <p>사이드카마다 CPU/메모리를 할당하면 전체 클러스터 리소스가 부족해집니다. 프로파일링으로 실제 사용량을 측정하고 적절한 requests/limits를 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>사이드카 장애 전파</strong>
+                        <p>프록시 사이드카가 죽으면 메인 앱도 통신 불가합니다. 사이드카의 liveness/readiness probe를 설정하고, 사이드카 없이도 동작하는 fallback 모드를 고려하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>사이드카 패턴 베스트 프랙티스</strong>
+                        <p>경량 사이드카 이미지 사용, 공유 볼륨으로 효율적 통신, 사이드카 버전 일괄 관리(Helm/Kustomize), 모니터링으로 사이드카 리소스 추적.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Ambassador%20Pattern/" class="related-term-link">Ambassador Pattern</a>
+                <a href="/ko/term/Service%20Mesh/" class="related-term-link">Service Mesh</a>
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+                <a href="/ko/term/%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EC%84%9C%EB%B9%84%EC%8A%A4/" class="related-term-link">마이크로서비스</a>
+                <a href="/ko/term/Envoy/" class="related-term-link">Envoy</a>
+                <a href="/ko/term/Istio/" class="related-term-link">Istio</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/" target="_blank" class="learn-link">
+                    📄 Kubernetes - Sidecar Containers 공식 문서
+                </a>
+                <a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/sidecar" target="_blank" class="learn-link">
+                    🎓 Microsoft - Sidecar Pattern 설계 가이드
+                </a>
+                <a href="https://istio.io/latest/docs/ops/deployment/architecture/" target="_blank" class="learn-link">
+                    📖 Istio - Service Mesh 아키텍처
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +778,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

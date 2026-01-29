@@ -161,6 +161,122 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhancement Section Styles */
+        .enhancement-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.8));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhancement-section h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .enhancement-section p, .enhancement-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+        }
+        .enhancement-section ul, .enhancement-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .enhancement-section strong {
+            color: #a855f7;
+        }
+        .code-block {
+            background: #0f172a;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .code-block .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-block .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .dialogue-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .dialogue-box .speaker {
+            font-weight: 600;
+            color: #818cf8;
+            margin-bottom: 0.25rem;
+        }
+        .dialogue-box p {
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-link {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #fff;
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #00f5ff;
+            text-decoration: none;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -202,6 +318,143 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="enhancement-section">
+            <h2>상세 설명</h2>
+            <p><strong>XHR(XMLHttpRequest)</strong>은 JavaScript에서 서버와 비동기 HTTP 통신을 수행하는 API입니다. 1999년 Microsoft가 Outlook Web Access를 위해 처음 개발했으며, 이후 모든 브라우저의 표준이 되었습니다.</p>
+            <p>XHR은 <strong>Ajax(Asynchronous JavaScript and XML)</strong>의 핵심 기술로, 페이지 새로고침 없이 서버와 데이터를 주고받을 수 있게 합니다. Gmail, Google Maps 등 Web 2.0 시대의 인터랙티브 웹 애플리케이션을 가능하게 한 기술입니다.</p>
+            <ul>
+                <li><strong>비동기 통신</strong>: 요청 중에도 UI가 멈추지 않음</li>
+                <li><strong>진행 상태 추적</strong>: 업로드/다운로드 진행률 모니터링</li>
+                <li><strong>다양한 데이터 형식</strong>: XML, JSON, HTML, 텍스트, Blob 지원</li>
+                <li><strong>요청 취소</strong>: abort() 메서드로 진행 중인 요청 취소 가능</li>
+            </ul>
+            <p>현재는 더 현대적인 <strong>Fetch API</strong>가 권장되지만, XHR은 진행률 추적, 요청 취소 등 일부 기능에서 여전히 사용됩니다.</p>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="enhancement-section">
+            <h2>코드 예제</h2>
+            <p><strong>기본 GET 요청</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>// XHR 객체 생성
+const xhr = new XMLHttpRequest();
+
+// 요청 초기화 (메서드, URL, 비동기 여부)
+xhr.open('GET', '/api/users', true);
+
+// 응답 처리
+xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            console.log(data);
+        } else {
+            console.error('요청 실패:', xhr.status);
+        }
+    }
+};
+
+// 요청 전송
+xhr.send();</code>
+            </div>
+            <p><strong>POST 요청 (JSON 데이터)</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>const xhr = new XMLHttpRequest();
+xhr.open('POST', '/api/users', true);
+xhr.setRequestHeader('Content-Type', 'application/json');
+
+xhr.onload = function() {
+    if (xhr.status === 201) {
+        console.log('생성 성공:', JSON.parse(xhr.response));
+    }
+};
+
+const userData = { name: '홍길동', email: 'hong@example.com' };
+xhr.send(JSON.stringify(userData));</code>
+            </div>
+            <p><strong>파일 업로드와 진행률 추적</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>const xhr = new XMLHttpRequest();
+xhr.open('POST', '/api/upload', true);
+
+// 업로드 진행률
+xhr.upload.onprogress = function(e) {
+    if (e.lengthComputable) {
+        const percent = (e.loaded / e.total) * 100;
+        console.log(`업로드: ${percent.toFixed(1)}%`);
+    }
+};
+
+// 완료 처리
+xhr.onload = () => console.log('업로드 완료');
+xhr.onerror = () => console.error('업로드 실패');
+
+const formData = new FormData();
+formData.append('file', fileInput.files[0]);
+xhr.send(formData);</code>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="enhancement-section">
+            <h2>실무 대화 예시</h2>
+            <div class="dialogue-box">
+                <p class="speaker">팀장</p>
+                <p>"이 레거시 코드 XHR로 되어 있는데, Fetch로 마이그레이션 해야 하나?"</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">개발자</p>
+                <p>"대부분은 Fetch가 좋은데요, 파일 업로드 진행률 표시하는 부분은 XHR이 더 편해요. upload.onprogress 이벤트가 Fetch에는 없거든요."</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">팀장</p>
+                <p>"그럼 업로드 부분만 XHR 유지하고 나머지는 Fetch로 바꾸자."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="enhancement-section">
+            <h2>주의사항</h2>
+            <div class="warning-box">
+                <p><strong>readyState 상태 값 이해</strong></p>
+                <p>0: UNSENT, 1: OPENED, 2: HEADERS_RECEIVED, 3: LOADING, 4: DONE. status 확인은 readyState가 4일 때만 의미있습니다.</p>
+            </div>
+            <div class="warning-box">
+                <p><strong>동기 요청 지양</strong></p>
+                <p>xhr.open(method, url, false)로 동기 요청 가능하지만, UI를 블로킹하므로 절대 사용하지 마세요. 브라우저에서 경고가 표시됩니다.</p>
+            </div>
+            <div class="warning-box">
+                <p><strong>CORS 이슈</strong></p>
+                <p>다른 도메인 요청 시 서버에서 CORS 헤더 설정이 필요합니다. withCredentials = true로 쿠키 포함 요청도 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhancement-section">
+            <h2>관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Fetch%20API/" class="related-term-link">Fetch API</a>
+                <a href="/ko/term/REST%20API/" class="related-term-link">REST API</a>
+                <a href="/ko/term/JSON/" class="related-term-link">JSON</a>
+                <a href="/ko/term/CORS/" class="related-term-link">CORS</a>
+                <a href="/ko/term/WebSocket/" class="related-term-link">WebSocket</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhancement-section">
+            <h2>더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://developer.mozilla.org/ko/docs/Web/API/XMLHttpRequest" target="_blank">MDN - XMLHttpRequest 가이드</a></li>
+                <li><a href="https://javascript.info/xmlhttprequest" target="_blank">JavaScript.info - XMLHttpRequest</a></li>
+                <li><a href="https://developer.mozilla.org/ko/docs/Web/API/Fetch_API/Using_Fetch" target="_blank">MDN - Fetch API 사용하기</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +465,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

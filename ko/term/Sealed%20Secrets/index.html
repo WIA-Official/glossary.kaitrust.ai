@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sealed Secrets | KAITRUST AI 백과사전</title>
-    <meta name="description" content="Kubernetes에서 암호화된 비밀 관리">
-    <meta name="keywords" content="Sealed Secrets, , AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="Sealed Secrets는 Kubernetes 비밀을 안전하게 Git에 저장할 수 있도록 암호화하는 Bitnami 오픈소스 도구입니다. GitOps 환경에서 시크릿 관리의 보안 문제를 해결합니다.">
+    <meta name="keywords" content="Sealed Secrets, Kubernetes Secrets, GitOps, kubeseal, Bitnami, 시크릿 암호화, KAITRUST, AI 백과사전, 보안">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Sealed%20Secrets/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Sealed%20Secrets/">
     <meta property="og:title" content="Sealed Secrets | KAITRUST AI 백과사전">
-    <meta property="og:description" content="Kubernetes에서 암호화된 비밀 관리">
+    <meta property="og:description" content="Sealed Secrets는 Kubernetes 비밀을 안전하게 Git에 저장할 수 있도록 암호화하는 Bitnami 오픈소스 도구입니다. GitOps 환경에서 시크릿 관리의 보안 문제를 해결합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Sealed Secrets | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="Kubernetes에서 암호화된 비밀 관리">
+    <meta name="twitter:description" content="Sealed Secrets는 Kubernetes 비밀을 안전하게 Git에 저장할 수 있도록 암호화하는 Bitnami 오픈소스 도구입니다. GitOps 환경에서 시크릿 관리의 보안 문제를 해결합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Sealed Secrets",
-        "description": "Kubernetes에서 암호화된 비밀 관리",
+        "description": "Sealed Secrets는 Kubernetes 비밀을 안전하게 Git에 저장할 수 있도록 암호화하는 Bitnami 오픈소스 도구입니다. GitOps 환경에서 시크릿 관리의 보안 문제를 해결합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -189,9 +190,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">Sealed Secrets</h1>
-            
+
             <div class="term-description">
-                <p>Kubernetes에서 암호화된 비밀 관리</p>
+                <p>Kubernetes에서 암호화된 비밀 관리 - GitOps 환경에서 안전한 시크릿 저장을 위한 Bitnami 오픈소스 도구</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +203,345 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Sealed Secrets는 Bitnami에서 개발한 Kubernetes용 시크릿 암호화 도구입니다. GitOps 환경에서 가장 큰 과제인 "비밀 정보를 Git에 어떻게 안전하게 저장할 것인가"라는 문제를 해결합니다. 일반 Kubernetes Secret은 base64 인코딩만 되어 있어 실제로는 평문이나 다름없지만, Sealed Secrets를 사용하면 공개키로 암호화되어 클러스터 내의 Sealed Secrets Controller만 복호화할 수 있습니다.</p>
+
+                <p>작동 방식은 비대칭 암호화(공개키/비공개키)를 기반으로 합니다. 클러스터에 설치된 Controller가 비공개키를 보유하고, 개발자는 kubeseal CLI 도구를 통해 공개키로 Secret을 암호화하여 SealedSecret 리소스를 생성합니다. 이 SealedSecret은 Git에 안전하게 저장할 수 있으며, 클러스터에 배포되면 Controller가 자동으로 복호화하여 실제 Secret을 생성합니다.</p>
+
+                <p>Sealed Secrets의 가장 큰 장점은 기존 Kubernetes 워크플로우와의 완벽한 통합입니다. ArgoCD, Flux 같은 GitOps 도구와 함께 사용하면 인프라 전체를 코드로 관리할 수 있습니다. 또한 namespace별, 클러스터별로 스코프를 지정할 수 있어 다중 환경 관리에도 유연합니다. 암호화된 SealedSecret은 특정 클러스터, 특정 namespace에서만 복호화되도록 제한할 수 있습니다.</p>
+
+                <p>운영 시 주의할 점은 비공개키 관리입니다. Controller의 비공개키가 유출되면 모든 SealedSecret이 복호화될 수 있으므로, 키 로테이션 정책과 백업 전략이 필수입니다. 또한 SealedSecret은 생성 시점의 공개키로 암호화되므로, 키 로테이션 후에는 기존 SealedSecret을 재암호화해야 합니다. 대규모 환경에서는 HashiCorp Vault나 External Secrets Operator와의 조합도 고려할 만합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <h3>Sealed Secrets Controller 설치 및 kubeseal 사용</h3>
+                <pre><code class="language-bash"># Sealed Secrets Controller 설치 (Helm 사용)
+helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
+helm repo update
+helm install sealed-secrets sealed-secrets/sealed-secrets \
+  --namespace kube-system \
+  --set fullnameOverride=sealed-secrets-controller
+
+# kubeseal CLI 설치 (macOS)
+brew install kubeseal
+
+# kubeseal CLI 설치 (Linux)
+wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.24.5/kubeseal-0.24.5-linux-amd64.tar.gz
+tar -xvzf kubeseal-0.24.5-linux-amd64.tar.gz
+sudo install -m 755 kubeseal /usr/local/bin/kubeseal
+
+# 공개키 가져오기 (오프라인 사용 시)
+kubeseal --fetch-cert \
+  --controller-name=sealed-secrets-controller \
+  --controller-namespace=kube-system \
+  > sealed-secrets-pub.pem</code></pre>
+
+                <h3>Secret을 SealedSecret으로 변환</h3>
+                <pre><code class="language-bash"># 1. 먼저 일반 Secret YAML 생성
+cat > my-secret.yaml << EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-credentials
+  namespace: production
+type: Opaque
+data:
+  username: YWRtaW4=  # base64 encoded: admin
+  password: c3VwZXJzZWNyZXQ=  # base64 encoded: supersecret
+EOF
+
+# 2. kubeseal로 암호화 (클러스터에 연결된 상태)
+kubeseal --format yaml < my-secret.yaml > sealed-secret.yaml
+
+# 3. 또는 공개키 파일 직접 지정 (오프라인 환경)
+kubeseal --format yaml \
+  --cert sealed-secrets-pub.pem \
+  < my-secret.yaml > sealed-secret.yaml
+
+# 4. 생성된 SealedSecret 확인
+cat sealed-secret.yaml</code></pre>
+
+                <h3>SealedSecret 리소스 예시</h3>
+                <pre><code class="language-yaml"># sealed-secret.yaml - Git에 안전하게 저장 가능
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: database-credentials
+  namespace: production
+spec:
+  encryptedData:
+    username: AgBy3i4OJSWK+PiTySYZZA9rO43cGDEq...
+    password: AgBvLh7fH9/WTBu+ZqMC2nvDpAJJSzAR...
+  template:
+    metadata:
+      name: database-credentials
+      namespace: production
+    type: Opaque
+
+---
+# 다른 스코프 옵션들
+# strict (기본값): namespace와 name 둘 다 일치해야 복호화
+# namespace-wide: 같은 namespace 내 어떤 이름으로도 복호화 가능
+# cluster-wide: 클러스터 전체에서 복호화 가능
+
+# namespace-wide 스코프로 암호화
+# kubeseal --scope namespace-wide --format yaml < my-secret.yaml
+
+# cluster-wide 스코프로 암호화
+# kubeseal --scope cluster-wide --format yaml < my-secret.yaml</code></pre>
+
+                <h3>GitOps CI/CD 파이프라인 예제</h3>
+                <pre><code class="language-yaml"># .github/workflows/seal-secrets.yml
+name: Seal Secrets
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+
+jobs:
+  seal-secret:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install kubeseal
+        run: |
+          wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.24.5/kubeseal-0.24.5-linux-amd64.tar.gz
+          tar -xvzf kubeseal-0.24.5-linux-amd64.tar.gz
+          sudo install -m 755 kubeseal /usr/local/bin/kubeseal
+
+      - name: Seal secrets for environment
+        run: |
+          CERT_FILE="certs/${{ inputs.environment }}-sealed-secrets.pem"
+
+          # 환경별 시크릿 암호화
+          for secret_file in secrets/${{ inputs.environment }}/*.yaml; do
+            output_file="manifests/${{ inputs.environment }}/$(basename $secret_file .yaml)-sealed.yaml"
+            kubeseal --format yaml \
+              --cert "$CERT_FILE" \
+              < "$secret_file" > "$output_file"
+          done
+
+      - name: Commit sealed secrets
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add manifests/
+          git commit -m "Seal secrets for ${{ inputs.environment }}"
+          git push</code></pre>
+
+                <h3>Python 스크립트: SealedSecret 검증 및 관리</h3>
+                <pre><code class="language-python">import subprocess
+import yaml
+import json
+from pathlib import Path
+from datetime import datetime, timedelta
+from kubernetes import client, config
+
+class SealedSecretsManager:
+    def __init__(self, kubeconfig_path: str = None):
+        if kubeconfig_path:
+            config.load_kube_config(config_file=kubeconfig_path)
+        else:
+            config.load_incluster_config()
+
+        self.custom_api = client.CustomObjectsApi()
+        self.core_api = client.CoreV1Api()
+
+    def list_sealed_secrets(self, namespace: str = None):
+        """클러스터의 모든 SealedSecret 목록 조회"""
+        if namespace:
+            secrets = self.custom_api.list_namespaced_custom_object(
+                group="bitnami.com",
+                version="v1alpha1",
+                namespace=namespace,
+                plural="sealedsecrets"
+            )
+        else:
+            secrets = self.custom_api.list_cluster_custom_object(
+                group="bitnami.com",
+                version="v1alpha1",
+                plural="sealedsecrets"
+            )
+
+        return secrets.get('items', [])
+
+    def verify_sealed_secret(self, sealed_secret_path: str) -> bool:
+        """SealedSecret이 현재 Controller 키로 복호화 가능한지 검증"""
+        try:
+            result = subprocess.run(
+                ['kubeseal', '--validate', '--format', 'yaml'],
+                input=Path(sealed_secret_path).read_bytes(),
+                capture_output=True
+            )
+            return result.returncode == 0
+        except Exception as e:
+            print(f"Validation failed: {e}")
+            return False
+
+    def get_controller_key_age(self, namespace: str = "kube-system"):
+        """Controller의 현재 키 생성 시점 확인"""
+        secrets = self.core_api.list_namespaced_secret(
+            namespace=namespace,
+            label_selector="sealedsecrets.bitnami.com/sealed-secrets-key=active"
+        )
+
+        if secrets.items:
+            key_secret = secrets.items[0]
+            creation_time = key_secret.metadata.creation_timestamp
+            age = datetime.now(creation_time.tzinfo) - creation_time
+            return {
+                "name": key_secret.metadata.name,
+                "created": creation_time.isoformat(),
+                "age_days": age.days
+            }
+        return None
+
+    def backup_controller_keys(self, output_dir: str):
+        """Controller 키 백업 (재해복구용)"""
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+
+        # 모든 키 시크릿 백업
+        secrets = self.core_api.list_namespaced_secret(
+            namespace="kube-system",
+            label_selector="sealedsecrets.bitnami.com/sealed-secrets-key"
+        )
+
+        for secret in secrets.items:
+            backup_file = Path(output_dir) / f"{secret.metadata.name}.yaml"
+            secret_dict = client.ApiClient().sanitize_for_serialization(secret)
+            with open(backup_file, 'w') as f:
+                yaml.dump(secret_dict, f)
+            print(f"Backed up: {backup_file}")
+
+    def rotate_and_reseal(self, manifest_dir: str, new_cert_path: str):
+        """키 로테이션 후 모든 SealedSecret 재암호화"""
+        sealed_files = list(Path(manifest_dir).rglob("*-sealed.yaml"))
+
+        for sealed_file in sealed_files:
+            # 원본 Secret 파일 찾기
+            original_file = str(sealed_file).replace("-sealed.yaml", ".yaml")
+            if not Path(original_file).exists():
+                print(f"Warning: Original secret not found for {sealed_file}")
+                continue
+
+            # 새 인증서로 재암호화
+            result = subprocess.run(
+                ['kubeseal', '--format', 'yaml', '--cert', new_cert_path],
+                input=Path(original_file).read_bytes(),
+                capture_output=True
+            )
+
+            if result.returncode == 0:
+                sealed_file.write_bytes(result.stdout)
+                print(f"Re-sealed: {sealed_file}")
+            else:
+                print(f"Failed to re-seal: {sealed_file}")
+
+
+# 사용 예시
+if __name__ == "__main__":
+    manager = SealedSecretsManager()
+
+    # 모든 SealedSecret 조회
+    secrets = manager.list_sealed_secrets()
+    for secret in secrets:
+        name = secret['metadata']['name']
+        ns = secret['metadata']['namespace']
+        print(f"SealedSecret: {ns}/{name}")
+
+    # 키 나이 확인 (30일 이상이면 로테이션 권장)
+    key_info = manager.get_controller_key_age()
+    if key_info and key_info['age_days'] > 30:
+        print(f"Warning: Key is {key_info['age_days']} days old. Consider rotation.")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 표현 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="usage-tabs">
+                <button class="usage-tab active" data-tab="meeting">회의</button>
+                <button class="usage-tab" data-tab="interview">면접</button>
+                <button class="usage-tab" data-tab="review">코드리뷰</button>
+            </div>
+            <div class="usage-content active" id="meeting">
+                <ul>
+                    <li>"GitOps로 전환하면서 시크릿 관리가 문제인데, Sealed Secrets 도입하면 Git에 암호화된 상태로 커밋할 수 있어요."</li>
+                    <li>"kubeseal로 암호화한 SealedSecret만 레포에 올리고, 실제 복호화는 클러스터 내에서만 가능해서 안전합니다."</li>
+                    <li>"환경별로 다른 키를 사용하니까 staging의 SealedSecret이 production에서 복호화 안 되게 분리되어 있어요."</li>
+                    <li>"Controller 키 로테이션 주기 정해야 하는데, 30일마다 하고 기존 SealedSecret 재암호화 자동화 스크립트 돌리죠."</li>
+                </ul>
+            </div>
+            <div class="usage-content" id="interview">
+                <ul>
+                    <li>"GitOps 환경에서 시크릿 관리의 어려움과 Sealed Secrets가 이를 어떻게 해결하는지 설명해주세요."</li>
+                    <li>"Sealed Secrets의 암호화 메커니즘과 스코프(strict, namespace-wide, cluster-wide)의 차이점은 무엇인가요?"</li>
+                    <li>"Sealed Secrets Controller의 키 관리 전략과 재해복구 계획에 대해 어떻게 수립하시겠습니까?"</li>
+                    <li>"Sealed Secrets와 External Secrets Operator, HashiCorp Vault를 비교하고 각각의 적합한 사용 시나리오를 설명해주세요."</li>
+                </ul>
+            </div>
+            <div class="usage-content" id="review">
+                <ul>
+                    <li>"이 Secret이 base64만 되어있네요. Sealed Secrets로 암호화해서 SealedSecret으로 변환해주세요."</li>
+                    <li>"scope가 cluster-wide로 되어있는데, 보안상 strict이나 namespace-wide로 제한하는 게 좋겠어요."</li>
+                    <li>"원본 Secret 파일이 레포에 같이 커밋되어 있는데, .gitignore에 추가하고 삭제해주세요."</li>
+                    <li>"키 로테이션 후 이 SealedSecret이 아직 예전 키로 암호화되어 있어요. 재암호화 필요합니다."</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-content">
+                <ul>
+                    <li><strong>원본 Secret 노출 금지:</strong> kubeseal로 암호화하기 전의 원본 Secret 파일은 절대로 Git에 커밋하면 안 됩니다. .gitignore에 명시적으로 추가하고, 암호화 후 즉시 삭제하는 습관을 들이세요. 실수로 커밋되면 Git 히스토리에서도 완전히 제거해야 합니다.</li>
+                    <li><strong>Controller 키 백업 필수:</strong> Sealed Secrets Controller의 비공개키가 손실되면 모든 SealedSecret을 복호화할 수 없습니다. 정기적으로 키를 안전한 곳(Hardware Security Module, 암호화된 백업 저장소)에 백업하고, 재해복구 절차를 문서화해야 합니다.</li>
+                    <li><strong>클러스터/환경 간 키 분리:</strong> 개발, 스테이징, 프로덕션 환경은 반드시 별도의 Sealed Secrets Controller와 키를 사용해야 합니다. 한 환경의 키가 유출되어도 다른 환경의 시크릿은 안전하게 보호됩니다. 키를 공유하면 환경 격리의 의미가 없어집니다.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/External%20Secrets/" class="related-term-link">External Secrets</a>
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+                <a href="/ko/term/GitOps/" class="related-term-link">GitOps</a>
+                <a href="/ko/term/HashiCorp%20Vault/" class="related-term-link">HashiCorp Vault</a>
+                <a href="/ko/term/SOPS/" class="related-term-link">SOPS</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <ul>
+                    <li><a href="https://sealed-secrets.netlify.app/" target="_blank" rel="noopener">Sealed Secrets 공식 문서 - 설치 가이드 및 사용법</a></li>
+                    <li><a href="https://github.com/bitnami-labs/sealed-secrets" target="_blank" rel="noopener">Sealed Secrets GitHub - 소스코드 및 릴리스</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=xd2QoV6GJlc" target="_blank" rel="noopener">Sealed Secrets Deep Dive - 아키텍처 및 보안 분석</a></li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +552,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

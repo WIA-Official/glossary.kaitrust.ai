@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,303 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Subnet(서브넷)은 하나의 큰 IP 네트워크를 더 작은 논리적 네트워크 세그먼트로 분할하는 기술입니다. 예를 들어, 회사에서 10.0.0.0/16 네트워크를 할당받았다면, 이를 10.0.1.0/24(개발팀), 10.0.2.0/24(운영팀), 10.0.3.0/24(DB서버)처럼 분리하여 네트워크 관리 효율성과 보안성을 높일 수 있습니다.</p>
+                <p>서브넷은 CIDR(Classless Inter-Domain Routing) 표기법으로 표현합니다. 10.0.1.0/24에서 /24는 서브넷 마스크를 의미하며, 앞의 24비트가 네트워크 주소, 나머지 8비트(2^8 = 256개, 실제 사용 가능 254개)가 호스트 주소입니다. /24는 255.255.255.0과 동일하며, /16은 65,536개, /28은 16개의 IP를 할당받습니다.</p>
+                <p>클라우드 환경에서 서브넷은 VPC(Virtual Private Cloud)의 핵심 구성 요소입니다. AWS, GCP, Azure 모두 Public Subnet(인터넷 직접 연결)과 Private Subnet(내부 통신 전용)을 구분합니다. 웹 서버는 Public Subnet에, 데이터베이스는 Private Subnet에 배치하여 보안을 강화합니다. Private Subnet의 아웃바운드 인터넷 접근은 NAT Gateway를 통해 처리합니다.</p>
+                <p>고가용성(HA) 아키텍처에서는 최소 2개 이상의 가용영역(AZ)에 서브넷을 분산 배치합니다. 예를 들어, ap-northeast-2a와 ap-northeast-2c에 각각 Public/Private Subnet을 만들어 총 4개의 서브넷을 구성합니다. 이렇게 하면 한 AZ에 장애가 발생해도 서비스가 중단되지 않습니다. CIDR 블록은 향후 확장을 고려해 /24보다 여유 있는 /20 ~ /22 크기로 설계하는 것이 권장됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="terraform">Terraform</button>
+                <button class="code-tab" data-lang="python">Python (boto3)</button>
+                <button class="code-tab" data-lang="bash">AWS CLI</button>
+            </div>
+            <div class="code-block active" data-lang="terraform">
+                <pre><code class="language-hcl"># AWS VPC와 서브넷 구성 (Terraform)
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = { Name = "production-vpc" }
+}
+
+# Public Subnet (AZ-a) - 웹 서버, ALB 배치
+resource "aws_subnet" "public_a" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24"    # 254개 IP
+  availability_zone       = "ap-northeast-2a"
+  map_public_ip_on_launch = true
+
+  tags = { Name = "public-subnet-a", Type = "public" }
+}
+
+# Public Subnet (AZ-c) - HA 구성용
+resource "aws_subnet" "public_c" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "ap-northeast-2c"
+  map_public_ip_on_launch = true
+
+  tags = { Name = "public-subnet-c", Type = "public" }
+}
+
+# Private Subnet (AZ-a) - DB, 애플리케이션 서버
+resource "aws_subnet" "private_a" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.10.0/24"
+  availability_zone = "ap-northeast-2a"
+
+  tags = { Name = "private-subnet-a", Type = "private" }
+}
+
+# Private Subnet (AZ-c) - HA 구성용
+resource "aws_subnet" "private_c" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.11.0/24"
+  availability_zone = "ap-northeast-2c"
+
+  tags = { Name = "private-subnet-c", Type = "private" }
+}
+
+# Internet Gateway - Public Subnet용
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+  tags   = { Name = "main-igw" }
+}
+
+# NAT Gateway - Private Subnet 아웃바운드용
+resource "aws_eip" "nat" {
+  domain = "vpc"
+}
+
+resource "aws_nat_gateway" "main" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public_a.id  # Public Subnet에 배치
+
+  tags = { Name = "main-nat-gateway" }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import boto3
+import ipaddress
+
+# CIDR 계산 유틸리티
+def calculate_cidr(cidr_block):
+    """CIDR 블록 정보 계산"""
+    network = ipaddress.ip_network(cidr_block, strict=False)
+
+    print(f"네트워크 주소: {network.network_address}")
+    print(f"브로드캐스트: {network.broadcast_address}")
+    print(f"서브넷 마스크: {network.netmask}")
+    print(f"총 IP 수: {network.num_addresses}")
+    print(f"사용 가능 IP: {network.num_addresses - 5}")  # AWS는 5개 예약
+    print(f"IP 범위: {list(network.hosts())[0]} ~ {list(network.hosts())[-1]}")
+
+    return network
+
+# 예제: /24 블록 분석
+calculate_cidr("10.0.1.0/24")
+# 네트워크 주소: 10.0.1.0
+# 총 IP 수: 256
+# 사용 가능 IP: 251 (AWS는 5개 예약: .0, .1, .2, .3, .255)
+
+# boto3로 VPC 서브넷 생성
+ec2 = boto3.client('ec2', region_name='ap-northeast-2')
+
+# VPC 생성
+vpc_response = ec2.create_vpc(
+    CidrBlock='10.0.0.0/16',
+    TagSpecifications=[{
+        'ResourceType': 'vpc',
+        'Tags': [{'Key': 'Name', 'Value': 'production-vpc'}]
+    }]
+)
+vpc_id = vpc_response['Vpc']['VpcId']
+
+# Public Subnet 생성
+public_subnet = ec2.create_subnet(
+    VpcId=vpc_id,
+    CidrBlock='10.0.1.0/24',
+    AvailabilityZone='ap-northeast-2a',
+    TagSpecifications=[{
+        'ResourceType': 'subnet',
+        'Tags': [
+            {'Key': 'Name', 'Value': 'public-subnet-a'},
+            {'Key': 'Type', 'Value': 'public'}
+        ]
+    }]
+)
+
+# Private Subnet 생성
+private_subnet = ec2.create_subnet(
+    VpcId=vpc_id,
+    CidrBlock='10.0.10.0/24',
+    AvailabilityZone='ap-northeast-2a',
+    TagSpecifications=[{
+        'ResourceType': 'subnet',
+        'Tags': [
+            {'Key': 'Name', 'Value': 'private-subnet-a'},
+            {'Key': 'Type', 'Value': 'private'}
+        ]
+    }]
+)
+
+print(f"Public Subnet ID: {public_subnet['Subnet']['SubnetId']}")
+print(f"Private Subnet ID: {private_subnet['Subnet']['SubnetId']}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># AWS CLI로 VPC 서브넷 관리
+
+# VPC 생성
+aws ec2 create-vpc \
+    --cidr-block 10.0.0.0/16 \
+    --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=production-vpc}]'
+
+# VPC ID 확인
+VPC_ID=$(aws ec2 describe-vpcs \
+    --filters "Name=tag:Name,Values=production-vpc" \
+    --query 'Vpcs[0].VpcId' --output text)
+
+# Public Subnet 생성 (AZ-a)
+aws ec2 create-subnet \
+    --vpc-id $VPC_ID \
+    --cidr-block 10.0.1.0/24 \
+    --availability-zone ap-northeast-2a \
+    --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=public-subnet-a},{Key=Type,Value=public}]'
+
+# Private Subnet 생성 (AZ-a)
+aws ec2 create-subnet \
+    --vpc-id $VPC_ID \
+    --cidr-block 10.0.10.0/24 \
+    --availability-zone ap-northeast-2a \
+    --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=private-subnet-a},{Key=Type,Value=private}]'
+
+# 서브넷 목록 조회
+aws ec2 describe-subnets \
+    --filters "Name=vpc-id,Values=$VPC_ID" \
+    --query 'Subnets[*].{ID:SubnetId,CIDR:CidrBlock,AZ:AvailabilityZone,Public:MapPublicIpOnLaunch}' \
+    --output table
+
+# Internet Gateway 생성 및 연결
+IGW_ID=$(aws ec2 create-internet-gateway \
+    --query 'InternetGateway.InternetGatewayId' --output text)
+aws ec2 attach-internet-gateway --vpc-id $VPC_ID --internet-gateway-id $IGW_ID
+
+# CIDR 계산 (Linux ipcalc)
+ipcalc 10.0.1.0/24
+# Network:   10.0.1.0/24
+# Netmask:   255.255.255.0
+# HostMin:   10.0.1.1
+# HostMax:   10.0.1.254
+# Hosts/Net: 254
+
+# 서브넷 내 사용 가능 IP 수 확인
+aws ec2 describe-subnets \
+    --subnet-ids subnet-xxxxx \
+    --query 'Subnets[0].AvailableIpAddressCount'</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 VPC 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "프로덕션 VPC는 10.0.0.0/16으로 잡고, Public Subnet은 /24로 2개 AZ에 배치합시다. Private Subnet은 RDS Multi-AZ 때문에 최소 2개 필요하고, EKS 노드용으로 /20 크기 서브넷을 별도로 만들어야 Pod IP가 부족하지 않습니다. 총 6개 서브넷 구성이 적절해 보입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 리뷰 미팅에서</div>
+                    <blockquote class="conv-quote">
+                        "DB 서버가 Public Subnet에 있으면 안 됩니다. Private Subnet으로 이동하고, 웹 서버에서만 3306 포트 접근 가능하도록 Security Group을 설정해야 합니다. 외부 API 호출이 필요하면 NAT Gateway를 통해 나가도록 라우팅 테이블을 수정하겠습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 트러블슈팅 상황에서</div>
+                    <blockquote class="conv-quote">
+                        "EC2에서 인터넷 연결이 안 된다고요? 먼저 서브넷이 Public인지 Private인지 확인해주세요. Private Subnet이라면 NAT Gateway가 있는지, 라우트 테이블에 0.0.0.0/0 → NAT 경로가 있는지 체크해야 합니다. Public이면 IGW 연결과 퍼블릭 IP 할당 여부를 확인하세요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>CIDR 블록을 너무 작게 설정</strong>
+                        <p>/28(11개 IP)로 만들었다가 서비스 확장 시 IP가 부족합니다. 서브넷 CIDR은 나중에 변경 불가하므로 처음부터 /24 이상으로 여유 있게 잡으세요. EKS 사용 시 /20 권장입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>단일 AZ에만 서브넷 배치</strong>
+                        <p>ap-northeast-2a에만 서브넷을 만들면, 해당 AZ 장애 시 전체 서비스가 중단됩니다. RDS Multi-AZ, ALB는 최소 2개 AZ의 서브넷이 필수입니다. 항상 짝수 개로 구성하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Public/Private 구분 없이 모든 리소스를 Public에 배치</strong>
+                        <p>데이터베이스, 백엔드 서버를 Public Subnet에 두면 외부 공격에 노출됩니다. 인터넷 직접 연결이 필요한 ALB, Bastion만 Public에 두고, 나머지는 반드시 Private Subnet에 배치하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 서브넷 설계 패턴</strong>
+                        <p>VPC /16 → Public /24 x 2 AZ + Private /24 x 2 AZ 구성이 표준입니다. CIDR 블록은 겹치지 않게 계획하고(VPC Peering 대비), 용도별로 태그를 명확히 붙이세요. 서브넷당 AWS 예약 IP 5개를 감안한 용량 산정이 필요합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/VPC/" class="related-term-link">VPC</a>
+                <a href="/ko/term/NAT%20Gateway/" class="related-term-link">NAT Gateway</a>
+                <a href="/ko/term/IP/" class="related-term-link">IP</a>
+                <a href="/ko/term/Security%20Group/" class="related-term-link">Security Group</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/configure-subnets.html" target="_blank" class="learn-link">
+                    📖 AWS VPC 서브넷 공식 문서
+                </a>
+                <a href="https://cidr.xyz/" target="_blank" class="learn-link">
+                    🧮 CIDR 계산기 - 시각적 IP 범위 확인
+                </a>
+                <a href="https://aws.amazon.com/ko/blogs/korea/vpc-subnet-zoning-patterns-for-sap-on-aws/" target="_blank" class="learn-link">
+                    📄 AWS VPC 서브넷 설계 모범 사례
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +651,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

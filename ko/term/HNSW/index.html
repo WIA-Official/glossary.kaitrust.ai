@@ -161,6 +161,122 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +318,145 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>HNSW(Hierarchical Navigable Small World)는 고차원 벡터 공간에서 근사 최근접 이웃(ANN)을 빠르게 찾는 그래프 기반 알고리즘입니다. 2016년 Yu. A. Malkov와 D. A. Yashunin이 발표했으며, 현재 가장 널리 사용되는 벡터 검색 알고리즘 중 하나입니다.</p>
+                <p>HNSW는 Small World 네트워크 이론에 기반합니다. 계층적 구조로 그래프를 구성하여 상위 레이어에서는 멀리 점프하고, 하위 레이어로 내려가면서 정밀하게 탐색합니다. 이 방식으로 O(log N) 시간 복잡도의 검색이 가능합니다.</p>
+                <p>핵심 파라미터는 M(각 노드의 최대 연결 수)과 ef(검색 시 탐색할 후보 수)입니다. M이 클수록 정확도가 높아지지만 메모리를 많이 사용하고, ef가 클수록 검색 정확도가 높아지지만 속도가 느려집니다.</p>
+                <p>Pinecone, Weaviate, Milvus, Qdrant 등 대부분의 벡터 데이터베이스가 HNSW를 기본 인덱스로 사용합니다. 100억 개 이상의 벡터에서도 밀리초 단위 검색이 가능해 RAG, 추천 시스템, 이미지 검색 등에 필수적인 기술입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>import numpy as np
+import hnswlib
+
+# HNSW 인덱스 생성 및 검색 예제
+def create_hnsw_index(vectors, dim=128):
+    num_elements = len(vectors)
+
+    # HNSW 인덱스 초기화
+    index = hnswlib.Index(space='cosine', dim=dim)
+
+    # 인덱스 파라미터 설정
+    # M: 노드당 연결 수 (높을수록 정확, 메모리 증가)
+    # ef_construction: 인덱스 구축 시 탐색 범위
+    index.init_index(
+        max_elements=num_elements,
+        ef_construction=200,
+        M=16
+    )
+
+    # 벡터 추가
+    ids = np.arange(num_elements)
+    index.add_items(vectors, ids)
+
+    # 검색 시 ef 파라미터 설정 (높을수록 정확, 느림)
+    index.set_ef(100)
+
+    return index
+
+# 사용 예시
+dim = 128
+num_vectors = 100000
+vectors = np.random.randn(num_vectors, dim).astype('float32')
+
+# 인덱스 생성
+index = create_hnsw_index(vectors, dim)
+
+# 쿼리 벡터로 검색
+query = np.random.randn(1, dim).astype('float32')
+labels, distances = index.knn_query(query, k=10)
+
+print(f"가장 유사한 10개 벡터 ID: {labels[0]}")
+print(f"코사인 거리: {distances[0]}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">벡터 DB 선정 회의에서</div>
+                    <p class="conv-quote">"1억 개 임베딩을 저장해야 하는데, HNSW 기반 인덱스가 필수예요. Milvus나 Qdrant가 HNSW를 잘 지원하고, ef와 M 파라미터 튜닝으로 recall 95% 이상 나옵니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">기술 면접에서</div>
+                    <p class="conv-quote">"HNSW와 IVF의 차이는 구조입니다. IVF는 클러스터 기반으로 메모리 효율적이지만 recall이 낮고, HNSW는 그래프 기반으로 recall이 높지만 메모리를 더 사용합니다. 대부분의 경우 HNSW가 품질 면에서 유리합니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">성능 최적화 논의에서</div>
+                    <p class="conv-quote">"검색 지연이 50ms인데 10ms 이하로 줄여야 해요. ef를 100에서 50으로 낮추면 속도는 빨라지지만 recall이 떨어지니, 먼저 벤치마크로 적절한 트레이드오프를 찾아야 합니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">1</span>
+                    <div>
+                        <strong>메모리 사용량</strong>
+                        <p>HNSW는 그래프 구조를 메모리에 유지해야 합니다. 1억 개 768차원 벡터는 약 300GB+ 메모리가 필요할 수 있으니 용량을 미리 계산하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">2</span>
+                    <div>
+                        <strong>인덱스 구축 시간</strong>
+                        <p>대규모 데이터셋에서 HNSW 인덱스 구축은 수 시간이 걸릴 수 있습니다. 배치 삽입과 병렬 처리를 활용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">3</span>
+                    <div>
+                        <strong>파라미터 튜닝 필요</strong>
+                        <p>M, ef_construction, ef 파라미터는 데이터셋 특성에 따라 최적값이 다릅니다. 반드시 자체 벤치마크로 튜닝하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Vector%20Database/" class="related-term-link">Vector Database</a>
+                <a href="/ko/term/Embedding/" class="related-term-link">Embedding</a>
+                <a href="/ko/term/Semantic%20Search/" class="related-term-link">Semantic Search</a>
+                <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                <a href="/ko/term/Cosine%20Similarity/" class="related-term-link">Cosine Similarity</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/1603.09320" target="_blank" class="learn-link">
+                    <span>HNSW 원본 논문 (arXiv)</span>
+                </a>
+                <a href="https://github.com/nmslib/hnswlib" target="_blank" class="learn-link">
+                    <span>hnswlib - 공식 Python 라이브러리</span>
+                </a>
+                <a href="https://www.pinecone.io/learn/hnsw/" target="_blank" class="learn-link">
+                    <span>Pinecone - HNSW 알고리즘 가이드</span>
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +467,26 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

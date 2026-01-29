@@ -147,19 +147,126 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
+        .content-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
         }
-        .related-title {
-            font-size: 1.3rem;
+        .section-title {
+            font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .conversation-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+        }
+        .conversation-box .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .warning-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: #fbbf24;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #67e8f9;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
         }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
+            .content-section { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -202,6 +309,197 @@
                 </a>
             </div>
         </article>
+
+        <!-- Detailed Explanation Section -->
+        <section class="content-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>그래디언트 부스팅(Gradient Boosting)은 여러 개의 약한 학습기(주로 결정 트리)를 순차적으로 결합하여 강력한 예측 모델을 만드는 앙상블 기법입니다. 각 단계에서 이전 모델의 잔차(residual), 즉 오차를 학습하는 새로운 모델을 추가합니다. 이 과정에서 경사하강법(Gradient Descent)을 사용하여 손실 함수를 최소화하는 방향으로 모델을 개선해 나갑니다.</p>
+
+                <p>부스팅의 핵심 아이디어는 "이전 모델이 틀린 부분에 집중하라"입니다. 첫 번째 트리가 예측한 오차를 두 번째 트리가 학습하고, 그 오차를 다시 세 번째 트리가 학습하는 식으로 반복합니다. 최종 예측은 모든 트리 예측의 합으로 계산됩니다. 이 방식은 랜덤 포레스트처럼 병렬로 학습하는 배깅(Bagging)과 달리 순차적으로 학습하므로 이전 모델의 약점을 보완할 수 있습니다.</p>
+
+                <p>실무에서 가장 많이 사용되는 구현체로 XGBoost, LightGBM, CatBoost가 있습니다. XGBoost는 정규화와 병렬 처리 최적화로 Kaggle 대회에서 많은 우승을 차지했습니다. LightGBM은 리프 중심 트리 성장 방식으로 대규모 데이터에서 더 빠릅니다. CatBoost는 범주형 변수를 별도 전처리 없이 처리하고 순서 의존 타깃 인코딩으로 과적합을 줄입니다.</p>
+
+                <p>그래디언트 부스팅은 정형 데이터(tabular data)에서 여전히 딥러닝보다 우수한 성능을 보이는 경우가 많습니다. 특히 피처 엔지니어링과 하이퍼파라미터 튜닝에 민감하므로, 학습률(learning_rate), 트리 개수(n_estimators), 트리 깊이(max_depth), 정규화 파라미터(reg_alpha, reg_lambda)를 신중하게 조정해야 합니다. 과적합 방지를 위해 조기 종료(early stopping)를 함께 사용하는 것이 일반적입니다.</p>
+            </div>
+        </section>
+
+        <!-- Code Example Section -->
+        <section class="content-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>XGBoost, LightGBM, CatBoost 세 가지 구현체를 비교하는 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <code># pip install xgboost lightgbm catboost scikit-learn
+
+import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import accuracy_score, classification_report
+import xgboost as xgb
+import lightgbm as lgb
+from catboost import CatBoostClassifier
+import time
+
+# 데이터 생성
+X, y = make_classification(n_samples=10000, n_features=20, n_informative=15,
+                           n_redundant=3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 1. XGBoost
+print("=== XGBoost ===")
+start = time.time()
+xgb_model = xgb.XGBClassifier(
+    n_estimators=100,
+    max_depth=6,
+    learning_rate=0.1,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    reg_alpha=0.1,
+    reg_lambda=1.0,
+    early_stopping_rounds=10,
+    eval_metric='logloss',
+    random_state=42
+)
+xgb_model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
+xgb_pred = xgb_model.predict(X_test)
+print(f"정확도: {accuracy_score(y_test, xgb_pred):.4f}")
+print(f"학습 시간: {time.time() - start:.2f}초")
+
+# 2. LightGBM
+print("\n=== LightGBM ===")
+start = time.time()
+lgb_model = lgb.LGBMClassifier(
+    n_estimators=100,
+    max_depth=6,
+    learning_rate=0.1,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    reg_alpha=0.1,
+    reg_lambda=1.0,
+    random_state=42,
+    verbose=-1
+)
+lgb_model.fit(
+    X_train, y_train,
+    eval_set=[(X_test, y_test)],
+    callbacks=[lgb.early_stopping(stopping_rounds=10, verbose=False)]
+)
+lgb_pred = lgb_model.predict(X_test)
+print(f"정확도: {accuracy_score(y_test, lgb_pred):.4f}")
+print(f"학습 시간: {time.time() - start:.2f}초")
+
+# 3. CatBoost
+print("\n=== CatBoost ===")
+start = time.time()
+cat_model = CatBoostClassifier(
+    iterations=100,
+    depth=6,
+    learning_rate=0.1,
+    l2_leaf_reg=3.0,
+    random_seed=42,
+    verbose=False,
+    early_stopping_rounds=10
+)
+cat_model.fit(X_train, y_train, eval_set=(X_test, y_test))
+cat_pred = cat_model.predict(X_test)
+print(f"정확도: {accuracy_score(y_test, cat_pred):.4f}")
+print(f"학습 시간: {time.time() - start:.2f}초")
+
+# 피처 중요도 (XGBoost)
+print("\n=== XGBoost 피처 중요도 Top 5 ===")
+importance = xgb_model.feature_importances_
+indices = np.argsort(importance)[::-1][:5]
+for i, idx in enumerate(indices):
+    print(f"{i+1}. Feature {idx}: {importance[idx]:.4f}")
+
+# 결과 예시:
+# === XGBoost ===
+# 정확도: 0.9285
+# 학습 시간: 0.42초
+#
+# === LightGBM ===
+# 정확도: 0.9310
+# 학습 시간: 0.18초</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Conversation Section -->
+        <section class="content-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-box">
+                    <div class="speaker">PM:</div>
+                    <div>"이번 고객 이탈 예측 모델, 어떤 알고리즘 쓸 건가요? 딥러닝?"</div>
+                </div>
+                <div class="conversation-box">
+                    <div class="speaker">ML 엔지니어:</div>
+                    <div>"정형 데이터라 LightGBM으로 시작합니다. 데이터 100만 건인데 학습 시간도 빠르고, 범주형 피처 50개는 CatBoost가 더 나을 수도 있어서 둘 다 비교해볼게요. 하이퍼파라미터는 Optuna로 튜닝하고, early_stopping 걸어서 과적합 방지하겠습니다."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Mistakes Section -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>n_estimators를 매우 크게 설정하고 early_stopping 없이 학습</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>early_stopping_rounds와 함께 사용하여 최적 트리 개수 자동 결정</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>학습률(learning_rate)을 너무 높게 설정하여 과적합 발생</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>0.01~0.1 범위에서 시작하고, 트리 개수와 함께 조정</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>범주형 변수를 원핫 인코딩 없이 그대로 XGBoost에 입력</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>XGBoost는 범주형 인코딩 필요, CatBoost는 cat_features 지정으로 자동 처리</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms Section -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EC%95%99%EC%83%81%EB%B8%94/" class="related-term-link">앙상블</a>
+                <a href="/ko/term/%EB%9E%9C%EB%8D%A4%20%ED%8F%AC%EB%A0%88%EC%8A%A4%ED%8A%B8/" class="related-term-link">랜덤 포레스트</a>
+                <a href="/ko/term/%EA%B2%B0%EC%A0%95%20%ED%8A%B8%EB%A6%AC/" class="related-term-link">결정 트리</a>
+                <a href="/ko/term/%EA%B2%BD%EC%82%AC%ED%95%98%EA%B0%95%EB%B2%95/" class="related-term-link">경사하강법</a>
+                <a href="/ko/term/%ED%95%98%EC%9D%B4%ED%8D%BC%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0%20%ED%8A%9C%EB%8B%9D/" class="related-term-link">하이퍼파라미터 튜닝</a>
+            </div>
+        </section>
+
+        <!-- Learn More Section -->
+        <section class="content-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://xgboost.readthedocs.io/" target="_blank">📄 XGBoost 공식 문서</a></li>
+                <li><a href="https://lightgbm.readthedocs.io/" target="_blank">📄 LightGBM 공식 문서</a></li>
+                <li><a href="https://catboost.ai/en/docs/" target="_blank">📄 CatBoost 공식 문서</a></li>
+                <li><a href="https://www.youtube.com/watch?v=3CC4N4z3GJc" target="_blank">🎬 그래디언트 부스팅 원리 설명 (StatQuest)</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +510,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

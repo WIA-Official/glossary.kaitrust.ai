@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSR (Server-Side Rendering) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="서버에서 HTML을 생성하여 전송하는 렌더링 방식. SEO에 유리. Next.js, Nuxt.js가 대표적.">
-    <meta name="keywords" content="SSR, Server-Side Rendering, AI 용어, KAITRUST, AI 백과사전, 웹개발">
+    <title>SSR | Server-Side Rendering 서버 사이드 렌더링 | KAITRUST AI 백과사전</title>
+    <meta name="description" content="SSR(Server-Side Rendering)은 요청마다 서버에서 HTML을 생성하는 렌더링 방식입니다. 실시간 데이터와 SEO가 중요한 페이지에 적합하며, Next.js, Nuxt.js에서 기본 지원합니다.">
+    <meta name="keywords" content="SSR, Server-Side Rendering, 서버 사이드 렌더링, getServerSideProps, 서버 렌더링, Next.js, Nuxt.js, SEO, 실시간 데이터, 하이드레이션, TTFB, FCP, 웹개발">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/SSR/">
 
     <!-- Open Graph -->
@@ -202,6 +202,159 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">SSR(Server-Side Rendering)은 사용자가 페이지를 요청할 때마다 서버에서 HTML을 동적으로 생성하여 전송하는 렌더링 방식입니다. 클라이언트는 이미 콘텐츠가 포함된 완성된 HTML을 받기 때문에, 초기 로딩 시 화면이 빠르게 표시됩니다.</p>
+                <p style="margin-bottom: 1rem;">SSR의 가장 큰 장점은 SEO와 소셜 미디어 공유입니다. 검색 엔진 크롤러나 SNS 봇이 JavaScript 실행 없이도 페이지 콘텐츠를 읽을 수 있어, SPA의 SEO 문제를 해결합니다. 메타 태그도 동적으로 생성할 수 있습니다.</p>
+                <p style="margin-bottom: 1rem;">Next.js의 getServerSideProps, Nuxt의 asyncData, Remix의 loader 등이 SSR을 구현합니다. 서버에서 데이터를 가져와 HTML에 포함시킨 후, 클라이언트에서 Hydration을 통해 React/Vue 앱으로 활성화됩니다.</p>
+                <p>SSR은 서버 부하가 증가하고 TTFB(Time To First Byte)가 SSG보다 느립니다. 하지만 실시간 데이터가 필요하거나 사용자별 맞춤 콘텐츠를 제공해야 할 때 필수적인 방식입니다. Streaming SSR로 응답 시간을 개선할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>// Next.js SSR with getServerSideProps
+// pages/dashboard.tsx
+
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
+
+interface DashboardProps {
+  user: { name: string; email: string };
+  stats: { visitors: number; revenue: number };
+}
+
+// 매 요청마다 서버에서 실행
+export const getServerSideProps: GetServerSideProps = async (context) =&gt; {
+  // 인증 확인
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  // 실시간 데이터 페칭
+  const [user, stats] = await Promise.all([
+    fetch(`${process.env.API_URL}/user/${session.user.id}`).then(r =&gt; r.json()),
+    fetch(`${process.env.API_URL}/stats`, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    }).then(r =&gt; r.json())
+  ]);
+
+  return {
+    props: {
+      user,
+      stats,
+    },
+  };
+};
+
+export default function Dashboard({ user, stats }: DashboardProps) {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;안녕하세요, {user.name}님&lt;/h1&gt;
+      &lt;div className="stats"&gt;
+        &lt;div&gt;방문자: {stats.visitors.toLocaleString()}&lt;/div&gt;
+        &lt;div&gt;매출: ₩{stats.revenue.toLocaleString()}&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Next.js App Router SSR
+// app/dashboard/page.tsx
+async function Dashboard() {
+  const session = await getServerSession();
+  const stats = await fetch('https://api.example.com/stats', {
+    cache: 'no-store' // SSR 강제
+  }).then(r =&gt; r.json());
+
+  return &lt;DashboardClient stats={stats} /&gt;;
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">기술 미팅에서:</p>
+                    <p>"대시보드 페이지는 SSR이 맞아요. 실시간 데이터에 인증도 필요하니까요. 근데 서버 부하 걱정되면 캐싱 레이어 추가하거나 stale-while-revalidate 헤더 설정하면 됩니다."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"SSR의 단점과 해결 방법은요?" - "TTFB가 느려질 수 있는데, Streaming SSR로 점진적 렌더링하거나, Edge Runtime에서 실행해서 지연 시간을 줄일 수 있습니다."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">코드 리뷰에서:</p>
+                    <p>"getServerSideProps에서 5개 API 순차 호출하고 있네요. Promise.all로 병렬화하면 응답 시간 반 이상 줄일 수 있어요. 의존성 없는 요청은 동시에 보내세요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">getServerSideProps에서 에러가 발생하면 전체 페이지가 500 에러를 반환합니다. try-catch로 에러를 처리하고 fallback UI를 제공하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">SSR 함수에서 window, document 같은 브라우저 API를 사용하면 에러가 발생합니다. 서버/클라이언트 환경을 구분하여 코드를 작성하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">모든 페이지를 SSR로 만들면 서버 비용이 급증합니다. 정적인 페이지는 SSG, 실시간 데이터만 SSR로 하이브리드 구성하세요.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/SSG/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">SSG</a>
+                <a href="/ko/term/Hydration/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Hydration</a>
+                <a href="/ko/term/Streaming%20SSR/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Streaming SSR</a>
+                <a href="/ko/term/Next.js/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Next.js</a>
+                <a href="/ko/term/Edge%20Runtime/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Edge Runtime</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Next.js 공식 문서 - Server-side Rendering
+                </a>
+                <a href="https://nuxt.com/docs/guide/concepts/rendering#server-side-rendering" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Nuxt 공식 문서 - Server-side Rendering
+                </a>
+                <a href="https://web.dev/articles/rendering-on-the-web" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> web.dev - Rendering on the Web
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,177 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>ONNX(Open Neural Network Exchange)는 딥러닝 모델을 다양한 프레임워크와 하드웨어에서 실행할 수 있게 해주는 개방형 표준 포맷입니다. PyTorch에서 학습한 모델을 TensorFlow에서 추론하거나, 모바일/엣지 디바이스에 배포할 때 중간 포맷으로 활용됩니다.</p>
+                <p>2017년 Facebook과 Microsoft가 공동 발표했으며, 이후 Amazon, Google, NVIDIA 등 주요 기업이 참여하는 Linux Foundation 프로젝트가 되었습니다. 프레임워크 종속성 없이 모델을 이식할 수 있어, ML 생태계의 표준으로 자리잡았습니다.</p>
+                <p>ONNX는 모델의 계산 그래프와 연산자(Operator)를 표준화된 형식으로 저장합니다. ONNX Runtime은 Microsoft가 개발한 추론 엔진으로, CPU/GPU/NPU 등 다양한 하드웨어에서 최적화된 추론을 지원하며, 평균 2-3배 추론 속도 향상을 제공합니다.</p>
+                <p>실무에서 ONNX는 모델 서빙(배포) 단계에서 핵심입니다. PyTorch로 연구/개발하고, ONNX로 변환하여 TensorRT(NVIDIA), OpenVINO(Intel), CoreML(Apple) 등 타겟 플랫폼에 최적화해 배포하는 워크플로우가 일반적입니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># ONNX 변환 및 추론 예제
+# pip install torch onnx onnxruntime
+
+import torch
+import torch.nn as nn
+import onnx
+import onnxruntime as ort
+import numpy as np
+
+# ===== 1. PyTorch 모델 정의 =====
+class SimpleModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.fc1 = nn.Linear(10, 64)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(64, 2)
+
+    def forward(self, x):
+        x = self.relu(self.fc1(x))
+        return self.fc2(x)
+
+model = SimpleModel()
+model.eval()
+
+# ===== 2. ONNX로 변환 =====
+dummy_input = torch.randn(1, 10)  # 예시 입력
+
+torch.onnx.export(
+    model,                        # 모델
+    dummy_input,                  # 예시 입력
+    "model.onnx",                 # 출력 파일
+    export_params=True,           # 가중치 포함
+    opset_version=17,             # ONNX opset 버전
+    input_names=['input'],        # 입력 이름
+    output_names=['output'],      # 출력 이름
+    dynamic_axes={                # 동적 배치 크기
+        'input': {0: 'batch_size'},
+        'output': {0: 'batch_size'}
+    }
+)
+print("ONNX 모델 저장 완료: model.onnx")
+
+# ===== 3. ONNX 모델 검증 =====
+onnx_model = onnx.load("model.onnx")
+onnx.checker.check_model(onnx_model)
+print("ONNX 모델 검증 통과!")
+
+# 모델 구조 확인
+print(onnx.helper.printable_graph(onnx_model.graph))
+
+# ===== 4. ONNX Runtime으로 추론 =====
+# 세션 생성 (GPU 사용시: providers=['CUDAExecutionProvider'])
+session = ort.InferenceSession(
+    "model.onnx",
+    providers=['CPUExecutionProvider']
+)
+
+# 추론 실행
+input_data = np.random.randn(5, 10).astype(np.float32)
+outputs = session.run(None, {'input': input_data})
+print(f"추론 결과 shape: {outputs[0].shape}")
+
+# ===== 5. 성능 비교 =====
+import time
+
+# PyTorch 추론 시간
+torch_input = torch.from_numpy(input_data)
+start = time.time()
+for _ in range(1000):
+    _ = model(torch_input)
+pytorch_time = time.time() - start
+
+# ONNX Runtime 추론 시간
+start = time.time()
+for _ in range(1000):
+    _ = session.run(None, {'input': input_data})
+onnx_time = time.time() - start
+
+print(f"PyTorch: {pytorch_time:.3f}s, ONNX Runtime: {onnx_time:.3f}s")
+print(f"속도 향상: {pytorch_time/onnx_time:.2f}x")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 배포 계획 회의에서</div>
+                    <blockquote class="conv-quote">"PyTorch 모델을 프로덕션에 배포할 때 ONNX로 변환하면 ONNX Runtime으로 2-3배 빠른 추론이 가능합니다. NVIDIA GPU면 TensorRT, Intel CPU면 OpenVINO로 추가 최적화할 수 있고요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"ONNX는 딥러닝 모델의 개방형 표준 포맷으로, 프레임워크 간 이식성을 제공합니다. 계산 그래프와 연산자를 표준화해서 저장하고, ONNX Runtime으로 다양한 하드웨어에서 최적화된 추론이 가능합니다. 실무에서는 주로 PyTorch 학습 후 서빙 단계에서 변환합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 문제 해결 상황에서</div>
+                    <blockquote class="conv-quote">"변환 중 에러가 나면 opset 버전 문제일 수 있어요. opset_version을 낮춰보거나, 지원 안 되는 연산자가 있으면 torch.onnx.register_custom_op_symbolic으로 커스텀 매핑을 해야 합니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>모든 PyTorch 연산이 지원된다고 가정</strong>
+                        <p>일부 커스텀 연산이나 최신 연산자는 ONNX에서 지원되지 않을 수 있습니다. 변환 전 호환성을 확인하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>변환 후 정확도 검증 생략</strong>
+                        <p>변환 과정에서 수치 오차가 발생할 수 있습니다. 반드시 동일 입력에 대해 원본과 ONNX 모델의 출력을 비교하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 접근법</strong>
+                        <p>변환 전 onnx.checker로 검증하고, 동일 입력에 대한 출력 차이를 np.allclose()로 확인하세요. dynamic_axes를 설정해 배치 크기 유연성을 확보하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/PyTorch/" class="related-term-link">PyTorch</a>
+                <a href="/ko/term/TensorFlow/" class="related-term-link">TensorFlow</a>
+                <a href="/ko/term/TensorRT/" class="related-term-link">TensorRT</a>
+                <a href="/ko/term/Model%20Serving/" class="related-term-link">Model Serving</a>
+                <a href="/ko/term/Quantization/" class="related-term-link">Quantization</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://onnx.ai/" target="_blank" class="learn-link">📄 ONNX 공식 사이트</a>
+                <a href="https://github.com/microsoft/onnxruntime" target="_blank" class="learn-link">🎓 ONNX Runtime GitHub</a>
+                <a href="https://pytorch.org/docs/stable/onnx.html" target="_blank" class="learn-link">📘 PyTorch ONNX 문서</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +407,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

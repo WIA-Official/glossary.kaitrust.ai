@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,108 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Cosign은 Sigstore 프로젝트의 핵심 도구로, 컨테이너 이미지에 디지털 서명을 추가하고 검증하는 기능을 제공합니다. 소프트웨어 공급망 보안이 중요해지면서, 배포되는 컨테이너 이미지가 신뢰할 수 있는 출처에서 왔고 변조되지 않았음을 증명하는 것이 필수가 되었습니다.</p>
+                <p>Cosign의 가장 큰 특징은 "keyless signing"입니다. 전통적인 서명 방식은 개인 키를 안전하게 보관해야 하지만, Cosign은 OIDC(OpenID Connect) 기반 인증을 통해 임시 키를 생성하고 서명합니다. GitHub Actions, GitLab CI에서 워크플로 아이덴티티를 사용하면 키 관리 부담 없이 서명할 수 있습니다.</p>
+                <p>서명된 이미지는 Rekor(투명성 로그)에 기록되어 누가 언제 서명했는지 공개적으로 검증 가능합니다. 이를 통해 SLSA(Supply-chain Levels for Software Artifacts) 요구사항을 충족하고, 감사 추적이 가능해집니다.</p>
+                <p>Kubernetes 환경에서는 Kyverno나 Gatekeeper와 연동하여 서명되지 않은 이미지의 배포를 차단할 수 있습니다. 이를 통해 "신뢰할 수 있는 이미지만 클러스터에 배포"라는 정책을 강제할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="bash">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Cosign 설치 (macOS)
+brew install cosign
+
+# Keyless 서명 (GitHub Actions에서 자동으로 OIDC 토큰 사용)
+cosign sign --yes ghcr.io/myorg/myapp:v1.0.0
+
+# 서명 검증
+cosign verify ghcr.io/myorg/myapp:v1.0.0 \
+  --certificate-identity=https://github.com/myorg/myapp/.github/workflows/build.yml@refs/tags/v1.0.0 \
+  --certificate-oidc-issuer=https://token.actions.githubusercontent.com
+
+# SBOM 첨부 (소프트웨어 구성요소 목록)
+cosign attach sbom --sbom sbom.spdx ghcr.io/myorg/myapp:v1.0.0
+
+# Attestation 추가 (빌드 출처 증명)
+cosign attest --predicate provenance.json --type slsaprovenance ghcr.io/myorg/myapp:v1.0.0
+
+# GitHub Actions 워크플로 예시
+# .github/workflows/build.yml
+jobs:
+  build:
+    permissions:
+      id-token: write  # OIDC 토큰 발급에 필요
+      packages: write
+    steps:
+      - uses: sigstore/cosign-installer@v3
+      - run: |
+          cosign sign --yes ${{ env.IMAGE_TAG }}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "공급망 보안 감사 준비하려면 모든 프로덕션 이미지에 서명 붙여야 해요. Cosign keyless로 CI 파이프라인에 추가합시다."</p>
+                <p><strong class="role-junior">주니어:</strong> "키 관리는 어떻게 하죠? 시크릿 저장소에 넣어야 하나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "Keyless 모드 쓰면 GitHub OIDC로 자동 서명돼요. 키 관리 필요 없어요. Rekor에 기록되니까 감사 로그도 자동으로 남고요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "컨테이너 이미지 공급망 보안을 어떻게 구현하시겠어요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "Cosign으로 CI에서 이미지 서명하고, Kyverno 정책으로 서명 검증된 이미지만 배포 허용합니다. Keyless 서명으로 키 관리 부담 없이 OIDC 기반으로 서명하고, Rekor 투명성 로그로 감사 추적합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "cosign verify에 --certificate-identity 옵션이 빠졌네요. 서명자 신원 검증 안 하면 아무 서명이나 통과돼요."</p>
+                <p><strong class="role-author">작성자:</strong> "맞아요, 워크플로 파일 경로랑 OIDC issuer도 지정해서 우리 CI에서 서명한 것만 허용하도록 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>Keyless 서명은 OIDC 토큰 유효 기간(보통 10분) 내에 서명해야 합니다. CI 파이프라인에서 이미지 빌드 후 바로 서명하세요.</li>
+                <li>서명 검증 시 --certificate-identity와 --certificate-oidc-issuer를 반드시 지정하세요. 없으면 모든 유효한 서명이 통과됩니다.</li>
+                <li class="info">프라이빗 환경에서는 자체 Sigstore 인프라(Fulcio, Rekor, CTFE)를 구축하거나, 전통적인 키 기반 서명을 사용할 수 있습니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Sigstore/" class="related-link">Sigstore</a>
+                <a href="/ko/term/SLSA/" class="related-link">SLSA</a>
+                <a href="/ko/term/SBOM/" class="related-link">SBOM</a>
+                <a href="/ko/term/Supply%20Chain%20Security/" class="related-link">Supply Chain Security</a>
+                <a href="/ko/term/Kyverno/" class="related-link">Kyverno</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.sigstore.dev/cosign/overview/" target="_blank">Cosign 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://github.com/sigstore/cosign" target="_blank">Cosign GitHub 저장소</a></li>
+                <li><span class="type-tutorial"></span><a href="https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect" target="_blank">GitHub Actions OIDC 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +315,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

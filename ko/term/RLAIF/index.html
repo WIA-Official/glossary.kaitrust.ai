@@ -161,6 +161,107 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhanced Sections */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+
+        .code-block {
+            position: relative;
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .code-block pre { margin: 0; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-left: 3px solid #a855f7;
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .conv-context { font-weight: 600; color: #a855f7; margin-bottom: 0.5rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; }
+
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+        }
+        .warning-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            color: #a855f7;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(168, 85, 247, 0.2); }
     </style>
 </head>
 <body>
@@ -189,7 +290,7 @@
                 <span>AI/ML</span>
             </div>
             <h1 class="term-title">RLAIF</h1>
-            
+            <p class="term-english">Reinforcement Learning from AI Feedback</p>
             <div class="term-description">
                 <p>AI 피드백으로 강화학습하는 방법</p>
             </div>
@@ -202,6 +303,133 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>RLAIF(Reinforcement Learning from AI Feedback, AI 피드백 기반 강화학습)</strong>는 인간 대신 AI 모델이 피드백을 제공하여 다른 AI 모델을 학습시키는 기법입니다. RLHF의 인간 라벨러 비용과 확장성 문제를 해결하기 위해 개발되었으며, 더 강력한 AI가 약한 AI를 평가하고 개선하는 방식으로 작동합니다.</p>
+                <p>RLAIF는 2023년 Google에서 Constitutional AI와 함께 주목받기 시작했습니다. RLHF는 수천 명의 인간 라벨러가 필요해 비용이 높고 일관성 유지가 어려웠는데, RLAIF는 AI가 원칙(Constitution)에 따라 자동으로 피드백을 생성하므로 대규모 학습이 가능해졌습니다.</p>
+                <p>RLAIF의 핵심 원리는 "AI 심사위원" 개념입니다. 먼저 더 강력한 모델(예: GPT-4, Claude)이 두 응답을 비교하여 선호도를 판단합니다. 이 AI 피드백으로 Reward Model을 학습시키고, 이를 바탕으로 Policy Model을 최적화합니다. Constitutional AI에서는 원칙 기반 자기 개선도 포함됩니다.</p>
+                <p>실무에서 RLAIF는 RLHF의 보완책 또는 대안으로 활용됩니다. 특히 도메인별 Fine-tuning, 다국어 모델 학습, 빠른 프로토타이핑에 효과적입니다. Anthropic의 Claude는 Constitutional AI + RLAIF 조합으로 안전성을 강화했으며, 이는 업계 표준이 되어가고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>AI 피드백을 활용한 선호도 데이터 생성 예제입니다.</p>
+                <div class="code-block" data-lang="python">
+                    <pre><code class="language-python"># RLAIF: AI를 활용한 선호도 데이터 생성
+from openai import OpenAI
+
+client = OpenAI()
+
+def generate_ai_preference(prompt: str, response_a: str, response_b: str) -> dict:
+    """AI가 두 응답을 비교하여 선호도를 판단"""
+
+    evaluation_prompt = f"""다음 두 응답을 비교하여 어느 것이 더 좋은지 판단하세요.
+
+질문: {prompt}
+
+응답 A: {response_a}
+
+응답 B: {response_b}
+
+평가 기준:
+1. 정확성: 사실적으로 올바른가?
+2. 유용성: 질문에 적절히 답변하는가?
+3. 안전성: 유해하거나 편향된 내용이 없는가?
+
+JSON 형식으로 답변: {{"preferred": "A" 또는 "B", "reason": "선택 이유"}}"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": evaluation_prompt}],
+        response_format={"type": "json_object"}
+    )
+
+    return eval(response.choices[0].message.content)
+
+# 사용 예시
+result = generate_ai_preference(
+    prompt="파이썬의 장점은?",
+    response_a="파이썬은 쉽습니다.",
+    response_b="파이썬은 간결한 문법, 풍부한 라이브러리, 활발한 커뮤니티가 장점입니다."
+)
+print(f"선호 응답: {result['preferred']}, 이유: {result['reason']}")</code></pre>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <div class="conv-quote">"RLHF 라벨링 비용이 부담되면 RLAIF로 시작해보죠. GPT-4를 심사위원으로 쓰면 초기 데이터셋은 빠르게 만들 수 있어요."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <div class="conv-quote">"RLAIF는 RLHF의 확장성 문제를 해결합니다. 다만 AI 피드백의 편향이 전파될 수 있어 인간 검증과 병행하는 게 좋습니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <div class="conv-quote">"Constitutional AI의 핵심은 원칙 기반 자기 개선입니다. RLAIF로 Self-Critique 과정을 자동화하면 안전성을 체계적으로 강화할 수 있어요."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div><strong>AI 피드백만 신뢰</strong>: AI 심사위원도 편향이 있습니다. 특히 평가 모델보다 강한 모델을 학습시킬 때는 인간 검증이 필수입니다.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div><strong>단일 모델로 평가</strong>: 하나의 AI로만 평가하면 해당 모델의 편향이 증폭됩니다. 여러 모델의 앙상블 평가를 권장합니다.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div><strong>RLHF + RLAIF 하이브리드</strong>: 핵심 안전성 기준은 인간이, 스타일/품질은 AI가 평가하는 방식으로 비용과 품질의 균형을 맞추세요.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/RLHF/" class="related-term-link">RLHF</a>
+                <a href="/ko/term/Constitutional%20AI/" class="related-term-link">Constitutional AI</a>
+                <a href="/ko/term/Reward%20Model/" class="related-term-link">Reward Model</a>
+                <a href="/ko/term/PPO/" class="related-term-link">PPO</a>
+                <a href="/ko/term/DPO/" class="related-term-link">DPO</a>
+                <a href="/ko/term/Fine-tuning/" class="related-term-link">Fine-tuning</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/2309.00267" target="_blank" class="learn-link">
+                    📝 RLAIF 논문 (Google, 2023)
+                </a>
+                <a href="https://www.anthropic.com/research/constitutional-ai" target="_blank" class="learn-link">
+                    📄 Constitutional AI - Anthropic
+                </a>
+                <a href="https://huggingface.co/blog/rlhf" target="_blank" class="learn-link">
+                    🎓 Hugging Face RLHF 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,6 +437,15 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>

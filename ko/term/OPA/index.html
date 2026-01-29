@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,126 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>OPA(Open Policy Agent)는 CNCF 프로젝트로, 클라우드 네이티브 환경에서 정책을 코드로 관리하는 범용 정책 엔진입니다. Rego라는 선언적 언어로 정책을 작성하며, Kubernetes뿐 아니라 API 게이트웨이, CI/CD, 마이크로서비스 등 다양한 곳에 적용됩니다.</p>
+                <p>OPA의 핵심 원리는 "정책과 데이터의 분리"입니다. 정책(Rego)과 데이터(JSON)를 OPA에 로드하면, 쿼리에 대해 허용/거부 결정을 반환합니다. 이를 통해 중앙 집중식 정책 관리가 가능합니다.</p>
+                <p>Kubernetes에서는 Gatekeeper를 통해 OPA를 사용합니다. API 게이트웨이에서는 Envoy, Kong과 연동하여 API 접근 제어를 구현합니다. Terraform에서는 conftest로 IaC 정책을 검증합니다.</p>
+                <p>Rego 언어는 처음에 생소할 수 있지만, 복잡한 조건 로직을 간결하게 표현할 수 있습니다. OPA Playground에서 온라인으로 Rego를 테스트해볼 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># OPA 설치 (CLI)
+brew install opa
+
+# 기본 Rego 정책 예시 (authz.rego)
+package authz
+
+default allow = false
+
+# 관리자는 모든 접근 허용
+allow {
+    input.user.role == "admin"
+}
+
+# 일반 사용자는 자신의 리소스만 접근 가능
+allow {
+    input.user.role == "user"
+    input.resource.owner == input.user.id
+}
+
+# 읽기 작업은 공개 리소스에 허용
+allow {
+    input.action == "read"
+    input.resource.public == true
+}
+
+# OPA 서버 실행
+opa run --server authz.rego
+
+# 정책 쿼리 (curl)
+curl -X POST localhost:8181/v1/data/authz/allow \
+  -H "Content-Type: application/json" \
+  -d '{"input": {"user": {"role": "admin"}, "action": "delete", "resource": {"id": "123"}}}'
+
+# conftest로 Terraform 정책 검증
+# policy/terraform.rego
+package terraform
+
+deny[msg] {
+    resource := input.resource_changes[_]
+    resource.type == "aws_s3_bucket"
+    not resource.change.after.versioning[0].enabled
+    msg := sprintf("S3 bucket %v must have versioning enabled", [resource.address])
+}
+
+# 실행
+conftest test terraform.plan.json</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">아키텍트:</strong> "API 접근 제어를 OPA로 중앙화하려고요. Envoy 사이드카에서 OPA 쿼리해서 허용/거부 결정하면 서비스 코드 수정 없이 정책 적용 가능해요."</p>
+                <p><strong class="role-junior">개발자:</strong> "Rego 배워야 하나요?"</p>
+                <p><strong class="role-senior">아키텍트:</strong> "기본 문법만 알면 돼요. OPA Playground에서 연습해보세요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Policy as Code를 어떻게 구현하시겠어요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "OPA로 중앙 정책 엔진을 구축합니다. Kubernetes에는 Gatekeeper, API 게이트웨이에는 Envoy+OPA, CI에서는 conftest로 IaC 검증합니다. Rego 정책은 Git으로 버전 관리하고, PR 리뷰를 통해 정책 변경을 승인합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 Rego에서 not 없이 조건을 부정하고 있어요. Rego에서는 명시적으로 not을 써야 해요."</p>
+                <p><strong class="role-author">작성자:</strong> "아, Rego 문법 실수였네요. 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li class="">Rego는 선언적 언어라 명령형 사고방식으로 접근하면 어렵습니다. 공식 튜토리얼로 패러다임을 이해하세요.</li>
+                <li class="">복잡한 정책은 성능에 영향을 줄 수 있습니다. 정책 번들을 미리 컴파일하고 벤치마크하세요.</li>
+                <li class="info">OPA Decision Log를 활성화하여 모든 정책 결정을 기록하고 감사에 활용하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Gatekeeper/" class="related-link">Gatekeeper</a>
+                <a href="/ko/term/Kyverno/" class="related-link">Kyverno</a>
+                <a href="/ko/term/Envoy/" class="related-link">Envoy</a>
+                <a href="/ko/term/Terraform/" class="related-link">Terraform</a>
+                <a href="/ko/term/RBAC/" class="related-link">RBAC</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://www.openpolicyagent.org/docs/latest/" target="_blank">OPA 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://play.openpolicyagent.org/" target="_blank">OPA Playground</a></li>
+                <li><span class="type-book"></span><a href="https://www.styra.com/blog/rego-style-guide/" target="_blank">Rego 스타일 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +333,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

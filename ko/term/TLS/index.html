@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,225 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>TLS(Transport Layer Security)는 인터넷 통신에서 데이터의 기밀성과 무결성을 보장하는 암호화 프로토콜입니다. SSL(Secure Sockets Layer)의 후속 버전으로, 1999년 TLS 1.0이 발표된 이후 SSL이라는 이름은 역사 속으로 사라졌지만, 업계에서는 여전히 'SSL 인증서'라는 표현을 관습적으로 사용합니다. 현재 웹 트래픽의 95% 이상이 TLS로 암호화되어 있습니다.</p>
+                <p>TLS Handshake는 클라이언트와 서버가 안전한 연결을 수립하는 협상 과정입니다. 클라이언트가 지원하는 TLS 버전과 암호화 스위트를 보내면, 서버가 선택하고 인증서를 전송합니다. 클라이언트는 인증서를 CA(Certificate Authority)를 통해 검증한 후, 세션 키를 교환하여 대칭 암호화 통신을 시작합니다. TLS 1.3에서는 이 과정이 1-RTT(왕복 시간)로 단축되어 연결 속도가 크게 향상되었습니다.</p>
+                <p>TLS 1.3(2018년 RFC 8446)은 보안과 성능 모두에서 혁신적인 개선을 이루었습니다. 취약한 암호화 알고리즘(RC4, 3DES, SHA-1)이 제거되었고, Perfect Forward Secrecy(PFS)가 필수화되어 과거 세션 키가 유출되어도 이전 통신은 복호화할 수 없습니다. 0-RTT 재연결 기능으로 이전에 연결했던 서버와는 지연 없이 바로 암호화 데이터를 전송할 수 있습니다.</p>
+                <p>Let's Encrypt의 등장으로 TLS 인증서 발급이 무료화되면서 HTTPS 보급이 급격히 확산되었습니다. mTLS(Mutual TLS)는 서버뿐 아니라 클라이언트도 인증서로 신원을 증명하는 방식으로, 마이크로서비스 간 통신이나 제로 트러스트 아키텍처에서 필수적으로 사용됩니다. HSTS(HTTP Strict Transport Security) 헤더를 설정하면 브라우저가 해당 도메인에 항상 HTTPS로만 접속하도록 강제할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="bash">Bash/OpenSSL</button>
+                <button class="code-tab" data-lang="javascript">Node.js</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python">import ssl
+import socket
+import requests
+
+# TLS 컨텍스트 생성 (기본 설정)
+context = ssl.create_default_context()
+
+# TLS 1.3만 허용 (최신 보안)
+context.minimum_version = ssl.TLSVersion.TLSv1_3
+context.maximum_version = ssl.TLSVersion.TLSv1_3
+
+# TLS 연결로 소켓 래핑
+hostname = "google.com"
+with socket.create_connection((hostname, 443)) as sock:
+    with context.wrap_socket(sock, server_hostname=hostname) as ssock:
+        print(f"TLS 버전: {ssock.version()}")  # TLSv1.3
+        print(f"암호화 스위트: {ssock.cipher()}")
+
+# requests로 HTTPS 요청 (인증서 검증)
+response = requests.get("https://api.example.com", verify=True)
+
+# 자체 서명 인증서 사용 시
+response = requests.get(
+    "https://internal.example.com",
+    verify="/path/to/ca-bundle.crt",
+    cert=("/path/to/client.crt", "/path/to/client.key")  # mTLS
+)
+
+# 인증서 정보 확인
+cert = ssock.getpeercert()
+print(f"발급자: {cert['issuer']}")
+print(f"만료일: {cert['notAfter']}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># 서버 TLS 버전 및 인증서 확인
+openssl s_client -connect google.com:443 -tls1_3
+openssl s_client -connect example.com:443 -servername example.com
+
+# 인증서 상세 정보 확인
+echo | openssl s_client -connect google.com:443 2>/dev/null | \
+    openssl x509 -noout -text
+
+# 인증서 만료일 확인
+echo | openssl s_client -connect google.com:443 2>/dev/null | \
+    openssl x509 -noout -dates
+
+# Let's Encrypt 인증서 발급 (certbot)
+sudo certbot certonly --standalone -d example.com
+sudo certbot certonly --webroot -w /var/www/html -d example.com
+
+# 인증서 자동 갱신 테스트
+sudo certbot renew --dry-run
+
+# 자체 서명 인증서 생성 (개발용)
+openssl req -x509 -newkey rsa:4096 -sha256 -days 365 \
+    -nodes -keyout server.key -out server.crt \
+    -subj "/CN=localhost" \
+    -addext "subjectAltName=DNS:localhost,IP:127.0.0.1"
+
+# TLS 버전별 테스트
+openssl s_client -connect example.com:443 -tls1_2
+openssl s_client -connect example.com:443 -tls1_3
+
+# 지원 암호화 스위트 확인
+nmap --script ssl-enum-ciphers -p 443 example.com</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="javascript">
+                <pre><code class="language-javascript">const https = require('https');
+const tls = require('tls');
+const fs = require('fs');
+
+// HTTPS 서버 생성 (TLS 1.3 강제)
+const server = https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.crt'),
+    minVersion: 'TLSv1.3',
+    maxVersion: 'TLSv1.3'
+}, (req, res) => {
+    res.writeHead(200);
+    res.end('Hello TLS 1.3!');
+});
+
+// mTLS 서버 (클라이언트 인증서 요구)
+const mtlsServer = https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.crt'),
+    ca: fs.readFileSync('ca.crt'),
+    requestCert: true,
+    rejectUnauthorized: true
+}, (req, res) => {
+    const clientCert = req.socket.getPeerCertificate();
+    console.log(`클라이언트 CN: ${clientCert.subject.CN}`);
+    res.end('mTLS 인증 성공!');
+});
+
+// TLS 연결 정보 확인
+const options = { host: 'google.com', port: 443, servername: 'google.com' };
+const socket = tls.connect(options, () => {
+    console.log('TLS 버전:', socket.getProtocol());  // TLSv1.3
+    console.log('암호화:', socket.getCipher().name);
+    console.log('인증서:', socket.getPeerCertificate().subject);
+    socket.end();
+});
+
+server.listen(443);</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 점검 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "현재 서버가 TLS 1.0, 1.1도 지원하고 있는데, 이건 보안 취약점입니다. PCI DSS 규정상 TLS 1.2 이상만 허용해야 하고, 가능하면 TLS 1.3으로 올리는 게 좋습니다. nginx 설정에서 ssl_protocols TLSv1.2 TLSv1.3;으로 제한하면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "TLS Handshake는 클라이언트가 ClientHello를 보내면 서버가 ServerHello와 인증서로 응답하고, 키 교환 후 대칭키로 암호화 통신합니다. TLS 1.3에서는 1-RTT로 줄어들었고, Perfect Forward Secrecy가 필수화되어 키가 유출되어도 과거 통신은 복호화할 수 없습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 설계 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "마이크로서비스 간 통신에는 mTLS를 적용해야 합니다. Istio 서비스 메시를 쓰면 사이드카 프록시가 자동으로 mTLS를 처리해주고, 인증서 로테이션도 자동화됩니다. HSTS 헤더도 max-age=31536000; includeSubDomains; preload로 설정해서 다운그레이드 공격을 막아야 합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>SSL/TLS 1.0, 1.1 사용</strong>
+                        <p>TLS 1.0, 1.1은 POODLE, BEAST 등 알려진 취약점이 있어 더 이상 사용해서는 안 됩니다. 주요 브라우저들은 2020년부터 TLS 1.0/1.1 지원을 중단했습니다. 반드시 TLS 1.2 이상을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>인증서 만료 방치</strong>
+                        <p>인증서가 만료되면 브라우저가 경고를 표시하고 사용자가 이탈합니다. Let's Encrypt 인증서는 90일마다 갱신이 필요합니다. certbot renew를 cron에 등록하거나 AWS Certificate Manager처럼 자동 갱신 서비스를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Mixed Content 허용</strong>
+                        <p>HTTPS 페이지에서 HTTP 리소스를 로드하면 보안 경고가 발생하고 일부 리소스가 차단됩니다. 모든 리소스(이미지, 스크립트, API)를 HTTPS로 제공하고, Content-Security-Policy: upgrade-insecure-requests 헤더를 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 TLS 설정 방법</strong>
+                        <p>TLS 1.3 + TLS 1.2만 허용, HSTS 헤더 설정, OCSP Stapling 활성화, 강력한 암호화 스위트만 허용(ECDHE, AES-GCM). SSL Labs(ssllabs.com/ssltest)에서 A+ 등급을 목표로 설정을 검증하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/HTTPS/" class="related-term-link">HTTPS</a>
+                <a href="/ko/term/SSL/" class="related-term-link">SSL</a>
+                <a href="/ko/term/Certificate/" class="related-term-link">Certificate</a>
+                <a href="/ko/term/TCP/" class="related-term-link">TCP</a>
+                <a href="/ko/term/OAuth/" class="related-term-link">OAuth</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/ssl/transport-layer-security-tls/" target="_blank" class="learn-link">
+                    📄 Cloudflare - TLS란 무엇인가?
+                </a>
+                <a href="https://letsencrypt.org/ko/getting-started/" target="_blank" class="learn-link">
+                    🔐 Let's Encrypt - 무료 TLS 인증서 시작하기
+                </a>
+                <a href="https://www.ssllabs.com/ssltest/" target="_blank" class="learn-link">
+                    🧪 SSL Labs - TLS 보안 등급 테스트
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +573,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,367 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Streamlit</strong>은 Python 개발자를 위한 오픈소스 데이터 앱 프레임워크입니다. 복잡한 프론트엔드 지식 없이 순수 Python 코드만으로 인터랙티브한 웹 애플리케이션을 몇 분 만에 구축할 수 있습니다.</p>
+
+                <h3>핵심 특징</h3>
+                <ul>
+                    <li><strong>Simple API:</strong> st.write(), st.dataframe() 등 직관적인 함수로 UI 구성</li>
+                    <li><strong>Hot Reload:</strong> 코드 저장 시 자동으로 앱 새로고침</li>
+                    <li><strong>Widget System:</strong> st.slider(), st.selectbox(), st.button() 등 풍부한 입력 위젯</li>
+                    <li><strong>Caching:</strong> @st.cache_data, @st.cache_resource로 성능 최적화</li>
+                    <li><strong>State Management:</strong> st.session_state로 사용자 세션 상태 관리</li>
+                </ul>
+
+                <h3>주요 컴포넌트</h3>
+                <ul>
+                    <li><strong>Display Elements:</strong> st.write, st.markdown, st.latex, st.code</li>
+                    <li><strong>Data Elements:</strong> st.dataframe, st.table, st.metric, st.json</li>
+                    <li><strong>Chart Elements:</strong> st.line_chart, st.bar_chart, st.pyplot, st.plotly_chart</li>
+                    <li><strong>Input Widgets:</strong> st.text_input, st.number_input, st.date_input, st.file_uploader</li>
+                    <li><strong>Layout:</strong> st.sidebar, st.columns, st.expander, st.tabs, st.container</li>
+                </ul>
+
+                <h3>Streamlit Cloud</h3>
+                <p>Streamlit Cloud를 통해 GitHub 연동으로 원클릭 배포가 가능하며, Community Cloud는 무료로 공개 앱을 호스팅합니다. 데이터 과학자들이 ML 모델 데모, 대시보드, 데이터 탐색 도구를 빠르게 공유할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>기본 데이터 앱 구조</h3>
+                <pre><code class="language-python"># app.py
+import streamlit as st
+import pandas as pd
+import numpy as np
+
+# 페이지 설정
+st.set_page_config(
+    page_title="데이터 대시보드",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# 제목과 설명
+st.title("📊 데이터 분석 대시보드")
+st.markdown("""
+이 대시보드는 **실시간 데이터 분석**을 위한 인터랙티브 도구입니다.
+사이드바에서 옵션을 조절해 보세요!
+""")
+
+# 사이드바 설정
+st.sidebar.header("설정")
+data_size = st.sidebar.slider("데이터 크기", 100, 1000, 500)
+chart_type = st.sidebar.selectbox("차트 타입", ["Line", "Bar", "Area"])
+
+# 샘플 데이터 생성
+@st.cache_data
+def generate_data(size):
+    dates = pd.date_range(start="2024-01-01", periods=size)
+    return pd.DataFrame({
+        "날짜": dates,
+        "매출": np.random.randint(1000, 5000, size),
+        "비용": np.random.randint(500, 2000, size),
+        "이익": np.random.randint(200, 1500, size)
+    })
+
+df = generate_data(data_size)
+
+# 메트릭 표시
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric("총 매출", f"${df['매출'].sum():,.0f}", "+12%")
+with col2:
+    st.metric("평균 비용", f"${df['비용'].mean():,.0f}", "-5%")
+with col3:
+    st.metric("순이익", f"${df['이익'].sum():,.0f}", "+8%")
+
+# 차트 표시
+st.subheader(f"{chart_type} 차트")
+chart_data = df.set_index("날짜")[["매출", "비용"]]
+
+if chart_type == "Line":
+    st.line_chart(chart_data)
+elif chart_type == "Bar":
+    st.bar_chart(chart_data)
+else:
+    st.area_chart(chart_data)
+
+# 데이터 테이블 (확장 가능)
+with st.expander("📋 상세 데이터 보기"):
+    st.dataframe(df, use_container_width=True)</code></pre>
+
+                <h3>Session State와 콜백</h3>
+                <pre><code class="language-python">import streamlit as st
+
+# Session State 초기화
+if "counter" not in st.session_state:
+    st.session_state.counter = 0
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# 콜백 함수
+def increment_counter():
+    st.session_state.counter += 1
+
+def add_message():
+    if st.session_state.new_message:
+        st.session_state.messages.append(st.session_state.new_message)
+        st.session_state.new_message = ""  # 입력 필드 초기화
+
+# UI
+st.header("Session State 데모")
+
+# 카운터
+col1, col2 = st.columns(2)
+with col1:
+    st.button("카운터 증가", on_click=increment_counter)
+    st.write(f"현재 카운터: {st.session_state.counter}")
+
+# 메시지 리스트
+with col2:
+    st.text_input("메시지 추가", key="new_message", on_change=add_message)
+    for i, msg in enumerate(st.session_state.messages):
+        st.write(f"{i+1}. {msg}")</code></pre>
+
+                <h3>파일 업로드 및 ML 모델 데모</h3>
+                <pre><code class="language-python">import streamlit as st
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+st.title("🤖 ML 모델 데모")
+
+# 파일 업로드
+uploaded_file = st.file_uploader("CSV 파일을 업로드하세요", type=["csv"])
+
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+
+    st.subheader("데이터 미리보기")
+    st.dataframe(df.head())
+
+    # 컬럼 선택
+    st.subheader("모델 설정")
+    target_col = st.selectbox("타겟 컬럼", df.columns)
+    feature_cols = st.multiselect(
+        "피처 컬럼",
+        [c for c in df.columns if c != target_col]
+    )
+
+    if feature_cols and st.button("모델 학습"):
+        with st.spinner("모델 학습 중..."):
+            X = df[feature_cols]
+            y = df[target_col]
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+            model = RandomForestClassifier(n_estimators=100)
+            model.fit(X_train, y_train)
+
+            accuracy = model.score(X_test, y_test)
+
+        st.success(f"모델 학습 완료! 정확도: {accuracy:.2%}")
+
+        # 피처 중요도
+        importance_df = pd.DataFrame({
+            "Feature": feature_cols,
+            "Importance": model.feature_importances_
+        }).sort_values("Importance", ascending=False)
+
+        st.bar_chart(importance_df.set_index("Feature"))</code></pre>
+
+                <h3>Multi-page App 구조</h3>
+                <pre><code class="language-python"># 디렉토리 구조
+# my_app/
+# ├── Home.py           # 메인 페이지 (streamlit run Home.py)
+# └── pages/
+#     ├── 1_📊_Data.py  # 첫 번째 페이지
+#     ├── 2_📈_Charts.py # 두 번째 페이지
+#     └── 3_⚙️_Settings.py
+
+# Home.py
+import streamlit as st
+
+st.set_page_config(page_title="멀티 페이지 앱", page_icon="🏠")
+
+st.title("🏠 홈페이지")
+st.markdown("""
+사이드바에서 다른 페이지로 이동할 수 있습니다.
+- 📊 Data: 데이터 분석
+- 📈 Charts: 시각화
+- ⚙️ Settings: 설정
+""")
+
+# pages/1_📊_Data.py
+import streamlit as st
+import pandas as pd
+
+st.title("📊 데이터 분석")
+# 페이지별 컨텐츠...</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">실무 대화 예제</h2>
+            <div class="section-content">
+                <div class="conversation">
+                    <h3>회의: 데이터 앱 프로토타입 논의</h3>
+                    <div class="dialogue">
+                        <div class="speaker">PM:</div>
+                        <div class="speech">"ML 모델 결과를 비개발자들도 쉽게 확인할 수 있는 인터페이스가 필요해요. 웹 개발팀에 요청해야 할까요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">데이터 사이언티스트:</div>
+                        <div class="speech">"Streamlit으로 빠르게 만들 수 있어요. Python만으로 UI를 구성할 수 있고, 저희가 직접 만들어도 이번 주 안에 가능합니다."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">PM:</div>
+                        <div class="speech">"프론트엔드 경험이 없어도 되나요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">데이터 사이언티스트:</div>
+                        <div class="speech">"네, st.slider()로 파라미터 조절, st.dataframe()으로 테이블 표시, st.plotly_chart()로 차트까지 전부 Python 함수 호출만으로 됩니다. 배포도 Streamlit Cloud에 GitHub 연동하면 자동이에요."</div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <h3>면접: Streamlit 활용 경험</h3>
+                    <div class="dialogue">
+                        <div class="speaker">면접관:</div>
+                        <div class="speech">"데이터 앱 개발 경험이 있으신가요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">지원자:</div>
+                        <div class="speech">"Streamlit으로 실시간 모델 추론 대시보드를 만들었습니다. @st.cache_resource로 모델을 캐싱해서 매 요청마다 로드하지 않게 했고, st.session_state로 사용자별 입력 히스토리를 관리했어요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">면접관:</div>
+                        <div class="speech">"성능 이슈는 없었나요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">지원자:</div>
+                        <div class="speech">"@st.cache_data로 데이터 전처리 결과를 캐싱하고, 대용량 데이터는 st.dataframe의 pagination 기능을 활용했습니다. 무거운 연산은 st.spinner()로 로딩 상태를 보여주면서 UX를 개선했어요."</div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <h3>코드 리뷰: Streamlit 앱 최적화</h3>
+                    <div class="dialogue">
+                        <div class="speaker">시니어:</div>
+                        <div class="speech">"이 코드 보면 매번 페이지 로드할 때마다 CSV를 다시 읽고 있네요. @st.cache_data 데코레이터를 추가해주세요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">주니어:</div>
+                        <div class="speech">"TTL 설정도 필요할까요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">시니어:</div>
+                        <div class="speech">"네, @st.cache_data(ttl=3600)으로 1시간마다 갱신하게 하면 좋겠어요. 그리고 컬럼 레이아웃도 st.columns()로 나누면 화면 활용도가 높아져요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <h3>Stateless 아키텍처</h3>
+                    <p>Streamlit은 매 상호작용마다 스크립트 전체를 다시 실행합니다. session_state를 사용하지 않으면 상태가 유지되지 않으니, 사용자 입력이나 계산 결과는 반드시 st.session_state에 저장하세요.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>캐싱 데코레이터 구분</h3>
+                    <p>@st.cache_data는 직렬화 가능한 데이터(DataFrame, dict)에, @st.cache_resource는 직렬화 불가능한 객체(ML 모델, DB 커넥션)에 사용합니다. 잘못 사용하면 에러가 발생하거나 캐싱이 제대로 동작하지 않습니다.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>동시 사용자 제한</h3>
+                    <p>Streamlit은 단일 스레드로 동작하므로 동시 사용자가 많으면 성능이 저하됩니다. 프로덕션 환경에서는 여러 인스턴스를 띄우거나, Streamlit Community Cloud의 제한을 확인하세요.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>Widget Key 중복</h3>
+                    <p>반복문 안에서 위젯을 생성할 때는 고유한 key 파라미터를 지정해야 합니다. key가 중복되면 "DuplicateWidgetID" 에러가 발생합니다.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>보안 고려사항</h3>
+                    <p>st.secrets를 사용해 API 키나 민감한 정보를 관리하세요. 코드에 직접 하드코딩하거나 .env 파일을 커밋하지 않도록 주의하고, secrets.toml은 .gitignore에 추가하세요.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <div class="term-card">
+                        <h4>Gradio</h4>
+                        <p>ML 모델 데모에 특화된 Python UI 프레임워크. Hugging Face와 긴밀히 통합됩니다.</p>
+                    </div>
+                    <div class="term-card">
+                        <h4>Dash (Plotly)</h4>
+                        <p>Plotly 기반의 분석 웹 앱 프레임워크. 더 복잡한 커스터마이징이 가능합니다.</p>
+                    </div>
+                    <div class="term-card">
+                        <h4>Panel</h4>
+                        <p>HoloViews와 Bokeh 기반의 대시보드 프레임워크. 고급 시각화에 강점이 있습니다.</p>
+                    </div>
+                    <div class="term-card">
+                        <h4>Flask/FastAPI</h4>
+                        <p>범용 Python 웹 프레임워크. Streamlit보다 유연하지만 UI 직접 구현 필요.</p>
+                    </div>
+                    <div class="term-card">
+                        <h4>Jupyter Notebook</h4>
+                        <p>인터랙티브 컴퓨팅 환경. 탐색적 분석에 적합하나 배포에는 제약이 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <div class="resources">
+                    <div class="resource-card">
+                        <span class="badge">공식 문서</span>
+                        <h4>Streamlit Documentation</h4>
+                        <p>API 레퍼런스, 튜토리얼, 가이드 제공</p>
+                        <a href="https://docs.streamlit.io/" target="_blank" rel="noopener">docs.streamlit.io</a>
+                    </div>
+                    <div class="resource-card">
+                        <span class="badge">갤러리</span>
+                        <h4>Streamlit Gallery</h4>
+                        <p>다양한 Streamlit 앱 예제 모음</p>
+                        <a href="https://streamlit.io/gallery" target="_blank" rel="noopener">streamlit.io/gallery</a>
+                    </div>
+                    <div class="resource-card">
+                        <span class="badge">커뮤니티</span>
+                        <h4>Streamlit Forum</h4>
+                        <p>질문, 토론, 쇼케이스 커뮤니티</p>
+                        <a href="https://discuss.streamlit.io/" target="_blank" rel="noopener">discuss.streamlit.io</a>
+                    </div>
+                    <div class="resource-card">
+                        <span class="badge">배포</span>
+                        <h4>Streamlit Community Cloud</h4>
+                        <p>무료 앱 호스팅 및 배포 플랫폼</p>
+                        <a href="https://streamlit.io/cloud" target="_blank" rel="noopener">streamlit.io/cloud</a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +574,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

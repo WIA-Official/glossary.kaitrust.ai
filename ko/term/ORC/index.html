@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,138 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>ORC(Optimized Row Columnar)는 2013년 Hortonworks가 Apache Hive를 위해 개발한 컬럼형 파일 포맷입니다. Facebook이 RC File을 개선해 만들었으며, Hadoop 에코시스템에서 분석 쿼리 성능을 최적화하기 위해 설계되었습니다.</p>
+                <p>핵심 특징은 컬럼 기반 저장, 경량 압축, 내장 인덱싱입니다. Stripe 단위(기본 250MB)로 데이터를 저장하고, 각 Stripe에 min/max, bloom filter 인덱스가 포함되어 불필요한 데이터 스캔을 건너뜁니다. Predicate Pushdown으로 WHERE 조건에 맞지 않는 Stripe를 통째로 스킵합니다.</p>
+                <p>압축 효율이 뛰어나 Zlib, Snappy, LZ4를 지원하며, 컬럼별로 동일한 데이터 타입이 연속 저장되어 딕셔너리 인코딩, RLE(Run-Length Encoding) 효과가 극대화됩니다. 텍스트 파일 대비 5-10배 작은 용량으로 저장됩니다.</p>
+                <p>Hive, Spark, Presto, Trino에서 네이티브로 지원되며, 특히 Hive ACID 트랜잭션은 ORC 포맷에서만 작동합니다. Parquet은 범용성, ORC는 Hive 생태계 최적화에 강점이 있어 환경에 따라 선택합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="sql">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>-- Hive에서 ORC 테이블 생성
+CREATE TABLE sales_orc (
+    sale_id BIGINT,
+    product_name STRING,
+    category STRING,
+    amount DECIMAL(10, 2),
+    quantity INT,
+    sale_date DATE
+)
+STORED AS ORC
+TBLPROPERTIES (
+    'orc.compress' = 'ZLIB',          -- 압축 방식
+    'orc.compress.size' = '262144',    -- 압축 버퍼 크기
+    'orc.stripe.size' = '268435456',   -- Stripe 크기 (256MB)
+    'orc.row.index.stride' = '10000',  -- 인덱스 간격
+    'orc.bloom.filter.columns' = 'product_name,category'  -- 블룸 필터
+);
+
+-- 기존 테이블에서 ORC로 변환
+INSERT INTO TABLE sales_orc
+SELECT * FROM sales_csv;
+
+-- ORC 테이블 분석 (통계 수집)
+ANALYZE TABLE sales_orc COMPUTE STATISTICS FOR COLUMNS;
+
+-- Predicate Pushdown 활용 쿼리
+-- category 인덱스로 불필요한 Stripe 스킵
+SELECT product_name, SUM(amount) as total_sales
+FROM sales_orc
+WHERE category = 'Electronics'
+  AND sale_date BETWEEN '2024-01-01' AND '2024-12-31'
+GROUP BY product_name
+ORDER BY total_sales DESC
+LIMIT 10;
+
+-- Spark에서 ORC 읽기/쓰기
+-- spark-shell 또는 PySpark
+-- val df = spark.read.orc("hdfs:///data/sales_orc")
+
+-- Python (PyORC 라이브러리)
+import pyorc
+
+# ORC 파일 쓰기
+with open("data.orc", "wb") as f:
+    with pyorc.Writer(
+        f,
+        "struct<id:int,name:string,value:double>",
+        compression=pyorc.CompressionKind.ZLIB
+    ) as writer:
+        writer.write((1, "product_a", 100.5))
+        writer.write((2, "product_b", 200.3))
+
+# ORC 파일 읽기
+with open("data.orc", "rb") as f:
+    reader = pyorc.Reader(f)
+    for row in reader:
+        print(row)</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "Hive 테이블을 ORC로 바꾸니까 쿼리 속도가 5배 빨라지고 스토리지도 70% 줄었어요."</p>
+                <p><strong class="role-junior">주니어:</strong> "Parquet이랑 뭐가 다른가요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "Hive ACID 트랜잭션 쓰려면 ORC만 되고, 범용 분석엔 Parquet이 호환성 좋아요. 우리는 Hive 중심이라 ORC 씁니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "대용량 데이터 저장 포맷 경험을 말씀해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "하루 10억 건 로그를 ORC로 저장하는 파이프라인을 운영했습니다. bloom filter 컬럼을 설정해 특정 user_id 검색 시 95%의 Stripe를 스킵하도록 최적화했고, ANALYZE TABLE로 통계 정보를 갱신해 Hive 쿼리 플래너가 정확한 실행 계획을 세우도록 했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "ORC 테이블에 bloom filter 추가해주세요. user_id 컬럼으로 검색이 많아서 효과 있을 거예요."</p>
+                <p><strong class="role-junior">개발자:</strong> "ALTER TABLE로 bloom.filter.columns 속성 추가하면 되나요?"</p>
+                <p><strong class="role-reviewer">리뷰어:</strong> "네, 근데 기존 데이터엔 적용 안 되니까 테이블 재생성하거나 INSERT OVERWRITE 해야 해요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>Hive 외 생태계에서 호환성이 Parquet보다 떨어짐 - Spark, Pandas 등에서는 Parquet이 더 범용적</li>
+                <li>작은 파일이 많으면 성능 저하 - Stripe 단위 최적화가 무효화되므로 파일 병합 필요</li>
+                <li>스키마 변경이 제한적 - 컬럼 추가는 되지만 타입 변경이나 삭제는 복잡함</li>
+                <li class="info">ANALYZE TABLE로 컬럼 통계를 주기적으로 갱신하면 쿼리 최적화 효과가 커짐</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Parquet/" class="related-link">Parquet</a>
+                <a href="/ko/term/Spark/" class="related-link">Spark</a>
+                <a href="/ko/term/Redshift/" class="related-link">Redshift</a>
+                <a href="/ko/term/Snowflake/" class="related-link">Snowflake</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://orc.apache.org/docs/" target="_blank" rel="noopener">Apache ORC 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://cwiki.apache.org/confluence/display/hive/languagemanual+orc" target="_blank" rel="noopener">Hive ORC Language Manual</a></li>
+                <li><span class="type-article"></span><a href="https://orc.apache.org/specification/" target="_blank" rel="noopener">ORC 파일 포맷 스펙</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +345,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,164 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Amazon Redshift는 2012년 AWS가 출시한 클라우드 데이터 웨어하우스입니다. PostgreSQL 기반이지만 컬럼형 저장, MPP(Massively Parallel Processing), 자동 압축으로 페타바이트 규모 분석에 최적화되었습니다. OLAP(Online Analytical Processing) 워크로드에 적합합니다.</p>
+                <p>아키텍처는 Leader Node와 Compute Node로 구성됩니다. Leader Node가 쿼리를 파싱하고 실행 계획을 수립해 Compute Node에 분배합니다. 각 Compute Node는 데이터 슬라이스를 병렬 처리하고 결과를 Leader에 집계합니다. 노드 수를 늘려 수평 확장합니다.</p>
+                <p>Redshift Spectrum으로 S3 데이터를 외부 테이블로 직접 쿼리할 수 있어, 자주 사용하는 데이터만 Redshift에 로드하고 나머지는 S3에 두는 레이크하우스 패턴이 가능합니다. 비용 효율적인 콜드 데이터 분석에 유용합니다.</p>
+                <p>Redshift Serverless는 2022년 출시되어 노드 프로비저닝 없이 쿼리 기반 과금으로 사용합니다. 간헐적 분석 워크로드에 비용 효율적이며, RA3 인스턴스는 컴퓨팅과 스토리지를 분리해 각각 독립적으로 확장할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="sql">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>-- 테이블 생성 (분산 키, 정렬 키 설정)
+CREATE TABLE sales (
+    sale_id BIGINT IDENTITY(1,1),
+    product_id INT NOT NULL,
+    customer_id INT NOT NULL,
+    sale_date DATE NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    region VARCHAR(50)
+)
+DISTSTYLE KEY DISTKEY(customer_id)  -- 분산 키
+SORTKEY(sale_date);                  -- 정렬 키
+
+-- COPY: S3에서 데이터 로드 (가장 빠른 방법)
+COPY sales
+FROM 's3://my-bucket/sales-data/'
+IAM_ROLE 'arn:aws:iam::123456789:role/RedshiftLoadRole'
+FORMAT AS PARQUET;
+
+-- CSV 로드 (압축 파일 지원)
+COPY sales
+FROM 's3://my-bucket/sales.csv.gz'
+IAM_ROLE 'arn:aws:iam::123456789:role/RedshiftLoadRole'
+CSV GZIP
+IGNOREHEADER 1
+DATEFORMAT 'YYYY-MM-DD';
+
+-- 분석 쿼리
+SELECT
+    DATE_TRUNC('month', sale_date) AS month,
+    region,
+    COUNT(*) AS num_sales,
+    SUM(amount) AS total_revenue,
+    AVG(amount) AS avg_order_value
+FROM sales
+WHERE sale_date >= '2024-01-01'
+GROUP BY 1, 2
+ORDER BY 1, total_revenue DESC;
+
+-- 윈도우 함수
+SELECT
+    product_id,
+    sale_date,
+    amount,
+    SUM(amount) OVER (PARTITION BY product_id ORDER BY sale_date
+                      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_sales,
+    RANK() OVER (PARTITION BY DATE_TRUNC('month', sale_date) ORDER BY amount DESC) AS monthly_rank
+FROM sales;
+
+-- Redshift Spectrum: S3 외부 테이블
+CREATE EXTERNAL SCHEMA spectrum_schema
+FROM DATA CATALOG
+DATABASE 'my_glue_database'
+IAM_ROLE 'arn:aws:iam::123456789:role/SpectrumRole'
+REGION 'us-east-1';
+
+-- S3 데이터 직접 쿼리 (Redshift 테이블과 조인 가능)
+SELECT
+    s.product_id,
+    p.product_name,
+    SUM(s.amount) AS total
+FROM sales s
+JOIN spectrum_schema.products p ON s.product_id = p.id
+GROUP BY 1, 2;
+
+-- 쿼리 성능 분석
+EXPLAIN
+SELECT * FROM sales WHERE region = 'Seoul';
+
+-- 테이블 통계 갱신
+ANALYZE sales;
+
+-- 디스크 공간 회수 (DELETE 후)
+VACUUM sales;
+
+-- Python에서 연결 (psycopg2 또는 redshift_connector)
+-- import redshift_connector
+-- conn = redshift_connector.connect(
+--     host='cluster.xxx.region.redshift.amazonaws.com',
+--     database='dev',
+--     user='admin',
+--     password='password'
+-- )
+-- cursor = conn.cursor()
+-- cursor.execute("SELECT * FROM sales LIMIT 10")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "최근 데이터는 Redshift 테이블에, 1년 이상 된 건 S3에 두고 Spectrum으로 조회해요. 스토리지 비용이 확 줄어요."</p>
+                <p><strong class="role-junior">주니어:</strong> "쿼리가 느린데 어떻게 해요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "EXPLAIN으로 실행 계획 보고, DISTKEY와 SORTKEY가 쿼리 패턴에 맞는지 확인하세요. ANALYZE, VACUUM도 주기적으로 돌려야 해요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "데이터 웨어하우스 경험을 말씀해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "Redshift에서 1TB 규모 데이터를 분석했습니다. DISTKEY를 조인 컬럼으로, SORTKEY를 필터링 컬럼으로 설정해 쿼리 성능을 5배 개선했고, COPY 명령으로 S3에서 Parquet 파일을 병렬 로드해 ETL 시간을 단축했습니다. Spectrum으로 콜드 데이터 쿼리 비용도 절감했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "INSERT 대신 COPY 쓰세요. 대량 데이터 로드에 INSERT는 너무 느려요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, S3에 먼저 저장하고 COPY로 로드하면 되겠네요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>DELETE 후 디스크 공간 자동 회수 안 됨 - VACUUM 명령으로 주기적 정리 필요</li>
+                <li>동시 쿼리 제한 (WLM) - 기본 동시성이 낮아 많은 사용자가 접속하면 대기 발생, WLM 큐 설정 조정</li>
+                <li>단일 행 INSERT 비효율 - COPY 또는 배치 INSERT 사용, OLTP 워크로드 부적합</li>
+                <li class="info">RA3 인스턴스 + Managed Storage로 스토리지를 자동 확장하면 리사이즈 작업 불필요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Snowflake/" class="related-link">Snowflake</a>
+                <a href="/ko/term/Parquet/" class="related-link">Parquet</a>
+                <a href="/ko/term/Spark/" class="related-link">Spark</a>
+                <a href="/ko/term/ORC/" class="related-link">ORC</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.aws.amazon.com/redshift/" target="_blank" rel="noopener">Amazon Redshift 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-best-dist-key.html" target="_blank" rel="noopener">Redshift 테이블 설계 베스트 프랙티스</a></li>
+                <li><span class="type-article"></span><a href="https://aws.amazon.com/blogs/big-data/category/database/amazon-redshift/" target="_blank" rel="noopener">AWS Big Data Blog - Redshift</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +371,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

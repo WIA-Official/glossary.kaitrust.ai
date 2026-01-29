@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -202,6 +228,241 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>포지셔널 인코딩(Positional Encoding)은 Transformer 아키텍처에서 시퀀스 내 토큰의 순서 정보를 모델에 제공하는 핵심 기법입니다. RNN이나 LSTM과 달리 Transformer는 Self-Attention 메커니즘을 사용해 모든 토큰을 동시에 처리하기 때문에, 별도의 위치 정보 없이는 "나는 사과를 먹었다"와 "사과를 나는 먹었다"를 구분할 수 없습니다. 포지셔널 인코딩은 각 토큰의 임베딩에 위치 정보를 더해 이 문제를 해결합니다.</p>
+
+                <p>2017년 "Attention Is All You Need" 논문에서 처음 제안된 사인/코사인 기반 포지셔널 인코딩은 서로 다른 주파수의 sin과 cos 함수를 조합해 각 위치에 고유한 벡터를 할당합니다. PE(pos, 2i) = sin(pos / 10000^(2i/d))와 PE(pos, 2i+1) = cos(pos / 10000^(2i/d)) 공식을 사용하며, 이 방식은 학습 없이도 임의의 길이 시퀀스를 처리할 수 있고, 상대적 위치 관계를 선형 변환으로 표현할 수 있다는 장점이 있습니다.</p>
+
+                <p>2024-2025년 현재 다양한 변형이 발전했습니다. RoPE(Rotary Position Embedding)는 LLaMA, Mistral 등에서 사용되며 상대적 위치 정보를 효과적으로 인코딩합니다. ALiBi(Attention with Linear Biases)는 Attention 점수에 직접 위치 편향을 추가해 외삽(extrapolation) 성능이 뛰어납니다. 학습 가능한 위치 임베딩은 BERT, GPT에서 사용되며 데이터로부터 최적의 위치 표현을 학습합니다. 최근에는 컨텍스트 길이를 100K 이상으로 확장하기 위한 YaRN, Streaming LLM 등의 기법도 등장했습니다.</p>
+
+                <p>실무에서 포지셔널 인코딩 선택은 모델 성능에 직접적인 영향을 미칩니다. 긴 문서 처리가 필요한 RAG 시스템에서는 RoPE나 ALiBi를 선호하고, Vision Transformer에서는 2D 좌표를 인코딩하기 위한 별도의 설계가 필요합니다. 최근 GPT-4 Turbo와 Claude 3 등은 128K 이상의 컨텍스트를 지원하는데, 이는 효율적인 포지셔널 인코딩 기법의 발전 덕분입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>PyTorch를 사용한 사인/코사인 포지셔널 인코딩과 RoPE 구현 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code>import torch
+import torch.nn as nn
+import math
+
+class SinusoidalPositionalEncoding(nn.Module):
+    """원본 Transformer 사인/코사인 포지셔널 인코딩"""
+    def __init__(self, d_model: int, max_len: int = 5000, dropout: float = 0.1):
+        super().__init__()
+        self.dropout = nn.Dropout(p=dropout)
+
+        # 위치 인코딩 행렬 생성 [max_len, d_model]
+        pe = torch.zeros(max_len, d_model)
+        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+
+        # 10000^(2i/d_model) 계산
+        div_term = torch.exp(
+            torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model)
+        )
+
+        # sin은 짝수 인덱스, cos은 홀수 인덱스
+        pe[:, 0::2] = torch.sin(position * div_term)
+        pe[:, 1::2] = torch.cos(position * div_term)
+
+        pe = pe.unsqueeze(0)  # [1, max_len, d_model]
+        self.register_buffer('pe', pe)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """x: [batch_size, seq_len, d_model]"""
+        x = x + self.pe[:, :x.size(1), :]
+        return self.dropout(x)
+
+class RotaryPositionalEncoding(nn.Module):
+    """RoPE: Rotary Position Embedding (LLaMA, Mistral 등에서 사용)"""
+    def __init__(self, dim: int, max_len: int = 2048, base: int = 10000):
+        super().__init__()
+        self.dim = dim
+        self.max_len = max_len
+
+        # 주파수 계산
+        inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2).float() / dim))
+        self.register_buffer('inv_freq', inv_freq)
+
+        # 캐시 생성
+        self._build_cache(max_len)
+
+    def _build_cache(self, seq_len: int):
+        t = torch.arange(seq_len, device=self.inv_freq.device)
+        freqs = torch.einsum('i,j->ij', t, self.inv_freq)
+        emb = torch.cat((freqs, freqs), dim=-1)
+        self.register_buffer('cos_cached', emb.cos())
+        self.register_buffer('sin_cached', emb.sin())
+
+    def forward(self, q: torch.Tensor, k: torch.Tensor) -> tuple:
+        """Query와 Key에 회전 변환 적용"""
+        seq_len = q.shape[1]
+        cos = self.cos_cached[:seq_len].unsqueeze(0)
+        sin = self.sin_cached[:seq_len].unsqueeze(0)
+
+        q_embed = (q * cos) + (self._rotate_half(q) * sin)
+        k_embed = (k * cos) + (self._rotate_half(k) * sin)
+        return q_embed, k_embed
+
+    def _rotate_half(self, x: torch.Tensor) -> torch.Tensor:
+        x1, x2 = x[..., :x.shape[-1]//2], x[..., x.shape[-1]//2:]
+        return torch.cat((-x2, x1), dim=-1)
+
+# 사용 예시
+if __name__ == "__main__":
+    batch_size, seq_len, d_model = 2, 128, 512
+
+    # 사인/코사인 인코딩
+    sinusoidal_pe = SinusoidalPositionalEncoding(d_model)
+    x = torch.randn(batch_size, seq_len, d_model)
+    x_with_pos = sinusoidal_pe(x)
+    print(f"Sinusoidal PE 출력: {x_with_pos.shape}")
+
+    # RoPE
+    rope = RotaryPositionalEncoding(dim=64)  # head_dim
+    q = torch.randn(batch_size, seq_len, 8, 64)  # 8 heads
+    k = torch.randn(batch_size, seq_len, 8, 64)
+    q_rope, k_rope = rope(q, k)
+    print(f"RoPE 적용 후 Q: {q_rope.shape}, K: {k_rope.shape}")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 비교 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 포지셔널 인코딩 방식 비교</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <tr>
+                        <th>방식</th>
+                        <th>최대 컨텍스트</th>
+                        <th>외삽 성능</th>
+                        <th>사용 모델</th>
+                    </tr>
+                    <tr>
+                        <td>Sinusoidal (Absolute)</td>
+                        <td>학습 시 길이</td>
+                        <td>보통</td>
+                        <td>원본 Transformer</td>
+                    </tr>
+                    <tr>
+                        <td>Learned Embedding</td>
+                        <td>학습 시 길이</td>
+                        <td>낮음</td>
+                        <td>BERT, GPT-2</td>
+                    </tr>
+                    <tr>
+                        <td>RoPE</td>
+                        <td>8K~128K+</td>
+                        <td>우수</td>
+                        <td>LLaMA, Mistral, Qwen</td>
+                    </tr>
+                    <tr>
+                        <td>ALiBi</td>
+                        <td>무제한</td>
+                        <td>매우 우수</td>
+                        <td>BLOOM, MPT</td>
+                    </tr>
+                    <tr>
+                        <td>YaRN (RoPE 확장)</td>
+                        <td>128K+</td>
+                        <td>우수</td>
+                        <td>LLaMA 2 Long</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-examples">
+                    <div class="conv-item">
+                        <div class="conv-context">💬 회의에서</div>
+                        <div class="conv-quote">"긴 문서 RAG에서 검색 품질이 떨어지는 건 포지셔널 인코딩 한계 때문일 수 있어요. 현재 4K 컨텍스트 모델을 RoPE 기반의 128K 모델로 교체하면 청크 분할 없이 전체 문서를 처리할 수 있습니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 면접에서</div>
+                        <div class="conv-quote">"Transformer에서 포지셔널 인코딩이 필요한 이유는 Self-Attention이 순서에 무관한(permutation invariant) 연산이기 때문입니다. sin/cos 함수를 사용하면 학습 없이도 상대적 위치를 선형 변환으로 표현할 수 있어 일반화 성능이 좋습니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 기술 토론에서</div>
+                        <div class="conv-quote">"RoPE가 외삽 성능이 좋은 건 Query-Key 내적에서 상대 위치만 반영되기 때문이에요. ALiBi는 아예 Attention 점수에 선형 페널티를 주는 방식이라 컨텍스트 확장에 더 유연하지만, 학습 시 보지 못한 패턴에서는 RoPE가 더 나을 수 있습니다."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-list">
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>학습 시 최대 길이를 넘어서 추론하기</h4>
+                            <p>Learned Positional Embedding을 사용하는 모델(BERT, GPT-2)은 학습 시 max_length를 초과하면 위치 임베딩이 없어 성능이 급격히 저하됩니다. 반드시 모델의 최대 컨텍스트 길이를 확인하세요.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>포지셔널 인코딩과 토큰 임베딩 차원 불일치</h4>
+                            <p>포지셔널 인코딩의 차원은 토큰 임베딩 차원(d_model)과 정확히 일치해야 합니다. 더하기 연산이 불가능하면 런타임 에러가 발생합니다.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">✅</div>
+                        <div class="warning-content">
+                            <h4>긴 컨텍스트가 필요하면 RoPE/ALiBi 모델 선택</h4>
+                            <p>문서 QA, 코드 분석 등 긴 시퀀스 처리가 필요하면 처음부터 RoPE 기반 모델(LLaMA 3, Mistral, Claude)을 선택하세요. 나중에 컨텍스트를 확장하는 것보다 훨씬 안정적입니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/%ED%8A%B8%EB%9E%9C%EC%8A%A4%ED%8F%AC%EB%A8%B8/" class="related-term-link">Transformer</a>
+                    <a href="/ko/term/%EC%85%80%ED%94%84%20%EC%96%B4%ED%85%90%EC%85%98/" class="related-term-link">Self-Attention</a>
+                    <a href="/ko/term/%EC%9E%84%EB%B2%A0%EB%94%A9/" class="related-term-link">임베딩</a>
+                    <a href="/ko/term/%ED%86%A0%ED%81%AC%EB%82%98%EC%9D%B4%EC%A0%80/" class="related-term-link">토크나이저</a>
+                    <a href="/ko/term/%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8%20%EC%9C%88%EB%8F%84%EC%9A%B0/" class="related-term-link">컨텍스트 윈도우</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <div class="learn-more">
+                    <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener" class="learn-link">
+                        <span>📄</span> Attention Is All You Need (원본 논문)
+                    </a>
+                    <a href="https://arxiv.org/abs/2104.09864" target="_blank" rel="noopener" class="learn-link">
+                        <span>📄</span> RoFormer: Enhanced Transformer with Rotary Position Embedding
+                    </a>
+                    <a href="https://arxiv.org/abs/2108.12409" target="_blank" rel="noopener" class="learn-link">
+                        <span>📄</span> Train Short, Test Long: ALiBi Paper
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +473,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

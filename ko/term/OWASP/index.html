@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OWASP (Open Web Application Security Project) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="웹 보안 취약점 Top 10 발표하는 비영리 단체. 보안 표준.">
-    <meta name="keywords" content="OWASP, Open Web Application Security Project, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="OWASP는 웹 애플리케이션 보안을 위한 글로벌 비영리 커뮤니티입니다. OWASP Top 10, ZAP, Dependency-Check 등 무료 보안 도구와 가이드라인을 제공합니다.">
+    <meta name="keywords" content="OWASP, Open Web Application Security Project, OWASP Top 10, 웹 보안, XSS, SQL Injection, CSRF, 취약점, 보안 표준, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/OWASP/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/OWASP/">
     <meta property="og:title" content="OWASP (Open Web Application Security Project) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="웹 보안 취약점 Top 10 발표하는 비영리 단체. 보안 표준.">
+    <meta property="og:description" content="웹 애플리케이션 보안을 위한 글로벌 비영리 커뮤니티. OWASP Top 10, ZAP 등 무료 보안 도구와 가이드라인 제공.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="OWASP (Open Web Application Security Project) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="웹 보안 취약점 Top 10 발표하는 비영리 단체. 보안 표준.">
+    <meta name="twitter:description" content="웹 애플리케이션 보안을 위한 글로벌 비영리 커뮤니티. OWASP Top 10, ZAP 등 무료 보안 도구와 가이드라인 제공.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "OWASP",
-        "description": "웹 보안 취약점 Top 10 발표하는 비영리 단체. 보안 표준.",
+        "alternateName": "Open Web Application Security Project",
+        "description": "웹 애플리케이션 보안을 위한 글로벌 비영리 커뮤니티입니다. OWASP Top 10, ZAP, Dependency-Check 등 무료 보안 도구와 가이드라인을 제공합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +328,7 @@
             <h1 class="term-title">OWASP</h1>
             <p class="term-english">Open Web Application Security Project</p>
             <div class="term-description">
-                <p>웹 보안 취약점 Top 10 발표하는 비영리 단체. 보안 표준.</p>
+                <p>웹 애플리케이션 보안을 위한 글로벌 비영리 커뮤니티입니다. OWASP Top 10을 통해 가장 치명적인 웹 취약점을 정의하고, ZAP, Dependency-Check 등 무료 오픈소스 보안 도구와 가이드라인을 제공합니다. 개발자, 보안 전문가, 조직이 안전한 소프트웨어를 개발하도록 지원합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,365 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>OWASP(Open Web Application Security Project)는 2001년 Mark Curphey가 설립한 비영리 재단으로, 소프트웨어 보안 향상을 목표로 합니다. 전 세계 수만 명의 보안 전문가, 개발자, 연구자가 참여하는 커뮤니티 주도 프로젝트로, 모든 자료와 도구를 무료로 공개합니다. OWASP의 핵심 철학은 "보안은 모든 사람의 책임"이며, 기업 규모나 예산에 관계없이 누구나 안전한 소프트웨어를 만들 수 있도록 지원합니다.</p>
+                <p>OWASP Top 10은 가장 널리 알려진 프로젝트로, 웹 애플리케이션에서 가장 치명적인 10대 취약점을 정리합니다. 2021년 버전 기준으로 Broken Access Control(접근 제어 취약점), Cryptographic Failures(암호화 실패), Injection(인젝션), Insecure Design(안전하지 않은 설계) 등이 포함됩니다. 이 목록은 3~4년마다 업데이트되며, 실제 취약점 데이터와 보안 전문가 설문을 기반으로 작성됩니다. 많은 조직이 OWASP Top 10을 보안 요구사항 기준으로 채택하고 있습니다.</p>
+                <p>OWASP는 Top 10 외에도 다양한 프로젝트를 운영합니다. OWASP ZAP(Zed Attack Proxy)는 가장 인기 있는 무료 웹 취약점 스캐너로, 자동화된 보안 테스트를 지원합니다. OWASP Dependency-Check는 프로젝트의 의존성에서 알려진 취약점을 탐지합니다. OWASP ASVS(Application Security Verification Standard)는 애플리케이션 보안 검증 표준을 제공하고, OWASP SAMM(Software Assurance Maturity Model)은 조직의 보안 성숙도를 평가하는 프레임워크입니다.</p>
+                <p>현대 소프트웨어 개발에서 OWASP는 필수적인 참조 자료입니다. DevSecOps 파이프라인에 OWASP ZAP을 통합하여 자동화된 보안 테스트를 수행하고, OWASP Dependency-Check로 취약한 라이브러리를 탐지합니다. PCI-DSS, HIPAA 등 규정 준수 감사에서도 OWASP Top 10 대응이 요구되는 경우가 많습니다. AI/ML 시스템의 보안을 위한 OWASP AI Security 프로젝트도 새롭게 주목받고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="zap">OWASP ZAP (CLI)</button>
+                <button class="code-tab" data-lang="depcheck">Dependency-Check</button>
+                <button class="code-tab" data-lang="prevention">취약점 예방 (Node.js)</button>
+            </div>
+            <div class="code-block active" data-lang="zap">
+                <pre><code class="language-bash"># OWASP ZAP (Zed Attack Proxy) - 웹 취약점 자동 스캔
+# Docker를 사용한 ZAP 스캔 예제
+
+# 1. 기본 스캔 (Baseline Scan) - 빠른 수동적 스캔
+docker run -t owasp/zap2docker-stable zap-baseline.py \
+    -t https://example.com \
+    -r zap-report.html
+
+# 2. 전체 스캔 (Full Scan) - 능동적 취약점 테스트 포함
+docker run -t owasp/zap2docker-stable zap-full-scan.py \
+    -t https://example.com \
+    -r full-report.html \
+    -a  # AJAX Spider 포함
+
+# 3. API 스캔 - OpenAPI/Swagger 스펙 기반
+docker run -t owasp/zap2docker-stable zap-api-scan.py \
+    -t https://api.example.com/openapi.json \
+    -f openapi \
+    -r api-report.html
+
+# 4. CI/CD 통합 예제 (GitHub Actions)
+# .github/workflows/security.yml
+# name: OWASP ZAP Security Scan
+# on: [push]
+# jobs:
+#   zap_scan:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: ZAP Scan
+#         uses: zaproxy/action-baseline@v0.7.0
+#         with:
+#           target: 'https://staging.example.com'
+#           fail_action: true
+#           rules_file_name: '.zap/rules.tsv'
+
+# 5. ZAP Python API 활용 예제
+# pip install python-owasp-zap-v2.4
+from zapv2 import ZAPv2
+
+zap = ZAPv2(proxies={'http': 'http://127.0.0.1:8080'})
+
+# Spider로 사이트 크롤링
+zap.spider.scan('https://example.com')
+while int(zap.spider.status()) < 100:
+    time.sleep(2)
+
+# 능동적 스캔 시작
+zap.ascan.scan('https://example.com')
+while int(zap.ascan.status()) < 100:
+    time.sleep(5)
+
+# 결과 확인
+alerts = zap.core.alerts()
+for alert in alerts:
+    print(f"[{alert['risk']}] {alert['name']}: {alert['url']}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="depcheck">
+                <pre><code class="language-bash"># OWASP Dependency-Check - 의존성 취약점 검사
+# 알려진 취약점(CVE)이 있는 라이브러리 탐지
+
+# 1. CLI 설치 및 실행
+# macOS
+brew install dependency-check
+
+# 프로젝트 스캔
+dependency-check --project "MyProject" \
+    --scan /path/to/project \
+    --format HTML \
+    --out dependency-check-report.html
+
+# 2. Maven 플러그인 (pom.xml)
+# &lt;plugin&gt;
+#     &lt;groupId&gt;org.owasp&lt;/groupId&gt;
+#     &lt;artifactId&gt;dependency-check-maven&lt;/artifactId&gt;
+#     &lt;version&gt;8.4.0&lt;/version&gt;
+#     &lt;executions&gt;
+#         &lt;execution&gt;
+#             &lt;goals&gt;
+#                 &lt;goal&gt;check&lt;/goal&gt;
+#             &lt;/goals&gt;
+#         &lt;/execution&gt;
+#     &lt;/executions&gt;
+#     &lt;configuration&gt;
+#         &lt;failBuildOnCVSS&gt;7&lt;/failBuildOnCVSS&gt;
+#     &lt;/configuration&gt;
+# &lt;/plugin&gt;
+mvn dependency-check:check
+
+# 3. Gradle 플러그인 (build.gradle)
+# plugins {
+#     id "org.owasp.dependencycheck" version "8.4.0"
+# }
+# dependencyCheck {
+#     failBuildOnCVSS = 7
+#     suppressionFile = "dependency-check-suppressions.xml"
+# }
+./gradlew dependencyCheckAnalyze
+
+# 4. npm/yarn 프로젝트 (Node.js)
+# npm audit 대안으로 더 정확한 검사
+dependency-check --project "NodeApp" \
+    --scan ./node_modules \
+    --scan ./package-lock.json \
+    --enableExperimental
+
+# 5. GitHub Actions 통합
+# - name: OWASP Dependency Check
+#   uses: dependency-check/Dependency-Check_Action@main
+#   with:
+#     project: 'MyProject'
+#     path: '.'
+#     format: 'HTML'
+#     args: '--failOnCVSS 7'</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="prevention">
+                <pre><code class="language-javascript">// OWASP Top 10 취약점 예방 코드 예제 (Node.js/Express)
+
+const express = require('express');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const app = express();
+
+// A03:2021 - Injection 방지
+// 1. 파라미터화된 쿼리 사용 (SQL Injection 방지)
+const { Pool } = require('pg');
+const pool = new Pool();
+
+// 잘못된 예 (취약)
+// const query = `SELECT * FROM users WHERE id = ${userId}`;
+
+// 올바른 예 (안전)
+async function getUserById(userId) {
+    const result = await pool.query(
+        'SELECT * FROM users WHERE id = $1',  // 파라미터화
+        [userId]
+    );
+    return result.rows[0];
+}
+
+// A02:2021 - Cryptographic Failures 방지
+// 2. 안전한 비밀번호 해싱
+async function hashPassword(password) {
+    const saltRounds = 12;  // 최소 10 이상 권장
+    return await bcrypt.hash(password, saltRounds);
+}
+
+async function verifyPassword(password, hash) {
+    return await bcrypt.compare(password, hash);
+}
+
+// A01:2021 - Broken Access Control 방지
+// 3. 역할 기반 접근 제어
+function authorize(requiredRole) {
+    return (req, res, next) => {
+        const userRole = req.user?.role;
+        if (!userRole || !hasPermission(userRole, requiredRole)) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        next();
+    };
+}
+
+// A07:2021 - XSS 방지
+// 4. Helmet으로 보안 헤더 설정
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],  // 인라인 스크립트 차단
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+        },
+    },
+    xssFilter: true,
+}));
+
+// A04:2021 - Insecure Design 방지
+// 5. Rate Limiting (무차별 대입 공격 방지)
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,  // 15분
+    max: 5,  // 최대 5번 시도
+    message: { error: 'Too many login attempts. Try again later.' },
+    standardHeaders: true,
+});
+
+app.post('/login', loginLimiter, async (req, res) => {
+    // 로그인 로직
+});
+
+// A03:2021 - Injection 방지 (입력 검증)
+// 6. express-validator로 입력 검증
+app.post('/users',
+    [
+        body('email').isEmail().normalizeEmail(),
+        body('username').isAlphanumeric().isLength({ min: 3, max: 20 }),
+        body('password').isStrongPassword({
+            minLength: 12,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1
+        }),
+    ],
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        // 사용자 생성 로직
+    }
+);
+
+// A08:2021 - SSRF 방지
+// 7. URL 화이트리스트 검증
+const allowedHosts = ['api.trusted.com', 'cdn.trusted.com'];
+
+function isAllowedUrl(url) {
+    try {
+        const parsed = new URL(url);
+        return allowedHosts.includes(parsed.hostname);
+    } catch {
+        return false;
+    }
+}
+
+app.post('/fetch-url', (req, res) => {
+    if (!isAllowedUrl(req.body.url)) {
+        return res.status(400).json({ error: 'URL not allowed' });
+    }
+    // URL 페치 로직
+});</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 감사 준비 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "이번 보안 감사에서 OWASP Top 10 대응 현황을 물어볼 겁니다. OWASP ZAP으로 스테이징 환경 전체 스캔을 돌리고, Dependency-Check로 모든 서비스의 취약한 의존성을 점검합시다. A01 Broken Access Control과 A03 Injection은 특히 꼼꼼히 확인해야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "이 부분 OWASP A03 Injection 취약점이에요. 사용자 입력을 직접 SQL 쿼리에 넣으면 안 됩니다. 파라미터화된 쿼리를 사용하거나 ORM의 안전한 메서드를 쓰세요. OWASP Cheat Sheet에 언어별 안전한 코딩 가이드가 있으니 참고하시면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 DevSecOps 파이프라인 구축에서</div>
+                    <blockquote class="conv-quote">
+                        "CI/CD에 OWASP 도구들을 통합합시다. PR 단계에서 Dependency-Check로 취약한 라이브러리를 차단하고, 스테이징 배포 후 ZAP API 스캔을 자동으로 돌립니다. CVSS 7 이상이면 배포 차단하는 게이트를 만들어서 고위험 취약점이 프로덕션에 나가지 않도록 하죠."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>OWASP Top 10만 확인하면 충분하다는 착각</strong>
+                        <p>Top 10은 가장 흔한 취약점 10개일 뿐, 모든 보안 위협을 다루지 않습니다. OWASP ASVS(Application Security Verification Standard)로 더 포괄적인 보안 검증을 수행하세요. Top 10은 시작점이지 종착점이 아닙니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>자동화 도구 결과를 맹신</strong>
+                        <p>OWASP ZAP이나 Dependency-Check는 알려진 취약점 패턴만 탐지합니다. 비즈니스 로직 취약점, 제로데이, 복잡한 인증 우회 등은 수동 침투 테스트가 필요합니다. 자동화 도구는 보조 수단이지 완벽한 해결책이 아닙니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>False Positive 무시 또는 과민 반응</strong>
+                        <p>취약점 스캔 결과에는 오탐(False Positive)이 포함됩니다. 모든 경고를 무시하거나 반대로 모든 경고에 과민 반응하면 안 됩니다. 각 취약점을 수동으로 검증하고, 억제 규칙(suppression)을 적절히 관리하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>OWASP 베스트 프랙티스</strong>
+                        <p>개발 단계부터 OWASP Secure Coding Practices를 적용하세요. CI/CD에 ZAP과 Dependency-Check를 통합하여 지속적 보안 검사를 수행합니다. 정기적으로 OWASP Top 10 업데이트를 확인하고 팀 교육을 진행하세요. OWASP SAMM으로 조직의 보안 성숙도를 측정하고 개선 계획을 수립하는 것도 좋습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Penetration%20Testing/" class="related-term-link">Penetration Testing</a>
+                <a href="/ko/term/XSS/" class="related-term-link">XSS</a>
+                <a href="/ko/term/SQL%20Injection/" class="related-term-link">SQL Injection</a>
+                <a href="/ko/term/SBOM/" class="related-term-link">SBOM</a>
+                <a href="/ko/term/Trivy/" class="related-term-link">Trivy</a>
+                <a href="/ko/term/DevSecOps/" class="related-term-link">DevSecOps</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://owasp.org/Top10/" target="_blank" class="learn-link">
+                    📘 OWASP Top 10 (2021) 공식 문서
+                </a>
+                <a href="https://owasp.org/www-project-zap/" target="_blank" class="learn-link">
+                    🔧 OWASP ZAP - 무료 웹 보안 테스트 도구
+                </a>
+                <a href="https://cheatsheetseries.owasp.org/" target="_blank" class="learn-link">
+                    📝 OWASP Cheat Sheet Series - 보안 코딩 가이드
+                </a>
+                <a href="https://owasp.org/www-project-dependency-check/" target="_blank" class="learn-link">
+                    🔍 OWASP Dependency-Check - 취약한 의존성 탐지
+                </a>
+                <a href="https://owasp.org/www-project-application-security-verification-standard/" target="_blank" class="learn-link">
+                    📋 OWASP ASVS - 애플리케이션 보안 검증 표준
+                </a>
+                <a href="https://owaspsamm.org/" target="_blank" class="learn-link">
+                    📊 OWASP SAMM - 보안 성숙도 모델
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +705,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

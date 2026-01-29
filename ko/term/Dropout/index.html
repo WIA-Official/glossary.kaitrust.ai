@@ -161,6 +161,122 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +318,153 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Dropout은 신경망 학습 시 각 훈련 반복에서 뉴런을 무작위로 비활성화(출력을 0으로 설정)하는 정규화 기법입니다. 2012년 Geoffrey Hinton 팀이 발표한 이 기법은 신경망의 과적합(overfitting)을 방지하는 가장 효과적이고 널리 사용되는 방법 중 하나로, AlexNet 이후 거의 모든 딥러닝 모델의 표준 구성요소가 되었습니다.</p>
+                <p>Dropout의 핵심 아이디어는 앙상블 학습에서 영감을 받았습니다. 매 학습 스텝마다 다른 뉴런 조합을 사용하면, 결과적으로 2^n개의 서로 다른 "얇은(thinned)" 네트워크를 동시에 학습하는 효과가 있습니다. 이는 단일 뉴런에 대한 과도한 의존을 줄이고, 더 강건한 특징 표현을 학습하도록 유도합니다.</p>
+                <p>동작 원리는 단순합니다. 학습 시 각 뉴런을 확률 p(보통 0.5 또는 0.2)로 비활성화합니다. 추론 시에는 모든 뉴런을 사용하되, 출력에 (1-p)를 곱하거나(표준 dropout), 학습 시 출력을 1/(1-p)로 스케일링(inverted dropout)하여 기대값을 맞춥니다. 현대 프레임워크는 대부분 inverted dropout을 사용하여 추론 시 별도 처리가 필요 없습니다.</p>
+                <p>실무에서 Dropout은 특히 Fully Connected 레이어에서 효과적이며, CNN의 마지막 FC 레이어나 RNN/LSTM의 은닉층에 주로 적용됩니다. 다만 BatchNorm과 함께 사용 시 효과가 감소할 수 있고, Transformer 아키텍처에서는 Attention 후에 적용하는 것이 일반적입니다. ResNet 이후 현대 CNN에서는 BatchNorm이 충분한 정규화를 제공하여 Dropout 사용이 줄었지만, FC 레이어나 언어 모델에서는 여전히 필수적입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># PyTorch에서 Dropout 사용 예제
+import torch
+import torch.nn as nn
+
+class MLPWithDropout(nn.Module):
+    """Dropout이 적용된 MLP 분류기"""
+    def __init__(self, input_size, hidden_size, num_classes, dropout_rate=0.5):
+        super().__init__()
+        self.layer1 = nn.Linear(input_size, hidden_size)
+        self.layer2 = nn.Linear(hidden_size, hidden_size)
+        self.layer3 = nn.Linear(hidden_size, num_classes)
+        self.relu = nn.ReLU()
+        # Dropout 레이어 (학습 시에만 활성화)
+        self.dropout = nn.Dropout(p=dropout_rate)
+
+    def forward(self, x):
+        x = self.relu(self.layer1(x))
+        x = self.dropout(x)  # 첫 번째 hidden layer 후 dropout
+        x = self.relu(self.layer2(x))
+        x = self.dropout(x)  # 두 번째 hidden layer 후 dropout
+        x = self.layer3(x)   # 출력층에는 dropout 적용 안 함
+        return x
+
+# 모델 생성
+model = MLPWithDropout(784, 256, 10, dropout_rate=0.5)
+
+# 학습 모드 vs 평가 모드
+model.train()  # Dropout 활성화
+output_train = model(torch.randn(32, 784))
+
+model.eval()   # Dropout 비활성화 (모든 뉴런 사용)
+output_eval = model(torch.randn(32, 784))
+
+# 2D Dropout (CNN용)
+class CNNWithDropout(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv = nn.Conv2d(3, 64, 3, padding=1)
+        self.dropout2d = nn.Dropout2d(p=0.25)  # 채널 단위 dropout
+        self.fc = nn.Linear(64 * 32 * 32, 10)
+        self.dropout = nn.Dropout(p=0.5)
+
+    def forward(self, x):
+        x = torch.relu(self.conv(x))
+        x = self.dropout2d(x)  # Conv 후 2D dropout
+        x = x.view(x.size(0), -1)
+        x = self.dropout(x)    # FC 전 dropout
+        return self.fc(x)
+
+print("Dropout 모델 구성 완료!")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">모델 과적합 문제 해결 논의에서</div>
+                    <p class="conv-quote">"훈련 정확도는 98%인데 검증 정확도가 85%면 심한 과적합입니다. FC 레이어에 Dropout 0.5 추가하고, 데이터 증강도 같이 적용해보세요. Dropout 단독으로도 보통 2-4% 검증 정확도 개선 효과가 있습니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">코드 리뷰에서</div>
+                    <p class="conv-quote">"이 부분에서 model.eval() 호출이 빠져있네요. 추론 시에는 반드시 eval 모드로 전환해야 Dropout이 비활성화됩니다. 그렇지 않으면 매 추론마다 다른 결과가 나오고, 정확도도 떨어집니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">기술 면접에서</div>
+                    <p class="conv-quote">"Inverted Dropout은 학습 시 출력을 1/(1-p)로 스케일업하여 추론 시 별도 처리가 필요 없게 합니다. p=0.5면 학습 때 출력을 2배로 곱하고, 추론 때는 그대로 사용하면 기대값이 동일하게 유지됩니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div>
+                        <strong>추론 시 반드시 eval() 모드 전환</strong>
+                        <p>PyTorch에서 model.eval()을 호출하지 않으면 추론 시에도 Dropout이 활성화되어 일관되지 않은 결과와 성능 저하가 발생합니다. with torch.no_grad()와 함께 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div>
+                        <strong>BatchNorm과의 상호작용</strong>
+                        <p>BatchNorm 레이어 바로 뒤에 Dropout을 적용하면 추론 시 분포 불일치로 성능이 저하될 수 있습니다. 일반적으로 Conv-BN-ReLU-Dropout 순서보다 Conv-BN-ReLU만 사용하는 것이 권장됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div>
+                        <strong>Dropout 비율 조정의 중요성</strong>
+                        <p>너무 높은 Dropout(0.7 이상)은 학습을 방해하고, 너무 낮은 값(0.1 이하)은 정규화 효과가 미미합니다. FC 레이어는 0.5, Conv 레이어는 0.2-0.3에서 시작하여 조정하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Regularization/" class="related-term-link">Regularization</a>
+                <a href="/ko/term/Batch%20Normalization/" class="related-term-link">Batch Normalization</a>
+                <a href="/ko/term/Overfitting/" class="related-term-link">Overfitting</a>
+                <a href="/ko/term/Neural%20Network/" class="related-term-link">Neural Network</a>
+                <a href="/ko/term/Epoch/" class="related-term-link">Epoch</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://jmlr.org/papers/v15/srivastava14a.html" target="_blank" class="learn-link">
+                    <span>📄</span> Dropout 원본 논문 - JMLR 2014
+                </a>
+                <a href="https://pytorch.org/docs/stable/nn.html#dropout-layers" target="_blank" class="learn-link">
+                    <span>📖</span> PyTorch Dropout 공식 문서
+                </a>
+                <a href="https://cs231n.github.io/neural-networks-2/#reg" target="_blank" class="learn-link">
+                    <span>🎓</span> Stanford CS231n - 정규화 기법 설명
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +475,26 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,234 @@
                 </a>
             </div>
         </article>
+
+        <!-- 6개 표준 섹션 -->
+        <div class="term-sections">
+            <!-- 섹션 1: 상세 설명 -->
+            <section class="term-section" aria-labelledby="detail-title">
+                <h2 class="section-title" id="detail-title">상세 설명</h2>
+                <div class="detail-content">
+                    <p>데이터 메시(Data Mesh)는 Zhamak Dehghani가 2019년에 제안한 분산형 데이터 아키텍처 패러다임입니다. 중앙 집중식 데이터 플랫폼(모놀리식 데이터 레이크, 데이터 웨어하우스)의 확장성 한계와 병목 현상을 극복하기 위해 탄생했습니다. 핵심 철학은 마이크로서비스가 애플리케이션을 분산시킨 것처럼, 데이터 소유권과 책임을 비즈니스 도메인 단위로 분산시키는 것입니다.</p>
+                    <p>데이터 메시의 4대 원칙은 다음과 같습니다. 첫째, 도메인 중심 소유권(Domain-Oriented Ownership)으로 각 비즈니스 도메인이 자체 데이터를 소유하고 관리합니다. 둘째, 데이터를 제품처럼 취급(Data as a Product)하여 소비자 관점에서 검색 가능하고, 품질이 보장되며, 문서화된 데이터셋을 제공합니다. 셋째, 셀프 서비스 데이터 플랫폼(Self-Serve Platform)을 통해 도메인 팀이 인프라 복잡성 없이 데이터 프로덕트를 생성하고 배포할 수 있습니다.</p>
+                    <p>넷째, 연합 거버넌스(Federated Computational Governance)를 적용하여 보안, 품질, 상호운용성 등 전역 표준은 중앙에서 정의하되, 실제 구현은 각 도메인에서 자율적으로 수행합니다. 이 원칙들이 조화롭게 작동할 때, 조직은 데이터 병목 현상을 해소하고 빠른 혁신이 가능해집니다. 마이크로서비스 아키텍처와 유사하게, 각 도메인 팀이 end-to-end 책임을 가지므로 데이터 제공 속도가 향상됩니다.</p>
+                    <p>데이터 메시는 대규모 조직(수백 명 이상의 데이터 관련 인력)에서 효과적이며, 소규모 조직에는 과도한 오버헤드가 될 수 있습니다. 성공적인 도입을 위해서는 조직 문화의 변화, 도메인 팀의 데이터 역량 강화, 그리고 강력한 셀프 서비스 플랫폼이 필요합니다. Netflix, Zalando, Intuit 등 글로벌 기업들이 데이터 메시를 채택하여 데이터 민주화와 확장성을 달성하고 있습니다.</p>
+                </div>
+            </section>
+
+            <!-- 섹션 2: 코드 예제 -->
+            <section class="term-section" aria-labelledby="code-title">
+                <h2 class="section-title" id="code-title">코드 예제</h2>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Data Product YAML + Self-Service Platform</span>
+                        <button class="copy-btn" data-code="code-block-1">복사</button>
+                    </div>
+                    <pre><code id="code-block-1"># 데이터 프로덕트 정의 예시
+# data-products/orders/dataproduct.yaml
+
+apiVersion: datamesh.io/v1
+kind: DataProduct
+metadata:
+  name: orders-data-product
+  domain: order-management
+  owner: order-team@company.com
+  version: "2.1.0"
+
+spec:
+  description: |
+    주문 도메인의 핵심 데이터 프로덕트.
+    모든 주문 트랜잭션 및 집계 메트릭 제공.
+
+  # 출력 포트 정의 (데이터 접근 방법)
+  outputPorts:
+    - name: orders-events
+      type: streaming
+      format: avro
+      location: kafka://orders.events
+      description: "실시간 주문 이벤트 스트림"
+      sla:
+        latency: "p99 < 100ms"
+        availability: "99.9%"
+
+    - name: orders-snapshot
+      type: batch
+      format: delta
+      location: s3://data-products/orders/snapshot/
+      description: "주문 스냅샷 테이블 (일별 업데이트)"
+      schedule: "0 2 * * *"
+      schema:
+        fields:
+          - name: order_id
+            type: string
+            description: "주문 고유 식별자"
+            pii: false
+          - name: customer_id
+            type: string
+            description: "고객 ID (암호화됨)"
+            pii: true
+          - name: total_amount
+            type: decimal(18,2)
+            description: "주문 총액"
+          - name: status
+            type: string
+            enum: [pending, confirmed, shipped, delivered]
+          - name: created_at
+            type: timestamp
+
+    - name: orders-metrics
+      type: api
+      format: rest
+      location: https://api.internal/orders/metrics
+      description: "주문 집계 메트릭 API"
+
+  # 입력 소스 (의존성)
+  inputPorts:
+    - name: raw-orders
+      type: database
+      source: postgres://order-service-db
+    - name: customer-data
+      type: data_product
+      source: customer-domain/customer-data-product
+
+  # 데이터 품질 규칙
+  quality:
+    tests:
+      - name: order_id_unique
+        type: unique
+        column: order_id
+      - name: no_null_amounts
+        type: not_null
+        column: total_amount
+      - name: valid_status
+        type: accepted_values
+        column: status
+        values: [pending, confirmed, shipped, delivered]
+      - name: freshness_check
+        type: freshness
+        column: created_at
+        max_age: "24h"
+
+  # 접근 제어 (연합 거버넌스)
+  access:
+    public: false
+    classification: confidential
+    teams:
+      - name: analytics-team
+        permissions: [read]
+      - name: ml-team
+        permissions: [read]
+      - name: order-team
+        permissions: [read, write, admin]
+
+  # 문서 및 지원
+  documentation:
+    readme: docs/README.md
+    wiki: https://wiki.company.com/orders-data-product
+    slack: "#orders-data-support"
+
+---
+# 셀프 서비스 플랫폼: 인프라 자동 프로비저닝
+# platform/terraform/data-product-infra.tf
+
+resource "datamesh_data_product" "orders" {
+  name   = "orders-data-product"
+  domain = "order-management"
+  owner  = "order-team@company.com"
+
+  compute {
+    type    = "spark"
+    version = "3.5"
+    size    = "medium"
+    autoscaling {
+      min_workers = 2
+      max_workers = 10
+    }
+  }
+
+  storage {
+    type     = "delta"
+    location = "s3://data-products/orders/"
+    retention_days = 90
+  }
+
+  catalog {
+    type      = "unity_catalog"
+    namespace = "orders_domain"
+    register_to_global = true
+  }
+
+  monitoring {
+    enable_lineage = true
+    alert_channels = ["slack:#orders-alerts"]
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- 섹션 3: 실무 대화 -->
+            <section class="term-section" aria-labelledby="conv-title">
+                <h2 class="section-title" id="conv-title">실무 대화</h2>
+                <div class="conversation-tabs">
+                    <button class="conv-tab active" data-tab="meeting">팀 회의</button>
+                    <button class="conv-tab" data-tab="interview">기술 면접</button>
+                    <button class="conv-tab" data-tab="review">코드 리뷰</button>
+                </div>
+                <div class="conversation-content">
+                    <div class="conv-panel active" id="meeting">
+                        <div class="chat-bubble user">CTO: 데이터 팀이 병목이에요. 모든 부서의 데이터 요청이 중앙 데이터 팀에 몰리니까 6개월 대기열이 생겼습니다.</div>
+                        <div class="chat-bubble expert">데이터 아키텍트: 데이터 메시 도입을 검토해보시죠. 각 도메인 팀이 자체 데이터 프로덕트를 소유하면 병목이 해소됩니다. 중앙 팀은 플랫폼과 거버넌스에 집중하고요.</div>
+                        <div class="chat-bubble user">CTO: 각 도메인 팀에 데이터 역량이 있을까요?</div>
+                        <div class="chat-bubble expert">데이터 아키텍트: 셀프 서비스 플랫폼이 핵심이에요. 인프라 복잡성을 추상화해서 도메인 팀이 SQL과 YAML 정도만으로 데이터 프로덕트를 만들 수 있게 합니다. 초기에 파일럿 도메인 2-3개로 시작하세요.</div>
+                    </div>
+                    <div class="conv-panel" id="interview">
+                        <div class="chat-bubble user">면접관: 데이터 메시와 기존 데이터 레이크의 차이점을 설명해주세요.</div>
+                        <div class="chat-bubble expert">지원자: 기존 데이터 레이크는 중앙 팀이 모든 데이터를 수집, 변환, 제공합니다. 데이터 메시는 각 도메인 팀이 자체 데이터 프로덕트를 소유하고, 표준화된 인터페이스로 다른 팀에 제공합니다. 마이크로서비스처럼 분산되어 있지만, 연합 거버넌스로 일관성을 유지합니다.</div>
+                        <div class="chat-bubble user">면접관: 데이터 메시의 도입 조건은 무엇인가요?</div>
+                        <div class="chat-bubble expert">지원자: 대규모 조직, 명확한 도메인 경계, 도메인 팀의 데이터 역량, 그리고 셀프 서비스 플랫폼이 필요합니다. 소규모 조직에서는 오버헤드가 더 클 수 있어 중앙 집중식이 효율적입니다.</div>
+                    </div>
+                    <div class="conv-panel" id="review">
+                        <div class="chat-bubble user">개발자: 데이터 프로덕트 정의에 inputPorts가 없는데, 의존성 관리는 어떻게 하나요?</div>
+                        <div class="chat-bubble expert">시니어: 좋은 지적이야. inputPorts에 의존하는 다른 데이터 프로덕트를 명시해야 해. 그래야 리니지 추적이 가능하고, 상위 프로덕트 변경 시 영향도 분석이 되거든. customer-domain의 customer-data-product 의존성 추가해줘.</div>
+                        <div class="chat-bubble user">개발자: SLA 정의도 더 구체적으로 해야 할까요?</div>
+                        <div class="chat-bubble expert">시니어: 맞아. 소비자 팀과 합의된 SLA를 명시해야 데이터 계약이 완성돼. latency, availability 외에 freshness(데이터 신선도)와 accuracy(정확도) 지표도 추가하자.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 섹션 4: 주의사항 -->
+            <section class="term-section" aria-labelledby="warning-title">
+                <h2 class="section-title" id="warning-title">주의사항</h2>
+                <ul class="warning-list">
+                    <li class="warning">조직 문화 변화가 기술보다 중요합니다. 데이터 메시는 기술 솔루션이 아닌 조직 패러다임 전환입니다.</li>
+                    <li class="warning">소규모 조직(데이터 팀 10명 이하)에서는 오버헤드가 더 클 수 있습니다. 중앙 집중식이 더 효율적일 수 있습니다.</li>
+                    <li class="warning">셀프 서비스 플랫폼 없이 도메인 분산만 하면 사일로가 심화됩니다. 플랫폼 투자가 선행되어야 합니다.</li>
+                    <li class="info">파일럿 도메인 2-3개로 시작하여 성공 사례를 만들고 점진적으로 확대하세요.</li>
+                    <li class="info">연합 거버넌스 정책을 코드로 자동화하세요. 수동 검토는 병목이 됩니다.</li>
+                </ul>
+            </section>
+
+            <!-- 섹션 5: 관련 용어 -->
+            <section class="term-section" aria-labelledby="related-title">
+                <h2 class="section-title" id="related-title">관련 용어</h2>
+                <div class="related-links">
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B3%84%EC%95%BD/" class="related-link">데이터 계약</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%B9%B4%ED%83%88%EB%A1%9C%EA%B7%B8/" class="related-link">데이터 카탈로그</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A6%AC%EB%8B%88%EC%A7%80/" class="related-link">데이터 리니지</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A0%88%EC%9D%B4%ED%81%AC/" class="related-link">데이터 레이크</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A0%88%EC%9D%B4%ED%81%AC%ED%95%98%EC%9A%B0%EC%8A%A4/" class="related-link">데이터 레이크하우스</a>
+                </div>
+            </section>
+
+            <!-- 섹션 6: 더 배우기 -->
+            <section class="term-section" aria-labelledby="learn-title">
+                <h2 class="section-title" id="learn-title">더 배우기</h2>
+                <ul class="learn-links">
+                    <li><a href="https://martinfowler.com/articles/data-mesh-principles.html" target="_blank" rel="noopener">Martin Fowler - Data Mesh Principles</a></li>
+                    <li><a href="https://www.datamesh-architecture.com/" target="_blank" rel="noopener">Data Mesh Architecture 가이드</a></li>
+                    <li><a href="https://www.oreilly.com/library/view/data-mesh/9781492092384/" target="_blank" rel="noopener">O'Reilly - Data Mesh Book (Zhamak Dehghani)</a></li>
+                </ul>
+            </section>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -212,6 +441,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

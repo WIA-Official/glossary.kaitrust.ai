@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Backup (백업) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="데이터 손실 대비 복사본 생성. 풀, 증분, 차등 백업으로 구분. 재해 복구의 기반.">
-    <meta name="keywords" content="Backup, 백업, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="Backup은 데이터 손실에 대비하여 복사본을 생성하는 작업입니다. 풀 백업, 증분 백업, 차등 백업으로 구분되며 재해 복구(DR)의 핵심 기반입니다.">
+    <meta name="keywords" content="Backup, 백업, Full Backup, Incremental Backup, Differential Backup, pg_dump, mysqldump, 재해복구, DR, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Backup/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Backup/">
     <meta property="og:title" content="Backup (백업) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="데이터 손실 대비 복사본 생성. 풀, 증분, 차등 백업으로 구분. 재해 복구의 기반.">
+    <meta property="og:description" content="Backup은 데이터 손실에 대비하여 복사본을 생성하는 작업으로 재해 복구의 핵심 기반입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Backup (백업) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="데이터 손실 대비 복사본 생성. 풀, 증분, 차등 백업으로 구분. 재해 복구의 기반.">
+    <meta name="twitter:description" content="Backup은 데이터 손실에 대비하여 복사본을 생성하는 작업으로 재해 복구의 핵심 기반입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Backup",
-        "description": "데이터 손실 대비 복사본 생성. 풀, 증분, 차등 백업으로 구분. 재해 복구의 기반.",
+        "alternateName": "백업",
+        "description": "Backup은 데이터 손실에 대비하여 복사본을 생성하는 작업으로 재해 복구의 핵심 기반입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">Backup</h1>
             <p class="term-english">백업</p>
             <div class="term-description">
-                <p>데이터 손실 대비 복사본 생성. 풀, 증분, 차등 백업으로 구분. 재해 복구의 기반.</p>
+                <p>데이터 손실에 대비하여 복사본을 생성하는 작업입니다. 풀 백업, 증분 백업, 차등 백업으로 구분되며, 재해 복구(Disaster Recovery)의 핵심 기반이 됩니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,511 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>풀 백업(Full Backup)</strong>은 모든 데이터를 완전히 복사하는 방식입니다. 복원이 가장 간단하지만, 시간과 저장 공간이 많이 필요합니다. 주로 주 단위 또는 월 단위로 수행합니다.</p>
+                <p><strong>증분 백업(Incremental Backup)</strong>은 마지막 백업 이후 변경된 데이터만 복사합니다. 백업 시간과 공간이 적게 들지만, 복원 시 풀 백업 + 모든 증분 백업을 순차적으로 적용해야 합니다. PostgreSQL의 WAL 아카이빙이 대표적인 예입니다.</p>
+                <p><strong>차등 백업(Differential Backup)</strong>은 마지막 풀 백업 이후 변경된 모든 데이터를 복사합니다. 증분 백업보다 크지만, 복원 시 풀 백업 + 가장 최근 차등 백업만 있으면 됩니다.</p>
+                <p><strong>논리적 백업 vs 물리적 백업</strong>: 논리적 백업(pg_dump, mysqldump)은 SQL 형태로 데이터를 추출하여 이식성이 좋지만 느립니다. 물리적 백업(pg_basebackup, Percona XtraBackup)은 데이터 파일을 직접 복사하여 빠르지만 동일 버전에서만 복원 가능합니다.</p>
+                <p><strong>3-2-1 백업 규칙</strong>은 업계 표준 모범 사례입니다: 최소 3개의 데이터 복사본, 2개의 다른 저장 매체, 1개는 오프사이트(클라우드, 원격지)에 보관해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (자동화)</button>
+                <button class="code-tab" data-lang="node">Node.js (S3 업로드)</button>
+                <button class="code-tab" data-lang="sql">CLI (pg_dump/mysql)</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># 데이터베이스 백업 자동화 - Python
+import subprocess
+import boto3
+from datetime import datetime
+from pathlib import Path
+import gzip
+import os
+
+class DatabaseBackup:
+    """PostgreSQL/MySQL 백업 관리 클래스"""
+
+    def __init__(self, db_config: dict, s3_bucket: str = None):
+        self.db_config = db_config
+        self.s3_bucket = s3_bucket
+        self.backup_dir = Path("/var/backups/db")
+        self.backup_dir.mkdir(parents=True, exist_ok=True)
+
+    def create_postgresql_backup(self, backup_type: str = "full") -> Path:
+        """
+        PostgreSQL 백업 생성
+        - full: pg_dump로 전체 백업
+        - basebackup: pg_basebackup으로 물리적 백업
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        db_name = self.db_config['database']
+
+        if backup_type == "full":
+            # 논리적 백업 (SQL 덤프)
+            backup_file = self.backup_dir / f"{db_name}_{timestamp}.sql.gz"
+
+            # pg_dump 실행 후 gzip 압축
+            dump_cmd = [
+                "pg_dump",
+                "-h", self.db_config['host'],
+                "-p", str(self.db_config.get('port', 5432)),
+                "-U", self.db_config['user'],
+                "-d", db_name,
+                "-F", "p",  # plain SQL format
+                "--no-owner",
+                "--no-acl"
+            ]
+
+            env = os.environ.copy()
+            env['PGPASSWORD'] = self.db_config['password']
+
+            with gzip.open(backup_file, 'wt') as f:
+                result = subprocess.run(
+                    dump_cmd, stdout=f, stderr=subprocess.PIPE,
+                    env=env, text=True
+                )
+
+            if result.returncode != 0:
+                raise Exception(f"Backup failed: {result.stderr}")
+
+            print(f"✅ Full backup created: {backup_file}")
+
+        elif backup_type == "basebackup":
+            # 물리적 백업 (PITR 지원)
+            backup_file = self.backup_dir / f"{db_name}_base_{timestamp}"
+
+            basebackup_cmd = [
+                "pg_basebackup",
+                "-h", self.db_config['host'],
+                "-p", str(self.db_config.get('port', 5432)),
+                "-U", self.db_config['user'],
+                "-D", str(backup_file),
+                "-Ft",  # tar format
+                "-z",   # gzip compression
+                "-P"    # progress
+            ]
+
+            env = os.environ.copy()
+            env['PGPASSWORD'] = self.db_config['password']
+
+            result = subprocess.run(basebackup_cmd, env=env)
+            if result.returncode != 0:
+                raise Exception("Base backup failed")
+
+            print(f"✅ Base backup created: {backup_file}")
+
+        return backup_file
+
+    def upload_to_s3(self, backup_file: Path, retention_days: int = 30):
+        """백업 파일을 S3에 업로드 (3-2-1 규칙의 오프사이트 보관)"""
+        if not self.s3_bucket:
+            raise ValueError("S3 bucket not configured")
+
+        s3 = boto3.client('s3')
+        s3_key = f"backups/{backup_file.name}"
+
+        # 업로드
+        s3.upload_file(str(backup_file), self.s3_bucket, s3_key)
+
+        # 수명 주기 태그 설정
+        s3.put_object_tagging(
+            Bucket=self.s3_bucket,
+            Key=s3_key,
+            Tagging={'TagSet': [
+                {'Key': 'retention-days', 'Value': str(retention_days)}
+            ]}
+        )
+
+        print(f"✅ Uploaded to S3: s3://{self.s3_bucket}/{s3_key}")
+
+    def cleanup_old_backups(self, retention_days: int = 7):
+        """오래된 로컬 백업 삭제"""
+        import time
+        cutoff_time = time.time() - (retention_days * 86400)
+
+        for backup_file in self.backup_dir.glob("*.sql.gz"):
+            if backup_file.stat().st_mtime < cutoff_time:
+                backup_file.unlink()
+                print(f"🗑️ Deleted old backup: {backup_file.name}")
+
+
+# 사용 예시
+if __name__ == "__main__":
+    config = {
+        'host': 'localhost',
+        'database': 'myapp',
+        'user': 'backup_user',
+        'password': 'secure_password'
+    }
+
+    backup = DatabaseBackup(config, s3_bucket="my-db-backups")
+
+    # 일일 풀 백업
+    backup_file = backup.create_postgresql_backup("full")
+
+    # S3에 업로드 (오프사이트 보관)
+    backup.upload_to_s3(backup_file, retention_days=30)
+
+    # 7일 이상 된 로컬 백업 삭제
+    backup.cleanup_old_backups(retention_days=7)
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// 데이터베이스 백업 및 S3 업로드 - Node.js
+const { spawn } = require('child_process');
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { createReadStream, createWriteStream, unlinkSync } = require('fs');
+const { createGzip } = require('zlib');
+const { pipeline } = require('stream/promises');
+const path = require('path');
+
+class DatabaseBackup {
+    constructor(dbConfig, s3Config) {
+        this.dbConfig = dbConfig;
+        this.s3Client = new S3Client({ region: s3Config.region });
+        this.s3Bucket = s3Config.bucket;
+        this.backupDir = '/var/backups/db';
+    }
+
+    /**
+     * PostgreSQL 백업 생성
+     */
+    async createPostgresBackup() {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filename = `${this.dbConfig.database}_${timestamp}.sql`;
+        const backupPath = path.join(this.backupDir, filename);
+        const compressedPath = `${backupPath}.gz`;
+
+        return new Promise((resolve, reject) => {
+            const env = { ...process.env, PGPASSWORD: this.dbConfig.password };
+
+            const pgDump = spawn('pg_dump', [
+                '-h', this.dbConfig.host,
+                '-p', this.dbConfig.port || '5432',
+                '-U', this.dbConfig.user,
+                '-d', this.dbConfig.database,
+                '-F', 'p',
+                '--no-owner'
+            ], { env });
+
+            const writeStream = createWriteStream(backupPath);
+            pgDump.stdout.pipe(writeStream);
+
+            pgDump.stderr.on('data', (data) => {
+                console.error(`pg_dump stderr: ${data}`);
+            });
+
+            pgDump.on('close', async (code) => {
+                if (code !== 0) {
+                    reject(new Error(`pg_dump exited with code ${code}`));
+                    return;
+                }
+
+                // Gzip 압축
+                await pipeline(
+                    createReadStream(backupPath),
+                    createGzip(),
+                    createWriteStream(compressedPath)
+                );
+
+                // 원본 삭제
+                unlinkSync(backupPath);
+
+                console.log(`✅ Backup created: ${compressedPath}`);
+                resolve(compressedPath);
+            });
+        });
+    }
+
+    /**
+     * MySQL 백업 생성
+     */
+    async createMysqlBackup() {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filename = `${this.dbConfig.database}_${timestamp}.sql.gz`;
+        const backupPath = path.join(this.backupDir, filename);
+
+        return new Promise((resolve, reject) => {
+            const mysqldump = spawn('mysqldump', [
+                '-h', this.dbConfig.host,
+                '-P', this.dbConfig.port || '3306',
+                '-u', this.dbConfig.user,
+                `-p${this.dbConfig.password}`,
+                '--single-transaction',  // InnoDB 일관성 보장
+                '--routines',            // 스토어드 프로시저 포함
+                '--triggers',            // 트리거 포함
+                this.dbConfig.database
+            ]);
+
+            const gzip = createGzip();
+            const writeStream = createWriteStream(backupPath);
+
+            mysqldump.stdout.pipe(gzip).pipe(writeStream);
+
+            mysqldump.on('close', (code) => {
+                if (code === 0) {
+                    console.log(`✅ MySQL backup created: ${backupPath}`);
+                    resolve(backupPath);
+                } else {
+                    reject(new Error(`mysqldump exited with code ${code}`));
+                }
+            });
+        });
+    }
+
+    /**
+     * S3에 백업 업로드
+     */
+    async uploadToS3(backupPath) {
+        const filename = path.basename(backupPath);
+        const s3Key = `backups/${filename}`;
+
+        const command = new PutObjectCommand({
+            Bucket: this.s3Bucket,
+            Key: s3Key,
+            Body: createReadStream(backupPath),
+            ContentType: 'application/gzip',
+            Tagging: 'backup-type=automated&retention=30days'
+        });
+
+        await this.s3Client.send(command);
+        console.log(`✅ Uploaded to S3: s3://${this.s3Bucket}/${s3Key}`);
+
+        return `s3://${this.s3Bucket}/${s3Key}`;
+    }
+
+    /**
+     * 전체 백업 워크플로우
+     */
+    async runBackupWorkflow() {
+        try {
+            console.log('🚀 Starting backup workflow...');
+
+            // 1. 백업 생성
+            const backupPath = await this.createPostgresBackup();
+
+            // 2. S3 업로드 (오프사이트 보관)
+            const s3Uri = await this.uploadToS3(backupPath);
+
+            // 3. 알림 전송 (Slack, Email 등)
+            console.log(`✅ Backup complete: ${s3Uri}`);
+
+            return { success: true, location: s3Uri };
+        } catch (error) {
+            console.error(`❌ Backup failed: ${error.message}`);
+            // 실패 알림 전송
+            throw error;
+        }
+    }
+}
+
+// 사용 예시
+const backup = new DatabaseBackup(
+    {
+        host: 'localhost',
+        database: 'myapp',
+        user: 'backup_user',
+        password: 'secure_password'
+    },
+    {
+        region: 'ap-northeast-2',
+        bucket: 'my-db-backups'
+    }
+);
+
+backup.runBackupWorkflow();
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="sql">
+                <pre><code class="language-bash"># ============================================
+# PostgreSQL 백업 명령어
+# ============================================
+
+# 1. 논리적 백업 (pg_dump)
+# 단일 데이터베이스 백업
+pg_dump -h localhost -U postgres -d mydb > backup.sql
+
+# 압축하여 백업
+pg_dump -h localhost -U postgres -d mydb | gzip > backup.sql.gz
+
+# Custom 포맷 (병렬 복원 가능)
+pg_dump -h localhost -U postgres -d mydb -F c -f backup.dump
+
+# 특정 테이블만 백업
+pg_dump -h localhost -U postgres -d mydb -t users -t orders > tables.sql
+
+# 2. 전체 클러스터 백업
+pg_dumpall -h localhost -U postgres > all_databases.sql
+
+# 3. 물리적 백업 (pg_basebackup) - PITR 지원
+pg_basebackup -h localhost -U replication -D /backup/base -Ft -z -P
+
+# 4. 복원
+psql -h localhost -U postgres -d mydb < backup.sql
+pg_restore -h localhost -U postgres -d mydb backup.dump
+
+
+# ============================================
+# MySQL 백업 명령어
+# ============================================
+
+# 1. 단일 데이터베이스 백업
+mysqldump -h localhost -u root -p mydb > backup.sql
+
+# 트랜잭션 일관성 보장 (InnoDB)
+mysqldump -h localhost -u root -p \
+    --single-transaction \
+    --routines \
+    --triggers \
+    mydb > backup.sql
+
+# 압축하여 백업
+mysqldump -h localhost -u root -p mydb | gzip > backup.sql.gz
+
+# 2. 전체 백업
+mysqldump -h localhost -u root -p --all-databases > all_databases.sql
+
+# 3. 바이너리 로그 위치 포함 (PITR용)
+mysqldump -h localhost -u root -p \
+    --single-transaction \
+    --master-data=2 \
+    mydb > backup_with_position.sql
+
+# 4. 복원
+mysql -h localhost -u root -p mydb < backup.sql
+gunzip < backup.sql.gz | mysql -h localhost -u root -p mydb
+
+
+# ============================================
+# 자동화 스크립트 (cron)
+# ============================================
+
+# /etc/cron.d/db-backup
+# 매일 새벽 2시 풀 백업
+0 2 * * * postgres /opt/scripts/daily_backup.sh
+
+# daily_backup.sh 예시
+#!/bin/bash
+DATE=$(date +%Y%m%d)
+BACKUP_DIR="/var/backups/postgresql"
+S3_BUCKET="my-db-backups"
+
+# 백업 생성
+pg_dump -h localhost -U backup_user -d production \
+    -F c -f "$BACKUP_DIR/production_$DATE.dump"
+
+# S3 업로드
+aws s3 cp "$BACKUP_DIR/production_$DATE.dump" \
+    "s3://$S3_BUCKET/daily/production_$DATE.dump"
+
+# 7일 이상 된 로컬 백업 삭제
+find $BACKUP_DIR -name "*.dump" -mtime +7 -delete
+
+echo "Backup completed: production_$DATE.dump"
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 재해 복구 계획 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "3-2-1 백업 규칙을 적용했습니다. 로컬에 7일치 풀 백업을 보관하고, S3에 30일, Glacier에 1년치를 보관합니다. RTO는 2시간, RPO는 1시간으로 WAL 아카이빙으로 PITR을 지원합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 백업 전략 결정 시</div>
+                    <blockquote class="conv-quote">
+                        "데이터가 100GB 넘으니까 매일 풀 백업은 비효율적입니다. 주 1회 풀 백업에 일일 증분 백업 조합으로 가죠. pg_basebackup으로 물리적 백업하고 WAL 아카이빙으로 특정 시점 복구가 가능하게요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 후 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "백업은 있었는데 복원 테스트를 안 해봐서 당황했습니다. 이제부터 분기마다 DR 훈련으로 실제 복원 절차를 검증하고, 복원 소요 시간도 측정해서 RTO 충족 여부를 확인하겠습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>백업만 하고 복원 테스트 생략</strong>
+                        <p>백업 파일이 손상되었거나 복원 절차에 문제가 있으면 실제 장애 시 복구 불가능합니다. 정기적으로 복원 테스트를 수행하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>동일 서버에만 백업 보관</strong>
+                        <p>서버 장애나 디스크 손상 시 백업도 함께 유실됩니다. 반드시 오프사이트(S3, 다른 리전)에 복사본을 보관하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>백업 중 서비스 락 발생</strong>
+                        <p>MyISAM 테이블이나 잘못된 옵션 사용 시 테이블 락이 걸립니다. InnoDB + --single-transaction 옵션으로 무중단 백업하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>백업 베스트 프랙티스</strong>
+                        <p>3-2-1 규칙 준수, 백업 암호화(AES-256), 복원 테스트 자동화, 백업 모니터링 및 알림 설정, RPO/RTO 기반 백업 주기 결정.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Replication/" class="related-term-link">Replication</a>
+                <a href="/ko/term/PITR/" class="related-term-link">PITR</a>
+                <a href="/ko/term/WAL/" class="related-term-link">WAL</a>
+                <a href="/ko/term/Snapshot/" class="related-term-link">Snapshot</a>
+                <a href="/ko/term/Disaster-Recovery/" class="related-term-link">Disaster Recovery</a>
+                <a href="/ko/term/RTO-RPO/" class="related-term-link">RTO/RPO</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.postgresql.org/docs/current/backup.html" target="_blank" class="learn-link">
+                    📄 PostgreSQL - Backup and Restore
+                </a>
+                <a href="https://dev.mysql.com/doc/refman/8.0/en/backup-and-recovery.html" target="_blank" class="learn-link">
+                    🎓 MySQL - Backup and Recovery
+                </a>
+                <a href="https://aws.amazon.com/backup/" target="_blank" class="learn-link">
+                    📖 AWS Backup - 중앙 집중식 백업 관리
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +801,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

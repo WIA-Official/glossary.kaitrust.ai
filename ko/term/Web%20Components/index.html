@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +228,149 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Web Components는 재사용 가능한 커스텀 HTML 요소를 만들기 위한 웹 표준 기술입니다. Custom Elements, Shadow DOM, HTML Templates 세 가지 핵심 기술로 구성되며, React나 Vue 같은 프레임워크 없이도 캡슐화된 컴포넌트를 만들 수 있습니다.</p>
+                <p>Custom Elements는 새로운 HTML 태그를 정의합니다. class로 요소의 동작을 정의하고 customElements.define()으로 등록하면 &lt;my-component&gt;처럼 사용할 수 있습니다. Shadow DOM은 스타일과 마크업을 캡슐화하여 외부 CSS가 내부에 영향을 주지 않게 합니다.</p>
+                <p>Web Components의 가장 큰 장점은 프레임워크 독립성입니다. 한 번 만든 컴포넌트를 React, Vue, Angular, 순수 HTML 어디서나 사용할 수 있습니다. 디자인 시스템, 위젯, 마이크로프론트엔드에서 프레임워크 간 공유 컴포넌트로 활용됩니다.</p>
+                <p>실무에서는 Lit, Stencil, Fast 같은 라이브러리가 Web Components 개발을 더 쉽게 해줍니다. YouTube, GitHub, Salesforce Lightning 등 대형 서비스에서 Web Components를 적극 활용합니다. 단, IE11 지원이 필요하면 폴리필이 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <pre><code>// Custom Element 정의
+class MyCounter extends HTMLElement {
+  constructor() {
+    super();
+    // Shadow DOM 생성 (캡슐화)
+    this.attachShadow({ mode: 'open' });
+    this.count = 0;
+  }
+
+  connectedCallback() {
+    // DOM에 추가될 때 호출
+    this.render();
+    this.shadowRoot.querySelector('button')
+      .addEventListener('click', () => this.increment());
+  }
+
+  increment() {
+    this.count++;
+    this.render();
+    // 커스텀 이벤트 발생
+    this.dispatchEvent(new CustomEvent('count-changed', {
+      detail: { count: this.count }
+    }));
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `
+      &lt;style&gt;
+        /* Shadow DOM 내부에만 적용 */
+        button { padding: 8px 16px; cursor: pointer; }
+        span { font-size: 1.5rem; margin: 0 10px; }
+      &lt;/style&gt;
+      &lt;button&gt;+&lt;/button&gt;
+      &lt;span&gt;${this.count}&lt;/span&gt;
+    `;
+  }
+}
+
+// 커스텀 요소 등록
+customElements.define('my-counter', MyCounter);
+
+// HTML에서 사용
+// &lt;my-counter&gt;&lt;/my-counter&gt;
+
+// React에서 사용
+function App() {
+  const handleCount = (e) => console.log(e.detail.count);
+  return &lt;my-counter onCount-changed={handleCount} /&gt;;
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 아키텍처 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "마이크로프론트엔드에서 팀별로 다른 프레임워크를 쓴다면, 공통 컴포넌트는 Web Components로 만드는 게 좋아요. React 팀이든 Vue 팀이든 동일한 디자인 시스템 컴포넌트를 사용할 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "Web Components는 Custom Elements, Shadow DOM, HTML Templates로 구성됩니다. Shadow DOM으로 스타일 캡슐화가 되어서 외부 CSS 충돌 걱정이 없고, 프레임워크와 무관하게 동작합니다. Lit 라이브러리를 사용하면 더 선언적으로 작성할 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "Shadow DOM을 쓰면 외부 스타일이 침투하지 않지만, 의도적으로 테마 변수를 받으려면 CSS Custom Properties(--변수)를 사용해야 해요. ::part() 의사 요소로 특정 부분만 스타일링 허용할 수도 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>SSR과의 호환성 문제</strong>
+                        <p>Web Components는 클라이언트 JavaScript가 필요합니다. SSR 환경에서는 Declarative Shadow DOM이나 hydration 전략이 필요합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>React와의 이벤트 처리 차이</strong>
+                        <p>React는 커스텀 이벤트를 자동으로 처리하지 않습니다. ref를 사용하거나 래퍼 컴포넌트를 만들어 이벤트 리스너를 직접 연결해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 활용</strong>
+                        <p>Lit 같은 라이브러리로 개발 경험을 개선하고, 테마 지원을 위해 CSS Custom Properties를 노출하세요. 프레임워크 래퍼를 제공하면 사용성이 좋아집니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/DOM/" class="related-term-link">DOM</a>
+                <a href="/ko/term/JavaScript/" class="related-term-link">JavaScript</a>
+                <a href="/ko/term/CSS/" class="related-term-link">CSS</a>
+                <a href="/ko/term/React/" class="related-term-link">React</a>
+                <a href="/ko/term/Vue.js/" class="related-term-link">Vue.js</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://developer.mozilla.org/ko/docs/Web/API/Web_components" target="_blank" class="learn-link">📄 MDN Web Components</a>
+                <a href="https://lit.dev/" target="_blank" class="learn-link">🎓 Lit - Web Components 라이브러리</a>
+                <a href="https://www.webcomponents.org/" target="_blank" class="learn-link">📖 WebComponents.org</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +381,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

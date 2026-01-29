@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,123 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>CWPP(Cloud Workload Protection Platform)는 클라우드 환경에서 실행되는 워크로드(VM, 컨테이너, 서버리스 함수)를 보호하는 보안 플랫폼입니다. 전통적인 엔드포인트 보안이 PC나 서버 OS를 보호했다면, CWPP는 클라우드 네이티브 워크로드에 특화된 보호를 제공합니다.</p>
+                <p>CWPP의 핵심 기능은 취약점 관리, 런타임 보호, 네트워크 세그멘테이션, 무결성 모니터링입니다. 컨테이너 이미지 스캔으로 배포 전 취약점을 탐지하고, 런타임에서는 비정상 행위(쉘 실행, 권한 상승, 파일 변조)를 탐지하고 차단합니다.</p>
+                <p>에이전트 기반 CWPP는 호스트에 경량 에이전트를 설치하여 실시간 보호를 제공합니다. 프로세스, 파일 시스템, 네트워크 활동을 모니터링하고, 위협 탐지 시 즉시 대응합니다. 에이전트리스 방식은 클라우드 API를 통해 스캔하므로 배포가 간편하지만 실시간 보호에 한계가 있습니다.</p>
+                <p>Kubernetes 환경에서 CWPP는 Pod Security Standard, Network Policy와 연동하여 워크로드 격리를 강화합니다. Falco, Sysdig, Aqua, Prisma Cloud 같은 도구가 대표적입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Falco 런타임 보안 규칙 예시
+# falco-rules.yaml
+- rule: Terminal Shell in Container
+  desc: 컨테이너 내에서 터미널 쉘이 실행됨 (공격 의심)
+  condition: >
+    spawned_process and container and shell_procs and
+    proc.tty != 0 and container.image.repository != "debug-tools"
+  output: >
+    Shell spawned in container (user=%user.name container=%container.name
+    shell=%proc.name parent=%proc.pname cmdline=%proc.cmdline)
+  priority: WARNING
+  tags: [container, shell, mitre_execution]
+
+- rule: Sensitive File Read
+  desc: 민감한 파일 접근 탐지 (/etc/shadow, /etc/passwd)
+  condition: >
+    open_read and container and sensitive_files and
+    not user.name in (root, admin)
+  output: >
+    Sensitive file read (file=%fd.name user=%user.name container=%container.name)
+  priority: CRITICAL
+
+# Kubernetes에서 Falco DaemonSet 배포
+# helm install falco falcosecurity/falco --namespace falco
+
+# 컨테이너 이미지 스캔 (Trivy)
+# CI 파이프라인에서 사용
+trivy image --severity CRITICAL,HIGH \
+  --exit-code 1 \
+  --ignore-unfixed \
+  ghcr.io/myorg/myapp:latest
+
+# Aqua 런타임 정책 (declarative)
+apiVersion: aquasecurity.github.io/v1alpha1
+kind: RuntimePolicy
+metadata:
+  name: block-crypto-mining
+spec:
+  containers:
+    blockCryptoMiners: true
+    blockReverseShell: true
+    allowedCapabilities: []
+    dropAllCapabilities: true</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">보안팀:</strong> "프로덕션 컨테이너에서 쉘 실행이 탐지됐어요. Falco 알림인데 확인 부탁드려요."</p>
+                <p><strong class="role-junior">운영팀:</strong> "아, 제가 디버깅하려고 kubectl exec 했어요. 정상적인 작업이에요."</p>
+                <p><strong class="role-senior">보안팀:</strong> "그래도 로그 남기고 티켓 생성해주세요. 프로덕션 접근은 기록이 필요해요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "컨테이너 런타임 보안을 어떻게 구현하시겠어요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "빌드 시점에 Trivy로 이미지 취약점을 스캔하고, 런타임에서는 Falco로 비정상 행위를 탐지합니다. 쉘 실행, 민감 파일 접근, 네트워크 이상 징후를 모니터링하고, PodSecurityPolicy로 privileged 컨테이너를 차단합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">보안:</strong> "이 Dockerfile에서 USER 지시문이 없어서 root로 실행돼요. CWPP에서 알림이 뜰 거예요."</p>
+                <p><strong class="role-author">개발자:</strong> "맞네요, USER 1000:1000 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>에이전트 기반 CWPP는 호스트 리소스를 사용합니다. CPU/메모리 오버헤드를 테스트 환경에서 먼저 측정하세요.</li>
+                <li>너무 많은 규칙을 활성화하면 오탐(false positive)이 증가합니다. 점진적으로 규칙을 추가하고 튜닝하세요.</li>
+                <li class="info">서버리스(Lambda, Cloud Functions)는 전통적 CWPP로 보호하기 어렵습니다. 서버리스 특화 보안 도구를 함께 사용하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/CNAPP/" class="related-link">CNAPP</a>
+                <a href="/ko/term/Falco/" class="related-link">Falco</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+                <a href="/ko/term/Trivy/" class="related-link">Trivy</a>
+                <a href="/ko/term/EDR/" class="related-link">EDR</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://falco.org/docs/" target="_blank">Falco 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://sysdig.com/learn-cloud-native/cloud-workload-protection-platform/" target="_blank">Sysdig CWPP 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://aquasecurity.github.io/trivy/" target="_blank">Trivy 컨테이너 스캐너</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +330,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

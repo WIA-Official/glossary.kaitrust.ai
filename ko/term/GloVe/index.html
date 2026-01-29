@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,153 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>GloVe(Global Vectors for Word Representation)는 Stanford NLP 그룹이 2014년에 개발한 단어 임베딩 알고리즘입니다. 단어를 고정 길이의 밀집 벡터(dense vector)로 변환하여, 의미적으로 유사한 단어들이 벡터 공간에서 가�게 위치하도록 학습합니다.</p>
+                <p>Word2Vec이 주변 단어 예측(local context)에 집중하는 반면, GloVe는 전체 코퍼스의 단어 동시 출현 통계(global co-occurrence)를 활용합니다. 이 접근법 덕분에 "king - man + woman = queen" 같은 유명한 단어 유추(analogy) 태스크에서 뛰어난 성능을 보였습니다.</p>
+                <p>핵심 원리는 단어 동시 출현 행렬을 먼저 구축한 뒤, 두 단어 벡터의 내적이 그들의 동시 출현 확률의 로그값에 비례하도록 최적화하는 것입니다. 이 방식은 Word2Vec의 예측 기반 방식과 전통적인 행렬 분해 방식의 장점을 결합했습니다.</p>
+                <p>2025년 현재 Transformer 기반 임베딩(BERT, OpenAI Ada)이 대세지만, GloVe는 여전히 가치가 있습니다. 사전 학습된 벡터를 무료로 다운로드할 수 있고, 추론 시 연산이 거의 없으며, 해석 가능성이 높아 학술 연구와 리소스 제한 환경에서 활용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># GloVe 임베딩 로드 및 활용 예제
+import numpy as np
+from scipy.spatial.distance import cosine
+
+# 1. 사전 학습된 GloVe 벡터 로드 (Wikipedia 6B, 100차원)
+# 다운로드: https://nlp.stanford.edu/projects/glove/
+def load_glove(filepath):
+    embeddings = {}
+    with open(filepath, 'r', encoding='utf-8') as f:
+        for line in f:
+            values = line.split()
+            word = values[0]
+            vector = np.array(values[1:], dtype='float32')
+            embeddings[word] = vector
+    return embeddings
+
+glove = load_glove('glove.6B.100d.txt')
+print(f"로드된 단어 수: {len(glove):,}개")  # 약 40만 단어
+
+# 2. 단어 유사도 계산
+def similarity(word1, word2):
+    if word1 not in glove or word2 not in glove:
+        return None
+    return 1 - cosine(glove[word1], glove[word2])
+
+print(f"king - queen 유사도: {similarity('king', 'queen'):.3f}")  # ~0.65
+print(f"cat - dog 유사도: {similarity('cat', 'dog'):.3f}")        # ~0.80
+print(f"cat - car 유사도: {similarity('cat', 'car'):.3f}")        # ~0.30
+
+# 3. 단어 유추 (king - man + woman = ?)
+def analogy(a, b, c, topn=5):
+    """a:b = c:? 형태의 유추"""
+    target = glove[b] - glove[a] + glove[c]
+
+    similarities = []
+    for word, vec in glove.items():
+        if word in [a, b, c]:
+            continue
+        sim = 1 - cosine(target, vec)
+        similarities.append((word, sim))
+
+    return sorted(similarities, key=lambda x: x[1], reverse=True)[:topn]
+
+print(analogy('man', 'king', 'woman'))
+# [('queen', 0.77), ('monarch', 0.71), ('princess', 0.69), ...]
+
+# 4. Gensim으로 간편하게 사용
+from gensim.models import KeyedVectors
+
+# GloVe를 Word2Vec 포맷으로 변환 후 로드
+glove_model = KeyedVectors.load_word2vec_format(
+    'glove.6B.100d.word2vec.txt', binary=False
+)
+print(glove_model.most_similar('python', topn=5))
+# [('perl', 0.75), ('java', 0.72), ('ruby', 0.70), ...]</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"검색 품질 개선에 GloVe 써볼게요. 사용자가 '노트북'을 검색하면 'laptop', '맥북'도 같이 매칭되게 유사어 확장하는 방식인데, API 비용 없이 로컬에서 바로 됩니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"GloVe와 Word2Vec의 핵심 차이는 학습 방식입니다. Word2Vec은 슬라이딩 윈도우로 주변 단어를 예측하는 반면, GloVe는 전체 코퍼스의 동시 출현 행렬을 분해합니다. GloVe가 전역 통계를 활용해서 희귀 단어 처리에 더 강합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"BERT 임베딩이 좋긴 한데, 매번 GPU 추론이 필요하잖아요. 배치 처리가 어려운 실시간 서비스에서는 GloVe 룩업 테이블이 훨씬 빠릅니다. 300차원 벡터 하나 가져오는 건 마이크로초 단위거든요."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>OOV(Out-of-Vocabulary) 단어 처리 무시</strong>
+                        <p>GloVe는 학습 코퍼스에 없는 단어를 처리할 수 없습니다. 신조어나 오타가 많은 데이터에서는 FastText(subword 기반)가 더 적합합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>문맥 무시 임베딩의 한계</strong>
+                        <p>"bank"가 은행인지 강둑인지 구분하지 못합니다. 다의어가 많은 태스크에서는 BERT 같은 contextual embedding을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법: 용도에 맞는 차원과 코퍼스 선택</strong>
+                        <p>일반 텍스트에는 Wikipedia 학습 버전(6B), 소셜 미디어에는 Twitter 버전(27B)을 사용하세요. 차원은 100d(빠름)~300d(정확) 중 선택합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Word2Vec/" class="related-term-link">Word2Vec</a>
+                <a href="/ko/term/Embedding/" class="related-term-link">Embedding</a>
+                <a href="/ko/term/Embedding%20Model/" class="related-term-link">Embedding Model</a>
+                <a href="/ko/term/FastText/" class="related-term-link">FastText</a>
+                <a href="/ko/term/BERT/" class="related-term-link">BERT</a>
+                <a href="/ko/term/Vector%20Database/" class="related-term-link">Vector Database</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://nlp.stanford.edu/projects/glove/" target="_blank" class="learn-link">📄 Stanford GloVe 공식 페이지 (사전학습 벡터 다운로드)</a>
+                <a href="https://aclanthology.org/D14-1162/" target="_blank" class="learn-link">📑 GloVe 원본 논문 (Pennington et al., 2014)</a>
+                <a href="https://radimrehurek.com/gensim/models/keyedvectors.html" target="_blank" class="learn-link">🎓 Gensim을 활용한 GloVe 사용법</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +383,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

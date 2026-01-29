@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDoS (Distributed Denial of Service) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="분산 서비스 거부 공격. 다수의 시스템에서 동시에 트래픽을 발생시켜 서비스를 마비시키는 공격.">
-    <meta name="keywords" content="DDoS, Distributed Denial of Service, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="DDoS(분산 서비스 거부 공격)는 다수의 시스템에서 동시에 대량의 트래픽을 발생시켜 대상 서비스를 마비시키는 사이버 공격입니다. 2025년 22.2Tbps 기록 경신, L3/L4/L7 방어 전략이 핵심입니다.">
+    <meta name="keywords" content="DDoS, Distributed Denial of Service, 분산 서비스 거부, 봇넷, Cloudflare, AWS Shield, CDN, WAF, Rate Limiting, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/DDoS/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/DDoS/">
     <meta property="og:title" content="DDoS (Distributed Denial of Service) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="분산 서비스 거부 공격. 다수의 시스템에서 동시에 트래픽을 발생시켜 서비스를 마비시키는 공격.">
+    <meta property="og:description" content="분산 서비스 거부 공격. 대량 트래픽으로 서비스를 마비시키는 사이버 공격과 클라우드 기반 방어 전략.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DDoS (Distributed Denial of Service) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="분산 서비스 거부 공격. 다수의 시스템에서 동시에 트래픽을 발생시켜 서비스를 마비시키는 공격.">
+    <meta name="twitter:description" content="분산 서비스 거부 공격. 대량 트래픽으로 서비스를 마비시키는 사이버 공격과 클라우드 기반 방어 전략.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "DDoS",
-        "description": "분산 서비스 거부 공격. 다수의 시스템에서 동시에 트래픽을 발생시켜 서비스를 마비시키는 공격.",
+        "alternateName": "Distributed Denial of Service",
+        "description": "분산 서비스 거부 공격. 다수의 시스템에서 동시에 대량의 트래픽을 발생시켜 대상 서비스를 마비시키는 사이버 공격입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">DDoS</h1>
-            <p class="term-english">Distributed Denial of Service</p>
+            <p class="term-english">Distributed Denial of Service (분산 서비스 거부)</p>
             <div class="term-description">
-                <p>분산 서비스 거부 공격. 다수의 시스템에서 동시에 트래픽을 발생시켜 서비스를 마비시키는 공격.</p>
+                <p>다수의 시스템(봇넷)에서 동시에 대량의 트래픽을 발생시켜 대상 서버나 네트워크의 리소스를 고갈시키고 정상적인 서비스를 불가능하게 만드는 사이버 공격입니다. 2025년 9월 Cloudflare가 22.2Tbps 공격을 방어하며 역대 기록을 경신했습니다. 공격 규모는 2020년 1-2Tbps에서 5년 만에 20배 이상 증가했으며, L3/L4 볼류메트릭 공격과 L7 애플리케이션 공격 모두에 대한 다계층 방어가 필수입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,637 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>DDoS 공격은 OSI 7계층 모델에 따라 분류됩니다. L3/L4 볼류메트릭 공격(SYN Flood, UDP Flood, ICMP Flood)은 네트워크 대역폭과 서버 연결 테이블을 고갈시킵니다. L7 애플리케이션 공격(HTTP Flood, Slowloris, DNS Query Flood)은 더 정교하게 웹 애플리케이션의 리소스(CPU, 메모리, DB 연결)를 소진시킵니다. 현대 공격자는 두 가지를 조합한 다중 벡터 공격을 사용하며, 단일 방어 레이어로는 대응이 불가능합니다.</p>
+                <p>DDoS의 규모는 기하급수적으로 증가하고 있습니다. 2020년 1-2Tbps 수준이던 최대 공격은 2025년 22.2Tbps까지 급증했습니다. 이는 IoT 봇넷(Mirai 변종)의 확산, 반사/증폭 공격 기법(DNS, NTP, Memcached 증폭)의 고도화, DDoS-as-a-Service 범죄 시장의 성장 때문입니다. 전문가들은 2-3년 내 50-100Tbps 공격도 가능할 것으로 예측합니다. 이러한 규모의 공격은 단일 조직의 인프라로는 절대 흡수할 수 없어, 클라우드 기반 분산 방어가 필수입니다.</p>
+                <p>클라우드 DDoS 방어 서비스의 핵심은 Anycast 네트워크입니다. Cloudflare(200+ Tbps), AWS Shield, Akamai 같은 서비스는 전 세계 수백 개 PoP(Point of Presence)에 트래픽을 분산하여 공격을 흡수합니다. Cloudflare는 3초 이내 자동 탐지 및 완화, AWS Shield Advanced는 24/7 DDoS Response Team(DRT) 지원과 비용 보호를 제공합니다. 2025년 12월 기준 Cloudflare가 17.8%, AWS Shield가 5.2%의 시장 점유율을 보유하고 있습니다.</p>
+                <p>2025년 DDoS 방어 트렌드는 AI/ML 기반 실시간 탐지, 제로 트러스트 통합, API 보호 강화입니다. 전통적인 임계값 기반 탐지는 정상 트래픽 급증과 공격을 구분하기 어려운데, ML 모델은 트래픽 패턴, 지리적 분포, 요청 특성을 분석하여 정교한 L7 공격도 식별합니다. 특히 API 엔드포인트를 노리는 공격이 급증하면서, WAF와 Rate Limiting의 API 특화 기능이 중요해졌습니다. Bot Management로 정상 사용자와 악성 봇을 구분하는 것도 L7 방어의 핵심입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="nginx">Nginx Rate Limiting</button>
+                <button class="code-tab" data-lang="cloudflare">Cloudflare API</button>
+                <button class="code-tab" data-lang="aws">AWS Shield</button>
+            </div>
+            <div class="code-block active" data-lang="nginx">
+                <pre><code class="language-nginx"># Nginx DDoS 방어 설정 예제
+
+# 1. Rate Limiting 설정
+# /etc/nginx/nginx.conf
+
+http {
+    # Rate Limiting Zone 정의
+    # $binary_remote_addr: 클라이언트 IP별 제한
+    # zone=req_limit:10m: 10MB 메모리로 약 160,000 IP 추적
+    # rate=10r/s: 초당 10 요청 허용
+
+    limit_req_zone $binary_remote_addr zone=req_limit:10m rate=10r/s;
+    limit_req_zone $binary_remote_addr zone=login_limit:10m rate=1r/s;
+
+    # 연결 수 제한
+    limit_conn_zone $binary_remote_addr zone=conn_limit:10m;
+
+    # 기본 타임아웃 설정 (Slowloris 방어)
+    client_body_timeout 10s;
+    client_header_timeout 10s;
+    keepalive_timeout 30s;
+    send_timeout 10s;
+
+    # 요청 크기 제한 (Buffer Overflow 방어)
+    client_body_buffer_size 1k;
+    client_header_buffer_size 1k;
+    client_max_body_size 1m;
+    large_client_header_buffers 2 1k;
+
+    # 서버 블록
+    server {
+        listen 80;
+        server_name example.com;
+
+        # 전역 Rate Limiting
+        # burst=20: 버스트 20 요청 허용
+        # nodelay: 버스트 즉시 처리 (지연 없음)
+        limit_req zone=req_limit burst=20 nodelay;
+
+        # 연결 제한: IP당 최대 10개 동시 연결
+        limit_conn conn_limit 10;
+
+        # Rate Limit 초과 시 응답 코드
+        limit_req_status 429;
+        limit_conn_status 429;
+
+        # 로그인 엔드포인트 강화된 제한
+        location /api/login {
+            limit_req zone=login_limit burst=5 nodelay;
+
+            proxy_pass http://backend;
+        }
+
+        # 정적 자산은 제한 완화
+        location /static/ {
+            limit_req zone=req_limit burst=100 nodelay;
+            expires 1d;
+            add_header Cache-Control "public, immutable";
+        }
+
+        # API 엔드포인트
+        location /api/ {
+            # IP당 Rate Limit
+            limit_req zone=req_limit burst=30 nodelay;
+
+            # 악성 User-Agent 차단
+            if ($http_user_agent ~* (curl|wget|python|libwww|java|httpclient)) {
+                return 403;
+            }
+
+            # 빈 User-Agent 차단
+            if ($http_user_agent = "") {
+                return 403;
+            }
+
+            proxy_pass http://backend;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # 에러 페이지
+        error_page 429 /429.html;
+        location = /429.html {
+            internal;
+            default_type text/html;
+            return 429 '
+                <html>
+                <head><title>429 Too Many Requests</title></head>
+                <body>
+                    <h1>429 Too Many Requests</h1>
+                    <p>요청이 너무 많습니다. 잠시 후 다시 시도해주세요.</p>
+                    <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
+</body>
+                </html>
+            ';
+        }
+    }
+
+    # 업스트림 서버 (Load Balancing)
+    upstream backend {
+        least_conn;  # 연결 수 최소 서버로 분배
+        server 10.0.0.1:8080 weight=3;
+        server 10.0.0.2:8080 weight=2;
+        server 10.0.0.3:8080 backup;  # 백업 서버
+
+        # Health Check
+        keepalive 32;
+    }
+}
+
+# /etc/nginx/conf.d/geo-block.conf
+# 특정 국가 차단 (GeoIP2 모듈 필요)
+# geo $blocked_country {
+#     default 0;
+#     # 공격 빈발 국가 차단 (예시)
+#     include /etc/nginx/geo-block-list.conf;
+# }
+#
+# server {
+#     if ($blocked_country) {
+#         return 403;
+#     }
+# }</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="cloudflare">
+                <pre><code class="language-python"># Cloudflare API를 사용한 DDoS 방어 자동화 - Python
+import requests
+import json
+from datetime import datetime, timedelta
+
+class CloudflareDDoSDefense:
+    """Cloudflare API를 통한 DDoS 방어 자동화"""
+
+    def __init__(self, api_token: str, zone_id: str):
+        self.api_token = api_token
+        self.zone_id = zone_id
+        self.base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}"
+        self.headers = {
+            "Authorization": f"Bearer {api_token}",
+            "Content-Type": "application/json"
+        }
+
+    def get_analytics(self, minutes: int = 60):
+        """트래픽 분석 데이터 조회"""
+        since = (datetime.utcnow() - timedelta(minutes=minutes)).isoformat() + "Z"
+
+        response = requests.get(
+            f"{self.base_url}/analytics/dashboard",
+            headers=self.headers,
+            params={"since": since, "continuous": "true"}
+        )
+
+        return response.json()
+
+    def get_ddos_events(self):
+        """DDoS 공격 이벤트 조회"""
+        response = requests.get(
+            f"{self.base_url}/security/events",
+            headers=self.headers,
+            params={
+                "action": "challenge,block,managed_challenge",
+                "source": "l7ddos",
+                "limit": 100
+            }
+        )
+
+        return response.json()
+
+    def create_rate_limit_rule(self, path: str, threshold: int, period: int):
+        """Rate Limit 규칙 생성"""
+        rule = {
+            "description": f"Rate limit for {path}",
+            "match": {
+                "request": {
+                    "url": f"*{path}*",
+                    "schemes": ["HTTP", "HTTPS"],
+                    "methods": ["GET", "POST"]
+                }
+            },
+            "threshold": threshold,
+            "period": period,
+            "action": {
+                "mode": "challenge",
+                "timeout": 3600
+            }
+        }
+
+        response = requests.post(
+            f"{self.base_url}/rate_limits",
+            headers=self.headers,
+            json=rule
+        )
+
+        return response.json()
+
+    def create_firewall_rule(self, expression: str, action: str = "block"):
+        """방화벽 규칙 생성"""
+        # 먼저 필터 생성
+        filter_response = requests.post(
+            f"{self.base_url}/filters",
+            headers=self.headers,
+            json=[{"expression": expression}]
+        )
+
+        if not filter_response.json()["success"]:
+            return filter_response.json()
+
+        filter_id = filter_response.json()["result"][0]["id"]
+
+        # 방화벽 규칙 생성
+        rule_response = requests.post(
+            f"{self.base_url}/firewall/rules",
+            headers=self.headers,
+            json=[{
+                "filter": {"id": filter_id},
+                "action": action,
+                "description": f"Auto-created rule: {expression[:50]}"
+            }]
+        )
+
+        return rule_response.json()
+
+    def enable_under_attack_mode(self):
+        """Under Attack Mode 활성화 (긴급 상황)"""
+        response = requests.patch(
+            f"{self.base_url}/settings/security_level",
+            headers=self.headers,
+            json={"value": "under_attack"}
+        )
+
+        return response.json()
+
+    def disable_under_attack_mode(self):
+        """Under Attack Mode 비활성화"""
+        response = requests.patch(
+            f"{self.base_url}/settings/security_level",
+            headers=self.headers,
+            json={"value": "high"}  # 또는 medium, low
+        )
+
+        return response.json()
+
+    def block_ip(self, ip: str, note: str = ""):
+        """특정 IP 차단"""
+        response = requests.post(
+            f"{self.base_url}/firewall/access_rules/rules",
+            headers=self.headers,
+            json={
+                "mode": "block",
+                "configuration": {
+                    "target": "ip",
+                    "value": ip
+                },
+                "notes": note or f"Blocked by automation at {datetime.utcnow()}"
+            }
+        )
+
+        return response.json()
+
+    def block_country(self, country_code: str):
+        """특정 국가 차단"""
+        response = requests.post(
+            f"{self.base_url}/firewall/access_rules/rules",
+            headers=self.headers,
+            json={
+                "mode": "block",
+                "configuration": {
+                    "target": "country",
+                    "value": country_code
+                },
+                "notes": f"Country block: {country_code}"
+            }
+        )
+
+        return response.json()
+
+    def get_bot_management_analytics(self):
+        """Bot Management 분석"""
+        response = requests.get(
+            f"{self.base_url}/bot_management/summary",
+            headers=self.headers
+        )
+
+        return response.json()
+
+
+# 자동 방어 스크립트 예시
+def auto_defend(cf: CloudflareDDoSDefense):
+    """트래픽 분석 및 자동 방어"""
+
+    # 최근 5분 분석
+    analytics = cf.get_analytics(minutes=5)
+
+    # 요청 수 급증 감지
+    total_requests = analytics["result"]["totals"]["requests"]["all"]
+    avg_requests = analytics["result"]["totals"]["requests"]["cached"] + \
+                   analytics["result"]["totals"]["requests"]["uncached"]
+
+    # 임계값 초과 시 Under Attack Mode
+    THRESHOLD = 100000  # 5분 내 10만 요청
+
+    if total_requests > THRESHOLD:
+        print(f"[ALERT] High traffic detected: {total_requests} requests")
+        cf.enable_under_attack_mode()
+
+        # Slack/PagerDuty 알림 (실제 구현 필요)
+        # notify_team(f"DDoS Alert: {total_requests} requests in 5 min")
+
+    # DDoS 이벤트 확인
+    events = cf.get_ddos_events()
+    if events.get("result"):
+        for event in events["result"][:10]:
+            print(f"DDoS Event: {event['action']} from {event.get('clientIP', 'unknown')}")
+
+
+if __name__ == "__main__":
+    cf = CloudflareDDoSDefense(
+        api_token="your-api-token",
+        zone_id="your-zone-id"
+    )
+
+    # Under Attack Mode 긴급 활성화
+    # cf.enable_under_attack_mode()
+
+    # 특정 패턴 차단
+    cf.create_firewall_rule(
+        expression='(http.request.uri.path contains "/wp-login.php") and (cf.threat_score gt 10)',
+        action="block"
+    )
+
+    # API Rate Limiting
+    cf.create_rate_limit_rule(
+        path="/api/",
+        threshold=100,  # 100 요청
+        period=60       # 60초당
+    )</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="aws">
+                <pre><code class="language-yaml"># AWS Shield Advanced + WAF 설정 - CloudFormation
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DDoS Protection with AWS Shield Advanced and WAF'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: production
+  ApplicationName:
+    Type: String
+    Default: my-app
+
+Resources:
+  # WAF WebACL
+  WebACL:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: !Sub '${ApplicationName}-webacl'
+      Description: DDoS and Bot Protection
+      Scope: REGIONAL  # CLOUDFRONT for CloudFront
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        CloudWatchMetricsEnabled: true
+        MetricName: !Sub '${ApplicationName}-webacl'
+        SampledRequestsEnabled: true
+
+      Rules:
+        # 1. AWS Managed Rules - Common Rule Set
+        - Name: AWSManagedRulesCommonRuleSet
+          Priority: 1
+          OverrideAction:
+            None: {}
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: AWSManagedRulesCommon
+            SampledRequestsEnabled: true
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesCommonRuleSet
+
+        # 2. AWS Managed Rules - Known Bad Inputs
+        - Name: AWSManagedRulesKnownBadInputsRuleSet
+          Priority: 2
+          OverrideAction:
+            None: {}
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: AWSManagedRulesKnownBadInputs
+            SampledRequestsEnabled: true
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesKnownBadInputsRuleSet
+
+        # 3. Rate Limiting Rule
+        - Name: RateLimitRule
+          Priority: 3
+          Action:
+            Block: {}
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: RateLimitRule
+            SampledRequestsEnabled: true
+          Statement:
+            RateBasedStatement:
+              Limit: 2000  # 5분간 2000 요청
+              AggregateKeyType: IP
+
+        # 4. API 엔드포인트 강화된 Rate Limit
+        - Name: APIRateLimitRule
+          Priority: 4
+          Action:
+            Block: {}
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: APIRateLimitRule
+            SampledRequestsEnabled: true
+          Statement:
+            RateBasedStatement:
+              Limit: 500  # 5분간 500 요청
+              AggregateKeyType: IP
+              ScopeDownStatement:
+                ByteMatchStatement:
+                  FieldToMatch:
+                    UriPath: {}
+                  PositionalConstraint: STARTS_WITH
+                  SearchString: '/api/'
+                  TextTransformations:
+                    - Priority: 0
+                      Type: LOWERCASE
+
+        # 5. Geo Blocking (특정 국가 차단)
+        - Name: GeoBlockRule
+          Priority: 5
+          Action:
+            Block: {}
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: GeoBlockRule
+            SampledRequestsEnabled: true
+          Statement:
+            GeoMatchStatement:
+              CountryCodes:
+                - XX  # 차단할 국가 코드
+
+        # 6. Bot Control (추가 비용)
+        - Name: AWSManagedRulesBotControlRuleSet
+          Priority: 6
+          OverrideAction:
+            None: {}
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: BotControl
+            SampledRequestsEnabled: true
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesBotControlRuleSet
+
+  # ALB에 WebACL 연결
+  WebACLAssociation:
+    Type: AWS::WAFv2::WebACLAssociation
+    Properties:
+      ResourceArn: !Ref ApplicationLoadBalancer
+      WebACLArn: !GetAtt WebACL.Arn
+
+  # Shield Advanced Protection (구독 필요: $3000/월)
+  # ShieldProtection:
+  #   Type: AWS::Shield::Protection
+  #   Properties:
+  #     Name: !Sub '${ApplicationName}-shield'
+  #     ResourceArn: !Ref ApplicationLoadBalancer
+
+  # CloudWatch 알람 - DDoS 탐지
+  DDoSAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${ApplicationName}-ddos-detected'
+      AlarmDescription: 'Potential DDoS attack detected'
+      MetricName: BlockedRequests
+      Namespace: AWS/WAFV2
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1000
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: WebACL
+          Value: !Sub '${ApplicationName}-webacl'
+        - Name: Region
+          Value: !Ref AWS::Region
+        - Name: Rule
+          Value: RateLimitRule
+      AlarmActions:
+        - !Ref AlertSNSTopic
+
+  # SNS Topic for Alerts
+  AlertSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub '${ApplicationName}-ddos-alerts'
+
+Outputs:
+  WebACLArn:
+    Description: WebACL ARN
+    Value: !GetAtt WebACL.Arn
+  WebACLId:
+    Description: WebACL ID
+    Value: !Ref WebACL</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 아키텍처 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "DDoS 방어는 다계층으로 구성해야 합니다. Cloudflare나 AWS Shield를 CDN 앞단에 두고 L3/L4 볼류메트릭 공격을 흡수하고, WAF로 L7 애플리케이션 공격을 필터링합니다. 2025년에 22Tbps 공격까지 나왔으니까 자체 인프라로는 불가능하고, 200Tbps+ 네트워크를 가진 클라우드 서비스가 필수입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 긴급 대응 상황에서</div>
+                    <blockquote class="conv-quote">
+                        "현재 L7 HTTP Flood 공격 진행 중입니다. Cloudflare Under Attack Mode 활성화했고, 공격 IP 대역 차단 중입니다. Rate Limiting을 API 엔드포인트에 100req/min으로 강화했습니다. 정상 사용자 영향도 있을 수 있으니 CS팀에 공지 요청하고, 공격 패턴 분석해서 WAF 규칙 추가하겠습니다. 30분 뒤 상황 업데이트하겠습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 비용 최적화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "소규모라면 Cloudflare Free/Pro 플랜으로 시작하세요. 기본 DDoS 보호가 포함되어 있고 Pro는 월 $20입니다. AWS Shield Standard도 무료인데 L3/L4만 방어합니다. L7 공격과 전문 지원이 필요하면 Shield Advanced($3000/월)인데, DDoS로 인한 비용 급증 보호가 포함되어 비용 예측이 가능합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>단일 계층 방어 의존</strong>
+                        <p>WAF만 있거나 CDN만 있으면 안 됩니다. L3/L4 공격은 CDN/Shield로, L7 공격은 WAF + Rate Limiting으로 다계층 방어가 필요합니다. 공격자는 여러 벡터를 동시에 사용합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>오리진 IP 직접 노출</strong>
+                        <p>CDN을 사용해도 오리진 서버 IP가 노출되면 CDN을 우회해 직접 공격할 수 있습니다. 오리진 IP는 화이트리스트로 CDN IP만 허용하고, DNS 히스토리에 노출된 적 있다면 IP를 변경하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>사전 대응 계획 부재</strong>
+                        <p>공격 발생 후 대응 방법을 찾으면 이미 늦습니다. DDoS 대응 플레이북을 문서화하고, 연락 체계, 에스컬레이션 경로, 완화 절차를 미리 정의하세요. 분기별 모의 훈련으로 대응 능력을 검증합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>DDoS 방어 베스트 프랙티스</strong>
+                        <p>클라우드 기반 DDoS 보호 서비스 사용, 오리진 IP 비공개 및 CDN IP만 화이트리스트, Rate Limiting과 Bot Management 적용, 자동 스케일링으로 급증 흡수, 정기적인 부하 테스트와 용량 계획, 대응 플레이북 문서화 및 훈련, 모니터링 및 알림 자동화를 구현하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/WAF/" class="related-term-link">WAF</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+                <a href="/ko/term/Load%20Balancing/" class="related-term-link">Load Balancing</a>
+                <a href="/ko/term/Rate%20Limiting/" class="related-term-link">Rate Limiting</a>
+                <a href="/ko/term/Botnet/" class="related-term-link">Botnet</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/" target="_blank" class="learn-link">
+                    📘 Cloudflare - DDoS 공격이란?
+                </a>
+                <a href="https://www.fastly.com/blog/best-ddos-mitigation-providers-2025-2026" target="_blank" class="learn-link">
+                    📄 Fastly - Best DDoS Mitigation Providers 2025
+                </a>
+                <a href="https://cloudminister.com/blog/a-technical-comparison-of-ddos-protection-services-cloudflare-aws-shield-akamai-and-azure-ddos-protection/" target="_blank" class="learn-link">
+                    🔐 DDoS Protection Services 기술 비교
+                </a>
+                <a href="https://maturitymodel.security.aws.dev/en/3.-efficient/shield-advanced/" target="_blank" class="learn-link">
+                    📚 AWS Shield Advanced 가이드
+                </a>
+                <a href="https://breached.company/the-ddos-arms-race-how-2025-became-the-year-of-record-breaking-cyber-assaults/" target="_blank" class="learn-link">
+                    ☁️ 2025 DDoS 공격 트렌드 분석
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +977,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

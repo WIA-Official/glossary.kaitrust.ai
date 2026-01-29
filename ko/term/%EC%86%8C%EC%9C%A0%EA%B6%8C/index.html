@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,123 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>소유권(Ownership)은 Rust 프로그래밍 언어의 가장 핵심적인 개념으로, 메모리 안전성을 가비지 컬렉터 없이 보장하는 독특한 시스템입니다. 모든 값은 정확히 하나의 소유자(owner)를 가지며, 소유자가 스코프를 벗어나면 해당 값은 자동으로 해제됩니다. 이를 통해 메모리 누수와 이중 해제를 원천적으로 방지합니다.</p>
+                <p>소유권의 핵심 규칙은 세 가지입니다. 첫째, 각 값은 소유자라고 불리는 변수를 가집니다. 둘째, 한 번에 하나의 소유자만 존재할 수 있습니다. 셋째, 소유자가 스코프를 벗어나면 값은 drop됩니다. 이 단순한 규칙들이 복잡한 메모리 관리 문제를 컴파일 타임에 해결합니다.</p>
+                <p>소유권 이전(move)은 값을 다른 변수에 할당하거나 함수에 전달할 때 발생합니다. 힙에 할당된 데이터(String, Vec 등)는 이동 시 원본 변수가 무효화됩니다. 반면 스택에 저장되는 간단한 타입(i32, bool 등)은 Copy 트레이트를 구현하여 값이 복사됩니다.</p>
+                <p>소유권 시스템은 보로잉(borrowing)과 함께 작동하여 유연성을 제공합니다. 참조(&T, &mut T)를 통해 소유권을 이전하지 않고 값에 접근할 수 있으며, 이는 보로우 체커가 컴파일 타임에 검증합니다. 이러한 메커니즘이 Rust의 "무비용 추상화"와 안전한 동시성의 기반입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// Rust 소유권 예제
+
+fn main() {
+    // 소유권 생성
+    let s1 = String::from("hello");
+
+    // 소유권 이전 (move)
+    let s2 = s1;
+    // println!("{}", s1); // 오류! s1은 더 이상 유효하지 않음
+    println!("{}", s2);     // OK
+
+    // 스택 타입은 복사됨 (Copy 트레이트)
+    let x = 5;
+    let y = x;
+    println!("x = {}, y = {}", x, y); // 둘 다 유효
+
+    // 함수에 소유권 전달
+    let s3 = String::from("world");
+    takes_ownership(s3);
+    // println!("{}", s3); // 오류! 소유권이 함수로 이동됨
+
+    // 소유권 반환받기
+    let s4 = gives_ownership();
+    println!("받은 문자열: {}", s4);
+
+    // Clone으로 깊은 복사
+    let s5 = String::from("clone me");
+    let s6 = s5.clone();
+    println!("s5 = {}, s6 = {}", s5, s6); // 둘 다 유효
+}
+
+fn takes_ownership(s: String) {
+    println!("소유권 받음: {}", s);
+} // s가 drop됨
+
+fn gives_ownership() -> String {
+    String::from("returned") // 소유권 반환
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">💼 회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">👔 면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">💻 코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>개발자 A:</strong> "이 함수에서 Vec을 받아서 처리하는데, 호출자도 계속 사용해야 해서 clone을 쓰고 있습니다."</p>
+                <p><strong>개발자 B:</strong> "소유권을 가져갈 필요가 없으면 참조(&Vec)로 받는 게 낫지 않을까요? 불필요한 복사를 줄일 수 있어요."</p>
+                <p><strong>개발자 A:</strong> "맞네요. 읽기만 하면 되니까 불변 참조면 충분하겠네요."</p>
+                <p><strong>개발자 B:</strong> "네, 소유권 이전이 필요한 경우만 값으로 받고, 나머지는 보로잉을 활용하세요."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "Rust의 소유권 시스템이 메모리 안전성을 어떻게 보장하나요?"</p>
+                <p><strong>지원자:</strong> "소유권 규칙에 따라 각 값은 하나의 소유자만 가지고, 소유자가 스코프를 벗어나면 자동으로 해제됩니다. 이를 통해 메모리 누수와 이중 해제가 불가능해집니다."</p>
+                <p><strong>면접관:</strong> "가비지 컬렉터와의 차이점은 무엇인가요?"</p>
+                <p><strong>지원자:</strong> "GC는 런타임에 메모리를 추적하지만, Rust는 컴파일 타임에 메모리 관리를 결정합니다. 따라서 런타임 오버헤드가 없고, 메모리 해제 시점이 예측 가능합니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "여기서 String을 받아서 바로 다른 함수에 넘기고 있는데, 원본에서 다시 사용하려고 하면 컴파일 오류가 날 거예요."</p>
+                <p><strong>작성자:</strong> "아, 소유권이 이동해서 그렇군요. 어떻게 하면 좋을까요?"</p>
+                <p><strong>리뷰어:</strong> "두 가지 방법이 있어요. 참조를 전달하거나, 함수가 처리 후 소유권을 다시 반환하도록 하세요."</p>
+                <p><strong>작성자:</strong> "수정이 필요 없으니 &str 슬라이스로 받겠습니다. 더 유연하기도 하고요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>불필요한 clone 남용:</strong> 컴파일 오류를 피하려고 무분별하게 clone()을 사용하면 성능이 저하됩니다. 보로잉으로 해결할 수 있는지 먼저 검토하세요.</li>
+                <li><strong>부분 이동(partial move):</strong> 구조체의 일부 필드만 이동하면 전체 구조체를 더 이상 사용할 수 없습니다. 필요하다면 참조를 사용하거나 개별 필드를 복사하세요.</li>
+                <li><strong>순환 참조:</strong> Rc나 Arc로 순환 참조를 만들면 메모리 누수가 발생합니다. 이런 경우 Weak를 사용해 순환을 끊어야 합니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%B3%B4%EB%A1%9C%EC%9E%89/" class="related-link">보로잉</a>
+                <a href="/ko/term/%EB%B3%B4%EB%A1%9C%EC%9A%B0%20%EC%B2%B4%EC%BB%A4/" class="related-link">보로우 체커</a>
+                <a href="/ko/term/%EA%B0%80%EB%B9%84%EC%A7%80%20%EC%BB%AC%EB%A0%89%EC%85%98/" class="related-link">가비지 컬렉션</a>
+                <a href="/ko/term/%ED%8A%B8%EB%A0%88%EC%9D%B4%ED%8A%B8/" class="related-link">트레이트</a>
+                <a href="/ko/term/%EC%8A%A4%ED%83%9D/" class="related-link">스택</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li>📖 <a href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html" target="_blank">The Rust Book - What is Ownership?</a></li>
+                <li>📖 <a href="https://doc.rust-lang.org/nomicon/ownership.html" target="_blank">The Rustonomicon - Ownership</a></li>
+                <li>🎥 <a href="https://www.youtube.com/watch?v=VFIOSWy93H0" target="_blank">Rust Ownership Explained</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +331,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

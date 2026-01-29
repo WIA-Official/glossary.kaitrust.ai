@@ -147,19 +147,126 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
+        .content-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
         }
-        .related-title {
-            font-size: 1.3rem;
+        .section-title {
+            font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .conversation-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+        }
+        .conversation-box .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .warning-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: #fbbf24;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #67e8f9;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
         }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
+            .content-section { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -202,6 +309,209 @@
                 </a>
             </div>
         </article>
+
+        <!-- Detailed Explanation Section -->
+        <section class="content-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>과적합(Overfitting)은 머신러닝 모델이 학습 데이터의 노이즈나 세부 패턴까지 외워버려서 새로운 데이터에 대한 예측 성능이 떨어지는 현상입니다. 학습 데이터에서는 거의 완벽한 성능을 보이지만, 테스트 데이터나 실제 서비스에서는 성능이 크게 하락합니다. 이는 모델이 데이터의 일반적인 패턴이 아닌 학습 데이터의 특수한 특성을 학습했기 때문입니다.</p>
+
+                <p>과적합이 발생하는 주요 원인은 모델 복잡도가 데이터 양에 비해 높거나, 학습을 너무 오래 진행하거나, 학습 데이터가 편향되어 있는 경우입니다. 예를 들어 100개의 데이터 포인트에 수백만 개의 파라미터를 가진 딥러닝 모델을 학습하면 모델이 모든 데이터를 암기하게 됩니다. 또한 검증 없이 학습 에포크를 계속 증가시키면 학습 손실은 줄어들지만 검증 손실은 오히려 증가하는 시점이 옵니다.</p>
+
+                <p>과적합을 방지하는 대표적인 기법으로 정규화(Regularization), 드롭아웃(Dropout), 조기 종료(Early Stopping), 데이터 증강(Data Augmentation)이 있습니다. L1/L2 정규화는 가중치 크기에 페널티를 부과하여 모델 복잡도를 제한합니다. 드롭아웃은 학습 시 무작위로 뉴런을 비활성화하여 특정 뉴런에 대한 의존도를 낮춥니다. 조기 종료는 검증 손실이 더 이상 개선되지 않을 때 학습을 멈춥니다. 데이터 증강은 이미지 회전, 자르기 등으로 학습 데이터를 인위적으로 늘립니다.</p>
+
+                <p>과적합과 반대되는 개념으로 과소적합(Underfitting)이 있습니다. 과소적합은 모델이 너무 단순하거나 학습이 부족하여 학습 데이터의 패턴조차 포착하지 못하는 상태입니다. 좋은 모델은 과적합과 과소적합 사이의 최적 지점을 찾아 편향-분산 트레이드오프(Bias-Variance Tradeoff)를 균형있게 맞춥니다. 이를 위해 교차 검증, 하이퍼파라미터 튜닝, 앙상블 기법 등을 활용합니다.</p>
+            </div>
+        </section>
+
+        <!-- Code Example Section -->
+        <section class="content-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>PyTorch에서 드롭아웃과 조기 종료를 활용하여 과적합을 방지하는 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <code># pip install torch scikit-learn matplotlib
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+# 데이터 생성 (일부러 작은 데이터셋)
+X, y = make_classification(n_samples=200, n_features=20, n_informative=10,
+                           n_redundant=5, random_state=42)
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 텐서 변환
+X_train = torch.FloatTensor(X_train)
+y_train = torch.FloatTensor(y_train).unsqueeze(1)
+X_val = torch.FloatTensor(X_val)
+y_val = torch.FloatTensor(y_val).unsqueeze(1)
+
+# 과적합 방지를 위한 모델 (드롭아웃 적용)
+class RegularizedModel(nn.Module):
+    def __init__(self, dropout_rate=0.5):
+        super().__init__()
+        self.fc1 = nn.Linear(20, 128)
+        self.dropout1 = nn.Dropout(dropout_rate)
+        self.fc2 = nn.Linear(128, 64)
+        self.dropout2 = nn.Dropout(dropout_rate)
+        self.fc3 = nn.Linear(64, 1)
+        self.relu = nn.ReLU()
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        x = self.relu(self.fc1(x))
+        x = self.dropout1(x)
+        x = self.relu(self.fc2(x))
+        x = self.dropout2(x)
+        x = self.sigmoid(self.fc3(x))
+        return x
+
+# 조기 종료 클래스
+class EarlyStopping:
+    def __init__(self, patience=10, min_delta=0.001):
+        self.patience = patience
+        self.min_delta = min_delta
+        self.counter = 0
+        self.best_loss = float('inf')
+        self.early_stop = False
+
+    def __call__(self, val_loss):
+        if val_loss < self.best_loss - self.min_delta:
+            self.best_loss = val_loss
+            self.counter = 0
+        else:
+            self.counter += 1
+            if self.counter >= self.patience:
+                self.early_stop = True
+
+# 모델 학습
+model = RegularizedModel(dropout_rate=0.5)
+criterion = nn.BCELoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)  # L2 정규화
+early_stopping = EarlyStopping(patience=15)
+
+train_losses, val_losses = [], []
+
+for epoch in range(500):
+    # 학습
+    model.train()
+    optimizer.zero_grad()
+    outputs = model(X_train)
+    train_loss = criterion(outputs, y_train)
+    train_loss.backward()
+    optimizer.step()
+
+    # 검증
+    model.eval()
+    with torch.no_grad():
+        val_outputs = model(X_val)
+        val_loss = criterion(val_outputs, y_val)
+
+    train_losses.append(train_loss.item())
+    val_losses.append(val_loss.item())
+
+    # 조기 종료 체크
+    early_stopping(val_loss.item())
+    if early_stopping.early_stop:
+        print(f"조기 종료! Epoch: {epoch+1}")
+        break
+
+    if (epoch + 1) % 50 == 0:
+        print(f"Epoch {epoch+1}: Train Loss={train_loss:.4f}, Val Loss={val_loss:.4f}")
+
+# 학습 곡선 시각화
+plt.figure(figsize=(10, 5))
+plt.plot(train_losses, label='Train Loss')
+plt.plot(val_losses, label='Validation Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+plt.title('Training vs Validation Loss (Overfitting Prevention)')
+plt.savefig('learning_curve.png')
+print("학습 곡선 저장: learning_curve.png")</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Conversation Section -->
+        <section class="content-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-box">
+                    <div class="speaker">팀원:</div>
+                    <div>"학습 정확도는 99%인데 테스트에서 75%밖에 안 나와요. 뭐가 문제일까요?"</div>
+                </div>
+                <div class="conversation-box">
+                    <div class="speaker">ML 엔지니어:</div>
+                    <div>"전형적인 과적합이네요. 학습 곡선 보니까 에포크 50 이후부터 검증 손실이 올라가고 있어요. 일단 드롭아웃 0.3 넣고, L2 regularization weight_decay=1e-4 추가하고, Early Stopping patience 10으로 걸어봅시다. 데이터가 충분하면 데이터 증강도 고려해볼게요."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Mistakes Section -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>학습 손실만 보고 모델 성능을 판단함</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>반드시 검증/테스트 손실을 함께 모니터링하고 학습 곡선을 시각화함</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>과적합 방지 기법을 한꺼번에 모두 적용함</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>하나씩 적용하며 효과를 확인하고, 과적합이 완화되면 멈춤</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>테스트 데이터로 하이퍼파라미터 튜닝을 함 (데이터 누수)</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>검증 데이터로 튜닝하고, 테스트 데이터는 최종 평가에만 사용</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms Section -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EA%B5%90%EC%B0%A8%20%EA%B2%80%EC%A6%9D/" class="related-term-link">교차 검증</a>
+                <a href="/ko/term/%EC%A0%95%EA%B7%9C%ED%99%94/" class="related-term-link">정규화 (Regularization)</a>
+                <a href="/ko/term/%EB%93%9C%EB%A1%AD%EC%95%84%EC%9B%83/" class="related-term-link">드롭아웃</a>
+                <a href="/ko/term/%ED%8E%B8%ED%96%A5-%EB%B6%84%EC%82%B0%20%ED%8A%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%98%A4%ED%94%84/" class="related-term-link">편향-분산 트레이드오프</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%A6%9D%EA%B0%95/" class="related-term-link">데이터 증강</a>
+            </div>
+        </section>
+
+        <!-- Learn More Section -->
+        <section class="content-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://pytorch.org/docs/stable/generated/torch.nn.Dropout.html" target="_blank">📄 PyTorch Dropout 문서</a></li>
+                <li><a href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank">📄 Scikit-learn 교차 검증 가이드</a></li>
+                <li><a href="https://www.youtube.com/watch?v=DEMmkFC6IGM" target="_blank">🎬 과적합 vs 과소적합 설명 (StatQuest)</a></li>
+                <li><a href="https://www.deeplearning.ai/ai-notes/optimization/" target="_blank">📄 DeepLearning.AI 최적화 노트</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +522,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

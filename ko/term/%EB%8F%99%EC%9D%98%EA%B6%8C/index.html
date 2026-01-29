@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>동의권 | KAITRUST AI 백과사전</title>
     <meta name="description" content="개인정보 처리에 대해 동의할 권리">
-    <meta name="keywords" content="동의권, , AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
+    <meta name="keywords" content="동의권, Right to Consent, AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%8F%99%EC%9D%98%EA%B6%8C/">
 
     <!-- Open Graph -->
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,240 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>동의권(Right to Consent)은 개인이 자신의 개인정보 처리에 대해 동의하거나 거부할 권리입니다. GDPR 제6조 및 제7조, 한국 개인정보보호법 제15조에서 핵심적인 처리 적법성 근거로 규정됩니다. AI 맥락에서는 학습 데이터 수집 시 동의 획득이 특히 중요합니다.</p>
+                <p>GDPR에서 유효한 동의는 4가지 요건을 충족해야 합니다: 자유롭게(freely given), 구체적으로(specific), 정보에 입각하여(informed), 명시적으로(unambiguous). 포괄적 동의나 사전 체크된 동의박스는 유효하지 않습니다. AI 학습 목적 동의는 "귀하의 데이터를 AI 모델 학습에 사용합니다"처럼 구체적이어야 합니다.</p>
+                <p>한국 개인정보보호법은 동의 시 처리 목적, 수집 항목, 보유 기간, 동의 거부권 및 불이익을 고지하도록 요구합니다(제15조 제2항). 특히 민감정보(건강, 정치 성향 등) 처리는 별도의 명시적 동의가 필수입니다.</p>
+                <p>AI 개발에서 동의 관리의 어려움은 동의 철회 시 이미 학습된 모델에서 해당 데이터의 영향을 제거하는 것입니다. Machine Unlearning 기술이 연구되고 있지만, 현실적으로는 모델 재학습이 필요할 수 있습니다. 따라서 동의 범위와 철회 가능성을 미리 고려한 데이터 아키텍처가 중요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn">복사</button>
+                <pre><code># 동의 관리 시스템 구현 예제
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import List, Dict, Optional
+from enum import Enum
+import uuid
+import hashlib
+
+class ConsentPurpose(Enum):
+    """동의 목적 (GDPR 제6조 기반)"""
+    SERVICE_PROVISION = "service_provision"      # 서비스 제공
+    AI_TRAINING = "ai_training"                  # AI 모델 학습
+    AI_PERSONALIZATION = "ai_personalization"   # AI 개인화
+    MARKETING = "marketing"                      # 마케팅
+    RESEARCH = "research"                        # 연구 목적
+    THIRD_PARTY_SHARING = "third_party_sharing" # 제3자 제공
+
+class ConsentStatus(Enum):
+    GRANTED = "granted"
+    WITHDRAWN = "withdrawn"
+    EXPIRED = "expired"
+
+@dataclass
+class ConsentRecord:
+    """개별 동의 기록"""
+    consent_id: str
+    user_id: str
+    purpose: ConsentPurpose
+    status: ConsentStatus
+    granted_at: datetime
+    withdrawn_at: Optional[datetime] = None
+    expiry_date: Optional[datetime] = None
+    version: str = "1.0"  # 동의 약관 버전
+    ip_address: Optional[str] = None
+    proof_hash: str = field(default="")  # 동의 증빙 해시
+
+    def __post_init__(self):
+        if not self.proof_hash:
+            # 동의 증빙용 해시 생성
+            content = f"{self.user_id}:{self.purpose.value}:{self.granted_at}"
+            self.proof_hash = hashlib.sha256(content.encode()).hexdigest()
+
+class ConsentManager:
+    """GDPR/개인정보보호법 준수 동의 관리 시스템"""
+
+    def __init__(self):
+        self.consents: Dict[str, List[ConsentRecord]] = {}  # user_id -> consents
+
+    def grant_consent(self, user_id: str, purpose: ConsentPurpose,
+                      expiry_days: int = 365, version: str = "1.0") -> ConsentRecord:
+        """동의 획득 (GDPR 제7조 요건 준수)"""
+        consent = ConsentRecord(
+            consent_id=str(uuid.uuid4())[:8],
+            user_id=user_id,
+            purpose=purpose,
+            status=ConsentStatus.GRANTED,
+            granted_at=datetime.now(),
+            expiry_date=datetime.now().replace(
+                year=datetime.now().year + (expiry_days // 365)
+            ) if expiry_days else None,
+            version=version
+        )
+
+        if user_id not in self.consents:
+            self.consents[user_id] = []
+        self.consents[user_id].append(consent)
+
+        print(f"[동의 획득] 사용자 {user_id}, 목적: {purpose.value}")
+        return consent
+
+    def withdraw_consent(self, user_id: str, purpose: ConsentPurpose) -> bool:
+        """동의 철회 (GDPR 제7조 제3항: 동의 철회는 동의만큼 쉬워야 함)"""
+        if user_id not in self.consents:
+            return False
+
+        for consent in self.consents[user_id]:
+            if consent.purpose == purpose and consent.status == ConsentStatus.GRANTED:
+                consent.status = ConsentStatus.WITHDRAWN
+                consent.withdrawn_at = datetime.now()
+                print(f"[동의 철회] 사용자 {user_id}, 목적: {purpose.value}")
+                print(f"  -> AI 학습 데이터 제외 처리 필요")
+                return True
+        return False
+
+    def check_consent(self, user_id: str, purpose: ConsentPurpose) -> bool:
+        """특정 목적에 대한 유효한 동의 존재 여부 확인"""
+        if user_id not in self.consents:
+            return False
+
+        for consent in self.consents[user_id]:
+            if consent.purpose == purpose:
+                if consent.status == ConsentStatus.GRANTED:
+                    # 만료 여부 확인
+                    if consent.expiry_date and consent.expiry_date < datetime.now():
+                        consent.status = ConsentStatus.EXPIRED
+                        return False
+                    return True
+        return False
+
+    def get_users_with_consent(self, purpose: ConsentPurpose) -> List[str]:
+        """특정 목적에 동의한 사용자 목록 (AI 학습 데이터 필터링용)"""
+        users = []
+        for user_id, user_consents in self.consents.items():
+            if self.check_consent(user_id, purpose):
+                users.append(user_id)
+        return users
+
+    def get_withdrawn_users(self, purpose: ConsentPurpose,
+                            since: datetime = None) -> List[str]:
+        """동의 철회 사용자 목록 (Machine Unlearning 대상)"""
+        users = []
+        for user_id, user_consents in self.consents.items():
+            for consent in user_consents:
+                if consent.purpose == purpose and consent.status == ConsentStatus.WITHDRAWN:
+                    if since is None or (consent.withdrawn_at and consent.withdrawn_at >= since):
+                        users.append(user_id)
+                        break
+        return users
+
+    def generate_consent_audit_log(self, user_id: str) -> Dict:
+        """감사용 동의 이력 생성 (GDPR 제7조 제1항: 동의 증명 의무)"""
+        if user_id not in self.consents:
+            return {"user_id": user_id, "consents": []}
+
+        return {
+            "user_id": user_id,
+            "consents": [
+                {
+                    "consent_id": c.consent_id,
+                    "purpose": c.purpose.value,
+                    "status": c.status.value,
+                    "granted_at": c.granted_at.isoformat(),
+                    "withdrawn_at": c.withdrawn_at.isoformat() if c.withdrawn_at else None,
+                    "version": c.version,
+                    "proof_hash": c.proof_hash
+                }
+                for c in self.consents[user_id]
+            ]
+        }
+
+# 사용 예시
+cm = ConsentManager()
+
+# AI 학습 목적 동의 획득
+cm.grant_consent("user_001", ConsentPurpose.AI_TRAINING)
+cm.grant_consent("user_002", ConsentPurpose.AI_TRAINING)
+cm.grant_consent("user_003", ConsentPurpose.AI_TRAINING)
+
+# 학습 데이터 필터링 (동의한 사용자만)
+consented_users = cm.get_users_with_consent(ConsentPurpose.AI_TRAINING)
+print(f"AI 학습 가능 사용자: {consented_users}")
+
+# 동의 철회 처리
+cm.withdraw_consent("user_002", ConsentPurpose.AI_TRAINING)
+
+# 철회 사용자 데이터 처리 (재학습 또는 unlearning)
+withdrawn = cm.get_withdrawn_users(ConsentPurpose.AI_TRAINING)
+print(f"데이터 제외 필요: {withdrawn}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conversation-title">
+            <h2 id="conversation-title" class="section-title">실무 대화</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-target="meeting7">회의</button>
+                <button class="conv-tab" data-target="interview7">면접</button>
+                <button class="conv-tab" data-target="review7">코드리뷰</button>
+            </div>
+            <div class="conv-content active" id="meeting7" data-label="회의">
+                <p><strong class="role-pm">PM:</strong> 사용자가 AI 학습 동의를 철회하면 어떻게 처리해야 하나요?</p>
+                <p><strong class="role-senior">법무팀:</strong> GDPR 제7조에 따라 동의 철회는 동의만큼 쉬워야 하고, 철회 전 처리의 적법성에는 영향이 없지만, 철회 후에는 해당 데이터를 사용할 수 없습니다.</p>
+                <p><strong class="role-junior">ML엔지니어:</strong> 이미 학습된 모델은 어떻게 하죠?</p>
+                <p><strong class="role-senior">법무팀:</strong> 이상적으로는 Machine Unlearning이지만, 현실적으로는 해당 데이터 제외 후 재학습이 필요할 수 있어요. 데이터 아키텍처 설계 시 이를 고려해야 합니다.</p>
+            </div>
+            <div class="conv-content" id="interview7" data-label="면접">
+                <p><strong class="role-interviewer">면접관:</strong> GDPR에서 유효한 동의의 요건을 설명해주세요.</p>
+                <p><strong class="role-candidate">지원자:</strong> GDPR 제7조에 따르면 유효한 동의는 네 가지 요건을 충족해야 합니다. 자유롭게(불이익 없이 거부 가능), 구체적으로(목적별 개별 동의), 정보에 입각하여(처리 내용 이해), 명시적으로(적극적 행위 필요) 이루어져야 합니다. AI 학습 목적은 별도 동의 항목으로 분리해야 하고, 동의 철회 수단도 쉽게 제공해야 합니다.</p>
+            </div>
+            <div class="conv-content" id="review7" data-label="코드리뷰">
+                <p><strong class="role-senior">시니어:</strong> 데이터 로더에서 동의 검증 로직이 빠져 있네요.</p>
+                <p><strong class="role-junior">주니어:</strong> DB에서 데이터 뽑을 때 이미 필터링되어 있는데도요?</p>
+                <p><strong class="role-senior">시니어:</strong> 중간에 동의 철회가 발생할 수 있어요. 학습 직전에 실시간으로 동의 상태를 재확인하는 로직을 추가하세요. 특히 장기 학습 Job에서는 필수입니다.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li class="critical">GDPR 동의 위반 시 최대 2,000만 유로 또는 전 세계 연간 매출의 4% 과징금이 부과됩니다. 동의 획득 증빙을 반드시 보관하세요.</li>
+                <li>사전 체크된 동의박스, 묵시적 동의, 서비스 이용 조건으로 강제한 동의는 GDPR에서 무효입니다. 적극적이고 자발적인 동의 행위가 필요합니다.</li>
+                <li class="info">아동(EU 기준 16세 미만, 한국 14세 미만)의 개인정보 처리는 법정대리인 동의가 필요합니다. AI 서비스 기획 시 연령 확인 절차를 고려하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%82%AD%EC%A0%9C%EA%B6%8C/" class="related-link">삭제권</a>
+                <a href="/ko/term/%EB%A7%88%EC%9D%B4%EB%8D%B0%EC%9D%B4%ED%84%B0/" class="related-link">마이데이터</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%8B%A0%ED%83%81/" class="related-link">데이터 신탁</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">데이터 거버넌스</a>
+                <a href="/ko/term/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%20%EC%98%81%ED%96%A5%ED%8F%89%EA%B0%80/" class="related-link">알고리즘 영향평가</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://gdpr-info.eu/art-7-gdpr/" target="_blank" rel="noopener">GDPR 제7조 - 동의의 조건</a><span class="resource-meta">EU 법령</span></li>
+                <li><span class="type-official"></span><a href="https://www.pipc.go.kr/np/cop/bbs/selectBoardArticle.do" target="_blank" rel="noopener">개인정보보호위원회 - 동의 가이드라인</a><span class="resource-meta">국내 가이드</span></li>
+                <li><span class="type-blog"></span><a href="https://arxiv.org/abs/1912.03817" target="_blank" rel="noopener">Machine Unlearning 연구 논문</a><span class="resource-meta">연구</span></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +447,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

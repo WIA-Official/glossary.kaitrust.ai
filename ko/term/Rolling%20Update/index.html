@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,167 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Rolling Update(롤링 업데이트)</strong>는 애플리케이션의 새 버전을 배포할 때 기존 인스턴스를 하나씩 순차적으로 교체하는 무중단 배포 전략입니다. 서비스 가용성을 유지하면서 점진적으로 업데이트를 진행하는 가장 기본적이면서도 안정적인 방법입니다.</p>
+                <p>Kubernetes에서 Rolling Update는 기본 배포 전략으로, maxSurge와 maxUnavailable 파라미터로 동시에 생성/삭제되는 Pod 수를 제어합니다. 예를 들어 10개 Pod에서 maxSurge=2, maxUnavailable=1로 설정하면, 최대 12개까지 Pod가 존재하고 최소 9개는 항상 가용 상태를 유지합니다. 이를 통해 트래픽 급증 시에도 안정적인 서비스를 제공할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>Kubernetes Rolling Update 설정</h3>
+                <pre><code class="language-yaml"># deployment-rolling.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 6
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2        # 최대 추가 생성 Pod 수
+      maxUnavailable: 1  # 최대 사용 불가 Pod 수
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web
+        image: myapp/web:v2.0.0
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      terminationGracePeriodSeconds: 30</code></pre>
+
+                <h3>배포 진행 상황 모니터링</h3>
+                <pre><code class="language-bash">#!/bin/bash
+# rolling-update-monitor.sh
+
+DEPLOYMENT="web-app"
+NAMESPACE="production"
+
+# 현재 버전 확인
+echo "=== 현재 배포 상태 ==="
+kubectl get deployment $DEPLOYMENT -n $NAMESPACE \
+  -o jsonpath='{.spec.template.spec.containers[0].image}'
+echo ""
+
+# 새 버전 배포
+echo "=== v2.0.0 롤링 업데이트 시작 ==="
+kubectl set image deployment/$DEPLOYMENT \
+  web=myapp/web:v2.0.0 -n $NAMESPACE
+
+# 실시간 진행 상황 확인
+echo "=== 배포 진행 상황 ==="
+kubectl rollout status deployment/$DEPLOYMENT -n $NAMESPACE -w
+
+# 완료 후 상태 확인
+echo "=== 최종 상태 ==="
+kubectl get pods -n $NAMESPACE -l app=$DEPLOYMENT -o wide
+
+# 배포 히스토리
+echo "=== 배포 히스토리 ==="
+kubectl rollout history deployment/$DEPLOYMENT -n $NAMESPACE</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 id="conv-title" class="section-title">실무 대화</h2>
+            <div class="section-content conversation-box">
+                <div class="conversation">
+                    <div class="message">
+                        <span class="speaker">주니어 개발자</span>
+                        <p>"배포할 때 서비스가 잠깐 끊기는 것 같은데, 무중단 배포가 맞나요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">DevOps 엔지니어</span>
+                        <p>"readinessProbe 설정 확인해봐요. 애플리케이션이 완전히 준비되기 전에 트래픽이 들어가면 그럴 수 있어요. initialDelaySeconds를 조금 늘려보세요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">주니어 개발자</span>
+                        <p>"maxSurge와 maxUnavailable 값은 어떻게 정하나요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">DevOps 엔지니어</span>
+                        <p>"트래픽과 리소스 여유에 따라 달라요. 우리 서비스는 피크 타임에 트래픽이 많아서 maxUnavailable을 1로 보수적으로 잡고, maxSurge는 2로 설정해서 빠른 배포와 안정성의 균형을 맞췄어요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">주니어 개발자</span>
+                        <p>"Blue-Green이나 Canary 대신 Rolling Update를 선택한 이유가 있나요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">DevOps 엔지니어</span>
+                        <p>"리소스 효율성 때문이에요. Blue-Green은 2배의 인프라가 필요하고, Canary는 트래픽 라우팅 설정이 복잡해요. Rolling Update는 추가 비용 없이 무중단 배포가 가능하죠."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <ul class="warning-list">
+                    <li><strong>readinessProbe 필수:</strong> 준비되지 않은 Pod로 트래픽이 라우팅되면 사용자에게 에러가 노출됩니다. 반드시 적절한 헬스체크를 구성하세요.</li>
+                    <li><strong>Graceful Shutdown:</strong> terminationGracePeriodSeconds를 충분히 설정하여 기존 연결이 정상 종료될 시간을 확보하세요.</li>
+                    <li><strong>버전 호환성:</strong> 롤링 업데이트 중에는 두 버전이 동시에 실행됩니다. API 호환성과 데이터 포맷 호환성을 반드시 검증하세요.</li>
+                    <li><strong>배포 속도 조절:</strong> maxSurge를 너무 크게 설정하면 리소스 부족으로 노드에 부하가 걸릴 수 있습니다.</li>
+                    <li><strong>PodDisruptionBudget:</strong> 여러 배포가 동시에 진행될 때 최소 가용 Pod 수를 보장하도록 PDB를 설정하세요.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <ul class="related-terms">
+                    <li><a href="/ko/term/Deployment/">Deployment</a> - Rolling Update를 기본 전략으로 사용하는 리소스</li>
+                    <li><a href="/ko/term/Rollback/">Rollback</a> - 배포 실패 시 이전 버전으로 복원</li>
+                    <li><a href="/ko/term/Blue-Green/">Blue-Green Deployment</a> - 즉각적 전환이 가능한 대안 전략</li>
+                    <li><a href="/ko/term/Canary/">Canary Deployment</a> - 점진적 트래픽 이동 전략</li>
+                    <li><a href="/ko/term/Pod/">Pod</a> - Rolling Update의 대상 단위</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more">
+                    <li><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/" target="_blank" rel="noopener">Kubernetes Rolling Updates Tutorial</a> - 공식 튜토리얼</li>
+                    <li><a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy" target="_blank" rel="noopener">Deployment Strategy</a> - 배포 전략 상세 문서</li>
+                    <li><a href="https://learnk8s.io/kubernetes-rollbacks" target="_blank" rel="noopener">Kubernetes Rollbacks</a> - 실전 롤백 가이드</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +374,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

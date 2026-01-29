@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +228,169 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>리랭킹(Reranking)은 초기 검색 결과를 더 정교한 모델로 재정렬하여 관련성을 높이는 기법입니다. 첫 번째 단계에서 빠른 검색(sparse retrieval 또는 dense retrieval)으로 후보를 선별하고, 두 번째 단계에서 cross-encoder 같은 정밀 모델이 쿼리와 각 문서를 직접 비교하여 순위를 재조정합니다.</p>
+                <p>리랭킹이 등장한 배경은 검색 시스템의 정확도-속도 트레이드오프입니다. BM25 같은 sparse 검색은 빠르지만 의미를 놓치고, bi-encoder는 빠르지만 쿼리-문서 간 상호작용이 부족합니다. Cross-encoder는 정확하지만 느려서, 2단계 구조로 이 문제를 해결합니다. 2020년 BERT 기반 리랭커가 등장하며 주류가 되었습니다.</p>
+                <p>리랭킹의 핵심 원리는 cross-attention입니다. 쿼리와 문서를 함께 모델에 입력하면, 모델이 둘 사이의 세밀한 의미 관계를 파악합니다. bi-encoder가 각각을 독립적으로 임베딩하는 것과 달리, cross-encoder는 "이 문서가 이 쿼리에 얼마나 관련있는가"를 직접 스코어링합니다. 보통 top-20~100개 후보에 적용됩니다.</p>
+                <p>2024-2025년 RAG 시스템에서 리랭킹은 필수 구성요소가 되었습니다. Cohere Rerank API, Jina Reranker, BGE Reranker 등 상용 서비스가 성장 중이며, LLM 응답 품질을 10-30% 향상시킵니다. 특히 복잡한 질문이나 긴 문서에서 효과가 큽니다. LangChain, LlamaIndex 모두 리랭킹을 기본 지원합니다.</p>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <tr><th>리랭커</th><th>모델 크기</th><th>NDCG@10</th><th>속도</th><th>비용</th></tr>
+                    <tr><td>Cohere Rerank v3</td><td>비공개</td><td>~0.72</td><td>~100ms/1000문서</td><td>$1/1K 검색</td></tr>
+                    <tr><td>BGE-reranker-large</td><td>560M</td><td>~0.70</td><td>~50ms/100문서</td><td>오픈소스</td></tr>
+                    <tr><td>Jina Reranker v2</td><td>137M</td><td>~0.68</td><td>~30ms/100문서</td><td>무료티어 있음</td></tr>
+                    <tr><td>cross-encoder/ms-marco</td><td>110M</td><td>~0.65</td><td>~40ms/100문서</td><td>오픈소스</td></tr>
+                </table>
+                <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 1rem;">* 2025년 1월 기준, MS MARCO 벤치마크 참조</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># RAG 파이프라인에서 리랭킹 적용
+from sentence_transformers import CrossEncoder
+from langchain.vectorstores import Chroma
+from langchain.embeddings import OpenAIEmbeddings
+
+# 1단계: 벡터 검색으로 후보 추출
+embeddings = OpenAIEmbeddings()
+vectorstore = Chroma(embedding_function=embeddings)
+
+query = "LLM의 할루시네이션을 줄이는 방법"
+initial_docs = vectorstore.similarity_search(query, k=20)
+
+# 2단계: Cross-Encoder로 리랭킹
+reranker = CrossEncoder('BAAI/bge-reranker-large')
+
+# 쿼리-문서 쌍 생성
+pairs = [[query, doc.page_content] for doc in initial_docs]
+
+# 관련성 점수 계산
+scores = reranker.predict(pairs)
+
+# 점수로 재정렬
+reranked = sorted(
+    zip(initial_docs, scores),
+    key=lambda x: x[1],
+    reverse=True
+)
+
+# 상위 5개 선택
+top_docs = [doc for doc, score in reranked[:5]]
+
+print("🔝 리랭킹 후 상위 문서:")
+for i, (doc, score) in enumerate(reranked[:5]):
+    print(f"{i+1}. [점수: {score:.4f}] {doc.page_content[:80]}...")
+
+# Cohere API 사용 예시
+import cohere
+co = cohere.Client("your-api-key")
+
+results = co.rerank(
+    query=query,
+    documents=[doc.page_content for doc in initial_docs],
+    top_n=5,
+    model="rerank-v3.0"
+)
+
+for r in results.results:
+    print(f"순위 {r.index}: 점수 {r.relevance_score:.4f}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "RAG 응답 품질이 낮은 건 검색 문제입니다. 벡터 검색 후 Cohere Rerank 적용하면 관련 문서 Hit Rate가 65%에서 85%로 올라갑니다. 월 비용은 1000달러 정도 예상되고요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "리랭킹은 2-stage retrieval의 핵심입니다. Bi-encoder로 top-100 후보를 빠르게 추출하고, cross-encoder로 쿼리-문서 상호작용을 정밀 분석합니다. 속도는 약간 느려지지만 정확도가 크게 향상되어 LLM 컨텍스트 품질이 좋아집니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">
+                        "BGE-reranker-large가 오픈소스 중에서는 최고인데, 프로덕션에서는 Cohere v3가 더 안정적이에요. 특히 다국어 쿼리에서 성능 차이가 큽니다. 비용 대비 효과를 따지면 상용 API가 낫습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>1단계 검색 결과가 너무 적음 (k=5)</strong>
+                        <p>리랭킹은 있는 문서 중에서 재정렬합니다. 1단계에서 관련 문서가 없으면 리랭킹도 무의미합니다. 최소 k=20~50으로 시작하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>리랭킹 대상이 너무 많음 (k=1000)</strong>
+                        <p>Cross-encoder는 O(n) 비용입니다. 1000개 문서 리랭킹은 수 초가 걸릴 수 있습니다. 100-200개가 적정선입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>1단계에서 k=50~100으로 충분히 추출하고, 리랭킹 후 top-5~10을 LLM에 전달하세요. 도메인 특화 리랭커 파인튜닝도 고려하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                <a href="/ko/term/%EB%B2%A1%ED%84%B0%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4/" class="related-term-link">벡터 데이터베이스</a>
+                <a href="/ko/term/%EC%9E%84%EB%B2%A0%EB%94%A9/" class="related-term-link">임베딩</a>
+                <a href="/ko/term/%EC%96%B4%ED%85%90%EC%85%98/" class="related-term-link">어텐션</a>
+                <a href="/ko/term/Transformer/" class="related-term-link">Transformer</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.cohere.com/docs/reranking" target="_blank" class="learn-link">
+                    📄 Cohere Rerank API 공식 문서
+                </a>
+                <a href="https://www.sbert.net/docs/cross_encoder/overview.html" target="_blank" class="learn-link">
+                    🎓 Sentence Transformers Cross-Encoder 가이드
+                </a>
+                <a href="https://huggingface.co/BAAI/bge-reranker-large" target="_blank" class="learn-link">
+                    📖 BGE Reranker 모델 - Hugging Face
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +401,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

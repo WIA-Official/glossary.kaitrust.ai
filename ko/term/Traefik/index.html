@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,169 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Traefik(트래픽)은 2015년 Containous(현 Traefik Labs)가 개발한 클라우드 네이티브 리버스 프록시이자 로드 밸런서입니다. Docker, Kubernetes, Consul 등 다양한 인프라 환경을 자동으로 감지하고 설정을 동적으로 업데이트하는 것이 핵심 특징입니다.</p>
+                <p>Traefik의 가장 큰 장점은 자동 서비스 디스커버리입니다. Docker 라벨이나 Kubernetes Ingress/IngressRoute 어노테이션만 정의하면 라우팅이 자동 설정됩니다. Nginx처럼 설정 파일을 직접 관리하고 reload할 필요가 없습니다.</p>
+                <p>Let's Encrypt 통합이 내장되어 HTTPS 인증서 발급과 갱신이 자동으로 이루어집니다. HTTP Challenge, DNS Challenge, TLS-ALPN Challenge를 지원하며, 와일드카드 인증서도 발급 가능합니다. 인증서 저장소로 파일, Kubernetes Secret, Consul 등을 사용합니다.</p>
+                <p>실무에서는 마이크로서비스 환경의 API Gateway, Kubernetes Ingress Controller로 많이 사용됩니다. 미들웨어 체인으로 인증, 레이트 리밋, 리다이렉트, 헤더 조작 등을 선언적으로 구성합니다. Prometheus 메트릭과 Jaeger 트레이싱 통합도 간단합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># docker-compose.yml - Traefik 기본 설정
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v3.0
+    command:
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      # Let's Encrypt 자동 인증서
+      - --certificatesresolvers.letsencrypt.acme.email=admin@example.com
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+    labels:
+      # 대시보드 활성화
+      - traefik.enable=true
+      - traefik.http.routers.dashboard.rule=Host(`traefik.example.com`)
+      - traefik.http.routers.dashboard.service=api@internal
+      - traefik.http.routers.dashboard.middlewares=auth
+      - traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$...
+
+  # 백엔드 서비스 예시
+  api:
+    image: myapp/api:latest
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.api.rule=Host(`api.example.com`)
+      - traefik.http.routers.api.entrypoints=websecure
+      - traefik.http.routers.api.tls.certresolver=letsencrypt
+      # 미들웨어 체인
+      - traefik.http.routers.api.middlewares=ratelimit,compress
+      # 레이트 리밋 미들웨어
+      - traefik.http.middlewares.ratelimit.ratelimit.average=100
+      - traefik.http.middlewares.ratelimit.ratelimit.burst=50
+      # 압축 미들웨어
+      - traefik.http.middlewares.compress.compress=true
+
+---
+# Kubernetes IngressRoute (Traefik CRD)
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-route
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`api.example.com`) && PathPrefix(`/v1`)
+      kind: Rule
+      services:
+        - name: api-service
+          port: 8080
+      middlewares:
+        - name: api-ratelimit
+        - name: api-auth
+  tls:
+    certResolver: letsencrypt
+---
+# 미들웨어 정의
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: api-ratelimit
+spec:
+  rateLimit:
+    average: 100
+    burst: 50
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: api-auth
+spec:
+  forwardAuth:
+    address: http://auth-service:8080/verify
+    authResponseHeaders:
+      - X-User-Id
+      - X-User-Role</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "새 서비스 배포할 때마다 Nginx 설정 수정하고 reload 하는 게 번거로워요. Traefik으로 바꾸면 라벨만 붙이면 자동이에요."</p>
+                <p><strong class="role-junior">주니어:</strong> "Let's Encrypt 인증서도 자동으로 관리되나요? 지금은 수동으로 갱신하고 있어서요."</p>
+                <p><strong class="role-senior">시니어:</strong> "네, certresolver 설정하면 발급부터 갱신까지 전부 자동이에요. 인증서 만료 알림 같은 거 설정 안 해도 돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Nginx와 Traefik의 차이점은 무엇인가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "Nginx는 정적 설정 기반으로 변경 시 reload가 필요하지만, Traefik은 Docker/Kubernetes를 자동으로 감지해 동적 설정이 가능합니다. Let's Encrypt 통합이 내장되어 있고, 미들웨어 체인으로 인증, 레이트 리밋을 선언적으로 구성할 수 있어 마이크로서비스 환경에 더 적합합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "IngressRoute에 rateLimit 미들웨어 없네요. 공개 API라면 레이트 리밋 필수에요."</p>
+                <p><strong class="role-junior">개발자:</strong> "Middleware CRD 추가하고 middlewares 배열에 연결하면 되는 거죠? average와 burst 값은 얼마가 적당할까요?"</p>
+                <p><strong class="role-reviewer">리뷰어:</strong> "현재 트래픽 기준 2배 정도면 되는데, Prometheus 메트릭 보고 조정해요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>Docker socket 마운트는 보안 위험 - 읽기 전용(:ro) 설정하고 가능하면 Docker socket proxy 사용</li>
+                <li>Let's Encrypt 레이트 리밋 주의 - 주당 도메인별 50개 인증서, 실패 시 1시간 대기</li>
+                <li>acme.json 파일 권한 600이어야 함 - 잘못되면 인증서 저장 실패</li>
+                <li class="info">Traefik Hub를 사용하면 여러 클러스터의 Traefik 인스턴스를 중앙에서 관리하고 API Gateway 기능 강화 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Nginx/" class="related-link">Nginx</a>
+                <a href="/ko/term/Ingress/" class="related-link">Ingress</a>
+                <a href="/ko/term/Envoy/" class="related-link">Envoy</a>
+                <a href="/ko/term/Caddy/" class="related-link">Caddy</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://doc.traefik.io/traefik/" target="_blank" rel="noopener">Traefik 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://doc.traefik.io/traefik/getting-started/quick-start/" target="_blank" rel="noopener">Traefik Quick Start</a></li>
+                <li><span class="type-book"></span><a href="https://traefik.io/blog/" target="_blank" rel="noopener">Traefik Labs 블로그</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +376,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

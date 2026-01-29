@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,130 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>IP-Adapter(Image Prompt Adapter)는 텍스트-이미지 생성 모델(Stable Diffusion 등)에 이미지 프롬프트 기능을 추가하는 경량 어댑터입니다. 단 22M 파라미터로 참조 이미지의 스타일, 구도, 색감을 새로운 이미지 생성에 반영할 수 있어 Midjourney나 DALL-E 3와 유사한 기능을 제공합니다.</p>
+                <p>Tencent AI Lab에서 2023년 8월 발표한 IP-Adapter는 "Decoupled Cross-Attention" 메커니즘이 핵심입니다. 텍스트 특징과 이미지 특징을 분리된 cross-attention 레이어로 처리하여 두 모달리티가 서로 간섭하지 않고 효과적으로 결합됩니다.</p>
+                <p>IP-Adapter는 이미지 인코더(CLIP ViT-H)로 참조 이미지의 특징을 추출하고, 이를 어댑티드 모듈을 통해 디퓨전 모델의 UNet에 주입합니다. 텍스트 프롬프트와 함께 사용하면 멀티모달 이미지 생성이 가능합니다.</p>
+                <p>실무에서는 ip_adapter_scale 파라미터(0.0~1.0)로 이미지 프롬프트의 영향력을 조절합니다. 0.5가 텍스트와 이미지 균형에 적합하며, 1.0은 이미지만으로 조건화됩니다. ControlNet, T2I-Adapter와 호환되어 포즈, 깊이맵 등과 함께 활용 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">from diffusers import StableDiffusionPipeline
+from diffusers.utils import load_image
+import torch
+
+# Stable Diffusion 파이프라인 로드
+pipe = StableDiffusionPipeline.from_pretrained(
+    "runwayml/stable-diffusion-v1-5",
+    torch_dtype=torch.float16
+).to("cuda")
+
+# IP-Adapter 로드
+pipe.load_ip_adapter(
+    "h94/IP-Adapter",
+    subfolder="models",
+    weight_name="ip-adapter_sd15.bin"
+)
+
+# 참조 이미지 로드 (스타일 복사용)
+reference_image = load_image("https://example.com/style_reference.jpg")
+
+# IP-Adapter 스케일 설정 (0.5 = 텍스트와 이미지 균형)
+pipe.set_ip_adapter_scale(0.6)
+
+# 이미지 생성: 참조 이미지 스타일 + 텍스트 프롬프트
+image = pipe(
+    prompt="a cat sitting on a couch, high quality",
+    ip_adapter_image=reference_image,
+    negative_prompt="low quality, blurry",
+    num_inference_steps=30,
+    generator=torch.Generator("cuda").manual_seed(42)
+).images[0]
+
+image.save("ip_adapter_result.png")
+print("스타일 전이 이미지 생성 완료!")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"IP-Adapter로 레퍼런스 이미지 스타일을 적용하면 프롬프트만으로 설명하기 어려운 분위기를 쉽게 재현할 수 있습니다. scale을 0.6 정도로 설정하면 스타일은 유지하면서 텍스트 프롬프트의 내용도 반영됩니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"IP-Adapter의 핵심은 Decoupled Cross-Attention입니다. 텍스트와 이미지 특징을 분리된 어텐션으로 처리해서 두 모달리티가 간섭 없이 결합됩니다. 22M 파라미터로 전체 모델 파인튜닝 없이 이미지 프롬프트 기능을 추가할 수 있어요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"IP-Adapter Plus 버전은 patch embeddings를 사용해서 더 정교한 스타일 전이가 가능해요. FaceID 버전은 얼굴 특징을 유지하면서 다른 스타일로 변환하는 데 최적화되어 있습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>ip_adapter_scale을 1.0으로 고정</strong>
+                        <p>scale이 1.0이면 텍스트 프롬프트가 거의 무시됩니다. 대부분의 경우 0.4~0.7 범위가 텍스트와 이미지의 균형에 적합합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>베이스 모델과 맞지 않는 IP-Adapter 사용</strong>
+                        <p>SD 1.5용 IP-Adapter를 SDXL에 사용하면 작동하지 않습니다. 반드시 베이스 모델에 맞는 어댑터를 선택하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>ControlNet과 함께 사용</strong>
+                        <p>IP-Adapter로 스타일을, ControlNet으로 포즈나 구도를 제어하면 더 정밀한 이미지 생성이 가능합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/ControlNet/" class="related-term-link">ControlNet</a>
+                <a href="/ko/term/Stable%20Diffusion/" class="related-term-link">Stable Diffusion</a>
+                <a href="/ko/term/LoRA/" class="related-term-link">LoRA</a>
+                <a href="/ko/term/CLIP/" class="related-term-link">CLIP</a>
+                <a href="/ko/term/Text-to-Image/" class="related-term-link">Text-to-Image</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://github.com/tencent-ailab/IP-Adapter" target="_blank" class="learn-link">📄 IP-Adapter GitHub 공식 저장소</a>
+                <a href="https://huggingface.co/docs/diffusers/en/using-diffusers/ip_adapter" target="_blank" class="learn-link">🎓 Hugging Face Diffusers IP-Adapter 가이드</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +360,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

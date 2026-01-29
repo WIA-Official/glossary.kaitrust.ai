@@ -202,6 +202,186 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">React Suspense는 컴포넌트의 렌더링을 데이터가 준비될 때까지 "일시 중단"하고 대체 UI(fallback)를 표시하는 선언적 로딩 처리 메커니즘입니다. if (loading) 조건문 없이도 깔끔하게 비동기 상태를 관리할 수 있습니다.</p>
+                <p style="margin-bottom: 1rem;">Suspense는 원래 React.lazy와 함께 코드 스플리팅용으로 도입되었지만, React 18부터 데이터 페칭에도 사용할 수 있게 확장되었습니다. 서버 컴포넌트의 async 함수나 TanStack Query의 suspense 옵션과 결합하여 동작합니다.</p>
+                <p style="margin-bottom: 1rem;">여러 Suspense boundary를 중첩하여 사용하면 세분화된 로딩 상태를 관리할 수 있습니다. 부모 Suspense는 자식들이 모두 준비될 때까지 기다리고, 각 자식 Suspense는 독립적으로 로딩 상태를 처리합니다.</p>
+                <p>Streaming SSR에서 Suspense는 핵심 역할을 합니다. 서버에서 Suspense boundary까지 렌더링한 후 fallback을 포함한 HTML을 먼저 전송하고, 데이터가 준비되면 나머지를 스트리밍으로 보내 점진적으로 채워넣습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>import { Suspense, lazy } from 'react';
+
+// 1. 코드 스플리팅과 Suspense
+const HeavyChart = lazy(() =&gt; import('./HeavyChart'));
+const AdminPanel = lazy(() =&gt; import('./AdminPanel'));
+
+function Dashboard() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;대시보드&lt;/h1&gt;
+
+      &lt;Suspense fallback={&lt;ChartSkeleton /&gt;}&gt;
+        &lt;HeavyChart /&gt;
+      &lt;/Suspense&gt;
+
+      &lt;Suspense fallback={&lt;div&gt;관리자 패널 로딩중...&lt;/div&gt;}&gt;
+        &lt;AdminPanel /&gt;
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+}
+
+// 2. TanStack Query와 Suspense
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+function UserProfile({ userId }: { userId: string }) {
+  // suspense: true 옵션이 자동 활성화
+  const { data: user } = useSuspenseQuery({
+    queryKey: ['user', userId],
+    queryFn: () =&gt; fetchUser(userId),
+  });
+
+  // data는 항상 존재 (undefined 체크 불필요)
+  return &lt;div&gt;{user.name}&lt;/div&gt;;
+}
+
+function ProfilePage({ userId }: { userId: string }) {
+  return (
+    &lt;Suspense fallback={&lt;ProfileSkeleton /&gt;}&gt;
+      &lt;UserProfile userId={userId} /&gt;
+    &lt;/Suspense&gt;
+  );
+}
+
+// 3. 중첩 Suspense로 세분화된 로딩
+function ProductPage({ id }: { id: string }) {
+  return (
+    &lt;Suspense fallback={&lt;PageSkeleton /&gt;}&gt;
+      &lt;ProductInfo id={id} /&gt;
+
+      &lt;div className="grid grid-cols-2 gap-4"&gt;
+        &lt;Suspense fallback={&lt;ReviewsSkeleton /&gt;}&gt;
+          &lt;ProductReviews productId={id} /&gt;
+        &lt;/Suspense&gt;
+
+        &lt;Suspense fallback={&lt;RelatedSkeleton /&gt;}&gt;
+          &lt;RelatedProducts productId={id} /&gt;
+        &lt;/Suspense&gt;
+      &lt;/div&gt;
+    &lt;/Suspense&gt;
+  );
+}
+
+// 4. ErrorBoundary와 함께 사용
+import { ErrorBoundary } from 'react-error-boundary';
+
+function SafeDataFetch() {
+  return (
+    &lt;ErrorBoundary fallback={&lt;ErrorMessage /&gt;}&gt;
+      &lt;Suspense fallback={&lt;Loading /&gt;}&gt;
+        &lt;DataComponent /&gt;
+      &lt;/Suspense&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+}
+
+// 5. SuspenseList로 로딩 순서 제어 (실험적)
+import { SuspenseList } from 'react';
+
+function Feed() {
+  return (
+    &lt;SuspenseList revealOrder="forwards" tail="collapsed"&gt;
+      &lt;Suspense fallback={&lt;PostSkeleton /&gt;}&gt;
+        &lt;Post id="1" /&gt;
+      &lt;/Suspense&gt;
+      &lt;Suspense fallback={&lt;PostSkeleton /&gt;}&gt;
+        &lt;Post id="2" /&gt;
+      &lt;/Suspense&gt;
+    &lt;/SuspenseList&gt;
+  );
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">기술 미팅에서:</p>
+                    <p>"로딩 스피너가 너무 많아서 정신없어요. Suspense boundary를 적절히 묶으면 하나의 스켈레톤으로 깔끔하게 처리할 수 있어요. UX팀이랑 로딩 단위 협의해보죠."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"Suspense의 동작 원리는요?" - "자식 컴포넌트가 Promise를 throw하면 Suspense가 catch해서 fallback을 렌더링합니다. Promise가 resolve되면 다시 자식을 렌더링합니다."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">코드 리뷰에서:</p>
+                    <p>"useSuspenseQuery 쓰면 if (isLoading) 체크 안 해도 돼요. 대신 반드시 Suspense로 감싸야 하고, ErrorBoundary도 같이 넣어서 에러 처리하세요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">일반 useEffect + useState 조합은 Suspense와 호환되지 않습니다. useSuspenseQuery나 use() 훅, React Server Components를 사용해야 합니다.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">Suspense fallback은 처음 마운트될 때만 표시됩니다. refetch 중 로딩 표시가 필요하면 isPending이나 isFetching 상태를 별도로 처리하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">Suspense 없이 suspense 모드 쿼리를 사용하면 에러가 발생합니다. 컴포넌트 트리에 반드시 Suspense boundary가 있어야 합니다.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/Streaming%20SSR/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Streaming SSR</a>
+                <a href="/ko/term/React/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">React</a>
+                <a href="/ko/term/Code%20Splitting/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Code Splitting</a>
+                <a href="/ko/term/TanStack%20Query/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">TanStack Query</a>
+                <a href="/ko/term/Error%20Boundary/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Error Boundary</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> React 공식 문서 - Suspense
+                </a>
+                <a href="https://tanstack.com/query/latest/docs/framework/react/guides/suspense" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> TanStack Query - Suspense Guide
+                </a>
+                <a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> React - lazy()
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBOM | KAITRUST AI 백과사전</title>
-    <meta name="description" content="Software Bill of Materials, 소프트웨어 구성 명세서">
-    <meta name="keywords" content="SBOM, , AI 용어, KAITRUST, AI 백과사전, 보안">
+    <title>SBOM (Software Bill of Materials) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="SBOM(소프트웨어 자재 명세서)은 소프트웨어를 구성하는 모든 컴포넌트, 라이브러리, 의존성의 목록입니다. 공급망 보안과 취약점 관리의 핵심 도구입니다.">
+    <meta name="keywords" content="SBOM, Software Bill of Materials, 소프트웨어 자재 명세서, 공급망 보안, Supply Chain Security, CycloneDX, SPDX, 의존성 관리, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/SBOM/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/SBOM/">
-    <meta property="og:title" content="SBOM | KAITRUST AI 백과사전">
-    <meta property="og:description" content="Software Bill of Materials, 소프트웨어 구성 명세서">
+    <meta property="og:title" content="SBOM (Software Bill of Materials) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="소프트웨어를 구성하는 모든 컴포넌트와 의존성의 목록. 공급망 보안과 취약점 관리의 핵심 도구.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SBOM | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="Software Bill of Materials, 소프트웨어 구성 명세서">
+    <meta name="twitter:title" content="SBOM (Software Bill of Materials) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="소프트웨어를 구성하는 모든 컴포넌트와 의존성의 목록. 공급망 보안과 취약점 관리의 핵심 도구.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "SBOM",
-        "description": "Software Bill of Materials, 소프트웨어 구성 명세서",
+        "alternateName": "Software Bill of Materials",
+        "description": "소프트웨어를 구성하는 모든 컴포넌트, 라이브러리, 의존성의 목록입니다. 공급망 보안과 취약점 관리의 핵심 도구입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">SBOM</h1>
-            
+            <p class="term-english">Software Bill of Materials (소프트웨어 자재 명세서)</p>
             <div class="term-description">
-                <p>Software Bill of Materials, 소프트웨어 구성 명세서</p>
+                <p>소프트웨어를 구성하는 모든 컴포넌트, 라이브러리, 의존성의 상세한 목록입니다. 제조업의 BOM(자재 명세서)처럼 소프트웨어의 "재료 목록"을 제공하여 공급망 보안, 라이선스 준수, 취약점 관리를 가능하게 합니다. CycloneDX, SPDX가 대표적인 표준 형식입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,424 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>SBOM(Software Bill of Materials)은 소프트웨어 제품에 포함된 모든 구성 요소의 목록입니다. 제조업에서 자동차나 전자제품에 들어가는 모든 부품을 명시한 BOM(Bill of Materials)처럼, 소프트웨어의 "재료 목록"을 제공합니다. 여기에는 오픈소스 라이브러리, 상용 컴포넌트, 자체 개발 모듈, 그리고 이들의 의존성이 포함됩니다. 각 컴포넌트의 이름, 버전, 라이선스, 공급자 정보가 기록됩니다.</p>
+                <p>SBOM의 중요성은 SolarWinds, Log4Shell(Log4j) 같은 대규모 공급망 공격 이후 급격히 부각되었습니다. 2021년 미국 백악관은 행정명령(EO 14028)을 통해 연방 정부에 소프트웨어를 공급하는 모든 기업에 SBOM 제공을 의무화했습니다. 취약점이 발견되었을 때 "우리 시스템에 해당 컴포넌트가 있는가?"라는 질문에 즉시 답할 수 있어야 하며, SBOM이 없으면 수천 개의 애플리케이션을 수동으로 검사해야 합니다.</p>
+                <p>대표적인 SBOM 표준 형식으로 CycloneDX와 SPDX가 있습니다. CycloneDX는 OWASP에서 개발한 경량 표준으로, 보안 사용 사례에 최적화되어 있습니다. SPDX(Software Package Data Exchange)는 Linux Foundation에서 관리하며, 라이선스 준수에 강점이 있고 ISO 표준(ISO/IEC 5962:2021)으로 채택되었습니다. 두 형식 모두 JSON, XML 등으로 표현할 수 있으며, 도구 간 상호 변환이 가능합니다.</p>
+                <p>현대 DevSecOps에서 SBOM 생성은 빌드 파이프라인에 자동화됩니다. Syft, Trivy, OWASP Dependency-Track 같은 도구로 빌드 시 SBOM을 생성하고, 취약점 데이터베이스(NVD, OSV)와 대조하여 위험을 평가합니다. VEX(Vulnerability Exploitability eXchange)는 SBOM과 함께 사용되어 "이 취약점이 우리 환경에서 실제로 악용 가능한가?"를 문서화합니다. 규제 준수, 고객 요구사항, 보안 실사(Due Diligence)에서 SBOM은 필수 자료가 되고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="syft">Syft (SBOM 생성)</button>
+                <button class="code-tab" data-lang="cyclonedx">CycloneDX 형식</button>
+                <button class="code-tab" data-lang="cicd">CI/CD 통합</button>
+            </div>
+            <div class="code-block active" data-lang="syft">
+                <pre><code class="language-bash"># Syft - Anchore의 SBOM 생성 도구
+# 컨테이너 이미지, 파일시스템, 아카이브에서 SBOM 생성
+
+# 1. 설치
+# macOS
+brew install syft
+# Linux
+curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+# 2. Docker 이미지에서 SBOM 생성
+syft nginx:latest
+# 기본 출력: 테이블 형식
+
+# CycloneDX JSON 형식으로 저장
+syft nginx:latest -o cyclonedx-json > sbom.json
+
+# SPDX 형식으로 저장
+syft nginx:latest -o spdx-json > sbom.spdx.json
+
+# 3. 로컬 디렉토리에서 SBOM 생성
+syft dir:/path/to/project -o cyclonedx-json > project-sbom.json
+
+# 4. 컨테이너 tar 파일에서 SBOM 생성
+docker save myapp:v1.0 -o myapp.tar
+syft myapp.tar -o cyclonedx-json > myapp-sbom.json
+
+# 5. 다양한 출력 형식
+syft alpine:latest -o table          # 터미널 테이블 (기본)
+syft alpine:latest -o json           # Syft JSON
+syft alpine:latest -o cyclonedx-json # CycloneDX JSON
+syft alpine:latest -o cyclonedx-xml  # CycloneDX XML
+syft alpine:latest -o spdx-json      # SPDX JSON
+syft alpine:latest -o spdx-tag-value # SPDX Tag-Value
+
+# 6. 특정 패키지 카탈로거만 사용
+syft packages alpine:latest --catalogers apk,python
+
+# 7. 프라이빗 레지스트리 인증
+syft registry.example.com/myapp:latest \
+    --registry-auth "username:password"
+
+# 8. SBOM 분석 (Grype로 취약점 스캔)
+# Syft로 생성한 SBOM을 Grype로 분석
+syft nginx:latest -o json > nginx-sbom.json
+grype sbom:nginx-sbom.json
+
+# 9. OCI 레지스트리에 SBOM 저장 (Attestation)
+syft nginx:latest -o cyclonedx-json | \
+    cosign attest --predicate - \
+    --type cyclonedx nginx:latest
+
+# 10. 멀티 플랫폼 이미지 지원
+syft --platform linux/amd64 nginx:latest</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="cyclonedx">
+                <pre><code class="language-json">// CycloneDX SBOM 예제 (JSON 형식)
+// https://cyclonedx.org/specification/overview/
+
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-01-15T10:30:00Z",
+    "tools": [
+      {
+        "vendor": "anchore",
+        "name": "syft",
+        "version": "0.100.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "my-web-app",
+      "version": "2.1.0",
+      "bom-ref": "my-web-app@2.1.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "express",
+      "version": "4.18.2",
+      "purl": "pkg:npm/express@4.18.2",
+      "bom-ref": "express@4.18.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://expressjs.com/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/expressjs/express"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "lodash",
+      "version": "4.17.21",
+      "purl": "pkg:npm/lodash@4.17.21",
+      "bom-ref": "lodash@4.17.21",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "axios",
+      "version": "1.6.0",
+      "purl": "pkg:npm/axios@1.6.0",
+      "bom-ref": "axios@1.6.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "my-web-app@2.1.0",
+      "dependsOn": [
+        "express@4.18.2",
+        "lodash@4.17.21",
+        "axios@1.6.0"
+      ]
+    },
+    {
+      "ref": "express@4.18.2",
+      "dependsOn": [
+        "body-parser@1.20.2",
+        "cookie@0.5.0"
+      ]
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "id": "CVE-2023-12345",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/"
+      },
+      "ratings": [
+        {
+          "source": { "name": "NVD" },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        }
+      ],
+      "affects": [
+        {
+          "ref": "axios@1.6.0"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "justification": "code_not_reachable",
+        "detail": "해당 취약점은 프록시 기능에서 발생하며, 우리 애플리케이션에서는 프록시를 사용하지 않음"
+      }
+    }
+  ]
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="cicd">
+                <pre><code class="language-yaml"># GitHub Actions - SBOM 생성 및 취약점 스캔 파이프라인
+
+name: SBOM Generation and Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  sbom-and-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+
+      # 1. Syft로 SBOM 생성
+      - name: Generate SBOM with Syft
+        uses: anchore/sbom-action@v0
+        with:
+          image: myapp:${{ github.sha }}
+          format: cyclonedx-json
+          output-file: sbom.json
+          artifact-name: sbom.cyclonedx.json
+
+      # 2. Grype로 취약점 스캔
+      - name: Scan SBOM for vulnerabilities
+        uses: anchore/scan-action@v3
+        id: scan
+        with:
+          sbom: sbom.json
+          fail-build: true
+          severity-cutoff: high
+
+      # 3. 취약점 보고서 업로드
+      - name: Upload vulnerability report
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+
+      # 4. SBOM을 릴리스 아티팩트로 저장
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.json
+
+---
+# GitLab CI - SBOM 파이프라인
+
+stages:
+  - build
+  - sbom
+  - scan
+
+variables:
+  IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+
+build:
+  stage: build
+  script:
+    - docker build -t $IMAGE_NAME .
+    - docker push $IMAGE_NAME
+
+generate-sbom:
+  stage: sbom
+  image: anchore/syft:latest
+  script:
+    - syft $IMAGE_NAME -o cyclonedx-json > sbom.json
+    - syft $IMAGE_NAME -o spdx-json > sbom.spdx.json
+  artifacts:
+    paths:
+      - sbom.json
+      - sbom.spdx.json
+    expire_in: 1 week
+
+vulnerability-scan:
+  stage: scan
+  image: anchore/grype:latest
+  needs: [generate-sbom]
+  script:
+    - grype sbom:sbom.json --fail-on high
+  allow_failure: false
+
+---
+# Dependency-Track 연동 (SBOM 중앙 관리)
+
+# SBOM을 Dependency-Track에 업로드
+upload-to-dependency-track:
+  stage: sbom
+  script:
+    - |
+      curl -X POST "https://dtrack.example.com/api/v1/bom" \
+        -H "X-Api-Key: $DEPENDENCY_TRACK_API_KEY" \
+        -H "Content-Type: multipart/form-data" \
+        -F "projectName=my-app" \
+        -F "projectVersion=$CI_COMMIT_SHA" \
+        -F "autoCreate=true" \
+        -F "bom=@sbom.json"</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 공급망 보안 이슈 대응에서</div>
+                    <blockquote class="conv-quote">
+                        "Log4j 취약점 공개 후 2시간 만에 전체 시스템 영향 범위를 파악했습니다. 모든 서비스의 SBOM이 Dependency-Track에 등록되어 있어서, 취약한 버전을 사용하는 서비스 15개를 즉시 식별했습니다. SBOM 없이 수동으로 확인했다면 며칠이 걸렸을 겁니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 고객사 보안 실사 대응에서</div>
+                    <blockquote class="conv-quote">
+                        "저희 제품의 SBOM을 CycloneDX 형식으로 제공해 드릴 수 있습니다. 여기에 모든 오픈소스 컴포넌트, 버전, 라이선스 정보가 포함되어 있고, VEX 문서로 현재 알려진 취약점에 대한 우리의 분석 결과도 함께 전달해 드리겠습니다. 분기마다 업데이트된 SBOM을 제공하는 프로세스도 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 DevSecOps 파이프라인 설계에서</div>
+                    <blockquote class="conv-quote">
+                        "빌드 단계에서 Syft로 SBOM을 자동 생성하고, Grype로 취약점 스캔을 수행합니다. CVSS 7 이상의 취약점이 있으면 빌드를 실패시키고, 생성된 SBOM은 Dependency-Track에 업로드해서 중앙에서 모든 서비스의 의존성을 추적합니다. 새 CVE가 공개되면 자동으로 영향받는 서비스 목록을 알림 받을 수 있어요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>일회성 SBOM 생성 후 방치</strong>
+                        <p>SBOM은 빌드할 때마다 새로 생성해야 합니다. 의존성은 계속 변경되고, 한 달 전 SBOM은 이미 구식입니다. CI/CD 파이프라인에 통합하여 모든 릴리스에 자동으로 SBOM을 생성하고 관리하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>직접 의존성만 포함</strong>
+                        <p>package.json이나 pom.xml에 명시된 직접 의존성만 SBOM에 포함하면 안 됩니다. 전이적 의존성(transitive dependencies)도 모두 포함해야 합니다. Log4j 취약점도 대부분 전이적 의존성으로 들어왔습니다. Syft, Trivy 같은 도구로 전체 의존성 트리를 스캔하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>SBOM 형식 비호환성</strong>
+                        <p>CycloneDX와 SPDX는 다른 표준이지만 상호 변환이 가능합니다. 고객이나 규제 기관이 특정 형식을 요구할 수 있으니, 여러 형식으로 내보내기할 수 있는 도구를 선택하세요. 자체 형식의 SBOM은 도구 호환성이 없어 피해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>SBOM 베스트 프랙티스</strong>
+                        <p>모든 빌드에서 SBOM을 자동 생성하고 중앙 저장소(Dependency-Track 등)에서 관리하세요. SBOM과 함께 VEX를 생성하여 취약점의 실제 영향을 문서화합니다. 컨테이너 이미지, 바이너리, 소스 코드 모두에서 SBOM을 생성하고, 라이선스 준수 검사와 취약점 모니터링을 자동화하세요. 소프트웨어 제공 시 SBOM을 함께 제공하는 프로세스를 수립하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Trivy/" class="related-term-link">Trivy</a>
+                <a href="/ko/term/CVE/" class="related-term-link">CVE</a>
+                <a href="/ko/term/Supply%20Chain%20Security/" class="related-term-link">Supply Chain Security</a>
+                <a href="/ko/term/OWASP/" class="related-term-link">OWASP</a>
+                <a href="/ko/term/DevSecOps/" class="related-term-link">DevSecOps</a>
+                <a href="/ko/term/Container%20Security/" class="related-term-link">Container Security</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://cyclonedx.org/" target="_blank" class="learn-link">
+                    📘 CycloneDX - OWASP SBOM 표준
+                </a>
+                <a href="https://spdx.dev/" target="_blank" class="learn-link">
+                    📄 SPDX - Linux Foundation SBOM 표준
+                </a>
+                <a href="https://github.com/anchore/syft" target="_blank" class="learn-link">
+                    🔧 Syft - SBOM 생성 도구
+                </a>
+                <a href="https://dependencytrack.org/" target="_blank" class="learn-link">
+                    📊 Dependency-Track - SBOM 관리 플랫폼
+                </a>
+                <a href="https://www.cisa.gov/sbom" target="_blank" class="learn-link">
+                    🏛️ CISA SBOM - 미국 정부 SBOM 가이드
+                </a>
+                <a href="https://ntia.gov/page/software-bill-materials" target="_blank" class="learn-link">
+                    📋 NTIA SBOM - 최소 요소 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +764,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

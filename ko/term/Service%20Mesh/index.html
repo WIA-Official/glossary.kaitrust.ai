@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,187 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Service Mesh(서비스 메시)</strong>는 마이크로서비스 간의 네트워크 통신을 관리하는 인프라 계층입니다. 애플리케이션 코드 수정 없이 서비스 간 트래픽 관리, 보안, 관측성을 제공하여 마이크로서비스 아키텍처의 복잡성을 해결합니다.</p>
+                <p>Service Mesh는 주로 <strong>사이드카 패턴</strong>을 사용하여 각 서비스 Pod에 프록시(예: Envoy)를 배치합니다. 이 프록시가 모든 인바운드/아웃바운드 트래픽을 가로채서 라우팅, 로드밸런싱, mTLS 암호화, 서킷 브레이커, 재시도 로직 등을 처리합니다. 대표적인 구현체로 <strong>Istio</strong>, <strong>Linkerd</strong>, <strong>Consul Connect</strong>가 있으며, 각각 기능성, 단순성, 멀티 클라우드 지원에 강점이 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>Istio VirtualService - 트래픽 라우팅</h3>
+                <pre><code class="language-yaml"># virtualservice.yaml - 카나리 배포 트래픽 분할
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: product-service
+  namespace: production
+spec:
+  hosts:
+  - product-service
+  http:
+  - match:
+    - headers:
+        x-canary:
+          exact: "true"
+    route:
+    - destination:
+        host: product-service
+        subset: v2
+  - route:
+    - destination:
+        host: product-service
+        subset: v1
+      weight: 90
+    - destination:
+        host: product-service
+        subset: v2
+      weight: 10
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+    timeout: 10s
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: product-service
+  namespace: production
+spec:
+  host: product-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        h2UpgradePolicy: UPGRADE
+        http1MaxPendingRequests: 100
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2</code></pre>
+
+                <h3>Istio mTLS 설정</h3>
+                <pre><code class="language-yaml"># peer-authentication.yaml - 서비스 간 mTLS 강제
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: production
+spec:
+  mtls:
+    mode: STRICT
+---
+# authorization-policy.yaml - 세밀한 접근 제어
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: product-service-policy
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: product-service
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals:
+        - "cluster.local/ns/production/sa/order-service"
+        - "cluster.local/ns/production/sa/cart-service"
+    to:
+    - operation:
+        methods: ["GET", "POST"]
+        paths: ["/api/products/*"]</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 id="conv-title" class="section-title">실무 대화</h2>
+            <div class="section-content conversation-box">
+                <div class="conversation">
+                    <div class="message">
+                        <span class="speaker">보안팀</span>
+                        <p>"마이크로서비스 간 통신이 암호화되어 있지 않아서 보안 감사에서 지적받았어요. 전부 HTTPS로 바꿔야 하나요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">플랫폼 엔지니어</span>
+                        <p>"Istio Service Mesh를 도입하면 mTLS로 모든 서비스 간 통신이 자동 암호화됩니다. 애플리케이션 코드 수정 없이요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">개발팀장</span>
+                        <p>"사이드카 프록시가 추가되면 성능 오버헤드가 있지 않나요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">플랫폼 엔지니어</span>
+                        <p>"Envoy 프록시로 약 1-3ms 레이턴시가 추가되고, 메모리는 Pod당 50MB 정도 더 필요해요. 하지만 서비스 간 직접 구현해야 할 재시도, 서킷 브레이커 로직을 대체하면 오히려 더 효율적이에요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">SRE</span>
+                        <p>"분산 트레이싱도 자동으로 되나요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">플랫폼 엔지니어</span>
+                        <p>"네, Istio가 트레이스 헤더를 자동 전파해서 Jaeger나 Zipkin과 연동하면 전체 호출 흐름을 볼 수 있어요. Kiali 대시보드로 서비스 토폴로지도 시각화됩니다."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <ul class="warning-list">
+                    <li><strong>복잡성 증가:</strong> Service Mesh는 강력하지만 복잡합니다. 소규모 팀이나 간단한 아키텍처에서는 오버엔지니어링일 수 있습니다.</li>
+                    <li><strong>리소스 오버헤드:</strong> 각 Pod에 사이드카가 추가되므로 클러스터 리소스 사용량이 증가합니다. Pod당 CPU 100m, 메모리 128MB 정도를 계획하세요.</li>
+                    <li><strong>디버깅 복잡도:</strong> 문제 발생 시 애플리케이션, 사이드카, 컨트롤 플레인 모두를 확인해야 합니다. 충분한 관측성 도구가 필요합니다.</li>
+                    <li><strong>버전 호환성:</strong> Istio와 Kubernetes 버전 간 호환성을 확인하세요. 업그레이드 시 주의가 필요합니다.</li>
+                    <li><strong>점진적 도입:</strong> 처음부터 모든 기능을 활성화하지 말고, mTLS부터 시작해서 점진적으로 기능을 추가하세요.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <ul class="related-terms">
+                    <li><a href="/ko/term/Istio/">Istio</a> - 가장 널리 사용되는 Service Mesh 구현체</li>
+                    <li><a href="/ko/term/Linkerd/">Linkerd</a> - 경량화된 Service Mesh</li>
+                    <li><a href="/ko/term/Envoy/">Envoy</a> - Service Mesh의 데이터 플레인 프록시</li>
+                    <li><a href="/ko/term/Kubernetes/">Kubernetes</a> - Service Mesh의 기반 플랫폼</li>
+                    <li><a href="/ko/term/Observability/">Observability</a> - Service Mesh가 제공하는 핵심 기능</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more">
+                    <li><a href="https://istio.io/latest/docs/" target="_blank" rel="noopener">Istio Documentation</a> - 공식 문서</li>
+                    <li><a href="https://linkerd.io/2.14/overview/" target="_blank" rel="noopener">Linkerd Documentation</a> - 경량 Service Mesh 가이드</li>
+                    <li><a href="https://www.envoyproxy.io/docs/envoy/latest/" target="_blank" rel="noopener">Envoy Proxy</a> - 데이터 플레인 프록시 문서</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +394,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,366 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Apache Hadoop</strong>은 대규모 데이터 세트를 분산 처리하기 위한 오픈소스 프레임워크입니다. Google의 GFS와 MapReduce 논문을 기반으로 개발되어 빅데이터 시대를 여는 핵심 기술이 되었습니다.</p>
+
+                <h3>Hadoop의 핵심 구성요소</h3>
+                <ul>
+                    <li><strong>HDFS (Hadoop Distributed File System):</strong> 대용량 파일을 여러 노드에 분산 저장하는 파일 시스템</li>
+                    <li><strong>YARN (Yet Another Resource Negotiator):</strong> 클러스터 리소스 관리 및 작업 스케줄링</li>
+                    <li><strong>MapReduce:</strong> 분산 데이터 처리 프로그래밍 모델</li>
+                    <li><strong>Hadoop Common:</strong> 공통 유틸리티 및 라이브러리</li>
+                </ul>
+
+                <h3>HDFS 아키텍처</h3>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>구성요소</th><th>역할</th><th>특징</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>NameNode</td><td>메타데이터 관리</td><td>파일 위치, 블록 정보 저장</td></tr>
+                        <tr><td>DataNode</td><td>실제 데이터 저장</td><td>블록 단위(128MB) 저장</td></tr>
+                        <tr><td>Secondary NameNode</td><td>체크포인트 생성</td><td>NameNode 백업 아님</td></tr>
+                        <tr><td>Block</td><td>데이터 저장 단위</td><td>기본 3중 복제</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>YARN 아키텍처</h3>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>구성요소</th><th>역할</th><th>설명</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>ResourceManager</td><td>글로벌 리소스 관리</td><td>클러스터 전체 리소스 할당</td></tr>
+                        <tr><td>NodeManager</td><td>노드별 리소스 관리</td><td>컨테이너 실행 및 모니터링</td></tr>
+                        <tr><td>ApplicationMaster</td><td>애플리케이션 관리</td><td>작업별 리소스 협상</td></tr>
+                        <tr><td>Container</td><td>실행 환경</td><td>CPU, 메모리 할당 단위</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>HDFS 설정 (hdfs-site.xml)</h3>
+                <pre><code class="language-xml">&lt;!-- hdfs-site.xml: HDFS 설정 --&gt;
+&lt;configuration&gt;
+    &lt;!-- 블록 복제 계수 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.replication&lt;/name&gt;
+        &lt;value&gt;3&lt;/value&gt;
+        &lt;description&gt;기본 블록 복제 수&lt;/description&gt;
+    &lt;/property&gt;
+
+    &lt;!-- 블록 크기 (128MB) --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.blocksize&lt;/name&gt;
+        &lt;value&gt;134217728&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- NameNode 데이터 디렉토리 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;
+        &lt;value&gt;file:///hadoop/hdfs/namenode&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- DataNode 데이터 디렉토리 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;
+        &lt;value&gt;file:///hadoop/hdfs/datanode&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- NameNode HA 설정 (선택) --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.nameservices&lt;/name&gt;
+        &lt;value&gt;mycluster&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;property&gt;
+        &lt;name&gt;dfs.ha.namenodes.mycluster&lt;/name&gt;
+        &lt;value&gt;nn1,nn2&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;property&gt;
+        &lt;name&gt;dfs.namenode.rpc-address.mycluster.nn1&lt;/name&gt;
+        &lt;value&gt;namenode1:8020&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;property&gt;
+        &lt;name&gt;dfs.namenode.rpc-address.mycluster.nn2&lt;/name&gt;
+        &lt;value&gt;namenode2:8020&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- 자동 Failover 활성화 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.ha.automatic-failover.enabled&lt;/name&gt;
+        &lt;value&gt;true&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;</code></pre>
+
+                <h3>YARN 설정 (yarn-site.xml)</h3>
+                <pre><code class="language-xml">&lt;!-- yarn-site.xml: YARN 설정 --&gt;
+&lt;configuration&gt;
+    &lt;!-- ResourceManager 호스트 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;
+        &lt;value&gt;resourcemanager&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- NodeManager 메모리 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.nodemanager.resource.memory-mb&lt;/name&gt;
+        &lt;value&gt;65536&lt;/value&gt;
+        &lt;description&gt;노드당 할당 가능한 메모리 (64GB)&lt;/description&gt;
+    &lt;/property&gt;
+
+    &lt;!-- NodeManager CPU 코어 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.nodemanager.resource.cpu-vcores&lt;/name&gt;
+        &lt;value&gt;16&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- 최소 컨테이너 메모리 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.scheduler.minimum-allocation-mb&lt;/name&gt;
+        &lt;value&gt;1024&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- 최대 컨테이너 메모리 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.scheduler.maximum-allocation-mb&lt;/name&gt;
+        &lt;value&gt;32768&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- Shuffle 서비스 활성화 (MapReduce/Spark용) --&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+        &lt;value&gt;mapreduce_shuffle,spark_shuffle&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;property&gt;
+        &lt;name&gt;yarn.nodemanager.aux-services.mapreduce_shuffle.class&lt;/name&gt;
+        &lt;value&gt;org.apache.hadoop.mapred.ShuffleHandler&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- ResourceManager HA 설정 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.ha.enabled&lt;/name&gt;
+        &lt;value&gt;true&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.cluster-id&lt;/name&gt;
+        &lt;value&gt;yarn-cluster&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;!-- Fair Scheduler 설정 --&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.scheduler.class&lt;/name&gt;
+        &lt;value&gt;org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;</code></pre>
+
+                <h3>HDFS CLI 명령어</h3>
+                <pre><code class="language-bash"># HDFS 기본 명령어
+
+# 디렉토리 목록 조회
+hdfs dfs -ls /user/hadoop/data
+
+# 디렉토리 생성
+hdfs dfs -mkdir -p /user/hadoop/input
+
+# 로컬 파일을 HDFS로 업로드
+hdfs dfs -put local_file.csv /user/hadoop/input/
+hdfs dfs -copyFromLocal large_data.parquet /user/hadoop/input/
+
+# HDFS 파일을 로컬로 다운로드
+hdfs dfs -get /user/hadoop/output/result.csv ./
+hdfs dfs -copyToLocal /user/hadoop/output/* ./local_output/
+
+# 파일 내용 확인
+hdfs dfs -cat /user/hadoop/input/sample.txt
+hdfs dfs -head /user/hadoop/input/large_file.csv  # 첫 1KB
+hdfs dfs -tail /user/hadoop/output/log.txt        # 마지막 1KB
+
+# 파일/디렉토리 삭제
+hdfs dfs -rm /user/hadoop/temp/old_file.txt
+hdfs dfs -rm -r /user/hadoop/temp/                # 재귀 삭제
+
+# 파일 이동/이름 변경
+hdfs dfs -mv /user/hadoop/input/old.csv /user/hadoop/input/new.csv
+
+# 복제 계수 변경
+hdfs dfs -setrep -w 2 /user/hadoop/archive/
+
+# 디스크 사용량 확인
+hdfs dfs -du -h /user/hadoop/
+hdfs dfs -df -h  # 전체 클러스터 용량
+
+# 파일 시스템 점검
+hdfs fsck /user/hadoop/data -files -blocks
+
+# 클러스터 리포트
+hdfs dfsadmin -report</code></pre>
+
+                <h3>Python에서 HDFS 접근 (hdfs 라이브러리)</h3>
+                <pre><code class="language-python"># Python으로 HDFS 파일 시스템 접근
+from hdfs import InsecureClient
+import pandas as pd
+
+# HDFS 클라이언트 생성
+client = InsecureClient('http://namenode:9870', user='hadoop')
+
+# 디렉토리 목록 조회
+files = client.list('/user/hadoop/data')
+print(f"파일 목록: {files}")
+
+# 파일 업로드
+client.upload('/user/hadoop/input/data.csv', 'local_data.csv')
+
+# 파일 다운로드
+client.download('/user/hadoop/output/result.csv', 'local_result.csv')
+
+# 파일 직접 읽기 (with문 사용)
+with client.read('/user/hadoop/data/sample.csv', encoding='utf-8') as reader:
+    df = pd.read_csv(reader)
+    print(df.head())
+
+# 파일 쓰기
+with client.write('/user/hadoop/output/processed.json', encoding='utf-8') as writer:
+    import json
+    json.dump({'result': 'success', 'count': 1000}, writer)
+
+# 디렉토리 생성
+client.makedirs('/user/hadoop/new_project/input')
+
+# 파일 삭제
+client.delete('/user/hadoop/temp/old_file.txt')
+
+# 상태 정보 조회
+status = client.status('/user/hadoop/data/large_file.parquet')
+print(f"파일 크기: {status['length']} bytes")
+print(f"복제 계수: {status['replication']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">실무 대화 예시</h2>
+            <div class="section-content">
+                <div class="dialogue">
+                    <div class="dialogue-item">
+                        <span class="speaker">주니어 엔지니어:</span>
+                        <span class="speech">"Hadoop 클러스터 구축하려는데, NameNode HA는 꼭 필요한가요?"</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">시니어 엔지니어:</span>
+                        <span class="speech">"프로덕션이면 필수야. NameNode가 SPOF(단일 장애점)라서, HA 없으면 NameNode 장애 시 전체 클러스터가 멈춰. ZooKeeper로 자동 Failover 설정해야 해."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">주니어 엔지니어:</span>
+                        <span class="speech">"YARN 메모리 설정은 어떻게 하면 좋을까요? 노드에 128GB 메모리가 있는데..."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">시니어 엔지니어:</span>
+                        <span class="speech">"OS와 다른 데몬용으로 최소 20% 남겨둬. 그러면 약 100GB를 YARN에 할당하고, 컨테이너 최소 1GB, 최대 16GB 정도로 설정해. vcores는 실제 코어 수의 1.5~2배로 설정하기도 해."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">주니어 엔지니어:</span>
+                        <span class="speech">"요즘 Hadoop 대신 클라우드 서비스 많이 쓴다던데, Hadoop 배울 필요 있나요?"</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">시니어 엔지니어:</span>
+                        <span class="speech">"기본 개념은 알아야 해. EMR, Dataproc 같은 클라우드 서비스도 Hadoop 기반이거든. 그리고 온프레미스 환경이나 데이터 주권 이슈가 있는 곳에선 아직 많이 써."</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <h4>HDFS 주의사항</h4>
+                    <ul>
+                        <li>작은 파일 다수 저장은 NameNode 메모리 부담 - 파일 병합 권장</li>
+                        <li>블록 크기보다 작은 파일은 공간 낭비 없지만 메타데이터 오버헤드</li>
+                        <li>복제 계수 변경은 네트워크 트래픽 발생 - 유휴 시간에 수행</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>YARN 주의사항</h4>
+                    <ul>
+                        <li>메모리 오버커밋 설정 시 OOM 발생 가능</li>
+                        <li>큐 용량 설정이 워크로드에 맞지 않으면 리소스 낭비</li>
+                        <li>ApplicationMaster 실패 시 전체 작업 재시작 - 체크포인팅 필수</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>클러스터 운영</h4>
+                    <ul>
+                        <li>데이터 편향(skew)은 특정 노드에 부하 집중 유발</li>
+                        <li>디스크 장애 시 자동 복구되지만 모니터링 필수</li>
+                        <li>네트워크 대역폭이 병목이 되는 경우가 많음</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/MapReduce/" class="related-term-card">
+                        <h4>MapReduce</h4>
+                        <p>분산 데이터 처리 프로그래밍 모델</p>
+                    </a>
+                    <a href="/ko/term/Spark/" class="related-term-card">
+                        <h4>Spark</h4>
+                        <p>인메모리 분산 처리 엔진</p>
+                    </a>
+                    <a href="/ko/term/Hive/" class="related-term-card">
+                        <h4>Hive</h4>
+                        <p>Hadoop 기반 SQL 분석 도구</p>
+                    </a>
+                    <a href="/ko/term/Data%20Lake/" class="related-term-card">
+                        <h4>Data Lake</h4>
+                        <p>대규모 원시 데이터 저장소</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <div class="resource-links">
+                    <a href="https://hadoop.apache.org/docs/stable/" class="resource-link" target="_blank">
+                        <span class="resource-icon">📚</span>
+                        <span>Apache Hadoop 공식 문서</span>
+                    </a>
+                    <a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html" class="resource-link" target="_blank">
+                        <span class="resource-icon">🔧</span>
+                        <span>HDFS HA 설정 가이드</span>
+                    </a>
+                    <a href="https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/YARN.html" class="resource-link" target="_blank">
+                        <span class="resource-icon">📋</span>
+                        <span>YARN 아키텍처 문서</span>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +573,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

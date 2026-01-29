@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,123 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Telepresence는 Ambassador Labs에서 개발한 도구로, 로컬 개발 환경에서 원격 Kubernetes 클러스터의 서비스에 직접 연결할 수 있게 해줍니다. 2017년 처음 출시되어 클라우드 네이티브 개발의 핵심 도구로 자리잡았습니다.</p>
+                <p>핵심 기능은 두 가지입니다. 첫째, 로컬 머신을 클러스터 네트워크에 연결해 클러스터 내 서비스를 localhost처럼 접근할 수 있습니다. 둘째, Intercept 기능으로 클러스터로 들어오는 트래픽을 로컬로 라우팅해 실시간 디버깅이 가능합니다.</p>
+                <p>Telepresence는 VPN과 유사한 터널을 생성해 로컬과 클러스터를 연결합니다. Traffic Agent라는 사이드카 컨테이너를 대상 서비스에 주입하고, 이를 통해 트래픽을 로컬로 전달합니다. 환경 변수와 볼륨도 로컬에서 접근 가능합니다.</p>
+                <p>실무에서는 마이크로서비스 환경에서 한 서비스만 로컬에서 개발하면서 다른 의존 서비스는 클러스터 것을 사용하는 시나리오에 유용합니다. 매번 이미지 빌드/푸시/배포 없이 코드 변경을 즉시 테스트할 수 있어 개발 속도가 10배 이상 빨라집니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="bash">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Telepresence 설치 (macOS)
+brew install datawire/blackbird/telepresence
+
+# 클러스터에 연결
+telepresence connect
+
+# 연결 상태 확인
+telepresence status
+
+# 클러스터 서비스 목록 확인
+telepresence list
+
+# 특정 서비스의 트래픽을 로컬로 가로채기 (Intercept)
+# user-service:8080으로 들어오는 트래픽을 로컬 3000번 포트로 전달
+telepresence intercept user-service --port 3000:8080
+
+# 환경 변수도 함께 가져오기
+telepresence intercept user-service --port 3000:8080 --env-file user-service.env
+
+# 헤더 기반 선택적 intercept (다른 팀원 영향 없이)
+telepresence intercept user-service --port 3000:8080 \
+  --http-header x-telepresence-intercept=dev-john
+
+# 로컬에서 개발 서버 실행
+source user-service.env
+npm run dev  # 로컬 3000번 포트에서 실행
+
+# 클러스터 내 다른 서비스 직접 호출 테스트
+curl http://order-service.default.svc.cluster.local:8080/api/orders
+
+# Intercept 종료
+telepresence leave user-service
+
+# 클러스터 연결 해제
+telepresence quit
+
+# Preview URL 생성 (팀원과 공유 가능)
+telepresence intercept user-service --port 3000:8080 --preview-url
+
+# 볼륨 마운트와 함께 intercept
+telepresence intercept user-service --port 3000:8080 \
+  --mount=/tmp/user-service-volumes</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "마이크로서비스 로컬 개발이 너무 느려요. 한 줄 바꾸는데 빌드-푸시-배포 5분 걸리는 건 말이 안 돼요."</p>
+                <p><strong class="role-junior">주니어:</strong> "Telepresence intercept 쓰면 코드 수정하고 바로 테스트할 수 있지 않나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "맞아요. 스테이징 클러스터에 연결해서 내 서비스만 로컬로 돌리면 돼요. 개발 속도가 확 달라져요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "마이크로서비스 환경에서 로컬 개발의 어려움을 어떻게 해결하셨나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "Telepresence로 클러스터에 연결해 개발했습니다. intercept로 특정 서비스 트래픽만 로컬로 가져와서 실시간 디버깅이 가능했고, 다른 의존 서비스는 클러스터 것을 사용해 환경 불일치 문제도 해결됐습니다. 개발 사이클이 5분에서 수 초로 단축됐어요."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "로컬 테스트 잘 되셨나요? 클러스터 환경에서는 다르게 동작할 수 있어서요."</p>
+                <p><strong class="role-junior">개발자:</strong> "Telepresence로 스테이징 연결해서 테스트했습니다. Redis랑 PostgreSQL 다 클러스터 거 쓰니까 환경 차이 걱정 없어요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>프로덕션 클러스터에서 intercept 사용 금지 - 실제 사용자 트래픽이 로컬로 빠질 수 있음</li>
+                <li>여러 개발자가 동시에 같은 서비스 intercept 시 충돌 - 헤더 기반 선택적 intercept 사용</li>
+                <li>클러스터 네트워크 정책이 strict하면 연결 실패할 수 있음 - Traffic Manager 권한 확인</li>
+                <li class="info">Personal Intercept 기능을 사용하면 x-telepresence-intercept 헤더가 있는 요청만 로컬로 라우팅되어 팀원에게 영향 없음</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Tilt/" class="related-link">Tilt</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+                <a href="/ko/term/Ingress/" class="related-link">Ingress</a>
+                <a href="/ko/term/Envoy/" class="related-link">Envoy</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://www.telepresence.io/docs/latest/" target="_blank" rel="noopener">Telepresence 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.telepresence.io/docs/latest/quick-start/" target="_blank" rel="noopener">Telepresence Quick Start</a></li>
+                <li><span class="type-book"></span><a href="https://www.getambassador.io/" target="_blank" rel="noopener">Ambassador Labs - Developer Portal</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +330,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

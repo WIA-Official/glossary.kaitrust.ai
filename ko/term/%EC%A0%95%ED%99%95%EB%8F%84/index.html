@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -202,6 +228,225 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>정확도(Accuracy)는 전체 예측 중 올바르게 예측한 비율을 나타내는 분류 모델의 가장 기본적인 평가 지표입니다. 수학적으로 (TP + TN) / (TP + TN + FP + FN)으로 계산되며, 여기서 TP는 True Positive, TN은 True Negative, FP는 False Positive, FN은 False Negative를 의미합니다.</p>
+
+                <p>정확도는 머신러닝 역사에서 가장 오래되고 직관적인 지표로, 분류 문제의 기본 평가 방법으로 사용되어 왔습니다. 그러나 1990년대 의료 진단, 사기 탐지 등 불균형 데이터셋 문제가 부각되면서, 정확도만으로는 모델 성능을 제대로 평가할 수 없다는 인식이 퍼졌습니다. 이후 Precision, Recall, F1-Score, AUC-ROC 등 보완 지표들이 발전했습니다.</p>
+
+                <p>정확도의 핵심 한계는 클래스 불균형 상황에서 발생합니다. 예를 들어 암 환자가 1%인 데이터셋에서 "모두 정상"이라고 예측하면 정확도는 99%지만, 이 모델은 실제로 쓸모없습니다. 반대로 균형 잡힌 데이터셋(예: MNIST, CIFAR-10)에서는 정확도가 여전히 유용한 지표입니다. 따라서 데이터 분포를 먼저 확인하고 적절한 지표를 선택해야 합니다.</p>
+
+                <p>2025년 현재 실무에서는 정확도를 단독으로 사용하는 경우가 드뭅니다. Kaggle, AI 경진대회에서는 AUC-ROC, Log Loss, F1-Score가 주요 평가 지표로 사용되며, LLM 평가에서는 BLEU, ROUGE, 인간 평가 등 도메인 특화 지표가 중심입니다. 그러나 정확도는 여전히 빠른 sanity check와 모델 간 비교에 유용하게 활용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>정확도와 함께 다양한 분류 지표 계산 예제:</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># 정확도 및 분류 평가 지표 계산
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score,
+    f1_score, classification_report, confusion_matrix
+)
+import numpy as np
+
+# 예시 데이터: 이진 분류 결과
+y_true = [1, 0, 1, 1, 0, 1, 0, 0, 1, 1]  # 실제 레이블
+y_pred = [1, 0, 1, 0, 0, 1, 1, 0, 1, 0]  # 예측 레이블
+
+# 1. 정확도 (Accuracy)
+accuracy = accuracy_score(y_true, y_pred)
+print(f"정확도: {accuracy:.2%}")  # 70.00%
+
+# 2. 정밀도 (Precision) - 예측 양성 중 실제 양성 비율
+precision = precision_score(y_true, y_pred)
+print(f"정밀도: {precision:.2%}")  # 80.00%
+
+# 3. 재현율 (Recall) - 실제 양성 중 예측 양성 비율
+recall = recall_score(y_true, y_pred)
+print(f"재현율: {recall:.2%}")  # 66.67%
+
+# 4. F1-Score - 정밀도와 재현율의 조화평균
+f1 = f1_score(y_true, y_pred)
+print(f"F1-Score: {f1:.2%}")  # 72.73%
+
+# 5. 혼동 행렬 (Confusion Matrix)
+cm = confusion_matrix(y_true, y_pred)
+print("\n혼동 행렬:")
+print(f"  TN={cm[0,0]}, FP={cm[0,1]}")
+print(f"  FN={cm[1,0]}, TP={cm[1,1]}")
+
+# 6. 전체 분류 리포트
+print("\n상세 리포트:")
+print(classification_report(y_true, y_pred, target_names=['음성', '양성']))</code></pre>
+                </div>
+
+                <p>불균형 데이터에서의 정확도 문제 시뮬레이션:</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># 불균형 데이터에서 정확도의 함정
+import numpy as np
+from sklearn.metrics import accuracy_score, f1_score, balanced_accuracy_score
+
+# 극단적 불균형: 양성 2%, 음성 98%
+np.random.seed(42)
+n_samples = 1000
+n_positive = 20  # 2%
+
+y_true = np.array([1] * n_positive + [0] * (n_samples - n_positive))
+
+# 모델 A: 모든 것을 음성으로 예측 (단순 모델)
+y_pred_naive = np.zeros(n_samples)
+
+# 모델 B: 실제로 양성을 어느 정도 탐지하는 모델
+y_pred_better = np.zeros(n_samples)
+y_pred_better[:15] = 1  # 양성 15개 올바르게 예측
+y_pred_better[25:30] = 1  # 오탐 5개
+
+print("=== 불균형 데이터 (양성 2%) ===")
+print(f"\n[모델 A: 전부 음성 예측]")
+print(f"  정확도: {accuracy_score(y_true, y_pred_naive):.2%}")  # 98%!
+print(f"  F1-Score: {f1_score(y_true, y_pred_naive):.2%}")  # 0%
+print(f"  Balanced Accuracy: {balanced_accuracy_score(y_true, y_pred_naive):.2%}")
+
+print(f"\n[모델 B: 양성 탐지 시도]")
+print(f"  정확도: {accuracy_score(y_true, y_pred_better):.2%}")  # 99%
+print(f"  F1-Score: {f1_score(y_true, y_pred_better):.2%}")  # 75%
+print(f"  Balanced Accuracy: {balanced_accuracy_score(y_true, y_pred_better):.2%}")
+
+print("\n=> 정확도만 보면 두 모델이 비슷해 보이지만, F1은 완전히 다름!")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 지표 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 지표 비교</h2>
+            <div class="section-content">
+                <p>상황별 적합한 평가 지표 선택 가이드:</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>상황</th>
+                        <th>권장 지표</th>
+                        <th>정확도 적합성</th>
+                        <th>이유</th>
+                    </tr>
+                    <tr>
+                        <td>균형 데이터 (50:50)</td>
+                        <td>Accuracy, F1</td>
+                        <td>적합</td>
+                        <td>클래스 분포가 균형</td>
+                    </tr>
+                    <tr>
+                        <td>불균형 데이터 (95:5)</td>
+                        <td>F1, AUC-ROC</td>
+                        <td>부적합</td>
+                        <td>다수 클래스 편향</td>
+                    </tr>
+                    <tr>
+                        <td>의료 진단 (놓치면 안됨)</td>
+                        <td>Recall, Sensitivity</td>
+                        <td>부적합</td>
+                        <td>FN 최소화 중요</td>
+                    </tr>
+                    <tr>
+                        <td>스팸 필터 (오탐 최소화)</td>
+                        <td>Precision</td>
+                        <td>보조적</td>
+                        <td>FP 최소화 중요</td>
+                    </tr>
+                    <tr>
+                        <td>다중 클래스 분류</td>
+                        <td>Macro F1, Weighted F1</td>
+                        <td>참고용</td>
+                        <td>클래스별 균형 평가</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말해요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <div class="conv-quote">"정확도 98%라고 하셨는데, 양성 클래스가 전체의 몇 퍼센트인가요? 불균형 데이터면 F1-Score나 AUC-ROC를 같이 봐야 할 것 같습니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <div class="conv-quote">"사기 탐지처럼 양성 클래스가 희귀한 경우, 정확도보다 Precision-Recall 커브나 F1-Score가 더 적합합니다. 비즈니스 요구사항에 따라 Precision과 Recall 중 어디에 가중치를 둘지 결정해야 합니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <div class="conv-quote">"MNIST 같은 균형 데이터셋에서는 정확도가 괜찮지만, 실제 배포 환경의 데이터 분포가 다르면 성능이 급락할 수 있어요. 배포 전에 반드시 실제 분포 데이터로 재평가해야 합니다."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>정확도만 보고 모델 선택</h4>
+                        <p>불균형 데이터에서 정확도 99%인 모델이 실제로는 소수 클래스를 전혀 탐지하지 못할 수 있습니다. 반드시 혼동 행렬과 클래스별 지표를 함께 확인하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>테스트 데이터 분포 확인 안 함</h4>
+                        <p>학습 데이터와 테스트 데이터의 클래스 분포가 다르면 정확도가 왜곡됩니다. 특히 시계열 데이터에서 시간에 따른 분포 변화(Data Drift)를 주의해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">✅</div>
+                    <div class="warning-content">
+                        <h4>올바른 접근법</h4>
+                        <p>먼저 데이터 분포를 확인하고, 비즈니스 목표에 맞는 지표를 선택하세요. Balanced Accuracy, F1-Score, AUC-ROC 등 상황에 맞는 지표를 주 지표로 사용하고, 정확도는 보조 지표로 활용합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80/" class="related-term-link">모델 평가</a>
+                <a href="/ko/term/%EC%A7%80%EB%8F%84%20%ED%95%99%EC%8A%B5/" class="related-term-link">지도 학습</a>
+                <a href="/ko/term/%EB%B6%84%EB%A5%98/" class="related-term-link">분류 (Classification)</a>
+                <a href="/ko/term/%ED%98%BC%EB%8F%99%20%ED%96%89%EB%A0%AC/" class="related-term-link">혼동 행렬</a>
+                <a href="/ko/term/%EA%B5%90%EC%B0%A8%20%EA%B2%80%EC%A6%9D/" class="related-term-link">교차 검증</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" class="learn-link">
+                    📄 scikit-learn 모델 평가 공식 문서
+                </a>
+                <a href="https://developers.google.com/machine-learning/crash-course/classification" target="_blank" class="learn-link">
+                    🎓 Google ML 분류 평가 지표 가이드
+                </a>
+                <a href="https://arxiv.org/abs/2010.16061" target="_blank" class="learn-link">
+                    📝 Beyond Accuracy: Behavioral Testing of NLP Models
+                </a>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -212,6 +457,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

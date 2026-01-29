@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebAuthn | KAITRUST AI 백과사전</title>
-    <meta name="description" content="웹 인증 API 표준">
-    <meta name="keywords" content="WebAuthn, , AI 용어, KAITRUST, AI 백과사전, 보안">
+    <title>WebAuthn (Web Authentication) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="WebAuthn은 W3C와 FIDO Alliance가 표준화한 웹 인증 API입니다. 생체인식, 보안키 등 비밀번호 없는 강력한 인증을 웹에서 구현합니다. 피싱 방지와 사용자 편의성을 동시에 제공합니다.">
+    <meta name="keywords" content="WebAuthn, Web Authentication, FIDO2, 패스키, Passkey, 생체인증, 비밀번호 없는 인증, Passwordless, 보안키, Security Key, MFA, 다중 인증, 피싱 방지, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/WebAuthn/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/WebAuthn/">
-    <meta property="og:title" content="WebAuthn | KAITRUST AI 백과사전">
-    <meta property="og:description" content="웹 인증 API 표준">
+    <meta property="og:title" content="WebAuthn (Web Authentication) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="WebAuthn은 W3C와 FIDO Alliance가 표준화한 웹 인증 API입니다. 비밀번호 없는 강력한 인증을 웹에서 구현합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="WebAuthn | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="웹 인증 API 표준">
+    <meta name="twitter:title" content="WebAuthn (Web Authentication) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="WebAuthn은 W3C와 FIDO Alliance가 표준화한 웹 인증 API입니다. 비밀번호 없는 강력한 인증을 웹에서 구현합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "WebAuthn",
-        "description": "웹 인증 API 표준",
+        "alternateName": "Web Authentication",
+        "description": "WebAuthn은 W3C와 FIDO Alliance가 표준화한 웹 인증 API입니다. 비밀번호 없는 강력한 인증을 웹에서 구현합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">WebAuthn</h1>
-            
+            <p class="term-english">Web Authentication API</p>
             <div class="term-description">
-                <p>웹 인증 API 표준</p>
+                <p>W3C와 FIDO Alliance가 표준화한 웹 인증 API. 생체인식, 보안키 등을 활용해 비밀번호 없는 강력한 인증을 웹에서 구현합니다. 피싱 공격을 원천 차단하며 패스키(Passkey)의 기반 기술입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,445 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>WebAuthn(Web Authentication)은 W3C와 FIDO Alliance가 공동 개발한 웹 표준 인증 API입니다. 기존 비밀번호 기반 인증의 근본적 한계(피싱, 크레덴셜 스터핑, 재사용 공격)를 해결하기 위해 설계되었습니다. 공개키 암호화를 기반으로 하며, 사용자의 디바이스에 개인키를 안전하게 저장하고 서버에는 공개키만 전송합니다. 이 구조 덕분에 서버가 해킹당해도 사용자 인증 정보는 유출되지 않습니다.</p>
+                <p>WebAuthn의 핵심 개념은 Authenticator(인증기)입니다. 플랫폼 인증기(Platform Authenticator)는 디바이스 내장 생체인식(Face ID, Touch ID, Windows Hello)을 활용하고, 로밍 인증기(Roaming Authenticator)는 YubiKey 같은 외부 보안키를 사용합니다. 인증 과정에서 챌린지-응답 방식으로 사용자를 검증하며, 각 사이트별로 고유한 키 쌍이 생성되어 크로스 사이트 추적이 불가능합니다.</p>
+                <p>FIDO2 프로토콜의 핵심 구성요소로, WebAuthn은 브라우저 API를 담당하고 CTAP(Client to Authenticator Protocol)은 디바이스와 인증기 간 통신을 담당합니다. 2023년부터 Apple, Google, Microsoft가 연합하여 '패스키(Passkey)'라는 브랜드로 대중화하고 있습니다. 패스키는 WebAuthn 크레덴셜을 클라우드 동기화하여 여러 디바이스에서 동일한 인증 정보를 사용할 수 있게 합니다.</p>
+                <p>AI/ML 시스템에서 WebAuthn은 특히 중요합니다. 모델 학습 파이프라인, 데이터 접근, 추론 API 호출 등 민감한 작업에 비밀번호 없는 강력한 인증을 제공합니다. 자동화된 공격에 취약한 비밀번호 대신 하드웨어 기반 인증을 사용하면 ML 자산의 무단 접근을 효과적으로 차단할 수 있습니다. 엔터프라이즈 MLOps 플랫폼에서 WebAuthn MFA는 필수 보안 요구사항으로 자리잡고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="javascript">JavaScript (브라우저)</button>
+                <button class="code-tab" data-lang="nodejs">Node.js (서버)</button>
+                <button class="code-tab" data-lang="python">Python (검증)</button>
+            </div>
+            <div class="code-block active" data-lang="javascript">
+                <pre><code class="language-javascript">// WebAuthn 등록 (Registration) - 브라우저
+async function registerWebAuthn(username) {
+    // 서버에서 챌린지와 사용자 정보 요청
+    const response = await fetch('/api/webauthn/register/options', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
+    });
+    const options = await response.json();
+
+    // Base64URL 디코딩
+    options.challenge = base64urlToBuffer(options.challenge);
+    options.user.id = base64urlToBuffer(options.user.id);
+
+    // 브라우저 WebAuthn API 호출 - 생체인식/보안키 프롬프트
+    const credential = await navigator.credentials.create({
+        publicKey: {
+            rp: {
+                name: "KAITRUST",
+                id: "kaitrust.ai"  // 도메인에 바인딩
+            },
+            user: {
+                id: options.user.id,
+                name: username,
+                displayName: username
+            },
+            challenge: options.challenge,
+            pubKeyCredParams: [
+                { type: "public-key", alg: -7 },   // ES256
+                { type: "public-key", alg: -257 }  // RS256
+            ],
+            authenticatorSelection: {
+                authenticatorAttachment: "platform",  // 내장 인증기
+                userVerification: "required",         // 생체인증 필수
+                residentKey: "required"               // 패스키 지원
+            },
+            timeout: 60000,
+            attestation: "none"  // 개인정보 보호
+        }
+    });
+
+    // 서버로 크레덴셜 전송
+    const attestationResponse = {
+        id: credential.id,
+        rawId: bufferToBase64url(credential.rawId),
+        type: credential.type,
+        response: {
+            clientDataJSON: bufferToBase64url(credential.response.clientDataJSON),
+            attestationObject: bufferToBase64url(credential.response.attestationObject)
+        }
+    };
+
+    await fetch('/api/webauthn/register/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(attestationResponse)
+    });
+
+    console.log('✅ WebAuthn 등록 완료');
+}
+
+// WebAuthn 인증 (Authentication) - 브라우저
+async function authenticateWebAuthn() {
+    const response = await fetch('/api/webauthn/authenticate/options');
+    const options = await response.json();
+
+    options.challenge = base64urlToBuffer(options.challenge);
+
+    const assertion = await navigator.credentials.get({
+        publicKey: {
+            challenge: options.challenge,
+            rpId: "kaitrust.ai",
+            userVerification: "required",
+            timeout: 60000
+        }
+    });
+
+    // 서버로 어설션 전송
+    const assertionResponse = {
+        id: assertion.id,
+        rawId: bufferToBase64url(assertion.rawId),
+        type: assertion.type,
+        response: {
+            clientDataJSON: bufferToBase64url(assertion.response.clientDataJSON),
+            authenticatorData: bufferToBase64url(assertion.response.authenticatorData),
+            signature: bufferToBase64url(assertion.response.signature),
+            userHandle: assertion.response.userHandle
+                ? bufferToBase64url(assertion.response.userHandle)
+                : null
+        }
+    };
+
+    const result = await fetch('/api/webauthn/authenticate/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(assertionResponse)
+    });
+
+    return result.json();
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="nodejs">
+                <pre><code class="language-javascript">// WebAuthn 서버 구현 - Node.js (SimpleWebAuthn 라이브러리)
+import {
+    generateRegistrationOptions,
+    verifyRegistrationResponse,
+    generateAuthenticationOptions,
+    verifyAuthenticationResponse
+} from '@simplewebauthn/server';
+
+const rpName = 'KAITRUST';
+const rpID = 'kaitrust.ai';
+const origin = 'https://kaitrust.ai';
+
+// 등록 옵션 생성
+app.post('/api/webauthn/register/options', async (req, res) => {
+    const { username } = req.body;
+    const user = await db.findOrCreateUser(username);
+
+    const options = await generateRegistrationOptions({
+        rpName,
+        rpID,
+        userID: user.id,
+        userName: username,
+        userDisplayName: username,
+        attestationType: 'none',
+        authenticatorSelection: {
+            authenticatorAttachment: 'platform',
+            userVerification: 'required',
+            residentKey: 'required'
+        },
+        supportedAlgorithmIDs: [-7, -257]  // ES256, RS256
+    });
+
+    // 챌린지 임시 저장 (세션 또는 Redis)
+    await redis.set(`webauthn:challenge:${user.id}`, options.challenge, 'EX', 300);
+
+    res.json(options);
+});
+
+// 등록 검증
+app.post('/api/webauthn/register/verify', async (req, res) => {
+    const { body } = req;
+    const user = req.session.user;
+    const expectedChallenge = await redis.get(`webauthn:challenge:${user.id}`);
+
+    try {
+        const verification = await verifyRegistrationResponse({
+            response: body,
+            expectedChallenge,
+            expectedOrigin: origin,
+            expectedRPID: rpID
+        });
+
+        if (verification.verified) {
+            // 공개키 저장
+            await db.saveCredential({
+                credentialID: verification.registrationInfo.credentialID,
+                credentialPublicKey: verification.registrationInfo.credentialPublicKey,
+                counter: verification.registrationInfo.counter,
+                userId: user.id
+            });
+
+            res.json({ success: true });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// 인증 옵션 생성
+app.get('/api/webauthn/authenticate/options', async (req, res) => {
+    const options = await generateAuthenticationOptions({
+        rpID,
+        userVerification: 'required',
+        timeout: 60000
+    });
+
+    await redis.set(`webauthn:auth:challenge`, options.challenge, 'EX', 300);
+    res.json(options);
+});
+
+// 인증 검증
+app.post('/api/webauthn/authenticate/verify', async (req, res) => {
+    const { body } = req;
+    const expectedChallenge = await redis.get(`webauthn:auth:challenge`);
+    const credential = await db.findCredential(body.id);
+
+    const verification = await verifyAuthenticationResponse({
+        response: body,
+        expectedChallenge,
+        expectedOrigin: origin,
+        expectedRPID: rpID,
+        authenticator: {
+            credentialID: credential.credentialID,
+            credentialPublicKey: credential.credentialPublicKey,
+            counter: credential.counter
+        }
+    });
+
+    if (verification.verified) {
+        // 카운터 업데이트 (리플레이 공격 방지)
+        await db.updateCredentialCounter(
+            credential.id,
+            verification.authenticationInfo.newCounter
+        );
+
+        // JWT 토큰 발급
+        const token = jwt.sign({ userId: credential.userId }, process.env.JWT_SECRET);
+        res.json({ success: true, token });
+    }
+});</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># WebAuthn 서버 검증 - Python (py_webauthn 라이브러리)
+from webauthn import (
+    generate_registration_options,
+    verify_registration_response,
+    generate_authentication_options,
+    verify_authentication_response,
+    options_to_json
+)
+from webauthn.helpers.structs import (
+    AuthenticatorSelectionCriteria,
+    UserVerificationRequirement,
+    ResidentKeyRequirement,
+    PublicKeyCredentialDescriptor
+)
+import json
+
+RP_ID = "kaitrust.ai"
+RP_NAME = "KAITRUST"
+ORIGIN = "https://kaitrust.ai"
+
+# 등록 옵션 생성
+def create_registration_options(user_id: str, username: str):
+    options = generate_registration_options(
+        rp_id=RP_ID,
+        rp_name=RP_NAME,
+        user_id=user_id.encode(),
+        user_name=username,
+        user_display_name=username,
+        authenticator_selection=AuthenticatorSelectionCriteria(
+            user_verification=UserVerificationRequirement.REQUIRED,
+            resident_key=ResidentKeyRequirement.REQUIRED
+        )
+    )
+    # 챌린지 저장 (Redis 또는 세션)
+    redis_client.setex(
+        f"webauthn:register:{user_id}",
+        300,
+        options.challenge
+    )
+    return options_to_json(options)
+
+# 등록 응답 검증
+def verify_registration(user_id: str, credential: dict):
+    expected_challenge = redis_client.get(f"webauthn:register:{user_id}")
+
+    verification = verify_registration_response(
+        credential=credential,
+        expected_challenge=expected_challenge,
+        expected_rp_id=RP_ID,
+        expected_origin=ORIGIN,
+        require_user_verification=True
+    )
+
+    # DB에 크레덴셜 저장
+    db.credentials.insert_one({
+        "user_id": user_id,
+        "credential_id": verification.credential_id,
+        "public_key": verification.credential_public_key,
+        "sign_count": verification.sign_count,
+        "created_at": datetime.utcnow()
+    })
+
+    return {"success": True, "credential_id": verification.credential_id.hex()}
+
+# 인증 옵션 생성
+def create_authentication_options(user_id: str = None):
+    # 사용자의 등록된 크레덴셜 조회
+    allow_credentials = []
+    if user_id:
+        creds = db.credentials.find({"user_id": user_id})
+        allow_credentials = [
+            PublicKeyCredentialDescriptor(id=c["credential_id"])
+            for c in creds
+        ]
+
+    options = generate_authentication_options(
+        rp_id=RP_ID,
+        user_verification=UserVerificationRequirement.REQUIRED,
+        allow_credentials=allow_credentials
+    )
+
+    redis_client.setex("webauthn:auth:challenge", 300, options.challenge)
+    return options_to_json(options)
+
+# 인증 응답 검증
+def verify_authentication(credential: dict):
+    expected_challenge = redis_client.get("webauthn:auth:challenge")
+    stored_cred = db.credentials.find_one({
+        "credential_id": bytes.fromhex(credential["id"])
+    })
+
+    verification = verify_authentication_response(
+        credential=credential,
+        expected_challenge=expected_challenge,
+        expected_rp_id=RP_ID,
+        expected_origin=ORIGIN,
+        credential_public_key=stored_cred["public_key"],
+        credential_current_sign_count=stored_cred["sign_count"],
+        require_user_verification=True
+    )
+
+    # 서명 카운터 업데이트
+    db.credentials.update_one(
+        {"_id": stored_cred["_id"]},
+        {"$set": {"sign_count": verification.new_sign_count}}
+    )
+
+    return {
+        "success": True,
+        "user_id": stored_cred["user_id"]
+    }</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 인증 시스템 개선 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "비밀번호 유출 사고가 계속되니 WebAuthn으로 패스키 로그인을 도입합시다. 사용자는 Face ID나 Touch ID로 한 번 터치하면 되고, 서버에는 공개키만 저장되니까 유출되어도 문제없어요. 피싱도 원천 차단됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 MLOps 보안 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "모델 학습 파이프라인 접근에 WebAuthn MFA를 적용해야 합니다. 자동화 스크립트로 비밀번호 탈취하는 공격이 늘고 있는데, 하드웨어 인증기 기반 WebAuthn은 물리적 접근 없이는 뚫을 수 없어요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 UX 팀과 협업 시</div>
+                    <blockquote class="conv-quote">
+                        "WebAuthn 패스키는 비밀번호보다 UX가 훨씬 좋습니다. 사용자가 복잡한 비밀번호 기억할 필요 없이 생체인식 한 번이면 끝이에요. 가입 전환율과 로그인 성공률 모두 올라갈 겁니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>비밀번호 폴백 없이 WebAuthn만 강제</strong>
+                        <p>아직 모든 브라우저/디바이스가 WebAuthn을 지원하지 않습니다. 초기에는 비밀번호 + WebAuthn MFA 옵션으로 시작하고, 점진적으로 패스키 전용으로 전환하세요. 계정 복구 방안도 필수입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>챌린지 재사용 또는 검증 누락</strong>
+                        <p>챌린지는 매 요청마다 새로 생성하고 짧은 TTL로 관리해야 합니다. 리플레이 공격 방지를 위해 서명 카운터를 반드시 확인하고 업데이트하세요. 카운터가 감소하면 복제 공격 의심입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>rpId 설정 오류</strong>
+                        <p>rpId는 도메인에 바인딩되며, 서브도메인은 상위 도메인의 rpId를 사용할 수 있지만 반대는 불가능합니다. 멀티 사이트 환경에서는 rpId 전략을 신중하게 계획하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>WebAuthn 베스트 프랙티스</strong>
+                        <p>residentKey: required로 패스키를 지원하고, userVerification: required로 생체인증을 강제하세요. attestation은 개인정보 보호를 위해 none으로 설정하고, 여러 인증기 등록을 허용하여 디바이스 분실에 대비하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+                <a href="/ko/term/MFA/" class="related-term-link">MFA</a>
+                <a href="/ko/term/OAuth/" class="related-term-link">OAuth</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+                <a href="/ko/term/%EC%95%94%ED%98%B8%ED%99%94/" class="related-term-link">암호화</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://webauthn.guide/" target="_blank" class="learn-link">
+                    📄 WebAuthn.guide - 개발자 가이드
+                </a>
+                <a href="https://passkeys.dev/" target="_blank" class="learn-link">
+                    🎓 Passkeys.dev - 패스키 구현 리소스
+                </a>
+                <a href="https://fidoalliance.org/specifications/" target="_blank" class="learn-link">
+                    📖 FIDO Alliance - 공식 스펙 문서
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +785,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

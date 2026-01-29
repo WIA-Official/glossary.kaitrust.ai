@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Express.js (Express) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="Node.js 웹 프레임워크. 미니멀리스트 설계. 미들웨어 기반 아키텍처.">
-    <meta name="keywords" content="Express.js, Express, AI 용어, KAITRUST, AI 백과사전, 웹개발">
+    <title>Express.js | Node.js 웹 프레임워크 | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Express.js는 Node.js를 위한 미니멀리스트 웹 프레임워크입니다. 미들웨어 기반 아키텍처로 라우팅, 에러 처리, 템플릿 렌더링 등 웹 애플리케이션 기능을 유연하게 구성합니다.">
+    <meta name="keywords" content="Express.js, Express, 익스프레스, Node.js, 미들웨어, 라우팅, REST API, 백엔드 프레임워크, req res, app.use, 에러 핸들링, CORS, body-parser, 웹개발">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Express.js/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Express.js/">
-    <meta property="og:title" content="Express.js (Express) | KAITRUST AI 백과사전">
+    <meta property="og:title" content="Express.js (익스프레스) | KAITRUST AI 백과사전">
     <meta property="og:description" content="Node.js 웹 프레임워크. 미니멀리스트 설계. 미들웨어 기반 아키텍처.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
@@ -19,7 +19,7 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Express.js (Express) | KAITRUST AI 백과사전">
+    <meta name="twitter:title" content="Express.js (익스프레스) | KAITRUST AI 백과사전">
     <meta name="twitter:description" content="Node.js 웹 프레임워크. 미니멀리스트 설계. 미들웨어 기반 아키텍처.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
@@ -41,175 +41,217 @@
     <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
     <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <!-- Common CSS -->
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+        .section-title .icon { font-size: 1.5rem; }
+        .detail-paragraph { color: #cbd5e1; line-height: 1.9; margin-bottom: 1.25rem; font-size: 1.05rem; }
+        .detail-paragraph:last-child { margin-bottom: 0; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; padding: 1.5rem; overflow-x: auto; border: 1px solid rgba(168, 85, 247, 0.2); }
+        .code-block pre { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 8px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-example { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+        .conversation-example:last-child { margin-bottom: 0; }
+        .conversation-label { font-size: 0.85rem; font-weight: 600; color: #a855f7; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .conversation-text { color: #e2e8f0; font-size: 1rem; line-height: 1.7; padding-left: 1.5rem; border-left: 2px solid rgba(168, 85, 247, 0.3); }
+        .warning-list { list-style: none; padding: 0; margin: 0; }
+        .warning-list li { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 10px; margin-bottom: 0.75rem; color: #fca5a5; }
+        .warning-list li:last-child { margin-bottom: 0; }
+        .warning-icon { font-size: 1.2rem; flex-shrink: 0; }
+        .related-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+        .related-link { display: flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.25rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 10px; color: #c4b5fd; text-decoration: none; transition: all 0.2s; font-size: 0.95rem; }
+        .related-link:hover { background: rgba(168, 85, 247, 0.2); border-color: rgba(168, 85, 247, 0.4); transform: translateY(-2px); }
+        .resource-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .resource-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 10px; color: #93c5fd; text-decoration: none; transition: all 0.2s; }
+        .resource-link:hover { background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4); }
+        .resource-icon { font-size: 1.2rem; }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } .term-section { padding: 1.5rem; } .related-links { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#web">웹개발</a>
-            <span>›</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai/#web">웹개발</a><span>›</span>
             <span class="current">Express.js</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>🌐</span>
-                <span>웹개발</span>
-            </div>
+            <div class="term-category-badge"><span>🌐</span><span>웹개발</span></div>
             <h1 class="term-title">Express.js</h1>
-            <p class="term-english">Express</p>
+            <p class="term-english">익스프레스</p>
             <div class="term-description">
                 <p>Node.js 웹 프레임워크. 미니멀리스트 설계. 미들웨어 기반 아키텍처.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#web" class="term-action-btn btn-secondary">
-                    🌐 웹개발 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#web" class="term-action-btn btn-secondary">🌐 웹개발 더보기</a>
             </div>
         </article>
+
+        <section class="term-section">
+            <h2 class="section-title"><span class="icon">📖</span>상세 설명</h2>
+            <p class="detail-paragraph">
+                Express.js는 2010년 출시된 Node.js의 사실상 표준 웹 프레임워크입니다. npm에서 주간 다운로드 3,000만 이상을 기록하며, Node.js 백엔드의 약 70%가 Express를 사용합니다. 미니멀하고 유연한 설계로 다양한 미들웨어를 조합해 원하는 기능을 구축할 수 있습니다.
+            </p>
+            <p class="detail-paragraph">
+                핵심 개념은 미들웨어 체인입니다. 요청(req)과 응답(res)을 순차적으로 처리하며, next() 함수로 다음 미들웨어에 제어권을 넘깁니다. 로깅, 인증, CORS, 에러 처리 등 공통 로직을 미들웨어로 분리해 재사용할 수 있습니다.
+            </p>
+            <p class="detail-paragraph">
+                Express 4.x는 오랫동안 안정 버전으로 유지되고 있으며, 5.x가 알파 단계입니다. 대규모 생태계 덕분에 passport(인증), multer(파일 업로드), helmet(보안), cors 등 거의 모든 기능의 미들웨어가 존재합니다. NestJS, Feathers 같은 상위 프레임워크도 Express를 기반으로 합니다.
+            </p>
+            <p class="detail-paragraph">
+                단점으로는 TypeScript 지원이 네이티브가 아니고, 비동기 에러 처리가 번거로우며, 성능이 Fastify 등 후발 프레임워크 대비 낮습니다. 하지만 압도적인 생태계와 레퍼런스 덕분에 여전히 가장 널리 사용되는 선택지입니다.
+            </p>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title"><span class="icon">💻</span>코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// Express.js 미들웨어 기반 API 서버
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+
+const app = express();
+
+// 글로벌 미들웨어
+app.use(helmet()); // 보안 헤더
+app.use(cors({ origin: 'https://myapp.com' }));
+app.use(express.json()); // JSON 파싱
+
+// 커스텀 로깅 미들웨어
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
+  next();
+});
+
+// 인증 미들웨어
+const authMiddleware = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ error: 'Token required' });
+  }
+  try {
+    req.user = verifyToken(token);
+    next();
+  } catch {
+    res.status(403).json({ error: 'Invalid token' });
+  }
+};
+
+// 라우트 정의
+app.get('/api/public', (req, res) => {
+  res.json({ message: 'Public data' });
+});
+
+app.get('/api/protected', authMiddleware, (req, res) => {
+  res.json({ user: req.user, message: 'Protected data' });
+});
+
+// 비동기 라우트 (Express 4.x에서는 try-catch 필요)
+app.get('/api/users/:id', async (req, res, next) => {
+  try {
+    const user = await db.users.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: 'Not found' });
+    res.json(user);
+  } catch (error) {
+    next(error); // 에러 미들웨어로 전달
+  }
+});
+
+// 에러 처리 미들웨어 (4개 인자 필수)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+app.listen(3000, () => console.log('Server running on :3000'));</code></pre>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title"><span class="icon">🗣️</span>실무 대화 예시</h2>
+            <div class="conversation-example">
+                <div class="conversation-label"><span>💼</span><span>프로젝트 킥오프에서</span></div>
+                <p class="conversation-text">"백엔드는 Express로 가려고 해요. 팀원들 대부분 Express 경험 있고, 필요한 미들웨어가 다 있어서 빠르게 MVP 만들 수 있습니다. 성능이 크리티컬해지면 그때 Fastify 마이그레이션 고려해도 늦지 않아요."</p>
+            </div>
+            <div class="conversation-example">
+                <div class="conversation-label"><span>🎯</span><span>기술 면접에서</span></div>
+                <p class="conversation-text">"면접관: Express 미들웨어의 실행 순서를 설명해주세요.<br><br>지원자: app.use()로 등록된 순서대로 실행됩니다. 각 미들웨어는 next()를 호출해야 다음 미들웨어로 넘어가고, next()를 호출하지 않으면 체인이 멈춥니다. 에러 미들웨어는 4개 인자를 가지며, next(error) 호출 시 일반 미들웨어를 건너뛰고 에러 미들웨어로 갑니다."</p>
+            </div>
+            <div class="conversation-example">
+                <div class="conversation-label"><span>🔍</span><span>코드 리뷰에서</span></div>
+                <p class="conversation-text">"async 라우트 핸들러에서 try-catch 없이 await 쓰고 있는데, Express 4.x는 프로미스 리젝션을 자동 캐치 안 해요. express-async-errors 패키지를 쓰거나 모든 async 핸들러를 try-catch로 감싸주세요."</p>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title"><span class="icon">⚠️</span>주의사항</h2>
+            <ul class="warning-list">
+                <li><span class="warning-icon">🚫</span><div><strong>비동기 에러 미처리:</strong> Express 4.x는 async/await 에러를 자동 처리하지 않습니다. try-catch로 감싸거나 express-async-errors 패키지를 사용하세요.</div></li>
+                <li><span class="warning-icon">🚫</span><div><strong>미들웨어 순서:</strong> 미들웨어 등록 순서가 중요합니다. body-parser는 라우트보다 먼저, 에러 처리 미들웨어는 가장 마지막에 등록해야 합니다.</div></li>
+                <li><span class="warning-icon">🚫</span><div><strong>보안 미들웨어 누락:</strong> Express 자체는 보안 기능이 없습니다. helmet, cors, rate-limiter 등 보안 미들웨어를 반드시 추가하세요.</div></li>
+            </ul>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title"><span class="icon">🔗</span>관련 용어</h2>
+            <div class="related-links">
+                <a href="/ko/term/Middleware/" class="related-link"><span>⚙️</span><span>Middleware</span></a>
+                <a href="/ko/term/REST%20API/" class="related-link"><span>🔌</span><span>REST API</span></a>
+                <a href="/ko/term/Cookie/" class="related-link"><span>🍪</span><span>Cookie</span></a>
+                <a href="/ko/term/CORS/" class="related-link"><span>🔒</span><span>CORS</span></a>
+                <a href="/ko/term/Hono/" class="related-link"><span>🔥</span><span>Hono</span></a>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title"><span class="icon">📚</span>더 배우기</h2>
+            <div class="resource-list">
+                <a href="https://expressjs.com/" target="_blank" rel="noopener noreferrer" class="resource-link"><span class="resource-icon">📖</span><span>Express.js 공식 문서</span></a>
+                <a href="https://expressjs.com/en/guide/using-middleware.html" target="_blank" rel="noopener noreferrer" class="resource-link"><span class="resource-icon">⚙️</span><span>미들웨어 가이드</span></a>
+                <a href="https://expressjs.com/en/advanced/best-practice-security.html" target="_blank" rel="noopener noreferrer" class="resource-link"><span class="resource-icon">🔐</span><span>보안 모범 사례</span></a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>function copyCode(btn) { const codeBlock = btn.parentElement.querySelector('code'); navigator.clipboard.writeText(codeBlock.textContent).then(() => { btn.textContent = '✅ 복사됨!'; setTimeout(() => btn.textContent = '📋 복사', 2000); }); }</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

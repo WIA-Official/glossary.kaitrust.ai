@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,248 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>BGP(Border Gateway Protocol)는 인터넷을 구성하는 수만 개의 자율시스템(AS, Autonomous System) 간에 라우팅 정보를 교환하는 프로토콜입니다. 인터넷의 "우체국 시스템"이라 불리며, 전 세계 네트워크가 서로 통신할 수 있도록 최적의 경로를 결정합니다. DNS가 인터넷의 전화번호부라면, BGP는 실제 데이터가 이동하는 도로를 설계하는 역할을 합니다.</p>
+                <p>BGP는 크게 두 종류로 나뉩니다. eBGP(External BGP)는 서로 다른 AS 간에 라우팅 정보를 교환하며, 일반적으로 ISP와 기업, 또는 ISP 간의 피어링에 사용됩니다. iBGP(Internal BGP)는 같은 AS 내부에서 외부로부터 학습한 경로를 전파하는 데 사용됩니다. AS 번호(ASN)는 IANA에서 할당하며, 2바이트(0-65535)에서 4바이트(최대 42억)로 확장되었습니다.</p>
+                <p>BGP의 경로 선택 알고리즘은 여러 속성을 기반으로 최적 경로를 결정합니다. LOCAL_PREF(높을수록 선호), AS_PATH(짧을수록 선호), MED(낮을수록 선호), ORIGIN(IGP > EGP > incomplete), WEIGHT(Cisco 전용) 등의 속성을 순차적으로 비교합니다. 이 복잡한 알고리즘 덕분에 네트워크 관리자는 트래픽 흐름을 세밀하게 제어할 수 있습니다.</p>
+                <p>BGP의 취약점으로 인한 대형 장애가 반복적으로 발생합니다. 2021년 10월 Facebook(Meta)은 BGP 설정 오류로 약 6시간 동안 전 세계적으로 서비스가 중단되었고, 수십억 달러의 손실이 발생했습니다. BGP Hijacking은 악의적인 AS가 잘못된 경로를 광고하여 트래픽을 가로채는 공격으로, 2018년 Amazon Route 53 하이재킹으로 약 15만 달러의 암호화폐가 탈취되기도 했습니다. 이를 방지하기 위해 RPKI(Resource Public Key Infrastructure)와 ROA(Route Origin Authorization) 등의 보안 메커니즘이 도입되고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="bash">Bash/CLI</button>
+                <button class="code-tab" data-lang="cisco">Cisco IOS</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># pip install pybgpstream (BGP 데이터 분석)
+from pybgpstream import BGPStream
+
+# BGP 업데이트 스트림 분석
+stream = BGPStream(
+    from_time="2021-10-04 15:00:00",
+    until_time="2021-10-04 22:00:00",
+    collectors=["route-views2", "rrc00"],
+    record_type="updates",
+    filter="prefix more 32.0.0.0/8"  # Facebook 관련 프리픽스
+)
+
+# BGP 메시지 파싱
+for elem in stream:
+    if elem.type == "A":  # Announcement
+        print(f"Announce: {elem.fields['prefix']}")
+        print(f"  AS Path: {elem.fields['as-path']}")
+        print(f"  Origin AS: {elem.peer_asn}")
+    elif elem.type == "W":  # Withdrawal
+        print(f"Withdraw: {elem.fields['prefix']}")
+
+# ExaBGP로 BGP 스피커 구현 (exabgp.conf)
+"""
+neighbor 192.168.1.1 {
+    router-id 10.0.0.1;
+    local-address 10.0.0.2;
+    local-as 65001;
+    peer-as 65002;
+
+    static {
+        route 203.0.113.0/24 next-hop self;
+        route 198.51.100.0/24 next-hop self community [65001:100];
+    }
+}
+"""
+
+# RPKI 검증 (routinator 사용)
+import requests
+
+def check_rpki_validity(prefix, asn):
+    """RPKI ROA 검증"""
+    url = f"https://rpki-validator.ripe.net/api/v1/validity/{asn}/{prefix}"
+    response = requests.get(url)
+    data = response.json()
+    return data.get("validated_route", {}).get("validity", {}).get("state")
+
+# 예시: AS15169(Google)의 8.8.8.0/24 검증
+result = check_rpki_validity("8.8.8.0/24", 15169)
+print(f"RPKI Status: {result}")  # valid, invalid, or not-found</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># BGP 라우팅 테이블 조회 (Looking Glass)
+# 공개 BGP Looking Glass 서비스 사용
+
+# whois로 AS 정보 조회
+whois -h whois.radb.net AS15169  # Google AS 정보
+whois -h whois.radb.net 8.8.8.0/24  # IP 프리픽스 소유자
+
+# bgpq4로 프리픽스 리스트 생성 (ISP 필터링용)
+bgpq4 -4 -l prefix_list AS-GOOGLE  # Google의 IPv4 프리픽스
+
+# RIPE RIS Live BGP 스트림 (WebSocket)
+websocat "wss://ris-live.ripe.net/v1/ws/?client=cli-example" | \
+  jq 'select(.data.type == "UPDATE")'
+
+# BGP 경로 추적 (traceroute + AS 정보)
+mtr --aslookup google.com
+
+# RPKI 검증 상태 확인
+curl "https://stat.ripe.net/data/rpki-validation/data.json?resource=8.8.8.0/24&prefix=8.8.8.0/24"
+
+# BGP 업데이트 모니터링 (bgpstream)
+bgpreader -w 1633356000,1633377600 \
+  -c route-views2 \
+  -p 32.0.0.0/8 \
+  | head -100
+
+# AS 경로 분석
+traceroute -A google.com  # AS 번호 표시
+
+# BGP 세션 상태 확인 (Linux FRRouting)
+sudo vtysh -c "show bgp summary"
+sudo vtysh -c "show ip bgp neighbors"
+sudo vtysh -c "show ip bgp"</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="cisco">
+                <pre><code class="language-cisco"># Cisco IOS BGP 기본 설정
+
+# BGP 라우터 설정
+router bgp 65001                        # 자신의 AS 번호
+  bgp router-id 10.0.0.1               # 라우터 ID
+  bgp log-neighbor-changes             # 네이버 상태 변화 로깅
+
+  # eBGP 네이버 설정 (외부 AS)
+  neighbor 192.168.1.1 remote-as 65002
+  neighbor 192.168.1.1 description ISP_A
+  neighbor 192.168.1.1 password MySecretPassword
+  neighbor 192.168.1.1 ebgp-multihop 2
+
+  # iBGP 네이버 설정 (같은 AS)
+  neighbor 10.0.0.2 remote-as 65001
+  neighbor 10.0.0.2 update-source Loopback0
+  neighbor 10.0.0.2 next-hop-self
+
+  # 네트워크 광고
+  network 203.0.113.0 mask 255.255.255.0
+
+  # 경로 필터링 (Prefix-list)
+  neighbor 192.168.1.1 prefix-list ALLOWED-IN in
+  neighbor 192.168.1.1 prefix-list ALLOWED-OUT out
+
+# Prefix-list 정의
+ip prefix-list ALLOWED-IN seq 10 permit 0.0.0.0/0 le 24
+ip prefix-list ALLOWED-IN seq 20 deny 0.0.0.0/0 le 32
+ip prefix-list ALLOWED-OUT seq 10 permit 203.0.113.0/24
+
+# Route-map으로 LOCAL_PREF 설정
+route-map SET-LOCAL-PREF permit 10
+  set local-preference 200
+!
+neighbor 192.168.1.1 route-map SET-LOCAL-PREF in
+
+# BGP 상태 확인 명령어
+show ip bgp summary                    # BGP 세션 요약
+show ip bgp neighbors                  # 네이버 상세 정보
+show ip bgp                           # BGP 라우팅 테이블
+show ip bgp 8.8.8.0/24                # 특정 프리픽스 경로
+clear ip bgp * soft                   # BGP 세션 소프트 리셋</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 네트워크 장애 분석 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "BGP Looking Glass로 확인해보니 우리 프리픽스가 업스트림 ISP에서 철회(withdraw)된 것 같습니다. AS Path에서 우리 ASN이 사라졌어요. 피어링 세션 상태를 확인하고, 필요하면 BGP 세션을 hard reset 해봐야 할 것 같습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 팀 미팅에서</div>
+                    <blockquote class="conv-quote">
+                        "최근 BGP Hijacking 시도가 감지되었습니다. RPKI ROA를 설정해서 우리 프리픽스의 origin AS를 인증하고, 업스트림 ISP에 ROV(Route Origin Validation) 활성화를 요청해야 합니다. MANRS 이니셔티브 가입도 검토해 주세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 설계 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "멀티호밍 구성을 위해 두 ISP와 BGP 피어링을 맺고, AS-prepending으로 트래픽 분산을 조절하려고 합니다. 주 ISP에는 LOCAL_PREF 200을, 백업 ISP에는 100을 설정해서 아웃바운드 트래픽 우선순위를 정하고, 인바운드는 AS Path 길이로 제어할 계획입니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>BGP 설정 변경 후 테스트 없이 배포</strong>
+                        <p>Facebook 2021년 장애는 설정 변경 스크립트의 버그로 모든 BGP 세션이 끊어져 발생했습니다. 변경 전 반드시 lab 환경에서 테스트하고, 롤백 계획을 수립하세요. 'commit confirm' 같은 자동 롤백 기능을 활용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>프리픽스 필터링 없이 피어링</strong>
+                        <p>필터 없이 BGP 세션을 열면 route leak이나 hijacking에 취약합니다. 반드시 prefix-list와 as-path 필터를 적용하고, bogon 프리픽스(0.0.0.0/8, 10.0.0.0/8, 224.0.0.0/4 등)를 차단하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>iBGP Full Mesh 미구성</strong>
+                        <p>iBGP는 학습한 경로를 다른 iBGP 피어에게 재광고하지 않습니다(split horizon). N개 라우터가 있으면 N*(N-1)/2 세션이 필요하거나, Route Reflector 또는 Confederation을 구성해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>BGP 보안 모범 사례</strong>
+                        <p>RPKI/ROA로 프리픽스 origin 인증, BGP 세션에 MD5 인증 또는 TCP-AO 적용, GTSM(TTL 보안)으로 원격 세션 스푸핑 방지, maximum-prefix 설정으로 route leak 대응. MANRS(Mutually Agreed Norms for Routing Security) 가이드라인을 따르세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/DNS/" class="related-term-link">DNS</a>
+                <a href="/ko/term/IP/" class="related-term-link">IP</a>
+                <a href="/ko/term/TCP/" class="related-term-link">TCP</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/security/glossary/what-is-bgp/" target="_blank" class="learn-link">
+                    📄 Cloudflare - BGP란 무엇인가?
+                </a>
+                <a href="https://engineering.fb.com/2021/10/05/networking-traffic/outage-details/" target="_blank" class="learn-link">
+                    🎓 Facebook 2021년 BGP 장애 분석 (공식)
+                </a>
+                <a href="https://www.manrs.org/resources/" target="_blank" class="learn-link">
+                    📖 MANRS - 라우팅 보안 가이드라인
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +596,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

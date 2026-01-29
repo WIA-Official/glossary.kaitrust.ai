@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,184 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Nginx(Engine X로 발음)는 고성능 HTTP 서버, 리버스 프록시, 로드 밸런서, 메일 프록시로 사용되는 오픈소스 소프트웨어입니다. 이벤트 기반 비동기 아키텍처로 동시 연결을 효율적으로 처리하며, Apache보다 적은 메모리로 더 많은 요청을 처리할 수 있어 현대 웹 인프라의 표준이 되었습니다.</p>
+                <p>Nginx의 주요 용도는 정적 파일 서빙, 리버스 프록시, 로드 밸런싱, SSL 종료입니다. 정적 파일(HTML, CSS, JS, 이미지)을 빠르게 서빙하고, 동적 요청은 백엔드 애플리케이션 서버(Node.js, Python, Java 등)로 프록시합니다. 여러 백엔드 서버 간 트래픽을 분산하는 로드 밸런서 역할도 합니다.</p>
+                <p>리버스 프록시로서 Nginx는 클라이언트와 백엔드 사이에 위치하여 SSL 인증서 관리, 요청 압축, 캐싱, 보안 헤더 추가 같은 공통 기능을 처리합니다. 백엔드 서버는 비즈니스 로직에만 집중할 수 있고, Nginx가 웹 계층 관심사를 담당합니다.</p>
+                <p>Kubernetes 환경에서는 Nginx Ingress Controller가 외부 트래픽을 클러스터 내부 서비스로 라우팅합니다. 도메인 기반 라우팅, 경로 기반 라우팅, TLS 종료, rate limiting 등을 Kubernetes 리소스로 선언적으로 관리합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="nginx">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># /etc/nginx/nginx.conf - 프로덕션 설정 예제
+user nginx;
+worker_processes auto;  # CPU 코어 수에 맞게 자동 설정
+error_log /var/log/nginx/error.log warn;
+
+events {
+    worker_connections 4096;  # 동시 연결 수
+    use epoll;  # Linux 최적화
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    # 로그 포맷 (JSON)
+    log_format json_combined escape=json '{"time":"$time_iso8601",'
+        '"remote_addr":"$remote_addr","method":"$request_method",'
+        '"uri":"$uri","status":$status,"body_bytes_sent":$body_bytes_sent,'
+        '"request_time":$request_time,"upstream_time":"$upstream_response_time"}';
+
+    access_log /var/log/nginx/access.log json_combined;
+
+    # 성능 최적화
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    gzip on;
+    gzip_types text/plain application/json application/javascript text/css;
+
+    # Upstream 백엔드 정의
+    upstream api_backend {
+        least_conn;  # 연결 수 기반 로드밸런싱
+        server api-1:8080 weight=3;
+        server api-2:8080 weight=2;
+        server api-3:8080 backup;
+        keepalive 32;  # 연결 재사용
+    }
+
+    server {
+        listen 80;
+        server_name example.com;
+        return 301 https://$server_name$request_uri;  # HTTPS 리다이렉트
+    }
+
+    server {
+        listen 443 ssl http2;
+        server_name example.com;
+
+        ssl_certificate /etc/nginx/ssl/cert.pem;
+        ssl_certificate_key /etc/nginx/ssl/key.pem;
+        ssl_protocols TLSv1.2 TLSv1.3;
+
+        # 정적 파일
+        location /static/ {
+            alias /var/www/static/;
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+
+        # API 프록시
+        location /api/ {
+            proxy_pass http://api_backend;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+
+            # 타임아웃
+            proxy_connect_timeout 5s;
+            proxy_read_timeout 60s;
+        }
+    }
+}</code></pre>
+            </div>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Kubernetes Ingress 설정 예제
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [api.example.com]
+      secretName: api-tls
+  rules:
+    - host: api.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 80</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">DevOps:</strong> "API 서버 앞에 Nginx 붙여서 SSL 종료랑 rate limiting 처리하자. 애플리케이션에서 직접 처리하면 부담이야."</p>
+                <p><strong class="role-junior">주니어:</strong> "그럼 Nginx에서 인증서 갱신은 어떻게 하나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "cert-manager랑 Let's Encrypt 연동하면 자동으로 갱신돼요. Kubernetes라면 Ingress에 어노테이션만 붙이면 되고요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Nginx로 고가용성 구성을 해본 경험이 있나요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "네, Nginx를 리버스 프록시로 써서 3대의 API 서버로 로드밸런싱했습니다. upstream에 health_check를 설정해서 장애 서버는 자동으로 제외되게 했고, keepalive로 연결을 재사용해서 latency를 줄였습니다. SSL은 Nginx에서 종료하고 백엔드는 HTTP 통신해서 인증서 관리를 단순화했어요."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "proxy_pass에 trailing slash 주의하세요. `location /api/`에 `proxy_pass http://backend;`면 /api/가 포함되지만, `proxy_pass http://backend/;`면 /api/가 제거돼요."</p>
+                <p><strong class="role-author">작성자:</strong> "아, 그래서 백엔드에서 /api/ 붙은 채로 오는 거였군요. trailing slash 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>설정 변경 후 반드시 `nginx -t`로 문법 검사 후 reload하세요. 문법 오류가 있으면 Nginx가 재시작되지 않아 서비스 장애가 발생할 수 있습니다.</li>
+                <li>proxy_pass URL의 trailing slash 유무에 따라 경로 처리가 달라집니다. 의도와 다르게 동작하는 경우가 많으니 꼭 테스트하세요.</li>
+                <li class="info">파일 업로드가 있는 서비스라면 client_max_body_size를 적절히 설정하세요. 기본값 1MB로는 이미지 업로드도 실패합니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Load%20Balancer/" class="related-link">Load Balancer</a>
+                <a href="/ko/term/Reverse%20Proxy/" class="related-link">Reverse Proxy</a>
+                <a href="/ko/term/Kubernetes/" class="related-link">Kubernetes</a>
+                <a href="/ko/term/SSL%2FTLS/" class="related-link">SSL/TLS</a>
+                <a href="/ko/term/CDN/" class="related-link">CDN</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://nginx.org/en/docs/" target="_blank">Nginx 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://kubernetes.github.io/ingress-nginx/" target="_blank">Nginx Ingress Controller 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching" target="_blank">Nginx 리버스 프록시 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +391,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

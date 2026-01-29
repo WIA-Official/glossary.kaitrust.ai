@@ -161,6 +161,35 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table td { color: #cbd5e1; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
     </style>
 </head>
 <body>
@@ -202,6 +231,202 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Kubeflow는 Kubernetes 위에서 ML 워크플로우를 구축, 배포, 관리하기 위한 오픈소스 플랫폼입니다. Google이 2017년 시작한 프로젝트로, ML 파이프라인의 End-to-End 자동화를 목표로 합니다. 현재 CNCF(Cloud Native Computing Foundation) 프로젝트입니다.</p>
+                <p>기존 ML 개발의 문제는 "내 노트북에서는 돌아가는데 프로덕션에서 안 됨" 이었습니다. Kubeflow는 컨테이너 기반으로 환경 일관성을 보장하고, 실험부터 배포까지 동일한 플랫폼에서 관리합니다.</p>
+                <p>핵심 컴포넌트: Kubeflow Pipelines(워크플로우 DAG), KServe(모델 서빙), Katib(하이퍼파라미터 튜닝), Training Operators(분산학습). 각각 독립 배포 가능하며, 필요한 것만 선택적으로 사용할 수 있습니다.</p>
+                <p>실무에서 Kubeflow는 대규모 ML 팀의 표준 인프라입니다. 데이터 전처리 → 학습 → 평가 → 배포 파이프라인을 코드로 정의하고, 버전 관리와 재현성을 확보합니다. AWS SageMaker, GCP Vertex AI의 온프레미스 대안으로 많이 사용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">from kfp import dsl, compiler
+from kfp.dsl import component, OutputPath, InputPath
+
+# 1. 컴포넌트 정의 (각 단계를 컨테이너로)
+@component(base_image="python:3.9")
+def preprocess_data(input_path: str, output_path: OutputPath()):
+    """데이터 전처리 컴포넌트"""
+    import pandas as pd
+    df = pd.read_csv(input_path)
+    df_clean = df.dropna()
+    df_clean.to_csv(output_path, index=False)
+    print(f"Preprocessed: {len(df)} -> {len(df_clean)} rows")
+
+@component(base_image="pytorch/pytorch:2.0.0-cuda11.7-cudnn8-runtime")
+def train_model(data_path: InputPath(), model_path: OutputPath(), epochs: int = 10):
+    """모델 학습 컴포넌트"""
+    import torch
+    # 학습 로직...
+    torch.save(model.state_dict(), model_path)
+
+@component(base_image="python:3.9")
+def deploy_model(model_path: InputPath(), endpoint_name: str):
+    """KServe로 모델 배포"""
+    # KServe InferenceService 생성 로직
+    print(f"Deployed to {endpoint_name}")
+
+# 2. 파이프라인 정의
+@dsl.pipeline(name="ML Training Pipeline", description="End-to-end ML pipeline")
+def ml_pipeline(data_url: str, epochs: int = 20):
+    # DAG 형태로 파이프라인 구성
+    preprocess_task = preprocess_data(input_path=data_url)
+    train_task = train_model(
+        data_path=preprocess_task.outputs['output_path'],
+        epochs=epochs
+    ).set_gpu_limit(1)  # GPU 할당
+    deploy_task = deploy_model(
+        model_path=train_task.outputs['model_path'],
+        endpoint_name="prod-model"
+    )
+
+# 3. 컴파일 & 실행
+compiler.Compiler().compile(ml_pipeline, 'pipeline.yaml')
+# kubectl apply -f pipeline.yaml 또는 Kubeflow UI에서 업로드</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 📊 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>2025년 1월 기준 Kubeflow 인프라 비용 예상입니다.</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>항목</th>
+                        <th>사양/가격</th>
+                        <th>비고</th>
+                    </tr>
+                    <tr>
+                        <td>Kubeflow 소프트웨어</td>
+                        <td>오픈소스 (무료)</td>
+                        <td>Apache 2.0 라이선스</td>
+                    </tr>
+                    <tr>
+                        <td>최소 클러스터 (개발)</td>
+                        <td>3 x n1-standard-4</td>
+                        <td>~$300/월 (GKE)</td>
+                    </tr>
+                    <tr>
+                        <td>프로덕션 클러스터</td>
+                        <td>5+ 노드, 16+ vCPU 각</td>
+                        <td>~$1,500/월 (GKE/EKS)</td>
+                    </tr>
+                    <tr>
+                        <td>GPU 노드 (A100 40GB)</td>
+                        <td>$2.95/시간 (GCP)</td>
+                        <td>학습 시간만 요금 발생</td>
+                    </tr>
+                    <tr>
+                        <td>GPU 노드 (T4)</td>
+                        <td>$0.35/시간 (GCP)</td>
+                        <td>추론/경량 학습용</td>
+                    </tr>
+                </table>
+                <table class="spec-table">
+                    <tr>
+                        <th>컴포넌트</th>
+                        <th>최소 리소스</th>
+                        <th>권장 리소스</th>
+                    </tr>
+                    <tr>
+                        <td>Kubeflow Pipelines</td>
+                        <td>4 vCPU, 8GB RAM</td>
+                        <td>8 vCPU, 16GB RAM</td>
+                    </tr>
+                    <tr>
+                        <td>KServe (모델 서빙)</td>
+                        <td>2 vCPU, 4GB RAM</td>
+                        <td>모델 크기에 따라</td>
+                    </tr>
+                    <tr>
+                        <td>Katib (AutoML)</td>
+                        <td>2 vCPU, 4GB RAM</td>
+                        <td>병렬 실험 수에 따라</td>
+                    </tr>
+                </table>
+                <p><strong>비용 절감 팁:</strong> Spot/Preemptible 인스턴스로 학습 비용 60-70% 절감. 자동 스케일링으로 유휴 리소스 최소화.</p>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"현재 학습 스크립트가 Jupyter에 흩어져 있어서 재현이 안 됩니다. Kubeflow Pipelines로 전처리-학습-평가-배포를 DAG로 묶으면, 한 번 클릭으로 전체 파이프라인 실행되고 버전 관리도 가능합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"온프레미스 GPU 클러스터에 Kubeflow 1.8을 구축했습니다. Katib으로 하이퍼파라미터 튜닝 자동화하고, KServe로 A/B 테스트 배포까지 한 달 만에 MLOps 파이프라인 완성했습니다. 모델 배포 주기가 2주에서 2일로 단축됐어요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"Kubeflow vs Airflow 비교하면, Airflow는 범용 워크플로우고 Kubeflow는 ML 특화입니다. GPU 스케줄링, 분산학습, 모델 서빙이 내장되어 있어서 ML 팀에는 Kubeflow가 더 적합해요."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Full Kubeflow를 무조건 설치</strong>
+                        <p>전체 설치 시 30개 이상 컴포넌트가 올라가 리소스 낭비. 필요한 것만 선택 설치하세요 (예: Pipelines + KServe만).</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Kubernetes 경험 없이 바로 Kubeflow 도입</strong>
+                        <p>k8s 기본 개념(Pod, Service, PVC) 없이 시작하면 디버깅 불가. 최소 CKA 수준 지식 필요합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>minikube나 kind로 로컬 테스트 후, 프로덕션은 EKS/GKE Autopilot 권장. Kubeflow Manifests로 버전 관리하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+                <a href="/ko/term/MLOps/" class="related-term-link">MLOps</a>
+                <a href="/ko/term/Docker/" class="related-term-link">Docker</a>
+                <a href="/ko/term/CI%20CD/" class="related-term-link">CI/CD</a>
+                <a href="/ko/term/Model%20Serving/" class="related-term-link">Model Serving</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.kubeflow.org/docs/" target="_blank" class="learn-link">📄 Kubeflow 공식 문서</a>
+                <a href="https://www.kubeflow.org/docs/components/pipelines/v2/" target="_blank" class="learn-link">🎓 Kubeflow Pipelines v2 가이드</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +437,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

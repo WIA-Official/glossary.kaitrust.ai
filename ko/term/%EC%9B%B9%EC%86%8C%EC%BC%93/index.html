@@ -161,6 +161,81 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhancement Section Styles */
+        .enhancement-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.8));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhancement-section h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        .enhancement-section p, .enhancement-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+        }
+        .enhancement-section ul { padding-left: 1.5rem; }
+        .enhancement-section strong { color: #a855f7; }
+        .code-block {
+            background: #0f172a;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .code-block .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        .dialogue-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .dialogue-box .speaker { font-weight: 600; color: #818cf8; }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+        .related-term-link {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .resource-list { list-style: none; padding: 0; }
+        .resource-list a { color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +277,74 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="enhancement-section">
+            <h2>상세 설명</h2>
+            <p><strong>웹소켓(WebSocket)</strong>은 클라이언트와 서버 간 양방향 실시간 통신을 위한 프로토콜입니다. HTTP와 달리 한 번 연결되면 양쪽에서 자유롭게 데이터를 주고받을 수 있습니다.</p>
+            <ul>
+                <li><strong>전이중 통신</strong>: 서버도 클라이언트에 먼저 메시지 전송 가능</li>
+                <li><strong>낮은 오버헤드</strong>: HTTP 헤더 없이 작은 프레임 단위 전송</li>
+                <li><strong>지속적 연결</strong>: 연결 유지로 폴링 불필요</li>
+            </ul>
+            <p>채팅, 실시간 알림, 게임, 협업 도구 등에 필수적입니다.</p>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="enhancement-section">
+            <h2>코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>// 클라이언트
+const ws = new WebSocket('wss://example.com/chat');
+
+ws.onopen = () => ws.send('Hello!');
+ws.onmessage = (event) => console.log('받음:', event.data);
+ws.onclose = () => console.log('연결 종료');
+
+// Node.js 서버 (ws 라이브러리)
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (ws) => {
+    ws.on('message', (msg) => {
+        // 모든 클라이언트에게 브로드캐스트
+        wss.clients.forEach(client => client.send(msg));
+    });
+});</code>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="enhancement-section">
+            <h2>실무 대화 예시</h2>
+            <div class="dialogue-box">
+                <p class="speaker">기획자</p>
+                <p>"채팅 기능에서 새 메시지 오면 바로 보여야 해요."</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">개발자</p>
+                <p>"웹소켓으로 구현하면 서버에서 바로 푸시할 수 있어요. 폴링처럼 계속 요청 안 해도 되고요."</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhancement-section">
+            <h2>관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/WebSocket/" class="related-term-link">WebSocket</a>
+                <a href="/ko/term/Socket.io/" class="related-term-link">Socket.io</a>
+                <a href="/ko/term/HTTP/" class="related-term-link">HTTP</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhancement-section">
+            <h2>더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://developer.mozilla.org/ko/docs/Web/API/WebSocket" target="_blank">MDN - WebSocket</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +355,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

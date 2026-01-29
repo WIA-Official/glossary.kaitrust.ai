@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,135 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>제네릭(Generic)은 타입을 파라미터화하여 재사용 가능한 컴포넌트를 작성하는 프로그래밍 기법입니다. 함수나 클래스를 특정 타입에 종속시키지 않고, 사용 시점에 타입을 지정할 수 있게 합니다. 이를 통해 타입 안정성을 유지하면서도 코드 중복을 줄일 수 있습니다.</p>
+                <p>제네릭의 핵심 이점은 컴파일 타임 타입 안정성입니다. Java의 List&lt;String&gt;은 문자열만 저장할 수 있고, 잘못된 타입 추가는 컴파일 오류로 잡힙니다. Object를 사용하면 런타임에 ClassCastException이 발생할 수 있지만, 제네릭은 이를 컴파일 타임에 방지합니다.</p>
+                <p>TypeScript에서 제네릭은 함수, 클래스, 인터페이스에 적용됩니다. Array&lt;T&gt;, Promise&lt;T&gt;, Map&lt;K, V&gt; 등 많은 내장 타입이 제네릭입니다. 제약 조건(extends)을 사용해 타입 파라미터를 특정 인터페이스를 구현한 타입으로 제한할 수도 있습니다.</p>
+                <p>Rust에서는 제네릭이 성능 저하 없이 동작합니다. 컴파일러가 단형화(monomorphization)를 통해 사용되는 각 타입에 대해 별도의 코드를 생성합니다. 이는 런타임 오버헤드 없이 제네릭의 편의성을 제공합니다. 트레이트 바운드로 타입 제약을 표현합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// TypeScript 제네릭 예제
+
+// 제네릭 함수
+function identity&lt;T&gt;(arg: T): T {
+    return arg;
+}
+
+const str = identity&lt;string&gt;("hello");  // 타입 명시
+const num = identity(42);                // 타입 추론
+
+// 제네릭 인터페이스
+interface Result&lt;T, E&gt; {
+    success: boolean;
+    data?: T;
+    error?: E;
+}
+
+// 제네릭 클래스
+class Container&lt;T&gt; {
+    private value: T;
+
+    constructor(value: T) {
+        this.value = value;
+    }
+
+    getValue(): T {
+        return this.value;
+    }
+}
+
+// 제약 조건 (extends)
+interface HasLength {
+    length: number;
+}
+
+function logLength&lt;T extends HasLength&gt;(arg: T): number {
+    console.log(arg.length);
+    return arg.length;
+}
+
+logLength("hello");     // OK - string has length
+logLength([1, 2, 3]);   // OK - array has length
+// logLength(123);      // Error - number doesn't have length
+
+// 여러 타입 파라미터
+function swap&lt;T, U&gt;(tuple: [T, U]): [U, T] {
+    return [tuple[1], tuple[0]];
+}
+
+const swapped = swap([1, "hello"]);  // [string, number]</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">💼 회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">👔 면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">💻 코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>프론트엔드 개발자:</strong> "API 호출 함수가 엔드포인트마다 거의 똑같은데, 응답 타입만 다릅니다. 코드 중복이 심해요."</p>
+                <p><strong>기술 리더:</strong> "제네릭 함수로 추상화하면 됩니다. fetch&lt;T&gt;(url): Promise&lt;T&gt; 형태로 만들어 보세요."</p>
+                <p><strong>프론트엔드 개발자:</strong> "호출 시 타입을 지정하면 반환값도 그 타입으로 추론되겠네요."</p>
+                <p><strong>기술 리더:</strong> "네, Axios 인스턴스도 그렇게 구현되어 있어요. 에러 타입도 제네릭으로 받으면 더 완벽합니다."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "제네릭을 사용하는 이유와 장점을 설명해 주세요."</p>
+                <p><strong>지원자:</strong> "타입 안정성을 유지하면서 재사용 가능한 코드를 작성할 수 있습니다. any를 쓰면 타입 검사가 무력화되지만, 제네릭은 사용 시점에 타입이 결정되어 IDE 자동완성과 컴파일 오류 검출이 가능합니다."</p>
+                <p><strong>면접관:</strong> "공변성(covariance)과 반공변성(contravariance)에 대해 아시나요?"</p>
+                <p><strong>지원자:</strong> "공변성은 T가 U의 하위 타입이면 Container&lt;T&gt;도 Container&lt;U&gt;의 하위 타입인 경우입니다. 반공변성은 그 반대이고, 함수 파라미터 위치에서 발생합니다. TypeScript에서는 이를 엄격하게 검사합니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "이 유틸리티 함수가 any를 반환하고 있어서 타입 안정성이 없네요."</p>
+                <p><strong>작성자:</strong> "여러 타입에서 사용되어서 any로 했는데, 더 좋은 방법이 있을까요?"</p>
+                <p><strong>리뷰어:</strong> "제네릭을 사용하세요. 입력 타입에서 반환 타입을 추론하게 하면 any 없이도 유연성을 유지할 수 있습니다."</p>
+                <p><strong>작성자:</strong> "알겠습니다. T extends 조건도 추가해서 잘못된 타입 전달을 막겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>과도한 제네릭:</strong> 모든 것을 제네릭으로 만들면 오히려 코드가 복잡해집니다. 실제로 여러 타입에서 재사용될 때만 제네릭을 적용하세요.</li>
+                <li><strong>타입 소거(Java):</strong> Java는 런타임에 제네릭 타입 정보가 소거됩니다. 런타임에 T의 실제 타입을 알 수 없으므로 new T()나 instanceof T는 불가능합니다.</li>
+                <li><strong>제약 조건 누락:</strong> 타입 파라미터에 메서드를 호출하려면 적절한 제약 조건(extends)이 필요합니다. 그렇지 않으면 Object의 메서드만 사용할 수 있습니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%ED%83%80%EC%9E%85/" class="related-link">타입</a>
+                <a href="/ko/term/%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4/" class="related-link">인터페이스</a>
+                <a href="/ko/term/%ED%8A%B8%EB%A0%88%EC%9D%B4%ED%8A%B8/" class="related-link">트레이트</a>
+                <a href="/ko/term/%EA%B0%9D%EC%B2%B4%EC%A7%80%ED%96%A5%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D/" class="related-link">객체지향 프로그래밍</a>
+                <a href="/ko/term/%EC%BB%B4%ED%8C%8C%EC%9D%BC%EB%9F%AC/" class="related-link">컴파일러</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li>📖 <a href="https://www.typescriptlang.org/docs/handbook/2/generics.html" target="_blank">TypeScript Handbook - Generics</a></li>
+                <li>📖 <a href="https://doc.rust-lang.org/book/ch10-00-generics.html" target="_blank">The Rust Book - Generic Types</a></li>
+                <li>🎥 <a href="https://www.youtube.com/watch?v=nViEqpgwxHE" target="_blank">TypeScript Generics Explained</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +343,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

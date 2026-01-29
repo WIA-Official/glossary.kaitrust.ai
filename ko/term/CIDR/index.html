@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,283 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>CIDR(Classless Inter-Domain Routing)는 IP 주소를 효율적으로 할당하고 라우팅하기 위한 방법입니다. 192.168.1.0/24처럼 IP 주소 뒤에 슬래시(/)와 숫자를 붙여 네트워크 범위를 표현합니다. 슬래시 뒤 숫자는 네트워크 비트 수를 의미하며, /24는 상위 24비트가 네트워크 주소, 나머지 8비트(256개)가 호스트 주소임을 나타냅니다.</p>
+                <p>CIDR는 1993년 RFC 1517~1520에서 도입되었습니다. 기존 클래스 기반(Class A/B/C) 주소 체계는 IP 주소를 낭비했습니다. 예를 들어 Class B(65,536개 IP)가 필요 없는 중소기업에도 통째로 할당해야 했죠. CIDR는 필요한 만큼만 유연하게 할당할 수 있어 IPv4 주소 고갈을 10년 이상 늦췄습니다.</p>
+                <p>CIDR 표기법에서 숫자가 클수록 네트워크는 작아집니다. /8은 16,777,214개(대기업), /16은 65,534개(중기업), /24는 254개(소규모 네트워크), /32는 단일 IP입니다. 서브넷 마스크로 변환하면 /24는 255.255.255.0, /16은 255.255.0.0입니다. 이 관계를 이해하면 VPC 설계와 보안그룹 규칙 작성이 수월해집니다.</p>
+                <p>클라우드 환경에서 CIDR는 필수 개념입니다. AWS VPC 생성 시 10.0.0.0/16 같은 CIDR 블록을 지정하고, 이를 /24 단위 서브넷으로 분할합니다. 보안그룹에서 0.0.0.0/0은 모든 IP를, 10.0.1.0/24는 특정 서브넷만 허용합니다. Kubernetes의 Pod CIDR, Service CIDR도 같은 원리로 네트워크를 분리합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="bash">Bash/AWS CLI</button>
+                <button class="code-tab" data-lang="terraform">Terraform</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python">import ipaddress
+
+# CIDR 기본 정보 확인
+network = ipaddress.ip_network("192.168.1.0/24")
+
+print(f"네트워크 주소: {network.network_address}")  # 192.168.1.0
+print(f"브로드캐스트: {network.broadcast_address}")  # 192.168.1.255
+print(f"서브넷 마스크: {network.netmask}")           # 255.255.255.0
+print(f"호스트 수: {network.num_addresses - 2}")     # 254 (사용 가능)
+print(f"IP 범위: {list(network.hosts())[0]} ~ {list(network.hosts())[-1]}")
+
+# IP가 특정 CIDR에 포함되는지 확인
+ip = ipaddress.ip_address("192.168.1.100")
+cidr = ipaddress.ip_network("192.168.1.0/24")
+print(f"{ip} in {cidr}: {ip in cidr}")  # True
+
+# VPC 서브넷 분할 예제 (/16 → /24로 분할)
+vpc_cidr = ipaddress.ip_network("10.0.0.0/16")
+subnets = list(vpc_cidr.subnets(new_prefix=24))
+print(f"생성 가능한 /24 서브넷 수: {len(subnets)}")  # 256개
+
+# 실제 AWS 서브넷 설계 예시
+print("Public Subnet 1:", subnets[0])   # 10.0.0.0/24
+print("Public Subnet 2:", subnets[1])   # 10.0.1.0/24
+print("Private Subnet 1:", subnets[10]) # 10.0.10.0/24
+print("Private Subnet 2:", subnets[11]) # 10.0.11.0/24
+
+# CIDR 간 겹침 여부 확인
+net1 = ipaddress.ip_network("10.0.0.0/16")
+net2 = ipaddress.ip_network("10.0.5.0/24")
+print(f"겹침 여부: {net1.overlaps(net2)}")  # True
+
+# 보안그룹 규칙 검증
+allowed_cidr = ipaddress.ip_network("10.0.0.0/8", strict=False)
+client_ip = ipaddress.ip_address("10.50.100.25")
+print(f"접근 허용: {client_ip in allowed_cidr}")  # True</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># AWS VPC 생성 (CIDR: 10.0.0.0/16)
+aws ec2 create-vpc \
+    --cidr-block 10.0.0.0/16 \
+    --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=MyVPC}]'
+
+# 서브넷 생성 (/24 단위)
+aws ec2 create-subnet \
+    --vpc-id vpc-12345678 \
+    --cidr-block 10.0.1.0/24 \
+    --availability-zone ap-northeast-2a \
+    --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=PublicSubnet1}]'
+
+# 보안그룹 인바운드 규칙 추가
+# 특정 CIDR에서만 SSH 허용
+aws ec2 authorize-security-group-ingress \
+    --group-id sg-12345678 \
+    --protocol tcp \
+    --port 22 \
+    --cidr 10.0.0.0/8
+
+# 모든 IP에서 HTTPS 허용 (0.0.0.0/0 = 전체)
+aws ec2 authorize-security-group-ingress \
+    --group-id sg-12345678 \
+    --protocol tcp \
+    --port 443 \
+    --cidr 0.0.0.0/0
+
+# VPC CIDR 블록 추가 (Secondary CIDR)
+aws ec2 associate-vpc-cidr-block \
+    --vpc-id vpc-12345678 \
+    --cidr-block 10.1.0.0/16
+
+# 라우팅 테이블에 CIDR 기반 경로 추가
+aws ec2 create-route \
+    --route-table-id rtb-12345678 \
+    --destination-cidr-block 0.0.0.0/0 \
+    --gateway-id igw-12345678
+
+# ipcalc로 CIDR 계산 (Linux)
+ipcalc 192.168.1.0/24
+# Network:   192.168.1.0/24
+# Netmask:   255.255.255.0
+# HostMin:   192.168.1.1
+# HostMax:   192.168.1.254
+# Hosts/Net: 254
+
+# sipcalc로 상세 정보 확인
+sipcalc 10.0.0.0/16</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="terraform">
+                <pre><code class="language-hcl"># VPC 및 서브넷 설계 (Terraform)
+variable "vpc_cidr" {
+  default = "10.0.0.0/16"  # 65,536개 IP
+}
+
+# VPC 생성
+resource "aws_vpc" "main" {
+  cidr_block           = var.vpc_cidr
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = {
+    Name = "production-vpc"
+  }
+}
+
+# 퍼블릭 서브넷 (AZ별 /24 할당)
+resource "aws_subnet" "public" {
+  count             = 2
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index)
+  # count=0: 10.0.0.0/24, count=1: 10.0.1.0/24
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+
+  map_public_ip_on_launch = true
+  tags = { Name = "public-subnet-${count.index + 1}" }
+}
+
+# 프라이빗 서브넷 (/24 할당, 오프셋 10부터)
+resource "aws_subnet" "private" {
+  count             = 2
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index + 10)
+  # count=0: 10.0.10.0/24, count=1: 10.0.11.0/24
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+
+  tags = { Name = "private-subnet-${count.index + 1}" }
+}
+
+# 보안그룹 - CIDR 기반 접근 제어
+resource "aws_security_group" "web" {
+  name   = "web-sg"
+  vpc_id = aws_vpc.main.id
+
+  # 전체 IP에서 HTTPS 허용
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # VPC 내부에서만 SSH 허용
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]  # 10.0.0.0/16
+  }
+
+  # 특정 사무실 IP만 DB 접근 허용
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["203.0.113.0/24"]  # 사무실 IP 대역
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 VPC 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "VPC는 10.0.0.0/16으로 잡으면 65,000개 IP를 쓸 수 있어요. 이걸 /24 단위로 쪼개면 퍼블릭 서브넷 2개, 프라이빗 서브넷 2개 만들고도 250개 이상의 서브넷을 추가할 여유가 있습니다. 나중에 EKS 도입하면 Pod CIDR도 필요하니까 넉넉하게 잡는 게 좋겠습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 검토 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "지금 보안그룹에 SSH 포트가 0.0.0.0/0으로 열려 있는데, 이건 전 세계 모든 IP에서 접근 가능하다는 뜻입니다. 사무실 IP 대역인 203.0.113.0/24로 제한하거나, 최소한 10.0.0.0/8(사내망)으로 좁혀야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 온프레미스 연동 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "VPN 연결할 때 CIDR가 겹치면 라우팅 충돌이 납니다. 온프레미스가 192.168.0.0/16을 쓰고 있으니, AWS VPC는 10.0.0.0/16으로 설정하고 Direct Connect 라우팅 테이블에 양쪽 CIDR을 명시해야 합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>VPC CIDR를 너무 작게 설정</strong>
+                        <p>/24(254개)로 VPC를 만들면 서브넷을 나눌 수 없고, EKS나 서비스 확장 시 IP가 부족합니다. VPC는 최소 /16으로 시작하세요. 나중에 CIDR 확장은 가능하지만 축소는 불가능합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>CIDR 겹침으로 인한 라우팅 충돌</strong>
+                        <p>VPC Peering이나 VPN 연결 시 양쪽 CIDR가 겹치면 연결이 안 됩니다. 멀티 계정 환경에서는 10.0.0.0/16, 10.1.0.0/16, 10.2.0.0/16처럼 미리 IP 대역을 분리 계획하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>0.0.0.0/0 무분별 사용</strong>
+                        <p>보안그룹에서 0.0.0.0/0은 "전 세계 모든 IP"를 의미합니다. SSH(22), RDP(3389), DB 포트에 이 설정을 사용하면 즉시 해킹 대상이 됩니다. 반드시 필요한 CIDR로 제한하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 CIDR 설계 방법</strong>
+                        <p>VPC /16 → 서브넷 /24 구조를 기본으로 합니다. 퍼블릭은 10.0.0-9.x, 프라이빗은 10.0.10-19.x, DB는 10.0.20-29.x처럼 용도별로 대역을 분리하면 관리가 쉽습니다. RFC 1918 사설 IP(10.x, 172.16-31.x, 192.168.x)만 사용하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/VPC/" class="related-term-link">VPC</a>
+                <a href="/ko/term/IP/" class="related-term-link">IP</a>
+                <a href="/ko/term/Subnet/" class="related-term-link">Subnet</a>
+                <a href="/ko/term/Firewall/" class="related-term-link">Firewall</a>
+                <a href="/ko/term/NAT/" class="related-term-link">NAT</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/vpc-cidr-blocks.html" target="_blank" class="learn-link">
+                    📄 AWS VPC CIDR 블록 공식 문서
+                </a>
+                <a href="https://cidr.xyz/" target="_blank" class="learn-link">
+                    🎓 CIDR.xyz - 인터랙티브 CIDR 계산기
+                </a>
+                <a href="https://www.ipaddressguide.com/cidr" target="_blank" class="learn-link">
+                    📖 CIDR 표기법 완벽 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +631,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

@@ -202,7 +202,322 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;"><strong>Sidecar Pattern</strong>은 메인 애플리케이션 컨테이너 옆에 보조 컨테이너를 배치하여 공통 기능을 분리하는 마이크로서비스 디자인 패턴입니다. 오토바이 옆에 붙은 사이드카처럼 메인 컨테이너와 생명주기를 함께하며, 네트워크 네임스페이스와 볼륨을 공유합니다.</p>
+
+                <p style="margin-bottom: 1rem;"><strong>핵심 개념:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>동일 Pod:</strong> Kubernetes에서 메인 컨테이너와 사이드카는 같은 Pod에 배치</li>
+                    <li><strong>localhost 통신:</strong> 같은 네트워크 네임스페이스를 공유하여 localhost로 통신</li>
+                    <li><strong>볼륨 공유:</strong> emptyDir 등을 통해 파일 시스템 공유 가능</li>
+                    <li><strong>독립 배포:</strong> 사이드카 업데이트 시 메인 앱 코드 변경 불필요</li>
+                </ul>
+
+                <p style="margin-bottom: 1rem;"><strong>주요 활용 사례:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>Service Mesh Proxy:</strong> Istio Envoy, Linkerd - 트래픽 라우팅, mTLS, 관측성</li>
+                    <li><strong>로그 수집:</strong> Fluentd, Filebeat - 로그 파일을 중앙 로그 시스템으로 전송</li>
+                    <li><strong>설정 동기화:</strong> Consul Template, Confd - 설정 변경 감지 및 적용</li>
+                    <li><strong>시크릿 주입:</strong> Vault Agent - 시크릿을 안전하게 주입</li>
+                    <li><strong>프록시:</strong> OAuth2 Proxy, Ambassador - 인증/인가 처리</li>
+                </ul>
+
+                <p style="margin-bottom: 1rem;"><strong>Service Mesh에서의 역할:</strong></p>
+                <p style="margin-bottom: 1rem;">Istio, Linkerd 같은 Service Mesh는 모든 서비스 Pod에 사이드카 프록시(Envoy 등)를 자동 주입합니다. 이 프록시가 모든 인바운드/아웃바운드 트래픽을 가로채서 mTLS 암호화, 로드 밸런싱, 서킷 브레이커, 분산 트레이싱을 제공합니다. 애플리케이션 코드 수정 없이 네트워크 레벨 기능을 투명하게 적용할 수 있습니다.</p>
+
+                <p><strong>Kubernetes 1.28+ Sidecar Container:</strong> 기존에는 사이드카도 일반 컨테이너로 취급되어 시작/종료 순서 제어가 어려웠습니다. 1.28부터 정식 지원되는 Sidecar Container(initContainers + restartPolicy: Always)는 메인 컨테이너보다 먼저 시작하고 나중에 종료되어 더 안정적인 라이프사이클 관리가 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">로그 수집 Sidecar (Fluentd)</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># logging-sidecar.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-logging
+spec:
+  containers:
+    # 메인 애플리케이션
+    - name: app
+      image: my-app:latest
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      resources:
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+
+    # Sidecar: 로그 수집 (Fluentd)
+    - name: log-collector
+      image: fluent/fluentd:v1.16
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+          readOnly: true
+        - name: fluentd-config
+          mountPath: /fluentd/etc
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "100m"
+
+  volumes:
+    - name: logs
+      emptyDir: {}
+    - name: fluentd-config
+      configMap:
+        name: fluentd-config
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+data:
+  fluent.conf: |
+    &lt;source&gt;
+      @type tail
+      path /var/log/app/*.log
+      pos_file /var/log/app/fluentd.pos
+      tag app.logs
+      &lt;parse&gt;
+        @type json
+      &lt;/parse&gt;
+    &lt;/source&gt;
+
+    &lt;match app.logs&gt;
+      @type elasticsearch
+      host elasticsearch.logging.svc
+      port 9200
+      index_name app-logs
+    &lt;/match&gt;</code></pre>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">Vault Agent Sidecar (시크릿 주입)</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># vault-sidecar.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-vault
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "my-app-role"
+    vault.hashicorp.com/agent-inject-secret-db: "secret/data/db/config"
+    vault.hashicorp.com/agent-inject-template-db: |
+      {{ with secret "secret/data/db/config" -}}
+      export DB_HOST="{{ .Data.data.host }}"
+      export DB_USER="{{ .Data.data.username }}"
+      export DB_PASS="{{ .Data.data.password }}"
+      {{- end }}
+spec:
+  serviceAccountName: my-app-sa
+  containers:
+    - name: app
+      image: my-app:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - source /vault/secrets/db && ./start.sh
+      volumeMounts:
+        - name: vault-secrets
+          mountPath: /vault/secrets
+  # Vault Injector가 자동으로 Sidecar 추가
+
+---
+# Kubernetes 1.28+ Native Sidecar Container
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-native-sidecar
+spec:
+  initContainers:
+    # Native Sidecar: 메인보다 먼저 시작, 나중에 종료
+    - name: vault-agent
+      image: hashicorp/vault:1.15
+      restartPolicy: Always  # 이게 핵심! Sidecar로 동작
+      args:
+        - agent
+        - -config=/etc/vault/agent.hcl
+      volumeMounts:
+        - name: secrets
+          mountPath: /vault/secrets
+        - name: vault-config
+          mountPath: /etc/vault
+
+  containers:
+    - name: app
+      image: my-app:latest
+      volumeMounts:
+        - name: secrets
+          mountPath: /vault/secrets
+          readOnly: true
+
+  volumes:
+    - name: secrets
+      emptyDir:
+        medium: Memory  # RAM에 저장 (보안)
+    - name: vault-config
+      configMap:
+        name: vault-agent-config</code></pre>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">Istio Envoy Sidecar (자동 주입)</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># Namespace에 Istio injection 활성화
+kubectl label namespace my-app istio-injection=enabled
+
+# Deployment 배포 시 Envoy Sidecar 자동 주입
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-service
+  namespace: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-service
+  template:
+    metadata:
+      labels:
+        app: my-service
+      # 특정 Pod에서 Sidecar 비활성화
+      # annotations:
+      #   sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+        - name: app
+          image: my-service:latest
+          ports:
+            - containerPort: 8080
+
+# 배포 후 Pod 확인 - Envoy Sidecar가 자동 추가됨
+# kubectl get pods -n my-app
+# NAME                          READY   STATUS    RESTARTS
+# my-service-5d4f6c7b8-abc12   2/2     Running   0
+#                               ^^^
+#                               app + istio-proxy (Envoy)
+
+# Istio VirtualService로 트래픽 제어
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: my-service
+spec:
+  hosts:
+    - my-service
+  http:
+    - route:
+        - destination:
+            host: my-service
+            subset: v1
+          weight: 90
+        - destination:
+            host: my-service
+            subset: v2
+          weight: 10  # Canary: 10% 트래픽을 v2로</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">아키텍처 리뷰</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">시니어:</strong> "서비스마다 로깅, 트레이싱 코드가 중복이네. 언어도 다르고..."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">개발자:</strong> "Sidecar 패턴으로 분리하면 어떨까요? Fluentd Sidecar로 로그 수집하고, Jaeger Agent Sidecar로 트레이스 전송하면 앱 코드에서 인프라 로직을 뺄 수 있어요."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">시니어:</strong> "리소스 오버헤드는?"</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">개발자:</strong> "Sidecar 하나당 메모리 50-100MB 정도요. 대신 각 앱에서 SDK 초기화 오버헤드가 사라지고, 버전 업그레이드도 Sidecar만 바꾸면 되니까 운영이 편해져요."</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">기술 면접</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">면접관:</strong> "Istio에서 Sidecar Proxy가 하는 일을 설명해주세요."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">지원자:</strong> "Envoy Sidecar가 모든 인바운드/아웃바운드 트래픽을 가로챕니다. iptables 규칙으로 트래픽을 Envoy로 리다이렉트하고요. mTLS로 서비스 간 통신을 암호화하고, 로드밸런싱, 서킷브레이커, 재시도 정책을 적용합니다. 또한 모든 요청의 메트릭과 트레이스를 수집해서 관측성을 제공해요."</p>
+                    <p style="color: #94a3b8;"><strong style="color: #f1f5f9;">면접관:</strong> "Sidecar 없는 Service Mesh는요?"</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">지원자:</strong> "Cilium 같은 eBPF 기반 Service Mesh가 있어요. 커널 레벨에서 트래픽을 처리해서 Sidecar 오버헤드가 없죠. 다만 eBPF 지원 커널이 필요하고, L7 기능이 Envoy보다 제한적일 수 있어요."</p>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">트러블슈팅</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">운영팀:</strong> "Pod가 Ready인데 앱 컨테이너에서 외부 API 호출이 안 돼요."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">개발자:</strong> "Istio Sidecar 때문일 수 있어요. Envoy가 아직 xDS 설정을 못 받아서 트래픽 라우팅을 못하는 거예요. holdApplicationUntilProxyStarts: true 설정하면 Envoy 준비될 때까지 앱 컨테이너 시작을 지연시킬 수 있어요."</p>
+                    <p style="color: #94a3b8;"><strong style="color: #f1f5f9;">운영팀:</strong> "아, Sidecar가 먼저 준비되어야 하는구나."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #e2e8f0; line-height: 1.8; margin-left: 1.5rem;">
+                <li style="margin-bottom: 0.75rem;"><strong>리소스 오버헤드:</strong> 각 Pod마다 Sidecar가 추가되어 메모리/CPU 사용량이 증가합니다. 특히 Envoy는 Pod당 50-100MB 메모리를 사용합니다. 대규모 클러스터에서는 무시할 수 없는 비용입니다.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>레이턴시:</strong> 모든 트래픽이 Sidecar를 거치므로 1-2ms 지연이 추가됩니다. 초저지연이 필요한 서비스에서는 문제가 될 수 있습니다.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>시작 순서:</strong> 메인 앱이 Sidecar보다 먼저 시작하면 초기 요청이 실패할 수 있습니다. Kubernetes 1.28+ Native Sidecar나 holdApplicationUntilProxyStarts 설정을 사용하세요.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>디버깅 복잡성:</strong> 문제 발생 시 앱 이슈인지 Sidecar 이슈인지 구분이 어려울 수 있습니다. Sidecar 로그와 메트릭을 별도로 모니터링하세요.</li>
+                <li><strong>종료 순서:</strong> Pod 종료 시 Sidecar가 먼저 죽으면 앱의 graceful shutdown 요청이 실패합니다. terminationGracePeriodSeconds와 preStop hook을 적절히 설정하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                <a href="/ko/term/Service%20Mesh/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Service Mesh</a>
+                <a href="/ko/term/Istio/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Istio</a>
+                <a href="/ko/term/Envoy/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Envoy</a>
+                <a href="/ko/term/Ambassador%20Pattern/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Ambassador Pattern</a>
+                <a href="/ko/term/Init%20Container/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Init Container</a>
+                <a href="/ko/term/mTLS/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">mTLS</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <ul style="color: #e2e8f0; line-height: 2; margin-left: 1.5rem;">
+                <li><a href="https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">Kubernetes Sidecar Containers</a> - 공식 문서 (1.28+)</li>
+                <li><a href="https://istio.io/latest/docs/ops/deployment/architecture/" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">Istio Architecture</a> - Envoy Sidecar 동작 원리</li>
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/sidecar" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">Microsoft - Sidecar Pattern</a> - 패턴 상세 설명</li>
+                <li><a href="https://www.envoyproxy.io/docs/envoy/latest/" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">Envoy Proxy Docs</a> - Envoy 상세 문서</li>
+            </ul>
+        </section>
     </main>
+
+    <script>
+    function copyCode(button) {
+        const code = button.parentElement.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            button.textContent = '복사됨!';
+            setTimeout(() => button.textContent = '복사', 2000);
+        });
+    }
+    </script>
 
     <!-- Footer -->
     <div id="kaitrust-footer"></div>

@@ -202,6 +202,187 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">Passkey는 FIDO2/WebAuthn 기반의 패스워드 대체 인증 방식으로, Apple, Google, Microsoft가 공동 지원하는 차세대 인증 표준입니다. 사용자는 지문, 얼굴 인식, PIN 등 기기 인증만으로 웹사이트에 로그인할 수 있습니다. 패스워드 없이도 피싱에 강하고 편리한 인증이 가능합니다.</p>
+                <p style="margin-bottom: 1rem;">Passkey의 핵심 혁신은 멀티 디바이스 동기화입니다. 기존 FIDO2 보안키는 해당 기기에서만 사용 가능했지만, Passkey는 iCloud Keychain, Google Password Manager, Windows Hello 등을 통해 여러 기기에서 동기화됩니다. 새 기기에서도 기존에 등록한 Passkey로 바로 로그인할 수 있습니다.</p>
+                <p style="margin-bottom: 1rem;">기술적으로 Passkey는 비밀키/공개키 쌍을 사용합니다. 비밀키는 사용자 기기의 보안 영역(Secure Enclave, TPM)에 저장되고, 절대 서버로 전송되지 않습니다. 공개키만 서버에 저장되므로, 서버 해킹 시에도 비밀키가 유출되지 않습니다. 피싱 사이트에서는 원본 사이트의 credential을 사용할 수 없습니다.</p>
+                <p>Passkey는 점진적 도입이 가능합니다. 기존 패스워드 로그인과 병행하다가, 사용자가 Passkey를 등록하면 우선 표시합니다. 브라우저 자동완성(Conditional UI)으로 Passkey가 있으면 자동 제안되어, 사용자 경험이 매우 자연스럽습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>// Passkey 등록 (Registration)
+async function registerPasskey() {
+  // 서버에서 등록 옵션 가져오기
+  const optionsRes = await fetch('/api/passkey/register/options', {
+    method: 'POST',
+    credentials: 'include'
+  });
+  const options = await optionsRes.json();
+
+  // ArrayBuffer 변환
+  options.challenge = base64URLToBuffer(options.challenge);
+  options.user.id = base64URLToBuffer(options.user.id);
+
+  // Passkey 생성 (생체인식 프롬프트)
+  const credential = await navigator.credentials.create({
+    publicKey: {
+      ...options,
+      authenticatorSelection: {
+        residentKey: 'required',        // Passkey (Discoverable Credential)
+        userVerification: 'required',   // 생체인식 필수
+        authenticatorAttachment: 'platform' // 내장 인증기 우선
+      }
+    }
+  });
+
+  // 서버에 등록
+  await fetch('/api/passkey/register/verify', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id: credential.id,
+      rawId: bufferToBase64URL(credential.rawId),
+      response: {
+        clientDataJSON: bufferToBase64URL(credential.response.clientDataJSON),
+        attestationObject: bufferToBase64URL(credential.response.attestationObject)
+      },
+      type: credential.type
+    })
+  });
+}
+
+// Passkey 인증 - Conditional UI (자동완성)
+async function authenticateWithConditionalUI() {
+  // Conditional UI 지원 확인
+  if (!window.PublicKeyCredential?.isConditionalMediationAvailable?.()) {
+    return fallbackToTraditionalLogin();
+  }
+
+  const optionsRes = await fetch('/api/passkey/authenticate/options');
+  const options = await optionsRes.json();
+  options.challenge = base64URLToBuffer(options.challenge);
+
+  // mediation: 'conditional'로 자동완성 UI 활성화
+  // 사용자가 input 필드 클릭 시 Passkey 자동완성 표시
+  const credential = await navigator.credentials.get({
+    publicKey: options,
+    mediation: 'conditional' // 핵심: 자동완성 통합
+  });
+
+  // 서버 검증
+  const verifyRes = await fetch('/api/passkey/authenticate/verify', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id: credential.id,
+      response: {
+        clientDataJSON: bufferToBase64URL(credential.response.clientDataJSON),
+        authenticatorData: bufferToBase64URL(credential.response.authenticatorData),
+        signature: bufferToBase64URL(credential.response.signature),
+        userHandle: credential.response.userHandle
+          ? bufferToBase64URL(credential.response.userHandle)
+          : null
+      }
+    })
+  });
+
+  return verifyRes.json();
+}
+
+// HTML: Conditional UI용 input
+// &lt;input type="text" autocomplete="username webauthn" /&gt;
+// autocomplete="webauthn"이 Passkey 자동완성을 트리거
+
+// Passkey 지원 여부 확인
+async function isPasskeySupported(): Promise&lt;boolean&gt; {
+  if (!window.PublicKeyCredential) return false;
+
+  // Platform Authenticator (Touch ID, Windows Hello 등) 지원 여부
+  return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">제품 기획에서:</p>
+                    <p>"패스워드 피로가 심해서 이탈률이 높아요. Passkey 도입하면 Touch ID 한 번으로 로그인 가능하고, 피싱도 막을 수 있어요. Google, Apple 계정처럼 자동 동기화도 되고요."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"Passkey와 기존 보안키의 차이점은?" - "기존 FIDO2 보안키는 해당 기기에만 바인딩되지만, Passkey는 클라우드 동기화됩니다. discoverable credential이라 아이디 입력 없이도 인증 가능하고요."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">UX 설계에서:</p>
+                    <p>"기존 패스워드 로그인이랑 어떻게 공존시키죠?" - "Conditional UI 쓰면 됩니다. 이메일 input에 autocomplete='webauthn' 추가하면, Passkey 있는 사용자에겐 자동완성으로 제안되고, 없으면 기존 로그인 플로우로 갑니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">플랫폼(Apple/Google/Microsoft) 계정에 의존합니다. 사용자가 해당 계정에서 로그아웃되거나 계정을 삭제하면 Passkey에 접근할 수 없습니다. 대체 복구 방법을 반드시 제공하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">크로스 플랫폼 동기화가 제한적입니다. iCloud Keychain의 Passkey는 Android에서 직접 사용 불가합니다. 여러 생태계를 사용하는 사용자는 각 플랫폼에서 별도 등록이 필요할 수 있습니다.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">공용 컴퓨터에서의 사용에 주의가 필요합니다. QR 코드 기반 크로스 디바이스 인증은 피싱에 악용될 수 있으므로, 신뢰할 수 있는 환경에서만 사용하도록 안내하세요.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/FIDO2/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">FIDO2</a>
+                <a href="/ko/term/OAuth%202.1/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">OAuth 2.1</a>
+                <a href="/ko/term/MFA/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">MFA</a>
+                <a href="/ko/term/Zero%20Trust/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Zero Trust</a>
+                <a href="/ko/term/Token-based%20Auth/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Token-based Auth</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://passkeys.dev/" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> passkeys.dev - Passkey 개발자 가이드
+                </a>
+                <a href="https://web.dev/articles/passkey-registration" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> web.dev - Passkey 구현 가이드
+                </a>
+                <a href="https://developer.apple.com/passkeys/" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Apple Developer - Passkeys
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

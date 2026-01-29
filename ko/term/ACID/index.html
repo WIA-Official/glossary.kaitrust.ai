@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACID (Atomicity, Consistency, Isolation, Durability) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="트랜잭션의 4가지 속성. 원자성, 일관성, 격리성, 지속성. 데이터 무결성 보장.">
-    <meta name="keywords" content="ACID, Atomicity, Consistency, Isolation, Durability, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="ACID는 데이터베이스 트랜잭션의 4가지 핵심 속성입니다. 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 통해 데이터 무결성을 보장합니다.">
+    <meta name="keywords" content="ACID, 트랜잭션, Atomicity, Consistency, Isolation, Durability, 원자성, 일관성, 격리성, 지속성, 데이터베이스, PostgreSQL, MySQL, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/ACID/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/ACID/">
     <meta property="og:title" content="ACID (Atomicity, Consistency, Isolation, Durability) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="트랜잭션의 4가지 속성. 원자성, 일관성, 격리성, 지속성. 데이터 무결성 보장.">
+    <meta property="og:description" content="ACID는 데이터베이스 트랜잭션의 4가지 핵심 속성으로 데이터 무결성을 보장합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ACID (Atomicity, Consistency, Isolation, Durability) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="트랜잭션의 4가지 속성. 원자성, 일관성, 격리성, 지속성. 데이터 무결성 보장.">
+    <meta name="twitter:description" content="ACID는 데이터베이스 트랜잭션의 4가지 핵심 속성으로 데이터 무결성을 보장합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "ACID",
-        "description": "트랜잭션의 4가지 속성. 원자성, 일관성, 격리성, 지속성. 데이터 무결성 보장.",
+        "alternateName": "Atomicity, Consistency, Isolation, Durability",
+        "description": "ACID는 데이터베이스 트랜잭션의 4가지 핵심 속성으로 데이터 무결성을 보장합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">ACID</h1>
             <p class="term-english">Atomicity, Consistency, Isolation, Durability</p>
             <div class="term-description">
-                <p>트랜잭션의 4가지 속성. 원자성, 일관성, 격리성, 지속성. 데이터 무결성 보장.</p>
+                <p>데이터베이스 트랜잭션의 4가지 핵심 속성입니다. 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 통해 데이터 무결성과 신뢰성을 보장합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,411 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>원자성(Atomicity)</strong>은 "전부 아니면 전무(All or Nothing)" 원칙입니다. 트랜잭션 내 모든 작업이 완료되거나, 하나라도 실패하면 전체가 취소(롤백)됩니다. 예를 들어 계좌 이체에서 출금은 성공했는데 입금이 실패하면, 출금도 취소되어 돈이 사라지는 것을 방지합니다.</p>
+                <p><strong>일관성(Consistency)</strong>은 트랜잭션 전후로 데이터베이스가 일관된 상태를 유지해야 함을 의미합니다. 모든 제약조건(Primary Key, Foreign Key, Check 등)이 만족되어야 하며, 비즈니스 규칙(예: 잔액은 음수가 될 수 없음)도 지켜져야 합니다.</p>
+                <p><strong>격리성(Isolation)</strong>은 동시에 실행되는 트랜잭션들이 서로 영향을 주지 않도록 합니다. 격리 수준(Isolation Level)에는 Read Uncommitted, Read Committed, Repeatable Read, Serializable이 있으며, 높은 격리 수준일수록 동시성은 낮아지지만 데이터 정합성은 높아집니다.</p>
+                <p><strong>지속성(Durability)</strong>은 트랜잭션이 커밋되면 시스템 장애가 발생해도 그 결과가 영구적으로 보존됨을 보장합니다. WAL(Write-Ahead Logging), 체크포인트 등의 기법으로 구현되며, 데이터 복구의 기반이 됩니다.</p>
+                <p>관계형 데이터베이스(PostgreSQL, MySQL, Oracle)는 ACID를 완벽히 지원합니다. 반면 일부 NoSQL 데이터베이스는 성능과 확장성을 위해 ACID 일부를 완화하고 BASE(Basically Available, Soft state, Eventually consistent)를 택하기도 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (psycopg2)</button>
+                <button class="code-tab" data-lang="node">Node.js (pg)</button>
+                <button class="code-tab" data-lang="sql">SQL 직접</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># ACID 트랜잭션 예제 - Python + PostgreSQL
+import psycopg2
+from psycopg2 import sql
+from decimal import Decimal
+
+class BankService:
+    """계좌 이체 서비스 - ACID 보장"""
+
+    def __init__(self, connection_string: str):
+        self.conn_string = connection_string
+
+    def transfer(self, from_account: str, to_account: str, amount: Decimal) -> bool:
+        """
+        계좌 이체 - 원자성(Atomicity) 보장
+        출금과 입금이 모두 성공하거나, 모두 롤백됨
+        """
+        conn = psycopg2.connect(self.conn_string)
+
+        try:
+            # autocommit=False가 기본값 (트랜잭션 시작)
+            with conn.cursor() as cur:
+                # 1. 출금 계좌 잔액 확인 (일관성 체크)
+                cur.execute(
+                    "SELECT balance FROM accounts WHERE id = %s FOR UPDATE",
+                    (from_account,)
+                )
+                result = cur.fetchone()
+
+                if not result:
+                    raise ValueError(f"계좌 {from_account}가 존재하지 않습니다")
+
+                balance = result[0]
+                if balance < amount:
+                    raise ValueError("잔액이 부족합니다")
+
+                # 2. 출금 (잔액 차감)
+                cur.execute(
+                    "UPDATE accounts SET balance = balance - %s WHERE id = %s",
+                    (amount, from_account)
+                )
+
+                # 3. 입금 (잔액 증가)
+                cur.execute(
+                    "UPDATE accounts SET balance = balance + %s WHERE id = %s",
+                    (amount, to_account)
+                )
+
+                # 4. 이체 기록 저장
+                cur.execute(
+                    """INSERT INTO transfers (from_account, to_account, amount, created_at)
+                       VALUES (%s, %s, %s, NOW())""",
+                    (from_account, to_account, amount)
+                )
+
+            # 모든 작업 성공 시 커밋 (지속성 보장)
+            conn.commit()
+            print(f"✅ 이체 완료: {from_account} → {to_account}, {amount}원")
+            return True
+
+        except Exception as e:
+            # 오류 발생 시 롤백 (원자성 보장)
+            conn.rollback()
+            print(f"❌ 이체 실패, 롤백됨: {e}")
+            return False
+
+        finally:
+            conn.close()
+
+
+# 격리 수준 설정 예제
+def set_isolation_level(conn, level: str):
+    """
+    격리 수준 설정
+    - READ UNCOMMITTED: Dirty Read 허용 (거의 사용 안함)
+    - READ COMMITTED: PostgreSQL 기본값
+    - REPEATABLE READ: 반복 읽기 보장
+    - SERIALIZABLE: 완벽한 격리, 낮은 동시성
+    """
+    isolation_levels = {
+        'read_committed': psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED,
+        'repeatable_read': psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ,
+        'serializable': psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE,
+    }
+    conn.set_isolation_level(isolation_levels.get(level, 1))
+
+
+# 사용 예시
+if __name__ == "__main__":
+    bank = BankService("postgresql://localhost/bank")
+
+    # ACID가 보장되는 이체
+    bank.transfer("ACC001", "ACC002", Decimal("50000"))
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// ACID 트랜잭션 예제 - Node.js + PostgreSQL
+const { Pool } = require('pg');
+
+class BankService {
+    constructor(connectionString) {
+        this.pool = new Pool({ connectionString });
+    }
+
+    /**
+     * 계좌 이체 - ACID 보장
+     * @param {string} fromAccount - 출금 계좌
+     * @param {string} toAccount - 입금 계좌
+     * @param {number} amount - 이체 금액
+     */
+    async transfer(fromAccount, toAccount, amount) {
+        const client = await this.pool.connect();
+
+        try {
+            // 트랜잭션 시작
+            await client.query('BEGIN');
+
+            // 1. 출금 계좌 잔액 확인 (FOR UPDATE로 락)
+            const { rows } = await client.query(
+                'SELECT balance FROM accounts WHERE id = $1 FOR UPDATE',
+                [fromAccount]
+            );
+
+            if (rows.length === 0) {
+                throw new Error(`계좌 ${fromAccount}가 존재하지 않습니다`);
+            }
+
+            const balance = parseFloat(rows[0].balance);
+            if (balance < amount) {
+                throw new Error('잔액이 부족합니다');
+            }
+
+            // 2. 출금
+            await client.query(
+                'UPDATE accounts SET balance = balance - $1 WHERE id = $2',
+                [amount, fromAccount]
+            );
+
+            // 3. 입금
+            await client.query(
+                'UPDATE accounts SET balance = balance + $1 WHERE id = $2',
+                [amount, toAccount]
+            );
+
+            // 4. 이체 기록
+            await client.query(
+                `INSERT INTO transfers (from_account, to_account, amount, created_at)
+                 VALUES ($1, $2, $3, NOW())`,
+                [fromAccount, toAccount, amount]
+            );
+
+            // 커밋 - 지속성(Durability) 보장
+            await client.query('COMMIT');
+            console.log(`✅ 이체 완료: ${fromAccount} → ${toAccount}, ${amount}원`);
+            return true;
+
+        } catch (error) {
+            // 롤백 - 원자성(Atomicity) 보장
+            await client.query('ROLLBACK');
+            console.error(`❌ 이체 실패, 롤백됨: ${error.message}`);
+            return false;
+
+        } finally {
+            client.release();
+        }
+    }
+
+    /**
+     * 격리 수준 설정
+     */
+    async withIsolationLevel(level, callback) {
+        const client = await this.pool.connect();
+
+        try {
+            // 격리 수준 설정
+            await client.query(`SET TRANSACTION ISOLATION LEVEL ${level}`);
+            await client.query('BEGIN');
+
+            const result = await callback(client);
+
+            await client.query('COMMIT');
+            return result;
+
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
+    }
+}
+
+// 사용 예시
+const bank = new BankService('postgresql://localhost/bank');
+
+// SERIALIZABLE 격리 수준으로 조회
+bank.withIsolationLevel('SERIALIZABLE', async (client) => {
+    const { rows } = await client.query(
+        'SELECT SUM(balance) as total FROM accounts'
+    );
+    return rows[0].total;
+});
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="sql">
+                <pre><code class="language-sql">-- ACID 속성 SQL 예제
+
+-- ============================================
+-- 1. 원자성 (Atomicity) - 트랜잭션
+-- ============================================
+BEGIN;  -- 트랜잭션 시작
+
+UPDATE accounts SET balance = balance - 50000
+WHERE id = 'ACC001';
+
+UPDATE accounts SET balance = balance + 50000
+WHERE id = 'ACC002';
+
+-- 둘 다 성공하면 커밋
+COMMIT;
+
+-- 실패 시 롤백
+-- ROLLBACK;
+
+
+-- ============================================
+-- 2. 일관성 (Consistency) - 제약조건
+-- ============================================
+CREATE TABLE accounts (
+    id VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    balance DECIMAL(15,2) NOT NULL DEFAULT 0,
+
+    -- 일관성 제약: 잔액은 음수 불가
+    CONSTRAINT positive_balance CHECK (balance >= 0)
+);
+
+-- 잔액이 부족하면 제약조건 위반으로 실패
+UPDATE accounts SET balance = balance - 1000000
+WHERE id = 'ACC001';  -- ERROR: check constraint 위반
+
+
+-- ============================================
+-- 3. 격리성 (Isolation) - 격리 수준
+-- ============================================
+-- 격리 수준 확인
+SHOW TRANSACTION ISOLATION LEVEL;
+
+-- 세션별 격리 수준 설정
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+-- PostgreSQL 격리 수준별 특징
+-- READ COMMITTED (기본): Dirty Read 방지
+-- REPEATABLE READ: Non-repeatable Read 방지
+-- SERIALIZABLE: Phantom Read 방지, 완벽한 격리
+
+
+-- ============================================
+-- 4. 지속성 (Durability) - WAL 확인
+-- ============================================
+-- WAL 설정 확인 (PostgreSQL)
+SHOW wal_level;
+SHOW synchronous_commit;
+
+-- fsync 설정 (데이터 디스크 동기화)
+SHOW fsync;
+
+
+-- ============================================
+-- 락(Lock)을 이용한 격리
+-- ============================================
+-- 행 레벨 락 (다른 트랜잭션의 수정 방지)
+SELECT * FROM accounts
+WHERE id = 'ACC001'
+FOR UPDATE;
+
+-- 공유 락 (읽기는 허용, 수정 방지)
+SELECT * FROM accounts
+WHERE id = 'ACC001'
+FOR SHARE;
+
+
+-- ============================================
+-- 데드락 예방
+-- ============================================
+-- 잠금 타임아웃 설정
+SET lock_timeout = '5s';
+
+-- 데드락 감지 시 자동 롤백됨
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 결제 시스템 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "결제 처리는 반드시 ACID 트랜잭션으로 감싸야 합니다. 재고 차감, 주문 생성, 결제 기록이 원자적으로 처리되어야 해요. 하나라도 실패하면 전체 롤백되어야 고객에게 결제됐는데 주문이 없는 상황을 막을 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 최적화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "격리 수준을 SERIALIZABLE로 올리면 동시성이 크게 떨어집니다. 대부분의 경우 READ COMMITTED면 충분하고, 정합성이 중요한 금융 거래만 SERIALIZABLE을 쓰세요. 상황에 따라 격리 수준을 다르게 가져가는 게 좋습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "서버가 갑자기 죽었는데 데이터 손실이 없는 건 PostgreSQL의 WAL 덕분입니다. 지속성이 보장되니까 커밋된 트랜잭션은 복구됩니다. 다만 synchronous_commit이 off면 최근 몇 건은 유실될 수 있어요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>긴 트랜잭션 금지</strong>
+                        <p>트랜잭션이 길어지면 락이 오래 유지되어 다른 요청이 대기합니다. 트랜잭션은 최대한 짧게, 필요한 작업만 포함하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>데드락 주의</strong>
+                        <p>두 트랜잭션이 서로의 락을 기다리면 데드락이 발생합니다. 락 순서를 일관되게 유지하고, lock_timeout을 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>NoSQL의 ACID 한계</strong>
+                        <p>MongoDB, Cassandra 등 일부 NoSQL은 ACID를 완벽히 지원하지 않습니다. 트랜잭션이 필요한 경우 지원 범위를 확인하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>ACID 베스트 프랙티스</strong>
+                        <p>트랜잭션 범위 최소화, FOR UPDATE로 명시적 락, 적절한 격리 수준 선택, 재시도 로직 구현, 모니터링으로 장시간 트랜잭션 감지.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Transaction/" class="related-term-link">Transaction</a>
+                <a href="/ko/term/PostgreSQL/" class="related-term-link">PostgreSQL</a>
+                <a href="/ko/term/MySQL/" class="related-term-link">MySQL</a>
+                <a href="/ko/term/BASE/" class="related-term-link">BASE</a>
+                <a href="/ko/term/Replication/" class="related-term-link">Replication</a>
+                <a href="/ko/term/%EB%8D%B0%EB%93%9C%EB%9D%BD/" class="related-term-link">데드락</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.postgresql.org/docs/current/transaction-iso.html" target="_blank" class="learn-link">
+                    📄 PostgreSQL - 트랜잭션 격리
+                </a>
+                <a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html" target="_blank" class="learn-link">
+                    🎓 MySQL InnoDB - 격리 수준
+                </a>
+                <a href="https://jepsen.io/consistency" target="_blank" class="learn-link">
+                    📖 Jepsen - 분산 시스템 일관성 모델
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +701,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

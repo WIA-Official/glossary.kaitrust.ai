@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,138 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Instruction Tuning은 자연어 지시문(instruction)과 그에 대한 응답 쌍으로 언어 모델을 파인튜닝하는 기법입니다. "요약해줘", "번역해줘", "코드 작성해줘" 같은 명령을 이해하고 수행하는 능력을 모델에 학습시킵니다.</p>
+                <p>Google의 FLAN(Finetuned Language Net) 프로젝트에서 체계화되었으며, FLAN-T5는 1,800개 이상의 다양한 태스크 템플릿으로 학습되었습니다. 이를 통해 처음 보는 지시문에도 일반화(zero-shot generalization) 능력을 갖추게 됩니다.</p>
+                <p>기존 언어 모델은 다음 토큰 예측에 최적화되어 있어 명령 수행 능력이 부족합니다. Instruction Tuning은 "사용자 의도 파악 -> 적절한 응답 생성" 패턴을 학습시켜 ChatGPT처럼 대화형 AI를 만드는 핵심 기술입니다.</p>
+                <p>실무에서 FLAN-T5는 94.8% SQL 생성 정확도를 2시간 만에 달성했고(15B 모델 SQLCoder는 54시간), 의료 보고서 요약에서 GPT-4를 능가하는 성능을 보였습니다. 소규모 모델도 단일 GPU로 효과적으로 학습 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, Trainer, TrainingArguments
+from datasets import Dataset
+import torch
+
+# FLAN-T5 모델 로드
+model_name = "google/flan-t5-base"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+# Instruction Tuning 데이터셋 예시
+instruction_data = [
+    {"instruction": "다음 문장을 요약해줘:", "input": "인공지능은 컴퓨터 과학의 한 분야로, 기계가 인간처럼 학습하고 추론하는 능력을 갖추게 하는 기술입니다.", "output": "AI는 기계에 학습과 추론 능력을 부여하는 기술입니다."},
+    {"instruction": "영어로 번역해줘:", "input": "안녕하세요, 만나서 반갑습니다.", "output": "Hello, nice to meet you."},
+    {"instruction": "감정을 분류해줘:", "input": "이 영화 정말 최고였어요!", "output": "긍정"},
+]
+
+# 데이터 전처리
+def preprocess(examples):
+    inputs = [f"{ex['instruction']} {ex['input']}" for ex in examples]
+    targets = [ex['output'] for ex in examples]
+
+    model_inputs = tokenizer(inputs, max_length=256, truncation=True, padding="max_length")
+    labels = tokenizer(targets, max_length=128, truncation=True, padding="max_length")
+
+    model_inputs["labels"] = labels["input_ids"]
+    return model_inputs
+
+dataset = Dataset.from_list(instruction_data)
+tokenized_dataset = dataset.map(lambda x: preprocess([x]), batched=False)
+
+# 학습 설정
+training_args = TrainingArguments(
+    output_dir="./flan-t5-instruction-tuned",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    learning_rate=5e-5,
+    save_strategy="epoch"
+)
+
+trainer = Trainer(model=model, args=training_args, train_dataset=tokenized_dataset)
+trainer.train()
+print("Instruction Tuning 완료!")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"기본 LLM은 텍스트 완성에만 최적화되어 있어서 명령 수행이 어렵습니다. Instruction Tuning을 적용하면 '요약해줘', '번역해줘' 같은 지시문을 이해하고 수행할 수 있게 됩니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"Instruction Tuning은 지시문-응답 쌍으로 모델을 학습시키는 기법입니다. FLAN-T5가 대표적인데, 1,800개 이상의 태스크로 학습되어 처음 보는 지시문에도 잘 대응합니다. ChatGPT의 핵심 기술 중 하나입니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"FLAN-T5-base만으로도 단일 GPU에서 instruction tuning이 가능해요. 특정 도메인에 맞는 지시문 데이터셋만 구축하면 GPT API보다 저렴하게 자체 서비스를 운영할 수 있습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>지시문 형식의 일관성 무시</strong>
+                        <p>"요약해줘", "요약해주세요", "Summarize"가 섞이면 모델이 패턴을 학습하기 어렵습니다. 일관된 템플릿을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>단일 태스크로만 학습</strong>
+                        <p>요약만 학습시키면 다른 지시문에 대한 일반화 능력이 떨어집니다. 다양한 태스크를 포함하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>다양한 태스크 템플릿 포함</strong>
+                        <p>분류, 요약, 번역, QA, 코드 생성 등 다양한 태스크를 포함하면 zero-shot 일반화 능력이 향상됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Fine-tuning/" class="related-term-link">Fine-tuning</a>
+                <a href="/ko/term/RLHF/" class="related-term-link">RLHF</a>
+                <a href="/ko/term/Prompt%20Engineering/" class="related-term-link">Prompt Engineering</a>
+                <a href="/ko/term/In-Context%20Learning/" class="related-term-link">In-Context Learning</a>
+                <a href="/ko/term/LoRA/" class="related-term-link">LoRA</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://huggingface.co/docs/transformers/model_doc/flan-t5" target="_blank" class="learn-link">📄 Hugging Face FLAN-T5 문서</a>
+                <a href="https://research.google/blog/the-flan-collection-advancing-open-source-methods-for-instruction-tuning/" target="_blank" class="learn-link">🎓 Google Research - FLAN Collection</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +368,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

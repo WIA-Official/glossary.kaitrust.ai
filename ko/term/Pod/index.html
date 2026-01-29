@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,212 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>파드(Pod)는 Kubernetes에서 생성하고 관리할 수 있는 가장 작은 배포 단위입니다. "고래 떼(a pod of whales)"에서 유래한 이름으로, 하나 이상의 컨테이너를 그룹으로 묶어 동일한 네트워크 네임스페이스와 스토리지를 공유합니다.</p>
+                <p>파드 내 컨테이너들은 localhost로 서로 통신하고, 동일한 IP 주소를 공유합니다. 일반적으로 단일 컨테이너 파드가 권장되지만, 사이드카 패턴(로깅, 프록시)이나 앰배서더 패턴(외부 서비스 프록시)에서는 멀티 컨테이너 파드를 사용합니다.</p>
+                <p>파드는 일시적(Ephemeral)인 존재로 설계되었습니다. 노드 장애, 리소스 부족, 스케줄러 결정에 따라 언제든 삭제되고 재생성될 수 있습니다. 따라서 Deployment, StatefulSet, DaemonSet 같은 상위 컨트롤러를 통해 파드를 관리하는 것이 표준입니다.</p>
+                <p>실무에서 파드 스펙에는 리소스 요청(requests)/제한(limits), 라이브니스/레디니스 프로브, 보안 컨텍스트, 환경변수, 시크릿 마운트 등을 정의합니다. 프로덕션에서는 replicas: 3 이상으로 설정하여 고가용성을 확보합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># 프로덕션 레벨 Pod 스펙 (Deployment 권장)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api-server
+  labels:
+    app: api-server
+    version: v1.2.3
+    team: backend
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+spec:
+  # 보안 설정
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 2000
+
+  # 초기화 컨테이너 (메인 컨테이너 실행 전)
+  initContainers:
+    - name: init-db-check
+      image: busybox:1.36
+      command: ['sh', '-c',
+        'until nc -z postgres-service 5432; do
+          echo "Waiting for database...";
+          sleep 2;
+        done']
+
+  containers:
+    # 메인 애플리케이션 컨테이너
+    - name: api
+      image: myregistry.io/api-server:v1.2.3
+      imagePullPolicy: IfNotPresent
+
+      ports:
+        - name: http
+          containerPort: 8080
+        - name: metrics
+          containerPort: 9090
+
+      # 리소스 제한 (필수!)
+      resources:
+        requests:
+          cpu: "250m"
+          memory: "256Mi"
+        limits:
+          cpu: "1000m"
+          memory: "512Mi"
+
+      # 환경변수
+      env:
+        - name: NODE_ENV
+          value: "production"
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: host
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: password
+
+      # 헬스체크 (필수!)
+      livenessProbe:
+        httpGet:
+          path: /health/live
+          port: 8080
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        failureThreshold: 3
+
+      readinessProbe:
+        httpGet:
+          path: /health/ready
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 5
+        failureThreshold: 3
+
+      # Graceful shutdown
+      lifecycle:
+        preStop:
+          exec:
+            command: ["/bin/sh", "-c", "sleep 10"]
+
+      # 볼륨 마운트
+      volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: cache-volume
+          mountPath: /app/cache
+
+    # 사이드카 컨테이너 (로그 수집)
+    - name: log-shipper
+      image: fluent/fluent-bit:2.2
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "64Mi"
+        limits:
+          cpu: "100m"
+          memory: "128Mi"
+      volumeMounts:
+        - name: log-volume
+          mountPath: /var/log/app
+
+  volumes:
+    - name: config-volume
+      configMap:
+        name: api-config
+    - name: cache-volume
+      emptyDir: {}
+    - name: log-volume
+      emptyDir: {}
+
+  # 스케줄링 설정
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app: api-server
+            topologyKey: kubernetes.io/hostname
+
+  terminationGracePeriodSeconds: 30
+  restartPolicy: Always</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "api-server 파드가 자꾸 OOMKilled 되는데, 메모리 프로파일링 해봤어요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "네, 피크 시간대 메모리가 480MB까지 올라가더라고요. 현재 limit이 256Mi라서 512Mi로 올리면 될 것 같습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Pod와 Container의 차이점을 설명해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "Pod는 Kubernetes의 배포 단위로 하나 이상의 Container를 포함합니다. 같은 Pod 내 컨테이너들은 네트워크와 스토리지를 공유하고, 함께 스케줄링되고 함께 종료됩니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 파드 스펙에 readinessProbe가 없네요. 배포 시 트래픽이 준비 안 된 파드로 갈 수 있어요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, /health/ready 엔드포인트는 있는데 프로브 설정을 빼먹었네요. 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>리소스 requests/limits를 설정하지 않으면 노드의 리소스를 모두 소진하거나 OOM으로 강제 종료될 수 있습니다</li>
+                <li>파드를 직접 생성하면 장애 시 자동 복구되지 않습니다. 반드시 Deployment를 사용하세요</li>
+                <li>livenessProbe를 너무 공격적으로 설정하면 정상 파드가 불필요하게 재시작됩니다</li>
+                <li class="info">프로덕션에서는 podAntiAffinity로 동일 서비스 파드가 다른 노드에 분산되도록 설정하세요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+                <a href="/ko/term/Deployment/" class="related-link">Deployment</a>
+                <a href="/ko/term/Service%20Mesh/" class="related-link">Service Mesh</a>
+                <a href="/ko/term/Scaling/" class="related-link">Scaling</a>
+                <a href="/ko/term/Helm/" class="related-link">Helm</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://kubernetes.io/docs/concepts/workloads/pods/" target="_blank" rel="noopener">Kubernetes Pod 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/deploy-app/" target="_blank" rel="noopener">Kubernetes 배포 튜토리얼</a></li>
+                <li><span class="type-book"></span><a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/" target="_blank" rel="noopener">Pod 라이프사이클 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +419,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

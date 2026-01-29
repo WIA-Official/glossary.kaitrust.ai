@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,116 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>kubectl(큐브컨트롤, 발음: 큐브-CTL 또는 큐브-커틀)은 Kubernetes 클러스터를 관리하는 공식 커맨드라인 도구입니다. API 서버와 통신하여 Pod, Service, Deployment 등 모든 Kubernetes 리소스를 생성, 조회, 수정, 삭제할 수 있습니다.</p>
+                <p>명령 구조는 kubectl [동사] [리소스] [이름] [옵션]입니다. 주요 동사로 get(조회), describe(상세정보), apply(적용), delete(삭제), logs(로그), exec(명령실행)가 있습니다. YAML 파일로 선언적 관리가 가능하며, --dry-run으로 실행 전 검증할 수 있습니다.</p>
+                <p>kubeconfig 파일(~/.kube/config)에 클러스터 접속 정보가 저장됩니다. context로 여러 클러스터를 관리하고, 네임스페이스로 리소스를 격리합니다. RBAC 권한에 따라 실행 가능한 명령이 제한됩니다.</p>
+                <p>실무에서는 kubectl get pods --watch로 실시간 상태 확인, kubectl logs -f로 로그 스트리밍, kubectl exec -it로 컨테이너 접속을 자주 사용합니다. alias k=kubectl 설정과 bash completion으로 생산성을 높입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="bash">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># 리소스 조회
+kubectl get pods                     # Pod 목록
+kubectl get pods -o wide             # 추가 정보 (IP, Node)
+kubectl get pods -w                  # 실시간 변화 감시
+kubectl get all -n production        # 특정 네임스페이스 전체 리소스
+
+# 상세 정보 및 로그
+kubectl describe pod my-pod          # Pod 상세 정보
+kubectl logs my-pod -f               # 로그 스트리밍
+kubectl logs my-pod -c nginx         # 특정 컨테이너 로그
+kubectl logs -l app=web --tail=100   # 레이블로 여러 Pod 로그
+
+# 리소스 생성/적용
+kubectl apply -f deployment.yaml     # 선언적 적용
+kubectl apply -f ./k8s/              # 디렉토리 전체 적용
+kubectl create deployment nginx --image=nginx  # 명령형 생성
+kubectl apply -f - <<EOF             # 인라인 YAML
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.25
+EOF
+
+# 디버깅
+kubectl exec -it my-pod -- /bin/sh   # 컨테이너 셸 접속
+kubectl port-forward svc/web 8080:80 # 로컬 포트 포워딩
+kubectl top pods                     # 리소스 사용량
+
+# 클러스터/컨텍스트 관리
+kubectl config get-contexts          # 컨텍스트 목록
+kubectl config use-context prod      # 컨텍스트 전환
+kubectl config set-context --current --namespace=dev  # 기본 네임스페이스 설정</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "운영 클러스터 Pod가 CrashLoopBackOff인데, kubectl describe로 이벤트 확인해봐요."</p>
+                <p><strong class="role-junior">주니어:</strong> "OOMKilled가 나오네요. 메모리 limit을 512Mi에서 1Gi로 올려야 할 것 같아요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "kubectl apply와 kubectl create의 차이점은 무엇인가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "create는 리소스가 없을 때만 생성하고, apply는 없으면 생성, 있으면 업데이트합니다. GitOps 환경에서는 선언적 관리를 위해 apply를 사용합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "운영 환경에서 kubectl delete를 직접 실행하는 스크립트는 위험해요."</p>
+                <p><strong class="role-junior">개발자:</strong> "ArgoCD로 관리하도록 수정하고, kubectl은 조회용으로만 제한하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>운영 클러스터에서 delete/scale 명령 전 반드시 --dry-run으로 확인</li>
+                <li>컨텍스트 확인 없이 명령 실행 금지 - 잘못된 클러스터 조작 위험</li>
+                <li>kubectl edit 보다 YAML 파일 수정 후 apply 권장 - 변경 이력 추적 가능</li>
+                <li class="info">kubectx/kubens 도구로 클러스터/네임스페이스 전환을 안전하게 관리</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Helm/" class="related-link">Helm</a>
+                <a href="/ko/term/Kustomize/" class="related-link">Kustomize</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+                <a href="/ko/term/%EB%94%94%ED%94%8C%EB%A1%9C%EC%9D%B4%EB%A8%BC%ED%8A%B8/" class="related-link">디플로이먼트</a>
+                <a href="/ko/term/ArgoCD/" class="related-link">ArgoCD</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://kubernetes.io/docs/reference/kubectl/" target="_blank" rel="noopener">kubectl 공식 레퍼런스</a></li>
+                <li><span class="type-tutorial"></span><a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/" target="_blank" rel="noopener">kubectl Cheat Sheet</a></li>
+                <li><span class="type-book"></span><a href="https://github.com/ahmetb/kubectx" target="_blank" rel="noopener">kubectx/kubens - 컨텍스트 관리 도구</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +323,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

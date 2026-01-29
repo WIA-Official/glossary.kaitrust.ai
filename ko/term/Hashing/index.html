@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hashing (해싱) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="단방향 변환으로 원본 복원 불가. 비밀번호 저장에 사용. bcrypt, Argon2.">
-    <meta name="keywords" content="Hashing, 해싱, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="Hashing(해싱)은 임의 길이의 데이터를 고정 길이의 값으로 변환하는 단방향 함수입니다. 비밀번호 저장에는 Argon2, bcrypt를 사용하고, 데이터 무결성에는 SHA-256을 사용합니다.">
+    <meta name="keywords" content="Hashing, 해싱, Argon2, bcrypt, SHA-256, 비밀번호 저장, 해시 함수, Salt, Pepper, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Hashing/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Hashing/">
     <meta property="og:title" content="Hashing (해싱) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="단방향 변환으로 원본 복원 불가. 비밀번호 저장에 사용. bcrypt, Argon2.">
+    <meta property="og:description" content="단방향 변환으로 원본 복원 불가. 비밀번호 저장에는 Argon2, bcrypt를 사용합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Hashing (해싱) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="단방향 변환으로 원본 복원 불가. 비밀번호 저장에 사용. bcrypt, Argon2.">
+    <meta name="twitter:description" content="단방향 변환으로 원본 복원 불가. 비밀번호 저장에는 Argon2, bcrypt를 사용합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Hashing",
-        "description": "단방향 변환으로 원본 복원 불가. 비밀번호 저장에 사용. bcrypt, Argon2.",
+        "alternateName": "해싱",
+        "description": "임의 길이의 데이터를 고정 길이의 값으로 변환하는 단방향 함수입니다. 비밀번호 저장에는 Argon2, bcrypt를 사용하고, 데이터 무결성에는 SHA-256을 사용합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">Hashing</h1>
-            <p class="term-english">해싱</p>
+            <p class="term-english">해싱 (Hash Function)</p>
             <div class="term-description">
-                <p>단방향 변환으로 원본 복원 불가. 비밀번호 저장에 사용. bcrypt, Argon2.</p>
+                <p>Hashing(해싱)은 임의 길이의 데이터를 고정 길이의 값(해시값, 다이제스트)으로 변환하는 단방향 함수입니다. 원본 복원이 불가능하며, 비밀번호 저장에는 Argon2, bcrypt를, 데이터 무결성 검증에는 SHA-256을 사용합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,381 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>해시 함수(Hash Function)는 임의 크기의 입력을 받아 고정 크기의 출력(해시값, 다이제스트)을 생성하는 수학적 함수입니다. 암호학적 해시 함수는 세 가지 핵심 속성을 가져야 합니다. 단방향성(Pre-image Resistance): 해시값에서 원본을 역산할 수 없음. 충돌 저항성(Collision Resistance): 같은 해시를 생성하는 두 입력을 찾기가 불가능에 가까움. 쇄도 효과(Avalanche Effect): 입력의 작은 변화가 출력의 대대적인 변화를 초래함.</p>
+                <p>해시 함수는 용도에 따라 구분됩니다. 범용 해시 함수(SHA-256, SHA-3, BLAKE3)는 데이터 무결성 검증, 디지털 서명, 블록체인에 사용됩니다. 비밀번호 해싱 함수(Argon2, bcrypt, scrypt)는 의도적으로 느리게 설계되어 무차별 대입 공격을 어렵게 합니다. 2015년 Password Hashing Competition 우승자인 Argon2가 2025년 현재 최고의 선택이며, OWASP도 Argon2id를 최우선으로 권장합니다.</p>
+                <p>비밀번호 저장의 핵심은 Salt와 적절한 Work Factor입니다. Salt는 각 비밀번호마다 생성되는 무작위 값으로, Rainbow Table 공격을 방지합니다. Argon2, bcrypt 같은 현대 알고리즘은 Salt를 자동으로 처리합니다. Work Factor(Cost Factor)는 해싱에 필요한 연산량/메모리량으로, 하드웨어 성능 향상에 맞춰 점진적으로 증가시켜야 합니다. OWASP는 Argon2id에 최소 19MiB 메모리, 2회 반복을 권장하며, 보안 중시 시스템은 128MiB, 3-5회 반복을 권장합니다.</p>
+                <p>bcrypt는 오래되었지만 여전히 안전합니다. 단, GPU 기반 공격에 Argon2보다 취약합니다. Argon2가 메모리-하드(Memory-Hard) 알고리즘이라 GPU의 제한된 메모리로 대규모 병렬 크래킹이 어렵기 때문입니다. bcrypt의 72바이트 비밀번호 제한도 고려해야 합니다. 레거시 시스템에서 bcrypt를 사용한다면 Cost Factor 12 이상을 설정하세요. 새 프로젝트는 Argon2id를 선택하는 것이 좋습니다. Pepper(서버 측 비밀 키)를 추가하면 데이터베이스 유출 시에도 추가 보호층이 됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="argon2">Argon2 (Python)</button>
+                <button class="code-tab" data-lang="bcrypt">bcrypt (Node.js)</button>
+                <button class="code-tab" data-lang="sha256">SHA-256 (다양한 용도)</button>
+            </div>
+            <div class="code-block active" data-lang="argon2">
+                <pre><code class="language-python"># Argon2id 비밀번호 해싱 - 2025 최고의 선택 (Python)
+# pip install argon2-cffi
+from argon2 import PasswordHasher, exceptions
+from argon2.profiles import RFC_9106_LOW_MEMORY, RFC_9106_HIGH_MEMORY
+
+# === 기본 사용법 ===
+ph = PasswordHasher()
+
+def hash_password(password: str) -> str:
+    """비밀번호 해싱"""
+    # Argon2id는 Salt를 자동 생성하고 해시에 포함
+    return ph.hash(password)
+
+def verify_password(stored_hash: str, input_password: str) -> bool:
+    """비밀번호 검증"""
+    try:
+        ph.verify(stored_hash, input_password)
+        return True
+    except exceptions.VerifyMismatchError:
+        return False
+    except exceptions.InvalidHashError:
+        return False
+
+# === OWASP 권장 파라미터로 커스텀 설정 ===
+class SecurePasswordHasher:
+    """OWASP 2025 권장 파라미터 적용"""
+
+    def __init__(self, high_security: bool = False):
+        if high_security:
+            # 보안 중시: 128 MiB 메모리, 3회 반복
+            self.ph = PasswordHasher(
+                time_cost=3,           # 반복 횟수
+                memory_cost=131072,    # 128 MiB (KB 단위)
+                parallelism=4,         # 병렬 스레드
+                hash_len=32,           # 해시 길이
+                salt_len=16            # Salt 길이
+            )
+        else:
+            # 일반: 19 MiB 메모리, 2회 반복 (최소 권장)
+            self.ph = PasswordHasher(
+                time_cost=2,
+                memory_cost=19456,     # 19 MiB
+                parallelism=1,
+                hash_len=32,
+                salt_len=16
+            )
+
+    def hash(self, password: str) -> str:
+        return self.ph.hash(password)
+
+    def verify(self, hash: str, password: str) -> tuple[bool, bool]:
+        """
+        검증 + 리해싱 필요 여부 반환
+        파라미터가 변경되면 기존 해시를 새 파라미터로 업데이트 필요
+        """
+        try:
+            self.ph.verify(hash, password)
+            needs_rehash = self.ph.check_needs_rehash(hash)
+            return True, needs_rehash
+        except exceptions.VerifyMismatchError:
+            return False, False
+
+
+# 사용 예시
+hasher = SecurePasswordHasher(high_security=True)
+
+# 회원가입: 해싱
+password = "MySecureP@ssw0rd2025!"
+hashed = hasher.hash(password)
+print(f"해시: {hashed}")
+# 결과 예: $argon2id$v=19$m=131072,t=3,p=4$Salt$Hash
+
+# 로그인: 검증
+valid, needs_rehash = hasher.verify(hashed, password)
+if valid:
+    print("비밀번호 일치!")
+    if needs_rehash:
+        # 파라미터 업그레이드 시 리해싱
+        new_hash = hasher.hash(password)
+        # DB에 new_hash 저장
+        print("보안 파라미터 업그레이드됨")
+
+# 해시 구조 분석
+# $argon2id$v=19$m=131072,t=3,p=4$randomSalt$hashedOutput
+# - argon2id: 알고리즘 (id = Argon2i + Argon2d 하이브리드)
+# - v=19: 버전
+# - m=131072: 메모리 (KB)
+# - t=3: 반복 횟수
+# - p=4: 병렬성</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bcrypt">
+                <pre><code class="language-javascript">// bcrypt 비밀번호 해싱 (Node.js)
+// npm install bcrypt
+const bcrypt = require('bcrypt');
+
+// === 기본 사용법 ===
+class PasswordManager {
+    constructor(costFactor = 12) {
+        // Cost Factor (Work Factor)
+        // 10 = 2^10 = 1,024 반복
+        // 12 = 2^12 = 4,096 반복 (2025 최소 권장)
+        // 14 = 2^14 = 16,384 반복 (높은 보안)
+        this.saltRounds = costFactor;
+    }
+
+    async hashPassword(password) {
+        // bcrypt는 Salt를 자동 생성하고 해시에 포함
+        // 주의: bcrypt는 72바이트 제한이 있음!
+        if (password.length > 72) {
+            throw new Error('bcrypt는 72바이트까지만 처리합니다');
+        }
+        return await bcrypt.hash(password, this.saltRounds);
+    }
+
+    async verifyPassword(inputPassword, storedHash) {
+        return await bcrypt.compare(inputPassword, storedHash);
+    }
+
+    // Cost Factor 업그레이드 확인
+    needsRehash(hash) {
+        const match = hash.match(/^\$2[aby]?\$(\d+)\$/);
+        if (!match) return true;
+        const currentCost = parseInt(match[1], 10);
+        return currentCost < this.saltRounds;
+    }
+}
+
+// 사용 예시
+const pm = new PasswordManager(12);
+
+async function demo() {
+    const password = 'MySecureP@ssw0rd!';
+
+    // 해싱
+    const hash = await pm.hashPassword(password);
+    console.log('bcrypt 해시:', hash);
+    // 결과 예: $2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/X4.1zCYSQ0KYB6OiS
+
+    // 검증
+    const isValid = await pm.verifyPassword(password, hash);
+    console.log('검증 결과:', isValid); // true
+
+    // 잘못된 비밀번호
+    const isWrong = await pm.verifyPassword('wrongpassword', hash);
+    console.log('잘못된 비밀번호:', isWrong); // false
+
+    // 리해싱 필요 확인 (Cost Factor 업그레이드 시)
+    const oldHash = '$2b$10$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQ...'; // Cost 10
+    if (pm.needsRehash(oldHash)) {
+        console.log('보안 업그레이드 필요: 새로운 해시 생성');
+    }
+}
+
+// Pepper 추가 (선택적 추가 보안)
+const PEPPER = process.env.PASSWORD_PEPPER; // 환경 변수에서 로드
+
+async function hashWithPepper(password) {
+    const pm = new PasswordManager(12);
+    // Pepper를 비밀번호에 추가 (HMAC 권장)
+    const crypto = require('crypto');
+    const pepperedPassword = crypto
+        .createHmac('sha256', PEPPER)
+        .update(password)
+        .digest('hex');
+    return await pm.hashPassword(pepperedPassword);
+}
+
+demo();
+
+// bcrypt 해시 구조:
+// $2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/X4.1zCYSQ0KYB6OiS
+// $2b = 알고리즘 버전
+// $12 = Cost Factor (2^12 반복)
+// 나머지 = Salt + Hash (22자 Salt, 31자 Hash)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="sha256">
+                <pre><code class="language-python"># SHA-256: 데이터 무결성, 디지털 서명, 블록체인 등
+# 비밀번호에는 사용하지 마세요! (너무 빠름)
+import hashlib
+import hmac
+
+# === 1. 파일 무결성 검증 ===
+def calculate_file_hash(filepath: str) -> str:
+    """파일의 SHA-256 해시 계산"""
+    sha256 = hashlib.sha256()
+    with open(filepath, 'rb') as f:
+        for chunk in iter(lambda: f.read(8192), b''):
+            sha256.update(chunk)
+    return sha256.hexdigest()
+
+# 다운로드한 파일 검증
+expected = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+actual = calculate_file_hash("downloaded_file.zip")
+if actual == expected:
+    print("파일 무결성 검증 통과!")
+else:
+    print("파일이 변조되었거나 손상됨!")
+
+
+# === 2. HMAC: 메시지 인증 코드 ===
+def create_hmac(key: bytes, message: bytes) -> str:
+    """HMAC-SHA256으로 메시지 인증 코드 생성"""
+    return hmac.new(key, message, hashlib.sha256).hexdigest()
+
+def verify_hmac(key: bytes, message: bytes, expected_mac: str) -> bool:
+    """HMAC 검증 (Timing Attack 방지)"""
+    actual_mac = create_hmac(key, message)
+    return hmac.compare_digest(actual_mac, expected_mac)
+
+# API 요청 서명
+api_key = b"secret-api-key-2025"
+request_body = b'{"user_id": 123, "action": "transfer"}'
+signature = create_hmac(api_key, request_body)
+print(f"API 서명: {signature}")
+
+
+# === 3. 블록체인/Merkle Tree ===
+def merkle_hash(*items: bytes) -> str:
+    """여러 데이터의 Merkle 해시 계산"""
+    combined = b''.join(items)
+    return hashlib.sha256(combined).hexdigest()
+
+
+# === 4. 안전한 토큰 생성 ===
+import secrets
+
+def generate_secure_token(length: int = 32) -> str:
+    """URL-safe 랜덤 토큰 생성"""
+    return secrets.token_urlsafe(length)
+
+def generate_api_key() -> tuple[str, str]:
+    """API 키 생성: (실제 키, 저장용 해시)"""
+    raw_key = secrets.token_hex(32)
+    key_hash = hashlib.sha256(raw_key.encode()).hexdigest()
+    return raw_key, key_hash  # raw_key는 사용자에게만, key_hash는 DB에
+
+api_key, api_key_hash = generate_api_key()
+print(f"사용자에게 전달: {api_key[:20]}...")
+print(f"DB에 저장: {api_key_hash}")
+
+
+# === 해시 알고리즘 선택 가이드 ===
+#
+# 비밀번호 저장: Argon2id > scrypt > bcrypt > PBKDF2
+#   - SHA-256 단독 사용 금지! (너무 빠름 → 무차별 대입 취약)
+#
+# 데이터 무결성: SHA-256, SHA-3, BLAKE3
+#   - MD5, SHA-1은 충돌 취약점으로 사용 금지
+#
+# 메시지 인증: HMAC-SHA256
+#   - API 서명, JWT, 웹훅 검증 등
+#
+# 고성능 해싱: BLAKE3 (SHA-256보다 빠름)
+#   - 파일 해싱, Merkle Tree 등</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 감사 대응에서</div>
+                    <blockquote class="conv-quote">
+                        "비밀번호는 Argon2id로 해싱하고 있습니다. 메모리 128MiB, 반복 3회 설정으로 OWASP 권장을 충족합니다. 레거시 bcrypt 해시는 로그인 성공 시 자동으로 Argon2로 마이그레이션됩니다. Pepper는 HSM에 저장하여 데이터베이스 유출 시에도 추가 보호층이 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "SHA-256으로 비밀번호를 저장하면 안 됩니다. SHA-256은 속도가 빨라서 GPU로 초당 수십억 개를 계산할 수 있습니다. bcrypt나 Argon2는 의도적으로 느리고 메모리를 많이 사용해서 크래킹 비용을 높입니다. 프레임워크에서 제공하는 password_hash 함수를 사용하세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 최적화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "로그인 응답 시간이 느리다면 Argon2 파라미터를 조정해야 합니다. 200-500ms를 목표로 하세요. 너무 빠르면 보안이 약해지고, 너무 느리면 DoS 공격에 취약해집니다. 로그인 요청에 Rate Limiting을 적용하고, 실패 시 지연을 추가하면 무차별 대입 공격을 완화할 수 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>SHA-256/MD5/SHA-1로 비밀번호 저장</strong>
+                        <p>범용 해시 함수는 빠르게 설계되어 비밀번호 크래킹에 취약합니다. GPU로 SHA-256은 초당 수십억 회 계산 가능합니다. 반드시 Argon2, bcrypt, scrypt 같은 비밀번호 전용 해시를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Salt 없이 해싱 또는 Salt 재사용</strong>
+                        <p>Salt 없이 해싱하면 Rainbow Table 공격에 취약합니다. 같은 Salt를 모든 비밀번호에 사용하면 동일한 비밀번호가 동일한 해시를 생성합니다. Argon2, bcrypt는 Salt를 자동 생성하므로 직접 관리할 필요가 없습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>낮은 Work Factor 설정</strong>
+                        <p>bcrypt cost=4나 Argon2 memory=4MB는 보안에 충분하지 않습니다. OWASP 권장: bcrypt cost 12+, Argon2id memory 19MiB+. 하드웨어 성능 향상에 따라 주기적으로 파라미터를 업그레이드하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>비밀번호 해싱 베스트 프랙티스</strong>
+                        <p>Argon2id를 최우선 사용 (bcrypt는 레거시용), 로그인 시 리해싱으로 파라미터 업그레이드, Pepper 추가 고려, Rate Limiting으로 무차별 대입 방지, 로그인 응답 시간 200-500ms 목표. 해시 비교는 Timing Attack 방지를 위해 constant-time 함수 사용.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Cryptography/" class="related-term-link">Cryptography</a>
+                <a href="/ko/term/HTTPS/" class="related-term-link">HTTPS</a>
+                <a href="/ko/term/Authentication/" class="related-term-link">Authentication</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+                <a href="/ko/term/OAuth/" class="related-term-link">OAuth</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" target="_blank" class="learn-link">
+                    📘 OWASP - Password Storage Cheat Sheet
+                </a>
+                <a href="https://www.password-hashing.net/" target="_blank" class="learn-link">
+                    🏆 Password Hashing Competition (Argon2)
+                </a>
+                <a href="https://argon2-cffi.readthedocs.io/" target="_blank" class="learn-link">
+                    🐍 Python argon2-cffi 라이브러리
+                </a>
+                <a href="https://auth0.com/blog/hashing-in-action-understanding-bcrypt/" target="_blank" class="learn-link">
+                    📖 Auth0 - bcrypt 심층 분석
+                </a>
+                <a href="https://stytch.com/blog/argon2-vs-bcrypt-vs-scrypt/" target="_blank" class="learn-link">
+                    ⚖️ Argon2 vs bcrypt vs scrypt 비교
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +721,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

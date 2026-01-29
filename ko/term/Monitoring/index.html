@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,159 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Monitoring(모니터링)은 시스템, 애플리케이션, 인프라의 상태와 성능을 지속적으로 수집, 분석, 시각화하는 활동입니다. 모니터링의 핵심 목표는 문제를 사전에 감지하고, 장애 발생 시 빠르게 대응하며, 시스템 건강 상태를 파악하는 것입니다.</p>
+                <p>모니터링은 크게 인프라 모니터링과 애플리케이션 모니터링으로 나뉩니다. 인프라 모니터링은 CPU, 메모리, 디스크, 네트워크 같은 시스템 리소스를 추적합니다. 애플리케이션 모니터링(APM)은 요청 처리 시간, 오류율, 처리량 같은 비즈니스 메트릭을 추적합니다.</p>
+                <p>메트릭은 시계열 데이터로 저장되며, 시간에 따른 변화를 분석합니다. 핵심 메트릭으로는 RED 메서드(Rate, Errors, Duration)와 USE 메서드(Utilization, Saturation, Errors)가 있습니다. 서비스 품질을 정의하는 SLI(Service Level Indicators)를 측정하고, 목표치 SLO(Service Level Objectives)와 비교하여 서비스 건강도를 판단합니다.</p>
+                <p>대표적인 모니터링 도구로는 오픈소스 Prometheus+Grafana 스택과 상용 서비스인 Datadog, New Relic, Dynatrace가 있습니다. Prometheus는 Pull 방식으로 메트릭을 수집하고 PromQL로 쿼리하며, Grafana에서 대시보드를 구성합니다. Alertmanager와 연동하여 임계치 기반 알림을 설정합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># prometheus.yml - Prometheus 설정
+global:
+  scrape_interval: 15s      # 메트릭 수집 주기
+  evaluation_interval: 15s  # 알림 규칙 평가 주기
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+rule_files:
+  - "alerts/*.yml"
+
+scrape_configs:
+  # Prometheus 자체 모니터링
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Kubernetes Pod 자동 발견
+  - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      # prometheus.io/scrape: "true" 어노테이션이 있는 Pod만
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      # 커스텀 경로 지원
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      # 포트 지정
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        target_label: __address__
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2</code></pre>
+            </div>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># alerts/api-alerts.yml - 알림 규칙
+groups:
+- name: api-alerts
+  rules:
+  # 높은 에러율 감지
+  - alert: HighErrorRate
+    expr: |
+      sum(rate(http_requests_total{status=~"5.."}[5m])) by (service)
+      /
+      sum(rate(http_requests_total[5m])) by (service)
+      > 0.05
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High error rate on {{ $labels.service }}"
+      description: "Error rate is {{ $value | humanizePercentage }}"
+
+  # 느린 응답 시간
+  - alert: HighLatency
+    expr: |
+      histogram_quantile(0.95,
+        sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service)
+      ) > 1
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "P95 latency above 1s on {{ $labels.service }}"
+
+  # Pod 메모리 사용량
+  - alert: PodHighMemory
+    expr: |
+      container_memory_working_set_bytes / container_spec_memory_limit_bytes > 0.9
+    for: 15m
+    labels:
+      severity: warning</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">SRE:</strong> "주말에 알림이 너무 많이 울렸어요. alert fatigue 걸릴 수준이에요."</p>
+                <p><strong class="role-junior">개발자:</strong> "HighCPU 알림이 대부분인데, 크론잡 돌 때마다 울려서..."</p>
+                <p><strong class="role-senior">시니어:</strong> "크론잡 시간대는 알림 억제하거나, CPU 임계치를 올리거나, 지속 시간(for)을 늘려서 일시적 스파이크는 무시하게 합시다. 진짜 중요한 알림만 가도록요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "SLI/SLO 기반 모니터링 경험이 있으신가요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "네, 주요 API의 SLO를 "99.9% 가용성, P95 응답시간 200ms 이내"로 정의했습니다. Prometheus에서 error rate와 latency percentile을 측정해서 SLI로 사용하고, Grafana에 SLO 대시보드를 만들어 Error Budget 소진율을 추적했습니다. 월간 Error Budget이 80% 소진되면 feature freeze하고 안정화에 집중하는 정책을 운영했어요."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 커스텀 메트릭, label cardinality 확인했어요? user_id를 레이블로 넣으면 메트릭 폭발해요."</p>
+                <p><strong class="role-author">작성자:</strong> "아, user_id는 빼고 user_type(free, premium, enterprise)처럼 bounded된 값만 레이블로 쓰겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>알림 피로(Alert Fatigue)를 피하세요. 너무 많은 알림은 중요한 알림을 무시하게 만듭니다. 알림은 즉시 대응이 필요한 것만 설정하고, 정보성은 대시보드로 확인하세요.</li>
+                <li>메트릭 레이블의 cardinality(고유 값 수)를 낮게 유지하세요. 사용자 ID, 세션 ID 같은 high cardinality 값은 메모리와 스토리지를 폭발적으로 증가시킵니다.</li>
+                <li class="info">평균값보다 백분위수(percentile)를 사용하세요. 평균 응답시간 100ms여도 P99가 5초일 수 있습니다. P50, P95, P99를 함께 보세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Prometheus/" class="related-link">Prometheus</a>
+                <a href="/ko/term/Grafana/" class="related-link">Grafana</a>
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+                <a href="/ko/term/SRE/" class="related-link">SRE</a>
+                <a href="/ko/term/Alerting/" class="related-link">Alerting</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://prometheus.io/docs/" target="_blank">Prometheus 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://grafana.com/docs/grafana/latest/" target="_blank">Grafana 공식 문서</a></li>
+                <li><span class="type-book"></span><a href="https://sre.google/sre-book/monitoring-distributed-systems/" target="_blank">Google SRE Book - Monitoring</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +366,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

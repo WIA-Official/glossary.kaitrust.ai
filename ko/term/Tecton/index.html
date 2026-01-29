@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,380 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Tecton</strong>은 머신러닝을 위한 엔터프라이즈급 Feature Platform입니다. 피처 엔지니어링, 저장, 서빙을 통합 관리하여 ML 모델의 프로덕션 배포와 운영을 가속화합니다. Uber의 Michelangelo를 개발한 팀이 창업했습니다.</p>
+
+                <h3>핵심 개념</h3>
+                <ul>
+                    <li><strong>Feature Store:</strong> 피처 정의, 버전 관리, 재사용 가능한 피처 저장소</li>
+                    <li><strong>Feature Pipeline:</strong> 배치, 스트리밍, 실시간 피처 계산 파이프라인</li>
+                    <li><strong>Feature Serving:</strong> 온라인(실시간)과 오프라인(배치) 서빙 지원</li>
+                    <li><strong>Feature Monitoring:</strong> 피처 드리프트, 품질, 신선도 모니터링</li>
+                </ul>
+
+                <h3>Tecton 아키텍처</h3>
+                <ul>
+                    <li><strong>Declarative Config:</strong> Python SDK로 피처를 코드로 정의 (Feature-as-Code)</li>
+                    <li><strong>Offline Store:</strong> 학습용 히스토리 피처 (S3, BigQuery, Snowflake)</li>
+                    <li><strong>Online Store:</strong> 실시간 추론용 저지연 피처 (DynamoDB, Redis)</li>
+                    <li><strong>Stream Processing:</strong> Spark Structured Streaming, Kafka 연동</li>
+                    <li><strong>Point-in-Time Correctness:</strong> 시점 기준 정확한 피처 조회로 data leakage 방지</li>
+                </ul>
+
+                <h3>주요 이점</h3>
+                <p>Tecton은 Training-Serving Skew를 방지하고, 피처 재사용성을 높여 모델 개발 시간을 단축합니다. 특히 금융(사기 탐지), 이커머스(추천), 라이드셰어(가격 책정) 등 실시간 ML이 중요한 도메인에서 활용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>Feature 정의 (Tecton SDK)</h3>
+                <pre><code class="language-python"># features/user_features.py
+from tecton import Entity, BatchSource, SnowflakeConfig, batch_feature_view
+from datetime import timedelta
+
+# Entity 정의 - 피처가 연결될 비즈니스 객체
+user = Entity(
+    name="user",
+    join_keys=["user_id"],
+    description="고객 엔티티"
+)
+
+# 데이터 소스 정의
+user_transactions = BatchSource(
+    name="user_transactions",
+    batch_config=SnowflakeConfig(
+        database="ANALYTICS",
+        schema="PUBLIC",
+        table="user_transactions",
+        timestamp_field="transaction_time"
+    )
+)
+
+# 배치 Feature View 정의
+@batch_feature_view(
+    sources=[user_transactions],
+    entities=[user],
+    mode="spark_sql",
+    batch_schedule=timedelta(days=1),
+    ttl=timedelta(days=30),
+    online=True,
+    offline=True,
+    feature_start_time=datetime(2023, 1, 1),
+    description="사용자 거래 통계 피처"
+)
+def user_transaction_features(user_transactions):
+    return f"""
+        SELECT
+            user_id,
+            transaction_time,
+            COUNT(*) as transaction_count_30d,
+            SUM(amount) as total_amount_30d,
+            AVG(amount) as avg_transaction_amount,
+            MAX(amount) as max_transaction_amount,
+            COUNT(DISTINCT merchant_id) as unique_merchants_30d
+        FROM {user_transactions}
+        WHERE transaction_time >= CURRENT_DATE - INTERVAL '30 days'
+        GROUP BY user_id, transaction_time
+    """</code></pre>
+
+                <h3>실시간 스트리밍 Feature</h3>
+                <pre><code class="language-python"># features/realtime_features.py
+from tecton import StreamSource, KafkaConfig, stream_feature_view
+from tecton.types import Field, String, Int64, Float64, Timestamp
+from datetime import timedelta
+
+# Kafka 스트림 소스
+click_events = StreamSource(
+    name="click_events",
+    stream_config=KafkaConfig(
+        bootstrap_servers="kafka:9092",
+        topics=["user-clicks"],
+        timestamp_field="event_time"
+    ),
+    schema=[
+        Field("user_id", String),
+        Field("event_time", Timestamp),
+        Field("page_id", String),
+        Field("session_id", String)
+    ]
+)
+
+# 실시간 윈도우 집계 Feature
+@stream_feature_view(
+    source=click_events,
+    entities=[user],
+    mode="spark_sql",
+    aggregation_interval=timedelta(minutes=1),
+    aggregations=[
+        Aggregation(column="page_id", function="count", time_windows=[
+            timedelta(minutes=5),
+            timedelta(minutes=30),
+            timedelta(hours=1)
+        ]),
+        Aggregation(column="session_id", function="count_distinct", time_windows=[
+            timedelta(hours=1),
+            timedelta(hours=24)
+        ])
+    ],
+    online=True,
+    offline=True,
+    feature_start_time=datetime(2024, 1, 1),
+    description="실시간 사용자 클릭 피처"
+)
+def user_click_features(click_events):
+    return f"""
+        SELECT
+            user_id,
+            event_time,
+            page_id,
+            session_id
+        FROM {click_events}
+    """</code></pre>
+
+                <h3>Feature Service 정의 및 서빙</h3>
+                <pre><code class="language-python"># feature_services/fraud_detection_service.py
+from tecton import FeatureService
+from features.user_features import user_transaction_features
+from features.realtime_features import user_click_features
+from features.device_features import user_device_features
+
+# 여러 Feature View를 묶어 Feature Service 생성
+fraud_detection_service = FeatureService(
+    name="fraud_detection_service",
+    features=[
+        user_transaction_features,
+        user_click_features,
+        user_device_features
+    ],
+    description="사기 탐지 모델용 피처 서비스"
+)
+
+# ----- 추론 시 피처 조회 (Python SDK) -----
+import tecton
+
+# Feature Service 가져오기
+fs = tecton.get_feature_service("fraud_detection_service")
+
+# 온라인 피처 조회 (실시간 추론)
+features = fs.get_online_features(
+    join_keys={"user_id": "user_123"}
+)
+
+print(features.to_dict())
+# {
+#     "transaction_count_30d": 45,
+#     "total_amount_30d": 12500.0,
+#     "avg_transaction_amount": 277.8,
+#     "user_click_features__page_id_count_5m": 12,
+#     "user_click_features__session_id_count_distinct_1h": 2,
+#     ...
+# }
+
+# 오프라인 피처 조회 (학습 데이터 생성)
+training_events = spark.read.parquet("s3://bucket/training_events/")
+
+training_data = fs.get_historical_features(
+    spine=training_events,  # user_id, timestamp 컬럼 포함
+    timestamp_key="event_timestamp"
+).to_spark()
+
+training_data.write.parquet("s3://bucket/training_features/")</code></pre>
+
+                <h3>REST API로 피처 서빙</h3>
+                <pre><code class="language-python"># REST API 호출 예시
+import requests
+
+TECTON_API_URL = "https://app.tecton.ai/api/v1/feature-service/get-features"
+TECTON_API_KEY = "your-api-key"
+
+headers = {
+    "Authorization": f"Tecton-key {TECTON_API_KEY}",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "params": {
+        "feature_service_name": "fraud_detection_service",
+        "join_key_map": {
+            "user_id": "user_123"
+        },
+        "workspace_name": "production"
+    }
+}
+
+response = requests.post(
+    TECTON_API_URL,
+    headers=headers,
+    json=payload
+)
+
+features = response.json()["result"]["features"]
+print(features)
+# [45, 12500.0, 277.8, 12, 2, ...]</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">실무 대화 예제</h2>
+            <div class="section-content">
+                <div class="conversation">
+                    <h3>회의: Feature Store 도입 논의</h3>
+                    <div class="dialogue">
+                        <div class="speaker">ML 엔지니어:</div>
+                        <div class="speech">"모델마다 같은 피처를 다르게 계산하고 있어서 결과 불일치 문제가 있어요. 학습할 때와 추론할 때 피처 값이 다른 Training-Serving Skew도 발생하고요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">테크 리드:</div>
+                        <div class="speech">"Tecton 같은 Feature Platform 도입을 고려해봐야겠네요. Feature-as-Code로 피처를 한 번 정의하면 학습과 서빙에서 동일한 로직을 사용할 수 있어요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">데이터 엔지니어:</div>
+                        <div class="speech">"Snowflake 데이터를 Spark로 처리해서 DynamoDB에 저장하는 파이프라인을 직접 만들었는데 유지보수가 어려워요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">테크 리드:</div>
+                        <div class="speech">"Tecton은 Offline Store와 Online Store 동기화를 자동으로 해주고, Point-in-Time Correctness도 보장해줘요. 그리고 피처 재사용률도 높아져서 전체 팀 생산성이 올라갑니다."</div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <h3>면접: Feature Engineering 경험</h3>
+                    <div class="dialogue">
+                        <div class="speaker">면접관:</div>
+                        <div class="speech">"실시간 ML 시스템에서 피처를 어떻게 서빙하셨나요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">지원자:</div>
+                        <div class="speech">"Tecton을 사용해서 배치와 스트리밍 피처를 통합 관리했습니다. 배치 피처는 Snowflake에서 일배치로 계산하고, 실시간 피처는 Kafka 스트림으로 윈도우 집계했어요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">면접관:</div>
+                        <div class="speech">"Data Leakage 문제는 어떻게 처리하셨나요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">지원자:</div>
+                        <div class="speech">"Tecton의 Point-in-Time Join을 사용했습니다. 학습 데이터 생성 시 각 이벤트 시점에 실제로 사용 가능했던 피처만 조회되도록 timestamp key를 지정했어요."</div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <h3>코드 리뷰: Feature 정의 검토</h3>
+                    <div class="dialogue">
+                        <div class="speaker">시니어:</div>
+                        <div class="speech">"이 피처는 online=True로 설정했는데, 배치로 일배치 계산하면 피처 신선도가 최대 24시간 지연될 수 있어요. 실시간 추론에 문제없나요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">주니어:</div>
+                        <div class="speech">"30일 집계 피처라 하루 지연은 괜찮을 것 같은데, TTL 설정은 얼마로 해야 할까요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="speaker">시니어:</div>
+                        <div class="speech">"배치 주기보다 길게, ttl=timedelta(days=2) 정도로 설정하세요. 배치 실패해도 이전 값으로 서빙됩니다. 그리고 피처 모니터링 대시보드에서 null 비율도 확인해보세요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <h3>Point-in-Time Correctness</h3>
+                    <p>학습 데이터 생성 시 반드시 Point-in-Time Join을 사용하세요. 미래 데이터가 과거 시점에 사용되면 모델이 실제보다 좋은 성능을 보이는 Data Leakage가 발생합니다.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>Online/Offline 일관성</h3>
+                    <p>동일한 피처 정의에서 Online Store와 Offline Store의 값이 달라질 수 있습니다. 집계 윈도우, 시간대(timezone), null 처리 로직을 꼼꼼히 검증하세요.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>피처 신선도(Freshness)</h3>
+                    <p>배치 피처는 batch_schedule에 따라 지연이 발생합니다. 실시간성이 중요한 피처는 Stream Feature View로 구현하고, TTL을 적절히 설정해 stale data 서빙을 방지하세요.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>비용 관리</h3>
+                    <p>Online Store(DynamoDB, Redis)와 스트리밍 컴퓨트 비용이 증가할 수 있습니다. 모든 피처를 온라인으로 서빙하기보다, 실제 실시간 추론에 필요한 피처만 online=True로 설정하세요.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>스키마 변경 관리</h3>
+                    <p>피처 스키마 변경 시 기존 모델과의 호환성을 확인하세요. 새 피처 추가는 안전하지만, 기존 피처 삭제나 타입 변경은 서빙 중인 모델에 영향을 줄 수 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <div class="term-card">
+                        <h4>Feast</h4>
+                        <p>오픈소스 Feature Store. Tecton보다 가볍지만 엔터프라이즈 기능은 제한적입니다.</p>
+                    </div>
+                    <div class="term-card">
+                        <h4>Databricks Feature Store</h4>
+                        <p>Databricks 통합 피처 스토어. Unity Catalog와 연동됩니다.</p>
+                    </div>
+                    <div class="term-card">
+                        <h4>SageMaker Feature Store</h4>
+                        <p>AWS의 관리형 피처 스토어. SageMaker 파이프라인과 통합됩니다.</p>
+                    </div>
+                    <div class="term-card">
+                        <h4>Vertex AI Feature Store</h4>
+                        <p>Google Cloud의 피처 스토어. BigQuery와 긴밀히 연동됩니다.</p>
+                    </div>
+                    <div class="term-card">
+                        <h4>MLflow</h4>
+                        <p>ML 실험 추적 및 모델 관리 플랫폼. Tecton과 함께 MLOps 스택을 구성합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <div class="resources">
+                    <div class="resource-card">
+                        <span class="badge">공식 문서</span>
+                        <h4>Tecton Documentation</h4>
+                        <p>SDK 레퍼런스, 튜토리얼, 아키텍처 가이드</p>
+                        <a href="https://docs.tecton.ai/" target="_blank" rel="noopener">docs.tecton.ai</a>
+                    </div>
+                    <div class="resource-card">
+                        <span class="badge">블로그</span>
+                        <h4>Tecton Blog</h4>
+                        <p>Feature Engineering 베스트 프랙티스, 사례 연구</p>
+                        <a href="https://www.tecton.ai/blog/" target="_blank" rel="noopener">tecton.ai/blog</a>
+                    </div>
+                    <div class="resource-card">
+                        <span class="badge">교육</span>
+                        <h4>Tecton Academy</h4>
+                        <p>Feature Platform 기초부터 고급까지 학습 코스</p>
+                        <a href="https://www.tecton.ai/academy/" target="_blank" rel="noopener">tecton.ai/academy</a>
+                    </div>
+                    <div class="resource-card">
+                        <span class="badge">커뮤니티</span>
+                        <h4>Tecton Community Slack</h4>
+                        <p>ML 엔지니어 커뮤니티, 질문 및 토론</p>
+                        <a href="https://www.tecton.ai/community/" target="_blank" rel="noopener">tecton.ai/community</a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +587,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

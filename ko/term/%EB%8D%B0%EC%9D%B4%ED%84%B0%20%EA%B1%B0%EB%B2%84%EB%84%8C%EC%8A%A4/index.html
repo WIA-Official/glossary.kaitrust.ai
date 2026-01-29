@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>데이터 거버넌스 | KAITRUST AI 백과사전</title>
     <meta name="description" content="데이터의 관리, 품질, 보안에 관한 정책과 절차">
-    <meta name="keywords" content="데이터 거버넌스, , AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
+    <meta name="keywords" content="데이터 거버넌스, Data Governance, AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/">
 
     <!-- Open Graph -->
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,180 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>데이터 거버넌스(Data Governance)는 조직 내 데이터의 가용성, 무결성, 보안성, 사용성을 보장하기 위한 정책, 프로세스, 표준의 총체입니다. EU AI Act 제10조는 고위험 AI 시스템의 학습 데이터에 대해 적절한 데이터 거버넌스 및 관리 관행을 명시적으로 요구하고 있습니다.</p>
+                <p>핵심 구성요소로는 데이터 품질 관리, 메타데이터 관리, 데이터 계보 추적, 접근 제어, 개인정보 보호가 있습니다. AI 맥락에서는 학습 데이터의 편향 탐지, 데이터 출처 문서화, 적법한 수집 증빙이 특히 중요합니다. GDPR 제5조의 데이터 처리 원칙(적법성, 목적 제한, 최소화 등)과도 밀접하게 연결됩니다.</p>
+                <p>실무적으로 데이터 거버넌스는 데이터 스튜어드(Data Steward) 지정, 데이터 카탈로그 구축, 데이터 품질 대시보드 운영 등으로 구현됩니다. 특히 AI 개발팀은 모델 학습에 사용된 데이터셋의 버전, 전처리 과정, 라이선스 조건을 체계적으로 관리해야 합니다.</p>
+                <p>EU AI Act 위반 시 최대 3,500만 유로 또는 전 세계 연간 매출의 7% 과징금이 부과될 수 있어, 견고한 데이터 거버넌스 체계 구축은 법적 리스크 관리의 핵심입니다. 한국에서도 개인정보보호법, 신용정보법 등에서 유사한 데이터 관리 의무를 규정하고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn">복사</button>
+                <pre><code># 데이터 거버넌스 프레임워크 구현 예제
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import List, Optional, Dict
+from enum import Enum
+import hashlib
+import json
+
+class DataClassification(Enum):
+    PUBLIC = "public"
+    INTERNAL = "internal"
+    CONFIDENTIAL = "confidential"
+    RESTRICTED = "restricted"  # 개인정보, 민감정보
+
+class LicenseType(Enum):
+    CC_BY = "CC-BY-4.0"
+    CC_BY_NC = "CC-BY-NC-4.0"
+    COMMERCIAL = "Commercial"
+    INTERNAL_ONLY = "Internal-Only"
+
+@dataclass
+class DatasetGovernance:
+    """AI 학습용 데이터셋 거버넌스 메타데이터"""
+    dataset_id: str
+    name: str
+    version: str
+    classification: DataClassification
+    license: LicenseType
+
+    # EU AI Act 제10조 요구사항
+    source: str                          # 데이터 출처
+    collection_date: datetime            # 수집 일시
+    collection_method: str               # 수집 방법
+    legal_basis: str                     # 법적 근거 (동의, 계약 등)
+
+    # 데이터 품질 정보
+    record_count: int
+    quality_score: float                 # 0.0 ~ 1.0
+    bias_assessment: Dict[str, float]    # 편향 평가 결과
+
+    # 접근 제어
+    data_steward: str                    # 담당자
+    access_groups: List[str]             # 접근 가능 그룹
+    retention_period_days: int           # 보존 기간
+
+    # 처리 이력
+    preprocessing_steps: List[str] = field(default_factory=list)
+    last_updated: datetime = field(default_factory=datetime.now)
+
+    def generate_checksum(self) -> str:
+        """데이터 무결성 검증용 체크섬"""
+        content = f"{self.dataset_id}:{self.version}:{self.record_count}"
+        return hashlib.sha256(content.encode()).hexdigest()[:16]
+
+    def validate_ai_act_compliance(self) -> Dict[str, bool]:
+        """EU AI Act 제10조 컴플라이언스 검증"""
+        return {
+            "has_source_documentation": bool(self.source),
+            "has_legal_basis": bool(self.legal_basis),
+            "quality_threshold_met": self.quality_score >= 0.8,
+            "bias_assessed": len(self.bias_assessment) > 0,
+            "access_controlled": len(self.access_groups) > 0,
+            "has_steward": bool(self.data_steward),
+        }
+
+    def to_audit_log(self) -> str:
+        """감사 로그용 JSON 출력"""
+        return json.dumps({
+            "dataset_id": self.dataset_id,
+            "version": self.version,
+            "checksum": self.generate_checksum(),
+            "compliance": self.validate_ai_act_compliance(),
+            "timestamp": datetime.now().isoformat()
+        }, indent=2)
+
+# 사용 예시
+dataset = DatasetGovernance(
+    dataset_id="DS-2024-001",
+    name="고객 피드백 분류 데이터셋",
+    version="2.1.0",
+    classification=DataClassification.CONFIDENTIAL,
+    license=LicenseType.INTERNAL_ONLY,
+    source="내부 고객센터 시스템",
+    collection_date=datetime(2024, 1, 15),
+    collection_method="시스템 자동 수집 (동의 기반)",
+    legal_basis="개인정보보호법 제15조 제1항 제1호 (동의)",
+    record_count=50000,
+    quality_score=0.92,
+    bias_assessment={"gender": 0.03, "age": 0.05},
+    data_steward="김데이터 (data-team@company.com)",
+    access_groups=["ai-team", "data-team"],
+    retention_period_days=365,
+    preprocessing_steps=["PII 마스킹", "중복 제거", "라벨 검증"]
+)
+
+# 컴플라이언스 검증
+compliance = dataset.validate_ai_act_compliance()
+print(f"AI Act 준수 상태: {all(compliance.values())}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conversation-title">
+            <h2 id="conversation-title" class="section-title">실무 대화</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-target="meeting2">회의</button>
+                <button class="conv-tab" data-target="interview2">면접</button>
+                <button class="conv-tab" data-target="review2">코드리뷰</button>
+            </div>
+            <div class="conv-content active" id="meeting2" data-label="회의">
+                <p><strong class="role-pm">CPO:</strong> EU AI Act 대응을 위해 데이터 거버넌스 체계를 점검해야 합니다. 현재 상태는요?</p>
+                <p><strong class="role-dba">DBA:</strong> 데이터 카탈로그는 구축했는데, AI 학습 데이터의 편향 정보와 출처 문서화가 미흡합니다.</p>
+                <p><strong class="role-senior">법무팀:</strong> 제10조에서 적절한 데이터 거버넌스를 명시적으로 요구하고 있어요. 학습 데이터별로 법적 근거, 전처리 과정, 품질 점수를 기록해야 합니다.</p>
+                <p><strong class="role-pm">CPO:</strong> 데이터 스튜어드 역할도 명확히 하고, 분기별 감사 체계를 수립합시다.</p>
+            </div>
+            <div class="conv-content" id="interview2" data-label="면접">
+                <p><strong class="role-interviewer">면접관:</strong> AI 프로젝트에서 데이터 거버넌스를 어떻게 구현하셨나요?</p>
+                <p><strong class="role-candidate">지원자:</strong> 각 데이터셋마다 메타데이터 스키마를 정의하고, 출처/법적근거/품질점수/편향평가 결과를 필수 필드로 관리했습니다. 데이터 카탈로그 툴로 DataHub를 사용했고, 접근 권한은 RBAC으로 통제했습니다. 특히 모델 학습 파이프라인에서 거버넌스 메타데이터가 없으면 데이터 로딩이 차단되도록 설계했습니다.</p>
+            </div>
+            <div class="conv-content" id="review2" data-label="코드리뷰">
+                <p><strong class="role-senior">시니어:</strong> 데이터 로더에 거버넌스 검증 로직이 빠져 있네요.</p>
+                <p><strong class="role-junior">주니어:</strong> 성능 이슈로 생략했는데, 필수인가요?</p>
+                <p><strong class="role-senior">시니어:</strong> 네, 캐싱하면 성능 문제 없어요. 최소한 legal_basis, quality_score, bias_assessment 필드는 검증해야 합니다. 컴플라이언스 감사 때 이 체크가 없으면 문제 됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li class="critical">EU AI Act 제10조 위반 시 최대 3,500만 유로 또는 전 세계 연간 매출의 7% 과징금이 부과됩니다. 고위험 AI 개발 시 데이터 거버넌스 문서화는 필수입니다.</li>
+                <li>데이터 거버넌스 정책은 문서로만 존재해서는 안 됩니다. 실제 시스템에 검증 로직으로 구현되어야 감사 시 증빙이 가능합니다.</li>
+                <li class="info">데이터 스튜어드는 단순 관리자가 아닌 해당 데이터의 비즈니스 맥락을 이해하는 담당자여야 효과적입니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%92%88%EC%A7%88%20%EA%B4%80%EB%A6%AC/" class="related-link">데이터 품질 관리</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B3%84%EB%B3%B4/" class="related-link">데이터 계보</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B1%B0%EB%9E%98%EC%86%8C/" class="related-link">데이터 거래소</a>
+                <a href="/ko/term/%EB%8F%99%EC%9D%98%EA%B6%8C/" class="related-link">동의권</a>
+                <a href="/ko/term/%EC%82%AD%EC%A0%9C%EA%B6%8C/" class="related-link">삭제권</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act 원문 (제10조 데이터 거버넌스)</a><span class="resource-meta">EU 법령</span></li>
+                <li><span class="type-tool"></span><a href="https://datahubproject.io/" target="_blank" rel="noopener">DataHub - 오픈소스 데이터 카탈로그</a><span class="resource-meta">도구</span></li>
+                <li><span class="type-book"></span><a href="https://www.dama.org/cpages/body-of-knowledge" target="_blank" rel="noopener">DAMA DMBOK (Data Management Body of Knowledge)</a><span class="resource-meta">표준</span></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +387,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

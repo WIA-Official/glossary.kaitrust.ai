@@ -161,6 +161,35 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table td { color: #cbd5e1; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
     </style>
 </head>
 <body>
@@ -202,6 +231,199 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>LoRA(Low-Rank Adaptation)는 대규모 언어 모델을 효율적으로 파인튜닝하는 기법입니다. 전체 모델 가중치를 업데이트하는 대신, 작은 저랭크(Low-Rank) 행렬만 학습하여 메모리와 계산 비용을 획기적으로 줄입니다.</p>
+                <p>Microsoft 연구팀이 2021년 발표한 LoRA는 GPT-3 175B 모델 파인튜닝에 필요한 학습 파라미터를 10,000배 줄이고, GPU 메모리를 3분의 1로 감소시켰습니다. 이를 통해 소비자 GPU(RTX 3090, RTX 4090 등)에서도 LLM 파인튜닝이 가능해졌습니다.</p>
+                <p>LoRA의 핵심 아이디어는 가중치 업데이트가 낮은 내재 랭크(intrinsic rank)를 가진다는 가설입니다. 원본 가중치 W에 대해 W' = W + BA 형태로 분해하며, A와 B는 저랭크 행렬입니다. 랭크 r=4~8 정도로 설정해도 전체 파인튜닝과 동등한 성능을 달성합니다.</p>
+                <p>실무에서 LoRA는 도메인 특화 LLM 개발, 스타일 커스터마이징, 멀티태스크 어댑터 등에 활용됩니다. HuggingFace PEFT 라이브러리로 쉽게 적용 가능하며, QLoRA(양자화+LoRA)를 사용하면 7B 모델을 14GB GPU에서도 파인튜닝할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
+from peft import LoraConfig, get_peft_model, TaskType
+from datasets import load_dataset
+from trl import SFTTrainer
+
+# 베이스 모델 로드
+model_name = "meta-llama/Llama-3.2-3B"
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype="auto",
+    device_map="auto"
+)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+# LoRA 설정 (핵심 하이퍼파라미터)
+lora_config = LoraConfig(
+    task_type=TaskType.CAUSAL_LM,
+    r=8,                         # 랭크 (4~64, 높을수록 표현력 증가)
+    lora_alpha=16,               # 스케일링 팩터 (보통 r*2)
+    lora_dropout=0.05,           # 드롭아웃
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],  # 적용 레이어
+    bias="none"
+)
+
+# LoRA 어댑터 적용
+model = get_peft_model(model, lora_config)
+model.print_trainable_parameters()
+# 출력: trainable params: 3,407,872 || all params: 3,213,539,072 || 0.11%
+
+# 학습 데이터 준비
+dataset = load_dataset("json", data_files="train_data.json")
+
+# 학습 설정
+training_args = TrainingArguments(
+    output_dir="./lora_output",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-4,
+    warmup_ratio=0.03,
+    logging_steps=10,
+    save_strategy="epoch"
+)
+
+# SFT Trainer로 학습
+trainer = SFTTrainer(
+    model=model,
+    args=training_args,
+    train_dataset=dataset["train"],
+    tokenizer=tokenizer,
+    max_seq_length=2048
+)
+trainer.train()
+
+# 어댑터만 저장 (수 MB)
+model.save_pretrained("./my_lora_adapter")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 📊 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>2025년 1월 기준 LoRA vs Full Fine-tuning 비교입니다.</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>항목</th>
+                        <th>Full Fine-tuning</th>
+                        <th>LoRA</th>
+                        <th>QLoRA (4-bit)</th>
+                    </tr>
+                    <tr>
+                        <td>가격</td>
+                        <td>오픈소스 (무료)</td>
+                        <td>오픈소스 (무료)</td>
+                        <td>오픈소스 (무료)</td>
+                    </tr>
+                    <tr>
+                        <td>학습 파라미터</td>
+                        <td>100%</td>
+                        <td>0.1% ~ 1%</td>
+                        <td>0.1% ~ 1%</td>
+                    </tr>
+                    <tr>
+                        <td>7B 모델 VRAM</td>
+                        <td>60GB+</td>
+                        <td>16GB</td>
+                        <td>6GB</td>
+                    </tr>
+                    <tr>
+                        <td>70B 모델 VRAM</td>
+                        <td>1,120GB+</td>
+                        <td>140GB</td>
+                        <td>48GB</td>
+                    </tr>
+                    <tr>
+                        <td>메모리 절감율</td>
+                        <td>-</td>
+                        <td>3x (66%)</td>
+                        <td>17x (94%)</td>
+                    </tr>
+                    <tr>
+                        <td>성능 유지율</td>
+                        <td>100%</td>
+                        <td>90~95%</td>
+                        <td>90~95%</td>
+                    </tr>
+                </table>
+                <p><strong>비용 절감:</strong> QLoRA 사용 시 RTX 4090($1,500)으로 70B 모델도 파인튜닝 가능. 학습 비용 50~70% 절감.</p>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"Llama 3 모델을 우리 고객 서비스 데이터로 LoRA 파인튜닝했습니다. 전체 파라미터의 0.1%만 학습해서 A100 1장으로 4시간 만에 완료했고, 고객 문의 응답 품질이 35% 향상됐습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"LoRA는 가중치 업데이트를 저랭크 행렬로 분해합니다. W' = W + BA 형태로, A는 (d, r), B는 (r, k) 크기입니다. 랭크 r을 4로 설정하면 원본 대비 0.01%의 파라미터만 학습하면서도 비슷한 성능을 얻습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"QLoRA를 쓰면 4bit 양자화된 모델에 LoRA를 적용해서 GPU 메모리를 더 절약할 수 있습니다. RTX 4090 24GB로 70B 모델도 파인튜닝 가능합니다. 단, 추론 속도가 조금 느려지는 트레이드오프가 있어요."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Query/Value에만 LoRA 적용</strong>
+                        <p>일부 레이어에만 LoRA를 적용하면 성능이 떨어집니다. 모든 Attention 레이어에 적용해야 최적 성능을 얻습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 설정</strong>
+                        <p>q_proj, k_proj, v_proj, o_proj 모두에 LoRA를 적용하세요. lora_alpha는 보통 r*2로 설정합니다. Learning rate는 일반 파인튜닝보다 10배 높게 (1e-4~3e-4) 설정해야 합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Fine-tuning/" class="related-term-link">Fine-tuning</a>
+                <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                <a href="/ko/term/Llama/" class="related-term-link">Llama</a>
+                <a href="/ko/term/Quantization/" class="related-term-link">Quantization</a>
+                <a href="/ko/term/PEFT/" class="related-term-link">PEFT</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/2106.09685" target="_blank" class="learn-link">📄 LoRA 원본 논문 (arXiv)</a>
+                <a href="https://huggingface.co/docs/peft" target="_blank" class="learn-link">🎓 HuggingFace PEFT 가이드</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +434,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

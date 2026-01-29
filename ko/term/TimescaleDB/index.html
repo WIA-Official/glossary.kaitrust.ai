@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TimescaleDB (TimescaleDB) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="PostgreSQL 기반 시계열 DB. 자동 파티셔닝.">
-    <meta name="keywords" content="TimescaleDB, TimescaleDB, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <title>TimescaleDB (PostgreSQL 시계열 확장) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="TimescaleDB는 PostgreSQL 기반 시계열 데이터베이스입니다. 표준 SQL을 사용하면서 하이퍼테이블로 자동 파티셔닝, 압축, 연속 집계를 지원하여 시계열 데이터를 효율적으로 처리합니다.">
+    <meta name="keywords" content="TimescaleDB, PostgreSQL, 시계열 데이터베이스, Time-Series, Hypertable, 자동 파티셔닝, SQL, 압축, 연속 집계, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/TimescaleDB/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/TimescaleDB/">
-    <meta property="og:title" content="TimescaleDB (TimescaleDB) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="PostgreSQL 기반 시계열 DB. 자동 파티셔닝.">
+    <meta property="og:title" content="TimescaleDB (PostgreSQL 시계열 확장) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="TimescaleDB는 PostgreSQL 기반 시계열 데이터베이스로 표준 SQL과 자동 파티셔닝을 지원합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="TimescaleDB (TimescaleDB) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="PostgreSQL 기반 시계열 DB. 자동 파티셔닝.">
+    <meta name="twitter:title" content="TimescaleDB (PostgreSQL 시계열 확장) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="TimescaleDB는 PostgreSQL 기반 시계열 데이터베이스로 표준 SQL과 자동 파티셔닝을 지원합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "TimescaleDB",
-        "description": "PostgreSQL 기반 시계열 DB. 자동 파티셔닝.",
+        "alternateName": "PostgreSQL Time-Series Extension",
+        "description": "TimescaleDB는 PostgreSQL 기반 시계열 데이터베이스로 표준 SQL과 자동 파티셔닝을 지원합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +276,9 @@
                 <span>데이터베이스</span>
             </div>
             <h1 class="term-title">TimescaleDB</h1>
-            <p class="term-english">TimescaleDB</p>
+            <p class="term-english">PostgreSQL Time-Series Extension</p>
             <div class="term-description">
-                <p>PostgreSQL 기반 시계열 DB. 자동 파티셔닝.</p>
+                <p>PostgreSQL 기반 시계열 데이터베이스입니다. 표준 SQL을 그대로 사용하면서 하이퍼테이블(Hypertable)로 자동 파티셔닝, 압축, 연속 집계를 지원하여 시계열 데이터를 효율적으로 처리합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,632 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>TimescaleDB</strong>는 PostgreSQL의 확장(Extension)으로 설치되는 시계열 데이터베이스입니다. PostgreSQL의 모든 기능(ACID 트랜잭션, JOIN, 인덱스, 확장성)을 그대로 사용하면서 시계열 데이터에 최적화된 기능을 추가합니다. 새로운 쿼리 언어를 배울 필요 없이 표준 SQL로 시계열 분석이 가능합니다.</p>
+                <p><strong>하이퍼테이블(Hypertable)</strong>은 TimescaleDB의 핵심 개념입니다. 일반 테이블처럼 보이지만 내부적으로 시간 기준으로 자동 파티셔닝(청크)됩니다. 수십억 행의 데이터도 청크 단위로 분산되어 쿼리 성능이 유지됩니다. 공간 인덱스와 결합하면 공간-시간 데이터도 효율적으로 처리할 수 있습니다.</p>
+                <p><strong>연속 집계(Continuous Aggregates)</strong>는 시계열 집계를 자동으로 유지하는 기능입니다. 1분 데이터를 1시간 평균으로 미리 계산해두면 대시보드 쿼리가 수백 배 빨라집니다. 새 데이터가 들어오면 자동으로 집계가 업데이트되어 항상 최신 상태를 유지합니다.</p>
+                <p><strong>네이티브 압축</strong>은 시계열 데이터의 특성을 이용해 최대 95%까지 저장 공간을 줄입니다. 압축된 데이터도 SQL로 직접 조회할 수 있으며, 압축 정책을 설정하면 오래된 청크를 자동으로 압축합니다. 이를 통해 수년간의 데이터를 경제적으로 보관할 수 있습니다.</p>
+                <p><strong>데이터 보존 정책</strong>으로 오래된 데이터를 자동 삭제하거나 콜드 스토리지로 이동할 수 있습니다. 핫 데이터는 빠른 SSD에, 오래된 데이터는 저렴한 스토리지에 저장하는 계층형 스토리지 전략이 가능합니다. PostgreSQL 에코시스템의 모든 도구(pg_dump, 리플리케이션 등)와 호환됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (psycopg2)</button>
+                <button class="code-tab" data-lang="node">Node.js (pg)</button>
+                <button class="code-tab" data-lang="sql">SQL 직접</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># TimescaleDB Python 예제 (psycopg2)
+import psycopg2
+from psycopg2.extras import execute_values
+from datetime import datetime, timedelta
+import random
+
+# PostgreSQL + TimescaleDB 연결
+conn = psycopg2.connect(
+    host="localhost",
+    database="tsdb",
+    user="postgres",
+    password="password"
+)
+conn.autocommit = True
+cur = conn.cursor()
+
+
+# ============================================
+# 하이퍼테이블 생성
+# ============================================
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS sensor_data (
+        time        TIMESTAMPTZ NOT NULL,
+        sensor_id   TEXT NOT NULL,
+        location    TEXT,
+        temperature DOUBLE PRECISION,
+        humidity    DOUBLE PRECISION,
+        pressure    DOUBLE PRECISION
+    );
+""")
+
+# 일반 테이블을 하이퍼테이블로 변환
+cur.execute("""
+    SELECT create_hypertable('sensor_data', 'time',
+        if_not_exists => TRUE,
+        chunk_time_interval => INTERVAL '1 day'
+    );
+""")
+print("하이퍼테이블 생성 완료")
+
+
+# ============================================
+# 데이터 삽입 (배치)
+# ============================================
+data = []
+base_time = datetime.utcnow() - timedelta(days=7)
+
+for i in range(10000):
+    time = base_time + timedelta(minutes=i)
+    sensor_id = f"sensor-{i % 10}"
+    location = ["factory-a", "factory-b", "warehouse"][i % 3]
+    temp = 20 + random.random() * 15
+    humidity = 40 + random.random() * 30
+    pressure = 1000 + random.random() * 50
+    data.append((time, sensor_id, location, temp, humidity, pressure))
+
+# execute_values로 빠른 배치 삽입
+execute_values(cur, """
+    INSERT INTO sensor_data (time, sensor_id, location, temperature, humidity, pressure)
+    VALUES %s
+""", data)
+print(f"{len(data)}행 삽입 완료")
+
+
+# ============================================
+# 시계열 쿼리 - time_bucket
+# ============================================
+cur.execute("""
+    SELECT
+        time_bucket('1 hour', time) AS hour,
+        sensor_id,
+        AVG(temperature) as avg_temp,
+        MAX(temperature) as max_temp,
+        MIN(temperature) as min_temp
+    FROM sensor_data
+    WHERE time > NOW() - INTERVAL '24 hours'
+    GROUP BY hour, sensor_id
+    ORDER BY hour DESC, sensor_id
+    LIMIT 20;
+""")
+
+print("\n시간별 온도 통계:")
+for row in cur.fetchall():
+    print(f"  {row[0]} | {row[1]} | 평균: {row[2]:.1f}C, 최대: {row[3]:.1f}C")
+
+
+# ============================================
+# 연속 집계 (Continuous Aggregates)
+# ============================================
+cur.execute("""
+    CREATE MATERIALIZED VIEW IF NOT EXISTS hourly_sensor_stats
+    WITH (timescaledb.continuous) AS
+    SELECT
+        time_bucket('1 hour', time) AS hour,
+        sensor_id,
+        AVG(temperature) as avg_temp,
+        AVG(humidity) as avg_humidity,
+        COUNT(*) as readings
+    FROM sensor_data
+    GROUP BY hour, sensor_id
+    WITH NO DATA;
+""")
+
+# 연속 집계 정책 추가 (1시간마다 자동 갱신)
+cur.execute("""
+    SELECT add_continuous_aggregate_policy('hourly_sensor_stats',
+        start_offset => INTERVAL '3 hours',
+        end_offset => INTERVAL '1 hour',
+        schedule_interval => INTERVAL '1 hour',
+        if_not_exists => TRUE
+    );
+""")
+print("\n연속 집계 뷰 생성 완료")
+
+
+# ============================================
+# 압축 정책 설정
+# ============================================
+cur.execute("""
+    ALTER TABLE sensor_data SET (
+        timescaledb.compress,
+        timescaledb.compress_segmentby = 'sensor_id'
+    );
+""")
+
+cur.execute("""
+    SELECT add_compression_policy('sensor_data',
+        INTERVAL '7 days',
+        if_not_exists => TRUE
+    );
+""")
+print("7일 이후 데이터 자동 압축 정책 추가 완료")
+
+
+# ============================================
+# 데이터 보존 정책 (자동 삭제)
+# ============================================
+cur.execute("""
+    SELECT add_retention_policy('sensor_data',
+        INTERVAL '90 days',
+        if_not_exists => TRUE
+    );
+""")
+print("90일 이후 데이터 자동 삭제 정책 추가 완료")
+
+
+cur.close()
+conn.close()
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// TimescaleDB Node.js 예제 (pg)
+const { Pool } = require('pg');
+
+const pool = new Pool({
+    host: 'localhost',
+    database: 'tsdb',
+    user: 'postgres',
+    password: 'password',
+    max: 20
+});
+
+
+// ============================================
+// 하이퍼테이블 생성
+// ============================================
+async function createHypertable() {
+    const client = await pool.connect();
+    try {
+        // 테이블 생성
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS metrics (
+                time        TIMESTAMPTZ NOT NULL,
+                host        TEXT NOT NULL,
+                service     TEXT NOT NULL,
+                cpu_usage   DOUBLE PRECISION,
+                memory_mb   INTEGER,
+                requests    INTEGER
+            );
+        `);
+
+        // 하이퍼테이블로 변환
+        await client.query(`
+            SELECT create_hypertable('metrics', 'time',
+                if_not_exists => TRUE,
+                chunk_time_interval => INTERVAL '1 day'
+            );
+        `);
+
+        console.log('하이퍼테이블 생성 완료');
+    } finally {
+        client.release();
+    }
+}
+
+
+// ============================================
+// 배치 삽입
+// ============================================
+async function insertMetrics(metrics) {
+    const client = await pool.connect();
+    try {
+        const values = metrics.map((m, i) => {
+            const offset = i * 6;
+            return `($${offset+1}, $${offset+2}, $${offset+3}, $${offset+4}, $${offset+5}, $${offset+6})`;
+        }).join(', ');
+
+        const params = metrics.flatMap(m => [
+            m.time, m.host, m.service, m.cpu_usage, m.memory_mb, m.requests
+        ]);
+
+        await client.query(`
+            INSERT INTO metrics (time, host, service, cpu_usage, memory_mb, requests)
+            VALUES ${values}
+        `, params);
+
+        console.log(`${metrics.length}개 메트릭 삽입 완료`);
+    } finally {
+        client.release();
+    }
+}
+
+
+// ============================================
+// 시계열 쿼리 - time_bucket
+// ============================================
+async function queryHourlyStats() {
+    const client = await pool.connect();
+    try {
+        const result = await client.query(`
+            SELECT
+                time_bucket('1 hour', time) AS hour,
+                host,
+                AVG(cpu_usage) as avg_cpu,
+                MAX(memory_mb) as max_memory,
+                SUM(requests) as total_requests
+            FROM metrics
+            WHERE time > NOW() - INTERVAL '24 hours'
+            GROUP BY hour, host
+            ORDER BY hour DESC
+            LIMIT 20;
+        `);
+
+        console.log('\n시간별 호스트 통계:');
+        result.rows.forEach(row => {
+            console.log(`  ${row.hour} | ${row.host} | CPU: ${row.avg_cpu?.toFixed(1)}%`);
+        });
+
+        return result.rows;
+    } finally {
+        client.release();
+    }
+}
+
+
+// ============================================
+// 마지막 값 조회 (last())
+// ============================================
+async function getLastReadings() {
+    const client = await pool.connect();
+    try {
+        const result = await client.query(`
+            SELECT
+                host,
+                last(cpu_usage, time) as latest_cpu,
+                last(memory_mb, time) as latest_memory,
+                last(time, time) as last_seen
+            FROM metrics
+            WHERE time > NOW() - INTERVAL '1 hour'
+            GROUP BY host;
+        `);
+
+        console.log('\n호스트별 최신 상태:');
+        result.rows.forEach(row => {
+            console.log(`  ${row.host}: CPU ${row.latest_cpu}%, Memory ${row.latest_memory}MB`);
+        });
+
+        return result.rows;
+    } finally {
+        client.release();
+    }
+}
+
+
+// ============================================
+// 연속 집계 조회
+// ============================================
+async function queryFromContinuousAggregate() {
+    const client = await pool.connect();
+    try {
+        // 연속 집계 뷰에서 조회 (미리 계산된 데이터)
+        const result = await client.query(`
+            SELECT * FROM hourly_metrics_stats
+            WHERE hour > NOW() - INTERVAL '7 days'
+            ORDER BY hour DESC
+            LIMIT 50;
+        `);
+
+        console.log(`\n연속 집계에서 ${result.rowCount}행 조회`);
+        return result.rows;
+    } finally {
+        client.release();
+    }
+}
+
+
+// ============================================
+// 청크 정보 조회
+// ============================================
+async function getChunkInfo() {
+    const client = await pool.connect();
+    try {
+        const result = await client.query(`
+            SELECT
+                hypertable_name,
+                chunk_name,
+                range_start,
+                range_end,
+                is_compressed
+            FROM timescaledb_information.chunks
+            WHERE hypertable_name = 'metrics'
+            ORDER BY range_start DESC
+            LIMIT 10;
+        `);
+
+        console.log('\n청크 정보:');
+        result.rows.forEach(row => {
+            const status = row.is_compressed ? '압축됨' : '미압축';
+            console.log(`  ${row.chunk_name}: ${row.range_start} ~ ${row.range_end} [${status}]`);
+        });
+    } finally {
+        client.release();
+    }
+}
+
+
+// 실행
+(async () => {
+    await createHypertable();
+
+    // 테스트 데이터 생성
+    const metrics = [];
+    for (let i = 0; i < 100; i++) {
+        metrics.push({
+            time: new Date(Date.now() - i * 60000),
+            host: `server-${i % 5}`,
+            service: ['web', 'api', 'worker'][i % 3],
+            cpu_usage: 20 + Math.random() * 60,
+            memory_mb: 1000 + Math.floor(Math.random() * 3000),
+            requests: Math.floor(Math.random() * 1000)
+        });
+    }
+
+    await insertMetrics(metrics);
+    await queryHourlyStats();
+    await getLastReadings();
+    await getChunkInfo();
+
+    await pool.end();
+})();
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="sql">
+                <pre><code class="language-sql">-- ============================================
+-- TimescaleDB 설치 및 확장 활성화
+-- ============================================
+CREATE EXTENSION IF NOT EXISTS timescaledb;
+
+-- 버전 확인
+SELECT extversion FROM pg_extension WHERE extname = 'timescaledb';
+
+
+-- ============================================
+-- 하이퍼테이블 생성
+-- ============================================
+CREATE TABLE conditions (
+    time        TIMESTAMPTZ NOT NULL,
+    device_id   TEXT NOT NULL,
+    location    TEXT,
+    temperature DOUBLE PRECISION,
+    humidity    DOUBLE PRECISION
+);
+
+-- 하이퍼테이블로 변환 (1일 단위 청크)
+SELECT create_hypertable('conditions', 'time',
+    chunk_time_interval => INTERVAL '1 day'
+);
+
+-- 인덱스 추가
+CREATE INDEX ON conditions (device_id, time DESC);
+
+
+-- ============================================
+-- time_bucket을 이용한 집계
+-- ============================================
+-- 1시간 단위 평균
+SELECT
+    time_bucket('1 hour', time) AS hour,
+    device_id,
+    AVG(temperature) as avg_temp,
+    AVG(humidity) as avg_humidity
+FROM conditions
+WHERE time > NOW() - INTERVAL '24 hours'
+GROUP BY hour, device_id
+ORDER BY hour DESC;
+
+-- 다양한 시간 버킷
+SELECT time_bucket('15 minutes', time) AS bucket, ...  -- 15분
+SELECT time_bucket('1 day', time) AS bucket, ...       -- 1일
+SELECT time_bucket('1 week', time) AS bucket, ...      -- 1주
+
+
+-- ============================================
+-- 연속 집계 (Continuous Aggregates)
+-- ============================================
+CREATE MATERIALIZED VIEW hourly_conditions
+WITH (timescaledb.continuous) AS
+SELECT
+    time_bucket('1 hour', time) AS hour,
+    device_id,
+    AVG(temperature) as avg_temp,
+    MAX(temperature) as max_temp,
+    MIN(temperature) as min_temp,
+    COUNT(*) as readings
+FROM conditions
+GROUP BY hour, device_id
+WITH NO DATA;
+
+-- 자동 새로고침 정책
+SELECT add_continuous_aggregate_policy('hourly_conditions',
+    start_offset => INTERVAL '3 hours',
+    end_offset => INTERVAL '1 hour',
+    schedule_interval => INTERVAL '1 hour'
+);
+
+-- 수동 새로고침
+CALL refresh_continuous_aggregate('hourly_conditions',
+    NOW() - INTERVAL '24 hours', NOW());
+
+
+-- ============================================
+-- 압축 설정
+-- ============================================
+-- 압축 활성화
+ALTER TABLE conditions SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'device_id',
+    timescaledb.compress_orderby = 'time DESC'
+);
+
+-- 7일 이후 자동 압축 정책
+SELECT add_compression_policy('conditions', INTERVAL '7 days');
+
+-- 수동 압축
+SELECT compress_chunk(c.chunk_name)
+FROM timescaledb_information.chunks c
+WHERE c.hypertable_name = 'conditions'
+  AND c.range_end < NOW() - INTERVAL '7 days'
+  AND NOT c.is_compressed;
+
+-- 압축 통계 확인
+SELECT
+    hypertable_name,
+    before_compression_total_bytes,
+    after_compression_total_bytes,
+    (1 - after_compression_total_bytes::float / before_compression_total_bytes) * 100 as ratio
+FROM timescaledb_information.compression_stats;
+
+
+-- ============================================
+-- 데이터 보존 정책
+-- ============================================
+-- 90일 이후 자동 삭제
+SELECT add_retention_policy('conditions', INTERVAL '90 days');
+
+-- 정책 확인
+SELECT * FROM timescaledb_information.jobs;
+
+-- 수동 삭제
+SELECT drop_chunks('conditions', older_than => INTERVAL '90 days');
+
+
+-- ============================================
+-- 유용한 시계열 함수
+-- ============================================
+-- 첫 번째/마지막 값
+SELECT
+    device_id,
+    first(temperature, time) as first_temp,
+    last(temperature, time) as last_temp
+FROM conditions
+GROUP BY device_id;
+
+-- 시간 가중 평균
+SELECT
+    device_id,
+    time_weight('Linear', time, temperature) as weighted_avg
+FROM conditions
+WHERE time > NOW() - INTERVAL '1 hour'
+GROUP BY device_id;
+
+-- 갭 채우기 (time_bucket_gapfill)
+SELECT
+    time_bucket_gapfill('1 hour', time) AS hour,
+    device_id,
+    COALESCE(AVG(temperature), locf(AVG(temperature))) as temp
+FROM conditions
+WHERE time BETWEEN '2024-01-01' AND '2024-01-02'
+GROUP BY hour, device_id;
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 시계열 DB 선택 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "이미 PostgreSQL을 쓰고 있으니 TimescaleDB 확장을 설치하면 됩니다. 새로운 쿼리 언어 없이 SQL로 모든 시계열 분석이 가능하고, 기존 ORM이나 도구도 그대로 사용할 수 있어요. JOIN이 필요한 복잡한 쿼리에서 특히 강점이 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 대시보드 성능 최적화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "대시보드가 느린 건 매번 raw 데이터를 집계해서 그래요. 연속 집계(Continuous Aggregate)를 만들어두면 미리 계산된 데이터를 조회해서 수백 배 빨라집니다. 1시간 단위, 1일 단위 뷰를 만들어두세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 스토리지 비용 절감 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "TimescaleDB 압축을 활성화하면 스토리지를 90% 이상 줄일 수 있어요. 일주일 지난 청크는 자동 압축하고, 3개월 지나면 자동 삭제하는 정책을 설정합시다. 압축된 데이터도 SQL로 바로 조회 가능해요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>청크 간격 설정 주의</strong>
+                        <p>청크 간격이 너무 작으면 청크가 너무 많아지고, 너무 크면 압축/삭제 단위가 커집니다. 보통 1일~1주일이 적당하며, 데이터 볼륨에 맞게 조정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>압축 후 UPDATE 제한</strong>
+                        <p>압축된 청크는 UPDATE/DELETE가 불가능합니다. 수정이 필요하면 압축 해제 후 작업해야 합니다. 최신 데이터 청크는 압축하지 마세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>연속 집계 범위 주의</strong>
+                        <p>연속 집계는 start_offset보다 오래된 데이터만 처리합니다. 너무 짧으면 최신 데이터가 누락되고, 너무 길면 집계 지연이 발생합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>TimescaleDB 베스트 프랙티스</strong>
+                        <p>time 컬럼에 인덱스 필수, segmentby로 압축 효율 극대화, 연속 집계로 대시보드 성능 향상, 보존 정책으로 자동 데이터 관리를 구현하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/PostgreSQL/" class="related-term-link">PostgreSQL</a>
+                <a href="/ko/term/InfluxDB/" class="related-term-link">InfluxDB</a>
+                <a href="/ko/term/QuestDB/" class="related-term-link">QuestDB</a>
+                <a href="/ko/term/Partitioning/" class="related-term-link">Partitioning</a>
+                <a href="/ko/term/ACID/" class="related-term-link">ACID</a>
+                <a href="/ko/term/Grafana/" class="related-term-link">Grafana</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.timescale.com/" target="_blank" class="learn-link">
+                    📄 TimescaleDB 공식 문서
+                </a>
+                <a href="https://docs.timescale.com/use-timescale/latest/continuous-aggregates/" target="_blank" class="learn-link">
+                    🎓 연속 집계(Continuous Aggregates) 가이드
+                </a>
+                <a href="https://docs.timescale.com/use-timescale/latest/compression/" target="_blank" class="learn-link">
+                    📖 TimescaleDB 압축 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +922,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

@@ -50,168 +50,299 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#data">데이터공학</a>
-            <span>›</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai/#data">데이터공학</a><span>›</span>
             <span class="current">피처 엔지니어링</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>📊</span>
-                <span>데이터공학</span>
-            </div>
+            <div class="term-category-badge"><span>📊</span><span>데이터공학</span></div>
             <h1 class="term-title">피처 엔지니어링</h1>
             <p class="term-english">Feature Engineering</p>
             <div class="term-description">
                 <p>원시 데이터에서 ML 모델에 유용한 특성을 생성하는 과정. 모델 성능에 큰 영향.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#data" class="term-action-btn btn-secondary">
-                    📊 데이터공학 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#data" class="term-action-btn btn-secondary">📊 데이터공학 더보기</a>
             </div>
         </article>
+
+        <div class="term-sections">
+            <!-- 섹션 1: 상세 설명 -->
+            <section class="term-section" aria-labelledby="detail-title">
+                <h2 class="section-title" id="detail-title">상세 설명</h2>
+                <div class="detail-content">
+                    <p>피처 엔지니어링(Feature Engineering)은 원시 데이터에서 머신러닝 모델의 예측 성능을 높이는 유의미한 특성(Feature)을 생성하는 과정입니다. "데이터와 알고리즘이 동일하다면, 피처가 승패를 가른다"는 격언이 있을 만큼 ML 성공의 핵심 요소입니다. 도메인 지식을 바탕으로 특성 변환, 조합, 집계를 수행하며, 모델 성능의 70% 이상이 데이터 품질과 피처에 의해 결정됩니다.</p>
+                    <p>피처 엔지니어링의 주요 기법으로는 특성 생성(수학적 변환, 날짜 분해, 텍스트 임베딩, 집계 통계), 특성 조합(교차 특성, 다항 특성, 비율 특성), 인코딩(One-Hot, Target Encoding, Entity Embedding), 특성 선택(상관관계 분석, 중요도 기반 선택, Recursive Feature Elimination) 등이 있습니다. 시계열 데이터에서는 Lag 피처, 이동 평균, 변화율 등이 중요합니다.</p>
+                    <p>최근에는 Feature Store(Feast, Tecton, Databricks Feature Store)가 피처의 중앙 관리와 재사용을 가능하게 합니다. Feature Store는 피처 정의를 코드로 관리하고, 학습(오프라인)과 추론(온라인)에서 동일한 피처를 일관되게 제공합니다. 피처 버전 관리, 리니지 추적, 실시간 서빙이 가능해져 MLOps의 핵심 인프라로 자리잡았습니다.</p>
+                    <p>자동 피처 엔지니어링(AutoFE)도 발전하고 있습니다. Featuretools는 관계형 데이터에서 자동으로 수백 개의 피처를 생성하고, AutoML 도구들도 피처 선택과 변환을 자동화합니다. 하지만 도메인 지식을 반영한 수동 피처 엔지니어링이 여전히 중요하며, 자동화와 수동 작업의 균형이 필요합니다.</p>
+                </div>
+            </section>
+
+            <!-- 섹션 2: 코드 예제 -->
+            <section class="term-section" aria-labelledby="code-title">
+                <h2 class="section-title" id="code-title">코드 예제</h2>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Feast Feature Store + 피처 엔지니어링</span>
+                        <button class="copy-btn" data-code="code-block-1">복사</button>
+                    </div>
+                    <pre><code id="code-block-1"># 피처 엔지니어링 및 Feature Store 활용 예시
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+from feast import FeatureStore, Entity, FeatureView, Field, FileSource
+from feast.types import Float32, Int64, String
+
+# 1. 기본 피처 엔지니어링 함수
+def engineer_customer_features(df: pd.DataFrame) -> pd.DataFrame:
+    """고객 데이터에서 ML 피처 생성"""
+
+    # 날짜/시간 분해
+    df['signup_dayofweek'] = df['signup_date'].dt.dayofweek
+    df['signup_month'] = df['signup_date'].dt.month
+    df['signup_is_weekend'] = df['signup_dayofweek'].isin([5, 6]).astype(int)
+    df['days_since_signup'] = (datetime.now() - df['signup_date']).dt.days
+
+    # 수치 변환 (정규분포화)
+    df['log_total_spend'] = np.log1p(df['total_spend'])
+    df['sqrt_order_count'] = np.sqrt(df['order_count'])
+
+    # 비율 피처 (Ratio Features)
+    df['avg_order_value'] = df['total_spend'] / (df['order_count'] + 1)
+    df['order_frequency'] = df['order_count'] / (df['days_since_signup'] + 1)
+
+    # 구간화 (Binning)
+    df['spend_tier'] = pd.cut(
+        df['total_spend'],
+        bins=[0, 100, 500, 2000, np.inf],
+        labels=['low', 'medium', 'high', 'vip']
+    )
+
+    # 그룹 대비 비율 (Relative Features)
+    df['spend_vs_segment_avg'] = df['total_spend'] / df.groupby('segment')['total_spend'].transform('mean')
+
+    return df
+
+# 2. 시계열 집계 피처 (Rolling/Lag Features)
+def create_time_features(df: pd.DataFrame, user_col: str, date_col: str) -> pd.DataFrame:
+    """시계열 기반 피처 생성"""
+
+    df = df.sort_values([user_col, date_col])
+
+    # 이동 평균 (Rolling Mean)
+    df['revenue_ma_7d'] = df.groupby(user_col)['revenue'].transform(
+        lambda x: x.rolling(7, min_periods=1).mean()
+    )
+    df['revenue_ma_30d'] = df.groupby(user_col)['revenue'].transform(
+        lambda x: x.rolling(30, min_periods=1).mean()
+    )
+
+    # Lag 피처 (이전 값)
+    df['revenue_lag_1'] = df.groupby(user_col)['revenue'].shift(1)
+    df['revenue_lag_7'] = df.groupby(user_col)['revenue'].shift(7)
+
+    # 변화율
+    df['revenue_pct_change'] = df.groupby(user_col)['revenue'].pct_change()
+
+    # 누적 피처
+    df['cumulative_orders'] = df.groupby(user_col).cumcount() + 1
+    df['cumulative_revenue'] = df.groupby(user_col)['revenue'].cumsum()
+
+    return df
+
+# 3. Feast Feature Store 정의
+# feature_repo/features.py
+
+# 엔티티 정의 (Primary Key)
+customer = Entity(
+    name="customer_id",
+    description="고객 고유 식별자"
+)
+
+# 오프라인 데이터 소스
+customer_source = FileSource(
+    path="s3://feature-store/customer_features.parquet",
+    timestamp_field="event_timestamp",
+)
+
+# 피처 뷰 정의
+customer_features = FeatureView(
+    name="customer_features",
+    entities=[customer],
+    ttl=timedelta(days=1),
+    schema=[
+        Field(name="total_spend", dtype=Float32),
+        Field(name="order_count", dtype=Int64),
+        Field(name="avg_order_value", dtype=Float32),
+        Field(name="days_since_signup", dtype=Int64),
+        Field(name="spend_tier", dtype=String),
+        Field(name="revenue_ma_7d", dtype=Float32),
+        Field(name="revenue_ma_30d", dtype=Float32),
+        Field(name="order_frequency", dtype=Float32),
+    ],
+    source=customer_source,
+    online=True,  # 온라인 서빙 활성화
+)
+
+# 4. Feature Store 사용
+fs = FeatureStore(repo_path="feature_repo/")
+
+# 오프라인: 학습 데이터 생성 (Point-in-Time Join)
+entity_df = pd.DataFrame({
+    "customer_id": ["C001", "C002", "C003"],
+    "event_timestamp": [datetime.now()] * 3,
+})
+
+training_df = fs.get_historical_features(
+    entity_df=entity_df,
+    features=[
+        "customer_features:total_spend",
+        "customer_features:avg_order_value",
+        "customer_features:revenue_ma_7d",
+        "customer_features:order_frequency"
+    ]
+).to_df()
+
+print(f"학습 데이터: {training_df.shape}")
+
+# 온라인: 실시간 추론용 피처 조회
+online_features = fs.get_online_features(
+    features=[
+        "customer_features:total_spend",
+        "customer_features:avg_order_value",
+    ],
+    entity_rows=[{"customer_id": "C001"}]
+).to_dict()
+
+print(f"실시간 피처: {online_features}")
+
+# 5. 자동 피처 엔지니어링 (Featuretools)
+import featuretools as ft
+
+# EntitySet 생성
+es = ft.EntitySet(id="customer_data")
+es.add_dataframe(dataframe_name="customers", dataframe=customers_df, index="customer_id")
+es.add_dataframe(dataframe_name="orders", dataframe=orders_df, index="order_id")
+es.add_relationship("customers", "customer_id", "orders", "customer_id")
+
+# 자동 피처 생성 (Deep Feature Synthesis)
+feature_matrix, feature_defs = ft.dfs(
+    entityset=es,
+    target_dataframe_name="customers",
+    agg_primitives=["mean", "sum", "count", "max", "min", "std", "mode"],
+    trans_primitives=["month", "weekday", "is_weekend", "year"],
+    max_depth=2
+)
+
+print(f"자동 생성된 피처 수: {len(feature_defs)}")</code></pre>
+                </div>
+            </section>
+
+            <!-- 섹션 3: 실무 대화 -->
+            <section class="term-section" aria-labelledby="conv-title">
+                <h2 class="section-title" id="conv-title">실무 대화</h2>
+                <div class="conversation-tabs">
+                    <button class="conv-tab active" data-tab="meeting">팀 회의</button>
+                    <button class="conv-tab" data-tab="interview">기술 면접</button>
+                    <button class="conv-tab" data-tab="review">코드 리뷰</button>
+                </div>
+                <div class="conversation-content">
+                    <div class="conv-panel active" id="meeting">
+                        <div class="chat-bubble user">ML 엔지니어: 이탈 예측 모델 AUC가 0.72에서 안 올라가요. 알고리즘은 다 시도해봤는데...</div>
+                        <div class="chat-bubble expert">시니어 DS: 피처를 더 만들어봐. 최근 7일 활동 빈도, 이전 달 대비 구매 감소율, 마지막 접속 이후 일수 같은 시계열 피처가 이탈 예측에 강력해. 도메인 전문가와 인터뷰해서 이탈 신호를 파악해봐.</div>
+                        <div class="chat-bubble user">ML 엔지니어: 피처가 300개가 넘어서 관리가 어려워요.</div>
+                        <div class="chat-bubble expert">시니어 DS: Feature Store 도입해. Feast로 피처 정의를 코드로 관리하고, 학습/추론에서 동일한 피처를 재사용할 수 있어. 피처 중요도 기반으로 상위 50개만 선택하는 것도 방법이야.</div>
+                    </div>
+                    <div class="conv-panel" id="interview">
+                        <div class="chat-bubble user">면접관: Feature Store가 왜 필요한가요?</div>
+                        <div class="chat-bubble expert">지원자: 학습과 추론에서 피처 일관성을 보장합니다. 학습 시 계산한 피처 로직이 추론 시 다르면 Training-Serving Skew가 발생합니다. Feature Store는 피처 정의를 중앙에서 관리하고, 온라인(실시간)/오프라인(배치) 모두에 동일한 피처를 제공합니다.</div>
+                        <div class="chat-bubble user">면접관: Data Leakage를 어떻게 방지하나요?</div>
+                        <div class="chat-bubble expert">지원자: 미래 정보가 학습에 포함되면 안 됩니다. Point-in-Time Join으로 각 시점에 실제로 사용 가능했던 피처만 조인합니다. Feast의 get_historical_features가 이를 자동으로 처리합니다. Lag 피처 계산 시에도 현재 시점 값이 포함되지 않도록 주의해야 합니다.</div>
+                    </div>
+                    <div class="conv-panel" id="review">
+                        <div class="chat-bubble user">개발자: 온라인 추론 시 피처 계산이 느려서 지연이 발생해요.</div>
+                        <div class="chat-bubble expert">시니어: 실시간 피처 계산은 최소화해야 해. 집계 피처는 미리 계산해서 Feature Store에 저장하고, 추론 시에는 조회만 해. Redis 같은 인메모리 스토어를 온라인 스토어로 쓰면 1ms 이내 응답이 가능해.</div>
+                        <div class="chat-bubble user">개발자: 피처 버전 관리는 어떻게 하나요?</div>
+                        <div class="chat-bubble expert">시니어: 피처 정의를 Git으로 관리하고, Feature Store에 버전을 명시해. 모델별로 어떤 피처 버전을 사용했는지 메타데이터로 기록해야 재현 가능성이 보장돼.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 섹션 4: 주의사항 -->
+            <section class="term-section" aria-labelledby="warning-title">
+                <h2 class="section-title" id="warning-title">주의사항</h2>
+                <ul class="warning-list">
+                    <li class="warning">Data Leakage 주의: 미래 정보가 학습에 포함되면 과대평가됩니다. Point-in-Time Join을 사용하세요.</li>
+                    <li class="warning">Training-Serving Skew: 학습과 추론에서 피처 계산 로직이 달라지지 않도록 Feature Store를 사용하세요.</li>
+                    <li class="warning">피처 폭발(Feature Explosion): 자동 생성된 수천 개 피처는 과적합과 유지보수 문제를 일으킵니다. 중요도 기반 선택이 필요합니다.</li>
+                    <li class="info">도메인 전문가와 협업하세요. 비즈니스 통찰이 가장 강력한 피처를 만듭니다.</li>
+                    <li class="info">Feature Store로 피처를 중앙 관리하면 팀 간 재사용과 일관성이 보장됩니다.</li>
+                </ul>
+            </section>
+
+            <!-- 섹션 5: 관련 용어 -->
+            <section class="term-section" aria-labelledby="related-title">
+                <h2 class="section-title" id="related-title">관련 용어</h2>
+                <div class="related-links">
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%A0%84%EC%B2%98%EB%A6%AC/" class="related-link">데이터 전처리</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/" class="related-link">데이터 파이프라인</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A6%AC%EB%8B%88%EC%A7%80/" class="related-link">데이터 리니지</a>
+                    <a href="/ko/term/%EB%B9%85%EB%8D%B0%EC%9D%B4%ED%84%B0/" class="related-link">빅데이터</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%B9%B4%ED%83%88%EB%A1%9C%EA%B7%B8/" class="related-link">데이터 카탈로그</a>
+                </div>
+            </section>
+
+            <!-- 섹션 6: 더 배우기 -->
+            <section class="term-section" aria-labelledby="learn-title">
+                <h2 class="section-title" id="learn-title">더 배우기</h2>
+                <ul class="learn-links">
+                    <li><a href="https://docs.feast.dev/" target="_blank" rel="noopener">Feast Feature Store 문서</a></li>
+                    <li><a href="https://featuretools.alteryx.com/en/stable/" target="_blank" rel="noopener">Featuretools 문서</a></li>
+                    <li><a href="https://www.kaggle.com/learn/feature-engineering" target="_blank" rel="noopener">Kaggle - 피처 엔지니어링 강좌</a></li>
+                </ul>
+            </section>
+        </div>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

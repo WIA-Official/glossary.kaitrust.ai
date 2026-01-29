@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,131 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p><strong>캐시(Cache)</strong>는 자주 접근하는 데이터를 빠른 저장소에 임시 보관하여 응답 시간을 단축하는 기술입니다. 데이터베이스 조회 결과, API 응답, 세션 정보 등을 메모리에 저장해 반복적인 연산이나 I/O를 줄입니다.</p>
+                <p>대표적인 캐시 솔루션으로 <strong>Redis</strong>(인메모리 데이터 구조 서버), <strong>Memcached</strong>(분산 메모리 캐시), <strong>Varnish</strong>(HTTP 가속기) 등이 있습니다. 캐시 전략에는 <strong>Cache-Aside</strong>(필요 시 로드), <strong>Write-Through</strong>(쓰기 시 동시 갱신), <strong>Write-Behind</strong>(비동기 쓰기) 등이 있습니다.</p>
+                <p>캐시 적중률(Hit Rate)이 높을수록 성능 개선 효과가 크며, 만료 정책(TTL)과 무효화(Invalidation) 전략이 데이터 일관성 유지의 핵심입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>import redis
+import json
+
+# Redis 연결
+cache = redis.Redis(host='localhost', port=6379, db=0)
+
+def get_user_profile(user_id: int) -> dict:
+    cache_key = f"user:profile:{user_id}"
+
+    # 1. 캐시 확인
+    cached = cache.get(cache_key)
+    if cached:
+        print("Cache HIT")
+        return json.loads(cached)
+
+    # 2. 캐시 미스 - DB 조회
+    print("Cache MISS")
+    profile = db.query(f"SELECT * FROM users WHERE id = {user_id}")
+
+    # 3. 캐시에 저장 (TTL 300초)
+    cache.setex(cache_key, 300, json.dumps(profile))
+    return profile
+
+def update_user_profile(user_id: int, data: dict):
+    # DB 업데이트
+    db.update("users", user_id, data)
+
+    # 캐시 무효화 (삭제)
+    cache.delete(f"user:profile:{user_id}")
+
+# 패턴: 캐시 데코레이터
+from functools import wraps
+
+def cached(ttl=60):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            key = f"{func.__name__}:{args}:{kwargs}"
+            result = cache.get(key)
+            if result:
+                return json.loads(result)
+            result = func(*args, **kwargs)
+            cache.setex(key, ttl, json.dumps(result))
+            return result
+        return wrapper
+    return decorator</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>PM:</strong> "상품 목록 API 응답이 2초나 걸린다는 불만이 많아요."</p>
+                <p><strong>백엔드 개발자:</strong> "Redis 캐시 도입하면 50ms 이내로 줄일 수 있어요. 상품 정보는 자주 안 바뀌니까요."</p>
+                <p><strong>PM:</strong> "재고나 가격 변동은요?"</p>
+                <p><strong>백엔드 개발자:</strong> "상품 정보 업데이트할 때 캐시 무효화하고, 재고는 TTL 짧게 30초로 잡으면 됩니다."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "캐시 관련해서 발생할 수 있는 문제점과 해결 방안을 설명해주세요."</p>
+                <p><strong>지원자:</strong> "Cache Stampede는 TTL 만료 시 동시 요청이 몰리는 문제인데, 락이나 확률적 조기 갱신으로 해결합니다. Cache Penetration은 존재하지 않는 키 반복 조회로 DB 부하가 생기는데, 빈 값도 캐싱하거나 Bloom Filter를 씁니다."</p>
+                <p><strong>면접관:</strong> "캐시 일관성은 어떻게 보장하나요?"</p>
+                <p><strong>지원자:</strong> "데이터 변경 시 캐시 삭제 후 다음 조회에 갱신하는 Cache-Aside가 일반적이고, 중요 데이터는 이벤트 기반 무효화를 씁니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "이 API에서 캐시 키에 user_id만 쓰고 있네요?"</p>
+                <p><strong>개발자:</strong> "사용자별 데이터라서요."</p>
+                <p><strong>리뷰어:</strong> "근데 이 응답에 언어 설정에 따라 다른 텍스트가 들어가잖아요. 캐시 키에 locale도 포함해야 해요."</p>
+                <p><strong>개발자:</strong> "아, 맞네요. `user:{user_id}:locale:{locale}` 형태로 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>캐시 일관성:</strong> 원본 데이터 변경 시 캐시 무효화 누락으로 오래된 데이터 제공 위험</li>
+                <li><strong>메모리 관리:</strong> 캐시 크기 제한 없으면 OOM 발생 가능, maxmemory 설정 필수</li>
+                <li><strong>Cold Start:</strong> 서버 재시작 후 캐시가 비어서 일시적 성능 저하 발생</li>
+                <li><strong>보안 민감 데이터:</strong> 개인정보나 토큰을 캐시할 때 암호화 및 접근 제어 필요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%BB%A4%EB%84%A5%EC%85%98%20%ED%92%80/" class="related-link">커넥션 풀</a>
+                <a href="/ko/term/%EB%A0%88%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98/" class="related-link">레플리케이션</a>
+                <a href="/ko/term/%EB%B9%84%EC%A0%95%EA%B7%9C%ED%99%94/" class="related-link">비정규화</a>
+                <a href="/ko/term/%EC%9D%B8%EB%8D%B1%EC%8A%A4/" class="related-link">인덱스</a>
+                <a href="/ko/term/Upstash/" class="related-link">Upstash</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://redis.io/docs/" target="_blank">Redis 공식 문서</a></li>
+                <li><a href="https://aws.amazon.com/caching/" target="_blank">AWS Caching Best Practices</a></li>
+                <li><a href="https://martinfowler.com/bliki/TwoHardThings.html" target="_blank">캐시 무효화 - 컴퓨터과학의 어려운 문제</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +339,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

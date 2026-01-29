@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,126 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p><strong>데이터 무결성(Data Integrity)</strong>은 데이터의 정확성, 일관성, 유효성을 보장하는 데이터베이스의 핵심 속성입니다. 잘못된 데이터가 저장되거나 데이터 간 불일치가 발생하지 않도록 보호합니다.</p>
+                <p>무결성의 주요 유형: <strong>개체 무결성</strong>(Primary Key는 NULL이나 중복 불가), <strong>참조 무결성</strong>(Foreign Key는 참조 테이블에 존재해야 함), <strong>도메인 무결성</strong>(컬럼 값은 정의된 타입/범위 내), <strong>사용자 정의 무결성</strong>(비즈니스 규칙 적용).</p>
+                <p>DBMS는 제약조건(Constraints), 트리거(Triggers), 트랜잭션(ACID)을 통해 무결성을 강제합니다. 애플리케이션 레벨에서도 유효성 검증이 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>-- 개체 무결성: Primary Key 제약
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,  -- NOT NULL + UNIQUE 자동 적용
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+-- 참조 무결성: Foreign Key 제약
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE RESTRICT  -- 참조된 사용자 삭제 방지
+        ON UPDATE CASCADE   -- 사용자 ID 변경 시 자동 반영
+);
+
+-- 도메인 무결성: CHECK 제약
+CREATE TABLE products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10,2) CHECK (price >= 0),
+    stock INT DEFAULT 0 CHECK (stock >= 0),
+    status VARCHAR(20) CHECK (status IN ('active', 'inactive', 'discontinued'))
+);
+
+-- 사용자 정의 무결성: 트리거
+CREATE OR REPLACE FUNCTION check_order_total()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.total < 0 THEN
+        RAISE EXCEPTION 'Order total cannot be negative';
+    END IF;
+    IF NEW.total > 1000000 THEN
+        RAISE EXCEPTION 'Order total exceeds maximum limit';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER validate_order
+BEFORE INSERT OR UPDATE ON orders
+FOR EACH ROW EXECUTE FUNCTION check_order_total();</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>QA:</strong> "주문 데이터에 존재하지 않는 user_id가 들어가 있어요. 어떻게 된 거죠?"</p>
+                <p><strong>DBA:</strong> "Foreign Key 제약이 없네요. 누가 성능 이슈로 뺐나 봐요."</p>
+                <p><strong>백엔드 개발자:</strong> "제가 빼달라고 했어요. INSERT 속도가 느려서요."</p>
+                <p><strong>DBA:</strong> "FK 체크 비용보다 잘못된 데이터 수정 비용이 훨씬 커요. 다시 추가하고, 성능은 인덱스로 해결합시다."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "데이터 무결성의 종류와 보장 방법을 설명해주세요."</p>
+                <p><strong>지원자:</strong> "개체 무결성은 PK로, 참조 무결성은 FK로, 도메인 무결성은 CHECK/NOT NULL로, 사용자 정의 무결성은 트리거로 보장합니다. ACID 트랜잭션으로 연산 중 일관성도 유지합니다."</p>
+                <p><strong>면접관:</strong> "NoSQL에서는 어떻게 하나요?"</p>
+                <p><strong>지원자:</strong> "DB 레벨 제약이 없어서 애플리케이션에서 검증합니다. 스키마 검증 라이브러리나 ODM의 validator를 사용하고, 중요 로직은 트랜잭션을 지원하는 DB를 선택합니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "status 값이 그냥 VARCHAR인데, 잘못된 값이 들어갈 수 있어요."</p>
+                <p><strong>개발자:</strong> "애플리케이션에서 enum으로 검증하고 있어요."</p>
+                <p><strong>리뷰어:</strong> "그래도 DB에 CHECK 제약 추가하세요. 다른 경로로 데이터 들어올 수도 있고, DB가 마지막 방어선이에요."</p>
+                <p><strong>개발자:</strong> "맞네요. CHECK (status IN ('pending', 'confirmed', 'shipped')) 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>성능 트레이드오프:</strong> 제약조건이 많을수록 쓰기 성능 저하, 적절한 균형 필요</li>
+                <li><strong>마이그레이션 어려움:</strong> 기존 데이터가 제약조건 위반 시 ALTER TABLE 실패</li>
+                <li><strong>분산 환경:</strong> 여러 DB/마이크로서비스 간 참조 무결성 유지 어려움</li>
+                <li><strong>소프트 딜리트:</strong> deleted_at 패턴 사용 시 FK가 삭제된 레코드 참조 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98/" class="related-link">트랜잭션</a>
+                <a href="/ko/term/%EC%A0%95%EA%B7%9C%ED%99%94/" class="related-link">정규화</a>
+                <a href="/ko/term/%ED%8A%B8%EB%A6%AC%EA%B1%B0/" class="related-link">트리거</a>
+                <a href="/ko/term/%EC%9D%B8%EB%8D%B1%EC%8A%A4/" class="related-link">인덱스</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4/" class="related-link">데이터베이스</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://www.postgresql.org/docs/current/ddl-constraints.html" target="_blank">PostgreSQL Constraints 문서</a></li>
+                <li><a href="https://dev.mysql.com/doc/refman/8.0/en/constraint-foreign-key.html" target="_blank">MySQL Foreign Key 문서</a></li>
+                <li><a href="https://docs.microsoft.com/sql/relational-databases/tables/primary-and-foreign-key-constraints" target="_blank">SQL Server 제약조건 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +334,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

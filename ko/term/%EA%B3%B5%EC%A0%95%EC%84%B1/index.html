@@ -147,19 +147,126 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
+        .content-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
         }
-        .related-title {
-            font-size: 1.3rem;
+        .section-title {
+            font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .conversation-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+        }
+        .conversation-box .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .warning-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: #fbbf24;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #67e8f9;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
         }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
+            .content-section { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -202,6 +309,183 @@
                 </a>
             </div>
         </article>
+
+        <!-- Detailed Explanation Section -->
+        <section class="content-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>공정성(Fairness)은 AI 시스템이 성별, 인종, 나이, 장애 여부 등 민감 속성에 관계없이 모든 사용자에게 동등한 품질의 결과를 제공하는 것을 의미합니다. AI 모델이 학습 데이터에 내재된 편향을 그대로 학습하면 특정 그룹에 불리한 예측을 하게 되어 사회적 차별을 확대할 수 있습니다. 예를 들어 이력서 심사 AI가 과거 채용 데이터의 성별 편향을 학습하면 여성 지원자에게 낮은 점수를 부여할 수 있습니다.</p>
+
+                <p>공정성을 측정하는 다양한 지표가 존재합니다. 통계적 패리티(Statistical Parity)는 모든 그룹에서 긍정적 예측 비율이 동일해야 함을 요구합니다. 기회 균등(Equalized Odds)은 실제 결과가 같은 경우 예측 결과도 그룹과 무관해야 한다는 기준입니다. 예측 패리티(Predictive Parity)는 긍정 예측을 받은 사람들 중 실제 긍정인 비율이 그룹 간 동일해야 함을 의미합니다. 이들 지표는 수학적으로 동시에 만족하기 어려워 상황에 맞는 선택이 필요합니다.</p>
+
+                <p>공정성 문제는 데이터 수집, 전처리, 모델 학습, 후처리 등 ML 파이프라인 전반에서 다뤄져야 합니다. 데이터 수집 단계에서는 대표성 있는 샘플링으로 특정 그룹의 과소/과다 표현을 방지합니다. 전처리 단계에서는 민감 속성 제거나 리샘플링을 적용하고, 학습 단계에서는 공정성 제약을 손실 함수에 추가합니다. 후처리 단계에서는 임계값 조정으로 그룹 간 결과를 균형화합니다.</p>
+
+                <p>공정성은 신뢰할 수 있는 AI(Trustworthy AI)의 핵심 요소이며 EU AI Act, 한국 AI 기본법 등 규제에서도 중요하게 다루어집니다. IBM AI Fairness 360, Microsoft Fairlearn 등 오픈소스 도구를 활용하면 공정성 지표를 측정하고 편향을 완화하는 알고리즘을 적용할 수 있습니다. 다만 공정성의 정의 자체가 윤리적, 법적 맥락에 따라 달라지므로 기술적 해결책만으로는 충분하지 않으며 도메인 전문가 및 이해관계자와의 협업이 필수적입니다.</p>
+            </div>
+        </section>
+
+        <!-- Code Example Section -->
+        <section class="content-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Fairlearn 라이브러리를 사용하여 공정성 지표를 측정하고 편향을 완화하는 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <code># pip install fairlearn scikit-learn
+
+from fairlearn.metrics import MetricFrame, selection_rate, false_positive_rate
+from fairlearn.reductions import ExponentiatedGradient, DemographicParity
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.datasets import fetch_openml
+import pandas as pd
+
+# Adult Census 데이터셋 로드 (소득 예측)
+data = fetch_openml(data_id=1590, as_frame=True)
+X = data.data
+y = (data.target == ">50K").astype(int)
+
+# 민감 속성: 성별
+sensitive_feature = X["sex"]
+
+# 학습/테스트 분할
+X_train, X_test, y_train, y_test, sf_train, sf_test = train_test_split(
+    X.drop(columns=["sex"]), y, sensitive_feature,
+    test_size=0.3, random_state=42
+)
+
+# 수치형 변환 (간단한 전처리)
+X_train = pd.get_dummies(X_train)
+X_test = pd.get_dummies(X_test)
+X_test = X_test.reindex(columns=X_train.columns, fill_value=0)
+
+# 기본 모델 학습
+base_model = GradientBoostingClassifier(n_estimators=50, random_state=42)
+base_model.fit(X_train, y_train)
+y_pred_base = base_model.predict(X_test)
+
+# 공정성 지표 측정
+print("=== 기본 모델 공정성 분석 ===")
+mf = MetricFrame(
+    metrics={"selection_rate": selection_rate, "accuracy": lambda y_true, y_pred: (y_true == y_pred).mean()},
+    y_true=y_test,
+    y_pred=y_pred_base,
+    sensitive_features=sf_test
+)
+print(f"그룹별 선택률:\n{mf.by_group['selection_rate']}")
+print(f"선택률 차이: {mf.difference()['selection_rate']:.4f}")
+
+# 공정성 완화 적용 (Demographic Parity)
+mitigator = ExponentiatedGradient(
+    estimator=GradientBoostingClassifier(n_estimators=50, random_state=42),
+    constraints=DemographicParity()
+)
+mitigator.fit(X_train, y_train, sensitive_features=sf_train)
+y_pred_fair = mitigator.predict(X_test)
+
+# 완화 후 공정성 비교
+print("\n=== 완화 후 공정성 분석 ===")
+mf_fair = MetricFrame(
+    metrics={"selection_rate": selection_rate},
+    y_true=y_test,
+    y_pred=y_pred_fair,
+    sensitive_features=sf_test
+)
+print(f"그룹별 선택률:\n{mf_fair.by_group['selection_rate']}")
+print(f"선택률 차이: {mf_fair.difference()['selection_rate']:.4f}")
+
+# 결과 예시:
+# === 기본 모델 공정성 분석 ===
+# 그룹별 선택률:
+# sex
+# Female    0.095
+# Male      0.312
+# 선택률 차이: 0.2170
+#
+# === 완화 후 공정성 분석 ===
+# 그룹별 선택률:
+# sex
+# Female    0.182
+# Male      0.198
+# 선택률 차이: 0.0160</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Conversation Section -->
+        <section class="content-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-box">
+                    <div class="speaker">PM:</div>
+                    <div>"이번 대출 심사 AI, 성별에 따른 승인률 차이가 문제되지 않을까요?"</div>
+                </div>
+                <div class="conversation-box">
+                    <div class="speaker">ML 엔지니어:</div>
+                    <div>"Fairlearn으로 Demographic Parity 지표를 확인해보니 남녀 승인률 차이가 15%p 정도 납니다. Equalized Odds 제약을 적용해서 실제 상환 능력이 같은 경우 예측 결과도 동일하게 만들겠습니다. 다만 공정성과 정확도 간 트레이드오프가 있어서 비즈니스팀과 허용 범위를 논의해야 합니다."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Mistakes Section -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>민감 속성을 피처에서 제거하면 공정해진다고 생각함. 다른 피처가 대리 변수로 작용할 수 있음</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>민감 속성 제거 후에도 프록시 변수(우편번호, 이름 등)의 영향을 분석해야 함</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>하나의 공정성 지표만 만족시키면 된다고 판단함</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>여러 공정성 지표를 함께 모니터링하고 도메인 맥락에 맞는 지표를 우선시함</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>배포 후 공정성 모니터링을 하지 않음</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>데이터 분포 변화로 공정성이 악화될 수 있으므로 지속적 모니터링 필요</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms Section -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%ED%8E%B8%ED%96%A5/" class="related-term-link">편향 (Bias)</a>
+                <a href="/ko/term/%EC%84%A4%EB%AA%85%20%EA%B0%80%EB%8A%A5%ED%95%9C%20AI/" class="related-term-link">설명 가능한 AI (XAI)</a>
+                <a href="/ko/term/%EC%B1%85%EC%9E%84%20%EC%9E%88%EB%8A%94%20AI/" class="related-term-link">책임 있는 AI</a>
+                <a href="/ko/term/%EA%B3%A0%EC%9C%84%ED%97%98%20AI/" class="related-term-link">고위험 AI</a>
+                <a href="/ko/term/%ED%88%AC%EB%AA%85%EC%84%B1/" class="related-term-link">투명성</a>
+            </div>
+        </section>
+
+        <!-- Learn More Section -->
+        <section class="content-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://fairlearn.org/" target="_blank">📄 Fairlearn 공식 문서</a></li>
+                <li><a href="https://aif360.mybluemix.net/" target="_blank">📄 IBM AI Fairness 360</a></li>
+                <li><a href="https://arxiv.org/abs/1908.09635" target="_blank">📄 Fairness in Machine Learning 서베이 (arXiv)</a></li>
+                <li><a href="https://www.youtube.com/watch?v=jIXIuYdnyyk" target="_blank">🎬 AI 공정성 개요 (Google)</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +496,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

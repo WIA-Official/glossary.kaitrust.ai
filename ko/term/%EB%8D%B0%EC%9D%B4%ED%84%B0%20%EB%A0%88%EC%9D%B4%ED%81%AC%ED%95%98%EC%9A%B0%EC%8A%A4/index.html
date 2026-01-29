@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -147,15 +148,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -202,6 +194,140 @@
                 </a>
             </div>
         </article>
+
+        <!-- 표준 6개 섹션 -->
+        <div class="term-sections">
+            <!-- 섹션 1: 상세 설명 -->
+            <section class="term-section" aria-labelledby="detail-title">
+                <h2 class="section-title" id="detail-title">상세 설명</h2>
+                <div class="detail-content">
+                    <p>데이터 레이크하우스(Data Lakehouse)는 데이터 레이크의 유연성과 저비용 스토리지, 데이터 웨어하우스의 ACID 트랜잭션과 스키마 관리를 결합한 현대적 데이터 아키텍처입니다. Delta Lake, Apache Iceberg, Apache Hudi 같은 오픈 테이블 포맷이 이 패러다임을 가능하게 했습니다.</p>
+                    <p>레이크하우스는 단일 저장소에서 BI 분석, 머신러닝, 실시간 스트리밍을 모두 지원하며, 기존에 레이크와 웨어하우스를 분리 운영할 때 발생하던 데이터 복제 비용과 ETL 복잡성을 크게 줄입니다. 오픈 포맷을 사용하므로 벤더 종속을 피하고 다양한 쿼리 엔진에서 접근할 수 있습니다.</p>
+                    <p>핵심 기능으로는 ACID 트랜잭션(동시 쓰기 충돌 방지), 스키마 진화(컬럼 추가/변경 무중단), 타임 트래블(과거 시점 데이터 조회/롤백), Z-Ordering(쿼리 패턴 최적화된 데이터 레이아웃)이 있습니다.</p>
+                    <p>Databricks, Snowflake, AWS Lake Formation, Google BigLake 등이 레이크하우스 아키텍처를 제공하며, Unity Catalog나 Polaris 같은 통합 카탈로그로 데이터 거버넌스와 접근 제어를 관리합니다.</p>
+                </div>
+            </section>
+
+            <!-- 섹션 2: 코드 예제 -->
+            <section class="term-section" aria-labelledby="code-title">
+                <h2 class="section-title" id="code-title">코드 예제</h2>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Python (Delta Lake)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre><code class="language-python"># Delta Lake 기반 레이크하우스 아키텍처
+from delta.tables import DeltaTable
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+
+spark = SparkSession.builder \
+    .appName("Lakehouse") \
+    .config("spark.sql.extensions",
+            "io.delta.sql.DeltaSparkSessionExtension") \
+    .config("spark.sql.catalog.spark_catalog",
+            "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
+    .getOrCreate()
+
+# 1. ACID 트랜잭션으로 데이터 저장
+orders_df = spark.read.json("s3://raw/orders/")
+orders_df.write \
+    .format("delta") \
+    .mode("overwrite") \
+    .partitionBy("order_date") \
+    .save("s3://lakehouse/bronze/orders/")
+
+# 2. 스키마 진화 - 새 컬럼 추가 (무중단)
+spark.sql("""
+    ALTER TABLE delta.`s3://lakehouse/bronze/orders/`
+    ADD COLUMNS (loyalty_points INT)
+""")
+
+# 3. Merge (Upsert) 작업 - CDC 처리
+delta_orders = DeltaTable.forPath(spark, "s3://lakehouse/bronze/orders/")
+updates_df = spark.read.json("s3://raw/orders_updates/")
+
+delta_orders.alias("target").merge(
+    updates_df.alias("source"),
+    "target.order_id = source.order_id"
+).whenMatchedUpdate(set={
+    "status": "source.status",
+    "updated_at": "source.updated_at"
+}).whenNotMatchedInsertAll().execute()
+
+# 4. 타임 트래블 - 과거 시점 조회
+historical = spark.read.format("delta") \
+    .option("versionAsOf", 5) \
+    .load("s3://lakehouse/bronze/orders/")
+
+# 5. Z-Ordering으로 쿼리 최적화
+spark.sql("""
+    OPTIMIZE delta.`s3://lakehouse/gold/orders/`
+    ZORDER BY (customer_id, order_date)
+""")
+
+print("Lakehouse operations completed!")</code></pre>
+                </div>
+            </section>
+
+            <!-- 섹션 3: 실무 대화 -->
+            <section class="term-section" aria-labelledby="conv-title">
+                <h2 class="section-title" id="conv-title">실무 대화</h2>
+                <div class="conversation-tabs">
+                    <button class="conv-tab active" data-tab="meeting">팀 미팅</button>
+                    <button class="conv-tab" data-tab="interview">기술 면접</button>
+                    <button class="conv-tab" data-tab="review">코드 리뷰</button>
+                </div>
+                <div class="conversation-content">
+                    <div class="conv-panel active" id="meeting">
+                        <div class="chat-bubble user">Redshift와 S3 레이크 둘 다 유지하고 있는데, 데이터 동기화가 너무 힘들어요.</div>
+                        <div class="chat-bubble assistant">레이크하우스 아키텍처로 통합을 고려하세요. Delta Lake나 Iceberg를 S3 위에 적용하면 ACID 트랜잭션과 스키마 관리가 가능해져요. Redshift Spectrum이나 Athena로 직접 쿼리하면 데이터 복제 없이 BI와 ML을 통합할 수 있습니다.</div>
+                    </div>
+                    <div class="conv-panel" id="interview">
+                        <div class="chat-bubble user">Delta Lake와 Apache Iceberg의 차이점은?</div>
+                        <div class="chat-bubble assistant">둘 다 오픈 테이블 포맷으로 ACID와 타임 트래블을 지원해요. Delta Lake는 Databricks 생태계와 통합이 강하고, Iceberg는 벤더 중립적이며 Snowflake, Trino, Spark 등 다양한 엔진 지원이 우수합니다. Hudi는 스트리밍 Upsert에 특화되어 있어요. 조직 환경에 맞게 선택하면 됩니다.</div>
+                    </div>
+                    <div class="conv-panel" id="review">
+                        <div class="chat-bubble user">Delta 테이블인데 VACUUM 없이 1년간 운영했네요. 버전 파일이 엄청 많아요.</div>
+                        <div class="chat-bubble assistant">VACUUM을 정기 실행해서 오래된 버전 파일을 정리해야 해요. 기본 7일 보존인데, retention을 설정하고 주기적으로 실행하세요. 또한 OPTIMIZE로 소형 파일 병합도 함께 해주세요. S3 비용 절감에 효과적입니다.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 섹션 4: 주의사항 -->
+            <section class="term-section" aria-labelledby="warning-title">
+                <h2 class="section-title" id="warning-title">주의사항</h2>
+                <ul class="warning-list">
+                    <li>Small Files 문제를 방지하려면 OPTIMIZE/Compaction을 정기적으로 실행해야 합니다.</li>
+                    <li>VACUUM 없이 장기 운영하면 메타데이터 파일이 누적되어 성능 저하와 비용 증가가 발생합니다.</li>
+                    <li>Delta, Iceberg, Hudi 간 호환성이 완벽하지 않으므로 포맷 선정 시 신중히 검토하세요.</li>
+                    <li>타임 트래블 활용 시 오래된 버전 데이터가 삭제될 수 있으니 VACUUM retention 설정을 확인하세요.</li>
+                    <li class="info">Unity Catalog나 AWS Lake Formation으로 테이블 수준 접근 제어를 설정하면 거버넌스와 보안을 강화할 수 있습니다.</li>
+                </ul>
+            </section>
+
+            <!-- 섹션 5: 관련 용어 -->
+            <section class="term-section" aria-labelledby="related-title">
+                <h2 class="section-title" id="related-title">관련 용어</h2>
+                <div class="related-links">
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A0%88%EC%9D%B4%ED%81%AC/" class="related-link">데이터 레이크</a>
+                    <a href="/ko/term/%EB%B9%85%EB%8D%B0%EC%9D%B4%ED%84%B0/" class="related-link">빅데이터</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%B9%B4%ED%83%88%EB%A1%9C%EA%B7%B8/" class="related-link">데이터 카탈로그</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/" class="related-link">데이터 파이프라인</a>
+                    <a href="/ko/term/Trino/" class="related-link">Trino</a>
+                </div>
+            </section>
+
+            <!-- 섹션 6: 더 배우기 -->
+            <section class="term-section" aria-labelledby="learn-title">
+                <h2 class="section-title" id="learn-title">더 배우기</h2>
+                <ul class="learn-links">
+                    <li><a href="https://delta.io/" target="_blank" rel="noopener">Delta Lake 공식 사이트</a></li>
+                    <li><a href="https://iceberg.apache.org/docs/latest/" target="_blank" rel="noopener">Apache Iceberg 문서</a></li>
+                    <li><a href="https://www.databricks.com/glossary/data-lakehouse" target="_blank" rel="noopener">Databricks - 데이터 레이크하우스란?</a></li>
+                </ul>
+            </section>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -212,6 +338,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,133 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>NLP(Natural Language Processing, 자연어 처리)는 컴퓨터가 인간의 언어를 이해하고, 해석하고, 생성하는 인공지능 분야입니다. 텍스트와 음성 데이터를 처리하여 번역, 감정 분석, 질의응답, 요약, 챗봇 등 다양한 응용이 가능합니다.</p>
+                <p>1950년대 기계 번역 연구에서 시작되어, 규칙 기반 시스템에서 통계적 방법, 그리고 현재의 딥러닝 기반 접근으로 발전했습니다. 2017년 Transformer 아키텍처의 등장과 2018년 BERT 이후 사전학습 언어모델 시대가 열렸으며, GPT-4, Claude 같은 LLM이 NLP의 새로운 패러다임을 주도하고 있습니다.</p>
+                <p>NLP 파이프라인은 일반적으로 토큰화(Tokenization), 품사 태깅(POS Tagging), 개체명 인식(NER), 구문 분석(Parsing), 의미 분석(Semantic Analysis) 단계로 구성됩니다. 현대 LLM은 이 과정을 end-to-end로 처리합니다.</p>
+                <p>실무에서 NLP는 고객 서비스 자동화, 문서 분류/요약, 검색 시스템 개선, 음성 인식 등에 핵심적으로 사용됩니다. 한국어 NLP는 교착어 특성, 띄어쓰기 문제 등 영어와 다른 도전 과제가 있어 전용 형태소 분석기(Mecab, Okt 등)가 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Hugging Face Transformers를 사용한 NLP 작업 예제
+# pip install transformers torch
+
+from transformers import pipeline
+
+# 1. 감정 분석 (Sentiment Analysis)
+sentiment_analyzer = pipeline("sentiment-analysis")
+result = sentiment_analyzer("이 제품 정말 좋아요! 배송도 빠르고 품질도 최고입니다.")
+print(f"감정 분석: {result}")
+# [{'label': 'POSITIVE', 'score': 0.9998}]
+
+# 2. 개체명 인식 (Named Entity Recognition)
+ner = pipeline("ner", grouped_entities=True)
+entities = ner("삼성전자 이재용 회장이 서울에서 기자회견을 열었다.")
+print(f"개체명 인식: {entities}")
+
+# 3. 텍스트 요약
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+article = """
+인공지능 기술이 빠르게 발전하면서 다양한 산업에 혁신을 가져오고 있다.
+특히 자연어 처리 분야에서 대규모 언어 모델의 등장으로
+번역, 요약, 질의응답 등의 작업이 인간 수준에 근접하고 있다.
+기업들은 이러한 기술을 활용하여 고객 서비스 자동화,
+문서 처리 효율화 등 다양한 분야에서 비용 절감과 생산성 향상을 달성하고 있다.
+"""
+summary = summarizer(article, max_length=50, min_length=20)
+print(f"요약: {summary[0]['summary_text']}")
+
+# 4. 한국어 형태소 분석 (Okt 사용)
+# pip install konlpy
+from konlpy.tag import Okt
+okt = Okt()
+text = "자연어 처리는 정말 재미있는 분야입니다."
+print(f"형태소 분석: {okt.morphs(text)}")
+print(f"품사 태깅: {okt.pos(text)}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 프로젝트 기획 회의에서</div>
+                    <blockquote class="conv-quote">"고객 리뷰 분석에 NLP를 적용하면 감정 분석으로 긍부정 분류하고, 토픽 모델링으로 주요 불만 사항을 자동 추출할 수 있습니다. 기존 수작업 대비 처리 속도를 100배 이상 높일 수 있어요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"NLP 파이프라인은 토큰화, 정규화, 벡터화 단계를 거칩니다. 한국어는 교착어 특성 때문에 형태소 분석이 필수적이고, Mecab이나 Okt 같은 한국어 전용 도구를 사용합니다. 최근에는 BERT 계열 모델이 이런 전처리 의존도를 많이 줄였습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 검토에서</div>
+                    <blockquote class="conv-quote">"문서 분류 작업이니 fine-tuning된 KoBERT나 KoElectra를 쓰면 되고, 간단한 PoC라면 OpenAI API 호출이 더 빠를 수 있습니다. 정확도 요구사항과 비용을 비교해서 결정하죠."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>영어 모델을 한국어에 그대로 적용</strong>
+                        <p>한국어는 어순, 형태소 구조가 다릅니다. 반드시 한국어 전용 모델(KoBERT, KoGPT 등)이나 다국어 모델을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>전처리 없이 raw 텍스트 사용</strong>
+                        <p>특수문자, 이모지, HTML 태그 등이 포함된 데이터는 노이즈가 됩니다. 도메인에 맞는 정제 과정이 필수입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 접근법</strong>
+                        <p>데이터 특성을 분석하고, 적절한 전처리 파이프라인을 구축한 뒤, 작은 샘플로 모델 성능을 검증하세요. 한국어 NLP는 형태소 분석기 선택이 결과에 큰 영향을 미칩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                <a href="/ko/term/Transformer/" class="related-term-link">Transformer</a>
+                <a href="/ko/term/BERT/" class="related-term-link">BERT</a>
+                <a href="/ko/term/Tokenization/" class="related-term-link">Tokenization</a>
+                <a href="/ko/term/Embedding/" class="related-term-link">Embedding</a>
+                <a href="/ko/term/Sentiment%20Analysis/" class="related-term-link">Sentiment Analysis</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://huggingface.co/learn/nlp-course" target="_blank" class="learn-link">📄 Hugging Face NLP Course (무료)</a>
+                <a href="https://web.stanford.edu/class/cs224n/" target="_blank" class="learn-link">🎓 Stanford CS224N: NLP with Deep Learning</a>
+                <a href="https://github.com/konlpy/konlpy" target="_blank" class="learn-link">📘 KoNLPy: 한국어 NLP 파이썬 패키지</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +363,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

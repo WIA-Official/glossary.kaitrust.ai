@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,141 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>테스트(Testing)는 소프트웨어가 예상대로 동작하는지 검증하는 활동입니다. 버그를 조기에 발견하고, 리팩토링 시 안전망을 제공하며, 코드의 동작을 문서화합니다. 품질 보증(QA)의 핵심입니다.</p>
+                <p>테스트 피라미드에서 유닛 테스트(단위), 통합 테스트, E2E 테스트(종단간)로 계층화됩니다. 유닛 테스트가 가장 많고 빠르며, E2E로 갈수록 적고 느립니다. 70/20/10 비율을 권장합니다.</p>
+                <p>TDD(Test-Driven Development)는 테스트를 먼저 작성하고 코드를 구현합니다. Red(실패) -> Green(통과) -> Refactor(개선) 사이클로 진행합니다. BDD(Behavior-Driven Development)는 사용자 행동 관점에서 Given-When-Then으로 테스트를 기술합니다.</p>
+                <p>실무에서는 CI에서 모든 테스트를 자동 실행합니다. 커버리지 80% 이상을 목표로 하되, 숫자보다 중요 로직의 테스트 여부가 중요합니다. 테스트 속도를 위해 모킹을 활용하고, 플레이키(flaky) 테스트는 즉시 수정합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="javascript">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>// Jest 유닛 테스트 예제
+describe('calculatePrice', () => {
+  // 기본 케이스
+  it('should calculate price with no discount', () => {
+    const result = calculatePrice(100, 0);
+    expect(result).toBe(100);
+  });
+
+  // 할인 적용
+  it('should apply percentage discount correctly', () => {
+    const result = calculatePrice(100, 20);
+    expect(result).toBe(80);
+  });
+
+  // 엣지 케이스
+  it('should handle 100% discount', () => {
+    const result = calculatePrice(100, 100);
+    expect(result).toBe(0);
+  });
+
+  // 에러 케이스
+  it('should throw error for negative price', () => {
+    expect(() => calculatePrice(-100, 10)).toThrow('Invalid price');
+  });
+});
+
+// 비동기 테스트
+describe('UserService', () => {
+  it('should fetch user by id', async () => {
+    const mockUser = { id: 1, name: 'John' };
+    jest.spyOn(api, 'getUser').mockResolvedValue(mockUser);
+
+    const result = await userService.getUserById(1);
+
+    expect(result).toEqual(mockUser);
+    expect(api.getUser).toHaveBeenCalledWith(1);
+  });
+});
+
+// Integration Test (Supertest)
+describe('POST /api/orders', () => {
+  it('should create order and return 201', async () => {
+    const orderData = { productId: 1, quantity: 2 };
+
+    const response = await request(app)
+      .post('/api/orders')
+      .send(orderData)
+      .set('Authorization', `Bearer ${testToken}`);
+
+    expect(response.status).toBe(201);
+    expect(response.body.orderId).toBeDefined();
+  });
+});
+
+// package.json scripts
+// "scripts": {
+//   "test": "jest",
+//   "test:watch": "jest --watch",
+//   "test:coverage": "jest --coverage",
+//   "test:ci": "jest --ci --coverage --reporters=default --reporters=jest-junit"
+// }</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "결제 로직 변경했는데, 테스트 커버리지 어떤가요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "해당 모듈 95%이고, 경계값 케이스랑 에러 핸들링 테스트 다 추가했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "테스트 피라미드에서 각 계층의 특징을 설명해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "유닛 테스트는 빠르고 격리된 함수/클래스 단위를 테스트합니다. 통합 테스트는 모듈 간 상호작용을, E2E 테스트는 실제 사용자 시나리오를 검증합니다. 하위 계층이 많고 빠를수록 디버깅이 쉽습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 테스트는 외부 API를 실제로 호출하는데, CI에서 불안정하지 않을까요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "mockResolvedValue로 모킹 처리하겠습니다. 실제 API 테스트는 별도 integration 스위트로 분리할게요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>플레이키 테스트 즉시 수정 - 무작위 실패는 테스트 신뢰도 하락</li>
+                <li>테스트 독립성 유지 - 테스트 간 상태 공유 금지, 순서 의존성 제거</li>
+                <li>커버리지 숫자에 집착 금지 - 중요 비즈니스 로직 테스트가 우선</li>
+                <li class="info">테스트 명은 행동을 설명하도록 - "should return error when input is invalid"</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Integration%20Test/" class="related-link">Integration Test</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Linting/" class="related-link">Linting</a>
+                <a href="/ko/term/%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/" class="related-link">파이프라인</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://jestjs.io/docs/getting-started" target="_blank" rel="noopener">Jest 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://martinfowler.com/bliki/TestPyramid.html" target="_blank" rel="noopener">Martin Fowler - Test Pyramid</a></li>
+                <li><span class="type-book"></span><a href="https://www.oreilly.com/library/view/unit-testing-principles/9781617296277/" target="_blank" rel="noopener">Unit Testing Principles, Practices, and Patterns</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +348,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

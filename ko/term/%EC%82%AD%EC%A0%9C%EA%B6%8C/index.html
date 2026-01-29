@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>삭제권 | KAITRUST AI 백과사전</title>
     <meta name="description" content="개인정보 삭제를 요청할 권리">
-    <meta name="keywords" content="삭제권, , AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
+    <meta name="keywords" content="삭제권, Right to Erasure, Right to be Forgotten, AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EC%82%AD%EC%A0%9C%EA%B6%8C/">
 
     <!-- Open Graph -->
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,263 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>삭제권(Right to Erasure, Right to be Forgotten)은 개인이 자신의 개인정보 삭제를 요청할 수 있는 권리입니다. GDPR 제17조에서 규정되며, 한국 개인정보보호법 제36조에서도 유사한 권리를 보장합니다. AI 시대에 이 권리는 학습 데이터에서의 삭제라는 새로운 도전을 제기합니다.</p>
+                <p>GDPR 제17조에 따른 삭제 요청 사유는 다음과 같습니다: 수집 목적 달성 후, 동의 철회 시, 처리 반대권 행사 시, 불법 처리인 경우, 법적 의무에 따른 삭제 필요 시. 단, 표현의 자유, 법적 의무, 공익적 기록 보관 등의 예외가 있습니다.</p>
+                <p>AI 맥락에서 삭제권의 기술적 구현은 복잡합니다. 학습 데이터에서 특정 개인의 정보를 삭제하더라도, 이미 학습된 모델에는 그 정보의 영향이 남아있기 때문입니다. 이를 해결하기 위해 Machine Unlearning(기계 비학습) 기술이 연구되고 있으나, 완전한 영향 제거는 여전히 어려운 과제입니다.</p>
+                <p>실무적 접근법으로는 데이터 삭제 후 모델 재학습, 영향이 미미함을 입증하는 문서화, 또는 애초에 연합학습(Federated Learning)이나 차분 프라이버시(Differential Privacy) 적용으로 개인정보 노출을 최소화하는 방법이 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn">복사</button>
+                <pre><code># 삭제권 요청 처리 시스템 예제
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from typing import List, Dict, Optional
+from enum import Enum
+
+class DeletionStatus(Enum):
+    PENDING = "pending"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    REJECTED = "rejected"
+
+class DeletionScope(Enum):
+    RAW_DATA = "raw_data"           # 원본 데이터
+    PROCESSED_DATA = "processed"     # 처리된 데이터
+    TRAINING_DATA = "training"       # 학습 데이터
+    MODEL_INFLUENCE = "model"        # 모델 영향
+
+@dataclass
+class DeletionRequest:
+    """GDPR 제17조 삭제 요청"""
+    request_id: str
+    user_id: str
+    requested_at: datetime
+    reason: str
+    scopes: List[DeletionScope]
+    status: DeletionStatus = DeletionStatus.PENDING
+    completed_at: Optional[datetime] = None
+    affected_models: List[str] = field(default_factory=list)
+
+class RightToErasureManager:
+    """삭제권 관리 시스템"""
+
+    GDPR_RESPONSE_DEADLINE_DAYS = 30
+
+    def __init__(self):
+        self.requests: Dict[str, DeletionRequest] = {}
+        self.deletion_logs: List[Dict] = []
+
+    def submit_deletion_request(self, user_id: str, reason: str,
+                                  scopes: List[DeletionScope]) -> DeletionRequest:
+        """삭제 요청 접수"""
+        request_id = f"DEL-{datetime.now().strftime('%Y%m%d%H%M%S')}-{user_id[:4]}"
+
+        request = DeletionRequest(
+            request_id=request_id,
+            user_id=user_id,
+            requested_at=datetime.now(),
+            reason=reason,
+            scopes=scopes
+        )
+
+        self.requests[request_id] = request
+        deadline = request.requested_at + timedelta(days=self.GDPR_RESPONSE_DEADLINE_DAYS)
+        print(f"[삭제 요청 접수] ID: {request_id}, 처리 기한: {deadline.date()}")
+
+        return request
+
+    def process_deletion(self, request_id: str,
+                          data_sources: Dict[str, 'DataSource']) -> Dict:
+        """삭제 요청 처리"""
+        request = self.requests.get(request_id)
+        if not request:
+            return {"error": "요청을 찾을 수 없습니다"}
+
+        request.status = DeletionStatus.IN_PROGRESS
+        deletion_report = {
+            "request_id": request_id,
+            "user_id": request.user_id,
+            "deletions": []
+        }
+
+        for scope in request.scopes:
+            if scope == DeletionScope.RAW_DATA:
+                result = self._delete_raw_data(request.user_id, data_sources)
+            elif scope == DeletionScope.TRAINING_DATA:
+                result = self._delete_training_data(request.user_id, data_sources)
+            elif scope == DeletionScope.MODEL_INFLUENCE:
+                result = self._handle_model_impact(request.user_id)
+            else:
+                result = {"scope": scope.value, "status": "skipped"}
+
+            deletion_report["deletions"].append(result)
+
+        request.status = DeletionStatus.COMPLETED
+        request.completed_at = datetime.now()
+
+        self._log_deletion(deletion_report)
+        return deletion_report
+
+    def _delete_raw_data(self, user_id: str, data_sources: Dict) -> Dict:
+        """원본 데이터 삭제"""
+        deleted_from = []
+        for source_name, source in data_sources.items():
+            # 실제로는 각 데이터 소스에서 삭제 수행
+            deleted_from.append(source_name)
+
+        return {
+            "scope": "raw_data",
+            "status": "deleted",
+            "sources": deleted_from,
+            "timestamp": datetime.now().isoformat()
+        }
+
+    def _delete_training_data(self, user_id: str, data_sources: Dict) -> Dict:
+        """학습 데이터에서 삭제"""
+        # 데이터 계보를 통해 영향받는 데이터셋 식별
+        affected_datasets = ["training_v1", "training_v2"]
+
+        return {
+            "scope": "training_data",
+            "status": "deleted",
+            "affected_datasets": affected_datasets,
+            "requires_model_retrain": True,
+            "timestamp": datetime.now().isoformat()
+        }
+
+    def _handle_model_impact(self, user_id: str) -> Dict:
+        """모델 영향 처리 (Machine Unlearning 또는 재학습)"""
+        # 영향받는 모델 식별
+        affected_models = ["credit_model_v2", "fraud_detection_v1"]
+
+        # 옵션 1: 재학습 예약
+        # 옵션 2: Machine Unlearning 적용
+        # 옵션 3: 영향 미미함 입증 문서화
+
+        return {
+            "scope": "model_influence",
+            "status": "scheduled_retrain",
+            "affected_models": affected_models,
+            "action": "Model retrain scheduled for next training cycle",
+            "impact_assessment": "User data represents <0.001% of training set",
+            "timestamp": datetime.now().isoformat()
+        }
+
+    def _log_deletion(self, report: Dict):
+        """삭제 이력 기록 (GDPR 입증용)"""
+        self.deletion_logs.append({
+            **report,
+            "logged_at": datetime.now().isoformat()
+        })
+
+    def check_deadline_compliance(self, request_id: str) -> Dict:
+        """GDPR 30일 기한 준수 여부 확인"""
+        request = self.requests.get(request_id)
+        if not request:
+            return {"error": "요청을 찾을 수 없습니다"}
+
+        deadline = request.requested_at + timedelta(days=self.GDPR_RESPONSE_DEADLINE_DAYS)
+        now = datetime.now()
+
+        if request.status == DeletionStatus.COMPLETED:
+            days_taken = (request.completed_at - request.requested_at).days
+            compliant = days_taken <= self.GDPR_RESPONSE_DEADLINE_DAYS
+        else:
+            days_remaining = (deadline - now).days
+            compliant = days_remaining >= 0
+
+        return {
+            "request_id": request_id,
+            "status": request.status.value,
+            "deadline": deadline.isoformat(),
+            "gdpr_compliant": compliant
+        }
+
+# 사용 예시
+manager = RightToErasureManager()
+
+# 삭제 요청 접수
+request = manager.submit_deletion_request(
+    user_id="user_12345",
+    reason="동의 철회",
+    scopes=[DeletionScope.RAW_DATA, DeletionScope.TRAINING_DATA, DeletionScope.MODEL_INFLUENCE]
+)
+
+# 삭제 처리
+report = manager.process_deletion(request.request_id, data_sources={})
+
+# 기한 준수 확인
+compliance = manager.check_deadline_compliance(request.request_id)
+print(f"GDPR 준수: {compliance['gdpr_compliant']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conversation-title">
+            <h2 id="conversation-title" class="section-title">실무 대화</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-target="meeting12">회의</button>
+                <button class="conv-tab" data-target="interview12">면접</button>
+                <button class="conv-tab" data-target="review12">코드리뷰</button>
+            </div>
+            <div class="conv-content active" id="meeting12" data-label="회의">
+                <p><strong class="role-pm">법무팀:</strong> GDPR 삭제 요청이 들어왔는데, AI 학습 데이터는 어떻게 처리해야 하나요?</p>
+                <p><strong class="role-senior">시니어:</strong> 데이터 계보를 통해 해당 사용자 데이터가 포함된 모든 데이터셋을 식별하고 삭제해야 합니다. 문제는 이미 학습된 모델이에요.</p>
+                <p><strong class="role-junior">ML엔지니어:</strong> 모델도 재학습해야 하나요?</p>
+                <p><strong class="role-senior">시니어:</strong> 이상적으로는 그렇지만, 해당 데이터가 전체의 0.001% 미만이면 영향 미미함을 문서화하는 것도 방법입니다. 법무팀과 협의해서 결정하세요.</p>
+            </div>
+            <div class="conv-content" id="interview12" data-label="면접">
+                <p><strong class="role-interviewer">면접관:</strong> AI 모델에서 삭제권을 어떻게 구현할 수 있나요?</p>
+                <p><strong class="role-candidate">지원자:</strong> 세 가지 접근법이 있습니다. 첫째, 가장 확실한 방법은 데이터 삭제 후 모델 재학습입니다. 둘째, Machine Unlearning 기술로 특정 데이터의 영향을 제거할 수 있지만 아직 연구 단계입니다. 셋째, 차분 프라이버시를 적용해 애초에 개인 식별 가능성을 낮추면 삭제 요청의 영향을 최소화할 수 있습니다.</p>
+            </div>
+            <div class="conv-content" id="review12" data-label="코드리뷰">
+                <p><strong class="role-senior">시니어:</strong> 삭제 처리 로직에 감사 로그가 없네요.</p>
+                <p><strong class="role-junior">주니어:</strong> 삭제했는데 로그도 남겨야 하나요?</p>
+                <p><strong class="role-senior">시니어:</strong> 네, GDPR은 삭제 요청 처리 증빙을 요구해요. 언제 요청받았고, 언제 처리 완료했는지 기록해야 합니다. 실제 데이터는 삭제하되, 처리 이력 메타데이터는 보관하세요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li class="critical">GDPR 제17조에 따른 삭제 요청은 30일 이내에 처리해야 합니다. 기한 미준수 시 최대 2,000만 유로 또는 매출의 4% 과징금이 부과될 수 있습니다.</li>
+                <li>삭제 요청을 거부할 수 있는 예외 사유(표현의 자유, 법적 의무 등)가 있지만, 거부 시 명확한 근거와 이의제기 방법을 안내해야 합니다.</li>
+                <li class="info">Machine Unlearning은 아직 연구 단계입니다. 현실적으로는 데이터 삭제 + 다음 학습 주기에 재학습이 가장 확실한 방법입니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%8F%99%EC%9D%98%EA%B6%8C/" class="related-link">동의권</a>
+                <a href="/ko/term/%EB%A7%88%EC%9D%B4%EB%8D%B0%EC%9D%B4%ED%84%B0/" class="related-link">마이데이터</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B3%84%EB%B3%B4/" class="related-link">데이터 계보</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">데이터 거버넌스</a>
+                <a href="/ko/term/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%20%EC%98%81%ED%96%A5%ED%8F%89%EA%B0%80/" class="related-link">알고리즘 영향평가</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://gdpr-info.eu/art-17-gdpr/" target="_blank" rel="noopener">GDPR 제17조 - 삭제권 원문</a><span class="resource-meta">법령</span></li>
+                <li><span class="type-blog"></span><a href="https://arxiv.org/abs/1912.03817" target="_blank" rel="noopener">Machine Unlearning 연구 서베이</a><span class="resource-meta">연구</span></li>
+                <li><span class="type-official"></span><a href="https://www.pipc.go.kr/" target="_blank" rel="noopener">개인정보보호위원회 - 삭제권 가이드</a><span class="resource-meta">국내 가이드</span></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +470,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

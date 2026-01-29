@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,130 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>환경 변수(Environment Variable)는 운영체제나 실행 환경에서 프로세스에 전달되는 키-값 쌍입니다. 애플리케이션의 설정을 코드와 분리하여 같은 코드를 개발, 스테이징, 프로덕션 등 다른 환경에서 다르게 동작시킬 수 있습니다.</p>
+                <p>12-Factor App 방법론에서 환경 변수를 통한 설정 관리를 권장합니다. 데이터베이스 URL, API 키, 포트 번호 등을 환경 변수로 관리하면 코드 변경 없이 환경만 바꿔서 배포할 수 있습니다. 특히 컨테이너 환경에서 필수적입니다.</p>
+                <p>보안상 민감한 정보(비밀번호, API 키, 토큰 등)는 환경 변수로 관리하되, 코드 저장소에는 절대 커밋하지 않습니다. .env 파일을 사용할 때는 반드시 .gitignore에 추가하고, 프로덕션에서는 시크릿 매니저(AWS Secrets Manager, HashiCorp Vault 등)를 사용합니다.</p>
+                <p>환경 변수 네이밍은 대문자와 언더스코어를 사용하는 것이 관례입니다. 예: DATABASE_URL, API_SECRET_KEY. 애플리케이션별 프리픽스를 붙여 충돌을 방지합니다(예: MYAPP_DATABASE_URL).</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="bash">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># .env 파일 (개발 환경용 - .gitignore에 추가!)
+DATABASE_URL=postgresql://user:pass@localhost:5432/mydb
+REDIS_URL=redis://localhost:6379
+API_SECRET_KEY=dev-secret-key-never-use-in-prod
+NODE_ENV=development
+PORT=3000
+LOG_LEVEL=debug
+
+# Node.js에서 환경 변수 사용
+# config.js
+import dotenv from 'dotenv';
+dotenv.config();
+
+export const config = {
+  database: {
+    url: process.env.DATABASE_URL,
+    poolSize: parseInt(process.env.DB_POOL_SIZE || '10'),
+  },
+  api: {
+    secretKey: process.env.API_SECRET_KEY,
+    port: parseInt(process.env.PORT || '3000'),
+  },
+  // 필수 환경 변수 검증
+  validate() {
+    const required = ['DATABASE_URL', 'API_SECRET_KEY'];
+    const missing = required.filter(key => !process.env[key]);
+    if (missing.length > 0) {
+      throw new Error(`Missing required env vars: ${missing.join(', ')}`);
+    }
+  }
+};
+
+# Kubernetes에서 환경 변수 주입
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: url
+        - name: NODE_ENV
+          value: "production"</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "새로운 외부 API 연동하는데 API 키는 Vault에 저장하고 환경 변수로 주입하자."</p>
+                <p><strong class="role-junior">주니어:</strong> "로컬 개발할 때는 어떻게 하나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> ".env.example 파일 만들어서 필요한 변수 목록 문서화해두고, 각자 .env 파일 만들어서 쓰면 돼."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "프로덕션 환경에서 민감한 정보를 어떻게 관리하시나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "AWS Secrets Manager나 HashiCorp Vault를 사용합니다. Kubernetes에서는 External Secrets Operator로 시크릿을 자동 동기화하고, 환경 변수로 Pod에 주입합니다. 절대 코드나 이미지에 하드코딩하지 않습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 API 키가 코드에 하드코딩되어 있어요. 환경 변수로 빼주세요. 지금 당장 키 로테이션하고요."</p>
+                <p><strong class="role-junior">개발자:</strong> "죄송합니다. .env 파일로 옮기고 .gitignore도 확인하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>.env 파일 절대 Git에 커밋하지 말 것 - 커밋 히스토리에 남으면 삭제해도 노출됨</li>
+                <li>환경 변수는 문자열이므로 숫자/불리언 변환 필요 - parseInt, JSON.parse 사용</li>
+                <li>컨테이너 로그에 환경 변수 출력하지 않기 - 시크릿 노출 위험</li>
+                <li class="info">.env.example 파일로 필요한 환경 변수 목록을 문서화하고 커밋</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Dockerfile/" class="related-link">Dockerfile</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+                <a href="/ko/term/IaC/" class="related-link">IaC</a>
+                <a href="/ko/term/Deployment/" class="related-link">Deployment</a>
+                <a href="/ko/term/Feature%20Flag/" class="related-link">Feature Flag</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://12factor.net/config" target="_blank" rel="noopener">12-Factor App - Config</a></li>
+                <li><span class="type-official"></span><a href="https://www.vaultproject.io/" target="_blank" rel="noopener">HashiCorp Vault</a></li>
+                <li><span class="type-tool"></span><a href="https://www.npmjs.com/package/dotenv" target="_blank" rel="noopener">dotenv - Node.js 환경 변수 관리</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->

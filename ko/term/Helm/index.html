@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,305 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detailed-explanation">
+            <h2 id="detailed-explanation" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Helm</strong>은 Kubernetes 애플리케이션의 패키지 매니저입니다. Linux의 apt/yum, Node.js의 npm처럼, Helm은 복잡한 Kubernetes 리소스들을 "차트(Chart)"라는 패키지로 묶어 설치, 업그레이드, 롤백을 쉽게 만들어줍니다. CNCF 졸업 프로젝트로, Kubernetes 생태계의 핵심 도구입니다.</p>
+
+                <h3>핵심 개념</h3>
+                <ul>
+                    <li><strong>Chart</strong>: Kubernetes 리소스를 정의하는 파일들의 모음</li>
+                    <li><strong>Release</strong>: 클러스터에 설치된 차트의 인스턴스</li>
+                    <li><strong>Repository</strong>: 차트를 공유하는 저장소</li>
+                    <li><strong>Values</strong>: 차트 설정을 커스터마이즈하는 변수</li>
+                    <li><strong>Template</strong>: Go 템플릿으로 작성된 K8s 매니페스트</li>
+                </ul>
+
+                <h3>Helm의 장점</h3>
+                <ul>
+                    <li><strong>재사용성</strong>: 한 번 만든 차트를 여러 환경에서 재사용</li>
+                    <li><strong>버전 관리</strong>: 차트 버전과 릴리스 리비전 관리</li>
+                    <li><strong>롤백</strong>: 문제 발생 시 이전 버전으로 즉시 복구</li>
+                    <li><strong>의존성 관리</strong>: 차트 간 의존성 정의 및 자동 설치</li>
+                    <li><strong>커뮤니티</strong>: Artifact Hub에 수천 개의 공개 차트</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-example">
+            <h2 id="code-example" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>Chart.yaml - 차트 메타데이터</h3>
+                <pre><code class="language-yaml"># Chart.yaml
+apiVersion: v2
+name: my-app
+description: A Helm chart for My Application
+type: application
+version: 1.0.0          # 차트 버전
+appVersion: "2.1.0"     # 애플리케이션 버전
+
+keywords:
+  - app
+  - web
+
+home: https://github.com/myorg/my-app
+sources:
+  - https://github.com/myorg/my-app
+
+maintainers:
+  - name: Platform Team
+    email: platform@myorg.com
+
+dependencies:
+  - name: postgresql
+    version: "12.x.x"
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: "17.x.x"
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled</code></pre>
+
+                <h3>values.yaml - 기본 설정</h3>
+                <pre><code class="language-yaml"># values.yaml
+replicaCount: 2
+
+image:
+  repository: myorg/my-app
+  tag: ""  # Chart.yaml의 appVersion 사용
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts:
+    - host: my-app.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# 환경 변수
+env:
+  LOG_LEVEL: info
+  DB_HOST: postgresql
+
+# 의존성 설정
+postgresql:
+  enabled: true
+  auth:
+    database: myapp
+    username: myapp
+
+redis:
+  enabled: false</code></pre>
+
+                <h3>templates/deployment.yaml - 템플릿 예제</h3>
+                <pre><code class="language-yaml"># templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-app.fullname" . }}
+  labels:
+    {{- include "my-app.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "my-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      labels:
+        {{- include "my-app.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "my-app.serviceAccountName" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}</code></pre>
+
+                <h3>Helm CLI 명령어</h3>
+                <pre><code class="language-bash"># 저장소 관리
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm search repo nginx
+
+# 차트 설치
+helm install my-release bitnami/nginx
+helm install my-app ./my-app-chart -f values-prod.yaml
+helm install my-app ./my-app-chart --set replicaCount=3
+
+# 릴리스 관리
+helm list
+helm status my-release
+helm get values my-release
+
+# 업그레이드
+helm upgrade my-release bitnami/nginx --version 15.0.0
+helm upgrade my-app ./my-app-chart -f values-prod.yaml
+
+# 롤백
+helm history my-release
+helm rollback my-release 2
+
+# 삭제
+helm uninstall my-release
+
+# 디버깅
+helm template my-app ./my-app-chart      # 렌더링된 YAML 확인
+helm lint ./my-app-chart                  # 차트 검증
+helm install my-app ./my-app-chart --dry-run --debug  # 실제 설치 없이 테스트</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section" aria-labelledby="practical-dialogue">
+            <h2 id="practical-dialogue" class="section-title">실무 대화 예제</h2>
+            <div class="section-content">
+                <div class="dialogue-container">
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">주니어 개발자</div>
+                        <div class="dialogue-content">"배포할 때마다 Deployment, Service, ConfigMap, Ingress 파일을 다 수정해야 해서 힘들어요. 환경별로 관리하기도 복잡하고..."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">시니어 개발자</div>
+                        <div class="dialogue-content">"Helm 차트로 만들어보세요. 공통 리소스는 템플릿으로 정의하고, 환경별 차이점만 values 파일로 분리하면 돼요. `helm install -f values-prod.yaml`로 프로덕션, `-f values-staging.yaml`로 스테이징 배포하면 되죠."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">주니어 개발자</div>
+                        <div class="dialogue-content">"배포했는데 문제가 생기면 어떻게 하죠?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">시니어 개발자</div>
+                        <div class="dialogue-content">"Helm은 릴리스 히스토리를 저장해요. `helm rollback my-app 2`로 2번 리비전으로 바로 돌릴 수 있어요. 롤백도 10초 안에 끝나고, 어떤 버전으로 롤백했는지 기록도 남아요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="cautions">
+            <h2 id="cautions" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="caution-box">
+                    <h3>Secret 관리</h3>
+                    <p>values.yaml에 평문 비밀번호를 저장하지 마세요. helm-secrets 플러그인이나 External Secrets Operator를 사용하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>릴리스 히스토리</h3>
+                    <p>Helm은 릴리스 정보를 Secret(기본) 또는 ConfigMap에 저장합니다. 오래된 리비전은 `--history-max` 옵션으로 제한하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>차트 버전 고정</h3>
+                    <p>프로덕션에서는 항상 차트 버전을 명시하세요. `helm upgrade --version 12.3.4`로 특정 버전을 지정하면 예상치 못한 변경을 방지할 수 있습니다.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>템플릿 복잡도</h3>
+                    <p>Go 템플릿이 과도하게 복잡해지면 유지보수가 어렵습니다. 너무 많은 조건문은 피하고, 필요시 여러 차트로 분리하세요.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-terms">
+            <h2 id="related-terms" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms-grid">
+                    <a href="/ko/term/Kubernetes/" class="related-term-card">
+                        <h3>Kubernetes</h3>
+                        <p>Helm이 패키지를 배포하는 컨테이너 플랫폼</p>
+                    </a>
+                    <a href="/ko/term/GitOps/" class="related-term-card">
+                        <h3>GitOps</h3>
+                        <p>Helm 차트를 Git으로 관리하는 운영 방식</p>
+                    </a>
+                    <a href="/ko/term/Flux/" class="related-term-card">
+                        <h3>Flux</h3>
+                        <p>HelmRelease로 Helm 차트를 GitOps 배포</p>
+                    </a>
+                    <a href="/ko/term/IaC/" class="related-term-card">
+                        <h3>IaC</h3>
+                        <p>인프라를 코드로 관리. Helm과 유사한 철학</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-more">
+            <h2 id="learn-more" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="resource-list">
+                    <li><a href="https://helm.sh/docs/" target="_blank" rel="noopener noreferrer">Helm 공식 문서</a> - 전체 가이드 및 베스트 프랙티스</li>
+                    <li><a href="https://artifacthub.io/" target="_blank" rel="noopener noreferrer">Artifact Hub</a> - Helm 차트 검색</li>
+                    <li><a href="https://github.com/helm/helm" target="_blank" rel="noopener noreferrer">Helm GitHub</a> - 소스 코드</li>
+                    <li><a href="https://helm.sh/docs/chart_best_practices/" target="_blank" rel="noopener noreferrer">Chart 베스트 프랙티스</a> - 차트 작성 가이드</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +512,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

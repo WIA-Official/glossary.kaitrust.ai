@@ -147,19 +147,135 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
+        .content-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
-        .related-title {
-            font-size: 1.3rem;
+        .content-section h2 {
+            font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: #f1f5f9;
+        }
+        .content-section p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .conversation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .conversation-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            border-left: 3px solid #a855f7;
+        }
+        .mistake-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .mistake-item {
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            border-left: 3px solid #ef4444;
+        }
+        .mistake-item.correct {
+            background: rgba(34, 197, 94, 0.1);
+            border-left-color: #22c55e;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+        }
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .resource-link {
+            color: #60a5fa;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .cost-table th, .cost-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            color: #cbd5e1;
+        }
+        .cost-table th {
+            color: #f1f5f9;
+            font-weight: 600;
         }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
+            .content-section { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -174,18 +290,18 @@
         <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
+            <span>&#8250;</span>
             <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
+            <span>&#8250;</span>
             <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
-            <span>›</span>
+            <span>&#8250;</span>
             <span class="current">XGBoost</span>
         </nav>
 
         <!-- Term Header -->
         <article class="term-detail-header">
             <div class="term-category-badge">
-                <span>🤖</span>
+                <span>&#129302;</span>
                 <span>AI/ML</span>
             </div>
             <h1 class="term-title">XGBoost</h1>
@@ -195,13 +311,309 @@
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
+                    &#128218; 전체 용어 보기
                 </a>
                 <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
-                    🤖 AI/ML 더보기
+                    &#129302; AI/ML 더보기
                 </a>
             </div>
         </article>
+
+        <!-- Detailed Explanation -->
+        <section class="content-section">
+            <h2>&#128214; 상세 설명</h2>
+            <p>XGBoost(eXtreme Gradient Boosting)는 Tianqi Chen이 개발한 최적화된 분산 그래디언트 부스팅 라이브러리입니다. 2014년에 공개된 이후, 정형 데이터(tabular data) 분석에서 딥러닝을 능가하는 성능으로 Kaggle 경진대회에서 수많은 우승을 차지했습니다. 결정 트리(Decision Tree)를 기본 학습기(base learner)로 사용하며, 앙상블 학습의 부스팅(Boosting) 방식으로 여러 약한 학습기를 순차적으로 학습시켜 강한 학습기를 만듭니다.</p>
+            <p>XGBoost의 핵심 혁신은 여러 가지입니다. 첫째, **정규화된 목적 함수**로 과적합을 방지합니다. L1(Lasso)과 L2(Ridge) 정규화를 트리 구조에 적용하여 모델 복잡도를 제어합니다. 둘째, **2차 테일러 근사**를 사용하여 손실 함수를 더 정확하게 최적화합니다. 기존 Gradient Boosting은 1차 도함수(gradient)만 사용했지만, XGBoost는 2차 도함수(Hessian)까지 활용합니다.</p>
+            <p>성능 최적화 측면에서도 탁월합니다. **히스토그램 기반 분할**로 연속형 변수를 구간(bin)으로 나누어 계산량을 크게 줄입니다. **열 블록(Column Block)** 구조로 데이터를 정렬된 상태로 저장하여 분할 계산 시 재정렬이 불필요합니다. **캐시 인식 접근(Cache-aware Access)**과 **Out-of-core 학습**으로 대용량 데이터도 효율적으로 처리합니다. CPU 멀티코어 병렬화와 GPU 학습도 지원합니다.</p>
+            <p>XGBoost는 분류, 회귀, 랭킹, 생존 분석 등 다양한 태스크를 지원하며, scikit-learn API와 호환됩니다. 결측치 자동 처리, 조기 종료(early stopping), 교차 검증, 피처 중요도 등 실무에 필요한 기능을 기본 제공합니다. LightGBM, CatBoost와 함께 "GBDT 3대장"으로 불리며, 정형 데이터 문제에서는 여전히 첫 번째 선택지입니다.</p>
+        </section>
+
+        <!-- Code Example -->
+        <section class="content-section">
+            <h2>&#128187; 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">&#128203; 복사</button>
+                <pre><code># XGBoost 분류 및 회귀 예제
+import xgboost as xgb
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_breast_cancer, load_diabetes
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import accuracy_score, mean_squared_error
+import matplotlib.pyplot as plt
+
+# ============================================
+# 1. 분류 문제 (Classification)
+# ============================================
+print("=" * 50)
+print("분류 문제: 유방암 진단")
+print("=" * 50)
+
+# 데이터 로드
+cancer = load_breast_cancer()
+X_clf, y_clf = cancer.data, cancer.target
+X_train, X_test, y_train, y_test = train_test_split(
+    X_clf, y_clf, test_size=0.2, random_state=42
+)
+
+# XGBoost 분류기 (scikit-learn API)
+clf = xgb.XGBClassifier(
+    n_estimators=100,        # 트리 개수
+    max_depth=6,             # 트리 최대 깊이
+    learning_rate=0.1,       # 학습률 (eta)
+    subsample=0.8,           # 행 샘플링 비율
+    colsample_bytree=0.8,    # 열 샘플링 비율
+    reg_alpha=0.1,           # L1 정규화
+    reg_lambda=1.0,          # L2 정규화
+    use_label_encoder=False,
+    eval_metric='logloss',
+    random_state=42
+)
+
+# 학습 (early stopping 포함)
+clf.fit(
+    X_train, y_train,
+    eval_set=[(X_test, y_test)],
+    verbose=False
+)
+
+# 예측 및 평가
+y_pred = clf.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"테스트 정확도: {accuracy:.4f}")
+
+# 교차 검증
+cv_scores = cross_val_score(clf, X_clf, y_clf, cv=5, scoring='accuracy')
+print(f"5-Fold CV 정확도: {cv_scores.mean():.4f} (+/- {cv_scores.std()*2:.4f})")
+
+# ============================================
+# 2. 회귀 문제 (Regression)
+# ============================================
+print("\n" + "=" * 50)
+print("회귀 문제: 당뇨병 진행도 예측")
+print("=" * 50)
+
+# 데이터 로드
+diabetes = load_diabetes()
+X_reg, y_reg = diabetes.data, diabetes.target
+X_train_r, X_test_r, y_train_r, y_test_r = train_test_split(
+    X_reg, y_reg, test_size=0.2, random_state=42
+)
+
+# XGBoost 회귀 (Native API - DMatrix 사용)
+dtrain = xgb.DMatrix(X_train_r, label=y_train_r)
+dtest = xgb.DMatrix(X_test_r, label=y_test_r)
+
+params = {
+    'objective': 'reg:squarederror',
+    'max_depth': 4,
+    'eta': 0.1,
+    'subsample': 0.8,
+    'colsample_bytree': 0.8,
+    'seed': 42
+}
+
+# Early stopping으로 학습
+evals = [(dtrain, 'train'), (dtest, 'eval')]
+model = xgb.train(
+    params,
+    dtrain,
+    num_boost_round=500,
+    evals=evals,
+    early_stopping_rounds=20,
+    verbose_eval=False
+)
+
+# 예측 및 평가
+y_pred_r = model.predict(dtest)
+rmse = np.sqrt(mean_squared_error(y_test_r, y_pred_r))
+print(f"테스트 RMSE: {rmse:.4f}")
+print(f"최적 반복 횟수: {model.best_iteration}")
+
+# ============================================
+# 3. 피처 중요도 분석
+# ============================================
+print("\n" + "=" * 50)
+print("피처 중요도 (분류 모델)")
+print("=" * 50)
+
+# 피처 중요도 (gain, weight, cover)
+importance_types = ['weight', 'gain', 'cover']
+for imp_type in importance_types:
+    importance = clf.get_booster().get_score(importance_type=imp_type)
+    if importance:
+        sorted_imp = sorted(importance.items(), key=lambda x: x[1], reverse=True)[:5]
+        print(f"\n{imp_type.upper()} 기준 Top 5:")
+        for feat, score in sorted_imp:
+            print(f"  {feat}: {score:.4f}")
+
+# ============================================
+# 4. 하이퍼파라미터 튜닝 가이드
+# ============================================
+print("\n" + "=" * 50)
+print("하이퍼파라미터 튜닝 가이드")
+print("=" * 50)
+
+tuning_guide = """
+1단계: 트리 구조 (과적합 제어)
+   - max_depth: 3~10 (깊을수록 복잡)
+   - min_child_weight: 1~10 (높을수록 보수적)
+
+2단계: 샘플링 (분산 감소)
+   - subsample: 0.6~0.9 (행 샘플링)
+   - colsample_bytree: 0.6~0.9 (열 샘플링)
+
+3단계: 정규화 (과적합 방지)
+   - reg_alpha (L1): 0~1
+   - reg_lambda (L2): 1~10
+
+4단계: 학습률 및 트리 개수
+   - learning_rate: 0.01~0.3
+   - n_estimators: learning_rate와 반비례
+"""
+print(tuning_guide)</code></pre>
+            </div>
+        </section>
+
+        <!-- Performance & Cost -->
+        <section class="content-section">
+            <h2>&#128202; 성능 & 비용</h2>
+            <table class="cost-table">
+                <thead>
+                    <tr>
+                        <th>라이브러리</th>
+                        <th>학습 속도</th>
+                        <th>메모리 효율</th>
+                        <th>범주형 변수</th>
+                        <th>GPU 지원</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>XGBoost</td>
+                        <td>빠름</td>
+                        <td>보통</td>
+                        <td>수동 인코딩</td>
+                        <td>지원 (CUDA)</td>
+                    </tr>
+                    <tr>
+                        <td>LightGBM</td>
+                        <td>매우 빠름</td>
+                        <td>우수</td>
+                        <td>네이티브 지원</td>
+                        <td>지원</td>
+                    </tr>
+                    <tr>
+                        <td>CatBoost</td>
+                        <td>빠름</td>
+                        <td>보통</td>
+                        <td>네이티브 지원</td>
+                        <td>지원</td>
+                    </tr>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>보통</td>
+                        <td>우수</td>
+                        <td>수동 인코딩</td>
+                        <td>미지원</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 1rem;">
+                <strong>성능 벤치마크 (100만 행, 100 피처 기준):</strong>
+            </p>
+            <ul style="color: #cbd5e1; margin-top: 0.5rem;">
+                <li>XGBoost CPU: ~120초 (8코어)</li>
+                <li>XGBoost GPU: ~15초 (RTX 3080)</li>
+                <li>LightGBM CPU: ~40초 (8코어)</li>
+                <li>CatBoost GPU: ~20초 (RTX 3080)</li>
+            </ul>
+            <p style="margin-top: 1rem;">
+                <strong>비용:</strong> 오픈소스 무료. AWS SageMaker XGBoost 빌트인 사용 시 ml.m5.xlarge 기준 시간당 약 $0.23
+            </p>
+        </section>
+
+        <!-- Practical Usage -->
+        <section class="content-section">
+            <h2>&#128483; 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-list">
+                <div class="conversation-item">
+                    <p><strong>"정형 데이터니까 일단 XGBoost baseline부터 찍어보죠."</strong></p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">-> 정형 데이터 분석 시 기본 접근법</p>
+                </div>
+                <div class="conversation-item">
+                    <p><strong>"early stopping 걸어서 과적합 막고, feature importance 뽑아봅시다."</strong></p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">-> 모델 학습 및 해석 논의 시</p>
+                </div>
+                <div class="conversation-item">
+                    <p><strong>"max_depth 좀 줄이고 learning_rate 낮춰서 트리 수 늘려보세요."</strong></p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">-> 하이퍼파라미터 튜닝 조언 시</p>
+                </div>
+                <div class="conversation-item">
+                    <p><strong>"범주형 변수가 많으면 CatBoost나 LightGBM이 나을 수도 있어요."</strong></p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">-> 라이브러리 선택 논의 시</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Mistakes -->
+        <section class="content-section">
+            <h2>&#9888; 흔한 실수 & 주의사항</h2>
+            <div class="mistake-list">
+                <div class="mistake-item">
+                    <p><strong>학습 데이터에 검증 데이터 포함</strong></p>
+                    <p style="color: #f87171; margin-top: 0.5rem;">early stopping용 eval_set에 학습 데이터를 넣으면 데이터 누수가 발생합니다. 반드시 별도의 검증 데이터를 사용하세요.</p>
+                </div>
+                <div class="mistake-item">
+                    <p><strong>클래스 불균형 무시</strong></p>
+                    <p style="color: #f87171; margin-top: 0.5rem;">불균형 데이터에서 scale_pos_weight 파라미터를 설정하지 않으면 다수 클래스에 편향됩니다. (음성/양성 비율로 설정)</p>
+                </div>
+                <div class="mistake-item">
+                    <p><strong>과도한 max_depth</strong></p>
+                    <p style="color: #f87171; margin-top: 0.5rem;">max_depth가 너무 크면(10 이상) 과적합 위험이 급격히 증가합니다. 보통 3~8 사이에서 시작하세요.</p>
+                </div>
+                <div class="mistake-item correct">
+                    <p><strong>올바른 접근: 체계적인 튜닝</strong></p>
+                    <p style="color: #4ade80; margin-top: 0.5rem;">1) 기본값으로 baseline 확인 2) max_depth, min_child_weight 튜닝 3) subsample, colsample_bytree 튜닝 4) 정규화(alpha, lambda) 튜닝 5) learning_rate 낮추고 n_estimators 늘리기</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms -->
+        <section class="content-section">
+            <h2>&#128279; 관련 용어</h2>
+            <div class="related-terms">
+                <a href="../Gradient%20Boosting/" class="related-term-link">Gradient Boosting</a>
+                <a href="../LightGBM/" class="related-term-link">LightGBM</a>
+                <a href="../CatBoost/" class="related-term-link">CatBoost</a>
+                <a href="../Random%20Forest/" class="related-term-link">Random Forest</a>
+                <a href="../Decision%20Tree/" class="related-term-link">Decision Tree</a>
+                <a href="../Ensemble/" class="related-term-link">Ensemble</a>
+                <a href="../Overfitting/" class="related-term-link">Overfitting</a>
+            </div>
+        </section>
+
+        <!-- Learn More -->
+        <section class="content-section">
+            <h2>&#128218; 더 배우기</h2>
+            <div class="resource-list">
+                <a href="https://xgboost.readthedocs.io/" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; XGBoost 공식 문서
+                </a>
+                <a href="https://github.com/dmlc/xgboost" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; XGBoost GitHub
+                </a>
+                <a href="https://arxiv.org/abs/1603.02754" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; XGBoost 논문 (Chen & Guestrin, 2016)
+                </a>
+                <a href="https://www.kaggle.com/code/alexisbcook/xgboost" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; Kaggle XGBoost 튜토리얼
+                </a>
+                <a href="https://xgboost.readthedocs.io/en/stable/parameter.html" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; XGBoost 파라미터 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +624,16 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            const originalText = button.innerHTML;
+            button.innerHTML = '&#10003; 복사됨';
+            setTimeout(() => { button.innerHTML = originalText; }, 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

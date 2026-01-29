@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +228,140 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>WebAssembly(WASM)는 브라우저에서 네이티브에 가까운 속도로 실행되는 이진 명령어 포맷입니다. C, C++, Rust, Go 등의 언어로 작성된 코드를 .wasm 바이너리로 컴파일하여 웹에서 실행할 수 있습니다. JavaScript의 성능 한계를 넘어서는 연산 집약적 작업에 사용됩니다.</p>
+                <p>WASM은 2017년 주요 브라우저에서 지원을 시작했습니다. JavaScript 가상 머신 위에서 실행되지만, 미리 컴파일된 바이트코드여서 파싱 시간이 거의 없고 최적화된 네이티브 코드로 변환됩니다. 보안상 JavaScript와 동일한 샌드박스에서 실행됩니다.</p>
+                <p>WASM의 주요 사용 사례는 게임 엔진(Unity, Unreal), 영상/이미지 처리(FFmpeg, Photoshop Web), 암호화 연산, 과학 시뮬레이션 등입니다. Figma, Google Earth, AutoCAD 웹 버전이 WASM을 활용합니다. 기존 C/C++ 코드베이스를 웹으로 포팅하는 데도 유용합니다.</p>
+                <p>WASM은 JavaScript를 대체하지 않습니다. DOM 직접 접근이 불가능해서 JavaScript와 협력해야 합니다. 또한 WASI(WebAssembly System Interface)를 통해 브라우저 밖에서도 실행 가능해져, 서버리스 함수나 플러그인 시스템에서도 활용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <pre><code>// JavaScript에서 WebAssembly 로드 및 실행
+
+// 1. .wasm 파일 로드 (기본 방법)
+const response = await fetch('module.wasm');
+const bytes = await response.arrayBuffer();
+const { instance } = await WebAssembly.instantiate(bytes);
+
+// 2. WASM 함수 호출
+const result = instance.exports.add(10, 20);
+console.log(result); // 30
+
+// 3. 스트리밍 컴파일 (더 효율적)
+const { instance: streamInstance } = await WebAssembly.instantiateStreaming(
+  fetch('module.wasm'),
+  { env: { log: console.log } } // import 객체
+);
+
+// Rust로 WASM 만들기 (wasm-bindgen 사용)
+// Cargo.toml
+// [lib]
+// crate-type = ["cdylib"]
+// [dependencies]
+// wasm-bindgen = "0.2"
+
+// src/lib.rs
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub fn fibonacci(n: u32) -> u32 {
+    match n {
+        0 => 0,
+        1 => 1,
+        _ => fibonacci(n - 1) + fibonacci(n - 2)
+    }
+}
+
+// JavaScript에서 사용
+import init, { fibonacci } from './pkg/my_wasm.js';
+await init();
+console.log(fibonacci(40)); // JS보다 훨씬 빠름</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 검토에서</div>
+                    <blockquote class="conv-quote">
+                        "이미지 처리를 클라이언트에서 하면 서버 부하를 줄일 수 있어요. JavaScript Canvas로는 느리니까 Rust로 작성한 WASM 모듈로 처리하면 네이티브 앱에 가까운 성능이 나옵니다. wasm-bindgen으로 JS와 연동도 쉬워요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "WebAssembly는 저수준 바이트코드로, JavaScript 엔진이 빠르게 컴파일할 수 있습니다. 연산 집약적 작업에서 JavaScript보다 수십 배 빠를 수 있지만, DOM 접근이나 Web API 호출은 JavaScript를 통해야 합니다. 용도에 따라 적절히 조합하는 것이 중요합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "Figma가 WASM 덕분에 브라우저에서 네이티브 앱처럼 동작해요. 저희도 복잡한 그래프 계산 로직을 Rust로 포팅해서 WASM으로 컴파일하면 로딩 시간을 크게 줄일 수 있을 것 같습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>모든 것을 WASM으로 대체하려 함</strong>
+                        <p>WASM은 연산 집약적 작업에 적합합니다. 일반적인 UI 로직이나 DOM 조작은 JavaScript가 더 효율적입니다. JS-WASM 호출 오버헤드도 고려하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>.wasm 파일 크기 무시</strong>
+                        <p>WASM 바이너리가 크면 초기 로딩이 느려집니다. 코드 분할, 지연 로딩, 압축(gzip/brotli)으로 최적화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 활용</strong>
+                        <p>이미지/비디오 처리, 암호화, 시뮬레이션, 게임 엔진 등 CPU 집약적 작업에 WASM을 적용하세요. Rust + wasm-bindgen 조합이 개발 경험이 좋습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/JavaScript/" class="related-term-link">JavaScript</a>
+                <a href="/ko/term/TypeScript/" class="related-term-link">TypeScript</a>
+                <a href="/ko/term/esbuild/" class="related-term-link">esbuild</a>
+                <a href="/ko/term/SWC/" class="related-term-link">SWC</a>
+                <a href="/ko/term/%EC%84%9C%EB%B2%84%EB%A6%AC%EC%8A%A4/" class="related-term-link">서버리스</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://webassembly.org/" target="_blank" class="learn-link">📄 WebAssembly 공식 사이트</a>
+                <a href="https://rustwasm.github.io/docs/book/" target="_blank" class="learn-link">🎓 Rust and WebAssembly Book</a>
+                <a href="https://developer.mozilla.org/ko/docs/WebAssembly" target="_blank" class="learn-link">📖 MDN WebAssembly 문서</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +372,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

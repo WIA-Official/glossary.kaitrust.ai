@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,118 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>보로잉(Borrowing)은 Rust 프로그래밍 언어의 핵심 메모리 관리 개념으로, 값의 소유권을 이전하지 않고 참조를 통해 데이터에 접근하는 방식입니다. 이는 C/C++의 포인터와 유사하지만, 컴파일 타임에 안전성이 보장됩니다. 보로잉을 통해 여러 코드 블록에서 같은 데이터를 효율적으로 사용할 수 있습니다.</p>
+                <p>보로잉에는 불변 참조(immutable reference, &T)와 가변 참조(mutable reference, &mut T) 두 가지 유형이 있습니다. 불변 참조는 여러 개가 동시에 존재할 수 있지만 데이터를 수정할 수 없고, 가변 참조는 단 하나만 존재할 수 있으며 데이터 수정이 가능합니다. 이 규칙이 데이터 경쟁 조건을 원천적으로 방지합니다.</p>
+                <p>보로잉의 핵심 규칙은 "여러 불변 참조 또는 하나의 가변 참조"입니다. 즉, 불변 참조와 가변 참조가 동시에 존재할 수 없으며, 이는 컴파일러가 엄격하게 검사합니다. 이 규칙 덕분에 멀티스레드 환경에서도 안전한 코드를 작성할 수 있습니다.</p>
+                <p>참조의 수명(lifetime)도 보로잉의 중요한 개념입니다. 참조는 원본 데이터보다 오래 살아있을 수 없으며, 보로우 체커가 이를 자동으로 검증합니다. 함수 매개변수나 반환값에서 참조를 사용할 때 수명 주석을 명시해야 하는 경우도 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// Rust 보로잉 예제
+
+fn main() {
+    let mut s = String::from("hello");
+
+    // 불변 참조 (여러 개 가능)
+    let r1 = &s;
+    let r2 = &s;
+    println!("불변 참조들: {}, {}", r1, r2);
+
+    // 가변 참조 (하나만 가능)
+    let r3 = &mut s;
+    r3.push_str(", world");
+    println!("가변 참조: {}", r3);
+
+    // 함수에 참조 전달
+    let len = calculate_length(&s);
+    println!("'{}'의 길이: {}", s, len);
+
+    // 가변 참조로 수정
+    change(&mut s);
+    println!("수정 후: {}", s);
+}
+
+// 불변 참조를 받아 읽기만 함
+fn calculate_length(s: &String) -> usize {
+    s.len()
+}
+
+// 가변 참조를 받아 수정
+fn change(s: &mut String) {
+    s.push_str("!");
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">💼 회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">👔 면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">💻 코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>기술 리더:</strong> "이 로직에서 데이터 복사가 많이 일어나고 있어요. 성능이 걱정되는데요."</p>
+                <p><strong>개발자:</strong> "보로잉을 활용해서 복사 대신 참조로 전달하면 메모리 할당을 줄일 수 있습니다."</p>
+                <p><strong>기술 리더:</strong> "가변 참조가 필요한 부분도 있나요?"</p>
+                <p><strong>개발자:</strong> "네, 업데이트 로직에서는 &mut로 전달하고, 조회만 하는 곳은 불변 참조를 쓰면 됩니다."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "Rust의 보로잉 규칙에 대해 설명해 주세요."</p>
+                <p><strong>지원자:</strong> "보로잉은 소유권 이전 없이 값에 접근하는 방식입니다. 불변 참조는 여러 개 가능하지만, 가변 참조는 동시에 하나만 존재할 수 있습니다."</p>
+                <p><strong>면접관:</strong> "왜 그런 제약이 있을까요?"</p>
+                <p><strong>지원자:</strong> "데이터 레이스를 컴파일 타임에 방지하기 위함입니다. 여러 곳에서 동시에 읽거나, 한 곳에서만 쓰는 것이 보장되어 안전한 동시성을 구현할 수 있습니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "여기서 clone()을 호출하고 있는데, 불필요한 복사 같아요."</p>
+                <p><strong>작성자:</strong> "보로잉 규칙 때문에 컴파일이 안 돼서 임시로 clone을 넣었습니다."</p>
+                <p><strong>리뷰어:</strong> "참조의 스코프를 조정하면 해결될 것 같아요. 불변 참조 사용이 끝난 후에 가변 참조를 만들면 됩니다."</p>
+                <p><strong>작성자:</strong> "아, NLL(Non-Lexical Lifetimes) 덕분에 그게 가능하군요. 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>참조와 소유권 혼동:</strong> 참조(&T, &mut T)는 소유권을 가져가지 않습니다. 소유권 이전(move)과 보로잉(borrow)을 구분해야 합니다.</li>
+                <li><strong>댕글링 참조 위험:</strong> 참조가 원본 데이터보다 오래 살아있으면 안 됩니다. 보로우 체커가 이를 방지하지만, 수명 주석이 잘못되면 컴파일 오류가 발생합니다.</li>
+                <li><strong>가변 참조의 배타성:</strong> 가변 참조가 존재하는 동안에는 다른 어떤 참조도 만들 수 없습니다. 필요하다면 스코프를 분리하거나 RefCell을 사용하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%86%8C%EC%9C%A0%EA%B6%8C/" class="related-link">소유권</a>
+                <a href="/ko/term/%EB%B3%B4%EB%A1%9C%EC%9A%B0%20%EC%B2%B4%EC%BB%A4/" class="related-link">보로우 체커</a>
+                <a href="/ko/term/%ED%8A%B8%EB%A0%88%EC%9D%B4%ED%8A%B8/" class="related-link">트레이트</a>
+                <a href="/ko/term/%EB%8F%99%EC%8B%9C%EC%84%B1/" class="related-link">동시성</a>
+                <a href="/ko/term/%EC%8A%A4%EB%A0%88%EB%93%9C/" class="related-link">스레드</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li>📖 <a href="https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html" target="_blank">The Rust Book - References and Borrowing</a></li>
+                <li>📖 <a href="https://rust-lang.github.io/rfcs/2094-nll.html" target="_blank">Non-Lexical Lifetimes RFC</a></li>
+                <li>🎥 <a href="https://www.youtube.com/watch?v=WrqKfTkT02E" target="_blank">Rust Borrowing and Lifetimes Explained</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +326,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

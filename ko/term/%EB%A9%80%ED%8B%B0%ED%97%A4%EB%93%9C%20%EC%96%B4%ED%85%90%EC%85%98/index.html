@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +228,168 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>멀티헤드 어텐션(Multi-Head Attention)은 여러 개의 어텐션 연산을 병렬로 수행하여 입력 시퀀스의 다양한 표현 부분공간을 동시에 학습하는 메커니즘입니다. 단일 어텐션이 하나의 관점에서만 관계를 파악하는 것과 달리, 멀티헤드 어텐션은 문법, 의미, 위치 관계 등 다양한 패턴을 동시에 포착합니다.</p>
+                <p>2017년 "Attention Is All You Need" 논문에서 Transformer 아키텍처와 함께 제안되었습니다. 기존 RNN/LSTM의 순차 처리 한계를 극복하고, 완전 병렬화가 가능한 어텐션 기반 구조를 제시했습니다. 원 논문에서는 8개의 헤드를 사용했으며, 이후 GPT, BERT 등 모든 주요 언어 모델의 핵심 구성요소가 되었습니다.</p>
+                <p>멀티헤드 어텐션의 작동 원리는 다음과 같습니다. 입력을 Query(Q), Key(K), Value(V)로 변환한 후, 각 헤드별로 다른 가중치 행렬로 투영합니다. 각 헤드에서 Scaled Dot-Product Attention을 수행하고, 모든 헤드의 출력을 연결(concatenate)한 뒤 최종 선형 변환을 적용합니다. 수식은 MultiHead(Q,K,V) = Concat(head_1,...,head_h)W^O 입니다.</p>
+                <p>2024-2025년에는 효율적인 어텐션 변형이 활발히 연구됩니다. Flash Attention 2는 GPU 메모리 효율을 극대화하고, GQA(Grouped Query Attention)는 KV 캐시를 줄입니다. Llama 2/3, Mistral 등은 GQA를 채택하여 긴 컨텍스트에서 메모리를 절약합니다. MHA는 여전히 모델 품질의 핵심이지만, 추론 비용 최적화가 주요 과제입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># 멀티헤드 어텐션 구현 (PyTorch)
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import math
+
+class MultiHeadAttention(nn.Module):
+    def __init__(self, d_model, num_heads, dropout=0.1):
+        super().__init__()
+        assert d_model % num_heads == 0
+
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.d_k = d_model // num_heads  # 헤드당 차원
+
+        # Q, K, V 투영 가중치
+        self.W_q = nn.Linear(d_model, d_model)
+        self.W_k = nn.Linear(d_model, d_model)
+        self.W_v = nn.Linear(d_model, d_model)
+
+        # 출력 투영
+        self.W_o = nn.Linear(d_model, d_model)
+        self.dropout = nn.Dropout(dropout)
+
+    def scaled_dot_product_attention(self, Q, K, V, mask=None):
+        """Scaled Dot-Product Attention"""
+        # Q @ K^T / sqrt(d_k)
+        scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(self.d_k)
+
+        if mask is not None:
+            scores = scores.masked_fill(mask == 0, -1e9)
+
+        attention_weights = F.softmax(scores, dim=-1)
+        attention_weights = self.dropout(attention_weights)
+
+        return torch.matmul(attention_weights, V), attention_weights
+
+    def forward(self, query, key, value, mask=None):
+        batch_size = query.size(0)
+
+        # 1. 선형 투영 후 헤드 분할
+        Q = self.W_q(query).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        K = self.W_k(key).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        V = self.W_v(value).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+
+        # 2. 어텐션 계산
+        attn_output, attn_weights = self.scaled_dot_product_attention(Q, K, V, mask)
+
+        # 3. 헤드 연결 및 출력 투영
+        attn_output = attn_output.transpose(1, 2).contiguous().view(
+            batch_size, -1, self.d_model
+        )
+        output = self.W_o(attn_output)
+
+        return output, attn_weights
+
+# 사용 예시
+mha = MultiHeadAttention(d_model=512, num_heads=8)
+x = torch.randn(2, 10, 512)  # (batch, seq_len, d_model)
+output, weights = mha(x, x, x)
+print(f"출력 shape: {output.shape}")      # [2, 10, 512]
+print(f"어텐션 shape: {weights.shape}")   # [2, 8, 10, 10]</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "모델 추론 속도가 느린 건 KV 캐시 메모리 때문입니다. MHA를 GQA로 바꾸면 헤드 수는 유지하면서 KV 캐시를 1/8로 줄일 수 있어요. Llama 3도 이 방식 씁니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "멀티헤드 어텐션의 핵심은 다양한 표현 부분공간 학습입니다. 8개 헤드면 512차원을 64차원씩 8개로 나눠 각각 다른 관계를 학습합니다. 'sqrt(d_k)'로 나누는 건 softmax 기울기 소실을 방지하기 위함이고요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">
+                        "Flash Attention 2 적용하면 같은 MHA도 메모리 O(N^2)에서 O(N)으로 줄어요. 긴 컨텍스트 학습할 때 필수입니다. PyTorch 2.0부터 scaled_dot_product_attention이 Flash Attention을 자동 사용해요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>d_model이 num_heads로 나누어 떨어지지 않음</strong>
+                        <p>d_model=512, num_heads=12면 오류 발생. d_k = d_model // num_heads가 정수여야 합니다. 512에는 8, 16, 32 등을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>어텐션 마스크 방향 오류</strong>
+                        <p>Causal mask(미래 토큰 마스킹)와 padding mask를 혼동하면 학습이 제대로 안 됩니다. 디코더는 상삼각 마스크, 패딩은 True/False 마스크입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>PyTorch의 nn.MultiheadAttention 또는 F.scaled_dot_product_attention 사용을 권장합니다. 자동으로 Flash Attention을 적용하고 마스크 처리도 검증되어 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Transformer/" class="related-term-link">Transformer</a>
+                <a href="/ko/term/%EC%96%B4%ED%85%90%EC%85%98/" class="related-term-link">어텐션</a>
+                <a href="/ko/term/%EC%9E%84%EB%B2%A0%EB%94%A9/" class="related-term-link">임베딩</a>
+                <a href="/ko/term/%EB%94%A5%EB%9F%AC%EB%8B%9D/" class="related-term-link">딥러닝</a>
+                <a href="/ko/term/GPT/" class="related-term-link">GPT</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/1706.03762" target="_blank" class="learn-link">
+                    📄 Attention Is All You Need (원 논문)
+                </a>
+                <a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" class="learn-link">
+                    🎓 The Illustrated Transformer - Jay Alammar
+                </a>
+                <a href="https://pytorch.org/docs/stable/generated/torch.nn.MultiheadAttention.html" target="_blank" class="learn-link">
+                    📖 PyTorch MultiheadAttention 공식 문서
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->

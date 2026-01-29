@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B-Tree (Balanced Tree) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="균형 트리 자료구조. 데이터베이스 인덱스의 표준. O(log n) 검색, 삽입, 삭제 성능.">
-    <meta name="keywords" content="B-Tree, Balanced Tree, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="B-Tree는 균형 다방향 탐색 트리로, 데이터베이스 인덱스의 핵심 자료구조입니다. O(log n) 성능으로 검색, 삽입, 삭제를 보장하며, 디스크 I/O를 최적화하여 MySQL, PostgreSQL 등 모든 RDBMS의 기반이 됩니다.">
+    <meta name="keywords" content="B-Tree, B+Tree, 인덱스, 데이터베이스, 균형 트리, Index, InnoDB, 검색 성능, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/B-Tree/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/B-Tree/">
     <meta property="og:title" content="B-Tree (Balanced Tree) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="균형 트리 자료구조. 데이터베이스 인덱스의 표준. O(log n) 검색, 삽입, 삭제 성능.">
+    <meta property="og:description" content="B-Tree는 균형 다방향 탐색 트리로, 데이터베이스 인덱스의 핵심 자료구조입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="B-Tree (Balanced Tree) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="균형 트리 자료구조. 데이터베이스 인덱스의 표준. O(log n) 검색, 삽입, 삭제 성능.">
+    <meta name="twitter:description" content="B-Tree는 균형 다방향 탐색 트리로, 데이터베이스 인덱스의 핵심 자료구조입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "B-Tree",
-        "description": "균형 트리 자료구조. 데이터베이스 인덱스의 표준. O(log n) 검색, 삽입, 삭제 성능.",
+        "alternateName": "Balanced Tree",
+        "description": "B-Tree는 균형 다방향 탐색 트리로, 데이터베이스 인덱스의 핵심 자료구조입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +276,9 @@
                 <span>데이터베이스</span>
             </div>
             <h1 class="term-title">B-Tree</h1>
-            <p class="term-english">Balanced Tree</p>
+            <p class="term-english">Balanced Tree - Self-balancing Tree Data Structure</p>
             <div class="term-description">
-                <p>균형 트리 자료구조. 데이터베이스 인덱스의 표준. O(log n) 검색, 삽입, 삭제 성능.</p>
+                <p>B-Tree는 균형 다방향 탐색 트리로, 데이터베이스 인덱스의 핵심 자료구조입니다. 모든 리프 노드가 동일한 깊이를 유지하여 O(log n) 성능을 보장하며, 디스크 I/O를 최적화하기 위해 한 노드에 여러 키를 저장합니다. MySQL, PostgreSQL 등 모든 RDBMS의 기반이 됩니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,331 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>B-Tree의 탄생과 설계 철학</strong> - 1970년 Rudolf Bayer와 Edward McCreight가 발명한 B-Tree는 "Balanced"의 B를 따서 명명되었습니다(또는 Bayer의 B). 메인 메모리보다 훨씬 느린 디스크 접근을 최소화하기 위해 설계되었으며, 한 번의 디스크 읽기로 여러 키를 비교할 수 있어 탐색 효율이 높습니다.</p>
+                <p><strong>B-Tree vs B+Tree</strong> - 실제 데이터베이스는 대부분 B+Tree를 사용합니다. B+Tree는 모든 데이터가 리프 노드에만 저장되고, 리프 노드끼리 연결 리스트로 연결됩니다. 이 구조는 범위 쿼리(BETWEEN, ORDER BY)에서 압도적으로 유리합니다. 내부 노드는 라우팅용 키만 포함하여 더 많은 자식을 가질 수 있습니다.</p>
+                <p><strong>차수(Order)와 구조</strong> - B-Tree의 차수 m은 각 노드가 가질 수 있는 최대 자식 수입니다. 각 노드는 최소 ⌈m/2⌉개의 자식을 가져야 하며, 최대 m-1개의 키를 저장합니다. 예를 들어 차수 4인 B-Tree는 2-4개의 자식과 1-3개의 키를 가집니다. 데이터베이스에서는 보통 수백~수천의 차수를 사용합니다.</p>
+                <p><strong>삽입과 분할(Split)</strong> - 새 키를 삽입할 때 노드가 가득 차면 중간값을 기준으로 둘로 분할합니다. 중간 키는 부모로 올라가고, 이 과정이 루트까지 전파될 수 있어 트리 높이가 증가합니다. 삭제 시에는 반대로 병합(Merge)이 일어납니다.</p>
+                <p><strong>데이터베이스에서의 활용</strong> - InnoDB의 클러스터드 인덱스(Primary Key)는 B+Tree로 데이터를 직접 저장하고, 세컨더리 인덱스는 Primary Key를 참조합니다. PostgreSQL의 기본 인덱스도 B-Tree이며, CREATE INDEX 시 기본 적용됩니다. 인덱스 크기, 페이지 분할, 버퍼 풀 등이 성능의 핵심입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (B-Tree 구현)</button>
+                <button class="code-tab" data-lang="sql">SQL (인덱스 활용)</button>
+                <button class="code-tab" data-lang="explain">EXPLAIN (실행 계획)</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># B-Tree 핵심 개념 구현 (교육용)
+from dataclasses import dataclass, field
+from typing import List, Optional
+
+
+@dataclass
+class BTreeNode:
+    """B-Tree 노드"""
+    keys: List[int] = field(default_factory=list)
+    children: List['BTreeNode'] = field(default_factory=list)
+    is_leaf: bool = True
+
+
+class BTree:
+    """
+    B-Tree 구현
+    - 차수 t: 각 노드는 t-1 ~ 2t-1개의 키를 가짐
+    """
+
+    def __init__(self, t: int = 2):
+        self.t = t  # 최소 차수
+        self.root = BTreeNode()
+
+    def search(self, key: int, node: BTreeNode = None) -> Optional[tuple]:
+        """키 검색: O(log n)"""
+        if node is None:
+            node = self.root
+
+        i = 0
+        while i < len(node.keys) and key > node.keys[i]:
+            i += 1
+
+        if i < len(node.keys) and key == node.keys[i]:
+            return (node, i)
+
+        if node.is_leaf:
+            return None
+
+        return self.search(key, node.children[i])
+
+    def insert(self, key: int):
+        """키 삽입: O(log n)"""
+        root = self.root
+
+        if len(root.keys) == 2 * self.t - 1:
+            new_root = BTreeNode(is_leaf=False)
+            new_root.children.append(self.root)
+            self._split_child(new_root, 0)
+            self.root = new_root
+
+        self._insert_non_full(self.root, key)
+
+    def _split_child(self, parent: BTreeNode, idx: int):
+        """자식 노드 분할 (핵심 연산)"""
+        t = self.t
+        full_child = parent.children[idx]
+        new_child = BTreeNode(is_leaf=full_child.is_leaf)
+
+        mid_key = full_child.keys[t - 1]
+
+        new_child.keys = full_child.keys[t:]
+        full_child.keys = full_child.keys[:t - 1]
+
+        if not full_child.is_leaf:
+            new_child.children = full_child.children[t:]
+            full_child.children = full_child.children[:t]
+
+        parent.keys.insert(idx, mid_key)
+        parent.children.insert(idx + 1, new_child)
+
+    def _insert_non_full(self, node: BTreeNode, key: int):
+        """가득 차지 않은 노드에 삽입"""
+        i = len(node.keys) - 1
+
+        if node.is_leaf:
+            node.keys.append(None)
+            while i >= 0 and key < node.keys[i]:
+                node.keys[i + 1] = node.keys[i]
+                i -= 1
+            node.keys[i + 1] = key
+        else:
+            while i >= 0 and key < node.keys[i]:
+                i -= 1
+            i += 1
+
+            if len(node.children[i].keys) == 2 * self.t - 1:
+                self._split_child(node, i)
+                if key > node.keys[i]:
+                    i += 1
+
+            self._insert_non_full(node.children[i], key)
+
+
+# 사용 예제
+if __name__ == "__main__":
+    btree = BTree(t=3)
+
+    for key in [10, 20, 5, 6, 12, 30, 7, 17]:
+        btree.insert(key)
+
+    # 검색
+    result = btree.search(12)
+    print(f"12 검색: {'발견' if result else '없음'}")
+
+    # 시간 복잡도
+    print("\nB-Tree 시간 복잡도:")
+    print("- 검색: O(log n)")
+    print("- 삽입: O(log n)")
+    print("- 삭제: O(log n)")
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="sql">
+                <pre><code class="language-sql">-- B-Tree 인덱스 활용 SQL
+
+-- ============================================
+-- 1. 인덱스 생성 (B-Tree가 기본)
+-- ============================================
+
+-- 단일 컬럼 인덱스
+CREATE INDEX idx_users_email ON users(email);
+
+-- 복합 인덱스 (왼쪽부터 순서대로 사용됨)
+CREATE INDEX idx_orders_composite
+ON orders(customer_id, order_date DESC, status);
+
+-- 커버링 인덱스 (테이블 접근 없이 해결)
+CREATE INDEX idx_products_covering
+ON products(category_id, price, name);
+
+
+-- ============================================
+-- 2. 인덱스 사용 최적화
+-- ============================================
+
+-- ✅ 좋은 예: 인덱스 사용
+SELECT * FROM users WHERE email = 'user@example.com';
+SELECT * FROM orders WHERE customer_id = 100;
+SELECT * FROM orders
+WHERE customer_id = 100 AND order_date > '2024-01-01';
+
+-- ❌ 나쁜 예: 인덱스 미사용
+SELECT * FROM users WHERE LOWER(email) = 'user@example.com';
+SELECT * FROM orders WHERE status = 'shipped';
+SELECT * FROM products WHERE name LIKE '%phone%';
+
+
+-- ============================================
+-- 3. 클러스터드 vs 세컨더리
+-- ============================================
+
+CREATE TABLE orders (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,  -- 클러스터드
+    customer_id INT,
+    order_date DATETIME,
+    INDEX idx_customer (customer_id)       -- 세컨더리
+);
+
+
+-- ============================================
+-- 4. 인덱스 통계 확인
+-- ============================================
+
+-- MySQL
+SHOW INDEX FROM orders;
+
+-- PostgreSQL
+SELECT indexrelname, idx_scan, idx_tup_read
+FROM pg_stat_user_indexes
+WHERE schemaname = 'public';
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="explain">
+                <pre><code class="language-sql">-- EXPLAIN으로 B-Tree 인덱스 사용 분석
+
+-- ============================================
+-- 1. MySQL EXPLAIN
+-- ============================================
+
+EXPLAIN SELECT * FROM orders
+WHERE customer_id = 100 AND order_date > '2024-01-01';
+
+/*
+확인 항목:
+- type: const, ref, range (좋음) / ALL (나쁨)
+- key: 사용된 인덱스 이름
+- rows: 예상 스캔 행 수
+- Extra: Using index (커버링 인덱스)
+*/
+
+
+-- ============================================
+-- 2. PostgreSQL EXPLAIN ANALYZE
+-- ============================================
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM orders WHERE customer_id = 100;
+
+/*
+Index Scan using idx_orders_customer
+  (cost=0.43..8.45 rows=1)
+  (actual time=0.015..0.017 rows=1)
+  Buffers: shared hit=3
+*/
+
+
+-- ============================================
+-- 3. 인덱스 힌트
+-- ============================================
+
+-- MySQL: 특정 인덱스 강제 사용
+SELECT * FROM orders
+USE INDEX (idx_orders_customer)
+WHERE customer_id = 100;
+
+-- 인덱스 제외
+SELECT * FROM orders
+IGNORE INDEX (idx_orders_date)
+WHERE order_date > '2024-01-01';
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">💬 현업 대화 예시</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">DBA가 성능 튜닝 회의에서</div>
+                    <p class="conv-quote">"이 쿼리가 느린 이유는 B-Tree 인덱스 선택도가 너무 낮아서예요. status 컬럼은 값이 3개뿐이라 전체의 33%를 스캔해요. 복합 인덱스로 customer_id를 앞에 두면 B-Tree가 훨씬 효율적으로 탐색할 겁니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">시니어 개발자가 코드 리뷰에서</div>
+                    <p class="conv-quote">"ORDER BY id DESC LIMIT 10인데 왜 filesort가 생기죠? Primary Key가 B+Tree니까 역순 스캔도 빠를 텐데... 아, WHERE 조건 때문에 세컨더리 인덱스 타고 Primary Key 찾는 거네요. 커버링 인덱스로 해결합시다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">아키텍트가 설계 검토에서</div>
+                    <p class="conv-quote">"UUID를 Primary Key로 쓰면 B-Tree에서 문제가 생겨요. 랜덤한 값이라 삽입할 때마다 페이지 분할이 빈번해요. ULID나 Snowflake ID를 쓰면 B-Tree 오른쪽에만 삽입되어 분할이 최소화됩니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <div class="warning-icon">🔍</div>
+                    <div>
+                        <strong>인덱스 컬럼에 함수 적용 금지</strong>
+                        <p>WHERE YEAR(created_at) = 2024는 인덱스를 사용하지 못합니다. WHERE created_at >= '2024-01-01'로 작성하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">📊</div>
+                    <div>
+                        <strong>복합 인덱스 순서가 중요</strong>
+                        <p>INDEX(a, b, c)에서 b만으로는 검색 불가합니다. 가장 자주 쓰는 컬럼을 앞에 배치하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">💾</div>
+                    <div>
+                        <strong>과도한 인덱스는 쓰기 성능 저하</strong>
+                        <p>INSERT/UPDATE마다 모든 인덱스의 B-Tree를 수정해야 합니다. 사용되지 않는 인덱스를 정리하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">📈</div>
+                    <div>
+                        <strong>LIKE '%keyword%'는 인덱스 무효</strong>
+                        <p>B-Tree는 접두사 기반 정렬입니다. 전문검색이 필요하면 Full-Text Index를 사용하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/인덱스/" class="related-term-link">인덱스</a>
+                <a href="/ko/term/Query/" class="related-term-link">Query</a>
+                <a href="/ko/term/MySQL/" class="related-term-link">MySQL</a>
+                <a href="/ko/term/PostgreSQL/" class="related-term-link">PostgreSQL</a>
+                <a href="/ko/term/Primary%20Key/" class="related-term-link">Primary Key</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://use-the-index-luke.com/" target="_blank" rel="noopener" class="learn-link">
+                    <span>📖</span> Use The Index, Luke - SQL 인덱싱 가이드
+                </a>
+                <a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html" target="_blank" rel="noopener" class="learn-link">
+                    <span>📖</span> MySQL InnoDB Index Types
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +621,28 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+        document.querySelectorAll('.code-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const lang = tab.dataset.lang;
+                const section = tab.closest('.term-section');
+                section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+                section.querySelectorAll('.code-block').forEach(b => b.classList.remove('active'));
+                tab.classList.add('active');
+                section.querySelector(`.code-block[data-lang="${lang}"]`).classList.add('active');
+            });
+        });
+
+        function copyCode(btn) {
+            const code = btn.previousElementSibling.querySelector('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = '✅ 복사됨!';
+                setTimeout(() => btn.textContent = originalText, 2000);
+            });
+        }
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

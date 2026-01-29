@@ -161,6 +161,107 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhanced Sections */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+
+        .code-block {
+            position: relative;
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .code-block pre { margin: 0; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-left: 3px solid #a855f7;
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .conv-context { font-weight: 600; color: #a855f7; margin-bottom: 0.5rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; }
+
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+        }
+        .warning-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            color: #a855f7;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(168, 85, 247, 0.2); }
     </style>
 </head>
 <body>
@@ -202,6 +303,130 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>RLHF(Reinforcement Learning from Human Feedback, 인간 피드백 기반 강화학습)</strong>는 인간의 선호도 피드백을 활용하여 AI 모델을 학습시키는 기법입니다. ChatGPT, Claude 등 현대 대화형 AI의 핵심 학습 방법으로, 모델이 인간의 가치관과 선호도에 맞게 응답하도록 정렬(Alignment)하는 데 사용됩니다.</p>
+                <p>RLHF는 2017년 OpenAI와 DeepMind에서 게임 AI 학습에 처음 적용되었고, 2022년 InstructGPT 논문에서 LLM에 본격 적용되었습니다. 기존 지도학습만으로는 "도움이 되면서도 안전한" 응답을 생성하기 어려웠고, RLHF는 이 문제를 해결하는 혁신적인 방법으로 주목받았습니다.</p>
+                <p>RLHF의 핵심 원리는 3단계 학습 파이프라인입니다. 1) SFT(Supervised Fine-Tuning)로 기본 능력 학습, 2) 인간이 응답 쌍을 비교하여 Reward Model 학습, 3) PPO(Proximal Policy Optimization) 알고리즘으로 Policy Model 최적화. 이 과정에서 모델은 인간이 선호하는 방향으로 점진적으로 개선됩니다.</p>
+                <p>실무에서 RLHF는 AI 안전성과 유용성의 균형을 맞추는 핵심 기술입니다. 다만 수천 명의 인간 라벨러가 필요해 비용이 높고, 라벨러 간 일관성 유지가 어려운 단점이 있습니다. 최근에는 DPO, RLAIF 등 효율적인 대안들이 연구되고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>TRL 라이브러리를 활용한 RLHF 파이프라인 개요입니다.</p>
+                <div class="code-block" data-lang="python">
+                    <pre><code class="language-python"># pip install trl transformers torch
+from trl import PPOTrainer, PPOConfig, AutoModelForCausalLMWithValueHead
+from transformers import AutoTokenizer
+
+# 1. 모델 및 토크나이저 로드
+model_name = "gpt2"  # 실제로는 SFT된 모델 사용
+model = AutoModelForCausalLMWithValueHead.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+# 2. PPO 설정
+ppo_config = PPOConfig(
+    model_name=model_name,
+    learning_rate=1.41e-5,
+    batch_size=16,
+    mini_batch_size=4,
+    gradient_accumulation_steps=1,
+)
+
+# 3. PPO Trainer 초기화
+ppo_trainer = PPOTrainer(
+    config=ppo_config,
+    model=model,
+    tokenizer=tokenizer,
+)
+
+# 4. RLHF 학습 루프 (개념적 예시)
+def reward_fn(response: str) -> float:
+    """Reward Model이 응답 품질 점수 반환"""
+    # 실제로는 학습된 Reward Model 사용
+    return len(response) * 0.01  # 단순 예시
+
+# 학습은 PPO 알고리즘으로 진행
+# ppo_trainer.step(query_tensors, response_tensors, rewards)
+print("RLHF 파이프라인 준비 완료!")</code></pre>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <div class="conv-quote">"우리 챗봇이 가끔 부적절한 답변을 하는데, RLHF로 안전성 정렬을 강화하면 해결될 수 있어요."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <div class="conv-quote">"RLHF의 3단계는 SFT, Reward Modeling, PPO입니다. 핵심은 인간 선호도를 Reward 신호로 변환하는 것이죠."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <div class="conv-quote">"RLHF의 KL Divergence 페널티는 모델이 원래 분포에서 너무 벗어나지 않게 합니다. 이게 없으면 Reward Hacking이 발생해요."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div><strong>Reward Hacking 무시</strong>: 모델이 실제 품질이 아닌 Reward를 속이는 방법을 학습할 수 있습니다. KL 페널티와 다양한 평가 메트릭으로 방지하세요.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div><strong>라벨러 일관성 미확인</strong>: 라벨러 간 평가 기준이 다르면 Reward Model이 노이즈를 학습합니다. 라벨러 간 일치도(Inter-rater agreement)를 반드시 측정하세요.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div><strong>DPO 활용 검토</strong>: Reward Model 없이 직접 선호도 학습이 가능한 DPO(Direct Preference Optimization)가 더 효율적일 수 있습니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/RLAIF/" class="related-term-link">RLAIF</a>
+                <a href="/ko/term/DPO/" class="related-term-link">DPO</a>
+                <a href="/ko/term/PPO/" class="related-term-link">PPO</a>
+                <a href="/ko/term/Reward%20Model/" class="related-term-link">Reward Model</a>
+                <a href="/ko/term/Fine-tuning/" class="related-term-link">Fine-tuning</a>
+                <a href="/ko/term/Alignment/" class="related-term-link">Alignment</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/2203.02155" target="_blank" class="learn-link">
+                    📝 InstructGPT 논문 (OpenAI, 2022)
+                </a>
+                <a href="https://huggingface.co/docs/trl/index" target="_blank" class="learn-link">
+                    📄 TRL - Transformer Reinforcement Learning
+                </a>
+                <a href="https://openai.com/research/learning-from-human-preferences" target="_blank" class="learn-link">
+                    🎓 OpenAI RLHF 연구
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,6 +434,15 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>

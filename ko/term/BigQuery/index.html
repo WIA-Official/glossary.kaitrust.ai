@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,337 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 id="detail-title">상세 설명</h2>
+            <p>Google BigQuery는 Google Cloud Platform의 완전 관리형 서버리스 데이터 웨어하우스로, 페타바이트 규모의 데이터를 SQL로 분석할 수 있습니다. 인프라 관리 없이 필요에 따라 자동으로 확장되며, 표준 SQL을 지원하여 기존 SQL 지식으로 즉시 사용 가능합니다.</p>
+            <p>BigQuery의 핵심 아키텍처는 컴퓨트와 스토리지의 분리입니다. Dremel 기반의 분산 쿼리 엔진은 수천 개의 워커 노드에서 병렬 처리하고, Colossus 파일 시스템은 데이터를 컬럼 형식으로 저장합니다. 이 구조 덕분에 스토리지와 컴퓨트를 독립적으로 확장할 수 있으며, 슬롯(slot) 기반의 유연한 리소스 할당이 가능합니다.</p>
+            <p>요금 모델은 온디맨드와 용량 예약 두 가지입니다. 온디맨드는 처리한 데이터 양(TB당 $5~6.25)에 따라 과금되어 간헐적 사용에 적합하고, 용량 예약(슬롯 기반)은 고정 컴퓨팅 용량을 구매하여 예측 가능한 비용으로 대규모 워크로드를 처리합니다. 스토리지는 활성 데이터($0.02/GB/월)와 장기 보관 데이터($0.01/GB/월)로 구분됩니다.</p>
+            <p>BigQuery는 BigQuery ML로 SQL만으로 머신러닝 모델을 학습하고, BigQuery BI Engine으로 서브초 응답의 대화형 분석을 제공하며, BigQuery Omni로 AWS/Azure의 데이터도 단일 인터페이스로 분석할 수 있습니다. GCS, Pub/Sub, Dataflow 등 Google Cloud 서비스와 원활하게 통합됩니다.</p>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2>코드 예제</h2>
+            <div class="code-block" onclick="copyCode(this)">
+                <pre><code>-- BigQuery SQL 쿼리 및 비용 최적화 예제
+
+-- ============================================
+-- 1. 기본 분석 쿼리
+-- ============================================
+
+-- 일별 매출 집계 (파티션 활용)
+SELECT
+    DATE(order_timestamp) as order_date,
+    product_category,
+    COUNT(*) as order_count,
+    SUM(order_amount) as total_revenue,
+    AVG(order_amount) as avg_order_value,
+    COUNT(DISTINCT customer_id) as unique_customers
+FROM `project.dataset.orders`
+WHERE order_timestamp BETWEEN '2024-01-01' AND '2024-01-31'
+GROUP BY 1, 2
+ORDER BY order_date, total_revenue DESC;
+
+-- ============================================
+-- 2. 비용 최적화 기법
+-- ============================================
+
+-- [1] 필요한 컬럼만 선택 (SELECT * 지양)
+-- Bad: 전체 테이블 스캔
+SELECT * FROM `project.dataset.orders`;
+
+-- Good: 필요한 컬럼만 선택
+SELECT order_id, customer_id, order_amount
+FROM `project.dataset.orders`;
+
+-- [2] 파티션 필터 활용
+-- Bad: 파티션 프루닝 없음
+SELECT * FROM `project.dataset.orders`
+WHERE EXTRACT(MONTH FROM order_timestamp) = 1;
+
+-- Good: 파티션 프루닝 활성화
+SELECT * FROM `project.dataset.orders`
+WHERE order_timestamp >= '2024-01-01'
+  AND order_timestamp < '2024-02-01';
+
+-- [3] 클러스터링 활용
+-- 자주 필터/그룹하는 컬럼으로 클러스터링
+CREATE OR REPLACE TABLE `project.dataset.orders_clustered`
+PARTITION BY DATE(order_timestamp)
+CLUSTER BY customer_id, product_category
+AS SELECT * FROM `project.dataset.orders`;
+
+-- [4] Dry Run으로 비용 예측
+-- bq query --dry_run으로 처리할 바이트 확인
+-- 또는 BigQuery Console에서 쿼리 검증
+
+-- ============================================
+-- 3. 윈도우 함수 활용
+-- ============================================
+
+-- 고객별 구매 순서 및 누적 금액
+SELECT
+    customer_id,
+    order_id,
+    order_timestamp,
+    order_amount,
+    ROW_NUMBER() OVER (
+        PARTITION BY customer_id
+        ORDER BY order_timestamp
+    ) as purchase_sequence,
+    SUM(order_amount) OVER (
+        PARTITION BY customer_id
+        ORDER BY order_timestamp
+        ROWS UNBOUNDED PRECEDING
+    ) as cumulative_spend,
+    LAG(order_timestamp) OVER (
+        PARTITION BY customer_id
+        ORDER BY order_timestamp
+    ) as previous_order_date,
+    DATE_DIFF(
+        DATE(order_timestamp),
+        DATE(LAG(order_timestamp) OVER (
+            PARTITION BY customer_id
+            ORDER BY order_timestamp
+        )),
+        DAY
+    ) as days_since_last_order
+FROM `project.dataset.orders`
+ORDER BY customer_id, order_timestamp;
+
+-- ============================================
+-- 4. ARRAY 및 STRUCT 처리
+-- ============================================
+
+-- 중첩 데이터 쿼리
+SELECT
+    user_id,
+    event_date,
+    event_name,
+    -- STRUCT에서 값 추출
+    event_params.value.string_value as page_location,
+    -- ARRAY 풀기
+    item.item_name,
+    item.price
+FROM `project.dataset.events`,
+    UNNEST(event_params) as event_params,
+    UNNEST(items) as item
+WHERE event_params.key = 'page_location'
+  AND event_date = '2024-01-15';
+
+-- ARRAY_AGG로 그룹화
+SELECT
+    customer_id,
+    ARRAY_AGG(STRUCT(
+        product_id,
+        product_name,
+        order_amount
+    ) ORDER BY order_timestamp LIMIT 5) as recent_purchases
+FROM `project.dataset.orders` o
+JOIN `project.dataset.products` p USING (product_id)
+GROUP BY customer_id;
+
+-- ============================================
+-- 5. 근사 집계 (비용/성능 최적화)
+-- ============================================
+
+-- 정확한 COUNT DISTINCT (비용 높음)
+SELECT COUNT(DISTINCT user_id) as exact_users
+FROM `project.dataset.events`;
+
+-- 근사 COUNT DISTINCT (더 빠르고 저렴)
+SELECT APPROX_COUNT_DISTINCT(user_id) as approx_users
+FROM `project.dataset.events`;
+
+-- HyperLogLog++ 활용
+SELECT
+    DATE(event_timestamp) as event_date,
+    APPROX_COUNT_DISTINCT(user_id) as daily_users,
+    APPROX_QUANTILES(session_duration, 100)[OFFSET(50)] as median_duration,
+    APPROX_QUANTILES(session_duration, 100)[OFFSET(95)] as p95_duration
+FROM `project.dataset.sessions`
+GROUP BY event_date;
+
+-- ============================================
+-- 6. BigQuery ML (SQL로 ML)
+-- ============================================
+
+-- 고객 세그먼테이션 모델 학습
+CREATE OR REPLACE MODEL `project.dataset.customer_segments`
+OPTIONS (
+    model_type = 'KMEANS',
+    num_clusters = 5,
+    standardize_features = TRUE
+) AS
+SELECT
+    customer_id,
+    COUNT(*) as order_count,
+    SUM(order_amount) as total_spend,
+    AVG(order_amount) as avg_order_value,
+    DATE_DIFF(CURRENT_DATE(), MAX(DATE(order_timestamp)), DAY) as recency_days,
+    DATE_DIFF(
+        MAX(DATE(order_timestamp)),
+        MIN(DATE(order_timestamp)),
+        DAY
+    ) as customer_lifetime_days
+FROM `project.dataset.orders`
+GROUP BY customer_id
+HAVING order_count >= 2;
+
+-- 모델로 예측
+SELECT
+    customer_id,
+    CENTROID_ID as segment,
+    total_spend,
+    order_count
+FROM ML.PREDICT(
+    MODEL `project.dataset.customer_segments`,
+    (
+        SELECT
+            customer_id,
+            COUNT(*) as order_count,
+            SUM(order_amount) as total_spend,
+            AVG(order_amount) as avg_order_value,
+            DATE_DIFF(CURRENT_DATE(), MAX(DATE(order_timestamp)), DAY) as recency_days,
+            DATE_DIFF(
+                MAX(DATE(order_timestamp)),
+                MIN(DATE(order_timestamp)),
+                DAY
+            ) as customer_lifetime_days
+        FROM `project.dataset.orders`
+        GROUP BY customer_id
+    )
+);
+
+-- ============================================
+-- 7. 스케줄 쿼리 및 Materialized View
+-- ============================================
+
+-- Materialized View 생성 (자동 새로고침)
+CREATE MATERIALIZED VIEW `project.dataset.daily_sales_mv`
+OPTIONS (
+    enable_refresh = TRUE,
+    refresh_interval_minutes = 60
+) AS
+SELECT
+    DATE(order_timestamp) as order_date,
+    product_category,
+    SUM(order_amount) as total_revenue,
+    COUNT(*) as order_count
+FROM `project.dataset.orders`
+GROUP BY 1, 2;
+
+-- ============================================
+-- 8. Python 클라이언트 예제
+-- ============================================
+"""
+from google.cloud import bigquery
+import pandas as pd
+
+# 클라이언트 생성
+client = bigquery.Client(project='your-project-id')
+
+# 쿼리 실행 (비용 예측)
+query = '''
+SELECT product_category, SUM(order_amount) as revenue
+FROM `project.dataset.orders`
+WHERE order_timestamp >= '2024-01-01'
+GROUP BY product_category
+ORDER BY revenue DESC
+LIMIT 10
+'''
+
+# Dry run으로 비용 예측
+job_config = bigquery.QueryJobConfig(dry_run=True, use_query_cache=False)
+dry_run_job = client.query(query, job_config=job_config)
+print(f"예상 처리 바이트: {dry_run_job.total_bytes_processed:,}")
+print(f"예상 비용: ${dry_run_job.total_bytes_processed / 1e12 * 5:.4f}")
+
+# 실제 쿼리 실행
+df = client.query(query).to_dataframe()
+print(df)
+
+# 데이터 적재
+table_id = 'project.dataset.new_table'
+job_config = bigquery.LoadJobConfig(
+    write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
+    source_format=bigquery.SourceFormat.PARQUET,
+)
+
+# GCS에서 적재
+uri = 'gs://bucket/path/to/file.parquet'
+load_job = client.load_table_from_uri(uri, table_id, job_config=job_config)
+load_job.result()
+
+# DataFrame에서 직접 적재
+job_config = bigquery.LoadJobConfig(
+    write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
+)
+client.load_table_from_dataframe(df, table_id, job_config=job_config).result()
+"""</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section">
+            <h2>실무에서 이렇게 쓰여요</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-type="meeting">팀 미팅</button>
+                <button class="conv-tab" data-type="interview">기술 면접</button>
+                <button class="conv-tab" data-type="review">코드 리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong>데이터 분석가:</strong> "BigQuery 비용이 지난달보다 50% 늘었는데, 어디서 문제인지 모르겠어요."</p>
+                <p><strong>데이터 엔지니어:</strong> "INFORMATION_SCHEMA.JOBS로 쿼리별 비용을 확인해볼까요? 보통 SELECT *를 쓰거나 파티션 필터 없이 전체 스캔하면 비용이 급증해요."</p>
+                <p><strong>데이터 분석가:</strong> "ad-hoc 분석할 때 파티션 필터를 빼먹을 때가 있어요."</p>
+                <p><strong>데이터 엔지니어:</strong> "require_partition_filter 옵션을 테이블에 설정하면 파티션 필터 없이는 쿼리가 실행 안 돼요. 그리고 자주 쓰는 집계는 Materialized View로 만들면 비용을 크게 줄일 수 있어요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong>면접관:</strong> "BigQuery에서 비용을 최적화하기 위한 전략을 설명해주세요."</p>
+                <p><strong>지원자:</strong> "핵심은 스캔하는 데이터 양을 줄이는 것입니다. 첫째, SELECT *를 피하고 필요한 컬럼만 선택합니다. 둘째, 날짜 기반 파티셔닝과 자주 필터하는 컬럼의 클러스터링을 활용합니다. 셋째, APPROX_COUNT_DISTINCT 같은 근사 함수로 정확도를 약간 희생하고 비용을 절감합니다. 넷째, 반복되는 집계는 Materialized View나 스케줄 쿼리로 사전 계산합니다. 마지막으로 워크로드가 예측 가능하다면 Flex Slots이나 예약으로 온디맨드보다 저렴하게 사용할 수 있습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong>리뷰어:</strong> "COUNT(DISTINCT user_id)가 10TB 테이블에서 실행되고 있어요. 비용이 꽤 나올 텐데요."</p>
+                <p><strong>개발자:</strong> "정확한 수치가 필요한 건 아니에요. 대략적인 DAU만 알면 돼요."</p>
+                <p><strong>리뷰어:</strong> "그럼 APPROX_COUNT_DISTINCT로 바꾸세요. 오차율 1% 미만으로 훨씬 빠르고 저렴해요. 그리고 이 쿼리가 매일 돌아가는 것 같은데, Materialized View로 만들어서 증분 업데이트하면 비용이 크게 줄어요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2>주의사항</h2>
+            <ul class="warning-list">
+                <li>SELECT *는 전체 컬럼을 스캔하므로 필요한 컬럼만 명시적으로 선택하세요.</li>
+                <li>파티션 필터 없이 대용량 테이블을 쿼리하면 전체 스캔 비용이 발생합니다.</li>
+                <li>온디맨드 요금제에서 예상치 못한 대용량 쿼리로 비용 폭증이 발생할 수 있으니 사용자별 쿼리 한도를 설정하세요.</li>
+                <li>스트리밍 삽입은 배치 로딩보다 비용이 높으므로, 실시간성이 필수가 아니면 배치 로딩을 사용하세요.</li>
+                <li>쿼리 캐시는 동일 쿼리에만 적용되며, 결과가 자주 변하는 테이블에서는 효과가 제한적입니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2>관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Data%20Warehouse/" class="related-term-card">Data Warehouse</a>
+                <a href="/ko/term/Snowflake/" class="related-term-card">Snowflake</a>
+                <a href="/ko/term/Apache%20Spark/" class="related-term-card">Apache Spark</a>
+                <a href="/ko/term/BI/" class="related-term-card">BI</a>
+                <a href="/ko/term/SQL/" class="related-term-card">SQL</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2>더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://cloud.google.com/bigquery/docs" target="_blank">Google BigQuery 공식 문서</a></li>
+                <li><a href="https://cloud.google.com/bigquery/docs/best-practices-costs" target="_blank">BigQuery 비용 최적화 모범 사례</a></li>
+                <li><a href="https://cloud.google.com/blog/products/data-analytics/new-blog-series-bigquery-explained" target="_blank">BigQuery Explained 블로그 시리즈</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +544,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

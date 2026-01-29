@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,132 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>쿼리 옵티마이저(Query Optimizer)는 SQL 쿼리를 실행할 때 가장 효율적인 실행 방법을 결정하는 데이터베이스 엔진의 핵심 구성 요소입니다. 같은 결과를 내는 여러 실행 계획 중에서 비용이 가장 낮은 계획을 선택합니다.</p>
+                <p>비용 기반 옵티마이저(CBO)는 테이블 크기, 인덱스 선택도, 데이터 분포 등의 통계 정보를 활용해 각 실행 계획의 비용(I/O, CPU, 메모리)을 추정합니다. 이 통계가 오래되면 잘못된 계획을 선택할 수 있어, 정기적인 통계 갱신이 중요합니다.</p>
+                <p>옵티마이저는 조인 순서 결정, 인덱스 선택, 조인 방법 결정(Nested Loop, Hash, Merge), 서브쿼리 변환 등 다양한 최적화를 수행합니다. 복잡한 쿼리일수록 가능한 실행 계획이 기하급수적으로 늘어나므로, 시간 제한 내에 충분히 좋은 계획을 찾는 휴리스틱을 사용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>-- 통계 정보 갱신 (옵티마이저에 최신 정보 제공)
+-- MySQL
+ANALYZE TABLE orders;
+ANALYZE TABLE customers;
+
+-- PostgreSQL
+ANALYZE orders;
+ANALYZE customers;
+
+-- 옵티마이저가 선택한 실행 계획 확인
+EXPLAIN (ANALYZE, COSTS, FORMAT TEXT)
+SELECT c.name, COUNT(o.id) as order_count
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+WHERE o.order_date > '2024-01-01'
+GROUP BY c.id, c.name;
+
+-- 옵티마이저 힌트 사용 (MySQL)
+SELECT /*+ JOIN_ORDER(c, o) INDEX(o idx_order_date) */
+    c.name, COUNT(o.id)
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+WHERE o.order_date > '2024-01-01'
+GROUP BY c.id, c.name;
+
+-- PostgreSQL 힌트 (pg_hint_plan 확장)
+/*+ Leading(c o) IndexScan(o idx_order_date) */
+SELECT c.name, COUNT(o.id)
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+WHERE o.order_date > '2024-01-01'
+GROUP BY c.id, c.name;
+
+-- 옵티마이저 통계 확인
+-- MySQL
+SHOW TABLE STATUS LIKE 'orders';
+SHOW INDEX FROM orders;
+
+-- PostgreSQL 통계 확인
+SELECT
+    tablename,
+    n_live_tup,
+    n_dead_tup,
+    last_analyze
+FROM pg_stat_user_tables
+WHERE tablename = 'orders';
+
+-- 컬럼별 통계 분포 확인
+SELECT * FROM pg_stats
+WHERE tablename = 'orders' AND attname = 'order_date';</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>백엔드 개발자:</strong> 같은 쿼리인데 어제는 빨랐는데 오늘은 느려요.</p>
+                <p><strong>DBA:</strong> 옵티마이저가 다른 실행 계획을 선택했을 수 있어요. EXPLAIN 비교해보셨어요?</p>
+                <p><strong>백엔드 개발자:</strong> 네, 어제는 인덱스 스캔이었는데 오늘은 풀 스캔이에요.</p>
+                <p><strong>DBA:</strong> 데이터 양이 임계점 넘어서 풀 스캔이 더 효율적이라고 판단한 것 같아요. 통계를 갱신하거나 힌트로 인덱스를 강제하는 방법이 있어요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 옵티마이저가 잘못된 실행 계획을 선택할 때 어떻게 대응하시나요?</p>
+                <p><strong>지원자:</strong> 먼저 ANALYZE로 통계를 갱신합니다. 그래도 안 되면 힌트를 사용하지만, 힌트는 데이터 분포가 변할 때 오히려 성능을 저하시킬 수 있어서 최후의 수단으로 씁니다. 근본적으로는 쿼리 구조나 인덱스를 개선하는 게 좋습니다.</p>
+                <p><strong>면접관:</strong> 비용 기반 옵티마이저의 한계는 뭐가 있을까요?</p>
+                <p><strong>지원자:</strong> 통계 정보가 오래되면 잘못된 추정을 하고, 복잡한 쿼리에서는 모든 계획을 검토하지 못합니다. 또한 상관 서브쿼리나 함수 호출 비용을 정확히 추정하기 어렵습니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>시니어:</strong> 이 쿼리에 힌트가 하드코딩되어 있네요. 왜 넣었어요?</p>
+                <p><strong>주니어:</strong> 옵티마이저가 느린 계획을 선택해서요.</p>
+                <p><strong>시니어:</strong> 힌트는 임시 해결책이에요. 데이터가 10배 늘면 이 힌트가 오히려 독이 될 수 있어요. 통계 갱신 주기를 확인하고, 가능하면 인덱스나 쿼리 구조 개선으로 해결하세요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>통계 정보가 오래되면 옵티마이저가 잘못된 판단을 할 수 있음</li>
+                <li>힌트 남용은 데이터 변화에 대응하지 못해 장기적으로 성능 저하 유발</li>
+                <li>개발 환경과 운영 환경의 데이터 분포 차이로 다른 계획이 선택될 수 있음</li>
+                <li>자동 통계 갱신 설정과 정기적인 실행 계획 검토 필요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%8B%A4%ED%96%89%20%EA%B3%84%ED%9A%8D/" class="related-link">실행 계획</a>
+                <a href="/ko/term/%EC%9D%B8%EB%8D%B1%EC%8A%A4/" class="related-link">인덱스</a>
+                <a href="/ko/term/%EC%A1%B0%EC%9D%B8/" class="related-link">조인</a>
+                <a href="/ko/term/%EC%BF%BC%EB%A6%AC/" class="related-link">쿼리</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://dev.mysql.com/doc/refman/8.0/en/query-optimization.html" target="_blank">MySQL Query Optimization</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/planner-optimizer.html" target="_blank">PostgreSQL Planner/Optimizer</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +340,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

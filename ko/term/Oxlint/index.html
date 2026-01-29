@@ -161,6 +161,148 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -189,7 +331,7 @@
                 <span>프로그래밍</span>
             </div>
             <h1 class="term-title">Oxlint</h1>
-            
+
             <div class="term-description">
                 <p>Rust로 작성된 빠른 JavaScript 린터</p>
             </div>
@@ -202,6 +344,174 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Oxlint는 Rust로 작성된 초고속 JavaScript/TypeScript 린터(Linter)입니다. Oxc(Oxidation Compiler) 프로젝트의 일부로, JavaScript 생태계의 도구들을 Rust로 재작성하여 극한의 성능을 제공하는 것을 목표로 합니다. 코드의 잠재적 버그, 스타일 위반, 보안 취약점을 분석하여 더 안전하고 일관된 코드를 작성할 수 있도록 도와줍니다.</p>
+                <p>Oxlint는 Oxc 프로젝트의 핵심 도구 중 하나입니다. Oxc는 JavaScript/TypeScript를 위한 파서, 린터, 포매터, 트랜스파일러, 미니파이어를 Rust로 구현하는 야심찬 프로젝트로, 각 도구가 독립적으로 사용 가능하면서도 함께 통합될 때 최고의 성능을 발휘합니다. Oxlint는 이 중 린터 역할을 담당하며, Oxc 파서의 빠른 AST 파싱 속도를 활용합니다.</p>
+                <p>Oxlint의 가장 큰 장점은 압도적인 성능입니다. ESLint 대비 50~100배 빠른 속도를 자랑하며, 수천 개의 파일을 가진 대규모 프로젝트도 1초 이내에 린팅을 완료합니다. 이는 Rust의 제로 비용 추상화와 메모리 안전성, 그리고 병렬 처리 최적화 덕분입니다. CI/CD 파이프라인에서 린팅 시간이 몇 분에서 몇 초로 단축되어 개발 생산성이 크게 향상됩니다.</p>
+                <p>실무 도입 시 Oxlint는 ESLint를 완전히 대체하기보다 보완하는 용도로 사용하는 것이 권장됩니다. Oxlint를 먼저 실행하여 빠르게 기본적인 오류를 잡고, 특수 플러그인이 필요한 검사는 ESLint로 처리하는 하이브리드 전략이 효과적입니다. 2025년 현재 400개 이상의 린트 규칙을 지원하며, ESLint, TypeScript-ESLint, Jest, Unicorn, Import, React, JSX-a11y 등 주요 플러그인의 규칙들을 점진적으로 포팅하고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="config">
+                <pre><code class="language-json">// oxlint.json - Oxlint 설정 파일 (선택적)
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "rules": {
+    // ESLint 규칙
+    "no-unused-vars": "warn",
+    "no-console": "warn",
+    "eqeqeq": "error",
+
+    // TypeScript 규칙
+    "typescript/no-explicit-any": "warn",
+    "typescript/no-non-null-assertion": "warn",
+
+    // React 규칙
+    "react/no-direct-mutation-state": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+
+    // Import 규칙
+    "import/no-cycle": "error",
+    "import/no-self-import": "error",
+
+    // 접근성 규칙
+    "jsx-a11y/alt-text": "warn",
+    "jsx-a11y/anchor-is-valid": "warn"
+  },
+  "settings": {
+    "jsx-a11y": {
+      "polymorphicPropName": "as"
+    }
+  },
+  "ignorePatterns": ["dist", "node_modules", "*.config.js"]
+}
+
+// 터미널 명령어
+// 1. 설치
+npm install -D oxlint
+
+// 2. 전체 프로젝트 린팅
+npx oxlint
+
+// 3. 특정 디렉토리만 린팅
+npx oxlint ./src
+
+// 4. 설정 파일 지정
+npx oxlint -c oxlint.json
+
+// 5. 특정 규칙만 활성화 (카테고리 단위)
+npx oxlint -D correctness -D suspicious -D perf
+
+// 6. 자동 수정 가능한 문제 수정
+npx oxlint --fix
+
+// 7. 출력 형식 지정 (CI용)
+npx oxlint --format github
+
+// 8. ESLint와 함께 사용 (package.json scripts)
+"scripts": {
+  "lint": "oxlint && eslint . --ext .ts,.tsx",
+  "lint:fast": "oxlint",
+  "lint:full": "eslint . --ext .ts,.tsx"
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서 - ESLint 마이그레이션 논의</div>
+                    <blockquote class="conv-quote">
+                        "CI에서 ESLint 돌리는 데 3분 넘게 걸리는데요, Oxlint를 먼저 실행하면 대부분의 오류를 1초 만에 잡을 수 있습니다. ESLint는 Oxlint가 지원 안 하는 특수 플러그인용으로만 남기고, 기본 린팅은 Oxlint로 전환하면 PR 피드백 시간이 대폭 줄어들 것 같습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "Oxlint는 Oxc 프로젝트의 린터로, Rust로 작성되어 ESLint보다 50~100배 빠릅니다. 아직 모든 ESLint 플러그인을 지원하지는 않지만, correctness와 suspicious 카테고리 규칙들로 버그를 빠르게 찾을 수 있어서 ESLint와 병행해서 쓰면 개발 경험이 크게 개선됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 CI/CD 최적화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "GitHub Actions에서 린트 job이 병목이었는데, Oxlint로 바꾸니까 전체 CI 시간이 5분에서 2분으로 줄었습니다. 특히 PR마다 실행되는 거라 하루에 수십 번 돌아가는데, 개발팀 전체 대기 시간 합치면 엄청난 시간 절약이에요. 설정도 거의 없이 바로 쓸 수 있어서 도입 비용도 낮았습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서 - 린트 설정 개선</div>
+                    <blockquote class="conv-quote">
+                        "oxlint.json에서 'import/no-cycle': 'error' 설정 추가한 거 좋네요. 순환 참조 버그 예방에 효과적이에요. 근데 'typescript/no-explicit-any'는 warn 말고 error로 올려도 될 것 같아요. 현재 코드에 any가 거의 없어서 strict하게 가져도 문제없을 거예요. 그리고 CI에서 --format github 옵션 추가하면 PR에 인라인 어노테이션으로 린트 에러가 표시되니까 리뷰할 때 편합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>ESLint 규칙 100% 호환 기대하기</strong>
+                        <p>Oxlint는 ESLint의 모든 규칙과 플러그인을 지원하지 않습니다. eslint-plugin-import의 일부 규칙, 커스텀 플러그인 등은 아직 미지원입니다. 공식 규칙 지원 현황 페이지에서 확인 후 도입하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>ESLint 설정 파일 그대로 사용하기</strong>
+                        <p>Oxlint는 .eslintrc.js를 읽지 않습니다. 별도의 oxlint.json 설정 파일을 사용하거나 CLI 옵션으로 규칙을 지정해야 합니다. 대부분의 규칙은 기본적으로 적절히 설정되어 있어 설정 없이도 바로 사용 가능합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>하이브리드 전략 권장</strong>
+                        <p>Oxlint를 먼저 실행하여 빠른 피드백을 받고, ESLint는 Oxlint가 커버하지 못하는 규칙만 검사하도록 구성하세요. CI에서는 `oxlint && eslint --rule '{...}'` 형태로 조합하면 속도와 커버리지를 모두 잡을 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/ESLint/" class="related-term-link">ESLint</a>
+                <a href="/ko/term/Biome/" class="related-term-link">Biome</a>
+                <a href="/ko/term/TypeScript/" class="related-term-link">TypeScript</a>
+                <a href="/ko/term/Rust/" class="related-term-link">Rust</a>
+                <a href="/ko/term/Linter/" class="related-term-link">Linter</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://oxc.rs/docs/guide/usage/linter.html" target="_blank" class="learn-link">
+                    📄 Oxlint 공식 문서
+                </a>
+                <a href="https://github.com/oxc-project/oxc" target="_blank" class="learn-link">
+                    💻 Oxc GitHub 저장소
+                </a>
+                <a href="https://oxc.rs/docs/guide/usage/linter/rules.html" target="_blank" class="learn-link">
+                    📋 지원 규칙 목록
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +522,31 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

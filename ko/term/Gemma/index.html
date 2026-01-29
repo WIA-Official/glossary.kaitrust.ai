@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,153 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Gemma는 Google DeepMind가 공개한 오픈소스 경량 언어 모델 제품군입니다. Gemini를 만든 동일한 연구 기술로 제작되었지만, 누구나 무료로 다운로드하여 로컬 환경에서 실행하고 상업적으로 활용할 수 있습니다.</p>
+                <p>2024년 2월 첫 출시 이후, 2025년에 Gemma 3가 발표되며 오픈소스 LLM 생태계를 뒤흔들었습니다. Gemma 3 27B 모델은 단일 GPU에서 실행 가능하면서도 Llama 3 405B, DeepSeek-V3 등 훨씬 큰 모델들을 LMArena 벤치마크에서 능가하는 성능을 보여줍니다.</p>
+                <p>모델 라인업은 270M, 1B, 4B, 12B, 27B 5가지 크기로 제공됩니다. 128K 토큰 컨텍스트 윈도우, 35개 이상 언어 지원, 텍스트+이미지 멀티모달, Function Calling까지 지원합니다. 특히 Gemma 3n은 모바일 최적화 버전으로 스마트폰에서 실시간 AI를 구현할 수 있습니다.</p>
+                <p>실무에서 Gemma는 API 비용 없이 자체 서버에서 LLM을 운영하고 싶을 때 최선의 선택입니다. 2025년 8월 기준 2억 회 이상 다운로드되었으며, Hugging Face에서 가장 인기 있는 오픈소스 LLM 중 하나입니다. 민감한 데이터를 다루는 금융/의료 분야에서 특히 선호됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Gemma 3 로컬 실행 예제 (Hugging Face Transformers)
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
+
+# 1. 모델 로드 (4B 모델 - 8GB VRAM이면 충분)
+model_id = "google/gemma-3-4b-it"  # instruction-tuned 버전
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    torch_dtype=torch.bfloat16,  # 메모리 절약
+    device_map="auto"  # GPU 자동 할당
+)
+
+# 2. 텍스트 생성
+prompt = """<start_of_turn>user
+한국어로 간단한 FastAPI 서버 코드를 작성해줘.
+헬스체크 엔드포인트 포함해서.<end_of_turn>
+<start_of_turn>model
+"""
+
+inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+outputs = model.generate(
+    **inputs,
+    max_new_tokens=500,
+    temperature=0.7,
+    do_sample=True
+)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+
+# 3. vLLM으로 고성능 서빙 (프로덕션용)
+# pip install vllm
+from vllm import LLM, SamplingParams
+
+llm = LLM(model="google/gemma-3-12b-it", tensor_parallel_size=1)
+sampling_params = SamplingParams(temperature=0.7, max_tokens=512)
+
+prompts = [
+    "Python에서 비동기 처리의 장단점을 설명해줘",
+    "React와 Vue의 주요 차이점은?"
+]
+outputs = llm.generate(prompts, sampling_params)
+
+for output in outputs:
+    print(f"Prompt: {output.prompt[:50]}...")
+    print(f"Response: {output.outputs[0].text}\n")
+
+# 4. Ollama로 간편 실행 (로컬 개발용)
+# 터미널: ollama run gemma3:27b
+import requests
+response = requests.post("http://localhost:11434/api/generate", json={
+    "model": "gemma3:12b",
+    "prompt": "Kubernetes와 Docker의 관계를 설명해줘",
+    "stream": False
+})
+print(response.json()["response"])</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"고객 데이터가 외부로 나가면 안 되는 상황이니까, Gemma 3 12B를 자체 서버에 올려서 쓰겠습니다. RTX 4090 한 장이면 충분하고, API 비용도 제로입니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"Gemma는 Gemini와 동일한 아키텍처 기반이지만 오픈소스로 공개된 경량 버전입니다. 27B 모델이 Llama 405B보다 높은 벤치마크 점수를 기록하는 건 Google의 학습 데이터 품질과 효율적인 아키텍처 덕분입니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"QAT(Quantization-Aware Training) 버전 써보세요. 4bit 양자화해도 성능 손실이 거의 없어서, 8GB VRAM 노트북에서도 12B 모델 돌릴 수 있어요."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>base 모델을 그대로 사용</strong>
+                        <p>Gemma base 모델은 채팅용이 아닙니다. 반드시 "-it" (instruction-tuned) 버전을 사용하세요. 예: gemma-3-4b-it</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>프롬프트 포맷 무시</strong>
+                        <p>Gemma 3는 특정 턴 포맷을 사용합니다. &lt;start_of_turn&gt;user/model 태그 없이 입력하면 품질이 급격히 떨어집니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법: vLLM 또는 Ollama로 서빙</strong>
+                        <p>Transformers로 직접 로드하면 느립니다. 프로덕션에서는 vLLM(고성능), 개발 테스트는 Ollama(간편함)를 권장합니다. 토큰/초가 5배 이상 차이납니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Gemini/" class="related-term-link">Gemini</a>
+                <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                <a href="/ko/term/Llama/" class="related-term-link">Llama</a>
+                <a href="/ko/term/Hugging%20Face/" class="related-term-link">Hugging Face</a>
+                <a href="/ko/term/Quantization/" class="related-term-link">Quantization</a>
+                <a href="/ko/term/Fine-tuning/" class="related-term-link">Fine-tuning</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://ai.google.dev/gemma" target="_blank" class="learn-link">📄 Google Gemma 공식 문서</a>
+                <a href="https://huggingface.co/collections/google/gemma-3-release-67c6c6f89c4f76621268bb6d" target="_blank" class="learn-link">🤗 Hugging Face Gemma 3 모델</a>
+                <a href="https://blog.google/technology/developers/gemma-3/" target="_blank" class="learn-link">🎓 Google Gemma 3 발표 블로그</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +383,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

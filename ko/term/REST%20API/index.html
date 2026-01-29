@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REST API (Representational State Transfer) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="HTTP 메서드(GET, POST, PUT, DELETE)를 사용하는 API 설계 스타일. 무상태성이 핵심 원칙.">
-    <meta name="keywords" content="REST API, Representational State Transfer, AI 용어, KAITRUST, AI 백과사전, 웹개발">
+    <title>REST API | RESTful API 설계 아키텍처 | KAITRUST AI 백과사전</title>
+    <meta name="description" content="REST API는 HTTP 메서드(GET, POST, PUT, DELETE)를 사용하는 API 설계 아키텍처입니다. 무상태성, 자원 기반 URL, 표준 HTTP 상태 코드를 특징으로 하며, 웹 서비스의 표준 통신 방식입니다.">
+    <meta name="keywords" content="REST API, RESTful, REST, HTTP API, GET, POST, PUT, DELETE, CRUD, 무상태성, Stateless, API 설계, 엔드포인트, HTTP 상태코드, JSON, 웹개발">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/REST%20API/">
 
     <!-- Open Graph -->
@@ -52,115 +52,48 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        .content-section { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; display: flex; align-items: center; gap: 0.5rem; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-container { position: relative; background: #1e293b; border-radius: 12px; margin: 1rem 0; overflow: hidden; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(168, 85, 247, 0.2); border-bottom: 1px solid rgba(168, 85, 247, 0.3); }
+        .code-lang { color: #a855f7; font-size: 0.85rem; font-weight: 500; }
+        .copy-btn { background: rgba(168, 85, 247, 0.3); border: none; color: #e2e8f0; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .code-container pre { margin: 0; padding: 1rem; overflow-x: auto; }
+        .code-container code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .dialogue-box { background: rgba(30, 41, 59, 0.8); border-left: 4px solid #a855f7; padding: 1.5rem; border-radius: 0 12px 12px 0; margin: 1rem 0; }
+        .dialogue-title { color: #a855f7; font-weight: 600; margin-bottom: 0.75rem; }
+        .dialogue-content { color: #cbd5e1; font-style: italic; }
+        .warning-box { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .warning-box ul { margin: 0; padding-left: 1.5rem; color: #fbbf24; }
+        .warning-box li { margin-bottom: 0.5rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+        .related-term-link { background: rgba(168, 85, 247, 0.2); color: #a855f7; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.4); transform: translateY(-2px); }
+        .learn-more-list { list-style: none; padding: 0; margin: 0; }
+        .learn-more-list li { margin-bottom: 0.75rem; }
+        .learn-more-list a { color: #38bdf8; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .learn-more-list a:hover { text-decoration: underline; }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
@@ -202,6 +135,288 @@
                 </a>
             </div>
         </article>
+
+        <!-- Detailed Description -->
+        <section class="content-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>REST API(Representational State Transfer)는 2000년 Roy Fielding의 박사 논문에서 처음 제안된 아키텍처 스타일로, 웹 서비스 설계의 사실상 표준이 되었습니다. HTTP 프로토콜의 메서드(GET, POST, PUT, DELETE, PATCH)를 활용하여 리소스를 CRUD(Create, Read, Update, Delete) 방식으로 조작합니다. URL은 리소스를 명사형으로 표현하고, HTTP 메서드가 동작을 나타내는 것이 RESTful 설계의 핵심입니다.</p>
+
+                <p>REST의 6가지 제약 조건은 클라이언트-서버 분리, 무상태성(Stateless), 캐시 가능성, 계층화된 시스템, 코드 온 디맨드(선택), 통합 인터페이스입니다. 특히 무상태성은 각 요청이 독립적이며 서버가 클라이언트의 상태를 저장하지 않음을 의미합니다. 이로 인해 서버 확장이 용이하고 로드 밸런싱이 간단해집니다.</p>
+
+                <p>RESTful API 설계에서는 리소스 명명 규칙이 중요합니다. 복수형 명사(/users), 계층적 관계 표현(/users/1/posts), 쿼리 파라미터를 통한 필터링(/users?role=admin)이 권장됩니다. HTTP 상태 코드도 의미있게 사용해야 합니다. 200(성공), 201(생성됨), 400(잘못된 요청), 401(인증 필요), 404(없음), 500(서버 오류) 등이 있습니다.</p>
+
+                <p>현대 API 설계에서는 버전 관리(/api/v1/), 페이지네이션, HATEOAS(Hypermedia as the Engine of Application State), OpenAPI(Swagger) 문서화가 중요합니다. GraphQL, gRPC와 같은 대안이 있지만, REST는 간단함과 HTTP 표준 활용으로 여전히 가장 널리 사용됩니다. API Gateway, Rate Limiting, CORS 설정도 실무에서 필수적인 고려사항입니다.</p>
+            </div>
+        </section>
+
+        <!-- Code Example -->
+        <section class="content-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Express.js REST API</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre><code>// Express.js로 RESTful API 구현
+import express from 'express';
+
+const app = express();
+app.use(express.json());
+
+interface User {
+    id: number;
+    name: string;
+    email: string;
+}
+
+let users: User[] = [
+    { id: 1, name: '홍길동', email: 'hong@example.com' },
+    { id: 2, name: '김영희', email: 'kim@example.com' },
+];
+
+// GET /users - 전체 사용자 목록 조회
+app.get('/api/v1/users', (req, res) =&gt; {
+    const { role, limit = 10, offset = 0 } = req.query;
+    let result = users;
+
+    // 페이지네이션 적용
+    result = result.slice(Number(offset), Number(offset) + Number(limit));
+
+    res.json({
+        data: result,
+        pagination: {
+            total: users.length,
+            limit: Number(limit),
+            offset: Number(offset),
+        }
+    });
+});
+
+// GET /users/:id - 특정 사용자 조회
+app.get('/api/v1/users/:id', (req, res) =&gt; {
+    const user = users.find(u =&gt; u.id === Number(req.params.id));
+
+    if (!user) {
+        return res.status(404).json({
+            error: 'Not Found',
+            message: `User with id ${req.params.id} not found`
+        });
+    }
+
+    res.json({ data: user });
+});
+
+// POST /users - 새 사용자 생성
+app.post('/api/v1/users', (req, res) =&gt; {
+    const { name, email } = req.body;
+
+    // 유효성 검사
+    if (!name || !email) {
+        return res.status(400).json({
+            error: 'Bad Request',
+            message: 'name and email are required'
+        });
+    }
+
+    const newUser: User = {
+        id: users.length + 1,
+        name,
+        email
+    };
+
+    users.push(newUser);
+
+    // 201 Created와 Location 헤더 반환
+    res.status(201)
+       .header('Location', `/api/v1/users/${newUser.id}`)
+       .json({ data: newUser });
+});
+
+// PUT /users/:id - 전체 업데이트 (Idempotent)
+app.put('/api/v1/users/:id', (req, res) =&gt; {
+    const index = users.findIndex(u =&gt; u.id === Number(req.params.id));
+
+    if (index === -1) {
+        return res.status(404).json({ error: 'Not Found' });
+    }
+
+    const { name, email } = req.body;
+    users[index] = { id: Number(req.params.id), name, email };
+
+    res.json({ data: users[index] });
+});
+
+// PATCH /users/:id - 부분 업데이트
+app.patch('/api/v1/users/:id', (req, res) =&gt; {
+    const user = users.find(u =&gt; u.id === Number(req.params.id));
+
+    if (!user) {
+        return res.status(404).json({ error: 'Not Found' });
+    }
+
+    Object.assign(user, req.body);
+    res.json({ data: user });
+});
+
+// DELETE /users/:id - 삭제
+app.delete('/api/v1/users/:id', (req, res) =&gt; {
+    const index = users.findIndex(u =&gt; u.id === Number(req.params.id));
+
+    if (index === -1) {
+        return res.status(404).json({ error: 'Not Found' });
+    }
+
+    users.splice(index, 1);
+
+    // 204 No Content - 본문 없이 성공 응답
+    res.status(204).send();
+});
+
+// 에러 핸들링 미들웨어
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) =&gt; {
+    console.error(err.stack);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+    });
+});
+
+app.listen(3000, () =&gt; console.log('API server running on port 3000'));</code></pre>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">fetch API 클라이언트</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre><code>// REST API 클라이언트 유틸리티
+const API_BASE = 'https://api.example.com/v1';
+
+async function apiClient&lt;T&gt;(
+    endpoint: string,
+    options: RequestInit = {}
+): Promise&lt;T&gt; {
+    const response = await fetch(`${API_BASE}${endpoint}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getToken()}`,
+            ...options.headers,
+        },
+        ...options,
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || `HTTP ${response.status}`);
+    }
+
+    // 204 No Content 처리
+    if (response.status === 204) {
+        return null as T;
+    }
+
+    return response.json();
+}
+
+// CRUD 작업
+const api = {
+    // Read
+    getUsers: () =&gt; apiClient&lt;{ data: User[] }&gt;('/users'),
+    getUser: (id: number) =&gt; apiClient&lt;{ data: User }&gt;(`/users/${id}`),
+
+    // Create
+    createUser: (data: Omit&lt;User, 'id'&gt;) =&gt;
+        apiClient&lt;{ data: User }&gt;('/users', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        }),
+
+    // Update
+    updateUser: (id: number, data: Partial&lt;User&gt;) =&gt;
+        apiClient&lt;{ data: User }&gt;(`/users/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+        }),
+
+    // Delete
+    deleteUser: (id: number) =&gt;
+        apiClient&lt;null&gt;(`/users/${id}`, { method: 'DELETE' }),
+};</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-world Dialogue -->
+        <section class="content-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="section-content">
+                <div class="dialogue-box">
+                    <div class="dialogue-title">💼 API 설계 회의</div>
+                    <div class="dialogue-content">
+                        "주문 취소 API를 어떻게 설계할까요? DELETE /orders/{id}로 하면 될까요?"<br><br>
+                        "취소는 삭제가 아니라 상태 변경이에요. PATCH /orders/{id}로 status를 'cancelled'로 바꾸거나, POST /orders/{id}/cancel 같은 action 엔드포인트를 쓰는 게 RESTful합니다. DELETE는 데이터 자체를 지울 때만 쓰세요."
+                    </div>
+                </div>
+
+                <div class="dialogue-box">
+                    <div class="dialogue-title">🔍 코드 리뷰</div>
+                    <div class="dialogue-content">
+                        "GET 요청에 body를 넣어서 복잡한 검색 조건을 보내려고 하는데요."<br><br>
+                        "GET에 body 넣는 건 HTTP 스펙상 권장되지 않고, 일부 클라이언트나 프록시에서 무시될 수 있어요. 복잡한 검색은 POST /users/search로 만들거나, GraphQL을 검토해보세요. 쿼리 파라미터가 너무 길어지면 URL 길이 제한에도 걸릴 수 있거든요."
+                    </div>
+                </div>
+
+                <div class="dialogue-box">
+                    <div class="dialogue-title">📱 기술 면접</div>
+                    <div class="dialogue-content">
+                        "REST API에서 PUT과 PATCH의 차이점을 설명해주세요."<br><br>
+                        "PUT은 리소스 전체를 대체하는 멱등성(idempotent) 연산이에요. 같은 요청을 여러 번 보내도 결과가 같아요. PATCH는 부분 업데이트로, 변경할 필드만 보내면 됩니다. 예를 들어 사용자 이메일만 바꿀 때 PUT은 전체 사용자 데이터를 보내야 하지만, PATCH는 이메일 필드만 보내면 돼요."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Warnings -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <ul>
+                        <li><strong>동사형 URL 피하기</strong> - /getUsers, /createUser 대신 /users에 HTTP 메서드로 동작을 표현하세요. URL은 리소스(명사)만 나타내야 합니다.</li>
+                        <li><strong>적절한 상태 코드 사용</strong> - 모든 응답을 200으로 보내고 body에 에러를 담지 마세요. 400, 401, 403, 404, 500 등 의미있는 상태 코드를 활용해야 클라이언트가 적절히 처리할 수 있습니다.</li>
+                        <li><strong>버전 관리 필수</strong> - API가 변경될 때 기존 클라이언트가 깨지지 않도록 /api/v1/, /api/v2/ 같은 버전 관리를 처음부터 도입하세요.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/GraphQL/" class="related-term-link">GraphQL</a>
+                    <a href="/ko/term/gRPC/" class="related-term-link">gRPC</a>
+                    <a href="/ko/term/Fetch%20API/" class="related-term-link">Fetch API</a>
+                    <a href="/ko/term/CORS/" class="related-term-link">CORS</a>
+                    <a href="/ko/term/JSON/" class="related-term-link">JSON</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learn More -->
+        <section class="content-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more-list">
+                    <li>📄 <a href="https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm" target="_blank" rel="noopener">Roy Fielding REST 논문 원문 →</a></li>
+                    <li>📘 <a href="https://swagger.io/specification/" target="_blank" rel="noopener">OpenAPI(Swagger) 스펙 →</a></li>
+                    <li>📗 <a href="https://restfulapi.net/" target="_blank" rel="noopener">RESTful API 설계 가이드 →</a></li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +424,16 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-container').querySelector('code');
+            navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+                button.textContent = '복사됨!';
+                setTimeout(() => button.textContent = '복사', 2000);
+            });
+        }
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

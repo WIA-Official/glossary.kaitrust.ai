@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,198 @@
                 </a>
             </div>
         </article>
+
+        <!-- 6개 표준 섹션 -->
+        <div class="term-sections">
+            <!-- 섹션 1: 상세 설명 -->
+            <section class="term-section" aria-labelledby="detail-title">
+                <h2 class="section-title" id="detail-title">상세 설명</h2>
+                <div class="detail-content">
+                    <p>데이터 전처리(Data Preprocessing)는 원시 데이터를 머신러닝 모델이나 분석에 적합한 형태로 정제하고 변환하는 과정입니다. 실제 데이터 과학 프로젝트에서 전체 시간의 60-80%가 데이터 전처리에 소요될 만큼 핵심적인 단계입니다. "Garbage In, Garbage Out"이라는 격언처럼, 전처리 품질이 모델 성능에 직접적인 영향을 미칩니다.</p>
+                    <p>전처리의 주요 작업은 결측값 처리, 이상치 탐지 및 제거, 데이터 정규화/표준화, 범주형 변수 인코딩, 특성 선택 및 변환 등이 있습니다. 결측값은 삭제, 평균/중앙값 대체, KNN 대체, 다중 대체(MICE) 등 다양한 전략으로 처리하며, 이상치는 IQR, Z-score, Isolation Forest 등으로 탐지합니다. 스케일링은 알고리즘에 따라 적절한 방법을 선택해야 합니다.</p>
+                    <p>수치형 데이터의 스케일링에는 Min-Max 정규화(0-1 범위), StandardScaler(Z-score 표준화), RobustScaler(중앙값 기반으로 이상치에 강건) 등이 있습니다. 범주형 데이터는 One-Hot Encoding(명목형), Label Encoding(순서형), Target Encoding(고카디널리티 범주) 등으로 수치화합니다. 텍스트나 날짜 데이터도 적절한 변환이 필요합니다.</p>
+                    <p>scikit-learn의 Pipeline과 ColumnTransformer를 활용하면 전처리 과정을 재현 가능하고 모듈화된 형태로 구성할 수 있습니다. 대용량 데이터는 Spark나 Dask로 분산 처리하며, 전처리 로직을 Feature Store에 등록하면 학습과 추론에서 일관성을 유지할 수 있습니다. 전처리는 단순 작업이 아닌 도메인 지식을 반영하는 핵심 역량입니다.</p>
+                </div>
+            </section>
+
+            <!-- 섹션 2: 코드 예제 -->
+            <section class="term-section" aria-labelledby="code-title">
+                <h2 class="section-title" id="code-title">코드 예제</h2>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">scikit-learn 전처리 파이프라인</span>
+                        <button class="copy-btn" data-code="code-block-1">복사</button>
+                    </div>
+                    <pre><code id="code-block-1"># 종합적인 데이터 전처리 파이프라인 예시
+import pandas as pd
+import numpy as np
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import (
+    StandardScaler, MinMaxScaler, OneHotEncoder,
+    OrdinalEncoder, PowerTransformer
+)
+from sklearn.impute import SimpleImputer, KNNImputer
+from sklearn.feature_selection import SelectKBest, mutual_info_classif
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+# 1. 데이터 로드 및 탐색
+df = pd.read_csv('customer_data.csv')
+print(f"Shape: {df.shape}")
+print(f"결측값:\n{df.isnull().sum()}")
+print(f"데이터 타입:\n{df.dtypes}")
+
+# 2. 컬럼 타입별 분류
+numeric_features = ['age', 'income', 'credit_score', 'account_balance']
+categorical_features = ['gender', 'region', 'membership_type']
+ordinal_features = ['education']  # 순서 있는 범주
+
+# 3. 이상치 탐지 및 처리 (IQR 방식)
+def remove_outliers_iqr(df, column, threshold=1.5):
+    """IQR 기반 이상치 제거"""
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+    lower = Q1 - threshold * IQR
+    upper = Q3 + threshold * IQR
+    return df[(df[column] >= lower) & (df[column] <= upper)]
+
+# 수치형 컬럼에 이상치 처리 적용
+for col in numeric_features:
+    df = remove_outliers_iqr(df, col)
+
+# 4. 전처리 파이프라인 구성
+# 수치형: KNN 대체 -> Z-score 정규화 -> 정규분포화
+numeric_transformer = Pipeline(steps=[
+    ('imputer', KNNImputer(n_neighbors=5)),
+    ('scaler', StandardScaler()),
+    ('power', PowerTransformer(method='yeo-johnson'))
+])
+
+# 범주형: 최빈값 대체 -> One-Hot 인코딩
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('encoder', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+])
+
+# 순서형: 최빈값 대체 -> Ordinal 인코딩
+ordinal_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('encoder', OrdinalEncoder(categories=[
+        ['고졸', '전문대졸', '대졸', '석사', '박사']
+    ]))
+])
+
+# 5. ColumnTransformer로 통합
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features),
+        ('ord', ordinal_transformer, ordinal_features)
+    ],
+    remainder='drop'
+)
+
+# 6. 전체 ML 파이프라인 (전처리 + 특성 선택 + 모델)
+full_pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('feature_selection', SelectKBest(mutual_info_classif, k=15)),
+    ('classifier', RandomForestClassifier(n_estimators=100, random_state=42))
+])
+
+# 7. 학습 및 평가
+X = df.drop('target', axis=1)
+y = df['target']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# 전체 파이프라인 학습
+full_pipeline.fit(X_train, y_train)
+predictions = full_pipeline.predict(X_test)
+
+# 8. 전처리된 데이터 확인
+X_preprocessed = preprocessor.fit_transform(X_train)
+feature_names = preprocessor.get_feature_names_out()
+print(f"전처리 후 특성 수: {len(feature_names)}")
+print(f"특성 이름: {feature_names[:10]}...")
+
+# 9. 파이프라인 저장 (재사용)
+import joblib
+joblib.dump(full_pipeline, 'preprocessing_pipeline.pkl')
+
+# 추론 시 동일한 파이프라인 사용
+loaded_pipeline = joblib.load('preprocessing_pipeline.pkl')
+new_predictions = loaded_pipeline.predict(new_data)</code></pre>
+                </div>
+            </section>
+
+            <!-- 섹션 3: 실무 대화 -->
+            <section class="term-section" aria-labelledby="conv-title">
+                <h2 class="section-title" id="conv-title">실무 대화</h2>
+                <div class="conversation-tabs">
+                    <button class="conv-tab active" data-tab="meeting">팀 회의</button>
+                    <button class="conv-tab" data-tab="interview">기술 면접</button>
+                    <button class="conv-tab" data-tab="review">코드 리뷰</button>
+                </div>
+                <div class="conversation-content">
+                    <div class="conv-panel active" id="meeting">
+                        <div class="chat-bubble user">주니어: 결측값이 30%나 되는데 그냥 행을 삭제해도 될까요?</div>
+                        <div class="chat-bubble expert">시니어: 결측 패턴부터 확인해봐. MCAR(완전 무작위 결측)인지, MAR(조건부 결측)인지에 따라 전략이 달라. 30%면 삭제보다 KNN이나 MICE 대체가 나아. 그리고 결측 여부 자체를 새 피처로 만들어볼 수도 있어.</div>
+                        <div class="chat-bubble user">주니어: 정규화랑 표준화 중 뭘 써야 하나요?</div>
+                        <div class="chat-bubble expert">시니어: 알고리즘에 따라 달라. 신경망이나 거리 기반(KNN, SVM)은 표준화, 이미지나 0-1 범위가 필요하면 Min-Max 정규화. 트리 기반 모델은 스케일링이 필수는 아니지만, 해석에 도움이 돼.</div>
+                    </div>
+                    <div class="conv-panel" id="interview">
+                        <div class="chat-bubble user">면접관: 데이터 누수(Data Leakage)가 무엇이고 어떻게 방지하나요?</div>
+                        <div class="chat-bubble expert">지원자: 학습 데이터에 테스트 데이터 정보가 섞이는 것입니다. 전처리 시 전체 데이터로 스케일러를 fit하면 누수가 발생합니다. 반드시 train 데이터로만 fit하고, test는 transform만 해야 합니다. Pipeline을 사용하면 cross-validation에서도 자동으로 방지됩니다.</div>
+                        <div class="chat-bubble user">면접관: 고카디널리티 범주형 변수는 어떻게 처리하나요?</div>
+                        <div class="chat-bubble expert">지원자: 카테고리가 수백 개면 One-Hot은 차원 폭발이 생깁니다. Target Encoding, Frequency Encoding, 또는 Entity Embedding을 사용합니다. Target Encoding 시 정규화(smoothing)로 과적합을 방지해야 합니다.</div>
+                    </div>
+                    <div class="conv-panel" id="review">
+                        <div class="chat-bubble user">개발자: 왜 StandardScaler를 전체 데이터에 fit하면 안 되나요?</div>
+                        <div class="chat-bubble expert">시니어: 테스트 데이터의 평균/분산이 학습에 반영되면 데이터 누수야. 실제 서비스에서는 미래 데이터 통계를 알 수 없잖아. Pipeline을 쓰면 cross_val_score에서 각 fold마다 자동으로 train만 fit하고 val은 transform만 해.</div>
+                        <div class="chat-bubble user">개발자: 전처리 코드를 어떻게 관리해야 하나요?</div>
+                        <div class="chat-bubble expert">시니어: 학습과 추론에서 동일한 전처리가 적용되어야 해. Pipeline을 joblib으로 저장하거나, Feature Store에 전처리 로직을 등록하는 게 좋아. 버전 관리도 필수야.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 섹션 4: 주의사항 -->
+            <section class="term-section" aria-labelledby="warning-title">
+                <h2 class="section-title" id="warning-title">주의사항</h2>
+                <ul class="warning-list">
+                    <li class="warning">데이터 누수(Data Leakage) 주의: 테스트 데이터 정보가 학습에 사용되지 않도록 train 데이터로만 scaler를 fit하세요.</li>
+                    <li class="warning">결측값 처리 시 결측 패턴을 먼저 분석하세요. 무조건 삭제하면 편향이 발생할 수 있습니다.</li>
+                    <li class="warning">이상치를 무조건 제거하지 마세요. 도메인에 따라 이상치가 중요한 신호일 수 있습니다.</li>
+                    <li class="info">Pipeline을 사용하면 전처리 로직의 재현성과 유지보수성이 크게 향상됩니다.</li>
+                    <li class="info">전처리 파이프라인을 저장(joblib)하여 학습/추론 일관성을 유지하세요.</li>
+                </ul>
+            </section>
+
+            <!-- 섹션 5: 관련 용어 -->
+            <section class="term-section" aria-labelledby="related-title">
+                <h2 class="section-title" id="related-title">관련 용어</h2>
+                <div class="related-links">
+                    <a href="/ko/term/%ED%94%BC%EC%B2%98%20%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81/" class="related-link">피처 엔지니어링</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/" class="related-link">데이터 파이프라인</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B3%84%EC%95%BD/" class="related-link">데이터 계약</a>
+                    <a href="/ko/term/%EB%B9%85%EB%8D%B0%EC%9D%B4%ED%84%B0/" class="related-link">빅데이터</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A6%AC%EB%8B%88%EC%A7%80/" class="related-link">데이터 리니지</a>
+                </div>
+            </section>
+
+            <!-- 섹션 6: 더 배우기 -->
+            <section class="term-section" aria-labelledby="learn-title">
+                <h2 class="section-title" id="learn-title">더 배우기</h2>
+                <ul class="learn-links">
+                    <li><a href="https://scikit-learn.org/stable/modules/preprocessing.html" target="_blank" rel="noopener">scikit-learn 전처리 가이드</a></li>
+                    <li><a href="https://pandas.pydata.org/docs/user_guide/missing_data.html" target="_blank" rel="noopener">Pandas 결측값 처리</a></li>
+                    <li><a href="https://www.kaggle.com/learn/data-cleaning" target="_blank" rel="noopener">Kaggle - 데이터 클리닝 강좌</a></li>
+                </ul>
+            </section>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -212,6 +405,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

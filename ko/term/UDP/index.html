@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,250 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>UDP(User Datagram Protocol)는 TCP/IP 모델의 전송 계층에서 동작하는 비연결형 프로토콜입니다. TCP와 달리 연결 설정(3-way handshake) 없이 데이터를 즉시 전송하며, 패킷의 순서 보장이나 재전송 메커니즘이 없습니다. 이러한 특성 덕분에 오버헤드가 매우 낮고, 실시간 데이터 전송에 최적화되어 있습니다.</p>
+                <p>UDP 헤더는 단 8바이트로 구성됩니다(출발지 포트, 목적지 포트, 길이, 체크섬). TCP 헤더가 최소 20바이트인 것과 비교하면 매우 가볍습니다. 패킷당 오버헤드가 적기 때문에 대량의 작은 패킷을 빠르게 전송해야 하는 상황에서 효율적입니다. DNS 쿼리가 UDP를 사용하는 이유도 이 때문입니다.</p>
+                <p>실시간 스트리밍, 온라인 게임, VoIP(Voice over IP), 화상 회의 등에서 UDP가 선호됩니다. 이러한 애플리케이션에서는 패킷 하나가 유실되더라도 재전송을 기다리는 것보다 다음 데이터를 빨리 받는 것이 더 중요합니다. 예를 들어 화상 통화에서 0.5초 전 음성 패킷을 재전송받는 것보다 현재 음성을 듣는 게 더 자연스럽습니다.</p>
+                <p>현대 웹에서는 QUIC 프로토콜이 UDP 위에서 동작합니다. HTTP/3는 QUIC을 기반으로 하며, UDP의 속도와 TCP의 신뢰성을 결합했습니다. Google, Cloudflare, Facebook 등 대형 서비스들이 이미 HTTP/3를 적용하고 있으며, 특히 모바일 환경에서 네트워크 전환 시 연결 유지가 더 안정적입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="bash">Bash</button>
+                <button class="code-tab" data-lang="javascript">Node.js</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python">import socket
+
+# ============ UDP 서버 ============
+def udp_server():
+    server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server.bind(('0.0.0.0', 9999))
+    print("UDP 서버 시작: 포트 9999")
+
+    while True:
+        data, client_addr = server.recvfrom(1024)
+        print(f"수신: {data.decode()} from {client_addr}")
+        server.sendto(b"ACK: " + data, client_addr)
+
+# ============ UDP 클라이언트 ============
+def udp_client():
+    client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # UDP는 connect() 없이 바로 전송 가능
+
+    message = "Hello, UDP!"
+    client.sendto(message.encode(), ('127.0.0.1', 9999))
+
+    # 타임아웃 설정 (UDP는 응답 보장 없음)
+    client.settimeout(2.0)
+    try:
+        response, _ = client.recvfrom(1024)
+        print(f"응답: {response.decode()}")
+    except socket.timeout:
+        print("응답 없음 - UDP는 신뢰성 보장 안됨!")
+
+    client.close()
+
+# ============ 브로드캐스트 전송 ============
+def broadcast_message():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+    # 로컬 네트워크 전체에 메시지 전송
+    sock.sendto(b"DISCOVER", ('255.255.255.255', 9999))
+    print("브로드캐스트 전송 완료")
+
+# 실행: python server.py (서버) | python client.py (클라이언트)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># netcat으로 UDP 테스트
+# UDP 서버 시작 (-u: UDP 모드)
+nc -u -l 9999
+
+# UDP 클라이언트로 메시지 전송 (다른 터미널)
+echo "Hello UDP" | nc -u 127.0.0.1 9999
+
+# UDP 포트 스캔 (열린 UDP 포트 확인)
+nmap -sU -p 53,123,161 192.168.1.1
+
+# UDP 패킷 캡처 (tcpdump)
+sudo tcpdump -i eth0 udp port 53
+
+# DNS 쿼리 (UDP 53 포트 사용)
+dig @8.8.8.8 google.com +short
+
+# UDP 연결 상태 확인
+netstat -anu | grep 9999
+ss -anu | grep 9999
+
+# iperf3로 UDP 대역폭 테스트
+# 서버
+iperf3 -s -u -p 5201
+
+# 클라이언트 (100Mbps로 테스트)
+iperf3 -c 192.168.1.100 -u -b 100M -p 5201
+
+# socat으로 UDP 릴레이
+socat UDP-LISTEN:9999,fork UDP:192.168.1.100:9999
+
+# 특정 UDP 포트로 데이터 전송 (bash)
+exec 3<>/dev/udp/127.0.0.1/9999
+echo "Test message" >&3</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="javascript">
+                <pre><code class="language-javascript">const dgram = require('dgram');
+
+// ============ UDP 서버 ============
+const server = dgram.createSocket('udp4');
+
+server.on('message', (msg, rinfo) => {
+    console.log(`수신: ${msg} from ${rinfo.address}:${rinfo.port}`);
+
+    // 응답 전송
+    const response = Buffer.from(`ACK: ${msg}`);
+    server.send(response, rinfo.port, rinfo.address);
+});
+
+server.on('listening', () => {
+    const addr = server.address();
+    console.log(`UDP 서버 시작: ${addr.address}:${addr.port}`);
+});
+
+server.bind(9999);
+
+// ============ UDP 클라이언트 ============
+const client = dgram.createSocket('udp4');
+
+const message = Buffer.from('Hello, UDP!');
+client.send(message, 9999, '127.0.0.1', (err) => {
+    if (err) console.error('전송 실패:', err);
+    else console.log('메시지 전송 완료');
+});
+
+// 응답 대기 (타임아웃 처리)
+const timeout = setTimeout(() => {
+    console.log('응답 없음 - 타임아웃');
+    client.close();
+}, 2000);
+
+client.on('message', (msg) => {
+    clearTimeout(timeout);
+    console.log(`응답: ${msg}`);
+    client.close();
+});
+
+// ============ 멀티캐스트 예제 ============
+const multicast = dgram.createSocket({ type: 'udp4', reuseAddr: true });
+
+multicast.bind(5000, () => {
+    multicast.addMembership('239.255.255.250'); // 멀티캐스트 그룹 참가
+    console.log('멀티캐스트 그룹 참가 완료');
+});
+
+multicast.on('message', (msg, rinfo) => {
+    console.log(`멀티캐스트 수신: ${msg}`);
+});</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 게임 서버 아키텍처 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "실시간 위치 동기화는 UDP로 처리하고, 채팅이나 결제 같은 중요 데이터는 TCP로 분리해야 합니다. UDP에서 패킷 손실이 발생해도 다음 프레임 위치 정보가 바로 오니까 괜찮아요. 대신 TCP는 재전송 때문에 head-of-line blocking이 생길 수 있으니 별도 연결로 가져가죠."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "TCP와 UDP의 가장 큰 차이는 연결 지향성과 신뢰성입니다. TCP는 3-way handshake로 연결을 설정하고 패킷 순서와 재전송을 보장하지만, UDP는 이런 과정 없이 바로 전송합니다. DNS가 UDP를 쓰는 이유는 쿼리가 보통 512바이트 이하로 작고, 응답이 없으면 클라이언트가 재시도하면 되기 때문입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 VoIP 서비스 품질 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "음성 통화에서 200ms 이상 지연되면 사용자가 끊김을 느낍니다. UDP + RTP 조합으로 가면서 지터 버퍼를 50ms 정도 두면 적절할 것 같아요. 패킷 손실률이 1% 이하면 사용자가 거의 인지 못하니까, 품질 모니터링에서 그 기준으로 알림 설정해주세요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>중요 데이터를 UDP로만 전송</strong>
+                        <p>결제 정보, 로그인 토큰, 저장 데이터 등 유실되면 안 되는 데이터를 UDP로 보내면 안 됩니다. UDP는 패킷 손실을 감지하지 않으므로 데이터가 사라져도 모릅니다. 중요 데이터는 반드시 TCP를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>UDP 패킷 크기 제한 무시</strong>
+                        <p>UDP의 최대 데이터그램 크기는 65,507바이트지만, MTU(보통 1500바이트)를 초과하면 IP 단편화가 발생합니다. 단편화된 패킷 중 하나라도 손실되면 전체가 버려지므로, 실무에서는 패킷을 1472바이트(1500-28) 이하로 유지하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>방화벽에서 UDP 포트 차단 미고려</strong>
+                        <p>많은 기업 방화벽이 TCP는 허용하지만 UDP는 차단합니다. WebRTC나 게임 서버 개발 시 UDP가 막혀있을 경우를 대비해 TCP 폴백 또는 TURN 서버를 준비해야 합니다. STUN 테스트로 UDP 연결 가능 여부를 먼저 확인하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 UDP 사용 패턴</strong>
+                        <p>실시간성이 중요한 데이터(게임 위치, 음성, 영상)는 UDP로, 신뢰성이 중요한 데이터(로그인, 결제, 채팅)는 TCP로 분리. 애플리케이션 레벨에서 시퀀스 번호와 타임스탬프를 추가해 순서와 지연을 관리하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/TCP/" class="related-term-link">TCP</a>
+                <a href="/ko/term/IP/" class="related-term-link">IP</a>
+                <a href="/ko/term/DNS/" class="related-term-link">DNS</a>
+                <a href="/ko/term/WebSocket/" class="related-term-link">WebSocket</a>
+                <a href="/ko/term/HTTP/" class="related-term-link">HTTP</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/ko-kr/learning/ddos/glossary/user-datagram-protocol-udp/" target="_blank" class="learn-link">
+                    📄 Cloudflare - UDP란 무엇인가? (한글)
+                </a>
+                <a href="https://web.dev/articles/webrtc-basics" target="_blank" class="learn-link">
+                    🎓 WebRTC 기초 - UDP 기반 실시간 통신
+                </a>
+                <a href="https://http3-explained.haxx.se/ko/" target="_blank" class="learn-link">
+                    📖 HTTP/3 Explained - QUIC과 UDP (한글)
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +598,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

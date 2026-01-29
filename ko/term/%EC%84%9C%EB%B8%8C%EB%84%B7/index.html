@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>서브넷 (Subnet) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="IP 네트워크의 논리적 분할. CIDR 표기법.">
-    <meta name="keywords" content="서브넷, Subnet, AI 용어, KAITRUST, AI 백과사전, 네트워크">
+    <meta name="description" content="서브넷(Subnet)은 IP 네트워크를 논리적으로 분할하는 기술. CIDR 표기법, Public/Private Subnet 구분, VPC 서브넷 설계 원칙 설명.">
+    <meta name="keywords" content="서브넷, Subnet, CIDR, 서브넷 마스크, Public Subnet, Private Subnet, VPC 설계, 네트워크 분할, IP 주소, AWS VPC, NAT Gateway, 라우팅 테이블">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EC%84%9C%EB%B8%8C%EB%84%B7/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EC%84%9C%EB%B8%8C%EB%84%B7/">
     <meta property="og:title" content="서브넷 (Subnet) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="IP 네트워크의 논리적 분할. CIDR 표기법.">
+    <meta property="og:description" content="서브넷(Subnet)은 IP 네트워크를 논리적으로 분할하는 기술. CIDR 표기법, Public/Private Subnet 구분, VPC 서브넷 설계 원칙 설명.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="서브넷 (Subnet) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="IP 네트워크의 논리적 분할. CIDR 표기법.">
+    <meta name="twitter:description" content="서브넷(Subnet)은 IP 네트워크를 논리적으로 분할하는 기술. CIDR 표기법, Public/Private Subnet 구분, VPC 서브넷 설계 원칙 설명.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "서브넷",
-        "description": "IP 네트워크의 논리적 분할. CIDR 표기법.",
+        "description": "서브넷(Subnet)은 IP 네트워크를 논리적으로 분할하는 기술. CIDR 표기법, Public/Private Subnet 구분, VPC 서브넷 설계 원칙 설명.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +52,183 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        /* CIDR 테이블 */
+        .cidr-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .cidr-table th, .cidr-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .cidr-table th {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            font-weight: 600;
+        }
+        .cidr-table td { color: #cbd5e1; }
+        .cidr-table tr:hover td { background: rgba(168, 85, 247, 0.05); }
+
+        /* 서브넷 유형 카드 */
+        .subnet-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .subnet-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border-left: 4px solid;
+        }
+        .subnet-card.public { border-left-color: #22c55e; }
+        .subnet-card.private { border-left-color: #f59e0b; }
+        .subnet-card h4 { color: #f1f5f9; margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .subnet-card p { color: #94a3b8; font-size: 0.9rem; margin: 0; line-height: 1.6; }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -191,7 +368,7 @@
             <h1 class="term-title">서브넷</h1>
             <p class="term-english">Subnet</p>
             <div class="term-description">
-                <p>IP 네트워크의 논리적 분할. CIDR 표기법.</p>
+                <p>IP 네트워크를 논리적으로 분할하여 보안, 관리, 성능을 최적화하는 기술. CIDR 표기법으로 네트워크 범위를 정의하며, 클라우드 VPC 설계의 핵심 개념.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +379,340 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>서브넷(Subnet, Subnetwork)은 큰 IP 네트워크를 작은 논리적 단위로 분할하는 기술입니다. 마치 큰 건물을 층별로 나누어 관리하듯, 네트워크를 서브넷으로 나누면 트래픽 관리, 보안 정책 적용, IP 주소 효율화가 가능합니다. 1985년 RFC 950에서 처음 정의되었으며, 현대 클라우드 인프라의 핵심 개념입니다.</p>
+                <p>서브넷은 CIDR(Classless Inter-Domain Routing) 표기법으로 표현됩니다. 예를 들어 10.0.1.0/24는 10.0.1.0 ~ 10.0.1.255 범위의 256개 IP를 포함하며, 실제 사용 가능한 호스트는 254개입니다(네트워크 주소와 브로드캐스트 주소 제외). /24에서 숫자는 네트워크 부분의 비트 수를 의미하며, 숫자가 클수록 서브넷 크기가 작아집니다.</p>
+                <p>클라우드 환경에서 서브넷은 VPC(Virtual Private Cloud) 설계의 기본 단위입니다. AWS, GCP, Azure 모두 서브넷을 통해 리소스를 격리하고 네트워크 정책을 적용합니다. 예를 들어 AWS에서 VPC를 10.0.0.0/16으로 생성하면, 이를 10.0.1.0/24(Public), 10.0.2.0/24(Private), 10.0.3.0/24(Database) 등으로 나누어 계층적 보안을 구현합니다.</p>
+                <p>서브넷 설계는 확장성과 보안의 균형이 핵심입니다. 너무 작은 서브넷(/28, 16개 IP)은 리소스 확장에 제약이 있고, 너무 큰 서브넷(/16, 65,536개 IP)은 브로드캐스트 도메인이 커져 성능 저하를 유발할 수 있습니다. 실무에서는 /24(254개 호스트)를 기본 단위로 하고, 데이터베이스나 관리용 서브넷은 /27(30개 호스트)이나 /28(14개 호스트)로 구성하는 것이 일반적입니다.</p>
+            </div>
+        </section>
+
+        <!-- CIDR 참조표 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 CIDR 표기법 참조표</h2>
+            <table class="cidr-table">
+                <thead>
+                    <tr>
+                        <th>CIDR</th>
+                        <th>서브넷 마스크</th>
+                        <th>총 IP 수</th>
+                        <th>사용 가능 호스트</th>
+                        <th>용도</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>/16</td><td>255.255.0.0</td><td>65,536</td><td>65,534</td><td>VPC 전체 범위</td></tr>
+                    <tr><td>/20</td><td>255.255.240.0</td><td>4,096</td><td>4,094</td><td>대규모 서브넷</td></tr>
+                    <tr><td>/24</td><td>255.255.255.0</td><td>256</td><td>254</td><td>표준 서브넷 (가장 일반적)</td></tr>
+                    <tr><td>/27</td><td>255.255.255.224</td><td>32</td><td>30</td><td>소규모 서브넷</td></tr>
+                    <tr><td>/28</td><td>255.255.255.240</td><td>16</td><td>14</td><td>최소 단위 (AWS 최소)</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Public vs Private Subnet -->
+        <section class="term-section">
+            <h2 class="section-title">🌐 Public vs Private Subnet</h2>
+            <div class="section-content">
+                <p>클라우드 환경에서 서브넷은 인터넷 접근 방식에 따라 Public Subnet과 Private Subnet으로 구분됩니다. 이 구분은 보안 아키텍처의 근간이며, 올바른 설계 없이는 보안 사고로 이어질 수 있습니다.</p>
+            </div>
+            <div class="subnet-types">
+                <div class="subnet-card public">
+                    <h4>🟢 Public Subnet</h4>
+                    <p><strong>인터넷 게이트웨이(IGW)와 연결</strong>되어 외부에서 직접 접근 가능. 웹 서버, 로드 밸런서, Bastion Host(점프 서버) 배치. 라우팅 테이블에 0.0.0.0/0 → IGW 경로 설정됨.</p>
+                </div>
+                <div class="subnet-card private">
+                    <h4>🟠 Private Subnet</h4>
+                    <p><strong>NAT Gateway를 통해서만 아웃바운드 가능</strong>. 애플리케이션 서버, 데이터베이스, 내부 서비스 배치. 인바운드는 Public Subnet의 리소스를 통해서만 가능. 0.0.0.0/0 → NAT Gateway 경로 설정.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="terraform">Terraform</button>
+                <button class="code-tab" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="bash">Bash/AWS CLI</button>
+            </div>
+            <div class="code-block active" data-lang="terraform">
+                <pre><code class="language-hcl"># AWS VPC 및 서브넷 구성 (Terraform)
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"  # 65,536개 IP
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = { Name = "production-vpc" }
+}
+
+# Public Subnet (웹 서버, 로드 밸런서용)
+resource "aws_subnet" "public_a" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24"  # 254개 호스트
+  availability_zone       = "ap-northeast-2a"
+  map_public_ip_on_launch = true  # 자동 Public IP 할당
+
+  tags = { Name = "public-subnet-a", Tier = "public" }
+}
+
+resource "aws_subnet" "public_b" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "ap-northeast-2b"
+  map_public_ip_on_launch = true
+
+  tags = { Name = "public-subnet-b", Tier = "public" }
+}
+
+# Private Subnet (애플리케이션 서버용)
+resource "aws_subnet" "private_app_a" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.10.0/24"
+  availability_zone = "ap-northeast-2a"
+
+  tags = { Name = "private-app-subnet-a", Tier = "private" }
+}
+
+# Private Subnet (데이터베이스용 - 더 작은 크기)
+resource "aws_subnet" "private_db_a" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.20.0/27"  # 30개 호스트 (DB는 적게 필요)
+  availability_zone = "ap-northeast-2a"
+
+  tags = { Name = "private-db-subnet-a", Tier = "database" }
+}
+
+# Internet Gateway (Public Subnet용)
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+  tags   = { Name = "main-igw" }
+}
+
+# NAT Gateway (Private Subnet의 아웃바운드용)
+resource "aws_nat_gateway" "main" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public_a.id
+
+  tags = { Name = "main-nat-gw" }
+}
+
+# Public Subnet 라우팅 테이블
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+
+  tags = { Name = "public-rt" }
+}
+
+# Private Subnet 라우팅 테이블
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.main.id
+  }
+
+  tags = { Name = "private-rt" }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import ipaddress
+
+# CIDR 블록 분석
+network = ipaddress.ip_network("10.0.0.0/24")
+print(f"네트워크 주소: {network.network_address}")  # 10.0.0.0
+print(f"브로드캐스트: {network.broadcast_address}")  # 10.0.0.255
+print(f"서브넷 마스크: {network.netmask}")           # 255.255.255.0
+print(f"총 호스트 수: {network.num_addresses}")     # 256
+print(f"사용 가능: {network.num_addresses - 2}")    # 254
+
+# 사용 가능한 호스트 IP 나열
+for ip in list(network.hosts())[:5]:
+    print(f"호스트 IP: {ip}")
+
+# VPC를 서브넷으로 분할
+vpc = ipaddress.ip_network("10.0.0.0/16")
+subnets = list(vpc.subnets(new_prefix=24))  # /16을 /24로 분할
+print(f"\n/16 VPC를 /24로 분할하면 {len(subnets)}개 서브넷")
+print(f"첫 번째 서브넷: {subnets[0]}")  # 10.0.0.0/24
+print(f"마지막 서브넷: {subnets[-1]}")   # 10.0.255.0/24
+
+# IP가 서브넷에 속하는지 확인
+def check_ip_in_subnet(ip: str, subnet: str) -> bool:
+    return ipaddress.ip_address(ip) in ipaddress.ip_network(subnet)
+
+print(f"\n10.0.1.50은 10.0.1.0/24에 속함: {check_ip_in_subnet('10.0.1.50', '10.0.1.0/24')}")
+print(f"10.0.2.50은 10.0.1.0/24에 속함: {check_ip_in_subnet('10.0.2.50', '10.0.1.0/24')}")
+
+# AWS VPC 서브넷 설계 예시
+def design_vpc_subnets(vpc_cidr: str) -> dict:
+    """VPC CIDR를 받아 표준 3계층 서브넷 구조 반환"""
+    vpc = ipaddress.ip_network(vpc_cidr)
+    subnets_24 = list(vpc.subnets(new_prefix=24))
+
+    return {
+        "vpc": str(vpc),
+        "public_a": str(subnets_24[0]),   # 10.0.0.0/24
+        "public_b": str(subnets_24[1]),   # 10.0.1.0/24
+        "private_app_a": str(subnets_24[10]),  # 10.0.10.0/24
+        "private_app_b": str(subnets_24[11]),  # 10.0.11.0/24
+        "private_db_a": str(subnets_24[20]),   # 10.0.20.0/24
+        "private_db_b": str(subnets_24[21]),   # 10.0.21.0/24
+    }
+
+design = design_vpc_subnets("10.0.0.0/16")
+for name, cidr in design.items():
+    print(f"{name}: {cidr}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># AWS CLI로 서브넷 조회 및 생성
+
+# VPC 내 모든 서브넷 조회
+aws ec2 describe-subnets \
+  --filters "Name=vpc-id,Values=vpc-12345678" \
+  --query "Subnets[*].{ID:SubnetId,CIDR:CidrBlock,AZ:AvailabilityZone,Public:MapPublicIpOnLaunch}" \
+  --output table
+
+# Public Subnet 생성
+aws ec2 create-subnet \
+  --vpc-id vpc-12345678 \
+  --cidr-block 10.0.1.0/24 \
+  --availability-zone ap-northeast-2a \
+  --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=public-subnet-a}]'
+
+# Private Subnet 생성
+aws ec2 create-subnet \
+  --vpc-id vpc-12345678 \
+  --cidr-block 10.0.10.0/24 \
+  --availability-zone ap-northeast-2a \
+  --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=private-subnet-a}]'
+
+# 서브넷에 라우팅 테이블 연결
+aws ec2 associate-route-table \
+  --subnet-id subnet-11111111 \
+  --route-table-id rtb-22222222
+
+# 서브넷의 사용 가능한 IP 수 확인
+aws ec2 describe-subnets \
+  --subnet-ids subnet-11111111 \
+  --query "Subnets[0].AvailableIpAddressCount"
+
+# CIDR 계산 (ipcalc 사용)
+ipcalc 10.0.0.0/24
+# Network:   10.0.0.0/24
+# Netmask:   255.255.255.0
+# Broadcast: 10.0.0.255
+# HostMin:   10.0.0.1
+# HostMax:   10.0.0.254
+# Hosts/Net: 254
+
+# 서브넷 간 충돌 확인
+ipcalc -c 10.0.1.0/24 10.0.2.0/24  # OK (충돌 없음)
+ipcalc -c 10.0.1.0/24 10.0.1.128/25  # OVERLAP (충돌)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 VPC 설계 미팅에서</div>
+                    <blockquote class="conv-quote">
+                        "VPC CIDR는 10.0.0.0/16으로 잡고, AZ별로 서브넷을 나눕시다. Public은 10.0.1.0/24, 10.0.2.0/24, Private App은 10.0.10.0/24, 10.0.11.0/24, DB는 /27로 작게 10.0.20.0/27, 10.0.20.32/27 이렇게요. 나중에 EKS 노드 그룹 확장을 고려하면 Private은 /20으로 크게 잡는 것도 고려해볼 만합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "현재 모든 리소스가 Public Subnet에 있는데, 이건 심각한 보안 이슈입니다. RDS와 내부 서비스는 반드시 Private Subnet으로 옮기고, NAT Gateway 통해서만 외부 통신하도록 변경해야 합니다. Security Group만으로는 방어 계층이 부족해요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 중</div>
+                    <blockquote class="conv-quote">
+                        "서브넷 IP가 거의 다 찼습니다. /24라서 254개인데 지금 240개 사용 중이에요. 새 서브넷 10.0.12.0/24를 만들어서 오토스케일링 그룹에 추가하고, 라우팅 테이블 연결해야 합니다. 다음부터는 처음부터 /20으로 여유있게 설계하는 게 좋겠습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>서브넷을 너무 작게 설계</strong>
+                        <p>/28(14개 호스트)로 설계했다가 서비스 확장 시 IP 부족. AWS EKS는 노드당 IP를 많이 소모하므로 최소 /24, 권장 /20. 서브넷은 나중에 확장이 어려우니 처음부터 여유있게!</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>CIDR 범위 중복</strong>
+                        <p>10.0.0.0/16 VPC에 10.0.0.0/24와 10.0.0.128/25를 모두 생성하면 중복 오류. 서브넷 CIDR는 VPC 내에서 겹치면 안 됩니다. 설계 전 ipcalc나 스프레드시트로 미리 검증하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Private Subnet에 IGW 라우팅</strong>
+                        <p>실수로 Private Subnet 라우팅 테이블에 Internet Gateway를 연결하면 Public Subnet이 되어버림. 라우팅 테이블 변경 시 반드시 서브넷 용도 재확인 필요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 서브넷 설계</strong>
+                        <p>VPC는 /16, 일반 서브넷은 /24, 확장 예상 서브넷은 /20, 소규모 전용은 /27 사용. AZ당 최소 2개 서브넷(Public/Private) 구성. CIDR는 10.x.0.0/16, 172.16-31.0.0/16, 192.168.0.0/16 중 선택.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/VPC/" class="related-term-link">VPC</a>
+                <a href="/ko/term/IP/" class="related-term-link">IP</a>
+                <a href="/ko/term/%EA%B2%8C%EC%9D%B4%ED%8A%B8%EC%9B%A8%EC%9D%B4/" class="related-term-link">게이트웨이</a>
+                <a href="/ko/term/%EB%B0%A9%ED%99%94%EB%B2%BD/" class="related-term-link">방화벽</a>
+                <a href="/ko/term/%EB%A1%9C%EB%93%9C%20%EB%B0%B8%EB%9F%B0%EC%84%9C/" class="related-term-link">로드 밸런서</a>
+                <a href="/ko/term/DNS/" class="related-term-link">DNS</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/configure-subnets.html" target="_blank" class="learn-link">
+                    📄 AWS 공식 문서 - VPC 서브넷 구성
+                </a>
+                <a href="https://cidr.xyz/" target="_blank" class="learn-link">
+                    🛠️ CIDR.xyz - 인터랙티브 CIDR 계산기
+                </a>
+                <a href="https://www.cloudflare.com/learning/network-layer/what-is-a-subnet/" target="_blank" class="learn-link">
+                    🎓 Cloudflare - 서브넷이란?
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +720,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

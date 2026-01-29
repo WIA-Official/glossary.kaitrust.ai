@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>데이터 거래소 | KAITRUST AI 백과사전</title>
     <meta name="description" content="데이터를 사고파는 플랫폼">
-    <meta name="keywords" content="데이터 거래소, , AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
+    <meta name="keywords" content="데이터 거래소, Data Exchange, Data Marketplace, AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B1%B0%EB%9E%98%EC%86%8C/">
 
     <!-- Open Graph -->
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,159 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>데이터 거래소(Data Exchange/Data Marketplace)는 데이터 생산자와 수요자를 연결하여 데이터를 사고팔 수 있게 하는 플랫폼입니다. 한국의 경우 한국데이터거래소(KDX), 금융데이터거래소 등이 운영되고 있으며, EU에서는 데이터법(Data Act) 시행으로 B2B 데이터 공유가 활성화되고 있습니다.</p>
+                <p>데이터 거래소는 품질 인증된 데이터셋을 제공하며, 가격 책정, 라이선스 관리, 접근 제어 등의 기능을 포함합니다. AI 학습용 데이터의 합법적 조달 채널로서 저작권 및 개인정보 이슈를 해결하는 역할을 합니다. EU AI Act는 고위험 AI의 학습 데이터 출처 문서화를 요구하므로, 신뢰할 수 있는 데이터 거래소 이용이 컴플라이언스에 유리합니다.</p>
+                <p>거래 유형으로는 완전 양도(full transfer), 라이선스 기반 이용(license-based access), API 접근(API access), 데이터 결합(data linkage) 등이 있습니다. 한국 데이터 3법 개정(2020년)으로 가명정보 결합이 가능해져 거래소를 통한 데이터 결합 서비스도 제공됩니다.</p>
+                <p>주요 고려사항으로는 데이터 품질 보증, 메타데이터 표준화, 가격 결정 메커니즘, 개인정보 비식별화 적정성 검증 등이 있습니다. 특히 AI 학습 데이터 거래 시 편향 정보와 사용 제한 조건의 명확한 명시가 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn">복사</button>
+                <pre><code># 데이터 거래소 API 연동 예제 (가상 코드)
+import requests
+from datetime import datetime
+
+class DataExchangeClient:
+    """데이터 거래소 API 클라이언트"""
+
+    def __init__(self, api_key: str, base_url: str = "https://api.dataexchange.kr"):
+        self.api_key = api_key
+        self.base_url = base_url
+        self.headers = {"Authorization": f"Bearer {api_key}"}
+
+    def search_datasets(self, keyword: str, category: str = None) -> list:
+        """데이터셋 검색"""
+        params = {"q": keyword}
+        if category:
+            params["category"] = category  # AI학습, 금융, 의료 등
+
+        response = requests.get(
+            f"{self.base_url}/v1/datasets",
+            headers=self.headers,
+            params=params
+        )
+        return response.json()["datasets"]
+
+    def get_dataset_info(self, dataset_id: str) -> dict:
+        """데이터셋 상세 정보 조회 (품질 인증, 라이선스 포함)"""
+        response = requests.get(
+            f"{self.base_url}/v1/datasets/{dataset_id}",
+            headers=self.headers
+        )
+        info = response.json()
+
+        # AI Act 컴플라이언스용 정보 확인
+        print(f"데이터 출처: {info['provenance']}")
+        print(f"품질 등급: {info['quality_grade']}")
+        print(f"편향 정보: {info.get('bias_disclosure', 'N/A')}")
+        print(f"라이선스: {info['license']}")
+        print(f"개인정보 처리: {info['privacy_status']}")
+
+        return info
+
+    def purchase_dataset(self, dataset_id: str, purpose: str) -> dict:
+        """데이터셋 구매 (AI 학습 목적 명시 필수)"""
+        payload = {
+            "dataset_id": dataset_id,
+            "purpose": purpose,  # "ai_training", "analytics", "research"
+            "agreed_terms": True,
+            "timestamp": datetime.now().isoformat()
+        }
+
+        response = requests.post(
+            f"{self.base_url}/v1/purchases",
+            headers=self.headers,
+            json=payload
+        )
+
+        result = response.json()
+        # 구매 영수증은 AI Act 문서화 요건 충족용으로 보관
+        print(f"거래 ID: {result['transaction_id']}")
+        print(f"데이터 접근 URL: {result['access_url']}")
+
+        return result
+
+# 사용 예시
+client = DataExchangeClient(api_key="your-api-key")
+
+# AI 학습용 데이터셋 검색
+datasets = client.search_datasets("이미지 분류", category="AI학습")
+
+# 상세 정보 확인 후 구매
+info = client.get_dataset_info(datasets[0]["id"])
+if info["license"] in ["CC-BY-4.0", "Commercial"]:
+    purchase = client.purchase_dataset(
+        dataset_id=datasets[0]["id"],
+        purpose="ai_training"
+    )</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conversation-title">
+            <h2 id="conversation-title" class="section-title">실무 대화</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-target="meeting">회의</button>
+                <button class="conv-tab" data-target="interview">면접</button>
+                <button class="conv-tab" data-target="review">코드리뷰</button>
+            </div>
+            <div class="conv-content active" id="meeting" data-label="회의">
+                <p><strong class="role-pm">PM:</strong> 새 AI 모델 학습에 필요한 데이터는 어디서 조달하나요?</p>
+                <p><strong class="role-senior">법무팀:</strong> 웹 크롤링은 저작권 리스크가 있어서, 한국데이터거래소 활용을 권장합니다. EU AI Act 대응 시 출처 증빙도 필요하고요.</p>
+                <p><strong class="role-junior">ML엔지니어:</strong> 거래소 데이터는 품질 인증이 되어 있나요?</p>
+                <p><strong class="role-senior">법무팀:</strong> 네, KDX는 품질 등급 시스템이 있고, 편향 정보도 공개합니다. 가명처리된 데이터는 결합 서비스도 가능해요.</p>
+            </div>
+            <div class="conv-content" id="interview" data-label="면접">
+                <p><strong class="role-interviewer">면접관:</strong> AI 학습 데이터를 합법적으로 확보하는 방법에 대해 설명해주세요.</p>
+                <p><strong class="role-candidate">지원자:</strong> 데이터 거래소를 통한 구매가 가장 안전합니다. 품질 인증, 라이선스 명시, 개인정보 처리 현황이 투명하게 공개되어 있어서 EU AI Act 제10조의 데이터 거버넌스 요건 충족에 유리합니다. 특히 고위험 AI 개발 시 학습 데이터 출처 문서화가 필수인데, 거래소 영수증이 증빙 자료로 활용됩니다.</p>
+            </div>
+            <div class="conv-content" id="review" data-label="코드리뷰">
+                <p><strong class="role-senior">시니어:</strong> 데이터 로딩 코드에 출처 정보 주석이 없네요.</p>
+                <p><strong class="role-junior">주니어:</strong> 이 데이터셋은 KDX에서 구매한 건데 따로 기록해야 하나요?</p>
+                <p><strong class="role-senior">시니어:</strong> 네, 거래 ID와 라이선스 조건을 코드 헤더에 명시하세요. 나중에 모델 카드 작성할 때 필요하고, AI Act 감사 대비용으로도 필수입니다.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li class="critical">데이터 구매 후에도 라이선스 조건(상업적 이용 가능 여부, 재배포 제한 등)을 반드시 준수해야 합니다. AI 모델에 학습된 데이터의 라이선스 위반은 모델 전체의 법적 리스크로 이어집니다.</li>
+                <li>가명정보 결합 데이터 이용 시 개인정보보호법상 결합전문기관 승인 절차와 반출 심사를 거쳐야 합니다.</li>
+                <li class="info">EU 시장 진출 시 Data Act(2024년 시행)에 따른 B2B 데이터 공유 의무와 상호운용성 요건도 확인하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">데이터 거버넌스</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%92%88%EC%A7%88/" class="related-link">데이터 품질</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B3%84%EB%B3%B4/" class="related-link">데이터 계보</a>
+                <a href="/ko/term/%EB%A7%88%EC%9D%B4%EB%8D%B0%EC%9D%B4%ED%84%B0/" class="related-link">마이데이터</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%8B%A0%ED%83%81/" class="related-link">데이터 신탁</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://kdx.kr" target="_blank" rel="noopener">한국데이터거래소(KDX) 공식 사이트</a><span class="resource-meta">공식</span></li>
+                <li><span class="type-official"></span><a href="https://digital-strategy.ec.europa.eu/en/policies/data-act" target="_blank" rel="noopener">EU Data Act 개요</a><span class="resource-meta">EU 정책</span></li>
+                <li><span class="type-blog"></span><a href="https://www.law.go.kr" target="_blank" rel="noopener">데이터 3법 (개인정보보호법, 신용정보법, 정보통신망법)</a><span class="resource-meta">법령</span></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +366,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

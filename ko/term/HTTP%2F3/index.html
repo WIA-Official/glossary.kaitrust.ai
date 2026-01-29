@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,239 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>HTTP/3는 웹 통신의 차세대 프로토콜로, Google이 개발한 QUIC(Quick UDP Internet Connections) 프로토콜을 기반으로 합니다. 2022년 6월 IETF에서 RFC 9114로 공식 표준화되었으며, 기존 HTTP/2의 TCP 기반 한계를 극복하기 위해 UDP 위에서 신뢰성과 보안을 구현합니다. 현재 전 세계 웹 트래픽의 약 25% 이상이 HTTP/3를 사용하고 있습니다.</p>
+                <p>HTTP/3의 가장 혁신적인 특징은 0-RTT(Zero Round-Trip Time) 연결 설정입니다. HTTP/2에서는 TCP 3-way handshake + TLS 1.3 handshake로 최소 2-RTT가 필요했지만, HTTP/3는 이전 연결 정보를 재사용하여 첫 패킷부터 암호화된 데이터를 전송할 수 있습니다. 이로 인해 연결 지연이 100-200ms 이상 단축됩니다.</p>
+                <p>연결 마이그레이션(Connection Migration)은 HTTP/3만의 독보적인 기능입니다. TCP는 IP 주소와 포트 조합으로 연결을 식별하기 때문에, 모바일 기기가 Wi-Fi에서 LTE로 전환하면 연결이 끊어집니다. 반면 HTTP/3는 Connection ID를 사용하여 네트워크가 변경되어도 기존 연결을 유지합니다. 이는 모바일 환경에서 끊김 없는 스트리밍과 실시간 서비스를 가능하게 합니다.</p>
+                <p>HTTP/2의 Head-of-Line Blocking 문제도 완전히 해결되었습니다. HTTP/2는 단일 TCP 연결에서 멀티플렉싱을 지원하지만, 하나의 패킷이 손실되면 모든 스트림이 대기해야 했습니다. HTTP/3는 각 스트림이 독립적으로 작동하여, 한 스트림의 패킷 손실이 다른 스트림에 영향을 주지 않습니다. Cloudflare 측정에 따르면, 패킷 손실률 2%인 네트워크에서 HTTP/3가 HTTP/2보다 약 3배 빠른 성능을 보입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="curl">cURL / 브라우저</button>
+                <button class="code-tab" data-lang="nginx">Nginx 설정</button>
+                <button class="code-tab" data-lang="python">Python</button>
+            </div>
+            <div class="code-block active" data-lang="curl">
+                <pre><code class="language-bash"># cURL로 HTTP/3 요청 (cURL 7.66+ with HTTP/3 지원 빌드 필요)
+curl --http3 https://cloudflare-quic.com
+curl --http3-only https://www.google.com  # HTTP/3 강제 사용
+
+# HTTP 버전 확인
+curl -I --http3 https://cloudflare.com 2>&1 | grep -i "HTTP"
+# HTTP/3 200
+
+# HTTP/3 지원 여부 테스트
+curl -sI https://www.cloudflare.com -o /dev/null -w '%{http_version}\n'
+# 3 (HTTP/3 지원 시)
+
+# Chrome에서 HTTP/3 확인 (DevTools)
+# 1. F12 → Network 탭
+# 2. 우클릭 → Protocol 컬럼 추가
+# 3. h3 표시되면 HTTP/3 사용 중
+
+# Chrome QUIC 내부 상태 확인
+# 주소창에 입력: chrome://net-internals/#quic
+
+# Firefox에서 HTTP/3 활성화 확인
+# about:config → network.http.http3.enable = true
+
+# Alt-Svc 헤더로 HTTP/3 지원 확인
+curl -sI https://www.cloudflare.com | grep -i "alt-svc"
+# alt-svc: h3=":443"; ma=86400</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="nginx">
+                <pre><code class="language-nginx"># Nginx HTTP/3 설정 (Nginx 1.25.0+ 또는 nginx-quic 빌드 필요)
+# /etc/nginx/nginx.conf
+
+http {
+    # SSL 인증서 설정 (HTTP/3는 TLS 1.3 필수)
+    ssl_certificate /etc/nginx/ssl/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/key.pem;
+    ssl_protocols TLSv1.3;
+
+    server {
+        # HTTP/2 + HTTP/3 동시 지원 (권장)
+        listen 443 ssl;
+        listen 443 quic reuseport;  # HTTP/3 (QUIC)
+
+        # IPv6 지원
+        listen [::]:443 ssl;
+        listen [::]:443 quic reuseport;
+
+        server_name example.com;
+
+        # HTTP/3 활성화
+        http3 on;
+
+        # Alt-Svc 헤더 추가 (클라이언트에게 HTTP/3 지원 알림)
+        add_header Alt-Svc 'h3=":443"; ma=86400' always;
+
+        # QUIC 최적화 설정
+        quic_retry on;  # 연결 마이그레이션 지원
+        ssl_early_data on;  # 0-RTT 활성화
+
+        # 0-RTT replay attack 방지
+        proxy_set_header Early-Data $ssl_early_data;
+
+        location / {
+            root /var/www/html;
+            index index.html;
+        }
+    }
+}
+
+# 방화벽에서 UDP 443 포트 열기 (필수!)
+# sudo ufw allow 443/udp
+# sudo iptables -A INPUT -p udp --dport 443 -j ACCEPT</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Python HTTP/3 클라이언트 (aioquic 라이브러리)
+# pip install aioquic httpx[http2]
+
+import asyncio
+from aioquic.asyncio import connect
+from aioquic.asyncio.protocol import QuicConnectionProtocol
+from aioquic.quic.configuration import QuicConfiguration
+
+# 기본 HTTP/3 요청
+async def http3_request():
+    configuration = QuicConfiguration(
+        is_client=True,
+        alpn_protocols=["h3"],  # HTTP/3 ALPN
+    )
+
+    async with connect(
+        "www.cloudflare.com",
+        443,
+        configuration=configuration
+    ) as protocol:
+        # HTTP/3 스트림으로 요청 전송
+        reader, writer = await protocol.create_stream()
+        # ... 요청 처리
+        print("HTTP/3 연결 성공!")
+
+# httpx로 HTTP/2/3 자동 선택 (더 간단)
+import httpx
+
+async def httpx_example():
+    # HTTP/2 사용 (HTTP/3는 아직 실험적)
+    async with httpx.AsyncClient(http2=True) as client:
+        response = await client.get("https://www.cloudflare.com")
+        print(f"Protocol: {response.http_version}")
+        print(f"Status: {response.status_code}")
+
+# HTTP/3 지원 확인 함수
+async def check_http3_support(domain: str) -> bool:
+    """Alt-Svc 헤더로 HTTP/3 지원 여부 확인"""
+    async with httpx.AsyncClient() as client:
+        response = await client.head(f"https://{domain}")
+        alt_svc = response.headers.get("alt-svc", "")
+        return "h3" in alt_svc
+
+# 실행
+if __name__ == "__main__":
+    asyncio.run(httpx_example())</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 최적화 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "모바일 사용자 비중이 70%인데, Wi-Fi에서 LTE 전환 시 연결 끊김 이슈가 있습니다. HTTP/3의 Connection Migration을 도입하면 네트워크 전환 시에도 기존 세션을 유지할 수 있어서, 영상 스트리밍 끊김 문제를 해결할 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "HTTP/3는 TCP 대신 QUIC을 사용해서 Head-of-Line Blocking 문제를 해결합니다. HTTP/2는 하나의 TCP 연결에서 패킷 손실이 발생하면 모든 스트림이 블로킹되지만, HTTP/3는 각 스트림이 독립적이라 한 스트림의 손실이 다른 스트림에 영향을 주지 않습니다. 0-RTT로 초기 연결 시간도 100ms 이상 단축됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 도입 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "Cloudflare나 AWS CloudFront는 이미 HTTP/3를 지원하고 있어서 CDN 앞단에서 바로 활성화할 수 있습니다. 백엔드 서버는 HTTP/2로 유지하고, 엣지에서만 HTTP/3를 처리하는 방식으로 리스크 없이 도입 가능합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>방화벽에서 UDP 443 포트 차단</strong>
+                        <p>HTTP/3는 UDP 기반이므로 방화벽에서 UDP 443 포트를 열어야 합니다. 많은 기업 네트워크와 일부 ISP가 UDP 트래픽을 제한하므로, HTTP/2 폴백을 반드시 구현하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>0-RTT Replay Attack 무시</strong>
+                        <p>0-RTT 데이터는 재전송 공격(replay attack)에 취약합니다. 결제나 상태 변경 같은 중요한 요청은 0-RTT가 아닌 일반 요청으로 처리해야 합니다. Nginx에서 ssl_early_data 사용 시 Early-Data 헤더로 구분하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Alt-Svc 헤더 누락</strong>
+                        <p>서버가 HTTP/3를 지원해도 Alt-Svc 헤더가 없으면 브라우저가 HTTP/2로만 연결합니다. 반드시 'Alt-Svc: h3=":443"; ma=86400' 헤더를 응답에 포함하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 HTTP/3 도입 전략</strong>
+                        <p>CDN(Cloudflare, CloudFront)을 통해 먼저 도입하고, Alt-Svc로 점진적 마이그레이션하세요. HTTP/2 폴백을 유지하고, 0-RTT는 GET/HEAD 같은 멱등성 있는 요청에만 사용합니다. 모니터링으로 QUIC 연결 비율을 추적하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/QUIC/" class="related-term-link">QUIC</a>
+                <a href="/ko/term/HTTP%2F2/" class="related-term-link">HTTP/2</a>
+                <a href="/ko/term/TLS/" class="related-term-link">TLS</a>
+                <a href="/ko/term/TCP/" class="related-term-link">TCP</a>
+                <a href="/ko/term/UDP/" class="related-term-link">UDP</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/performance/what-is-http3/" target="_blank" class="learn-link">
+                    📄 Cloudflare - HTTP/3 완벽 가이드
+                </a>
+                <a href="https://http3-explained.haxx.se/" target="_blank" class="learn-link">
+                    🎓 HTTP/3 Explained - Daniel Stenberg (cURL 개발자)
+                </a>
+                <a href="https://nginx.org/en/docs/http/ngx_http_v3_module.html" target="_blank" class="learn-link">
+                    📖 Nginx HTTP/3 공식 문서
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +587,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

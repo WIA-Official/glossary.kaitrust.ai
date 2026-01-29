@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,148 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>스케일링(Scaling)은 시스템의 처리 용량을 늘리거나 줄이는 것입니다. 트래픽 증가에 대응하고, 비용을 최적화하며, 서비스 가용성을 유지하기 위해 필수적인 기술입니다.</p>
+                <p>수직 스케일링(Vertical/Scale-Up)은 단일 서버의 리소스(CPU, RAM)를 증가시킵니다. 간단하지만 물리적 한계가 있고 다운타임이 필요할 수 있습니다. 수평 스케일링(Horizontal/Scale-Out)은 서버 수를 늘려 부하를 분산합니다. 무중단으로 확장 가능하지만 상태 관리가 복잡합니다.</p>
+                <p>클라우드 환경에서는 Auto Scaling으로 메트릭 기반 자동 확장/축소를 구현합니다. CPU 사용률 70% 초과 시 인스턴스 추가, 30% 미만 시 축소하는 식입니다. Kubernetes HPA(Horizontal Pod Autoscaler)가 대표적입니다.</p>
+                <p>실무에서는 Stateless 설계로 수평 확장이 용이하게 합니다. 세션은 Redis에, 파일은 S3에 저장하여 각 인스턴스가 독립적으로 동작하도록 합니다. 데이터베이스는 읽기 복제본으로 수평 확장하고, 쓰기 분산에는 샤딩을 적용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Kubernetes HPA (Horizontal Pod Autoscaler)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300   # 축소 전 5분 대기
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60               # 분당 10%씩 축소
+    scaleUp:
+      stabilizationWindowSeconds: 0     # 즉시 확장
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15               # 15초마다 100%까지 확장
+---
+# AWS Auto Scaling (Terraform)
+resource "aws_autoscaling_group" "web" {
+  name                = "web-asg"
+  min_size            = 2
+  max_size            = 20
+  desired_capacity    = 4
+  vpc_zone_identifier = var.subnet_ids
+
+  launch_template {
+    id      = aws_launch_template.web.id
+    version = "$Latest"
+  }
+
+  target_group_arns = [aws_lb_target_group.web.arn]
+
+  tag {
+    key                 = "Name"
+    value               = "web-instance"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_policy" "scale_up" {
+  name                   = "scale-up"
+  scaling_adjustment     = 2
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = aws_autoscaling_group.web.name
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "블랙 프라이데이 트래픽 예상이 평소 5배인데, 스케일링 전략 논의해봐요."</p>
+                <p><strong class="role-junior">주니어:</strong> "미리 minReplicas를 10으로 올려두고, HPA max를 50까지 설정하면 어떨까요? 이벤트 후에 다시 원복하고요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "수평 스케일링과 수직 스케일링의 차이점과 각각의 장단점은?"</p>
+                <p><strong class="role-junior">지원자:</strong> "수직 스케일링은 구현이 쉽고 기존 아키텍처 유지가 가능하지만 물리적 한계와 비용 효율성 문제가 있습니다. 수평 스케일링은 무한 확장이 가능하고 가용성이 높지만 상태 관리와 분산 시스템 복잡도가 증가합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "scaleDown 정책이 너무 공격적인 것 같아요. 트래픽 패턴 변동이 있으면 thrashing 발생할 수 있어요."</p>
+                <p><strong class="role-junior">개발자:</strong> "stabilizationWindowSeconds를 300초로 늘리고 10%씩 축소하도록 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>Cold Start 시간 고려 - 컨테이너/VM 준비 시간이 스케일링 응답 시간에 포함</li>
+                <li>축소 정책은 신중하게 - 급격한 축소는 서비스 불안정 유발</li>
+                <li>데이터베이스 병목 확인 - 앱만 확장해도 DB가 병목이면 무의미</li>
+                <li class="info">예측 스케일링 활용 - 패턴이 일정하면 시간 기반 사전 확장이 효과적</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%9D%B8%ED%94%84%EB%9D%BC%EC%8A%A4%ED%8A%B8%EB%9F%AD%EC%B2%98/" class="related-link">인프라스트럭처</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+                <a href="/ko/term/%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81/" class="related-link">모니터링</a>
+                <a href="/ko/term/%EC%8A%A4%EC%9B%9C/" class="related-link">스웜</a>
+                <a href="/ko/term/IaC/" class="related-link">IaC</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank" rel="noopener">Kubernetes HPA 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" target="_blank" rel="noopener">AWS Auto Scaling 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://www.keda.sh/" target="_blank" rel="noopener">KEDA - Kubernetes 이벤트 기반 오토스케일링</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +355,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -161,6 +161,29 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +225,139 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Optuna는 머신러닝과 딥러닝 모델의 하이퍼파라미터를 자동으로 최적화하는 오픈소스 프레임워크입니다. 학습률, 레이어 수, 배치 크기 등 모델 성능에 영향을 미치는 하이퍼파라미터의 최적 조합을 효율적으로 탐색합니다.</p>
+                <p>Optuna는 2018년 일본 Preferred Networks에서 개발되었습니다. 기존 Grid Search나 Random Search의 비효율성을 개선하기 위해, 베이지안 최적화 기반의 TPE(Tree-structured Parzen Estimator) 알고리즘을 핵심으로 채택했습니다.</p>
+                <p>핵심 원리는 "Define-by-Run" 방식입니다. 탐색 공간을 사전에 정의하는 대신, 코드 실행 중에 동적으로 하이퍼파라미터를 샘플링합니다. 이전 시도의 결과를 학습하여 더 유망한 영역을 집중 탐색하는 베이지안 최적화로 효율성을 높입니다.</p>
+                <p>실무에서는 모델 튜닝 시간을 크게 단축시킵니다. Pruning 기능으로 성능이 낮은 시도를 조기에 중단하고, Dashboard로 최적화 과정을 시각화할 수 있어 실험 관리에도 유용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Optuna 하이퍼파라미터 최적화 예제
+import optuna
+from sklearn.datasets import load_iris
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+
+# 데이터 로드
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 목적 함수 정의 (최적화 대상)
+def objective(trial):
+    # 하이퍼파라미터 탐색 공간 정의 (Define-by-Run)
+    n_estimators = trial.suggest_int("n_estimators", 10, 200)
+    max_depth = trial.suggest_int("max_depth", 2, 32)
+    min_samples_split = trial.suggest_float("min_samples_split", 0.1, 1.0)
+    min_samples_leaf = trial.suggest_int("min_samples_leaf", 1, 10)
+
+    # 모델 생성 및 평가
+    clf = RandomForestClassifier(
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        min_samples_split=min_samples_split,
+        min_samples_leaf=min_samples_leaf,
+        random_state=42
+    )
+
+    # 교차 검증 점수 반환 (Optuna가 최대화할 값)
+    score = cross_val_score(clf, X, y, cv=5).mean()
+    return score
+
+# 스터디 생성 및 최적화 실행
+study = optuna.create_study(direction="maximize")  # 정확도 최대화
+study.optimize(objective, n_trials=100)  # 100번 시도
+
+# 최적 결과 출력
+print(f"Best accuracy: {study.best_value:.4f}")
+print(f"Best params: {study.best_params}")
+
+# 최적화 과정 시각화 (선택)
+# optuna.visualization.plot_optimization_history(study)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"수동 튜닝으로 3일 걸리던 작업을 Optuna로 자동화해서 반나절 만에 최적 하이퍼파라미터를 찾았습니다. 정확도도 2% 개선되었고요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"Optuna의 TPE 알고리즘은 베이지안 최적화를 기반으로 합니다. 이전 시도 결과를 확률 모델로 학습하여 성능이 좋을 것으로 예상되는 하이퍼파라미터 조합을 우선 탐색합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"Optuna의 Pruning 기능이 핵심입니다. MedianPruner를 설정하면 중간 성능이 다른 시도들의 중앙값보다 낮으면 조기 중단되어 GPU 시간을 60% 이상 절약할 수 있습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>탐색 공간을 너무 넓게 설정</strong>
+                        <p>learning_rate를 1e-10~1 범위로 설정하면 비효율적입니다. 도메인 지식을 활용해 합리적인 범위(예: 1e-5~1e-2)로 좁히세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>n_trials 수를 너무 적게 설정</strong>
+                        <p>10~20번 시도로는 최적점을 찾기 어렵습니다. 하이퍼파라미터 개수의 10~20배 이상의 trials를 권장합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>Pruning을 활성화하고, SQLite 저장소로 스터디를 저장하여 중단 후 재개가 가능하도록 설정하세요. 분산 최적화로 여러 GPU를 활용할 수도 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Hyperparameter/" class="related-term-link">Hyperparameter</a>
+                <a href="/ko/term/Learning%20Rate/" class="related-term-link">Learning Rate</a>
+                <a href="/ko/term/Cross-Validation/" class="related-term-link">Cross-Validation</a>
+                <a href="/ko/term/Grid%20Search/" class="related-term-link">Grid Search</a>
+                <a href="/ko/term/Bayesian%20Optimization/" class="related-term-link">Bayesian Optimization</a>
+                <a href="/ko/term/AutoML/" class="related-term-link">AutoML</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://optuna.readthedocs.io/" target="_blank" class="learn-link">📄 Optuna 공식 문서</a>
+                <a href="https://github.com/optuna/optuna" target="_blank" class="learn-link">💻 Optuna GitHub 저장소</a>
+                <a href="https://arxiv.org/abs/1907.10902" target="_blank" class="learn-link">📝 Optuna 논문 (KDD 2019)</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +368,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -161,6 +161,15 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
     </style>
 </head>
 <body>
@@ -202,6 +211,184 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>셀프 어텐션(Self-Attention)은 시퀀스 내의 각 요소가 같은 시퀀스의 다른 모든 요소와의 관계를 동시에 계산하는 메커니즘입니다. 2017년 "Attention Is All You Need" 논문에서 소개된 Transformer 아키텍처의 핵심 구성 요소로, RNN의 순차적 처리 한계를 극복하고 병렬 처리를 가능하게 했습니다.</p>
+
+                <p>셀프 어텐션은 Query, Key, Value 세 가지 벡터를 사용합니다. 입력 시퀀스의 각 토큰은 이 세 벡터로 변환됩니다. Query와 Key의 내적으로 attention score를 계산하고, softmax를 적용한 후 Value와 가중합하여 출력을 만듭니다. 이 과정을 통해 "어떤 토큰이 어떤 토큰에 얼마나 주목해야 하는지"를 학습합니다.</p>
+
+                <p>수식으로 표현하면 Attention(Q,K,V) = softmax(QK^T / sqrt(d_k)) * V 입니다. sqrt(d_k)로 나누는 scaled dot-product attention은 차원이 커질수록 내적 값이 커지는 문제를 방지합니다. 실제로는 여러 개의 어텐션 헤드를 병렬로 사용하는 Multi-Head Attention을 적용하여 다양한 관점에서 관계를 학습합니다.</p>
+
+                <p>셀프 어텐션의 장점은 장거리 의존성(long-range dependency)을 효과적으로 모델링한다는 것입니다. RNN은 먼 거리의 토큰 정보가 희석되지만, 셀프 어텐션은 모든 토큰 쌍을 직접 연결합니다. 단점은 시퀀스 길이의 제곱에 비례하는 O(n^2) 계산 복잡도입니다. 이를 해결하기 위해 Linformer, Performer, FlashAttention 등 효율적인 변형들이 개발되었습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <p>PyTorch로 구현한 Scaled Dot-Product Self-Attention입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code>import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import math
+
+class SelfAttention(nn.Module):
+    def __init__(self, embed_dim, num_heads=8):
+        super().__init__()
+        self.embed_dim = embed_dim
+        self.num_heads = num_heads
+        self.head_dim = embed_dim // num_heads
+
+        assert embed_dim % num_heads == 0, "embed_dim must be divisible by num_heads"
+
+        # Q, K, V 프로젝션
+        self.q_proj = nn.Linear(embed_dim, embed_dim)
+        self.k_proj = nn.Linear(embed_dim, embed_dim)
+        self.v_proj = nn.Linear(embed_dim, embed_dim)
+        self.out_proj = nn.Linear(embed_dim, embed_dim)
+
+    def forward(self, x, mask=None):
+        batch_size, seq_len, _ = x.shape
+
+        # Q, K, V 계산
+        Q = self.q_proj(x)  # (B, S, D)
+        K = self.k_proj(x)
+        V = self.v_proj(x)
+
+        # Multi-head 분리: (B, S, D) -> (B, H, S, D/H)
+        Q = Q.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
+        K = K.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
+        V = V.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
+
+        # Scaled Dot-Product Attention
+        scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(self.head_dim)
+
+        if mask is not None:
+            scores = scores.masked_fill(mask == 0, float('-inf'))
+
+        attn_weights = F.softmax(scores, dim=-1)
+        attn_output = torch.matmul(attn_weights, V)  # (B, H, S, D/H)
+
+        # 헤드 결합
+        attn_output = attn_output.transpose(1, 2).contiguous()
+        attn_output = attn_output.view(batch_size, seq_len, self.embed_dim)
+
+        return self.out_proj(attn_output), attn_weights
+
+# 사용 예시
+model = SelfAttention(embed_dim=512, num_heads=8)
+x = torch.randn(2, 100, 512)  # (batch, seq_len, embed_dim)
+output, weights = model(x)
+print(f"Output shape: {output.shape}")  # (2, 100, 512)
+print(f"Attention weights shape: {weights.shape}")  # (2, 8, 100, 100)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">성능 & 비용</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>어텐션 변형</th>
+                            <th>계산 복잡도</th>
+                            <th>메모리 복잡도</th>
+                            <th>특징</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Standard Self-Attention</td>
+                            <td>O(n^2 * d)</td>
+                            <td>O(n^2)</td>
+                            <td>기본, 정확함</td>
+                        </tr>
+                        <tr>
+                            <td>FlashAttention</td>
+                            <td>O(n^2 * d)</td>
+                            <td>O(n)</td>
+                            <td>메모리 효율적, 빠름</td>
+                        </tr>
+                        <tr>
+                            <td>Linformer</td>
+                            <td>O(n * k * d)</td>
+                            <td>O(n * k)</td>
+                            <td>K,V 프로젝션</td>
+                        </tr>
+                        <tr>
+                            <td>Performer</td>
+                            <td>O(n * d^2)</td>
+                            <td>O(n * d)</td>
+                            <td>Random Features</td>
+                        </tr>
+                        <tr>
+                            <td>Sparse Attention</td>
+                            <td>O(n * sqrt(n))</td>
+                            <td>O(n * sqrt(n))</td>
+                            <td>패턴 기반 희소화</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #94a3b8;">* n: 시퀀스 길이, d: 임베딩 차원, k: 프로젝션 차원</p>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <p><strong>"긴 시퀀스 처리 때문에 메모리 문제가 있어서 FlashAttention으로 교체했어요. 셀프 어텐션의 O(n^2) 메모리를 O(n)으로 줄여줍니다."</strong></p>
+                <p>영어로는 "We switched to FlashAttention to reduce the O(n^2) memory footprint of self-attention"이라고 표현합니다. "scaled dot-product attention", "multi-head attention", "attention score/weight" 등의 용어도 자주 사용됩니다. 시각화할 때는 "attention heatmap"을 그려서 모델이 어디에 주목하는지 보여주세요.</p>
+            </div>
+        </section>
+
+        <!-- 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">1.</span> <strong>스케일링 누락:</strong> sqrt(d_k)로 나누지 않으면 softmax가 극단적인 값을 출력하여 gradient vanishing이 발생합니다.</li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">2.</span> <strong>마스킹 실수:</strong> 패딩 마스크와 causal 마스크(미래 토큰 차단)를 혼동하면 학습이 제대로 안 됩니다.</li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">3.</span> <strong>메모리 폭발:</strong> 긴 시퀀스에서 attention matrix 크기가 급격히 커집니다. 8K 토큰이면 64M 개 어텐션 계산이 필요합니다.</li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">4.</span> <strong>헤드 수 과다:</strong> head_dim이 너무 작아지면 각 헤드의 표현력이 떨어집니다. 최소 32~64 차원을 유지하세요.</li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">5.</span> <strong>위치 정보 누락:</strong> 셀프 어텐션 자체는 순서 불변(permutation invariant)입니다. Positional Encoding을 반드시 추가하세요.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <li><a href="/ko/term/%EC%96%B4%ED%85%90%EC%85%98%20%EB%A9%94%EC%BB%A4%EB%8B%88%EC%A6%98/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">어텐션 메커니즘</a></li>
+                    <li><a href="/ko/term/%EB%A9%80%ED%8B%B0%ED%97%A4%EB%93%9C%20%EC%96%B4%ED%85%90%EC%85%98/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">멀티헤드 어텐션</a></li>
+                    <li><a href="/ko/term/%EC%9E%84%EB%B2%A0%EB%94%A9/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">임베딩</a></li>
+                    <li><a href="/ko/term/%EB%94%A5%EB%9F%AC%EB%8B%9D/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">딥러닝</a></li>
+                    <li><a href="/ko/term/%EB%B0%B1%ED%94%84%EB%A1%9C%ED%8C%8C%EA%B2%8C%EC%9D%B4%EC%85%98/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">백프로파게이션</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.75rem;"><a href="https://arxiv.org/abs/1706.03762" target="_blank" style="color: #00f5ff; text-decoration: none;">Attention Is All You Need - 원본 논문</a></li>
+                    <li style="margin-bottom: 0.75rem;"><a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" style="color: #00f5ff; text-decoration: none;">The Illustrated Transformer - Jay Alammar</a></li>
+                    <li style="margin-bottom: 0.75rem;"><a href="https://github.com/Dao-AILab/flash-attention" target="_blank" style="color: #00f5ff; text-decoration: none;">FlashAttention - GitHub</a></li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +399,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

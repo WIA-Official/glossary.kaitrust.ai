@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,252 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detailed-explanation">
+            <h2 id="detailed-explanation" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Datadog</strong>은 클라우드 규모의 인프라, 애플리케이션, 로그를 통합 모니터링하는 SaaS 플랫폼입니다. 2010년에 설립되어 현재 가장 많이 사용되는 상용 모니터링 솔루션 중 하나로, 관측 가능성(Observability)의 세 기둥인 메트릭, 로그, 트레이스를 하나의 플랫폼에서 제공합니다.</p>
+
+                <h3>핵심 기능</h3>
+                <ul>
+                    <li><strong>Infrastructure Monitoring</strong>: 서버, 컨테이너, 클라우드 서비스 메트릭 수집</li>
+                    <li><strong>APM (Application Performance Monitoring)</strong>: 분산 트레이싱으로 요청 흐름 추적</li>
+                    <li><strong>Log Management</strong>: 로그 수집, 파싱, 분석</li>
+                    <li><strong>RUM (Real User Monitoring)</strong>: 실제 사용자 경험 측정</li>
+                    <li><strong>Synthetics</strong>: API 및 브라우저 기반 합성 모니터링</li>
+                    <li><strong>Security Monitoring</strong>: 보안 이벤트 탐지 및 SIEM</li>
+                </ul>
+
+                <h3>Datadog Agent 아키텍처</h3>
+                <ul>
+                    <li><strong>Datadog Agent</strong>: 호스트에서 실행되는 메트릭/로그 수집기</li>
+                    <li><strong>DogStatsD</strong>: 커스텀 메트릭 전송 데몬</li>
+                    <li><strong>Trace Agent</strong>: APM 트레이스 수집기</li>
+                    <li><strong>Process Agent</strong>: 프로세스 레벨 모니터링</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-example">
+            <h2 id="code-example" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>datadog.yaml - Agent 설정</h3>
+                <pre><code class="language-yaml"># /etc/datadog-agent/datadog.yaml
+api_key: "your-api-key-here"
+site: "datadoghq.com"  # EU는 datadoghq.eu
+
+# 호스트 태그 설정
+tags:
+  - env:production
+  - service:api-server
+  - team:platform
+
+# APM 설정
+apm_config:
+  enabled: true
+  apm_dd_url: https://trace.agent.datadoghq.com
+
+# 로그 수집 활성화
+logs_enabled: true
+logs_config:
+  container_collect_all: true
+  processing_rules:
+    - type: exclude_at_match
+      name: exclude_healthchecks
+      pattern: "GET /health"
+
+# 프로세스 모니터링
+process_config:
+  enabled: true
+  container_collection:
+    enabled: true
+
+# DogStatsD 설정
+dogstatsd_port: 8125
+dogstatsd_non_local_traffic: true</code></pre>
+
+                <h3>Kubernetes 통합 설정</h3>
+                <pre><code class="language-yaml"># datadog-values.yaml - Helm Chart 설정
+datadog:
+  apiKey: ${DD_API_KEY}
+  appKey: ${DD_APP_KEY}
+  site: datadoghq.com
+
+  # 클러스터 이름
+  clusterName: production-k8s
+
+  # 태그
+  tags:
+    - env:production
+    - region:ap-northeast-2
+
+  # APM 활성화
+  apm:
+    portEnabled: true
+    socketEnabled: true
+
+  # 로그 수집
+  logs:
+    enabled: true
+    containerCollectAll: true
+
+  # 프로세스 모니터링
+  processAgent:
+    enabled: true
+    processCollection: true
+
+# 클러스터 에이전트
+clusterAgent:
+  enabled: true
+  metricsProvider:
+    enabled: true  # HPA 연동
+
+# Node Agent
+agents:
+  rbac:
+    create: true
+  containers:
+    agent:
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "200m"</code></pre>
+
+                <h3>애플리케이션 APM 연동 (Python)</h3>
+                <pre><code class="language-python"># Flask 애플리케이션 APM 연동
+from ddtrace import tracer, patch_all
+
+# 자동 패치
+patch_all()
+
+# 커스텀 설정
+tracer.configure(
+    hostname='localhost',
+    port=8126,
+    service='my-flask-app',
+    env='production',
+)
+
+from flask import Flask
+from datadog import statsd
+
+app = Flask(__name__)
+
+@app.route('/api/users/<user_id>')
+def get_user(user_id):
+    # 커스텀 스팬 추가
+    with tracer.trace('database.query', service='postgresql') as span:
+        span.set_tag('user.id', user_id)
+        user = fetch_user_from_db(user_id)
+
+    # 커스텀 메트릭 전송
+    statsd.increment('api.users.get', tags=['endpoint:get_user'])
+
+    return jsonify(user)
+
+# DogStatsD 커스텀 메트릭
+from datadog import initialize, statsd
+
+initialize(statsd_host='localhost', statsd_port=8125)
+
+# 카운터
+statsd.increment('page.views', tags=['page:home'])
+
+# 게이지
+statsd.gauge('queue.size', queue.size(), tags=['queue:orders'])
+
+# 히스토그램
+statsd.histogram('request.latency', response_time, tags=['endpoint:api'])</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section" aria-labelledby="practical-dialogue">
+            <h2 id="practical-dialogue" class="section-title">실무 대화 예제</h2>
+            <div class="section-content">
+                <div class="dialogue-container">
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">SRE 엔지니어</div>
+                        <div class="dialogue-content">"프로덕션에서 간헐적으로 500 에러가 발생하는데, 로그만 봐서는 원인을 모르겠어요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">시니어 SRE</div>
+                        <div class="dialogue-content">"Datadog APM에서 해당 시간대의 트레이스를 확인해볼게요. Error status로 필터링하면... 여기 보이네요. 특정 DB 쿼리에서 타임아웃이 발생하고 있어요. 트레이스를 따라가보면 이 쿼리가 5초 이상 걸리고 있네요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">SRE 엔지니어</div>
+                        <div class="dialogue-content">"와, 어떻게 그렇게 빨리 찾았어요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">시니어 SRE</div>
+                        <div class="dialogue-content">"APM Trace에서 각 스팬의 duration을 보면 병목 지점이 바로 보여요. 여기 Service Map에서 이 서비스가 DB에 의존하는 것도 한눈에 보이고요. 이 쿼리에 인덱스를 추가하거나, 타임아웃 설정을 조정해야 할 것 같아요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="cautions">
+            <h2 id="cautions" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="caution-box">
+                    <h3>비용 관리</h3>
+                    <p>Datadog은 호스트 수, 로그 볼륨, 커스텀 메트릭 수에 따라 비용이 발생합니다. 로그 인덱싱 정책과 메트릭 카디널리티를 주의깊게 관리하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>API 키 보안</h3>
+                    <p>API 키가 노출되면 악의적인 데이터 전송이나 과금 문제가 발생할 수 있습니다. Secrets Manager를 통해 안전하게 관리하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>Agent 리소스</h3>
+                    <p>Datadog Agent는 일정량의 CPU/메모리를 사용합니다. 리소스가 제한된 환경에서는 Agent 설정을 최적화하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>카디널리티 폭발</h3>
+                    <p>태그에 고유 ID(사용자 ID, 세션 ID)를 직접 사용하면 메트릭 카디널리티가 폭발적으로 증가합니다. 적절한 버킷팅을 사용하세요.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-terms">
+            <h2 id="related-terms" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms-grid">
+                    <a href="/ko/term/Grafana/" class="related-term-card">
+                        <h3>Grafana</h3>
+                        <p>오픈소스 시각화 도구. Datadog의 대안으로 자주 비교됨</p>
+                    </a>
+                    <a href="/ko/term/Prometheus/" class="related-term-card">
+                        <h3>Prometheus</h3>
+                        <p>오픈소스 메트릭 시스템. Datadog과 연동 가능</p>
+                    </a>
+                    <a href="/ko/term/Kubernetes/" class="related-term-card">
+                        <h3>Kubernetes</h3>
+                        <p>컨테이너 오케스트레이션. Datadog으로 클러스터 모니터링</p>
+                    </a>
+                    <a href="/ko/term/OpenTelemetry/" class="related-term-card">
+                        <h3>OpenTelemetry</h3>
+                        <p>오픈 표준 관측 프레임워크. Datadog이 지원</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-more">
+            <h2 id="learn-more" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="resource-list">
+                    <li><a href="https://docs.datadoghq.com/" target="_blank" rel="noopener noreferrer">Datadog 공식 문서</a> - 전체 기능 가이드</li>
+                    <li><a href="https://learn.datadoghq.com/" target="_blank" rel="noopener noreferrer">Datadog Learning Center</a> - 무료 온라인 강좌</li>
+                    <li><a href="https://www.datadoghq.com/blog/" target="_blank" rel="noopener noreferrer">Datadog Blog</a> - 모니터링 베스트 프랙티스</li>
+                    <li><a href="https://github.com/DataDog" target="_blank" rel="noopener noreferrer">Datadog GitHub</a> - 에이전트 및 통합 소스</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +459,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

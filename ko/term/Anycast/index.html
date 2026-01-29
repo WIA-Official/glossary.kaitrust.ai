@@ -161,6 +161,151 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +347,259 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Anycast는 하나의 IP 주소를 전 세계 여러 물리적 위치에서 동시에 광고(announce)하는 네트워크 주소 지정 방식입니다. 사용자가 해당 IP로 요청을 보내면, BGP(Border Gateway Protocol) 라우팅에 의해 네트워크적으로 가장 가까운 서버로 자동 연결됩니다. Unicast(1:1)와 달리 Anycast는 1:N 중 최적의 1로 라우팅됩니다.</p>
+                <p>Anycast의 핵심 원리는 BGP 라우팅입니다. 여러 데이터센터에서 동일한 IP 프리픽스(예: 1.1.1.0/24)를 ISP들에게 광고하면, 각 ISP의 라우터는 AS-path(경유하는 네트워크 수), latency, 정책 등을 기준으로 가장 최적의 경로를 선택합니다. 결과적으로 서울의 사용자는 서울 데이터센터로, 뉴욕의 사용자는 뉴욕 데이터센터로 자동 라우팅됩니다.</p>
+                <p>대표적인 Anycast 활용 사례는 DNS 서비스입니다. Cloudflare의 1.1.1.1, Google의 8.8.8.8, Quad9의 9.9.9.9 등 Public DNS는 모두 Anycast로 운영됩니다. 1.1.1.1 하나의 IP가 전 세계 300개 이상 도시의 데이터센터에서 응답하며, 평균 응답 시간 14ms 이하를 달성합니다. CDN(Cloudflare, Akamai)도 Anycast를 활용해 정적 콘텐츠를 사용자와 가까운 엣지에서 제공합니다.</p>
+                <p>Anycast의 또 다른 강점은 DDoS 방어입니다. 공격 트래픽이 발생해도 전 세계에 분산된 서버들이 각 지역의 트래픽을 나눠 처리하므로 단일 서버에 부하가 집중되지 않습니다. 특정 지역의 서버가 다운되면 BGP가 자동으로 트래픽을 다른 지역으로 재라우팅하여 서비스 연속성을 보장합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="bash">진단 명령어</button>
+                <button class="code-tab" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="terraform">Terraform</button>
+            </div>
+            <div class="code-block active" data-lang="bash">
+                <pre><code class="language-bash"># Anycast DNS 응답 서버 위치 확인
+dig +short TXT whoami.cloudflare.com @1.1.1.1
+# 결과: 응답한 Cloudflare 데이터센터 정보
+
+# traceroute로 Anycast 경로 확인
+traceroute 1.1.1.1
+# 한국에서 실행 시 서울/도쿄 POP로 라우팅
+
+# mtr로 실시간 경로 분석 (Linux)
+mtr -r -c 10 1.1.1.1
+
+# 여러 지역에서 Anycast 라우팅 테스트
+# RIPE Atlas 또는 Cloudflare의 speed.cloudflare.com 활용
+
+# BGP 경로 확인 (Looking Glass)
+# https://lg.he.net 에서 1.1.1.0/24 조회
+# 각 지역 ISP에서 보는 BGP AS-path 확인 가능
+
+# DNS 쿼리 응답 시간 비교
+dig google.com @1.1.1.1 | grep "Query time"  # Cloudflare Anycast
+dig google.com @168.126.63.1 | grep "Query time"  # KT DNS (Unicast)
+
+# Anycast 라우팅 변화 모니터링
+watch -n 5 'dig +short TXT whoami.cloudflare.com @1.1.1.1'</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import socket
+import subprocess
+import time
+
+# Anycast DNS 응답 위치 확인
+def check_anycast_location(dns_server="1.1.1.1"):
+    """Cloudflare Anycast DNS가 응답하는 데이터센터 확인"""
+    import dns.resolver
+
+    resolver = dns.resolver.Resolver()
+    resolver.nameservers = [dns_server]
+
+    # Cloudflare의 whoami 서비스로 응답 위치 확인
+    answers = resolver.resolve("whoami.cloudflare.com", "TXT")
+    for rdata in answers:
+        print(f"응답 위치: {rdata}")
+
+check_anycast_location()
+
+# 여러 Anycast DNS 응답 시간 비교
+def compare_anycast_dns():
+    """주요 Anycast DNS 서비스 응답 시간 비교"""
+    dns_servers = {
+        "Cloudflare": "1.1.1.1",
+        "Google": "8.8.8.8",
+        "Quad9": "9.9.9.9",
+        "OpenDNS": "208.67.222.222"
+    }
+
+    for name, server in dns_servers.items():
+        start = time.time()
+        socket.create_connection((server, 53), timeout=2)
+        latency = (time.time() - start) * 1000
+        print(f"{name} ({server}): {latency:.2f}ms")
+
+compare_anycast_dns()
+
+# BGP 경로 길이 확인 (RouteViews API 활용 예시)
+def check_bgp_path(prefix="1.1.1.0/24"):
+    """특정 IP 프리픽스의 BGP 경로 정보 확인"""
+    import requests
+
+    # RIPEstat API 사용
+    url = f"https://stat.ripe.net/data/routing-status/data.json"
+    params = {"resource": prefix}
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    if data.get("data"):
+        visibility = data["data"].get("visibility", {})
+        print(f"프리픽스: {prefix}")
+        print(f"전 세계 가시성: {visibility.get('v4', 0)}개 Peer")
+
+# check_bgp_path("1.1.1.0/24")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="terraform">
+                <pre><code class="language-hcl"># AWS Global Accelerator - Anycast IP 활용
+resource "aws_globalaccelerator_accelerator" "example" {
+  name            = "my-anycast-accelerator"
+  ip_address_type = "IPV4"
+  enabled         = true
+
+  attributes {
+    flow_logs_enabled   = true
+    flow_logs_s3_bucket = aws_s3_bucket.logs.bucket
+    flow_logs_s3_prefix = "global-accelerator/"
+  }
+
+  tags = {
+    Name = "Anycast-Accelerator"
+  }
+}
+
+# Anycast IP로 라우팅될 Listener 설정
+resource "aws_globalaccelerator_listener" "https" {
+  accelerator_arn = aws_globalaccelerator_accelerator.example.id
+  protocol        = "TCP"
+
+  port_range {
+    from_port = 443
+    to_port   = 443
+  }
+}
+
+# 엔드포인트 그룹 (각 리전별 서버)
+resource "aws_globalaccelerator_endpoint_group" "seoul" {
+  listener_arn          = aws_globalaccelerator_listener.https.id
+  endpoint_group_region = "ap-northeast-2"
+
+  endpoint_configuration {
+    endpoint_id = aws_lb.seoul.arn
+    weight      = 100
+  }
+
+  health_check_protocol = "HTTPS"
+  health_check_path     = "/health"
+}
+
+resource "aws_globalaccelerator_endpoint_group" "tokyo" {
+  listener_arn          = aws_globalaccelerator_listener.https.id
+  endpoint_group_region = "ap-northeast-1"
+
+  endpoint_configuration {
+    endpoint_id = aws_lb.tokyo.arn
+    weight      = 100
+  }
+}
+
+# 출력: Anycast IP 주소 확인
+output "anycast_ips" {
+  value = aws_globalaccelerator_accelerator.example.ip_sets[0].ip_addresses
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 CDN 도입 미팅에서</div>
+                    <blockquote class="conv-quote">
+                        "Cloudflare는 Anycast 기반이라 별도의 DNS 설정 없이 하나의 IP로 전 세계 300개 이상 POP에서 응답합니다. 한국 사용자는 서울 POP로, 미국 사용자는 가장 가까운 미국 POP로 자동 라우팅되어 레이턴시가 크게 줄어듭니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "Anycast는 BGP 라우팅을 활용해 동일 IP를 여러 위치에서 광고합니다. 1.1.1.1로 요청하면 AS-path가 가장 짧은, 즉 네트워크적으로 가장 가까운 서버로 라우팅됩니다. DNS와 CDN에 많이 사용되고, DDoS 방어에도 효과적인데 트래픽이 자연스럽게 분산되기 때문입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 장애 대응에서</div>
+                    <blockquote class="conv-quote">
+                        "서울 리전 장애 시 Anycast 덕분에 BGP가 자동으로 트래픽을 도쿄나 홍콩으로 재라우팅합니다. DNS TTL 걱정 없이 수십 초 내에 페일오버됩니다. AWS Global Accelerator 쓰면 우리 서비스도 Anycast IP를 받을 수 있어요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>TCP 연결 시 Anycast 오해</strong>
+                        <p>Anycast는 주로 UDP(DNS) 또는 짧은 TCP 연결에 적합합니다. 긴 TCP 연결 중 라우팅이 변경되면 연결이 끊길 수 있습니다. HTTP/3(QUIC)이나 AWS Global Accelerator는 이 문제를 해결합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>지리적 위치 = 네트워크 최적 경로 착각</strong>
+                        <p>Anycast는 물리적 거리가 아닌 BGP 경로 기준으로 라우팅합니다. 서울에서 홍콩 서버로 라우팅되는 경우도 있습니다. ISP 피어링 상태에 따라 달라질 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>자체 Anycast 구축 난이도 과소평가</strong>
+                        <p>Anycast 구축에는 자체 AS 번호, PI(Provider Independent) IP, 각 데이터센터에서 BGP 피어링이 필요합니다. 대부분의 서비스는 Cloudflare, AWS Global Accelerator를 활용하는 것이 현실적입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 Anycast 활용 방법</strong>
+                        <p>DNS, CDN 같은 짧은 요청/응답에 최적. 긴 연결이 필요하면 AWS Global Accelerator나 Cloudflare Spectrum 사용. 정기적으로 여러 지역에서 traceroute로 라우팅 경로를 검증하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/DNS/" class="related-term-link">DNS</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+                <a href="/ko/term/BGP/" class="related-term-link">BGP</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+                <a href="/ko/term/IP/" class="related-term-link">IP</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/cdn/glossary/anycast-network/" target="_blank" class="learn-link">
+                    📄 Cloudflare - Anycast 네트워크란?
+                </a>
+                <a href="https://blog.cloudflare.com/cloudflare-architecture-and-how-bpf-eats-the-world/" target="_blank" class="learn-link">
+                    🎓 Cloudflare 아키텍처와 Anycast 활용
+                </a>
+                <a href="https://docs.aws.amazon.com/ko_kr/global-accelerator/latest/dg/what-is-global-accelerator.html" target="_blank" class="learn-link">
+                    📖 AWS Global Accelerator 공식 문서
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +607,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

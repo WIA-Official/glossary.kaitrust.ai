@@ -161,6 +161,122 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhancement Section Styles */
+        .enhancement-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.8));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhancement-section h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .enhancement-section p, .enhancement-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+        }
+        .enhancement-section ul, .enhancement-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .enhancement-section strong {
+            color: #a855f7;
+        }
+        .code-block {
+            background: #0f172a;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .code-block .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-block .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .dialogue-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .dialogue-box .speaker {
+            font-weight: 600;
+            color: #818cf8;
+            margin-bottom: 0.25rem;
+        }
+        .dialogue-box p {
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-link {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #fff;
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #00f5ff;
+            text-decoration: none;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -202,6 +318,86 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="enhancement-section">
+            <h2>상세 설명</h2>
+            <p><strong>미들웨어(Middleware)</strong>는 요청(Request)과 응답(Response) 사이에서 실행되는 함수입니다. 주로 인증, 로깅, 에러 처리, 데이터 변환 등 공통 작업을 처리합니다.</p>
+            <ul>
+                <li><strong>Express.js</strong>: app.use()로 미들웨어 등록</li>
+                <li><strong>Next.js</strong>: middleware.ts 파일로 라우팅 전 처리</li>
+                <li><strong>Django</strong>: MIDDLEWARE 설정에서 순서대로 실행</li>
+            </ul>
+            <p>미들웨어는 체인처럼 연결되어 순차적으로 실행되며, next()를 호출해야 다음 미들웨어로 넘어갑니다.</p>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="enhancement-section">
+            <h2>코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>// Express.js 미들웨어
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`); // 로깅
+    next(); // 다음 미들웨어로
+});
+
+// 인증 미들웨어
+const authMiddleware = (req, res, next) => {
+    if (!req.headers.authorization) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    next();
+};
+
+app.get('/api/protected', authMiddleware, (req, res) => {
+    res.json({ data: 'secret' });
+});</code>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="enhancement-section">
+            <h2>실무 대화 예시</h2>
+            <div class="dialogue-box">
+                <p class="speaker">신입</p>
+                <p>"모든 API에서 로그인 체크하려면 if문 다 넣어야 해요?"</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">시니어</p>
+                <p>"미들웨어 하나 만들어서 라우터에 적용해. 공통 로직은 미들웨어로 빼는 게 기본이야."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="enhancement-section">
+            <h2>주의사항</h2>
+            <div class="warning-box">
+                <p><strong>순서 중요</strong>: 미들웨어는 등록 순서대로 실행됩니다. 인증 미들웨어가 라우터보다 뒤에 있으면 의미가 없습니다.</p>
+            </div>
+            <div class="warning-box">
+                <p><strong>next() 호출 필수</strong>: next()를 호출하지 않으면 요청이 멈춥니다.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhancement-section">
+            <h2>관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Express.js/" class="related-term-link">Express.js</a>
+                <a href="/ko/term/Next.js/" class="related-term-link">Next.js</a>
+                <a href="/ko/term/REST%20API/" class="related-term-link">REST API</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhancement-section">
+            <h2>더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://expressjs.com/en/guide/using-middleware.html" target="_blank">Express.js 미들웨어 가이드</a></li>
+                <li><a href="https://nextjs.org/docs/app/building-your-application/routing/middleware" target="_blank">Next.js 미들웨어</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +408,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

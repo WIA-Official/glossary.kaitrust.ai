@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,147 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>시스템적 위험(Systemic Risk)은 EU AI Act 제3조에서 정의하는 개념으로, GPAI(범용 AI) 모델이 가진 높은 영향력 역량으로 인해 EU 내부 시장에 상당한 영향을 미칠 수 있으며, 건강, 안전, 공공 안보, 기본권, 사회에 실제적 또는 합리적으로 예측 가능한 부정적 영향을 미칠 수 있는 위험을 의미합니다.</p>
+                <p>시스템적 위험이 있는 GPAI 모델의 판정 기준은 제51조에서 규정합니다. 첫째, 누적 학습 연산량이 10^25 FLOP을 초과하는 경우 자동으로 해당됩니다. 둘째, EU 집행위원회가 개별적으로 지정할 수 있습니다. GPT-4, Claude 3, Gemini Ultra 등 대형 모델들이 여기에 해당합니다.</p>
+                <p>시스템적 위험 GPAI 제공자는 추가 의무를 부담합니다(제55조): 모델 평가(레드팀 테스트 포함), 시스템적 위험 평가 및 완화, 심각한 사고 추적 및 보고, 사이버보안 보호 확보, 에너지 소비 문서화. 이러한 의무는 일반 GPAI 모델보다 훨씬 엄격합니다.</p>
+                <p>시스템적 위험의 구체적 예시로는 대규모 허위정보 생성 및 확산, 사이버 공격 자동화, 생물학적 위험물질 합성 지원, 중요 인프라에 대한 위협 등이 있습니다. 이러한 위험은 개별 AI 시스템을 넘어 사회 전체에 영향을 미칠 수 있어 '시스템적'이라고 명명됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn">복사</button>
+                <pre><code># 시스템적 위험 GPAI 의무사항 관리 예제
+from dataclasses import dataclass
+from datetime import datetime
+from typing import List, Dict
+from enum import Enum
+
+class SystemicRiskCategory(Enum):
+    MISINFORMATION = "misinformation"
+    CYBER_ATTACK = "cyber_attack"
+    BIOLOGICAL_RISK = "biological_risk"
+    INFRASTRUCTURE = "critical_infrastructure"
+    DISCRIMINATION = "large_scale_discrimination"
+
+@dataclass
+class SystemicRiskAssessment:
+    """시스템적 위험 평가 (EU AI Act 제55조)"""
+    model_name: str
+    model_version: str
+    training_compute_flops: float
+    assessment_date: datetime
+    risk_categories: List[SystemicRiskCategory]
+    risk_scores: Dict[str, float]  # 0-10
+    mitigation_measures: List[str]
+    red_team_completed: bool
+    energy_consumption_kwh: float
+
+    def is_systemic_risk_model(self) -> bool:
+        """10^25 FLOP 기준 자동 판정"""
+        return self.training_compute_flops >= 10**25
+
+    def get_compliance_status(self) -> Dict:
+        """제55조 준수 상태"""
+        return {
+            "model": self.model_name,
+            "is_systemic_risk": self.is_systemic_risk_model(),
+            "article_55_requirements": {
+                "model_evaluation": self.red_team_completed,
+                "risk_assessment": len(self.risk_scores) > 0,
+                "mitigation_measures": len(self.mitigation_measures) > 0,
+                "energy_documented": self.energy_consumption_kwh > 0
+            },
+            "overall_compliant": all([
+                self.red_team_completed,
+                len(self.risk_scores) > 0,
+                len(self.mitigation_measures) > 0,
+                self.energy_consumption_kwh > 0
+            ])
+        }
+
+# 사용 예시
+assessment = SystemicRiskAssessment(
+    model_name="LargeModel-X",
+    model_version="v1.0",
+    training_compute_flops=3e25,  # 10^25 초과
+    assessment_date=datetime.now(),
+    risk_categories=[SystemicRiskCategory.MISINFORMATION, SystemicRiskCategory.CYBER_ATTACK],
+    risk_scores={"misinformation": 7.5, "cyber_attack": 6.0},
+    mitigation_measures=["출력 필터링", "사용자 인증 강화", "워터마킹"],
+    red_team_completed=True,
+    energy_consumption_kwh=1500000
+)
+
+status = assessment.get_compliance_status()
+print(f"시스템적 위험 모델: {status['is_systemic_risk']}")
+print(f"제55조 준수: {status['overall_compliant']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conversation-title">
+            <h2 id="conversation-title" class="section-title">실무 대화</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-target="meeting14">회의</button>
+                <button class="conv-tab" data-target="interview14">면접</button>
+                <button class="conv-tab" data-target="review14">코드리뷰</button>
+            </div>
+            <div class="conv-content active" id="meeting14" data-label="회의">
+                <p><strong class="role-pm">CTO:</strong> 우리 신규 LLM이 시스템적 위험 모델에 해당하나요?</p>
+                <p><strong class="role-senior">ML리드:</strong> 학습 연산량이 10^25 FLOP을 넘으면 자동으로 해당됩니다. 우리 모델은 3x10^24라서 현재는 아니에요.</p>
+                <p><strong class="role-pm">CTO:</strong> 다음 버전에서 모델을 키우면?</p>
+                <p><strong class="role-senior">ML리드:</strong> 그러면 제55조 추가 의무가 적용됩니다. 레드팀 테스트, 위험 평가, 에너지 소비 문서화 등을 준비해야 해요.</p>
+            </div>
+            <div class="conv-content" id="interview14" data-label="면접">
+                <p><strong class="role-interviewer">면접관:</strong> EU AI Act에서 시스템적 위험의 의미와 관련 의무를 설명해주세요.</p>
+                <p><strong class="role-candidate">지원자:</strong> 시스템적 위험은 GPAI 모델이 사회 전반에 미칠 수 있는 대규모 부정적 영향을 의미합니다. 학습 연산량 10^25 FLOP 이상이면 자동 해당되고, 제55조에 따라 레드팀 테스트, 위험 평가 및 완화, 심각한 사고 보고, 사이버보안 확보, 에너지 소비 문서화 의무가 부과됩니다. GPT-4급 이상의 대형 모델이 대상입니다.</p>
+            </div>
+            <div class="conv-content" id="review14" data-label="코드리뷰">
+                <p><strong class="role-senior">시니어:</strong> 모델 카드에 학습 연산량 정보가 없네요.</p>
+                <p><strong class="role-junior">주니어:</strong> 필수인가요?</p>
+                <p><strong class="role-senior">시니어:</strong> EU AI Act 대응상 필요합니다. 10^25 기준 해당 여부 판단에 쓰이고, 에너지 소비 산출의 기초 데이터이기도 해요. FLOP 추정치라도 기록하세요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li class="critical">시스템적 위험 GPAI 모델 제공자가 제55조 의무를 위반하면 최대 1,500만 유로 또는 매출 3% 과징금이 부과됩니다.</li>
+                <li>10^25 FLOP 기준은 기술 발전에 따라 EU 집행위원회가 조정할 수 있습니다. 기준에 근접한 모델 개발 시 향후 변경 가능성을 고려하세요.</li>
+                <li class="info">시스템적 위험 모델은 AI Office에 등록해야 하며, 발효 후 12개월 이내에 준수 체계를 갖춰야 합니다(2025년 8월 예정).</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%88%98%EC%9D%B8%EB%B6%88%EA%B0%80%20%EC%9C%84%ED%97%98%20AI/" class="related-link">수인불가 위험 AI</a>
+                <a href="/ko/term/%EB%A0%88%EB%93%9C%ED%8C%80%20%ED%85%8C%EC%8A%A4%ED%8A%B8/" class="related-link">레드팀 테스트</a>
+                <a href="/ko/term/%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80/" class="related-link">모델 평가</a>
+                <a href="/ko/term/%EC%82%AC%ED%9B%84%20%EC%8B%9C%EC%9E%A5%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81/" class="related-link">사후 시장 모니터링</a>
+                <a href="/ko/term/%EC%8B%9C%EC%9E%A5%20%EA%B0%90%EC%8B%9C%20%EB%8B%B9%EA%B5%AD/" class="related-link">시장 감시 당국</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act 제51조, 제55조 원문</a><span class="resource-meta">법령</span></li>
+                <li><span class="type-blog"></span><a href="https://epochai.org/blog/compute-trends" target="_blank" rel="noopener">Epoch AI - AI 학습 연산량 트렌드</a><span class="resource-meta">연구</span></li>
+                <li><span class="type-official"></span><a href="https://digital-strategy.ec.europa.eu/en/policies/ai-office" target="_blank" rel="noopener">EU AI Office 소개</a><span class="resource-meta">EU 정책</span></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +354,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

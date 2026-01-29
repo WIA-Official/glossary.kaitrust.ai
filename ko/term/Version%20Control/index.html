@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,172 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>버전 관리(Version Control)는 파일의 변경 이력을 추적하고 관리하는 시스템입니다. 1972년 SCCS(Source Code Control System)에서 시작되어, CVS, Subversion을 거쳐 현재는 Git이 사실상 표준입니다. 2005년 리누스 토발즈가 Linux 커널 개발을 위해 Git을 만들었습니다.</p>
+                <p>버전 관리의 핵심 개념은 커밋(Commit), 브랜치(Branch), 머지(Merge)입니다. 커밋은 특정 시점의 스냅샷이고, 브랜치는 독립적인 개발 라인입니다. 브랜치를 사용해 새 기능을 격리된 환경에서 개발하고, 완료되면 메인 브랜치에 머지합니다.</p>
+                <p>분산 버전 관리(DVCS)인 Git은 모든 개발자가 전체 히스토리를 로컬에 가집니다. 네트워크 없이도 커밋, 브랜치 생성, 히스토리 조회가 가능하고, 중앙 서버 장애에도 복구가 쉽습니다. GitHub, GitLab, Bitbucket이 Git 호스팅과 협업 기능을 제공합니다.</p>
+                <p>실무에서는 Git Flow, GitHub Flow, Trunk Based Development 등의 브랜칭 전략을 사용합니다. Pull Request(Merge Request)로 코드 리뷰를 수행하고, CI/CD와 연동해 자동 테스트와 배포를 실행합니다. 의미 있는 커밋 메시지와 atomic commit이 협업의 핵심입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="bash">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Git 기본 워크플로우
+
+# 저장소 초기화/클론
+git init
+git clone https://github.com/org/repo.git
+
+# 상태 확인
+git status
+git log --oneline --graph -10
+
+# 기능 브랜치 생성 및 작업
+git checkout -b feature/user-auth
+git checkout -b feat/JIRA-123-login-api  # JIRA 연동 시
+
+# 변경사항 스테이징 및 커밋
+git add -p                    # 변경사항 부분 선택
+git add src/auth/
+git commit -m "feat: implement JWT authentication
+
+- Add JWT token generation and validation
+- Configure token expiration to 24 hours
+- Add refresh token rotation
+
+Closes #123"
+
+# 원격 저장소와 동기화
+git fetch origin
+git rebase origin/main        # 최신 main 위에 rebase
+git push origin feature/user-auth
+
+# Pull Request 생성 후 머지
+# (GitHub/GitLab UI에서 리뷰 및 승인)
+
+git checkout main
+git pull origin main
+git branch -d feature/user-auth  # 로컬 브랜치 삭제
+
+# 유용한 명령어들
+git stash                     # 임시 저장
+git stash pop                 # 복원
+git cherry-pick abc123        # 특정 커밋만 가져오기
+git revert abc123             # 커밋 되돌리기 (히스토리 유지)
+git reset --soft HEAD~1       # 직전 커밋 취소 (변경사항 유지)
+
+# 브랜치 전략 예시 (GitHub Flow)
+# main: 항상 배포 가능한 상태
+# feature/*: 기능 개발
+# hotfix/*: 긴급 버그 수정
+
+# .gitignore 예시
+cat << 'EOF' > .gitignore
+# Dependencies
+node_modules/
+vendor/
+
+# Build output
+dist/
+build/
+*.pyc
+
+# Environment
+.env
+.env.local
+*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test coverage
+coverage/
+.nyc_output/
+EOF
+
+# Conventional Commits 형식
+# feat: 새 기능
+# fix: 버그 수정
+# docs: 문서 변경
+# style: 코드 포맷팅
+# refactor: 리팩토링
+# test: 테스트 추가/수정
+# chore: 빌드/설정 변경</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "feature 브랜치가 너무 오래 살아있으면 충돌 해결하기 힘들어요. 작은 단위로 자주 머지하는 게 나아요."</p>
+                <p><strong class="role-junior">주니어:</strong> "아직 기능이 완성 안 됐는데 머지해도 되나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "Feature Flag 쓰면 돼요. 코드는 main에 있지만 플래그로 비활성화하면 유저한테 안 보여요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Git 충돌 해결 경험을 설명해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "git rebase 중 충돌이 발생하면 충돌 파일을 열어 두 변경사항의 의도를 파악합니다. 단순 텍스트 충돌은 직접 수정하고, 로직 충돌은 해당 코드 작성자와 논의합니다. VSCode의 3-way merge 뷰어나 git mergetool을 사용하면 시각적으로 해결하기 편합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "커밋 메시지가 'fix bug'만 있네요. 뭘 왜 수정했는지 적어주세요."</p>
+                <p><strong class="role-junior">개발자:</strong> "fix: prevent duplicate user registration 으로 수정하고, body에 원인과 해결 방법 적겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>push --force는 다른 개발자 작업을 덮어쓸 수 있음 - 공유 브랜치에서는 사용 금지</li>
+                <li>민감 정보(.env, 비밀키)가 커밋되면 히스토리에 영구 기록 - 사전에 .gitignore 설정</li>
+                <li>큰 바이너리 파일은 저장소 비대화 - Git LFS 사용하거나 별도 스토리지 관리</li>
+                <li class="info">git bisect로 버그가 발생한 커밋을 이진 탐색으로 빠르게 찾을 수 있음</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Git/" class="related-link">Git</a>
+                <a href="/ko/term/GitHub/" class="related-link">GitHub</a>
+                <a href="/ko/term/GitOps/" class="related-link">GitOps</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://git-scm.com/doc" target="_blank" rel="noopener">Git 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">Learn Git Branching - 인터랙티브 튜토리얼</a></li>
+                <li><span class="type-book"></span><a href="https://www.conventionalcommits.org/" target="_blank" rel="noopener">Conventional Commits 스펙</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +379,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

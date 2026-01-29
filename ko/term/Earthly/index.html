@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,134 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Earthly는 컨테이너 기반의 빌드 자동화 도구로, Dockerfile과 Makefile의 장점을 결합했습니다. 빌드를 컨테이너 안에서 실행하여 "내 컴퓨터에서는 되는데" 문제를 해결하고, 로컬과 CI 환경에서 동일한 결과를 보장합니다.</p>
+                <p>Earthfile이라는 설정 파일을 사용하며, 문법은 Dockerfile과 유사하지만 타겟(target) 개념으로 빌드 단계를 구조화합니다. 각 타겟은 의존성을 가질 수 있어서 복잡한 빌드 워크플로우를 선언적으로 표현합니다.</p>
+                <p>강력한 캐싱 시스템이 특징입니다. 입력 파일이 변경되지 않으면 이전 빌드 결과를 재사용하고, 리모트 캐시를 통해 팀원 간 빌드 캐시를 공유할 수 있어 CI 빌드 시간을 크게 단축합니다.</p>
+                <p>모노레포(monorepo) 환경에서 특히 유용합니다. 여러 서비스의 빌드를 하나의 Earthfile로 관리하고, 변경된 부분만 선택적으로 빌드할 수 있습니다. GitHub Actions, GitLab CI 등 모든 CI 시스템과 통합됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="earthfile">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Earthfile - 모노레포 빌드 설정
+VERSION 0.7
+
+# 공통 베이스 이미지
+base:
+    FROM node:20-alpine
+    WORKDIR /app
+    RUN apk add --no-cache python3 make g++
+
+# 프론트엔드 빌드
+frontend:
+    FROM +base
+    COPY frontend/package*.json ./frontend/
+    RUN cd frontend && npm ci
+    COPY frontend ./frontend
+    RUN cd frontend && npm run build
+    SAVE ARTIFACT frontend/dist AS LOCAL ./frontend/dist
+
+# 백엔드 빌드
+backend:
+    FROM +base
+    COPY backend/package*.json ./backend/
+    RUN cd backend && npm ci --only=production
+    COPY backend ./backend
+    RUN cd backend && npm run build
+    SAVE ARTIFACT backend/dist AS LOCAL ./backend/dist
+
+# 통합 테스트
+integration-test:
+    FROM +base
+    COPY +frontend/dist ./frontend/dist
+    COPY +backend/dist ./backend/dist
+    COPY tests ./tests
+    WITH DOCKER --compose docker-compose.test.yml
+        RUN npm run test:integration
+    END
+
+# Docker 이미지 빌드
+docker:
+    FROM node:20-alpine
+    WORKDIR /app
+    COPY +backend/dist ./dist
+    COPY +backend/node_modules ./node_modules
+    EXPOSE 3000
+    CMD ["node", "dist/main.js"]
+    SAVE IMAGE --push myregistry/myapp:latest
+
+# 전체 빌드
+all:
+    BUILD +frontend
+    BUILD +backend
+    BUILD +integration-test
+    BUILD +docker</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "CI 빌드가 20분이나 걸려. Earthly로 바꾸고 리모트 캐시 설정하면 많이 빨라질 거야."</p>
+                <p><strong class="role-junior">주니어:</strong> "로컬에서 빌드한 캐시를 CI에서도 쓸 수 있나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "응, S3나 GCS에 캐시 저장해두면 팀원 모두가 공유해. 첫 빌드 빼고는 5분 이내로 끝나."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "모노레포에서 빌드 시간을 줄이기 위해 어떤 전략을 사용하셨나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "Earthly를 도입해서 빌드 캐시를 팀 전체가 공유하고, 변경된 서비스만 선택적으로 빌드했습니다. 평균 빌드 시간이 15분에서 3분으로 줄었습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 타겟 COPY가 너무 넓어요. src만 복사하면 package.json 변경 없을 때 npm install 캐시 타요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, Dockerfile 최적화랑 같은 원리네요. 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>로컬에 Docker가 필요함 - Earthly는 내부적으로 BuildKit 사용</li>
+                <li>VERSION 선언 필수 - 버전에 따라 문법이 다르므로 명시해야 재현 가능</li>
+                <li>WITH DOCKER는 DinD(Docker in Docker) 사용 - 권한 이슈 주의</li>
+                <li class="info">처음엔 기존 Dockerfile을 Earthfile로 그대로 옮기고, 점진적으로 타겟을 분리</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Dockerfile/" class="related-link">Dockerfile</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+                <a href="/ko/term/GitHub/" class="related-link">GitHub</a>
+                <a href="/ko/term/Integration%20Test/" class="related-link">Integration Test</a>
+                <a href="/ko/term/IaC/" class="related-link">IaC</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://earthly.dev/docs" target="_blank" rel="noopener">Earthly 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://github.com/earthly/earthly" target="_blank" rel="noopener">Earthly GitHub 저장소</a></li>
+                <li><span class="type-tutorial"></span><a href="https://earthly.dev/blog/monorepo-with-earthly/" target="_blank" rel="noopener">Earthly로 모노레포 빌드하기</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +341,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

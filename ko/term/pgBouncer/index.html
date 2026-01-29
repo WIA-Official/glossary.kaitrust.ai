@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pgBouncer (pgBouncer) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="PostgreSQL 커넥션 풀러. 경량, 고성능.">
-    <meta name="keywords" content="pgBouncer, pgBouncer, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <title>pgBouncer (PostgreSQL Connection Pooler) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="pgBouncer는 PostgreSQL을 위한 경량 커넥션 풀러입니다. 애플리케이션의 수천 개 연결을 수십 개의 실제 DB 연결로 처리하여 메모리 사용량을 줄이고 성능을 향상시킵니다.">
+    <meta name="keywords" content="pgBouncer, PostgreSQL, Connection Pooler, 커넥션 풀링, 데이터베이스 연결, Transaction Pooling, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/pgBouncer/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/pgBouncer/">
-    <meta property="og:title" content="pgBouncer (pgBouncer) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="PostgreSQL 커넥션 풀러. 경량, 고성능.">
+    <meta property="og:title" content="pgBouncer (PostgreSQL Connection Pooler) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="pgBouncer는 PostgreSQL 경량 커넥션 풀러로 연결 효율성을 극대화합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="pgBouncer (pgBouncer) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="PostgreSQL 커넥션 풀러. 경량, 고성능.">
+    <meta name="twitter:title" content="pgBouncer (PostgreSQL Connection Pooler) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="pgBouncer는 PostgreSQL 경량 커넥션 풀러로 연결 효율성을 극대화합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "pgBouncer",
-        "description": "PostgreSQL 커넥션 풀러. 경량, 고성능.",
+        "alternateName": "PostgreSQL Connection Pooler",
+        "description": "pgBouncer는 PostgreSQL 경량 커넥션 풀러로 연결 효율성을 극대화합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +276,9 @@
                 <span>데이터베이스</span>
             </div>
             <h1 class="term-title">pgBouncer</h1>
-            <p class="term-english">pgBouncer</p>
+            <p class="term-english">PostgreSQL Connection Pooler</p>
             <div class="term-description">
-                <p>PostgreSQL 커넥션 풀러. 경량, 고성능.</p>
+                <p>PostgreSQL을 위한 경량 커넥션 풀러입니다. 애플리케이션의 수천 개 연결을 수십 개의 실제 DB 연결로 다중화하여 PostgreSQL 서버의 메모리 사용량과 연결 오버헤드를 크게 줄입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,587 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>pgBouncer</strong>는 PostgreSQL 앞단에서 동작하는 경량 커넥션 풀러입니다. PostgreSQL은 프로세스 기반 아키텍처로 연결당 하나의 프로세스가 생성되며, 연결당 약 5-10MB의 메모리를 소비합니다. pgBouncer는 이 문제를 해결합니다.</p>
+                <p><strong>풀링 모드</strong>: (1) <strong>Session 모드</strong> - 클라이언트 세션 동안 연결 유지, 가장 호환성 높음, (2) <strong>Transaction 모드</strong> - 트랜잭션 단위로 연결 공유, 가장 효율적이며 권장, (3) <strong>Statement 모드</strong> - 문장 단위 공유, 다중 문장 트랜잭션 불가로 제한적 사용.</p>
+                <p><strong>동작 원리</strong>: 클라이언트는 pgBouncer(기본 6432 포트)에 연결하고, pgBouncer가 내부적으로 PostgreSQL 연결 풀을 관리합니다. Transaction 모드에서 트랜잭션이 끝나면 연결이 풀로 반환되어 다른 클라이언트가 재사용합니다.</p>
+                <p><strong>성능 효과</strong>: 10,000개의 동시 클라이언트 연결을 50개의 실제 DB 연결로 처리 가능합니다. 서버리스 환경(AWS Lambda, Vercel)에서 연결이 자주 생성/해제될 때 특히 효과적입니다. 연결 생성 오버헤드(TCP 핸드셰이크, 인증)를 제거합니다.</p>
+                <p>Supabase, Neon, Railway 등 PostgreSQL 기반 클라우드 서비스들이 pgBouncer를 기본 제공하며, 서버리스 환경에서 필수적인 구성 요소로 자리잡았습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python 연결</button>
+                <button class="code-tab" data-lang="node">Node.js 연결</button>
+                <button class="code-tab" data-lang="config">pgBouncer 설정</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># pgBouncer를 통한 PostgreSQL 연결 - Python
+import psycopg2
+from psycopg2 import pool
+from contextlib import contextmanager
+
+class PgBouncerConnection:
+    """
+    pgBouncer를 통한 PostgreSQL 연결 관리
+    Transaction 모드 사용 시 주의사항 반영
+    """
+
+    def __init__(self, pgbouncer_host: str, port: int = 6432):
+        # pgBouncer 포트로 연결 (기본 6432)
+        self.connection_string = f"""
+            host={pgbouncer_host}
+            port={port}
+            dbname=mydb
+            user=app_user
+            password=secret
+        """
+        # 애플리케이션 레벨 풀 (pgBouncer가 있어도 권장)
+        self.pool = psycopg2.pool.ThreadedConnectionPool(
+            minconn=5,
+            maxconn=20,
+            dsn=self.connection_string
+        )
+
+    @contextmanager
+    def get_connection(self):
+        """연결 획득 및 반환"""
+        conn = self.pool.getconn()
+        try:
+            yield conn
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            raise e
+        finally:
+            self.pool.putconn(conn)
+
+    def execute_query(self, query: str, params: tuple = None):
+        """단순 쿼리 실행"""
+        with self.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(query, params)
+                if cur.description:
+                    return cur.fetchall()
+                return None
+
+
+# Transaction 모드에서의 주의사항
+class TransactionModeWarnings:
+    """
+    pgBouncer Transaction 모드 제한사항
+    - PREPARE/DEALLOCATE: 트랜잭션 간 유지 안됨
+    - SET 명령: 세션 변수 유지 안됨
+    - LISTEN/NOTIFY: 작동 안함
+    - Cursors: WITH HOLD 커서 사용 불가
+    """
+
+    def __init__(self, conn_string: str):
+        self.conn_string = conn_string
+
+    def wrong_approach(self):
+        """❌ 잘못된 사용 - SET이 다음 쿼리에서 유지 안됨"""
+        conn = psycopg2.connect(self.conn_string)
+
+        # 트랜잭션 1
+        with conn.cursor() as cur:
+            cur.execute("SET search_path TO myschema")
+        conn.commit()  # 여기서 연결이 풀로 반환됨
+
+        # 트랜잭션 2 - 다른 연결을 받을 수 있음!
+        with conn.cursor() as cur:
+            # search_path가 초기화되어 있을 수 있음
+            cur.execute("SELECT * FROM mytable")  # 오류 가능
+
+    def correct_approach(self):
+        """✅ 올바른 사용 - 같은 트랜잭션 내에서 처리"""
+        conn = psycopg2.connect(self.conn_string)
+
+        with conn.cursor() as cur:
+            # 같은 트랜잭션 내에서 SET과 쿼리 실행
+            cur.execute("SET search_path TO myschema")
+            cur.execute("SELECT * FROM mytable")
+            results = cur.fetchall()
+
+        conn.commit()  # 모든 작업 후 커밋
+        return results
+
+    def use_query_hints(self):
+        """✅ 쿼리 레벨에서 스키마 명시"""
+        conn = psycopg2.connect(self.conn_string)
+
+        with conn.cursor() as cur:
+            # SET 대신 스키마를 쿼리에 직접 명시
+            cur.execute("SELECT * FROM myschema.mytable")
+            return cur.fetchall()
+
+
+# pgBouncer 관리 명령어 실행
+class PgBouncerAdmin:
+    """pgBouncer 관리 인터페이스"""
+
+    def __init__(self, admin_conn_string: str):
+        # pgbouncer 데이터베이스로 연결
+        self.conn_string = admin_conn_string
+
+    def show_pools(self):
+        """풀 상태 확인"""
+        conn = psycopg2.connect(self.conn_string)
+        conn.autocommit = True  # 관리 명령은 autocommit 필요
+
+        with conn.cursor() as cur:
+            cur.execute("SHOW POOLS")
+            columns = [desc[0] for desc in cur.description]
+            rows = cur.fetchall()
+
+            for row in rows:
+                pool_info = dict(zip(columns, row))
+                print(f"DB: {pool_info['database']}")
+                print(f"  - Active: {pool_info['cl_active']}")
+                print(f"  - Waiting: {pool_info['cl_waiting']}")
+                print(f"  - Server connections: {pool_info['sv_active']}")
+
+    def show_stats(self):
+        """통계 확인"""
+        conn = psycopg2.connect(self.conn_string)
+        conn.autocommit = True
+
+        with conn.cursor() as cur:
+            cur.execute("SHOW STATS")
+            return cur.fetchall()
+
+    def reload_config(self):
+        """설정 리로드"""
+        conn = psycopg2.connect(self.conn_string)
+        conn.autocommit = True
+
+        with conn.cursor() as cur:
+            cur.execute("RELOAD")
+            print("pgBouncer config reloaded")
+
+
+# 사용 예시
+if __name__ == "__main__":
+    db = PgBouncerConnection("pgbouncer.example.com")
+
+    # 일반 쿼리
+    users = db.execute_query(
+        "SELECT * FROM users WHERE created_at > %s",
+        ("2024-01-01",)
+    )
+    print(users)
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// pgBouncer를 통한 PostgreSQL 연결 - Node.js
+const { Pool } = require('pg');
+
+class PgBouncerClient {
+    constructor(config) {
+        // pgBouncer 포트(6432)로 연결
+        this.pool = new Pool({
+            host: config.host,
+            port: config.port || 6432,  // pgBouncer 기본 포트
+            database: config.database,
+            user: config.user,
+            password: config.password,
+
+            // pgBouncer 사용 시 권장 설정
+            max: 20,                    // 클라이언트 풀 크기
+            idleTimeoutMillis: 30000,
+            connectionTimeoutMillis: 2000,
+
+            // Transaction 모드 호환성
+            statement_timeout: 30000,
+        });
+    }
+
+    /**
+     * 단순 쿼리 실행
+     */
+    async query(text, params) {
+        const client = await this.pool.connect();
+        try {
+            const result = await client.query(text, params);
+            return result.rows;
+        } finally {
+            client.release();
+        }
+    }
+
+    /**
+     * 트랜잭션 실행 - Transaction 모드 호환
+     */
+    async transaction(callback) {
+        const client = await this.pool.connect();
+        try {
+            await client.query('BEGIN');
+
+            // 트랜잭션 내에서 모든 작업 수행
+            const result = await callback(client);
+
+            await client.query('COMMIT');
+            return result;
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
+    }
+}
+
+// Transaction 모드 주의사항 예제
+class TransactionModeExamples {
+    constructor(pool) {
+        this.pool = pool;
+    }
+
+    /**
+     * ❌ 잘못된 사용: SET 명령이 다음 쿼리에서 유지 안됨
+     */
+    async wrongUsage() {
+        // 쿼리 1: SET 실행
+        await this.pool.query("SET timezone TO 'Asia/Seoul'");
+
+        // 쿼리 2: 다른 연결로 갈 수 있음!
+        const result = await this.pool.query("SELECT NOW()");
+        // timezone 설정이 적용 안 될 수 있음
+        return result.rows;
+    }
+
+    /**
+     * ✅ 올바른 사용: 같은 트랜잭션 내에서 처리
+     */
+    async correctUsage() {
+        const client = await this.pool.connect();
+        try {
+            await client.query('BEGIN');
+
+            // 같은 연결에서 SET과 쿼리 실행
+            await client.query("SET timezone TO 'Asia/Seoul'");
+            const result = await client.query("SELECT NOW()");
+
+            await client.query('COMMIT');
+            return result.rows;
+        } finally {
+            client.release();
+        }
+    }
+
+    /**
+     * ✅ 쿼리 레벨 설정 사용
+     */
+    async queryLevelTimezone() {
+        // SET 대신 AT TIME ZONE 사용
+        const result = await this.pool.query(`
+            SELECT NOW() AT TIME ZONE 'Asia/Seoul' as local_time
+        `);
+        return result.rows;
+    }
+
+    /**
+     * ❌ PREPARE는 Transaction 모드에서 작동 안함
+     */
+    async preparedStatement() {
+        // pgBouncer Transaction 모드에서는
+        // prepared statement가 트랜잭션 간 유지 안됨
+
+        // 대신 일반 파라미터 쿼리 사용
+        const result = await this.pool.query(
+            'SELECT * FROM users WHERE id = $1',
+            [123]
+        );
+        return result.rows;
+    }
+}
+
+// Prisma에서 pgBouncer 사용
+// prisma/schema.prisma
+/*
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // pgBouncer Transaction 모드 사용 시 필수
+  directUrl = env("DIRECT_URL")  // 마이그레이션용 직접 연결
+}
+
+// .env
+// DATABASE_URL="postgresql://user:pass@pgbouncer:6432/mydb?pgbouncer=true"
+// DIRECT_URL="postgresql://user:pass@postgres:5432/mydb"
+*/
+
+// 사용 예시
+async function main() {
+    const db = new PgBouncerClient({
+        host: 'pgbouncer.example.com',
+        port: 6432,
+        database: 'mydb',
+        user: 'app_user',
+        password: 'secret'
+    });
+
+    // 트랜잭션 예제
+    const result = await db.transaction(async (client) => {
+        await client.query(
+            'UPDATE accounts SET balance = balance - $1 WHERE id = $2',
+            [100, 'ACC001']
+        );
+        await client.query(
+            'UPDATE accounts SET balance = balance + $1 WHERE id = $2',
+            [100, 'ACC002']
+        );
+        return { success: true };
+    });
+
+    console.log(result);
+}
+
+main().catch(console.error);
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="config">
+                <pre><code class="language-ini"># ============================================
+# pgbouncer.ini - 기본 설정
+# ============================================
+
+[databases]
+# 데이터베이스 별칭 = 실제 연결 정보
+mydb = host=postgres.internal port=5432 dbname=production
+# 여러 DB 설정 가능
+analytics = host=analytics-db.internal port=5432 dbname=analytics
+
+# 와일드카드로 모든 DB 허용
+# * = host=postgres.internal port=5432
+
+[pgbouncer]
+# 리스닝 설정
+listen_addr = 0.0.0.0
+listen_port = 6432
+
+# 인증 설정
+auth_type = scram-sha-256
+auth_file = /etc/pgbouncer/userlist.txt
+# auth_query = SELECT username, password FROM pgbouncer.users WHERE username=$1
+
+# ============================================
+# 풀링 모드 (가장 중요한 설정)
+# ============================================
+# session: 세션 동안 연결 유지 (가장 호환성 높음)
+# transaction: 트랜잭션 단위 공유 (권장, 가장 효율적)
+# statement: 문장 단위 공유 (제한적)
+pool_mode = transaction
+
+# ============================================
+# 연결 풀 설정
+# ============================================
+# 데이터베이스당 기본 풀 크기
+default_pool_size = 25
+
+# 전체 최대 클라이언트 연결
+max_client_conn = 10000
+
+# 최소 풀 크기 (사전 연결)
+min_pool_size = 5
+
+# 예약 풀 크기 (긴급용)
+reserve_pool_size = 5
+reserve_pool_timeout = 3
+
+# 사용자당 최대 연결
+max_user_connections = 100
+
+# 데이터베이스당 최대 연결
+max_db_connections = 50
+
+# ============================================
+# 타임아웃 설정
+# ============================================
+# 서버 연결 유휴 타임아웃
+server_idle_timeout = 60
+
+# 클라이언트 유휴 타임아웃 (0 = 무제한)
+client_idle_timeout = 0
+
+# 클라이언트 로그인 타임아웃
+client_login_timeout = 60
+
+# 쿼리 타임아웃
+query_timeout = 120
+
+# 서버 연결 수명
+server_lifetime = 3600
+
+# ============================================
+# 로깅 설정
+# ============================================
+log_connections = 1
+log_disconnections = 1
+log_pooler_errors = 1
+stats_period = 60
+
+# 로그 파일
+logfile = /var/log/pgbouncer/pgbouncer.log
+pidfile = /var/run/pgbouncer/pgbouncer.pid
+
+# ============================================
+# 관리자 설정
+# ============================================
+admin_users = pgbouncer_admin
+stats_users = pgbouncer_stats
+
+# ============================================
+# userlist.txt 예시
+# ============================================
+# 형식: "username" "password" 또는 "username" "md5hash"
+# "app_user" "plain_password"
+# "app_user" "md5d8578edf8458ce06fbc5bb76a58c5ca4"
+
+# SCRAM-SHA-256 (PostgreSQL 10+)
+# "app_user" "SCRAM-SHA-256$iterations:salt$StoredKey:ServerKey"
+
+# ============================================
+# Docker Compose 예시
+# ============================================
+# docker-compose.yml
+version: '3.8'
+services:
+  pgbouncer:
+    image: edoburu/pgbouncer:1.21.0
+    ports:
+      - "6432:6432"
+    environment:
+      - DATABASE_URL=postgres://user:pass@postgres:5432/mydb
+      - POOL_MODE=transaction
+      - DEFAULT_POOL_SIZE=25
+      - MAX_CLIENT_CONN=1000
+    volumes:
+      - ./pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
+      - ./userlist.txt:/etc/pgbouncer/userlist.txt
+
+  postgres:
+    image: postgres:16
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+# ============================================
+# 관리 명령어
+# ============================================
+# pgbouncer DB로 접속
+# psql -h localhost -p 6432 -U pgbouncer_admin pgbouncer
+
+# SHOW POOLS;      -- 풀 상태 확인
+# SHOW CLIENTS;    -- 클라이언트 연결 확인
+# SHOW SERVERS;    -- 서버 연결 확인
+# SHOW STATS;      -- 통계 확인
+# SHOW CONFIG;     -- 설정 확인
+# RELOAD;          -- 설정 리로드
+# PAUSE mydb;      -- 특정 DB 일시정지
+# RESUME mydb;     -- 재개
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 PostgreSQL 연결 오류 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "max_connections 에러가 반복되는데 무작정 늘리면 안 됩니다. PostgreSQL은 연결당 메모리를 많이 써요. pgBouncer를 앞에 두면 클라이언트 연결 1만 개를 DB 연결 50개로 처리할 수 있어요. Transaction 모드로 설정하면 트랜잭션이 끝날 때마다 연결을 반환해서 효율이 극대화됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 서버리스 환경 마이그레이션 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "Lambda에서 직접 PostgreSQL 연결하면 함수 인스턴스마다 연결이 생겨서 금방 max_connections에 도달해요. pgBouncer나 RDS Proxy를 써야 합니다. Supabase 같은 서비스는 pgBouncer를 기본 제공하니까 pooler URL로 연결하세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서 문제 발견</div>
+                    <blockquote class="conv-quote">
+                        "여기서 SET search_path 후에 커밋하고 다음 쿼리를 실행하는데, pgBouncer Transaction 모드에서는 커밋 후 다른 연결을 받을 수 있어서 SET 효과가 사라집니다. 같은 트랜잭션 안에서 처리하거나, 쿼리에 스키마를 명시해주세요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Transaction 모드 제한사항</strong>
+                        <p>PREPARE, LISTEN/NOTIFY, 세션 변수(SET), WITH HOLD 커서가 트랜잭션 간 유지되지 않습니다. 이런 기능이 필요하면 Session 모드를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>인증 설정 복잡성</strong>
+                        <p>userlist.txt를 별도 관리해야 합니다. SCRAM-SHA-256 사용 시 auth_query로 PostgreSQL에서 직접 인증하는 방식도 고려하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>단일 장애점 주의</strong>
+                        <p>pgBouncer 다운 시 모든 연결이 끊깁니다. 프로덕션에서는 HAProxy나 Keepalived를 사용해 HA 구성을 권장합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>모니터링 필수</strong>
+                        <p>SHOW POOLS로 cl_waiting(대기 중인 클라이언트)을 모니터링하세요. 0이 아니면 풀 크기를 늘리거나 쿼리 최적화가 필요합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/PostgreSQL/" class="related-term-link">PostgreSQL</a>
+                <a href="/ko/term/%EC%BB%A4%EB%84%A5%EC%85%98%20%ED%92%80/" class="related-term-link">커넥션 풀</a>
+                <a href="/ko/term/ProxySQL/" class="related-term-link">ProxySQL</a>
+                <a href="/ko/term/Neon/" class="related-term-link">Neon</a>
+                <a href="/ko/term/Supabase/" class="related-term-link">Supabase</a>
+                <a href="/ko/term/Transaction/" class="related-term-link">Transaction</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.pgbouncer.org/config.html" target="_blank" class="learn-link">
+                    📄 pgBouncer 공식 설정 문서
+                </a>
+                <a href="https://supabase.com/docs/guides/database/connecting-to-postgres#connection-pooler" target="_blank" class="learn-link">
+                    🎓 Supabase - Connection Pooling 가이드
+                </a>
+                <a href="https://www.percona.com/blog/scaling-postgresql-with-pgbouncer-you-may-need-a-connection-pooler-sooner-than-you-expect/" target="_blank" class="learn-link">
+                    📖 Percona - Scaling PostgreSQL with pgBouncer
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +877,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

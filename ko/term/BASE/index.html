@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BASE (Basically Available, Soft state, Eventually consistent) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="ACID의 대안. 분산 시스템에서 최종 일관성 추구.">
-    <meta name="keywords" content="BASE, Basically Available, Soft state, Eventually consistent, AI 용어, KAITRUST, AI 백과사전, 아키텍처">
+    <meta name="description" content="BASE는 분산 시스템을 위한 데이터 일관성 모델입니다. ACID의 대안으로, 기본 가용성(Basically Available), 유연한 상태(Soft state), 최종 일관성(Eventually consistent)을 통해 높은 확장성과 성능을 제공합니다.">
+    <meta name="keywords" content="BASE, Basically Available, Soft state, Eventually consistent, 최종 일관성, 분산 시스템, NoSQL, CAP 정리, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/BASE/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/BASE/">
     <meta property="og:title" content="BASE (Basically Available, Soft state, Eventually consistent) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="ACID의 대안. 분산 시스템에서 최종 일관성 추구.">
+    <meta property="og:description" content="BASE는 분산 시스템을 위한 데이터 일관성 모델로, ACID의 대안입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="BASE (Basically Available, Soft state, Eventually consistent) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="ACID의 대안. 분산 시스템에서 최종 일관성 추구.">
+    <meta name="twitter:description" content="BASE는 분산 시스템을 위한 데이터 일관성 모델로, ACID의 대안입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "BASE",
-        "description": "ACID의 대안. 분산 시스템에서 최종 일관성 추구.",
+        "alternateName": "Basically Available, Soft state, Eventually consistent",
+        "description": "BASE는 분산 시스템을 위한 데이터 일관성 모델로, ACID의 대안입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">BASE</h1>
             <p class="term-english">Basically Available, Soft state, Eventually consistent</p>
             <div class="term-description">
-                <p>ACID의 대안. 분산 시스템에서 최종 일관성 추구.</p>
+                <p>분산 시스템을 위한 데이터 일관성 모델입니다. ACID의 대안으로, 높은 가용성과 확장성을 위해 즉각적인 강한 일관성 대신 최종 일관성을 선택합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,426 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>기본 가용성(Basically Available)</strong>은 시스템이 항상 응답을 반환함을 의미합니다. 일부 노드에 장애가 발생해도 전체 시스템은 계속 동작하며, 최신 데이터가 아닐 수 있지만 항상 응답을 제공합니다. 가용성을 일관성보다 우선시하는 것이 핵심입니다.</p>
+                <p><strong>유연한 상태(Soft state)</strong>는 시스템의 상태가 외부 입력 없이도 시간에 따라 변할 수 있음을 의미합니다. 데이터 복제본들 사이에서 동기화가 진행되는 동안 시스템 상태는 일시적으로 불일치할 수 있으며, 이는 정상적인 상태로 간주됩니다.</p>
+                <p><strong>최종 일관성(Eventually consistent)</strong>은 충분한 시간이 지나면 모든 복제본이 동일한 값을 가지게 됨을 보장합니다. 즉각적인 일관성은 포기하지만, 결국에는 모든 노드가 같은 데이터를 갖게 됩니다. 이 "결국"의 시간은 밀리초에서 수 초까지 다양합니다.</p>
+                <p>BASE는 CAP 정리에서 영감을 받았습니다. 네트워크 분할(Partition)이 발생할 때, ACID 시스템은 일관성(Consistency)을 선택하고 가용성을 포기하지만, BASE 시스템은 가용성(Availability)을 선택하고 일관성을 느슨하게 합니다.</p>
+                <p>Amazon DynamoDB, Apache Cassandra, MongoDB(기본 설정), Redis 클러스터 등 대부분의 대규모 분산 NoSQL 데이터베이스가 BASE 모델을 채택합니다. 소셜 미디어 피드, 좋아요 수, 쇼핑 카트 등 약간의 불일치가 허용되는 시나리오에 적합합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (DynamoDB)</button>
+                <button class="code-tab" data-lang="node">Node.js (Cassandra)</button>
+                <button class="code-tab" data-lang="diagram">ACID vs BASE 비교</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># BASE 모델 - Python + DynamoDB 예제
+import boto3
+from botocore.config import Config
+from decimal import Decimal
+import time
+
+class EventuallyConsistentCart:
+    """
+    BASE 원칙을 따르는 장바구니 서비스
+    - 최종 일관성 읽기로 빠른 응답
+    - 강한 일관성 읽기는 필요할 때만 사용
+    """
+
+    def __init__(self, table_name: str):
+        self.dynamodb = boto3.resource('dynamodb')
+        self.table = self.dynamodb.Table(table_name)
+
+    def add_item(self, user_id: str, product_id: str, quantity: int):
+        """
+        장바구니에 상품 추가
+        DynamoDB는 자동으로 여러 리전에 복제 (최종 일관성)
+        """
+        self.table.update_item(
+            Key={'user_id': user_id},
+            UpdateExpression='SET items.#pid = if_not_exists(items.#pid, :zero) + :qty',
+            ExpressionAttributeNames={'#pid': product_id},
+            ExpressionAttributeValues={
+                ':qty': quantity,
+                ':zero': 0
+            }
+        )
+        # 쓰기는 즉시 반환되지만, 읽기에 반영되기까지 시간 필요
+        print(f"✅ 상품 추가됨 (최종 일관성으로 전파 중)")
+
+    def get_cart_eventually_consistent(self, user_id: str) -> dict:
+        """
+        최종 일관성 읽기 - 빠르지만 최신 데이터 아닐 수 있음
+        대부분의 경우 충분 (밀리초 내 동기화)
+        """
+        response = self.table.get_item(
+            Key={'user_id': user_id},
+            ConsistentRead=False  # 기본값, 최종 일관성
+        )
+        return response.get('Item', {})
+
+    def get_cart_strongly_consistent(self, user_id: str) -> dict:
+        """
+        강한 일관성 읽기 - 결제 직전 등 정확성이 중요할 때
+        약간 느리고 비용 2배, 하지만 최신 데이터 보장
+        """
+        response = self.table.get_item(
+            Key={'user_id': user_id},
+            ConsistentRead=True  # 강한 일관성
+        )
+        return response.get('Item', {})
+
+
+# BASE 원칙을 활용한 좋아요 카운터
+class EventuallyConsistentCounter:
+    """
+    SNS 좋아요 수처럼 정확한 일관성보다 가용성이 중요한 경우
+    """
+
+    def __init__(self, table_name: str):
+        self.dynamodb = boto3.resource('dynamodb')
+        self.table = self.dynamodb.Table(table_name)
+
+    def increment_like(self, post_id: str):
+        """
+        좋아요 증가 - 원자적 카운터 업데이트
+        여러 리전에서 동시 증가해도 결국 합쳐짐
+        """
+        self.table.update_item(
+            Key={'post_id': post_id},
+            UpdateExpression='SET like_count = if_not_exists(like_count, :zero) + :inc',
+            ExpressionAttributeValues={
+                ':inc': 1,
+                ':zero': 0
+            }
+        )
+
+    def get_approximate_count(self, post_id: str) -> int:
+        """
+        대략적인 좋아요 수 - UI 표시용
+        "약 1.2K 좋아요" 처럼 표시하면 정확성 불필요
+        """
+        response = self.table.get_item(
+            Key={'post_id': post_id},
+            ConsistentRead=False,
+            ProjectionExpression='like_count'
+        )
+        return response.get('Item', {}).get('like_count', 0)
+
+
+# 사용 예시
+if __name__ == "__main__":
+    cart = EventuallyConsistentCart('shopping-carts')
+
+    # 상품 추가 (빠른 쓰기)
+    cart.add_item('user123', 'product-abc', 2)
+
+    # 최종 일관성 읽기 (일반 조회)
+    cart_data = cart.get_cart_eventually_consistent('user123')
+    print(f"장바구니 (최종 일관성): {cart_data}")
+
+    # 결제 전 강한 일관성 읽기 (정확성 필요)
+    cart_data = cart.get_cart_strongly_consistent('user123')
+    print(f"장바구니 (강한 일관성): {cart_data}")
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// BASE 모델 - Node.js + Cassandra 예제
+const cassandra = require('cassandra-driver');
+
+class EventuallyConsistentUserService {
+    constructor() {
+        // Cassandra는 분산 설계로 BASE 모델 기본 지원
+        this.client = new cassandra.Client({
+            contactPoints: ['node1', 'node2', 'node3'],
+            localDataCenter: 'datacenter1',
+            keyspace: 'users_ks'
+        });
+    }
+
+    /**
+     * 사용자 프로필 업데이트
+     * Cassandra는 "Last Write Wins" 전략 사용
+     */
+    async updateProfile(userId, profileData) {
+        const query = `
+            UPDATE users
+            SET name = ?, bio = ?, updated_at = toTimestamp(now())
+            WHERE user_id = ?
+        `;
+
+        // 일관성 수준 선택
+        await this.client.execute(query,
+            [profileData.name, profileData.bio, userId],
+            {
+                // ONE: 한 노드 확인 후 반환 (빠름, 낮은 일관성)
+                // QUORUM: 과반수 노드 확인 (균형)
+                // ALL: 모든 노드 확인 (느림, 높은 일관성)
+                consistency: cassandra.types.consistencies.one
+            }
+        );
+
+        console.log('✅ 프로필 업데이트됨 (최종 일관성으로 전파 중)');
+    }
+
+    /**
+     * 프로필 조회 - 일관성 수준 선택 가능
+     */
+    async getProfile(userId, strongConsistency = false) {
+        const query = 'SELECT * FROM users WHERE user_id = ?';
+
+        const result = await this.client.execute(query, [userId], {
+            consistency: strongConsistency
+                ? cassandra.types.consistencies.quorum
+                : cassandra.types.consistencies.one
+        });
+
+        return result.rows[0];
+    }
+
+    /**
+     * 팔로워 수 카운터 - 분산 카운터 사용
+     * Cassandra Counter는 최종 일관성으로 동작
+     */
+    async incrementFollowers(userId) {
+        const query = `
+            UPDATE user_stats
+            SET follower_count = follower_count + 1
+            WHERE user_id = ?
+        `;
+
+        await this.client.execute(query, [userId], {
+            consistency: cassandra.types.consistencies.one
+        });
+    }
+}
+
+// 읽기 복구 (Read Repair) 시뮬레이션
+class ReadRepairExample {
+    /**
+     * Cassandra의 Read Repair 동작 원리
+     * 읽기 시 불일치 발견하면 자동으로 복구
+     */
+    async readWithRepair(client, userId) {
+        // QUORUM 읽기: 여러 복제본 비교
+        const query = 'SELECT * FROM users WHERE user_id = ?';
+
+        const result = await client.execute(query, [userId], {
+            consistency: cassandra.types.consistencies.quorum
+        });
+
+        // 내부적으로:
+        // 1. 여러 노드에서 데이터 읽기
+        // 2. 타임스탬프 비교
+        // 3. 오래된 데이터 가진 노드에 최신 데이터 전파
+        // => "최종 일관성"이 실현되는 메커니즘
+
+        return result.rows[0];
+    }
+}
+
+// 사용 예시
+async function main() {
+    const userService = new EventuallyConsistentUserService();
+
+    // 프로필 업데이트 (빠른 쓰기)
+    await userService.updateProfile('user123', {
+        name: '홍길동',
+        bio: '소프트웨어 개발자'
+    });
+
+    // 일반 조회 (최종 일관성, 빠름)
+    const profile = await userService.getProfile('user123', false);
+    console.log('프로필:', profile);
+
+    // 중요한 조회 (강한 일관성, 느림)
+    const accurateProfile = await userService.getProfile('user123', true);
+    console.log('정확한 프로필:', accurateProfile);
+}
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="diagram">
+                <pre><code class="language-text">┌─────────────────────────────────────────────────────────────────────┐
+│                     ACID vs BASE 비교                                │
+├─────────────────────────────────────────────────────────────────────┤
+
+    ACID (관계형 DB)                    BASE (NoSQL/분산 시스템)
+    ═══════════════                    ═══════════════════════
+
+    ┌─────────────┐                    ┌─────────────┐
+    │  Atomicity  │                    │  Basically  │
+    │   원자성    │                    │  Available  │
+    │ 전부/전무   │                    │  기본가용성  │
+    └─────────────┘                    └─────────────┘
+          ↓                                  ↓
+    트랜잭션 전체 성공                   장애 시에도 응답 반환
+    또는 전체 롤백                      (오래된 데이터일 수 있음)
+
+    ┌─────────────┐                    ┌─────────────┐
+    │ Consistency │                    │ Soft State  │
+    │   일관성    │                    │  유연한상태  │
+    │ 즉각적 반영 │                    │ 중간상태허용 │
+    └─────────────┘                    └─────────────┘
+          ↓                                  ↓
+    쓰기 후 읽기는                      복제 중 일시적
+    항상 최신 데이터                    불일치 허용
+
+    ┌─────────────┐                    ┌─────────────┐
+    │  Isolation  │                    │ Eventually  │
+    │   격리성    │                    │ Consistent  │
+    │ 동시성제어  │                    │ 최종일관성  │
+    └─────────────┘                    └─────────────┘
+          ↓                                  ↓
+    트랜잭션 간                         시간이 지나면
+    간섭 없음                          모든 노드 동기화
+
+    ┌─────────────┐
+    │ Durability  │
+    │   지속성    │
+    │ 영구 저장   │
+    └─────────────┘
+
+
+    ═══════════════════════════════════════════════════════════════
+
+    적합한 사용 사례
+    ───────────────
+
+    ACID 선택                          BASE 선택
+    ──────────                         ──────────
+    • 금융 거래                        • 소셜 미디어 피드
+    • 결제 시스템                      • 좋아요/조회수 카운터
+    • 재고 관리 (정확성 중요)          • 쇼핑 카트 (결제 전)
+    • 예약 시스템                      • 로그/분석 데이터
+    • 사용자 인증                      • 추천 시스템
+
+
+    ═══════════════════════════════════════════════════════════════
+
+    최종 일관성의 시간 흐름
+    ─────────────────────
+
+    T=0ms (쓰기)          T=50ms              T=200ms (최종 일관성 달성)
+    ┌─────────┐          ┌─────────┐          ┌─────────┐
+    │ Node A  │          │ Node A  │          │ Node A  │
+    │ v=100 ✓ │  ──→     │ v=100   │  ──→     │ v=100   │
+    └─────────┘          └─────────┘          └─────────┘
+    ┌─────────┐          ┌─────────┐          ┌─────────┐
+    │ Node B  │          │ Node B  │          │ Node B  │
+    │ v=99    │  ──→     │ v=100 ✓ │  ──→     │ v=100   │
+    └─────────┘          └─────────┘          └─────────┘
+    ┌─────────┐          ┌─────────┐          ┌─────────┐
+    │ Node C  │          │ Node C  │          │ Node C  │
+    │ v=99    │  ──→     │ v=99    │  ──→     │ v=100 ✓ │
+    └─────────┘          └─────────┘          └─────────┘
+
+    불일치 상태             복제 진행 중          모든 노드 동기화!
+    (Soft State)          (Soft State)        (Eventually Consistent)
+
+└─────────────────────────────────────────────────────────────────────┘</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 시스템 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "SNS 피드는 BASE 모델이 적합합니다. 친구의 새 글이 0.5초 늦게 보여도 사용자 경험에 큰 문제 없어요. 대신 수백만 동시 사용자에게 빠르게 응답할 수 있죠. 반면 결제 기능은 ACID가 필수입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "좋아요 수가 잠깐 다르게 보이는 건 BASE의 특성입니다. 최종 일관성이라 복제 지연이 있을 수 있어요. 1-2초 후면 동기화됩니다. 심각한 버그가 아니라 설계된 동작이에요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 선택 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "Cassandra를 쓰면 일관성 수준을 조절할 수 있어요. 일반 조회는 ONE으로 빠르게, 중요한 작업은 QUORUM으로 일관성을 높이면 됩니다. BASE 시스템도 상황에 따라 일관성을 튜닝할 수 있어요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>금융 거래에 BASE 사용 금지</strong>
+                        <p>결제, 송금, 재고 차감 등 정확성이 필수인 작업에는 ACID 트랜잭션을 사용하세요. 1원이라도 차이나면 안 됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Read-Your-Write 보장 필요시 주의</strong>
+                        <p>사용자가 글을 작성 후 바로 조회할 때 안 보이면 혼란스러워합니다. 쓰기 후 자신의 데이터는 강한 일관성 읽기를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>충돌 해결 전략 필수</strong>
+                        <p>여러 노드에서 동시에 같은 데이터를 수정하면 충돌이 발생합니다. Last-Write-Wins, 버전 벡터 등 충돌 해결 전략을 미리 정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>하이브리드 접근법 권장</strong>
+                        <p>하나의 시스템 내에서도 기능별로 ACID/BASE를 구분하세요. 장바구니 조회는 BASE, 결제 처리는 ACID로 분리하면 양쪽 장점을 취할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/ACID/" class="related-term-link">ACID</a>
+                <a href="/ko/term/CAP%20%EC%A0%95%EB%A6%AC/" class="related-term-link">CAP 정리</a>
+                <a href="/ko/term/NoSQL/" class="related-term-link">NoSQL</a>
+                <a href="/ko/term/Cassandra/" class="related-term-link">Cassandra</a>
+                <a href="/ko/term/DynamoDB/" class="related-term-link">DynamoDB</a>
+                <a href="/ko/term/Replication/" class="related-term-link">Replication</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html" target="_blank" class="learn-link">
+                    📄 AWS DynamoDB - 읽기 일관성 모델
+                </a>
+                <a href="https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html" target="_blank" class="learn-link">
+                    🎓 Apache Cassandra - 분산 아키텍처
+                </a>
+                <a href="https://www.allthingsdistributed.com/2008/12/eventually_consistent.html" target="_blank" class="learn-link">
+                    📖 Werner Vogels - Eventually Consistent (원문)
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +716,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

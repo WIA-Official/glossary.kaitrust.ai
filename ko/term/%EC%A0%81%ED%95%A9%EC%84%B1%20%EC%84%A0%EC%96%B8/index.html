@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,397 @@
                 </a>
             </div>
         </article>
+
+        <!-- Section 1: 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-heading">
+            <h2 id="detail-heading" class="section-title">
+                <span class="section-icon">📖</span> 상세 설명
+            </h2>
+            <div class="section-content">
+                <p>적합성 선언(EU Declaration of Conformity)은 EU AI Act 제47조에 따라 고위험 AI 시스템 공급자가 작성하는 공식 문서입니다. 이 문서를 통해 공급자는 자사의 AI 시스템이 EU AI Act의 모든 관련 요건을 충족함을 법적으로 선언합니다. 적합성 선언은 CE 마킹 부착의 전제조건이며, 선언서에 허위 내용이 포함될 경우 최대 1,500만 유로 또는 전 세계 연간 매출액의 3% 중 높은 금액의 과징금이 부과될 수 있습니다.</p>
+
+                <p>EU AI Act 부속서 V(Annex V)는 적합성 선언에 반드시 포함되어야 할 정보를 명시합니다. AI 시스템 명칭과 유형, 공급자 또는 권한대리인의 이름과 주소, 시스템이 준수하는 EU AI Act 조항, 적용된 조화된 표준(Harmonised Standards) 또는 공통 사양의 참조, 관련된 인증기관(Notified Body) 정보, 선언 장소와 일자, 서명권자 정보가 필수적으로 기재되어야 합니다.</p>
+
+                <p>적합성 평가 절차는 EU AI Act 제43조에서 규정합니다. 대부분의 고위험 AI 시스템은 부속서 VI에 따른 내부 통제(internal control) 절차로 자체 적합성 평가가 가능합니다. 그러나 생체인식 시스템처럼 부속서 III 제1항에 해당하는 AI나, 다른 EU 조화법(의료기기, 기계류 등) 적용 대상인 경우 인증기관의 참여가 필요한 제3자 적합성 평가를 받아야 합니다.</p>
+
+                <p>적합성 선언서는 시장 감시 당국의 요청 시 10년간 제출 가능해야 합니다(제47조 제2항). 고위험 AI 시스템에 실질적 변경(substantial modification)이 발생하면 새로운 적합성 평가와 선언이 필요합니다. 한국 인공지능기본법 제22조에서도 고위험 AI에 대한 인증 요건을 규정하고 있어, 양 규제 모두 적용받는 기업은 통합 컴플라이언스 전략이 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- Section 2: 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-heading">
+            <h2 id="code-heading" class="section-title">
+                <span class="section-icon">💻</span> 코드 예제
+            </h2>
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-lang">Python</span>
+                    <span class="code-desc">EU AI Act Annex V 기반 적합성 선언서 생성 시스템</span>
+                </div>
+                <pre><code class="language-python">"""
+EU AI Act Article 47 & Annex V 기반 적합성 선언서(DoC) 생성 시스템
+고위험 AI 시스템의 CE 마킹을 위한 필수 문서 자동화
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime, date
+from enum import Enum
+from typing import Optional
+import hashlib
+
+
+class ConformityAssessmentProcedure(Enum):
+    """Article 43: 적합성 평가 절차 유형"""
+    INTERNAL_CONTROL = "annex_vi"           # 부속서 VI: 내부 통제
+    NOTIFIED_BODY_QMS = "annex_vii"         # 부속서 VII: 품질관리시스템 평가
+    THIRD_PARTY_ASSESSMENT = "article_43_1" # 제43조 제1항: 제3자 평가
+
+
+class HighRiskCategory(Enum):
+    """Annex III: 고위험 AI 시스템 분류"""
+    BIOMETRIC_IDENTIFICATION = "annex_iii_1"      # 생체인식
+    CRITICAL_INFRASTRUCTURE = "annex_iii_2"       # 핵심 인프라
+    EDUCATION_VOCATIONAL = "annex_iii_3"          # 교육/직업훈련
+    EMPLOYMENT_HR = "annex_iii_4"                 # 고용/인사
+    ESSENTIAL_SERVICES = "annex_iii_5"            # 필수 서비스 접근
+    LAW_ENFORCEMENT = "annex_iii_6"               # 법 집행
+    MIGRATION_ASYLUM = "annex_iii_7"              # 이민/망명
+    JUSTICE_DEMOCRACY = "annex_iii_8"             # 사법/민주주의
+
+
+@dataclass
+class NotifiedBodyInfo:
+    """인증기관(Notified Body) 정보"""
+    name: str
+    identification_number: str
+    address: str
+    certificate_number: Optional[str] = None
+    certificate_date: Optional[date] = None
+
+
+@dataclass
+class HarmonisedStandard:
+    """적용된 조화된 표준"""
+    standard_id: str      # 예: "EN ISO/IEC 42001:2023"
+    title: str
+    publication_date: date
+    ojeu_reference: str   # EU 관보 참조
+
+
+@dataclass
+class ProviderInfo:
+    """공급자 정보 (Annex V 요건)"""
+    legal_name: str
+    trade_name: Optional[str]
+    registered_address: str
+    contact_email: str
+    contact_phone: str
+    registration_number: str  # 사업자등록번호
+    authorised_representative: Optional[str] = None  # EU 역외 기업의 경우
+
+
+@dataclass
+class AISystemInfo:
+    """AI 시스템 식별 정보"""
+    system_name: str
+    model_version: str
+    unique_identifier: str
+    intended_purpose: str
+    high_risk_category: HighRiskCategory
+    deployment_member_states: list[str]
+
+
+@dataclass
+class DeclarationOfConformity:
+    """
+    EU AI Act Annex V 적합성 선언서
+    Article 47에 따른 필수 구성요소 포함
+    """
+    # Annex V 필수 항목
+    declaration_number: str
+    ai_system: AISystemInfo
+    provider: ProviderInfo
+
+    # 적합성 평가 정보
+    assessment_procedure: ConformityAssessmentProcedure
+    notified_body: Optional[NotifiedBodyInfo] = None
+
+    # 적용 표준/사양
+    harmonised_standards: list[HarmonisedStandard] = field(default_factory=list)
+    common_specifications: list[str] = field(default_factory=list)
+
+    # 규제 준수 선언
+    eu_ai_act_articles: list[str] = field(default_factory=list)
+    other_union_legislation: list[str] = field(default_factory=list)
+
+    # 서명 정보
+    place_of_issue: str = ""
+    date_of_issue: date = field(default_factory=date.today)
+    signatory_name: str = ""
+    signatory_position: str = ""
+
+    def __post_init__(self):
+        """필수 EU AI Act 조항 자동 설정"""
+        if not self.eu_ai_act_articles:
+            self.eu_ai_act_articles = [
+                "Article 9 - Risk Management System",
+                "Article 10 - Data and Data Governance",
+                "Article 11 - Technical Documentation",
+                "Article 12 - Record-keeping",
+                "Article 13 - Transparency",
+                "Article 14 - Human Oversight",
+                "Article 15 - Accuracy, Robustness and Cybersecurity"
+            ]
+
+    def validate_completeness(self) -> dict:
+        """Annex V 필수 항목 완전성 검증"""
+        issues = []
+
+        # 필수 항목 검증
+        if not self.ai_system.unique_identifier:
+            issues.append("AI 시스템 고유 식별자 누락")
+
+        if not self.provider.legal_name:
+            issues.append("공급자 법적 명칭 누락")
+
+        if not self.provider.registered_address:
+            issues.append("공급자 등록 주소 누락")
+
+        # EU 역외 공급자의 경우 권한대리인 필수
+        eu_countries = ["DE", "FR", "IT", "ES", "NL", "BE", "AT", "PL"]
+        if not any(
+            self.provider.registered_address.endswith(c)
+            for c in eu_countries
+        ):
+            if not self.provider.authorised_representative:
+                issues.append("EU 역외 공급자: 권한대리인(Authorised Representative) 정보 필수")
+
+        # 인증기관 필요 여부 검증
+        requires_notified_body = (
+            self.ai_system.high_risk_category == HighRiskCategory.BIOMETRIC_IDENTIFICATION
+            or self.assessment_procedure != ConformityAssessmentProcedure.INTERNAL_CONTROL
+        )
+
+        if requires_notified_body and not self.notified_body:
+            issues.append(
+                f"{self.ai_system.high_risk_category.value} 카테고리: "
+                "인증기관(Notified Body) 참여 필수"
+            )
+
+        # 서명 정보 검증
+        if not self.signatory_name or not self.signatory_position:
+            issues.append("서명권자 정보 불완전")
+
+        return {
+            "is_complete": len(issues) == 0,
+            "issues": issues,
+            "ready_for_ce_marking": len(issues) == 0
+        }
+
+    def generate_document_hash(self) -> str:
+        """선언서 무결성 해시 생성"""
+        content = (
+            f"{self.declaration_number}"
+            f"{self.ai_system.unique_identifier}"
+            f"{self.provider.registration_number}"
+            f"{self.date_of_issue.isoformat()}"
+        )
+        return hashlib.sha256(content.encode()).hexdigest()[:16]
+
+    def to_structured_format(self) -> dict:
+        """Annex V 형식 구조화된 선언서 출력"""
+        return {
+            "document_type": "EU Declaration of Conformity",
+            "legal_basis": "Regulation (EU) 2024/1689 (AI Act), Article 47",
+            "declaration_number": self.declaration_number,
+            "document_hash": self.generate_document_hash(),
+
+            "section_1_ai_system": {
+                "name": self.ai_system.system_name,
+                "version": self.ai_system.model_version,
+                "unique_identifier": self.ai_system.unique_identifier,
+                "intended_purpose": self.ai_system.intended_purpose,
+                "high_risk_classification": self.ai_system.high_risk_category.value
+            },
+
+            "section_2_provider": {
+                "legal_name": self.provider.legal_name,
+                "trade_name": self.provider.trade_name,
+                "address": self.provider.registered_address,
+                "contact": {
+                    "email": self.provider.contact_email,
+                    "phone": self.provider.contact_phone
+                },
+                "authorised_representative": self.provider.authorised_representative
+            },
+
+            "section_3_conformity_assessment": {
+                "procedure": self.assessment_procedure.value,
+                "notified_body": {
+                    "name": self.notified_body.name if self.notified_body else None,
+                    "id_number": self.notified_body.identification_number if self.notified_body else None,
+                    "certificate": self.notified_body.certificate_number if self.notified_body else None
+                } if self.notified_body else None
+            },
+
+            "section_4_standards_applied": {
+                "harmonised_standards": [
+                    {"id": hs.standard_id, "title": hs.title}
+                    for hs in self.harmonised_standards
+                ],
+                "common_specifications": self.common_specifications
+            },
+
+            "section_5_declaration": {
+                "eu_ai_act_compliance": self.eu_ai_act_articles,
+                "other_union_legislation": self.other_union_legislation
+            },
+
+            "section_6_signature": {
+                "place": self.place_of_issue,
+                "date": self.date_of_issue.isoformat(),
+                "signatory": {
+                    "name": self.signatory_name,
+                    "position": self.signatory_position
+                }
+            },
+
+            "retention_requirement": "10 years from market placement (Art 47(2))"
+        }
+
+
+# 사용 예시
+if __name__ == "__main__":
+    # 고위험 AI 시스템 정보
+    ai_system = AISystemInfo(
+        system_name="SmartHire AI",
+        model_version="2.1.0",
+        unique_identifier="SH-AI-2024-001",
+        intended_purpose="채용 후보자 이력서 분석 및 적합도 평가",
+        high_risk_category=HighRiskCategory.EMPLOYMENT_HR,
+        deployment_member_states=["DE", "FR", "NL"]
+    )
+
+    # 공급자 정보
+    provider = ProviderInfo(
+        legal_name="AI Solutions GmbH",
+        trade_name="AI Solutions",
+        registered_address="Musterstraße 1, 10115 Berlin, DE",
+        contact_email="compliance@aisolutions.eu",
+        contact_phone="+49 30 1234567",
+        registration_number="HRB 123456"
+    )
+
+    # 적합성 선언서 생성
+    doc = DeclarationOfConformity(
+        declaration_number="DoC-2024-SH-001",
+        ai_system=ai_system,
+        provider=provider,
+        assessment_procedure=ConformityAssessmentProcedure.INTERNAL_CONTROL,
+        harmonised_standards=[
+            HarmonisedStandard(
+                standard_id="EN ISO/IEC 42001:2023",
+                title="AI Management System",
+                publication_date=date(2023, 12, 18),
+                ojeu_reference="OJ L 2024/123"
+            )
+        ],
+        place_of_issue="Berlin, Germany",
+        signatory_name="Dr. Maria Schmidt",
+        signatory_position="Chief Compliance Officer"
+    )
+
+    # 완전성 검증
+    validation = doc.validate_completeness()
+    print(f"CE 마킹 준비 완료: {validation['ready_for_ce_marking']}")
+    # 출력: CE 마킹 준비 완료: True</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 3: 실무 대화 -->
+        <section class="term-section" aria-labelledby="conversation-heading">
+            <h2 id="conversation-heading" class="section-title">
+                <span class="section-icon">💬</span> 실무 대화
+            </h2>
+            <div class="conversation-tabs">
+                <button class="tab-btn active" data-tab="meeting">회의</button>
+                <button class="tab-btn" data-tab="interview">면접</button>
+                <button class="tab-btn" data-tab="review">코드리뷰</button>
+            </div>
+            <div class="conversation-content">
+                <div id="meeting" class="tab-panel active">
+                    <div class="chat-bubble user">고위험 AI 시스템을 EU에 출시하려면 어떤 절차가 필요한가요?</div>
+                    <div class="chat-bubble assistant">먼저 제43조에 따른 적합성 평가를 완료해야 합니다. 대부분의 고위험 AI는 부속서 VI의 내부 통제 절차로 자체 평가가 가능하지만, 생체인식 시스템이나 기존 EU 조화법 적용 제품은 인증기관의 참여가 필요합니다. 평가 후 부속서 V 형식에 맞는 적합성 선언서를 작성하고, CE 마킹을 부착한 뒤 EU AI 데이터베이스에 등록해야 합니다.</div>
+                    <div class="chat-bubble user">한국 기업인데 EU 역내에 법인이 없습니다. 어떻게 해야 하나요?</div>
+                    <div class="chat-bubble assistant">EU 역외 공급자는 제22조에 따라 권한대리인(Authorised Representative)을 EU 역내에 지정해야 합니다. 권한대리인은 적합성 선언서 사본 보관, 시장 감시 당국 대응, 기술문서 제출 등의 의무를 대행합니다. 적합성 선언서에 권한대리인 정보를 명시해야 하며, 둘 다 행정 제재의 연대 책임을 집니다.</div>
+                </div>
+                <div id="interview" class="tab-panel">
+                    <div class="chat-bubble user">적합성 선언서에 반드시 포함되어야 하는 정보는 무엇인가요?</div>
+                    <div class="chat-bubble assistant">부속서 V에서 필수 항목을 규정합니다. AI 시스템 식별 정보(명칭, 유형, 고유식별자), 공급자 정보(법적 명칭, 주소, 연락처), 준수하는 EU AI Act 조항 목록, 적용된 조화된 표준 또는 공통 사양의 참조, 인증기관 정보(해당 시), 선언 장소와 일자, 그리고 법적 구속력 있는 서명이 필요합니다.</div>
+                    <div class="chat-bubble user">내부 통제와 제3자 평가의 차이점은요?</div>
+                    <div class="chat-bubble assistant">내부 통제(부속서 VI)는 공급자가 자체적으로 기술문서 준비, 품질관리시스템 운영, 요건 충족 검증을 수행합니다. 제3자 평가는 인증기관이 품질관리시스템을 심사하거나(부속서 VII) 기술문서를 직접 검토합니다. 생체인식 AI처럼 부속서 III 제1항에 해당하거나, 공급자가 조화된 표준을 적용하지 않은 경우 제3자 평가가 필수입니다.</div>
+                </div>
+                <div id="review" class="tab-panel">
+                    <div class="chat-bubble user">선언서 검증 로직에서 인증기관 필요 여부를 생체인식만 체크하고 있는데, 다른 경우는요?</div>
+                    <div class="chat-bubble assistant">좋은 지적입니다. 제43조 제1항에 따르면 생체인식 외에도 (a) 조화된 표준이 존재하지 않거나 적용하지 않은 경우, (b) 공통 사양이 없는 경우, (c) 기존 EU 조화법에서 제3자 평가를 요구하는 경우에도 인증기관 참여가 필요합니다. other_union_legislation 필드를 활용해 의료기기 규정(MDR), 기계류 지침 등 적용 여부를 체크하는 로직을 추가하세요.</div>
+                    <div class="chat-bubble user">선언서 보관 기간이 10년인데, 버전 관리는 어떻게 해야 하나요?</div>
+                    <div class="chat-bubble assistant">generate_document_hash 메서드로 각 선언서의 무결성 해시를 생성한 것은 좋은 접근입니다. 추가로 AI 시스템에 실질적 변경이 발생하면 새 버전의 적합성 평가와 선언서가 필요하므로, 선언서 간 버전 연결(previous_declaration_number)과 변경 사유(modification_reason) 필드를 추가하세요. 모든 버전을 10년간 보관해야 합니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: 주의사항 -->
+        <section class="term-section" aria-labelledby="caution-heading">
+            <h2 id="caution-heading" class="section-title">
+                <span class="section-icon">⚠️</span> 주의사항
+            </h2>
+            <ul class="caution-list">
+                <li><strong>허위 선언의 법적 책임:</strong> 적합성 선언서에 허위 또는 오해의 소지가 있는 내용을 기재할 경우 제99조에 따라 최대 1,500만 유로 또는 전 세계 연간 매출액의 3% 중 높은 금액의 과징금이 부과됩니다. 선언서는 법적 구속력이 있는 문서입니다.</li>
+                <li><strong>실질적 변경 시 재평가 필수:</strong> AI 시스템에 실질적 변경(substantial modification)이 발생하면 새로운 적합성 평가와 선언서 작성이 필요합니다. 학습 데이터 변경, 알고리즘 수정, 용도 확대 등이 실질적 변경에 해당할 수 있습니다.</li>
+                <li><strong>10년 보관 의무:</strong> 적합성 선언서와 기술문서는 시장 출시 후 10년간 시장 감시 당국에 제출 가능해야 합니다(제47조 제2항). 전자 문서 관리 시스템에서 장기 보존 및 즉시 접근 가능성을 보장하세요.</li>
+            </ul>
+        </section>
+
+        <!-- Section 5: 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-heading">
+            <h2 id="related-heading" class="section-title">
+                <span class="section-icon">🔗</span> 관련 용어
+            </h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%A1%B0%ED%99%94%EB%90%9C%20%ED%91%9C%EC%A4%80/" class="related-card">
+                    <strong>조화된 표준</strong>
+                    <p>EU 요청에 따라 유럽표준화기구가 개발한 기술 표준</p>
+                </a>
+                <a href="/ko/term/%ED%91%9C%EC%A4%80%ED%99%94%20%EA%B8%B0%EA%B5%AC/" class="related-card">
+                    <strong>표준화 기구</strong>
+                    <p>CEN, CENELEC, ETSI 등 AI 표준을 개발하는 기관</p>
+                </a>
+                <a href="/ko/term/%EC%9C%84%ED%97%98%20%EA%B4%80%EB%A6%AC%20%EC%8B%9C%EC%8A%A4%ED%85%9C/" class="related-card">
+                    <strong>위험 관리 시스템</strong>
+                    <p>고위험 AI 요건 중 하나로 적합성 평가 대상</p>
+                </a>
+                <a href="/ko/term/%EC%9D%B8%EA%B0%84%20%EA%B0%90%EB%8F%85/" class="related-card">
+                    <strong>인간 감독</strong>
+                    <p>고위험 AI 필수 요건으로 적합성 선언 시 준수 확인 필요</p>
+                </a>
+                <a href="/ko/term/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%20%ED%88%AC%EB%AA%85%EC%84%B1/" class="related-card">
+                    <strong>알고리즘 투명성</strong>
+                    <p>적합성 평가 시 검증해야 할 투명성 요건</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 6: 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-heading">
+            <h2 id="learn-heading" class="section-title">
+                <span class="section-icon">📚</span> 더 배우기
+            </h2>
+            <ul class="learn-list">
+                <li><a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj" target="_blank" rel="noopener">EU AI Act 전문 (Regulation 2024/1689)</a></li>
+                <li><a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">EU 집행위원회 AI 규제 프레임워크 안내</a></li>
+                <li><a href="https://www.cen.eu/work/areas/ict/ai/pages/default.aspx" target="_blank" rel="noopener">CEN-CENELEC AI 표준화 작업</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +604,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>마이크로서비스 (Microservices) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="작은 독립적 서비스로 구성된 아키텍처. 각 서비스는 별도 배포, 확장 가능. 모놀리식의 대안.">
-    <meta name="keywords" content="마이크로서비스, Microservices, AI 용어, KAITRUST, AI 백과사전, 아키텍처">
+    <meta name="description" content="마이크로서비스는 작은 독립적 서비스로 구성된 아키텍처입니다. 각 서비스는 별도 배포, 확장이 가능하며 느슨한 결합으로 유연성과 확장성을 제공합니다.">
+    <meta name="keywords" content="마이크로서비스, Microservices, MSA, 아키텍처, Docker, Kubernetes, API Gateway, 서비스 메시, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EC%84%9C%EB%B9%84%EC%8A%A4/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EC%84%9C%EB%B9%84%EC%8A%A4/">
     <meta property="og:title" content="마이크로서비스 (Microservices) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="작은 독립적 서비스로 구성된 아키텍처. 각 서비스는 별도 배포, 확장 가능. 모놀리식의 대안.">
+    <meta property="og:description" content="마이크로서비스는 작은 독립적 서비스로 구성된 아키텍처로 유연성과 확장성을 제공합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="마이크로서비스 (Microservices) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="작은 독립적 서비스로 구성된 아키텍처. 각 서비스는 별도 배포, 확장 가능. 모놀리식의 대안.">
+    <meta name="twitter:description" content="마이크로서비스는 작은 독립적 서비스로 구성된 아키텍처로 유연성과 확장성을 제공합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "마이크로서비스",
-        "description": "작은 독립적 서비스로 구성된 아키텍처. 각 서비스는 별도 배포, 확장 가능. 모놀리식의 대안.",
+        "alternateName": "Microservices Architecture",
+        "description": "마이크로서비스는 작은 독립적 서비스로 구성된 아키텍처로 유연성과 확장성을 제공합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +276,9 @@
                 <span>아키텍처</span>
             </div>
             <h1 class="term-title">마이크로서비스</h1>
-            <p class="term-english">Microservices</p>
+            <p class="term-english">Microservices Architecture (MSA)</p>
             <div class="term-description">
-                <p>작은 독립적 서비스로 구성된 아키텍처. 각 서비스는 별도 배포, 확장 가능. 모놀리식의 대안.</p>
+                <p>작은 독립적 서비스들로 구성된 아키텍처 스타일입니다. 각 서비스는 특정 비즈니스 기능을 담당하며, 독립적으로 개발, 배포, 확장이 가능합니다. 모놀리식 아키텍처의 대안으로 대규모 시스템에서 널리 사용됩니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,480 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>마이크로서비스 아키텍처(MSA)</strong>는 하나의 큰 애플리케이션을 작고 독립적인 서비스들로 분리하여 구성하는 아키텍처 패턴입니다. 각 서비스는 단일 비즈니스 도메인에 집중하며, 자체 데이터베이스를 가지고, API를 통해 다른 서비스와 통신합니다.</p>
+                <p><strong>핵심 특징</strong>으로는 독립적 배포(각 서비스를 별도로 배포 가능), 기술 다양성(서비스별로 다른 언어/프레임워크 사용 가능), 장애 격리(한 서비스의 장애가 전체 시스템에 영향을 주지 않음), 독립적 확장(트래픽이 많은 서비스만 선택적으로 스케일 아웃)이 있습니다.</p>
+                <p><strong>서비스 간 통신</strong>은 동기 방식(REST API, gRPC)과 비동기 방식(메시지 큐, 이벤트 스트리밍)으로 나뉩니다. Netflix, Amazon, Uber 같은 대규모 서비스는 수천 개의 마이크로서비스로 구성되어 있으며, Kafka나 RabbitMQ 같은 메시지 브로커를 통해 느슨하게 결합됩니다.</p>
+                <p><strong>운영 복잡성</strong>이 증가하기 때문에 Kubernetes, Docker, 서비스 메시(Istio, Linkerd), API Gateway, 분산 추적(Jaeger, Zipkin), 중앙 로깅(ELK Stack) 등의 인프라가 필수적입니다. 조직 구조도 Conway의 법칙에 따라 서비스 단위의 소규모 자율 팀(Two-Pizza Team)으로 구성하는 것이 일반적입니다.</p>
+                <p>마이크로서비스는 모든 상황에 적합하지 않습니다. 초기 스타트업이나 소규모 프로젝트에서는 모놀리식으로 시작하고, 규모가 커지면 점진적으로 마이크로서비스로 전환하는 "Monolith First" 전략이 권장됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (FastAPI)</button>
+                <button class="code-tab" data-lang="node">Node.js (Express)</button>
+                <button class="code-tab" data-lang="structure">아키텍처 구조</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># 마이크로서비스 예제 - 주문 서비스 (FastAPI)
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import httpx
+import os
+
+app = FastAPI(title="Order Service")
+
+# 환경 변수에서 다른 서비스 URL 가져오기
+USER_SERVICE_URL = os.getenv("USER_SERVICE_URL", "http://user-service:8000")
+PRODUCT_SERVICE_URL = os.getenv("PRODUCT_SERVICE_URL", "http://product-service:8000")
+PAYMENT_SERVICE_URL = os.getenv("PAYMENT_SERVICE_URL", "http://payment-service:8000")
+
+
+class OrderRequest(BaseModel):
+    user_id: str
+    product_id: str
+    quantity: int
+
+
+class Order(BaseModel):
+    id: str
+    user_id: str
+    product_id: str
+    quantity: int
+    total_price: float
+    status: str
+
+
+# 인메모리 저장소 (실제로는 독립 DB 사용)
+orders_db = {}
+
+
+@app.post("/orders", response_model=Order)
+async def create_order(request: OrderRequest):
+    """
+    주문 생성 - 다른 마이크로서비스와 통신
+    """
+    async with httpx.AsyncClient() as client:
+        # 1. 사용자 서비스에서 사용자 검증
+        user_response = await client.get(
+            f"{USER_SERVICE_URL}/users/{request.user_id}"
+        )
+        if user_response.status_code != 200:
+            raise HTTPException(status_code=404, detail="사용자를 찾을 수 없습니다")
+
+        # 2. 상품 서비스에서 상품 정보 조회
+        product_response = await client.get(
+            f"{PRODUCT_SERVICE_URL}/products/{request.product_id}"
+        )
+        if product_response.status_code != 200:
+            raise HTTPException(status_code=404, detail="상품을 찾을 수 없습니다")
+
+        product = product_response.json()
+        total_price = product["price"] * request.quantity
+
+        # 3. 결제 서비스 호출
+        payment_response = await client.post(
+            f"{PAYMENT_SERVICE_URL}/payments",
+            json={
+                "user_id": request.user_id,
+                "amount": total_price,
+                "order_id": f"ORD-{len(orders_db) + 1}"
+            }
+        )
+
+        if payment_response.status_code != 200:
+            raise HTTPException(status_code=400, detail="결제 실패")
+
+    # 4. 주문 저장
+    order_id = f"ORD-{len(orders_db) + 1}"
+    order = Order(
+        id=order_id,
+        user_id=request.user_id,
+        product_id=request.product_id,
+        quantity=request.quantity,
+        total_price=total_price,
+        status="COMPLETED"
+    )
+    orders_db[order_id] = order
+
+    return order
+
+
+@app.get("/orders/{order_id}", response_model=Order)
+async def get_order(order_id: str):
+    if order_id not in orders_db:
+        raise HTTPException(status_code=404, detail="주문을 찾을 수 없습니다")
+    return orders_db[order_id]
+
+
+@app.get("/health")
+async def health_check():
+    """헬스 체크 - Kubernetes readiness/liveness probe용"""
+    return {"status": "healthy", "service": "order-service"}
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// 마이크로서비스 예제 - 사용자 서비스 (Express + TypeScript)
+import express, { Request, Response } from 'express';
+import axios from 'axios';
+
+const app = express();
+app.use(express.json());
+
+// 서비스 디스커버리 (Consul, Eureka 등 사용 가능)
+const SERVICE_REGISTRY = {
+    'order-service': process.env.ORDER_SERVICE_URL || 'http://order-service:3000',
+    'notification-service': process.env.NOTIFICATION_SERVICE_URL || 'http://notification-service:3000'
+};
+
+interface User {
+    id: string;
+    name: string;
+    email: string;
+    createdAt: Date;
+}
+
+// 인메모리 저장소 (실제로는 독립 DB 사용)
+const usersDb = new Map<string, User>();
+
+// Circuit Breaker 패턴 구현
+class CircuitBreaker {
+    private failures = 0;
+    private lastFailureTime = 0;
+    private readonly threshold = 5;
+    private readonly timeout = 30000; // 30초
+
+    async call<T>(fn: () => Promise<T>): Promise<T> {
+        if (this.isOpen()) {
+            throw new Error('Circuit breaker is open');
+        }
+
+        try {
+            const result = await fn();
+            this.reset();
+            return result;
+        } catch (error) {
+            this.recordFailure();
+            throw error;
+        }
+    }
+
+    private isOpen(): boolean {
+        if (this.failures >= this.threshold) {
+            const timeSinceLastFailure = Date.now() - this.lastFailureTime;
+            return timeSinceLastFailure < this.timeout;
+        }
+        return false;
+    }
+
+    private recordFailure(): void {
+        this.failures++;
+        this.lastFailureTime = Date.now();
+    }
+
+    private reset(): void {
+        this.failures = 0;
+    }
+}
+
+const notificationBreaker = new CircuitBreaker();
+
+// 사용자 생성
+app.post('/users', async (req: Request, res: Response) => {
+    const { name, email } = req.body;
+
+    const user: User = {
+        id: `USER-${Date.now()}`,
+        name,
+        email,
+        createdAt: new Date()
+    };
+
+    usersDb.set(user.id, user);
+
+    // 알림 서비스에 이벤트 발행 (비동기, 실패해도 사용자 생성은 성공)
+    try {
+        await notificationBreaker.call(async () => {
+            await axios.post(
+                `${SERVICE_REGISTRY['notification-service']}/notifications`,
+                {
+                    type: 'USER_CREATED',
+                    userId: user.id,
+                    email: user.email,
+                    message: '회원가입을 환영합니다!'
+                }
+            );
+        });
+    } catch (error) {
+        console.error('알림 서비스 호출 실패 (무시됨):', error);
+        // 알림 실패는 사용자 생성 실패로 이어지지 않음
+    }
+
+    res.status(201).json(user);
+});
+
+// 사용자 조회
+app.get('/users/:id', (req: Request, res: Response) => {
+    const user = usersDb.get(req.params.id);
+
+    if (!user) {
+        return res.status(404).json({ error: '사용자를 찾을 수 없습니다' });
+    }
+
+    res.json(user);
+});
+
+// 헬스 체크
+app.get('/health', (req: Request, res: Response) => {
+    res.json({
+        status: 'healthy',
+        service: 'user-service',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// 메트릭 엔드포인트 (Prometheus 수집용)
+app.get('/metrics', (req: Request, res: Response) => {
+    res.set('Content-Type', 'text/plain');
+    res.send(`
+# HELP users_total Total number of users
+# TYPE users_total counter
+users_total ${usersDb.size}
+    `);
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`User service running on port ${PORT}`);
+});
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="structure">
+                <pre><code class="language-yaml"># 마이크로서비스 아키텍처 구조 (Kubernetes + Docker Compose)
+
+# ========================================
+# docker-compose.yml - 로컬 개발 환경
+# ========================================
+version: '3.8'
+
+services:
+  # API Gateway - 모든 요청의 진입점
+  api-gateway:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    depends_on:
+      - user-service
+      - order-service
+      - product-service
+    networks:
+      - microservices-network
+
+  # 사용자 서비스
+  user-service:
+    build: ./services/user
+    environment:
+      - DATABASE_URL=postgres://user-db:5432/users
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3000
+    depends_on:
+      - user-db
+    networks:
+      - microservices-network
+
+  # 주문 서비스
+  order-service:
+    build: ./services/order
+    environment:
+      - DATABASE_URL=postgres://order-db:5432/orders
+      - USER_SERVICE_URL=http://user-service:8000
+      - PRODUCT_SERVICE_URL=http://product-service:8000
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - order-db
+      - kafka
+    networks:
+      - microservices-network
+
+  # 상품 서비스
+  product-service:
+    build: ./services/product
+    environment:
+      - DATABASE_URL=mongo://product-db:27017/products
+    depends_on:
+      - product-db
+    networks:
+      - microservices-network
+
+  # 각 서비스별 독립 데이터베이스
+  user-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: users
+    volumes:
+      - user-data:/var/lib/postgresql/data
+    networks:
+      - microservices-network
+
+  order-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: orders
+    networks:
+      - microservices-network
+
+  product-db:
+    image: mongo:6
+    networks:
+      - microservices-network
+
+  # 메시지 브로커 (비동기 통신)
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+    networks:
+      - microservices-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge
+
+volumes:
+  user-data:
+
+# ========================================
+# 프로젝트 디렉토리 구조
+# ========================================
+# microservices-app/
+# ├── docker-compose.yml
+# ├── k8s/
+# │   ├── user-service.yaml
+# │   ├── order-service.yaml
+# │   └── api-gateway.yaml
+# ├── services/
+# │   ├── user/
+# │   │   ├── Dockerfile
+# │   │   ├── package.json
+# │   │   └── src/
+# │   ├── order/
+# │   │   ├── Dockerfile
+# │   │   ├── requirements.txt
+# │   │   └── app/
+# │   └── product/
+# │       ├── Dockerfile
+# │       └── src/
+# └── shared/
+#     ├── proto/           # gRPC 프로토콜 정의
+#     └── events/          # 공유 이벤트 스키마
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 아키텍처 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "주문 도메인과 재고 도메인을 별도 마이크로서비스로 분리하면 좋겠습니다. 주문은 트래픽이 몰리는 시간대가 다르고, 재고는 실시간 정확성이 중요하니까요. Kafka로 이벤트를 발행하면 느슨하게 결합할 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "결제 서비스가 죽어도 주문 서비스에 서킷 브레이커가 있어서 전체 시스템이 다운되진 않았습니다. 결제만 일시 중단되고, 나머지 기능은 정상 동작했어요. 마이크로서비스의 장애 격리 덕분입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 도입 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "지금 우리 규모에서 마이크로서비스는 오버엔지니어링입니다. 팀도 작고 트래픽도 많지 않아요. 일단 모놀리식으로 빠르게 MVP를 만들고, 사용자가 늘면 병목이 되는 도메인부터 분리하는 게 현실적입니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>분산 트랜잭션의 복잡성</strong>
+                        <p>서비스 간 데이터 일관성 유지가 어렵습니다. SAGA 패턴이나 이벤트 소싱으로 최종 일관성을 구현하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>네트워크 장애 대비</strong>
+                        <p>서비스 간 통신은 언제든 실패할 수 있습니다. 타임아웃, 재시도, 서킷 브레이커, 폴백 패턴이 필수입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>운영 오버헤드</strong>
+                        <p>수십 개의 서비스를 관리하려면 로깅, 모니터링, 배포 자동화, 서비스 디스커버리 인프라가 필수입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>베스트 프랙티스</strong>
+                        <p>도메인 주도 설계(DDD)로 경계 식별, API 버저닝, 독립 DB(Database per Service), 컨테이너 오케스트레이션(K8s), 중앙 집중식 로깅과 분산 추적.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EB%AA%A8%EB%86%80%EB%A6%AC%EC%8B%9D/" class="related-term-link">모놀리식</a>
+                <a href="/ko/term/%EB%A9%94%EC%8B%9C%EC%A7%80%20%ED%81%90/" class="related-term-link">메시지 큐</a>
+                <a href="/ko/term/%EC%9D%B4%EB%B2%A4%ED%8A%B8%20%EB%93%9C%EB%A6%AC%EB%B8%90/" class="related-term-link">이벤트 드리븐</a>
+                <a href="/ko/term/Docker/" class="related-term-link">Docker</a>
+                <a href="/ko/term/API/" class="related-term-link">API</a>
+                <a href="/ko/term/%EC%B5%9C%EC%A2%85%20%EC%9D%BC%EA%B4%80%EC%84%B1/" class="related-term-link">최종 일관성</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://microservices.io/" target="_blank" class="learn-link">
+                    📄 Microservices.io - 마이크로서비스 패턴 카탈로그
+                </a>
+                <a href="https://martinfowler.com/articles/microservices.html" target="_blank" class="learn-link">
+                    🎓 Martin Fowler - Microservices 원문
+                </a>
+                <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/microservices" target="_blank" class="learn-link">
+                    📖 Microsoft - 마이크로서비스 아키텍처 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +770,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

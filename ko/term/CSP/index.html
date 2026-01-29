@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,133 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>CSP(Content Security Policy)는 웹 브라우저에서 XSS(Cross-Site Scripting)와 데이터 인젝션 공격을 방지하는 HTTP 응답 헤더입니다. 웹 페이지에서 로드할 수 있는 리소스(스크립트, 스타일, 이미지, 폰트 등)의 출처를 명시적으로 허용 목록(allowlist)으로 지정합니다.</p>
+                <p>CSP의 핵심 원리는 "화이트리스트 기반 보안"입니다. 기본적으로 모든 인라인 스크립트와 eval()을 차단하고, 명시적으로 허용한 출처의 리소스만 로드합니다. 공격자가 XSS 취약점을 발견해도 악성 스크립트 실행이 차단됩니다.</p>
+                <p>주요 디렉티브로는 default-src(기본 정책), script-src(스크립트 출처), style-src(스타일 출처), img-src(이미지 출처), connect-src(Ajax/WebSocket 출처) 등이 있습니다. 'self'는 같은 출처, 'unsafe-inline'은 인라인 허용(권장하지 않음), nonce/hash는 특정 인라인 스크립트만 허용합니다.</p>
+                <p>CSP 위반 시 브라우저가 리소스 로드를 차단하고 콘솔에 오류를 출력합니다. report-uri 또는 report-to 디렉티브로 위반 보고서를 수집하여 정책을 점진적으로 강화할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="http">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># 기본적인 CSP 헤더 설정 (Nginx)
+# nginx.conf
+add_header Content-Security-Policy "
+  default-src 'self';
+  script-src 'self' https://cdn.jsdelivr.net;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com;
+  img-src 'self' data: https:;
+  connect-src 'self' https://api.example.com;
+  frame-ancestors 'none';
+  base-uri 'self';
+  form-action 'self';
+" always;
+
+# Next.js에서 CSP 설정 (nonce 기반)
+// next.config.js
+const cspHeader = `
+  default-src 'self';
+  script-src 'self' 'nonce-{nonce}' 'strict-dynamic';
+  style-src 'self' 'nonce-{nonce}';
+  img-src 'self' blob: data:;
+  font-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  upgrade-insecure-requests;
+`;
+
+// middleware.ts
+import { NextResponse } from 'next/server';
+import crypto from 'crypto';
+
+export function middleware(request) {
+  const nonce = crypto.randomBytes(16).toString('base64');
+  const csp = cspHeader.replace(/{nonce}/g, nonce);
+
+  const response = NextResponse.next();
+  response.headers.set('Content-Security-Policy', csp);
+  response.headers.set('x-nonce', nonce);
+  return response;
+}
+
+# CSP Report-Only 모드 (먼저 테스트)
+Content-Security-Policy-Report-Only: default-src 'self'; report-uri /csp-report
+
+# 위반 보고서 수집 엔드포인트
+// /api/csp-report.ts
+export async function POST(req) {
+  const report = await req.json();
+  console.log('CSP Violation:', report['csp-report']);
+  // 로그 저장 또는 알림
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">보안팀:</strong> "웹 취약점 점검에서 CSP 헤더가 없다고 나왔어요. XSS 방어를 위해 추가해주세요."</p>
+                <p><strong class="role-junior">프론트:</strong> "인라인 스크립트를 많이 쓰고 있어서 바로 적용하면 사이트가 깨질 것 같아요."</p>
+                <p><strong class="role-senior">시니어:</strong> "Report-Only 모드로 먼저 배포해서 위반 로그를 수집하고, 점진적으로 강화합시다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "XSS 공격을 어떻게 방어하시겠어요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "입력값 검증과 출력 인코딩이 기본이고, CSP 헤더로 2차 방어를 합니다. script-src에 'self'만 허용하고, 인라인 스크립트는 nonce나 hash로 제한합니다. Report-Only로 시작해서 점진적으로 정책을 강화합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "CSP에 'unsafe-inline' 'unsafe-eval'이 있으면 XSS 방어 효과가 거의 없어요."</p>
+                <p><strong class="role-author">작성자:</strong> "레거시 코드 때문에 넣었는데, nonce 기반으로 리팩토링하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>'unsafe-inline'과 'unsafe-eval'은 CSP의 보안 효과를 무력화합니다. 반드시 nonce나 hash 기반으로 전환하세요.</li>
+                <li>서드파티 위젯(Google Analytics, 채팅 위젯 등)은 CSP에 명시적으로 허용해야 합니다. 위젯 제공자의 CSP 가이드를 확인하세요.</li>
+                <li class="info">CSP Level 3의 'strict-dynamic'을 사용하면 신뢰된 스크립트가 로드하는 스크립트도 자동 허용됩니다. 모던 브라우저에서 권장됩니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/XSS/" class="related-link">XSS</a>
+                <a href="/ko/term/HTTPS/" class="related-link">HTTPS</a>
+                <a href="/ko/term/WAF/" class="related-link">WAF</a>
+                <a href="/ko/term/OWASP/" class="related-link">OWASP</a>
+                <a href="/ko/term/CORS/" class="related-link">CORS</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP" target="_blank">MDN CSP 가이드</a></li>
+                <li><span class="type-tutorial"></span><a href="https://web.dev/strict-csp/" target="_blank">web.dev Strict CSP 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://csp-evaluator.withgoogle.com/" target="_blank">Google CSP Evaluator</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +340,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

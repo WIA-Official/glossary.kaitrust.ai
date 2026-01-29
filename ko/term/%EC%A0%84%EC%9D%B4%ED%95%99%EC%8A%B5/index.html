@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -202,6 +228,238 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>전이학습(Transfer Learning)은 한 도메인에서 학습된 모델의 지식을 다른 관련 도메인의 새로운 작업에 적용하는 머신러닝 기법입니다. 이는 대규모 데이터셋에서 사전 학습된 모델을 기반으로, 상대적으로 적은 양의 데이터로도 우수한 성능을 달성할 수 있게 해주는 핵심 기술입니다.</p>
+
+                <p>전이학습의 등장 배경은 딥러닝 모델의 학습에 필요한 막대한 데이터와 계산 자원 문제에서 비롯됩니다. 2012년 ImageNet 대회에서 AlexNet의 성공 이후, 사전학습된 CNN 모델을 다른 이미지 분류 작업에 재활용하는 방식이 널리 퍼졌습니다. 2018년 BERT의 등장으로 NLP 분야에서도 전이학습이 표준이 되었으며, 현재 GPT, LLaMA 등 대규모 언어 모델에서 필수적인 기법으로 자리잡았습니다.</p>
+
+                <p>전이학습의 핵심 원리는 특징 추출(Feature Extraction)과 파인튜닝(Fine-tuning)입니다. 특징 추출 방식은 사전학습된 모델의 가중치를 고정하고 마지막 분류 레이어만 새로 학습합니다. 파인튜닝은 전체 모델을 낮은 학습률로 추가 학습하여 새 도메인에 적응시킵니다. 최근에는 LoRA, QLoRA 같은 파라미터 효율적 파인튜닝(PEFT) 기법으로 메모리 효율성을 크게 개선했습니다.</p>
+
+                <p>실무에서 전이학습은 데이터 수집 비용 절감, 학습 시간 단축, 성능 향상의 세 가지 측면에서 필수적입니다. 2025년 현재, Hugging Face에는 100만 개 이상의 사전학습 모델이 등록되어 있으며, 대부분의 AI 프로젝트는 처음부터 학습하는 대신 전이학습을 기본으로 시작합니다. 특히 의료, 법률 등 특수 도메인에서는 일반 모델의 도메인 적응이 핵심 경쟁력입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Hugging Face Transformers를 활용한 텍스트 분류 파인튜닝 예제:</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># 전이학습 파인튜닝 예제 (Hugging Face Transformers)
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import Trainer, TrainingArguments
+from datasets import load_dataset
+
+# 1. 사전학습된 모델과 토크나이저 로드
+model_name = "klue/bert-base"  # 한국어 BERT
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(
+    model_name,
+    num_labels=2  # 이진 분류
+)
+
+# 2. 데이터셋 준비
+dataset = load_dataset("nsmc")  # 네이버 영화 리뷰 감성분류
+
+def tokenize_function(examples):
+    return tokenizer(
+        examples["document"],
+        padding="max_length",
+        truncation=True,
+        max_length=128
+    )
+
+tokenized_datasets = dataset.map(tokenize_function, batched=True)
+
+# 3. 학습 설정 (LoRA 없이 전체 파인튜닝)
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=16,
+    per_device_eval_batch_size=64,
+    learning_rate=2e-5,  # 파인튜닝은 낮은 학습률 사용
+    warmup_ratio=0.1,
+    weight_decay=0.01,
+    evaluation_strategy="epoch",
+    save_strategy="epoch",
+    load_best_model_at_end=True,
+)
+
+# 4. Trainer로 학습
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_datasets["train"],
+    eval_dataset=tokenized_datasets["test"],
+)
+
+# 5. 파인튜닝 실행
+trainer.train()
+
+# 6. 모델 저장 및 추론
+trainer.save_model("./nsmc-classifier")
+print("파인튜닝 완료! 저장 경로: ./nsmc-classifier")</code></pre>
+                </div>
+
+                <p>LoRA를 활용한 파라미터 효율적 파인튜닝 예제:</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># PEFT(LoRA)를 활용한 효율적 전이학습
+from peft import LoraConfig, get_peft_model, TaskType
+from transformers import AutoModelForCausalLM
+
+# 베이스 모델 로드
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-3.2-1B",
+    torch_dtype="auto",
+    device_map="auto"
+)
+
+# LoRA 설정 - 전체 파라미터의 약 0.1%만 학습
+lora_config = LoraConfig(
+    task_type=TaskType.CAUSAL_LM,
+    r=16,                    # rank 크기
+    lora_alpha=32,           # 스케일링 팩터
+    lora_dropout=0.1,        # 드롭아웃
+    target_modules=["q_proj", "v_proj"],  # 적용 레이어
+)
+
+# PEFT 모델 생성
+peft_model = get_peft_model(model, lora_config)
+
+# 학습 가능한 파라미터 확인
+peft_model.print_trainable_parameters()
+# 출력: trainable params: 4,194,304 || all params: 1,500,000,000 || trainable%: 0.28%</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>사전학습 모델 대비 전이학습 효율성 비교 (2025년 기준):</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>학습 방식</th>
+                        <th>필요 데이터</th>
+                        <th>GPU 시간</th>
+                        <th>비용 (A100 기준)</th>
+                        <th>성능 (KLUE)</th>
+                    </tr>
+                    <tr>
+                        <td>처음부터 학습</td>
+                        <td>100M+ 토큰</td>
+                        <td>1,000+ 시간</td>
+                        <td>$2,000+</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>전체 파인튜닝</td>
+                        <td>10K 샘플</td>
+                        <td>2-4시간</td>
+                        <td>$4-8</td>
+                        <td>90%+</td>
+                    </tr>
+                    <tr>
+                        <td>LoRA 파인튜닝</td>
+                        <td>10K 샘플</td>
+                        <td>0.5-1시간</td>
+                        <td>$1-2</td>
+                        <td>89%+</td>
+                    </tr>
+                    <tr>
+                        <td>프롬프트 튜닝</td>
+                        <td>100 샘플</td>
+                        <td>10분</td>
+                        <td>$0.3</td>
+                        <td>85%+</td>
+                    </tr>
+                </table>
+                <p>* 성능은 KLUE 벤치마크 평균 기준, 비용은 AWS p4d.24xlarge 시간당 $2 기준</p>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말해요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <div class="conv-quote">"의료 도메인 데이터가 1만 건밖에 없는데, 처음부터 학습하면 과적합됩니다. BERT를 베이스로 파인튜닝하고, 데이터 증강도 병행하면 F1 0.9 이상 나올 겁니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <div class="conv-quote">"전이학습에서 도메인 갭이 클 때는 중간 도메인 사전학습을 거치는 것이 효과적입니다. 예를 들어 일반 BERT에서 바로 의료 분류를 하기보다, PubMedBERT처럼 의료 코퍼스로 추가 사전학습된 모델을 사용합니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <div class="conv-quote">"LLM 파인튜닝은 LoRA가 거의 표준이에요. rank 16에 alpha 32면 전체 파인튜닝의 95% 성능을 0.3%의 파라미터만 학습해서 얻을 수 있죠. QLoRA로 4비트 양자화하면 8GB VRAM으로도 70B 모델 파인튜닝이 가능합니다."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>도메인 갭을 무시하고 파인튜닝</h4>
+                        <p>영어 모델을 한국어 작업에, 또는 일반 도메인 모델을 전문 도메인에 바로 파인튜닝하면 성능이 크게 저하됩니다. 도메인 적응 단계(Domain-Adaptive Pre-training)를 먼저 거쳐야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>학습률을 너무 높게 설정</h4>
+                        <p>파인튜닝에서 학습률이 너무 높으면(예: 1e-3) 사전학습된 지식이 파괴되는 "catastrophic forgetting" 현상이 발생합니다. 보통 2e-5 ~ 5e-5 정도의 낮은 학습률을 사용해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">✅</div>
+                    <div class="warning-content">
+                        <h4>올바른 접근법</h4>
+                        <p>점진적 언프리징(Gradual Unfreezing) 전략을 사용하세요. 처음에는 분류 레이어만 학습하고, 이후 상위 레이어부터 하위 레이어로 순차적으로 학습 가능하게 풀어주면 안정적인 파인튜닝이 가능합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EC%A6%9D%EB%A5%98/" class="related-term-link">증류 (Distillation)</a>
+                <a href="/ko/term/%ED%8C%8C%EC%9D%B8%ED%8A%9C%EB%8B%9D/" class="related-term-link">파인튜닝</a>
+                <a href="/ko/term/%EC%82%AC%EC%A0%84%ED%95%99%EC%8A%B5/" class="related-term-link">사전학습</a>
+                <a href="/ko/term/%EB%8C%80%EA%B7%9C%EB%AA%A8%20%EC%96%B8%EC%96%B4%20%EB%AA%A8%EB%8D%B8/" class="related-term-link">대규모 언어 모델 (LLM)</a>
+                <a href="/ko/term/%EC%9E%84%EB%B2%A0%EB%94%A9/" class="related-term-link">임베딩</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://huggingface.co/docs/transformers/training" target="_blank" class="learn-link">
+                    📄 Hugging Face 파인튜닝 공식 가이드
+                </a>
+                <a href="https://huggingface.co/docs/peft" target="_blank" class="learn-link">
+                    🎓 PEFT (LoRA) 공식 문서
+                </a>
+                <a href="https://arxiv.org/abs/2106.09685" target="_blank" class="learn-link">
+                    📝 LoRA 원본 논문 - Hu et al. (2021)
+                </a>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -212,6 +470,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

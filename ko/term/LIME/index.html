@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,140 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>LIME(Local Interpretable Model-agnostic Explanations)은 블랙박스 모델의 개별 예측을 해석하는 XAI(설명가능한 AI) 기법입니다. 2016년 Ribeiro 등이 발표했으며, 모델의 종류와 관계없이(Model-agnostic) 특정 예측이 "왜" 그렇게 나왔는지를 설명합니다.</p>
+                <p>핵심 아이디어: 복잡한 글로벌 모델도 특정 데이터 포인트 주변에서는 단순한 선형 모델로 근사할 수 있습니다. LIME은 설명하려는 샘플 주변에서 perturbation(변형)을 만들어 로컬 영역의 결정 경계를 학습합니다.</p>
+                <p>작동 과정: 1) 원본 샘플 주변에서 perturbation 생성, 2) 블랙박스 모델로 각 perturbation의 예측 획득, 3) 원본과의 거리로 가중치 부여, 4) 가중 선형 회귀로 feature 중요도 추출. 이 과정을 통해 "이 이미지가 고양이인 이유는 귀와 눈 때문"과 같은 직관적 설명이 가능합니다.</p>
+                <p>실무에서 LIME은 금융 심사, 의료 진단, 법률 AI 등 설명 의무가 있는 분야에서 필수입니다. EU AI Act에서도 고위험 AI의 설명가능성을 요구하며, LIME은 이를 충족하는 표준 도구로 자리잡았습니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import lime
+import lime.lime_tabular
+import lime.lime_text
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+
+# 1. 테이블 데이터 설명 (대출 심사 예시)
+X_train = np.array([...])  # 특성: 소득, 부채비율, 신용점수 등
+model = RandomForestClassifier().fit(X_train, y_train)
+
+explainer = lime.lime_tabular.LimeTabularExplainer(
+    X_train,
+    feature_names=['소득', '부채비율', '신용점수', '근무년수', '대출금액'],
+    class_names=['승인', '거절'],
+    mode='classification'
+)
+
+# 특정 고객의 거절 이유 설명
+idx = 42  # 거절된 고객
+exp = explainer.explain_instance(
+    X_test[idx],
+    model.predict_proba,
+    num_features=5,
+    num_samples=1000  # perturbation 수
+)
+
+# 결과: 거절에 기여한 요인
+print(exp.as_list())
+# [('부채비율 > 0.4', 0.35), ('신용점수 < 650', 0.28), ...]
+exp.show_in_notebook()  # 시각화
+
+# 2. 텍스트 데이터 설명 (스팸 분류)
+from lime.lime_text import LimeTextExplainer
+
+text_explainer = LimeTextExplainer(class_names=['정상', '스팸'])
+text = "무료 당첨! 지금 클릭하세요 100만원 즉시 지급"
+
+exp = text_explainer.explain_instance(
+    text,
+    spam_model.predict_proba,
+    num_features=10
+)
+# 결과: '무료', '당첨', '클릭'이 스팸 판정에 기여
+exp.as_pyplot_figure()</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"대출 거절 고객에게 왜 거절됐는지 설명해야 하는데, XGBoost 모델이라 직접 설명이 안 됩니다. LIME 붙여서 '부채비율 40% 초과'와 '신용점수 650 미만'이 주 요인이라고 리포트 자동 생성하겠습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"LIME으로 이미지 분류 모델을 해석한 경험이 있습니다. Superpixel segmentation 후 각 영역을 masking하면서 예측 변화를 측정했어요. 고양이 이미지에서 귀 영역이 70% 기여도로 가장 중요했습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"LIME vs SHAP 비교하면, LIME은 로컬 선형 근사라 빠르지만 샘플링 변동성이 있어요. SHAP은 Shapley value 기반이라 이론적으로 더 견고하지만 계산 비용이 높습니다. 실시간 설명엔 LIME, 정밀 분석엔 SHAP 쓰고 있습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>num_samples를 너무 적게 설정</strong>
+                        <p>샘플 수가 적으면 설명의 분산이 커서 같은 입력에도 다른 설명이 나옵니다. 최소 1000 이상 권장.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>LIME 결과를 글로벌 해석으로 오해</strong>
+                        <p>LIME은 특정 샘플의 로컬 설명이지, 모델 전체의 동작을 설명하지 않습니다. 글로벌 해석은 SHAP summary plot이나 PDP 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>kernel_width 파라미터로 로컬 영역 크기 조절. 이미지는 superpixel 개수, 텍스트는 단어/문장 단위 조절이 중요합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/SHAP/" class="related-term-link">SHAP</a>
+                <a href="/ko/term/XAI/" class="related-term-link">XAI</a>
+                <a href="/ko/term/Feature%20Importance/" class="related-term-link">Feature Importance</a>
+                <a href="/ko/term/Interpretability/" class="related-term-link">Interpretability</a>
+                <a href="/ko/term/Black%20Box/" class="related-term-link">Black Box Model</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/1602.04938" target="_blank" class="learn-link">📄 LIME 원논문: "Why Should I Trust You?"</a>
+                <a href="https://github.com/marcotcr/lime" target="_blank" class="learn-link">🎓 LIME 공식 GitHub & 튜토리얼</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +370,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

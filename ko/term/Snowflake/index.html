@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,165 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Snowflake는 2012년 설립된 동명의 회사가 개발한 클라우드 네이티브 데이터 웨어하우스입니다. AWS, Azure, GCP에서 동일하게 동작하는 멀티 클라우드 아키텍처로, 컴퓨팅과 스토리지를 완전히 분리해 각각 독립적으로 확장합니다.</p>
+                <p>아키텍처는 세 레이어로 구성됩니다. Cloud Services(최적화, 보안, 메타데이터), Query Processing(가상 웨어하우스), Database Storage(마이크로 파티션)입니다. 가상 웨어하우스는 T-shirt 사이징(XS~6XL)으로 쿼리 워크로드에 따라 스케일링하고, 사용하지 않을 때 자동 중지해 비용을 절감합니다.</p>
+                <p>Data Sharing은 Snowflake의 차별화 기능입니다. 데이터 복사 없이 계정 간에 실시간으로 데이터를 공유하고, Snowflake Marketplace에서 서드파티 데이터를 구독합니다. Zero-Copy Cloning으로 테이블, 스키마, 데이터베이스를 순간 복제해 개발/테스트 환경을 빠르게 구성합니다.</p>
+                <p>Snowpark는 Python, Java, Scala로 Snowflake 내에서 데이터 처리 로직을 실행하는 프레임워크입니다. DataFrame API로 데이터를 변환하고, UDF(User-Defined Function), Stored Procedure를 작성합니다. ML 워크로드도 Snowflake 안에서 처리할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="sql">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>-- 데이터베이스 및 스키마 생성
+CREATE DATABASE analytics_db;
+CREATE SCHEMA analytics_db.raw;
+
+-- 가상 웨어하우스 생성
+CREATE WAREHOUSE analytics_wh
+  WAREHOUSE_SIZE = 'MEDIUM'
+  AUTO_SUSPEND = 300       -- 5분 후 자동 중지
+  AUTO_RESUME = TRUE
+  MIN_CLUSTER_COUNT = 1
+  MAX_CLUSTER_COUNT = 3;   -- 멀티 클러스터 (자동 확장)
+
+-- 테이블 생성
+CREATE TABLE raw.sales (
+    sale_id NUMBER AUTOINCREMENT,
+    product_id NUMBER,
+    customer_id NUMBER,
+    sale_date DATE,
+    amount DECIMAL(10,2),
+    region VARCHAR(50)
+);
+
+-- S3에서 데이터 로드
+COPY INTO raw.sales (product_id, customer_id, sale_date, amount, region)
+FROM @my_s3_stage/sales/
+FILE_FORMAT = (TYPE = 'PARQUET')
+MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+
+-- 분석 쿼리
+SELECT
+    DATE_TRUNC('month', sale_date) AS month,
+    region,
+    SUM(amount) AS total_sales,
+    COUNT(DISTINCT customer_id) AS unique_customers
+FROM raw.sales
+WHERE sale_date >= '2024-01-01'
+GROUP BY 1, 2
+ORDER BY 1, total_sales DESC;
+
+-- Zero-Copy Cloning (즉시 복제)
+CREATE TABLE raw.sales_backup CLONE raw.sales;
+CREATE DATABASE analytics_dev CLONE analytics_db;
+
+-- Time Travel (과거 데이터 조회, 기본 1일)
+SELECT * FROM raw.sales AT (OFFSET => -60*60);  -- 1시간 전
+SELECT * FROM raw.sales BEFORE (TIMESTAMP => '2024-01-15 10:00:00');
+
+-- Data Sharing (읽기 전용 공유)
+CREATE SHARE sales_share;
+GRANT USAGE ON DATABASE analytics_db TO SHARE sales_share;
+GRANT SELECT ON TABLE raw.sales TO SHARE sales_share;
+ALTER SHARE sales_share ADD ACCOUNTS = partner_account;
+
+-- Snowpark (Python)
+-- from snowflake.snowpark import Session
+-- from snowflake.snowpark.functions import col, sum as sum_
+--
+-- session = Session.builder.configs(connection_params).create()
+--
+-- df = session.table("raw.sales")
+-- result = (df
+--     .filter(col("sale_date") >= "2024-01-01")
+--     .group_by("region")
+--     .agg(sum_("amount").alias("total_sales"))
+--     .sort(col("total_sales").desc())
+-- )
+-- result.show()
+
+-- Python UDF 생성
+CREATE OR REPLACE FUNCTION calculate_tax(amount FLOAT)
+RETURNS FLOAT
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.8'
+HANDLER = 'compute_tax'
+AS $$
+def compute_tax(amount):
+    return amount * 0.1
+$$;
+
+SELECT sale_id, amount, calculate_tax(amount) AS tax FROM raw.sales;
+
+-- Stream (CDC)
+CREATE STREAM sales_changes ON TABLE raw.sales;
+-- 변경 사항 조회
+SELECT * FROM sales_changes;</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "테스트 환경에 프로덕션 데이터 필요하면 Zero-Copy Cloning 쓰세요. 몇 초 만에 복제되고 스토리지 비용도 안 들어요."</p>
+                <p><strong class="role-junior">주니어:</strong> "웨어하우스 사이즈는 어떻게 정해요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "쿼리 복잡도에 따라 달라요. 간단한 조회는 XS, 대량 ETL은 L 이상 쓰고, AUTO_SUSPEND로 비용 관리하세요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Snowflake 경험을 말씀해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "Redshift에서 Snowflake로 마이그레이션했습니다. 컴퓨팅/스토리지 분리로 비용이 40% 절감되었고, Zero-Copy Cloning으로 개발 환경 구축 시간이 하루에서 분 단위로 단축되었습니다. Snowpark로 Python ML 모델을 Snowflake 내에서 실행해 데이터 이동 없이 배치 추론을 수행했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "대량 쿼리 실행 전에 웨어하우스 사이즈 확인하세요. XS로 돌리면 몇 시간 걸려요."</p>
+                <p><strong class="role-junior">개발자:</strong> "L로 바꾸고 AUTO_SUSPEND 설정해서 완료 후 바로 끄게 하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>사용량 기반 과금 - 웨어하우스 실행 시간(초 단위)과 스토리지에 따라 비용 증가, 모니터링 필수</li>
+                <li>Time Travel 기본 1일 - 장기 보관 필요 시 Fail-safe(7일 추가) 또는 스냅샷 활용</li>
+                <li>동시성 제한 - 웨어하우스당 동시 쿼리 수 제한 있음, 멀티 클러스터로 확장</li>
+                <li class="info">Query Profile로 쿼리 성능 분석 - 병목 구간과 스필링(디스크 사용) 확인 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Redshift/" class="related-link">Redshift</a>
+                <a href="/ko/term/Parquet/" class="related-link">Parquet</a>
+                <a href="/ko/term/Spark/" class="related-link">Spark</a>
+                <a href="/ko/term/Pandas/" class="related-link">Pandas</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.snowflake.com/" target="_blank" rel="noopener">Snowflake 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://quickstarts.snowflake.com/" target="_blank" rel="noopener">Snowflake Quickstarts</a></li>
+                <li><span class="type-article"></span><a href="https://docs.snowflake.com/en/developer-guide/snowpark/python/index" target="_blank" rel="noopener">Snowpark Python Guide</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +372,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

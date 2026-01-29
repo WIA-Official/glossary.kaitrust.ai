@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,178 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Terraform은 2014년 HashiCorp가 출시한 Infrastructure as Code(IaC) 도구로, 선언적 구성 언어인 HCL(HashiCorp Configuration Language)을 사용해 클라우드 인프라를 정의하고 관리합니다. 2024년 OpenTofu 포크 이전까지 IaC 분야의 사실상 표준이었습니다.</p>
+                <p>핵심 개념으로 Provider(AWS, Azure, GCP 등 플랫폼 플러그인), Resource(관리 대상 인프라), State(현재 인프라 상태 저장), Module(재사용 가능한 구성 단위)이 있습니다. terraform plan으로 변경 사항을 미리 확인하고, terraform apply로 실제 적용합니다.</p>
+                <p>Terraform의 강점은 멀티 클라우드 지원입니다. 3000개 이상의 Provider가 있어 AWS, Azure, GCP는 물론 Kubernetes, Datadog, GitHub 등 다양한 서비스를 하나의 도구로 관리합니다. 상태 파일(tfstate)로 인프라의 현재 상태를 추적하고, 변경 계획을 정확히 예측합니다.</p>
+                <p>실무에서는 Terraform Cloud/Enterprise로 팀 협업과 상태 파일 관리를 하거나, S3+DynamoDB로 백엔드를 구성합니다. Module을 사용해 VPC, EKS 클러스터 같은 복잡한 구성을 재사용하고, Terragrunt로 DRY(Don't Repeat Yourself) 원칙을 적용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="hcl">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># main.tf - AWS EKS 클러스터 구성 예제
+terraform {
+  required_version = ">= 1.5.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+
+  # 상태 파일 원격 저장
+  backend "s3" {
+    bucket         = "my-terraform-state"
+    key            = "prod/eks/terraform.tfstate"
+    region         = "ap-northeast-2"
+    dynamodb_table = "terraform-locks"
+    encrypt        = true
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
+
+  default_tags {
+    tags = {
+      Environment = var.environment
+      ManagedBy   = "Terraform"
+    }
+  }
+}
+
+# variables.tf
+variable "aws_region" {
+  description = "AWS 리전"
+  type        = string
+  default     = "ap-northeast-2"
+}
+
+variable "environment" {
+  description = "환경 (dev, staging, prod)"
+  type        = string
+}
+
+variable "cluster_name" {
+  description = "EKS 클러스터 이름"
+  type        = string
+}
+
+# EKS 모듈 사용
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 19.0"
+
+  cluster_name    = var.cluster_name
+  cluster_version = "1.28"
+
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnets
+
+  eks_managed_node_groups = {
+    general = {
+      desired_size = 2
+      min_size     = 1
+      max_size     = 5
+
+      instance_types = ["t3.medium"]
+      capacity_type  = "ON_DEMAND"
+    }
+
+    spot = {
+      desired_size = 2
+      min_size     = 0
+      max_size     = 10
+
+      instance_types = ["t3.large", "t3.xlarge"]
+      capacity_type  = "SPOT"
+    }
+  }
+}
+
+# outputs.tf
+output "cluster_endpoint" {
+  description = "EKS 클러스터 엔드포인트"
+  value       = module.eks.cluster_endpoint
+}
+
+output "cluster_name" {
+  description = "EKS 클러스터 이름"
+  value       = module.eks.cluster_name
+}
+
+# 실행 명령어
+# terraform init          # 초기화
+# terraform plan          # 변경 계획 확인
+# terraform apply         # 적용
+# terraform destroy       # 삭제</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "새 환경 구축에 매번 3일 걸렸는데, Terraform 모듈화하고 나니까 terraform apply 한 번이면 2시간 내로 끝나요."</p>
+                <p><strong class="role-junior">주니어:</strong> "상태 파일은 어디에 저장하나요? 로컬에 두면 협업이 안 될 것 같은데요."</p>
+                <p><strong class="role-senior">시니어:</strong> "S3 백엔드 쓰고 DynamoDB로 락 걸어요. terraform plan은 PR에서 GitHub Actions로 자동 실행되게 해놨어요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Terraform 상태 파일 관리는 어떻게 하셨나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "S3 버전 관리가 활성화된 버킷에 저장하고, DynamoDB로 state locking을 구현했습니다. Terraform Cloud의 Remote State도 사용해봤는데, 팀 규모가 작을 땐 S3 방식이 비용 면에서 유리했습니다. state 파일 손상 시 복구를 위해 S3 버전 관리는 필수입니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "리소스에 depends_on 없이 참조만 하면 암시적 의존성으로 순서가 보장돼요. 명시적으로 넣으면 오히려 유지보수가 힘들어져요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, module.eks.cluster_endpoint 참조하면 자동으로 EKS가 먼저 생성되는 거군요. depends_on 제거하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>상태 파일(tfstate)에 민감 정보 평문 저장됨 - S3 서버 사이드 암호화, 접근 제어 필수</li>
+                <li>terraform destroy는 전체 리소스 삭제 - 프로덕션에서는 극히 주의하고 lifecycle prevent_destroy 설정</li>
+                <li>Provider 버전 업그레이드 시 breaking change 가능 - 버전 고정하고 점진적 업그레이드</li>
+                <li class="info">terraform plan 결과를 PR 코멘트로 자동 게시하면 인프라 변경 리뷰가 수월함 (Atlantis, GitHub Actions)</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/IaC/" class="related-link">IaC</a>
+                <a href="/ko/term/OpenTofu/" class="related-link">OpenTofu</a>
+                <a href="/ko/term/Ansible/" class="related-link">Ansible</a>
+                <a href="/ko/term/GitOps/" class="related-link">GitOps</a>
+                <a href="/ko/term/Crossplane/" class="related-link">Crossplane</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://developer.hashicorp.com/terraform/docs" target="_blank" rel="noopener">Terraform 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://registry.terraform.io/" target="_blank" rel="noopener">Terraform Registry - 모듈과 Provider</a></li>
+                <li><span class="type-book"></span><a href="https://www.terraformupandrunning.com/" target="_blank" rel="noopener">Terraform: Up & Running 책</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +385,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -161,6 +161,151 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +347,257 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>eBPF(extended Berkeley Packet Filter)는 Linux 커널 내부에서 안전하게 샌드박스된 프로그램을 실행할 수 있게 해주는 혁신적인 기술입니다. 커널 소스 코드를 수정하거나 모듈을 로드하지 않고도 커널의 동작을 확장할 수 있어, 시스템 관찰성(Observability), 네트워킹, 보안 분야에서 게임 체인저로 평가받고 있습니다.</p>
+                <p>원래 BPF(Berkeley Packet Filter)는 1992년 네트워크 패킷 필터링용으로 설계되었습니다. 2014년 Linux 3.18에서 "extended" BPF로 대폭 확장되어, 패킷 필터링을 넘어 시스템 전반의 트레이싱, 성능 프로파일링, 보안 정책 적용까지 가능해졌습니다. eBPF 프로그램은 커널의 검증기(Verifier)를 통과해야만 실행되므로 시스템 크래시 위험이 없습니다.</p>
+                <p>eBPF의 핵심 강점은 커널 수준의 성능과 사용자 공간의 유연성을 결합한다는 점입니다. 전통적으로 시스템 성능 모니터링이나 네트워크 필터링은 커널 모듈 개발이 필요했지만, eBPF를 사용하면 Python이나 C로 작성한 프로그램을 컴파일하여 커널에 동적으로 로드할 수 있습니다. Netflix, Meta, Google 등 대형 기업들이 프로덕션에서 적극 활용하고 있습니다.</p>
+                <p>대표적인 eBPF 기반 도구로는 네트워킹을 위한 Cilium, 관찰성을 위한 bpftrace, Pixie, 보안을 위한 Falco, Tetragon 등이 있습니다. Kubernetes 환경에서 Cilium은 kube-proxy를 대체하여 서비스 메시 기능까지 eBPF만으로 구현하며, 기존 iptables 대비 최대 10배 빠른 처리 성능을 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="bpftrace">bpftrace</button>
+                <button class="code-tab" data-lang="python">Python (BCC)</button>
+                <button class="code-tab" data-lang="bash">CLI 명령어</button>
+            </div>
+            <div class="code-block active" data-lang="bpftrace">
+                <pre><code class="language-bash"># bpftrace - 고수준 eBPF 트레이싱 도구
+
+# 시스템 콜 추적 - 어떤 프로세스가 어떤 syscall을 호출하는지
+sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* { @[comm, probe] = count(); }'
+
+# 파일 열기 추적 - 어떤 파일이 열리는지 실시간 모니터링
+sudo bpftrace -e 'tracepoint:syscalls:sys_enter_openat {
+    printf("%s opened %s\n", comm, str(args->filename));
+}'
+
+# 함수 실행 시간 측정 - TCP 연결 지연 분석
+sudo bpftrace -e '
+kprobe:tcp_v4_connect { @start[tid] = nsecs; }
+kretprobe:tcp_v4_connect /@start[tid]/ {
+    @latency = hist((nsecs - @start[tid]) / 1000);
+    delete(@start[tid]);
+}'
+
+# 프로세스 생성 추적 - 보안 모니터링
+sudo bpftrace -e 'tracepoint:sched:sched_process_exec {
+    printf("%s (pid=%d) executed by %s\n",
+        str(args->filename), args->pid, comm);
+}'
+
+# CPU 사용량 높은 스택 프로파일링
+sudo bpftrace -e 'profile:hz:99 { @[kstack] = count(); }'
+
+# 디스크 I/O 지연 히스토그램
+sudo bpftrace -e 'tracepoint:block:block_rq_complete {
+    @bytes = hist(args->nr_sector * 512);
+}'</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">#!/usr/bin/python3
+# BCC (BPF Compiler Collection) - Python으로 eBPF 프로그래밍
+# pip install bcc
+
+from bcc import BPF
+from time import sleep
+
+# 1. TCP 연결 추적 프로그램
+program = """
+#include <net/sock.h>
+#include <bcc/proto.h>
+
+BPF_HASH(connections, u32, u64);
+
+int trace_connect(struct pt_regs *ctx, struct sock *sk) {
+    u32 pid = bpf_get_current_pid_tgid() >> 32;
+    u64 ts = bpf_ktime_get_ns();
+    connections.update(&pid, &ts);
+    return 0;
+}
+
+int trace_connect_return(struct pt_regs *ctx) {
+    u32 pid = bpf_get_current_pid_tgid() >> 32;
+    u64 *start_ts = connections.lookup(&pid);
+    if (start_ts) {
+        u64 latency = bpf_ktime_get_ns() - *start_ts;
+        bpf_trace_printk("PID %d: connect latency %d us\\n",
+                         pid, latency / 1000);
+        connections.delete(&pid);
+    }
+    return 0;
+}
+"""
+
+b = BPF(text=program)
+b.attach_kprobe(event="tcp_v4_connect", fn_name="trace_connect")
+b.attach_kretprobe(event="tcp_v4_connect", fn_name="trace_connect_return")
+
+print("Tracing TCP connects... Ctrl+C to exit")
+b.trace_print()
+
+
+# 2. 간단한 시스템콜 카운터
+from bcc import BPF
+from collections import Counter
+import time
+
+bpf_text = """
+BPF_HASH(syscall_count, u64, u64);
+
+TRACEPOINT_PROBE(raw_syscalls, sys_enter) {
+    u64 key = args->id;
+    u64 *val = syscall_count.lookup(&key);
+    if (val) {
+        (*val)++;
+    } else {
+        u64 one = 1;
+        syscall_count.update(&key, &one);
+    }
+    return 0;
+}
+"""
+
+b = BPF(text=bpf_text)
+print("Counting syscalls for 10 seconds...")
+time.sleep(10)
+
+for k, v in b["syscall_count"].items():
+    print(f"Syscall #{k.value}: {v.value} calls")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># eBPF 환경 확인 및 도구 사용법
+
+# 커널 eBPF 지원 확인
+cat /boot/config-$(uname -r) | grep BPF
+# CONFIG_BPF=y, CONFIG_BPF_SYSCALL=y 확인
+
+# bpftrace 설치 (Ubuntu/Debian)
+sudo apt-get install bpftrace
+
+# BCC 도구 모음 설치
+sudo apt-get install bpfcc-tools linux-headers-$(uname -r)
+
+# Cilium CLI 설치 (Kubernetes eBPF 네트워킹)
+curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz
+sudo tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
+
+# 유용한 BCC 도구들
+sudo /usr/share/bcc/tools/execsnoop      # 프로세스 실행 추적
+sudo /usr/share/bcc/tools/opensnoop      # 파일 열기 추적
+sudo /usr/share/bcc/tools/biolatency     # 디스크 I/O 지연
+sudo /usr/share/bcc/tools/tcpconnect     # TCP 연결 추적
+sudo /usr/share/bcc/tools/tcplife        # TCP 세션 수명
+sudo /usr/share/bcc/tools/profile        # CPU 프로파일링
+sudo /usr/share/bcc/tools/funclatency    # 함수 실행 시간
+
+# bpftool - eBPF 프로그램 관리
+sudo bpftool prog list          # 로드된 eBPF 프로그램 목록
+sudo bpftool map list           # eBPF 맵 목록
+sudo bpftool prog dump xlated id 123  # 프로그램 바이트코드 확인
+
+# Cilium 상태 확인 (Kubernetes)
+cilium status
+cilium hubble observe --follow   # 네트워크 플로우 실시간 관찰</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 분석 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "프로덕션에서 레이턴시 스파이크 원인을 찾기 어려운데, bpftrace로 커널 레벨 트레이싱을 해보면 어떨까요? 애플리케이션 코드 수정 없이 TCP 연결 지연, 시스템콜 병목, 디스크 I/O 패턴을 실시간으로 분석할 수 있습니다. Netflix도 이 방식으로 문제를 해결했다고 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 Kubernetes 네트워킹 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "kube-proxy의 iptables 모드가 서비스 수가 늘어나면서 병목이 되고 있습니다. Cilium으로 전환하면 eBPF 기반이라 룰 개수와 상관없이 O(1) 성능을 유지하고, Hubble로 서비스 간 트래픽 가시성도 얻을 수 있습니다. 실제로 전환 후 Pod 간 통신 레이턴시가 40% 개선된 사례가 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 팀 미팅에서</div>
+                    <blockquote class="conv-quote">
+                        "런타임 보안 강화를 위해 Falco나 Tetragon 도입을 검토해보시죠. eBPF 기반이라 시스템콜 레벨에서 컨테이너의 모든 행위를 실시간 감시할 수 있습니다. 파일 접근, 네트워크 연결, 권한 상승 시도를 커널에서 바로 탐지하고 차단할 수 있어서 기존 에이전트 방식보다 오버헤드가 훨씬 적습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>커널 버전 호환성 무시</strong>
+                        <p>eBPF 기능은 커널 버전에 따라 크게 다릅니다. Linux 4.x에서는 기본 기능만 지원되고, BTF(BPF Type Format), CO-RE(Compile Once Run Everywhere) 같은 최신 기능은 5.x 이상이 필요합니다. 프로덕션 적용 전 커널 버전을 반드시 확인하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>검증기(Verifier) 에러 방치</strong>
+                        <p>eBPF 프로그램이 검증을 통과하지 못하면 "invalid access to map value" 같은 암호 같은 에러가 발생합니다. 루프 횟수 제한, 스택 크기 제한, 메모리 접근 범위 검증 등 검증기 규칙을 이해해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>프로덕션에서 과도한 트레이싱</strong>
+                        <p>bpftrace나 BCC 도구를 고트래픽 프로덕션 서버에서 무분별하게 사용하면 CPU 오버헤드가 발생합니다. 꼭 필요한 이벤트만 선택적으로 트레이싱하고, 필터 조건을 적용해 데이터 양을 줄이세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 eBPF 도입 방법</strong>
+                        <p>libbpf와 CO-RE를 사용해 커널 버전 독립적인 프로그램 작성. 개발 환경에서 충분히 테스트 후 프로덕션 적용. Cilium, Falco 같은 검증된 도구부터 시작하여 점진적으로 커스텀 프로그램 개발로 확장하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Kernel/" class="related-term-link">Kernel</a>
+                <a href="/ko/term/Container/" class="related-term-link">Container</a>
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+                <a href="/ko/term/Linux/" class="related-term-link">Linux</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://ebpf.io/" target="_blank" class="learn-link">
+                    📄 ebpf.io - eBPF 공식 사이트 (문서 및 튜토리얼)
+                </a>
+                <a href="https://github.com/iovisor/bpftrace" target="_blank" class="learn-link">
+                    🛠️ bpftrace - 고수준 eBPF 트레이싱 언어
+                </a>
+                <a href="https://docs.cilium.io/" target="_blank" class="learn-link">
+                    📖 Cilium 공식 문서 - eBPF 기반 Kubernetes 네트워킹
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +605,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

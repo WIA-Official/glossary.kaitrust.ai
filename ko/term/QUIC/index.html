@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,317 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>QUIC(Quick UDP Internet Connections)은 Google이 2012년에 개발하고 2021년 IETF RFC 9000으로 표준화된 차세대 전송 프로토콜입니다. TCP+TLS+HTTP/2의 기능을 UDP 위에서 단일 프로토콜로 구현하여, 기존 웹 통신의 연결 설정 지연과 Head-of-Line Blocking 문제를 근본적으로 해결합니다. HTTP/3의 기반 프로토콜로 채택되어 현재 전 세계 웹 트래픽의 25% 이상을 처리하고 있습니다.</p>
+                <p>QUIC의 핵심 혁신은 0-RTT(Zero Round Trip Time) 연결 설정입니다. 기존 TCP+TLS 1.3은 최소 2-RTT(약 200-300ms)가 필요하지만, QUIC은 이전에 연결한 서버에 대해 첫 패킷부터 암호화된 데이터를 전송할 수 있어 체감 속도가 크게 향상됩니다. 새 연결도 1-RTT만에 완료되어 모바일 환경에서 특히 유리합니다.</p>
+                <p>멀티플렉싱과 연결 마이그레이션은 QUIC의 또 다른 강점입니다. TCP에서는 하나의 패킷 손실이 전체 스트림을 블로킹하지만, QUIC은 독립적인 스트림으로 멀티플렉싱하여 특정 스트림의 손실이 다른 스트림에 영향을 주지 않습니다. 또한 Connection ID 기반으로 동작하여 Wi-Fi에서 LTE로 전환할 때도 연결이 끊기지 않고 유지됩니다.</p>
+                <p>보안 측면에서 QUIC은 TLS 1.3을 프로토콜 자체에 내장하여 모든 페이로드뿐 아니라 대부분의 헤더까지 암호화합니다. 이는 중간자 공격과 프로토콜 ossification(경직화)을 방지합니다. Google, Facebook, Cloudflare, Akamai 등 주요 기업들이 이미 QUIC을 도입했으며, Chrome, Firefox, Safari 등 모든 주요 브라우저에서 지원합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="go">Go</button>
+                <button class="code-tab" data-lang="javascript">Node.js</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python">import asyncio
+from aioquic.asyncio import connect, serve
+from aioquic.asyncio.protocol import QuicConnectionProtocol
+from aioquic.quic.configuration import QuicConfiguration
+
+# QUIC 클라이언트 예제 (aioquic 라이브러리)
+async def quic_client():
+    configuration = QuicConfiguration(
+        is_client=True,
+        alpn_protocols=["h3"],  # HTTP/3 프로토콜
+    )
+    # 인증서 검증 비활성화 (테스트용)
+    configuration.verify_mode = False
+
+    async with connect(
+        "localhost",
+        4433,
+        configuration=configuration,
+    ) as protocol:
+        # 스트림 생성 및 데이터 전송
+        stream_id = protocol._quic.get_next_available_stream_id()
+        protocol._quic.send_stream_data(
+            stream_id,
+            b"GET / HTTP/3\r\n\r\n",
+            end_stream=True
+        )
+
+        # 응답 대기
+        await asyncio.sleep(1)
+        print("QUIC 연결 성공!")
+
+# HTTP/3 클라이언트 (httpx + h3)
+import httpx
+
+async def http3_request():
+    # httpx는 HTTP/3 지원 (h3 백엔드 필요)
+    async with httpx.AsyncClient(http2=True) as client:
+        response = await client.get("https://cloudflare-quic.com")
+        print(f"Protocol: {response.http_version}")
+        print(f"Status: {response.status_code}")
+
+# QUIC 연결 상태 확인
+def check_quic_support(url):
+    """서버의 QUIC/HTTP3 지원 여부 확인"""
+    import subprocess
+    result = subprocess.run(
+        ["curl", "-I", "--http3", url],
+        capture_output=True, text=True
+    )
+    return "HTTP/3" in result.stdout
+
+asyncio.run(quic_client())</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="go">
+                <pre><code class="language-go">package main
+
+import (
+    "context"
+    "crypto/tls"
+    "fmt"
+    "io"
+    "log"
+    "net/http"
+
+    "github.com/quic-go/quic-go"
+    "github.com/quic-go/quic-go/http3"
+)
+
+// HTTP/3 클라이언트 (quic-go 라이브러리)
+func main() {
+    // HTTP/3 RoundTripper 설정
+    roundTripper := &http3.RoundTripper{
+        TLSClientConfig: &tls.Config{
+            InsecureSkipVerify: false,
+        },
+        QuicConfig: &quic.Config{
+            MaxIdleTimeout:  30 * time.Second,
+            EnableDatagrams: true,
+        },
+    }
+    defer roundTripper.Close()
+
+    client := &http.Client{
+        Transport: roundTripper,
+    }
+
+    // HTTP/3 요청
+    resp, err := client.Get("https://cloudflare-quic.com")
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer resp.Body.Close()
+
+    fmt.Printf("Protocol: %s\n", resp.Proto) // HTTP/3.0
+    fmt.Printf("Status: %s\n", resp.Status)
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Printf("Body: %s\n", string(body[:100]))
+}
+
+// QUIC 서버 예제
+func startQUICServer() {
+    // TLS 인증서 로드
+    certFile := "server.crt"
+    keyFile := "server.key"
+
+    handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        w.Header().Set("Alt-Svc", `h3=":443"; ma=86400`)
+        fmt.Fprintf(w, "Hello from HTTP/3!")
+    })
+
+    // HTTP/3 서버 시작
+    err := http3.ListenAndServeQUIC(
+        ":443",
+        certFile,
+        keyFile,
+        handler,
+    )
+    if err != nil {
+        log.Fatal(err)
+    }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="javascript">
+                <pre><code class="language-javascript">// Node.js QUIC 지원 (실험적 - Node.js 15+)
+// --experimental-quic 플래그 필요
+
+const { createQuicSocket } = require('net');
+
+// QUIC 클라이언트
+async function quicClient() {
+    const socket = createQuicSocket({ client: {} });
+
+    const session = await socket.connect({
+        address: 'localhost',
+        port: 4433,
+        alpn: 'h3',
+        servername: 'localhost'
+    });
+
+    session.on('secure', () => {
+        console.log('QUIC 연결 성공!');
+        console.log('Protocol:', session.alpnProtocol);
+        console.log('Cipher:', session.cipher.name);
+
+        // 스트림 생성
+        const stream = session.openStream({ halfOpen: true });
+        stream.write('GET / HTTP/3\r\n\r\n');
+        stream.end();
+
+        stream.on('data', (data) => {
+            console.log('응답:', data.toString());
+        });
+    });
+
+    session.on('close', () => {
+        console.log('연결 종료');
+        socket.close();
+    });
+}
+
+// HTTP/3 fetch (브라우저에서 자동 지원)
+// 브라우저는 Alt-Svc 헤더를 통해 자동으로 HTTP/3 사용
+
+// Nginx QUIC 설정 예제 (nginx.conf)
+const nginxQuicConfig = `
+server {
+    listen 443 quic reuseport;  # QUIC (UDP)
+    listen 443 ssl;              # HTTPS (TCP)
+
+    http2 on;
+    http3 on;
+
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/key.pem;
+
+    # TLS 1.3 필수 (QUIC 요구사항)
+    ssl_protocols TLSv1.3;
+
+    # Alt-Svc 헤더로 HTTP/3 지원 알림
+    add_header Alt-Svc 'h3=":443"; ma=86400';
+
+    # 0-RTT 활성화 (Early Data)
+    ssl_early_data on;
+
+    location / {
+        root /var/www/html;
+    }
+}
+`;
+
+// QUIC 연결 상태 확인 (curl)
+// curl --http3 -I https://cloudflare-quic.com
+// curl --http3-only https://example.com
+
+console.log('QUIC/HTTP3 설정 예제');
+quicClient().catch(console.error);</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 최적화 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "모바일 사용자의 TTFB가 400ms인데, QUIC 도입하면 0-RTT로 첫 요청부터 데이터를 보낼 수 있어서 200ms 이상 단축할 수 있습니다. Cloudflare나 AWS CloudFront에서 HTTP/3 활성화하면 서버 수정 없이 바로 적용 가능해요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "QUIC은 UDP 위에 TCP의 신뢰성, TLS의 보안, HTTP/2의 멀티플렉싱을 통합한 프로토콜입니다. TCP의 HOL Blocking 문제를 해결하고, Connection ID 기반으로 네트워크 전환 시에도 연결이 유지됩니다. 특히 패킷 손실이 많은 모바일 환경에서 TCP 대비 30% 이상 성능 향상을 보입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 설계 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "QUIC 도입 시 방화벽에서 UDP 443 포트를 열어야 합니다. 일부 기업 네트워크에서 UDP를 차단하므로 Alt-Svc 헤더로 HTTP/3 지원을 알리고, 클라이언트가 QUIC 연결 실패 시 자동으로 TCP 폴백하도록 해야 해요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>UDP 포트 미개방</strong>
+                        <p>QUIC은 UDP 443 포트를 사용합니다. 방화벽이나 보안 그룹에서 TCP 443만 열고 UDP를 차단하면 QUIC 연결이 실패합니다. AWS Security Group, GCP Firewall에서 UDP 443 인바운드를 반드시 허용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>0-RTT 보안 위험 무시</strong>
+                        <p>0-RTT Early Data는 재전송 공격(Replay Attack)에 취약합니다. 결제, 주문 같은 멱등성이 없는 요청에는 0-RTT를 비활성화하거나 서버에서 중복 요청 감지 로직을 구현해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>로드밸런서 설정 누락</strong>
+                        <p>QUIC의 Connection ID는 클라이언트가 생성합니다. L4 로드밸런서에서 IP 해시 대신 Connection ID 기반 세션 지속성을 설정하지 않으면 연결 마이그레이션이 제대로 작동하지 않습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 QUIC 도입 방법</strong>
+                        <p>CDN(Cloudflare, Fastly)을 통해 먼저 도입하고, Alt-Svc 헤더로 점진적 마이그레이션하세요. TCP 폴백을 유지하고, 모니터링으로 QUIC vs TCP 성능을 비교한 후 Origin 서버에 직접 적용을 검토하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/HTTP/" class="related-term-link">HTTP</a>
+                <a href="/ko/term/TCP/" class="related-term-link">TCP</a>
+                <a href="/ko/term/UDP/" class="related-term-link">UDP</a>
+                <a href="/ko/term/TLS/" class="related-term-link">TLS</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/performance/what-is-http3/" target="_blank" class="learn-link">
+                    📄 Cloudflare - HTTP/3와 QUIC 이해하기
+                </a>
+                <a href="https://datatracker.ietf.org/doc/html/rfc9000" target="_blank" class="learn-link">
+                    📖 RFC 9000 - QUIC 공식 스펙
+                </a>
+                <a href="https://blog.chromium.org/2015/04/a-quic-update-on-googles-experimental.html" target="_blank" class="learn-link">
+                    🎓 Google Chromium Blog - QUIC 소개
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +665,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

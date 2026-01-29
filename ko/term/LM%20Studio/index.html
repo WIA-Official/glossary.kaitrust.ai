@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,138 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>LM Studio는 로컬 컴퓨터에서 LLM을 실행할 수 있는 무료 데스크톱 애플리케이션입니다. GUI 기반으로 Hugging Face의 오픈소스 모델을 쉽게 다운로드하고 실행할 수 있어, 클라우드 API 없이도 완전한 데이터 프라이버시를 보장합니다.</p>
+                <p>내부적으로 llama.cpp 엔진을 사용하며, macOS(Apple Silicon Metal 가속), Windows, Linux를 지원합니다. 특히 Apple Silicon Mac에서 MLX 가속을 통해 효율적인 추론이 가능하고, 통합 GPU 환경에서 Ollama보다 빠른 성능을 보입니다.</p>
+                <p>주요 기능: 로컬 API 서버(OpenAI 호환), RAG 지원(로컬 파일과 대화), Tool Calling, MCP 클라이언트, Python/TypeScript SDK. 2025-2026년 업데이트로 GLM-4.5, Devstral-2, olmOCR-2 등 최신 모델을 지속 지원합니다.</p>
+                <p>권장 사양: RAM 16GB 최소, 32GB 권장. 7B 모델은 16GB로 가능하고, 13B~70B 모델은 32GB 이상 필요합니다. GPU가 없어도 Vulkan offloading으로 CPU 실행이 가능하지만 속도는 느립니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># LM Studio 로컬 서버 연동 (OpenAI 호환 API)
+from openai import OpenAI
+
+# LM Studio 서버 시작: 앱에서 "Start Server" 클릭
+# 기본 주소: http://localhost:1234/v1
+
+client = OpenAI(
+    base_url="http://localhost:1234/v1",  # LM Studio 서버
+    api_key="lm-studio"  # 아무 값이나 OK (로컬이라 인증 불필요)
+)
+
+# 1. 기본 대화
+response = client.chat.completions.create(
+    model="llama-3.2-3b-instruct",  # LM Studio에 로드된 모델명
+    messages=[
+        {"role": "system", "content": "당신은 유용한 AI 어시스턴트입니다."},
+        {"role": "user", "content": "파이썬으로 피보나치 함수 작성해줘"}
+    ],
+    temperature=0.7,
+    max_tokens=1024
+)
+print(response.choices[0].message.content)
+
+# 2. Streaming 응답
+stream = client.chat.completions.create(
+    model="llama-3.2-3b-instruct",
+    messages=[{"role": "user", "content": "한국의 수도는?"}],
+    stream=True
+)
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+
+# 3. LM Studio SDK (더 많은 기능)
+# pip install lmstudio-sdk
+from lmstudio import LMStudioClient
+
+lm = LMStudioClient()
+models = lm.list_models()  # 로드된 모델 목록
+print(f"사용 가능 모델: {models}")
+
+# 비용: $0 (전기세만, GPU 없이도 실행 가능)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"보안 정책상 외부 API 사용이 금지되어 있습니다. LM Studio로 Llama 3.2를 로컬에 띄우면 데이터가 외부로 나가지 않아요. M3 Max 맥북이면 7B 모델 초당 40토큰 나옵니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"LM Studio로 프로토타입 개발 후 프로덕션은 vLLM으로 마이그레이션했습니다. OpenAI 호환 API라 코드 변경 없이 base_url만 바꾸면 되었고, 개발 비용 0원으로 MVP를 검증했습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"LM Studio vs Ollama 비교하면, LM Studio는 GUI가 좋고 통합 GPU에서 빠르고, Ollama는 CLI 친화적이고 멀티 모델 스위칭이 편해요. 개발자는 Ollama, 비개발자 팀원은 LM Studio 쓰고 있습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>RAM보다 큰 모델 로드 시도</strong>
+                        <p>70B 모델은 양자화해도 40GB+ 필요. 16GB RAM이면 7B Q4 양자화 모델이 한계입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Tool Calling을 프로덕션에서 바로 사용</strong>
+                        <p>LM Studio의 Tool Calling은 베타 품질. 테스트/개발용으로만 쓰고, 프로덕션은 검증된 API 사용 권장.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>Q4_K_M 양자화 모델 사용 권장 (품질/크기 밸런스). GPU layers 설정으로 VRAM 활용 최적화하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                <a href="/ko/term/Ollama/" class="related-term-link">Ollama</a>
+                <a href="/ko/term/Quantization/" class="related-term-link">Quantization</a>
+                <a href="/ko/term/GGUF/" class="related-term-link">GGUF</a>
+                <a href="/ko/term/llama.cpp/" class="related-term-link">llama.cpp</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://lmstudio.ai/" target="_blank" class="learn-link">📄 LM Studio 공식 사이트 & 다운로드</a>
+                <a href="https://lmstudio.ai/models" target="_blank" class="learn-link">🎓 LM Studio 모델 카탈로그</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +368,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

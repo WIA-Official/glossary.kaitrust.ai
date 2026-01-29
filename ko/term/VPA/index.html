@@ -202,7 +202,241 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;"><strong>VPA(Vertical Pod Autoscaler)</strong>는 Pod의 CPU와 메모리 리소스 요청(requests)과 제한(limits)을 자동으로 조정하는 Kubernetes 컴포넌트입니다. 실제 사용량을 모니터링하여 최적의 리소스 값을 추천하거나 자동으로 적용합니다.</p>
+
+                <p style="margin-bottom: 1rem;"><strong>VPA 구성요소:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>Recommender:</strong> 과거 메트릭을 분석하여 최적 리소스 추천</li>
+                    <li><strong>Updater:</strong> 추천 범위를 벗어난 Pod를 퇴거(evict)하여 재생성 유도</li>
+                    <li><strong>Admission Controller:</strong> Pod 생성 시 추천값으로 리소스 수정</li>
+                </ul>
+
+                <p style="margin-bottom: 1rem;"><strong>업데이트 모드(updatePolicy.updateMode):</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>Off:</strong> 추천만 제공, 자동 적용 안 함 (모니터링용)</li>
+                    <li><strong>Initial:</strong> Pod 생성 시에만 적용, 기존 Pod 변경 안 함</li>
+                    <li><strong>Recreate:</strong> 실행 중인 Pod도 퇴거 후 재생성하여 적용</li>
+                    <li><strong>Auto (기본):</strong> Recreate와 동일, 향후 인플레이스 업데이트 지원 예정</li>
+                </ul>
+
+                <p style="margin-bottom: 1rem;"><strong>HPA vs VPA:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>HPA (Horizontal):</strong> Pod 수를 늘리거나 줄임 (스케일 아웃/인)</li>
+                    <li><strong>VPA (Vertical):</strong> Pod의 리소스(CPU/메모리)를 늘리거나 줄임 (스케일 업/다운)</li>
+                </ul>
+
+                <p><strong>주의:</strong> HPA와 VPA를 같은 리소스(CPU 또는 메모리)에 동시 적용하면 충돌할 수 있습니다. VPA는 Off 모드로 추천만 확인하거나, 다른 메트릭을 기준으로 HPA를 사용하세요.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">VPA 설치 및 기본 설정</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># VPA 설치 (autoscaler 저장소에서)
+git clone https://github.com/kubernetes/autoscaler.git
+cd autoscaler/vertical-pod-autoscaler
+./hack/vpa-up.sh
+
+# 또는 Helm으로 설치
+helm repo add fairwinds-stable https://charts.fairwinds.com/stable
+helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
+
+# 설치 확인
+kubectl get pods -n kube-system | grep vpa
+# vpa-admission-controller-xxx   Running
+# vpa-recommender-xxx            Running
+# vpa-updater-xxx                Running</code></pre>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">VPA 리소스 정의</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># vpa.yaml
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: my-app-vpa
+spec:
+  # 대상 워크로드
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app
+
+  # 업데이트 정책
+  updatePolicy:
+    updateMode: "Auto"  # Off, Initial, Recreate, Auto
+
+  # 리소스 정책 (세부 제어)
+  resourcePolicy:
+    containerPolicies:
+      - containerName: "*"  # 모든 컨테이너
+        minAllowed:
+          cpu: 100m
+          memory: 128Mi
+        maxAllowed:
+          cpu: 2
+          memory: 4Gi
+        controlledResources: ["cpu", "memory"]
+        controlledValues: RequestsAndLimits  # RequestsOnly 가능
+
+---
+# 대상 Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: app
+          image: my-app:latest
+          resources:
+            requests:
+              cpu: 100m       # VPA가 자동 조정
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi</code></pre>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">추천값 확인</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># VPA 추천값 확인
+kubectl describe vpa my-app-vpa
+
+# 출력 예시:
+# Recommendation:
+#   Container Recommendations:
+#     Container Name: app
+#     Lower Bound:
+#       Cpu:     25m
+#       Memory:  262144k
+#     Target:                    # 권장 값
+#       Cpu:     50m
+#       Memory:  524288k
+#     Uncapped Target:
+#       Cpu:     50m
+#       Memory:  524288k
+#     Upper Bound:
+#       Cpu:     100m
+#       Memory:  1048576k
+
+# JSON으로 추천값만 추출
+kubectl get vpa my-app-vpa -o jsonpath='{.status.recommendation.containerRecommendations[0].target}'
+# {"cpu":"50m","memory":"524288k"}
+
+# 모든 VPA 추천값 확인
+kubectl get vpa -o custom-columns=\
+NAME:.metadata.name,\
+CPU_TARGET:.status.recommendation.containerRecommendations[0].target.cpu,\
+MEM_TARGET:.status.recommendation.containerRecommendations[0].target.memory</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">리소스 최적화 미팅</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">FinOps:</strong> "클러스터 비용이 너무 높아요. 리소스 requests가 과도한 것 같은데요."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">개발자:</strong> "VPA를 Off 모드로 설정해서 추천값을 먼저 확인해볼게요. 실제 사용량 대비 얼마나 과할당되었는지 파악할 수 있어요."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">FinOps:</strong> "자동 적용은요?"</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">개발자:</strong> "스테이징에서 Auto 모드로 테스트하고, 안정적이면 프로덕션에 적용해요. 다만 Pod 재시작이 발생하니까 영향도 체크해야 해요."</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">기술 면접</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">면접관:</strong> "HPA와 VPA를 함께 사용할 수 있나요?"</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">지원자:</strong> "같은 메트릭(CPU, 메모리)으로 동시 사용하면 충돌합니다. VPA가 requests를 높이면 HPA가 스케일다운하고, 다시 VPA가 조정하는 루프가 생길 수 있어요."</p>
+                    <p style="color: #94a3b8;"><strong style="color: #f1f5f9;">면접관:</strong> "그럼 어떻게 해야 하죠?"</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">지원자:</strong> "VPA는 Off 모드로 추천만 받고, HPA로 스케일링하는 게 일반적이에요. 아니면 VPA는 메모리만, HPA는 CPU나 커스텀 메트릭으로 분리하는 방법도 있습니다."</p>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">장애 대응</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">운영팀:</strong> "Pod가 자꾸 재시작돼요. OOMKilled도 아닌데..."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">개발자:</strong> "VPA Updater가 리소스 범위 벗어난 Pod를 퇴거시키는 거예요. kubectl describe pod 보면 evicted by VPA 이벤트가 있을 거예요."</p>
+                    <p style="color: #94a3b8;"><strong style="color: #f1f5f9;">운영팀:</strong> "잠깐 멈출 수 있나요?"</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">개발자:</strong> "updateMode를 Off로 바꾸면 추천만 하고 퇴거 안 해요. 안정화되면 다시 Auto로 변경하면 됩니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #e2e8f0; line-height: 1.8; margin-left: 1.5rem;">
+                <li style="margin-bottom: 0.75rem;"><strong>Pod 재시작:</strong> VPA Auto/Recreate 모드는 Pod를 퇴거시켜 재생성합니다. 서비스 중단을 최소화하려면 PodDisruptionBudget을 설정하세요.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>HPA와 충돌:</strong> 같은 메트릭으로 HPA와 VPA를 동시 사용하면 예측 불가능한 동작이 발생합니다. 분리 사용하거나 VPA는 Off 모드로 운영하세요.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>초기 데이터 부족:</strong> VPA Recommender는 충분한 히스토리 데이터가 필요합니다. 새 배포 직후에는 추천이 부정확할 수 있습니다.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>노드 리소스 부족:</strong> VPA가 리소스를 높여도 노드에 가용 용량이 없으면 Pod가 Pending 상태가 됩니다. Cluster Autoscaler와 함께 사용하세요.</li>
+                <li><strong>minAllowed/maxAllowed:</strong> 적절한 범위를 설정하지 않으면 너무 작거나 큰 값이 적용될 수 있습니다. 애플리케이션 특성에 맞게 제한하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                <a href="/ko/term/HPA/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">HPA</a>
+                <a href="/ko/term/Cluster%20Autoscaler/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Cluster Autoscaler</a>
+                <a href="/ko/term/Resource%20Quota/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Resource Quota</a>
+                <a href="/ko/term/LimitRange/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">LimitRange</a>
+                <a href="/ko/term/KEDA/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">KEDA</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <ul style="color: #e2e8f0; line-height: 2; margin-left: 1.5rem;">
+                <li><a href="https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">VPA GitHub Repository</a> - 공식 소스 및 문서</li>
+                <li><a href="https://cloud.google.com/kubernetes-engine/docs/concepts/verticalpodautoscaler" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">GKE VPA 가이드</a> - Google Cloud 문서</li>
+                <li><a href="https://www.kubecost.com/kubernetes-autoscaling/kubernetes-vpa/" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">Kubecost VPA 가이드</a> - 실무 활용 가이드</li>
+            </ul>
+        </section>
     </main>
+
+    <script>
+    function copyCode(button) {
+        const code = button.parentElement.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            button.textContent = '복사됨!';
+            setTimeout(() => button.textContent = '복사', 2000);
+        });
+    }
+    </script>
 
     <!-- Footer -->
     <div id="kaitrust-footer"></div>

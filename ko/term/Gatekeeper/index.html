@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,135 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Gatekeeper는 Kubernetes 클러스터에 OPA(Open Policy Agent)를 통합하여 선언적 정책을 강제하는 어드미션 컨트롤러입니다. Pod, Service, Ingress 등 모든 Kubernetes 리소스 생성/수정 요청을 정책에 따라 허용하거나 거부합니다.</p>
+                <p>Gatekeeper는 ConstraintTemplate과 Constraint라는 두 가지 CRD를 사용합니다. ConstraintTemplate은 Rego 언어로 정책 로직을 정의하고, Constraint는 해당 템플릿을 특정 리소스에 적용합니다. 이를 통해 "privileged 컨테이너 금지", "특정 레지스트리 이미지만 허용", "리소스 제한 필수" 같은 정책을 선언적으로 관리합니다.</p>
+                <p>OPA Gatekeeper 라이브러리(gatekeeper-library)에서 즉시 사용 가능한 정책 템플릿을 제공합니다. Pod Security Standards(PSS)를 Gatekeeper로 구현한 정책, CIS 벤치마크 정책 등을 바로 적용할 수 있습니다.</p>
+                <p>Kyverno와 자주 비교되는데, Gatekeeper는 Rego 언어로 복잡한 정책을 표현할 수 있고, Kyverno는 YAML 기반으로 학습 곡선이 낮습니다. 조직의 정책 복잡도와 팀의 Rego 숙련도에 따라 선택합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Gatekeeper 설치
+helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
+helm install gatekeeper gatekeeper/gatekeeper -n gatekeeper-system --create-namespace
+
+# ConstraintTemplate: 허용된 레지스트리만 이미지 사용
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8sallowedrepos
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sAllowedRepos
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            repos:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sallowedrepos
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          satisfied := [good | repo = input.parameters.repos[_]; good = startswith(container.image, repo)]
+          not any(satisfied)
+          msg := sprintf("container <%v> has an invalid image repo <%v>, allowed repos are %v", [container.name, container.image, input.parameters.repos])
+        }
+
+---
+# Constraint: 프로덕션 네임스페이스에 적용
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sAllowedRepos
+metadata:
+  name: prod-allowed-repos
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces: ["production"]
+  parameters:
+    repos:
+      - "ghcr.io/myorg/"
+      - "gcr.io/myproject/"
+
+# 정책 위반 테스트
+kubectl run nginx --image=nginx -n production
+# Error: admission webhook "validation.gatekeeper.sh" denied the request:
+# container <nginx> has an invalid image repo <nginx>, allowed repos are ["ghcr.io/myorg/", "gcr.io/myproject/"]</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">플랫폼:</strong> "프로덕션에서 privileged 컨테이너가 발견됐어요. Gatekeeper로 차단 정책 넣읍시다."</p>
+                <p><strong class="role-junior">개발팀:</strong> "모니터링 에이전트가 privileged 필요한데 어떡하죠?"</p>
+                <p><strong class="role-senior">플랫폼:</strong> "예외 처리 가능해요. kube-system 네임스페이스는 exclude하거나, 특정 ServiceAccount만 허용하는 Constraint를 만들면 됩니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Kubernetes 정책 관리를 어떻게 하시겠어요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "OPA Gatekeeper로 어드미션 정책을 구현합니다. gatekeeper-library의 PSS 정책을 기본으로 적용하고, 조직 요구사항에 맞는 커스텀 ConstraintTemplate을 추가합니다. Audit 모드로 기존 리소스 위반 현황을 파악하고 점진적으로 Deny로 전환합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 ConstraintTemplate Rego에서 not any(satisfied) 대신 count(satisfied) == 0 쓰는 게 가독성이 나을 것 같아요."</p>
+                <p><strong class="role-author">작성자:</strong> "동의합니다. 그리고 violation 메시지에 namespace도 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>Gatekeeper 장애 시 모든 리소스 생성이 차단될 수 있습니다. failurePolicy를 Ignore로 설정하거나 고가용성 배포를 고려하세요.</li>
+                <li>복잡한 Rego 정책은 성능에 영향을 줄 수 있습니다. Constraint의 match 조건을 최대한 좁혀 평가 대상을 줄이세요.</li>
+                <li class="info">Gatekeeper Audit 기능으로 기존 리소스의 정책 위반 현황을 확인할 수 있습니다. 새 정책 적용 전 꼭 audit 결과를 검토하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/OPA/" class="related-link">OPA</a>
+                <a href="/ko/term/Kyverno/" class="related-link">Kyverno</a>
+                <a href="/ko/term/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4/" class="related-link">Kubernetes</a>
+                <a href="/ko/term/RBAC/" class="related-link">RBAC</a>
+                <a href="/ko/term/Cosign/" class="related-link">Cosign</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://open-policy-agent.github.io/gatekeeper/website/docs/" target="_blank">Gatekeeper 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://github.com/open-policy-agent/gatekeeper-library" target="_blank">Gatekeeper 정책 라이브러리</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.openpolicyagent.org/docs/latest/kubernetes-tutorial/" target="_blank">OPA Kubernetes 튜토리얼</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +342,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

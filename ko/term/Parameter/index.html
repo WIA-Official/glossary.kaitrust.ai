@@ -161,6 +161,34 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table td { color: #cbd5e1; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
     </style>
 </head>
 <body>
@@ -202,6 +230,163 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>파라미터(Parameter)는 머신러닝 모델이 학습 과정에서 데이터로부터 배우는 가중치(weight)와 편향(bias) 값들입니다. 모델의 예측 능력은 이 파라미터 값들에 의해 결정되며, 학습이란 곧 최적의 파라미터 값을 찾는 과정입니다.</p>
+                <p>딥러닝의 발전과 함께 모델의 파라미터 수는 급격히 증가했습니다. 2012년 AlexNet은 6,000만 개, 2018년 BERT는 3.4억 개, 2020년 GPT-3는 1,750억 개, 2023년 GPT-4는 추정 1.8조 개의 파라미터를 가지고 있습니다.</p>
+                <p>파라미터는 모델 아키텍처에 따라 결정됩니다. Transformer 기반 LLM에서 파라미터 수는 주로 임베딩 차원(d_model), 레이어 수(n_layers), 헤드 수(n_heads), 어휘 크기(vocab_size)에 의해 결정됩니다. 대략적으로 12 * n_layers * d_model^2 개의 파라미터를 가집니다.</p>
+                <p>실무에서 파라미터 수는 모델의 용량, 학습 시간, 추론 비용, 필요한 GPU 메모리를 결정하는 핵심 지표입니다. 일반적으로 파라미터가 많을수록 성능이 좋지만, 더 많은 데이터와 컴퓨팅 자원이 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># 모델 파라미터 확인 및 분석
+import torch
+import torch.nn as nn
+from transformers import AutoModel
+
+# 1. 간단한 신경망 파라미터 예제
+class SimpleNN(nn.Module):
+    def __init__(self, input_dim=784, hidden_dim=256, output_dim=10):
+        super().__init__()
+        self.fc1 = nn.Linear(input_dim, hidden_dim)  # 가중치 + 편향
+        self.fc2 = nn.Linear(hidden_dim, output_dim)
+
+    def forward(self, x):
+        return self.fc2(torch.relu(self.fc1(x)))
+
+model = SimpleNN()
+
+# 파라미터 수 계산
+def count_parameters(model):
+    total = sum(p.numel() for p in model.parameters())
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    return total, trainable
+
+total, trainable = count_parameters(model)
+print(f"Total: {total:,}, Trainable: {trainable:,}")
+# 출력: Total: 203,530, Trainable: 203,530
+# fc1: 784*256 + 256 = 200,960
+# fc2: 256*10 + 10 = 2,570
+
+# 2. LLM 파라미터 확인
+llm = AutoModel.from_pretrained("bert-base-uncased")
+total_llm, _ = count_parameters(llm)
+print(f"BERT-base parameters: {total_llm / 1e6:.1f}M")
+# 출력: BERT-base parameters: 109.5M
+
+# 3. 레이어별 파라미터 분포
+print("\n레이어별 파라미터:")
+for name, param in model.named_parameters():
+    print(f"  {name}: {param.shape} = {param.numel():,}")
+
+# 4. 학습 가능 여부 제어 (파인튜닝 시)
+for param in llm.encoder.layer[:10].parameters():
+    param.requires_grad = False  # 하위 10개 레이어 동결
+
+_, trainable_after = count_parameters(llm)
+print(f"동결 후 학습 가능: {trainable_after/1e6:.1f}M")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 주요 모델 파라미터 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 주요 모델 파라미터 비교</h2>
+            <div class="section-content">
+                <p><strong>2025년 1월 기준</strong> 주요 AI 모델들의 파라미터 수</p>
+                <table class="spec-table">
+                    <tr><th>모델</th><th>파라미터</th><th>비고</th></tr>
+                    <tr><td>GPT-2</td><td>1.5B</td><td>2019년, 오픈소스</td></tr>
+                    <tr><td>BERT-large</td><td>340M</td><td>인코더 모델</td></tr>
+                    <tr><td>GPT-3</td><td>175B</td><td>2020년, API 전용</td></tr>
+                    <tr><td>Llama 2</td><td>7B / 13B / 70B</td><td>2023년, 오픈소스</td></tr>
+                    <tr><td>Llama 3.1</td><td>8B / 70B / 405B</td><td>2024년, 오픈소스</td></tr>
+                    <tr><td>GPT-4</td><td>~1.8T (추정)</td><td>MoE 구조</td></tr>
+                    <tr><td>Claude 3 Opus</td><td>비공개</td><td>Anthropic</td></tr>
+                    <tr><td>Phi-3-mini</td><td>3.8B</td><td>Microsoft SLM</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"7B 모델은 파라미터당 약 2바이트(FP16)가 필요하니 최소 14GB VRAM이 필요합니다. 4비트 양자화하면 3.5GB로 줄일 수 있습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"파라미터는 학습 데이터로부터 배우는 값이고, 하이퍼파라미터는 학습 전에 사람이 설정하는 값입니다. learning rate, batch size 등이 하이퍼파라미터입니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"Scaling Law에 따르면 파라미터 수, 학습 데이터 양, 컴퓨팅 예산이 모델 성능을 결정합니다. 단순히 파라미터만 늘리면 데이터 부족으로 과적합될 수 있습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>파라미터와 하이퍼파라미터 혼동</strong>
+                        <p>파라미터는 학습으로 결정되는 가중치이고, 하이퍼파라미터(learning rate 등)는 사람이 설정하는 값입니다. 면접에서 자주 묻는 개념입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>파라미터 수만으로 성능 판단</strong>
+                        <p>Phi-3(3.8B)가 Llama 2(7B)보다 일부 벤치마크에서 우수합니다. 데이터 품질, 학습 기법도 중요합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>태스크에 적합한 모델 크기를 선택하세요. 작은 모델 + 파인튜닝이 큰 모델 + 프롬프팅보다 효율적인 경우가 많습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Hyperparameter/" class="related-term-link">Hyperparameter</a>
+                <a href="/ko/term/Weight/" class="related-term-link">Weight</a>
+                <a href="/ko/term/Bias/" class="related-term-link">Bias</a>
+                <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                <a href="/ko/term/Scaling%20Law/" class="related-term-link">Scaling Law</a>
+                <a href="/ko/term/Quantization/" class="related-term-link">Quantization</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://pytorch.org/tutorials/beginner/blitz/neural_networks_tutorial.html" target="_blank" class="learn-link">📄 PyTorch 신경망 파라미터 튜토리얼</a>
+                <a href="https://arxiv.org/abs/2001.08361" target="_blank" class="learn-link">📝 Scaling Laws 논문 (Kaplan et al., 2020)</a>
+                <a href="https://huggingface.co/docs/transformers/model_summary" target="_blank" class="learn-link">📚 Hugging Face 모델 크기 가이드</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +397,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

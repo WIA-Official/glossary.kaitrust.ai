@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,164 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Argo Workflows는 Kubernetes 네이티브 워크플로우 엔진으로, 복잡한 작업 파이프라인을 DAG(Directed Acyclic Graph) 형태로 정의하고 실행합니다. 각 작업은 컨테이너로 실행되며, Kubernetes의 확장성과 리소스 관리 기능을 그대로 활용할 수 있습니다.</p>
+                <p>주요 사용 사례는 ML 파이프라인, 데이터 처리, CI/CD입니다. 예를 들어 ML 워크플로우에서 "데이터 수집 -> 전처리 -> 모델 학습 -> 평가 -> 배포" 과정을 각각 독립된 컨테이너로 실행하고, 단계 간 의존성과 데이터 전달을 관리합니다. 각 단계가 실패하면 해당 단계만 재시도하거나 특정 단계부터 다시 시작할 수 있습니다.</p>
+                <p>Argo Workflows의 핵심 개념은 Workflow(전체 파이프라인), Template(재사용 가능한 작업 정의), Step/DAG(작업 순서 정의), Artifact(작업 간 데이터 전달)입니다. Artifact는 S3, GCS, MinIO 같은 오브젝트 스토리지에 저장되어 워크플로우 단계 간에 파일을 주고받습니다.</p>
+                <p>같은 Argo 프로젝트인 ArgoCD(GitOps 배포), Argo Events(이벤트 기반 트리거), Argo Rollouts(점진적 배포)와 함께 사용하면 완전한 클라우드 네이티브 CI/CD/ML 플랫폼을 구성할 수 있습니다. Kubeflow Pipelines의 내부 엔진으로도 사용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># ml-pipeline.yaml - ML 학습 파이프라인 워크플로우
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ml-pipeline-
+spec:
+  entrypoint: ml-pipeline
+  # Artifact 저장소 설정
+  artifactRepositoryRef:
+    configMap: artifact-repositories
+    key: default-v1
+
+  # 워크플로우 전역 파라미터
+  arguments:
+    parameters:
+    - name: dataset-version
+      value: "v2.1"
+    - name: model-name
+      value: "sentiment-classifier"
+
+  templates:
+  - name: ml-pipeline
+    dag:
+      tasks:
+      # 1단계: 데이터 다운로드
+      - name: download-data
+        template: download
+        arguments:
+          parameters:
+          - name: version
+            value: "{{workflow.parameters.dataset-version}}"
+
+      # 2단계: 전처리 (download 완료 후)
+      - name: preprocess
+        template: preprocess
+        dependencies: [download-data]
+        arguments:
+          artifacts:
+          - name: raw-data
+            from: "{{tasks.download-data.outputs.artifacts.dataset}}"
+
+      # 3단계: 모델 학습 (전처리 완료 후)
+      - name: train-model
+        template: train
+        dependencies: [preprocess]
+        arguments:
+          artifacts:
+          - name: processed-data
+            from: "{{tasks.preprocess.outputs.artifacts.processed}}"
+
+      # 4단계: 평가
+      - name: evaluate
+        template: evaluate
+        dependencies: [train-model]
+
+  # 개별 템플릿 정의
+  - name: download
+    inputs:
+      parameters:
+      - name: version
+    container:
+      image: myregistry/data-loader:latest
+      command: [python, download.py]
+      args: ["--version", "{{inputs.parameters.version}}"]
+    outputs:
+      artifacts:
+      - name: dataset
+        path: /data/output
+
+  - name: train
+    inputs:
+      artifacts:
+      - name: processed-data
+        path: /data/input
+    container:
+      image: myregistry/ml-trainer:latest
+      resources:
+        requests:
+          nvidia.com/gpu: 1
+      command: [python, train.py]
+    outputs:
+      artifacts:
+      - name: model
+        path: /models/output</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">ML엔지니어:</strong> "학습 파이프라인이 전처리 단계에서 자꾸 실패하는데, Argo UI에서 로그 확인해봤어요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "네, OOM이었어요. 리소스 request를 8Gi로 올렸더니 통과했습니다."</p>
+                <p><strong class="role-senior">시니어:</strong> "그럼 실패한 워크플로우는 resubmit 하면 전처리부터 다시 시작할 수 있어요. 데이터 다운로드는 artifact 있으니까 스킵될 거예요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "ML 파이프라인 오케스트레이션 경험이 있으신가요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "Argo Workflows를 사용해서 일일 학습 파이프라인을 구축했습니다. DAG로 데이터 수집부터 모델 배포까지 정의하고, GPU 노드에 스케줄링되도록 nodeSelector를 설정했어요. Argo Events와 연동해서 S3에 새 데이터가 올라오면 자동으로 파이프라인이 트리거되게 했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 워크플로우에 retryStrategy 추가해주세요. 일시적인 네트워크 오류로 실패하면 자동 재시도하도록요."</p>
+                <p><strong class="role-author">작성자:</strong> "retryStrategy: limit: 3, retryPolicy: Always 추가하겠습니다. backoff도 넣을까요?"</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>워크플로우가 완료되어도 Pod이 남아있을 수 있습니다. ttlStrategy나 podGC 설정으로 완료된 Pod을 자동 정리하지 않으면 클러스터에 좀비 Pod이 쌓입니다.</li>
+                <li>Artifact 저장소 용량을 모니터링하세요. 대용량 데이터를 주고받는 ML 파이프라인은 artifact가 금방 TB 단위로 쌓입니다. lifecycle policy로 오래된 artifact를 자동 삭제하세요.</li>
+                <li class="info">복잡한 워크플로우는 WorkflowTemplate으로 분리하고, 공통 로직은 재사용하세요. 단일 YAML이 1000줄을 넘어가면 관리가 어려워집니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/ArgoCD/" class="related-link">ArgoCD</a>
+                <a href="/ko/term/Kubernetes/" class="related-link">Kubernetes</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/MLOps/" class="related-link">MLOps</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://argoproj.github.io/argo-workflows/" target="_blank">Argo Workflows 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://github.com/argoproj/argo-workflows/tree/master/examples" target="_blank">Argo Workflows 예제 모음</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.kubeflow.org/docs/components/pipelines/" target="_blank">Kubeflow Pipelines (Argo 기반)</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +371,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

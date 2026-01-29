@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,249 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detailed-explanation">
+            <h2 id="detailed-explanation" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Dagger</strong>는 CI/CD 파이프라인을 프로그래밍 언어로 작성할 수 있게 해주는 혁신적인 도구입니다. Docker의 공동 창시자 Solomon Hykes가 만든 이 도구는 YAML이나 Jenkins 스크립트 대신 Go, Python, Node.js 등 익숙한 프로그래밍 언어로 파이프라인을 정의합니다.</p>
+
+                <h3>핵심 특징</h3>
+                <ul>
+                    <li><strong>Pipeline as Code</strong>: 실제 프로그래밍 언어로 CI/CD 로직 작성</li>
+                    <li><strong>로컬 실행</strong>: CI 서버 없이 개발 머신에서 파이프라인 테스트</li>
+                    <li><strong>컨테이너 기반</strong>: 모든 작업이 컨테이너에서 실행되어 재현성 보장</li>
+                    <li><strong>캐싱</strong>: 빌드 결과를 캐싱하여 반복 실행 속도 향상</li>
+                    <li><strong>이식성</strong>: 어떤 CI/CD 플랫폼에서도 동일하게 동작</li>
+                </ul>
+
+                <h3>Dagger의 아키텍처</h3>
+                <ul>
+                    <li><strong>Dagger Engine</strong>: 파이프라인 실행 엔진 (Docker 기반)</li>
+                    <li><strong>Dagger SDK</strong>: Go, Python, Node.js, Rust SDK 제공</li>
+                    <li><strong>GraphQL API</strong>: 파이프라인 구성 요소 간 통신</li>
+                    <li><strong>Dagger Cloud</strong>: 분산 캐싱 및 시각화 (선택적)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-example">
+            <h2 id="code-example" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>Go SDK를 사용한 CI 파이프라인</h3>
+                <pre><code class="language-go">// main.go - Dagger CI 파이프라인
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+
+    "dagger.io/dagger"
+)
+
+func main() {
+    if err := build(context.Background()); err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+}
+
+func build(ctx context.Context) error {
+    // Dagger 클라이언트 초기화
+    client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stdout))
+    if err != nil {
+        return err
+    }
+    defer client.Close()
+
+    // 소스 코드 마운트
+    src := client.Host().Directory(".", dagger.HostDirectoryOpts{
+        Exclude: []string{"node_modules", ".git"},
+    })
+
+    // Node.js 컨테이너 설정
+    node := client.Container().
+        From("node:20-alpine").
+        WithDirectory("/app", src).
+        WithWorkdir("/app")
+
+    // 의존성 설치
+    node = node.WithExec([]string{"npm", "install"})
+
+    // 테스트 실행
+    node = node.WithExec([]string{"npm", "test"})
+
+    // 빌드 실행
+    node = node.WithExec([]string{"npm", "run", "build"})
+
+    // 빌드 결과물 내보내기
+    _, err = node.Directory("/app/dist").Export(ctx, "./dist")
+    if err != nil {
+        return err
+    }
+
+    fmt.Println("Build completed successfully!")
+    return nil
+}
+
+// Docker 이미지 빌드 및 푸시
+func buildAndPush(ctx context.Context, registry, tag string) error {
+    client, err := dagger.Connect(ctx)
+    if err != nil {
+        return err
+    }
+    defer client.Close()
+
+    // 레지스트리 인증
+    secret := client.SetSecret("registry-password", os.Getenv("REGISTRY_PASSWORD"))
+
+    // 이미지 빌드
+    src := client.Host().Directory(".")
+    image := client.Container().
+        Build(src).
+        WithRegistryAuth(registry, "username", secret)
+
+    // 이미지 푸시
+    addr, err := image.Publish(ctx, fmt.Sprintf("%s/myapp:%s", registry, tag))
+    if err != nil {
+        return err
+    }
+
+    fmt.Printf("Published: %s\n", addr)
+    return nil
+}</code></pre>
+
+                <h3>Python SDK 예제</h3>
+                <pre><code class="language-python"># ci.py - Dagger Python SDK
+import sys
+import anyio
+import dagger
+
+async def main():
+    config = dagger.Config(log_output=sys.stdout)
+
+    async with dagger.Connection(config) as client:
+        # Python 컨테이너 설정
+        python = (
+            client.container()
+            .from_("python:3.11-slim")
+            .with_directory("/app", client.host().directory("."))
+            .with_workdir("/app")
+        )
+
+        # 의존성 설치
+        python = python.with_exec(["pip", "install", "-r", "requirements.txt"])
+
+        # 린트 검사
+        python = python.with_exec(["flake8", "."])
+
+        # 테스트 실행
+        python = python.with_exec(["pytest", "-v"])
+
+        # 결과 출력
+        output = await python.stdout()
+        print(output)
+
+if __name__ == "__main__":
+    anyio.run(main)</code></pre>
+
+                <h3>dagger.json 모듈 설정</h3>
+                <pre><code class="language-json">{
+  "name": "my-pipeline",
+  "sdk": "go",
+  "dependencies": [],
+  "source": "dagger"
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section" aria-labelledby="practical-dialogue">
+            <h2 id="practical-dialogue" class="section-title">실무 대화 예제</h2>
+            <div class="section-content">
+                <div class="dialogue-container">
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">DevOps 엔지니어</div>
+                        <div class="dialogue-content">"Jenkins 파이프라인이 복잡해지면서 YAML 관리가 힘들어지고 있어요. 로컬에서 테스트도 어렵고..."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">시니어 개발자</div>
+                        <div class="dialogue-content">"Dagger를 도입해보는 건 어때요? Go나 Python으로 파이프라인을 작성할 수 있어서 IDE 지원도 받고, 로컬에서 바로 테스트할 수 있어요. 우리 팀 백엔드가 Go니까 Go SDK로 작성하면 모두가 이해하고 수정할 수 있죠."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">주니어 개발자</div>
+                        <div class="dialogue-content">"그런데 기존 GitHub Actions랑 같이 쓸 수 있나요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">시니어 개발자</div>
+                        <div class="dialogue-content">"네, Dagger는 어떤 CI 환경에서도 실행할 수 있어요. GitHub Actions에서 `dagger run go run ./ci` 명령 하나로 호출하면 돼요. 핵심 로직은 Dagger에, 트리거만 GitHub Actions에 두는 거죠. 나중에 GitLab CI나 CircleCI로 옮겨도 파이프라인 코드는 그대로예요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="cautions">
+            <h2 id="cautions" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="caution-box">
+                    <h3>Docker 의존성</h3>
+                    <p>Dagger는 Docker(또는 Podman, containerd)가 필요합니다. Docker가 없는 환경에서는 실행할 수 없으며, CI 러너에 Docker 권한이 있어야 합니다.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>학습 곡선</h3>
+                    <p>YAML 기반 CI에 익숙한 팀은 초기에 적응 시간이 필요합니다. SDK 사용법과 컨테이너 개념에 대한 이해가 필요합니다.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>디버깅 복잡성</h3>
+                    <p>여러 컨테이너 계층에서 실행되므로 디버깅이 복잡할 수 있습니다. `--debug` 플래그와 로그 분석 능력이 필요합니다.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>초기 빌드 시간</h3>
+                    <p>첫 실행 시 베이스 이미지 풀링으로 시간이 걸립니다. 캐싱이 적용되면 이후 빌드는 빨라집니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-terms">
+            <h2 id="related-terms" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms-grid">
+                    <a href="/ko/term/GitOps/" class="related-term-card">
+                        <h3>GitOps</h3>
+                        <p>Git 기반 운영 방식. Dagger 파이프라인과 함께 사용</p>
+                    </a>
+                    <a href="/ko/term/GitHub/" class="related-term-card">
+                        <h3>GitHub Actions</h3>
+                        <p>Dagger 파이프라인을 트리거하는 CI 플랫폼</p>
+                    </a>
+                    <a href="/ko/term/IaC/" class="related-term-card">
+                        <h3>IaC</h3>
+                        <p>인프라를 코드로 관리. Pipeline as Code와 유사한 철학</p>
+                    </a>
+                    <a href="/ko/term/Helm/" class="related-term-card">
+                        <h3>Helm</h3>
+                        <p>K8s 패키지 관리자. Dagger로 Helm 배포 자동화 가능</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-more">
+            <h2 id="learn-more" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="resource-list">
+                    <li><a href="https://docs.dagger.io/" target="_blank" rel="noopener noreferrer">Dagger 공식 문서</a> - 공식 가이드 및 튜토리얼</li>
+                    <li><a href="https://dagger.io/blog" target="_blank" rel="noopener noreferrer">Dagger 블로그</a> - 사용 사례 및 업데이트</li>
+                    <li><a href="https://github.com/dagger/dagger" target="_blank" rel="noopener noreferrer">Dagger GitHub</a> - 소스 코드 및 예제</li>
+                    <li><a href="https://discord.gg/dagger" target="_blank" rel="noopener noreferrer">Dagger Discord</a> - 커뮤니티 지원</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +456,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

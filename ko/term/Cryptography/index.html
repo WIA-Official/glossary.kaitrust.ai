@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cryptography (암호학) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="정보 보안을 위한 암호화 기술. 대칭키, 비대칭키, 해시 함수 포함.">
-    <meta name="keywords" content="Cryptography, 암호학, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="Cryptography(암호학)은 정보 보안을 위한 암호화 기술입니다. 대칭키(AES), 비대칭키(RSA, ECC), 해시 함수를 포함하며, 포스트 양자 암호화로 진화하고 있습니다.">
+    <meta name="keywords" content="Cryptography, 암호학, AES, RSA, ECC, 대칭키, 비대칭키, 해시 함수, 포스트 양자 암호화, PQC, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Cryptography/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Cryptography/">
     <meta property="og:title" content="Cryptography (암호학) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="정보 보안을 위한 암호화 기술. 대칭키, 비대칭키, 해시 함수 포함.">
+    <meta property="og:description" content="정보 보안을 위한 암호화 기술. 대칭키, 비대칭키, 해시 함수와 포스트 양자 암호화까지.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Cryptography (암호학) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="정보 보안을 위한 암호화 기술. 대칭키, 비대칭키, 해시 함수 포함.">
+    <meta name="twitter:description" content="정보 보안을 위한 암호화 기술. 대칭키, 비대칭키, 해시 함수와 포스트 양자 암호화까지.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Cryptography",
-        "description": "정보 보안을 위한 암호화 기술. 대칭키, 비대칭키, 해시 함수 포함.",
+        "alternateName": "암호학",
+        "description": "정보 보안을 위한 암호화 기술입니다. 대칭키(AES), 비대칭키(RSA, ECC), 해시 함수를 포함하며, 포스트 양자 암호화로 진화하고 있습니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">Cryptography</h1>
-            <p class="term-english">암호학</p>
+            <p class="term-english">암호학 (Cryptography)</p>
             <div class="term-description">
-                <p>정보 보안을 위한 암호화 기술. 대칭키, 비대칭키, 해시 함수 포함.</p>
+                <p>Cryptography(암호학)은 정보를 안전하게 보호하기 위한 수학적 기법과 프로토콜의 학문입니다. 대칭키 암호화(AES), 비대칭키 암호화(RSA, ECC), 해시 함수(SHA-256)를 포함하며, 데이터의 기밀성, 무결성, 인증, 부인 방지를 보장합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,414 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Cryptography(암호학)은 고대 시저 암호에서 시작해 현대 컴퓨터 보안의 핵심이 된 학문입니다. "암호(crypto)"는 그리스어로 "숨겨진"을, "graphein"은 "쓰기"를 의미합니다. 현대 암호학은 단순한 문자 치환을 넘어, 복잡한 수학적 문제(소인수분해, 이산 로그, 타원 곡선)를 기반으로 합니다. 암호학의 네 가지 핵심 목표는 기밀성(Confidentiality), 무결성(Integrity), 인증(Authentication), 부인 방지(Non-repudiation)입니다.</p>
+                <p>대칭키 암호화(Symmetric Encryption)는 암호화와 복호화에 동일한 키를 사용합니다. AES(Advanced Encryption Standard)가 대표적이며, 128/192/256비트 키를 지원합니다. 대칭키는 빠르고 효율적이지만, 키 교환 문제가 있습니다. 비대칭키 암호화(Asymmetric Encryption)는 공개키와 개인키 쌍을 사용해 이 문제를 해결합니다. RSA, ECC(Elliptic Curve Cryptography)가 대표적이며, RSA는 소인수분해의 어려움을, ECC는 타원곡선 이산 로그 문제를 기반으로 합니다.</p>
+                <p>실무에서는 하이브리드 암호화를 사용합니다. TLS 핸드셰이크에서 ECDHE(비대칭키)로 세션 키를 안전하게 교환하고, 이후 통신은 AES-GCM(대칭키)으로 암호화합니다. 비대칭키의 안전한 키 교환과 대칭키의 성능 장점을 모두 취하는 방식입니다. 디지털 서명(RSA-PSS, ECDSA)은 비대칭키로 메시지의 출처와 무결성을 검증합니다.</p>
+                <p>양자 컴퓨터의 발전으로 RSA와 ECC가 위협받고 있습니다. Shor 알고리즘을 사용하는 양자 컴퓨터는 RSA 2048비트 키를 수 시간 내에 해독할 수 있습니다. NIST는 2024년 포스트 양자 암호화(PQC) 표준을 발표했습니다. ML-KEM(키 캡슐화), ML-DSA(디지털 서명)가 새 표준으로, 격자 기반 암호화를 사용합니다. AES-256 같은 대칭키 암호는 Grover 알고리즘에도 키 크기를 두 배로 늘리면 안전합니다. 2025년 현재, 조직들은 "하이브리드 접근법"으로 PQC 마이그레이션을 준비하고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="aes">AES 암호화 (Python)</button>
+                <button class="code-tab" data-lang="rsa">RSA 암호화 (Python)</button>
+                <button class="code-tab" data-lang="nodejs">Node.js crypto</button>
+            </div>
+            <div class="code-block active" data-lang="aes">
+                <pre><code class="language-python"># AES-256-GCM 암호화 예제 (Python)
+# pip install cryptography
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+import os
+import base64
+
+class AESEncryptor:
+    """AES-256-GCM 암호화 클래스"""
+
+    def __init__(self, password: str):
+        # 비밀번호에서 256비트 키 파생 (PBKDF2)
+        salt = os.urandom(16)
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,  # 256비트 = 32바이트
+            salt=salt,
+            iterations=600000,  # 2025 OWASP 권장
+        )
+        self.key = kdf.derive(password.encode())
+        self.salt = salt
+
+    def encrypt(self, plaintext: str) -> dict:
+        """
+        AES-256-GCM 암호화
+        - GCM 모드: 암호화 + 인증(무결성 보장)을 동시에
+        - Nonce(IV): 각 암호화마다 고유해야 함 (절대 재사용 금지!)
+        """
+        # 12바이트 nonce (GCM 권장 크기)
+        nonce = os.urandom(12)
+
+        aesgcm = AESGCM(self.key)
+        ciphertext = aesgcm.encrypt(
+            nonce,
+            plaintext.encode('utf-8'),
+            associated_data=None  # AAD: 추가 인증 데이터 (옵션)
+        )
+
+        return {
+            'ciphertext': base64.b64encode(ciphertext).decode(),
+            'nonce': base64.b64encode(nonce).decode(),
+            'salt': base64.b64encode(self.salt).decode()
+        }
+
+    def decrypt(self, encrypted_data: dict) -> str:
+        """AES-256-GCM 복호화"""
+        nonce = base64.b64decode(encrypted_data['nonce'])
+        ciphertext = base64.b64decode(encrypted_data['ciphertext'])
+
+        aesgcm = AESGCM(self.key)
+        plaintext = aesgcm.decrypt(nonce, ciphertext, None)
+
+        return plaintext.decode('utf-8')
+
+
+# 사용 예시
+encryptor = AESEncryptor("my-secure-password-2025!")
+
+# 암호화
+message = "민감한 데이터: 신용카드 번호 4242-****-****-4242"
+encrypted = encryptor.encrypt(message)
+print(f"암호화된 데이터: {encrypted['ciphertext'][:50]}...")
+
+# 복호화
+decrypted = encryptor.decrypt(encrypted)
+print(f"복호화된 데이터: {decrypted}")
+
+# 주의사항:
+# 1. Nonce는 절대 재사용 금지! (같은 키로 같은 nonce 사용 = 보안 붕괴)
+# 2. CBC 모드 대신 GCM 모드 사용 (Padding Oracle 공격 방지)
+# 3. ECB 모드는 절대 사용 금지 (패턴 노출)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="rsa">
+                <pre><code class="language-python"># RSA 및 하이브리드 암호화 예제 (Python)
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+import os
+import base64
+
+class HybridEncryptor:
+    """
+    하이브리드 암호화 (RSA + AES)
+    - RSA로 대칭키 암호화 (키 교환)
+    - AES로 실제 데이터 암호화 (성능)
+    """
+
+    def __init__(self):
+        # RSA 4096비트 키 쌍 생성 (2048은 최소, 4096 권장)
+        self.private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=4096
+        )
+        self.public_key = self.private_key.public_key()
+
+    def get_public_key_pem(self) -> bytes:
+        """공개키를 PEM 형식으로 내보내기"""
+        return self.public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+
+    def encrypt(self, plaintext: str, recipient_public_key) -> dict:
+        """
+        하이브리드 암호화:
+        1. 랜덤 AES 세션 키 생성
+        2. RSA-OAEP로 세션 키 암호화
+        3. AES-GCM으로 데이터 암호화
+        """
+        # 1. 랜덤 256비트 AES 세션 키 생성
+        session_key = os.urandom(32)
+        nonce = os.urandom(12)
+
+        # 2. RSA-OAEP로 세션 키 암호화 (PSS 패딩 권장)
+        encrypted_key = recipient_public_key.encrypt(
+            session_key,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+
+        # 3. AES-GCM으로 데이터 암호화
+        aesgcm = AESGCM(session_key)
+        ciphertext = aesgcm.encrypt(nonce, plaintext.encode(), None)
+
+        return {
+            'encrypted_key': base64.b64encode(encrypted_key).decode(),
+            'ciphertext': base64.b64encode(ciphertext).decode(),
+            'nonce': base64.b64encode(nonce).decode()
+        }
+
+    def decrypt(self, encrypted_data: dict) -> str:
+        """하이브리드 복호화"""
+        # 1. RSA로 세션 키 복호화
+        encrypted_key = base64.b64decode(encrypted_data['encrypted_key'])
+        session_key = self.private_key.decrypt(
+            encrypted_key,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+
+        # 2. AES로 데이터 복호화
+        nonce = base64.b64decode(encrypted_data['nonce'])
+        ciphertext = base64.b64decode(encrypted_data['ciphertext'])
+
+        aesgcm = AESGCM(session_key)
+        plaintext = aesgcm.decrypt(nonce, ciphertext, None)
+
+        return plaintext.decode()
+
+
+# 디지털 서명 예제
+from cryptography.hazmat.primitives.asymmetric import padding as sign_padding
+
+def sign_message(private_key, message: bytes) -> bytes:
+    """RSA-PSS 디지털 서명"""
+    signature = private_key.sign(
+        message,
+        sign_padding.PSS(
+            mgf=sign_padding.MGF1(hashes.SHA256()),
+            salt_length=sign_padding.PSS.MAX_LENGTH
+        ),
+        hashes.SHA256()
+    )
+    return signature
+
+def verify_signature(public_key, message: bytes, signature: bytes) -> bool:
+    """서명 검증"""
+    try:
+        public_key.verify(
+            signature, message,
+            sign_padding.PSS(
+                mgf=sign_padding.MGF1(hashes.SHA256()),
+                salt_length=sign_padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
+        return True
+    except Exception:
+        return False</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="nodejs">
+                <pre><code class="language-javascript">// Node.js 암호화 예제
+const crypto = require('crypto');
+
+// === AES-256-GCM 암호화 ===
+class AESCrypto {
+    constructor(password) {
+        // 비밀번호에서 키 파생 (scrypt 사용)
+        this.salt = crypto.randomBytes(16);
+        this.key = crypto.scryptSync(password, this.salt, 32); // 256비트
+    }
+
+    encrypt(plaintext) {
+        // 12바이트 IV (GCM 권장)
+        const iv = crypto.randomBytes(12);
+
+        const cipher = crypto.createCipheriv('aes-256-gcm', this.key, iv);
+        let encrypted = cipher.update(plaintext, 'utf8', 'base64');
+        encrypted += cipher.final('base64');
+
+        // Auth Tag (GCM 무결성 검증용)
+        const authTag = cipher.getAuthTag();
+
+        return {
+            ciphertext: encrypted,
+            iv: iv.toString('base64'),
+            authTag: authTag.toString('base64'),
+            salt: this.salt.toString('base64')
+        };
+    }
+
+    decrypt(encryptedData) {
+        const decipher = crypto.createDecipheriv(
+            'aes-256-gcm',
+            this.key,
+            Buffer.from(encryptedData.iv, 'base64')
+        );
+
+        decipher.setAuthTag(Buffer.from(encryptedData.authTag, 'base64'));
+
+        let decrypted = decipher.update(encryptedData.ciphertext, 'base64', 'utf8');
+        decrypted += decipher.final('utf8');
+
+        return decrypted;
+    }
+}
+
+// === RSA 키 쌍 생성 및 암호화 ===
+function generateRSAKeyPair() {
+    return crypto.generateKeyPairSync('rsa', {
+        modulusLength: 4096,  // 4096비트 권장
+        publicKeyEncoding: { type: 'spki', format: 'pem' },
+        privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+    });
+}
+
+function rsaEncrypt(publicKey, data) {
+    return crypto.publicEncrypt(
+        {
+            key: publicKey,
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+            oaepHash: 'sha256'
+        },
+        Buffer.from(data)
+    ).toString('base64');
+}
+
+// === 해시 및 HMAC ===
+function hashSHA256(data) {
+    return crypto.createHash('sha256').update(data).digest('hex');
+}
+
+function hmacSHA256(key, data) {
+    return crypto.createHmac('sha256', key).update(data).digest('hex');
+}
+
+// === ECDH 키 교환 (Perfect Forward Secrecy) ===
+function ecdhKeyExchange() {
+    // Alice와 Bob의 ECDH 키 쌍 생성
+    const alice = crypto.createECDH('prime256v1');  // P-256
+    alice.generateKeys();
+
+    const bob = crypto.createECDH('prime256v1');
+    bob.generateKeys();
+
+    // 공개키 교환 후 공유 비밀 계산
+    const aliceSecret = alice.computeSecret(bob.getPublicKey());
+    const bobSecret = bob.computeSecret(alice.getPublicKey());
+
+    // 두 비밀이 동일함! (이것으로 세션 키 파생)
+    console.log('Shared secret match:', aliceSecret.equals(bobSecret));
+
+    return aliceSecret;
+}
+
+// 사용 예시
+const aes = new AESCrypto('my-secure-password');
+const encrypted = aes.encrypt('비밀 메시지');
+console.log('Encrypted:', encrypted.ciphertext);
+console.log('Decrypted:', aes.decrypt(encrypted));</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 아키텍처 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "민감한 데이터는 AES-256-GCM으로 암호화하고 있습니다. 키 관리는 AWS KMS를 사용하고, 키 로테이션은 연 1회 자동으로 수행됩니다. 데이터베이스 암호화 키와 애플리케이션 레벨 암호화 키를 분리해서 계층적으로 관리합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "ECB 모드 대신 GCM 모드를 사용해야 합니다. ECB는 같은 평문 블록이 같은 암호문 블록을 생성해서 패턴이 노출됩니다. 그리고 IV(Nonce)는 매번 새로 생성해야 합니다. 같은 키로 같은 IV를 재사용하면 보안이 완전히 무너집니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 포스트 양자 암호화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "장기 보관 데이터는 양자 컴퓨터 위협을 고려해야 합니다. 'Harvest Now, Decrypt Later' 공격에 대비해 민감한 데이터는 하이브리드 암호화(기존 알고리즘 + PQC)로 전환을 검토 중입니다. NIST ML-KEM-768이 범용 권장 사항입니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>직접 암호화 알고리즘 구현</strong>
+                        <p>"Don't roll your own crypto" - 암호화 알고리즘을 직접 구현하지 마세요. 검증된 라이브러리(OpenSSL, libsodium, cryptography)를 사용하세요. 미세한 구현 오류가 치명적 취약점이 됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>취약한 알고리즘 사용</strong>
+                        <p>MD5, SHA-1, DES, RC4, ECB 모드는 더 이상 안전하지 않습니다. SHA-256 이상, AES-256, RSA 2048+ 또는 ECC P-256 이상을 사용하세요. PKCS#1 v1.5 패딩 대신 OAEP 또는 PSS를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>하드코딩된 키</strong>
+                        <p>암호화 키를 소스 코드에 하드코딩하면 안 됩니다. 환경 변수, 시크릿 매니저(AWS Secrets Manager, HashiCorp Vault), 또는 KMS를 사용하세요. Git에 키가 푸시되면 즉시 로테이션하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>암호화 베스트 프랙티스</strong>
+                        <p>AES-256-GCM 사용, 고유한 IV/Nonce 생성, 키 로테이션 자동화, HSM/KMS로 키 보호, Crypto-agility(알고리즘 교체 가능한 설계), 장기 데이터는 PQC 하이브리드 검토. 암호화와 함께 해시(무결성), 서명(인증)을 조합하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/HTTPS/" class="related-term-link">HTTPS</a>
+                <a href="/ko/term/Hashing/" class="related-term-link">Hashing</a>
+                <a href="/ko/term/VPN/" class="related-term-link">VPN</a>
+                <a href="/ko/term/Authentication/" class="related-term-link">Authentication</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://csrc.nist.gov/projects/post-quantum-cryptography" target="_blank" class="learn-link">
+                    📘 NIST - Post-Quantum Cryptography (PQC) 표준
+                </a>
+                <a href="https://blog.cloudflare.com/pq-2025/" target="_blank" class="learn-link">
+                    ☁️ Cloudflare - 포스트 양자 암호화 현황 2025
+                </a>
+                <a href="https://cryptography.io/en/latest/" target="_blank" class="learn-link">
+                    🐍 Python cryptography 라이브러리 문서
+                </a>
+                <a href="https://www.crypto101.io/" target="_blank" class="learn-link">
+                    📖 Crypto 101 - 암호학 무료 입문서
+                </a>
+                <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html" target="_blank" class="learn-link">
+                    📄 OWASP - 암호화 저장소 Cheat Sheet
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +754,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

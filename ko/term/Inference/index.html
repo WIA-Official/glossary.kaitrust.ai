@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,149 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Inference(추론)는 학습이 완료된 모델을 사용해 새로운 데이터에 대한 예측을 수행하는 과정입니다. Training(학습)이 모델의 가중치를 업데이트하는 과정이라면, Inference는 고정된 가중치로 입력을 처리해 출력을 생성하는 과정입니다.</p>
+                <p>딥러닝 초기에는 학습이 주요 과제였지만, GPT-4, LLaMA 같은 대규모 모델이 등장하면서 추론 비용과 속도가 핵심 이슈가 되었습니다. OpenAI의 GPT-4 서비스 운영 비용 중 대부분이 추론에 사용됩니다.</p>
+                <p>추론 최적화 기법으로는 양자화(Quantization), KV Cache, 배치 처리, 모델 증류(Distillation) 등이 있습니다. NVIDIA TensorRT, vLLM, llama.cpp 같은 도구가 추론 가속을 지원합니다.</p>
+                <p>실무에서 LLM 추론 비용은 입력 토큰당 $0.01~0.03, 출력 토큰당 $0.03~0.06 수준입니다. 배치 처리로 throughput을 높이고, KV Cache로 TTFT(Time to First Token)를 줄이는 것이 핵심 최적화 전략입니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import time
+
+# 모델과 토크나이저 로드
+model_name = "meta-llama/Llama-2-7b-chat-hf"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype=torch.float16,  # FP16으로 메모리 절약
+    device_map="auto"
+)
+
+# 추론 함수 (배치 처리 지원)
+def batch_inference(prompts, max_new_tokens=100):
+    # 토큰화 (패딩 포함)
+    inputs = tokenizer(
+        prompts,
+        return_tensors="pt",
+        padding=True,
+        truncation=True
+    ).to(model.device)
+
+    start_time = time.time()
+
+    # 추론 실행 (gradient 계산 비활성화로 메모리 절약)
+    with torch.no_grad():
+        outputs = model.generate(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=True,
+            temperature=0.7,
+            use_cache=True  # KV Cache 활성화
+        )
+
+    inference_time = time.time() - start_time
+
+    # 결과 디코딩
+    responses = tokenizer.batch_decode(outputs, skip_special_tokens=True)
+
+    print(f"배치 크기: {len(prompts)}")
+    print(f"총 추론 시간: {inference_time:.2f}초")
+    print(f"프롬프트당 평균: {inference_time/len(prompts):.2f}초")
+
+    return responses
+
+# 테스트
+prompts = [
+    "Python의 장점을 설명해줘:",
+    "머신러닝과 딥러닝의 차이는:",
+    "좋은 코드를 작성하는 방법은:"
+]
+results = batch_inference(prompts)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"현재 추론 레이턴시가 평균 2초인데, KV Cache와 배치 처리를 적용하면 0.5초까지 줄일 수 있습니다. vLLM으로 전환하면 throughput도 3배 정도 개선될 거예요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"Training은 역전파로 가중치를 업데이트하고, Inference는 고정된 가중치로 예측만 합니다. 추론 시에는 torch.no_grad()로 gradient 계산을 끄고, use_cache=True로 KV Cache를 활성화해서 속도를 높입니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"INT8 양자화를 적용하면 메모리는 50% 줄고 속도는 2배 빨라지지만, 정확도 손실이 1~2% 있어요. 서비스 특성에 따라 FP16이나 INT4 중 선택해야 합니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>torch.no_grad() 없이 추론 실행</strong>
+                        <p>gradient 계산이 활성화되어 메모리를 2배 이상 소비하고 속도도 느려집니다. 추론 시에는 반드시 비활성화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>단건 처리로 API 호출</strong>
+                        <p>요청마다 개별 추론하면 GPU 활용률이 낮아집니다. 가능하면 배치로 묶어서 처리하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>KV Cache와 양자화 적극 활용</strong>
+                        <p>use_cache=True와 FP16/INT8 양자화만 적용해도 추론 속도가 2~3배 개선됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/KV%20Cache/" class="related-term-link">KV Cache</a>
+                <a href="/ko/term/Quantization/" class="related-term-link">Quantization</a>
+                <a href="/ko/term/Training/" class="related-term-link">Training</a>
+                <a href="/ko/term/Latency/" class="related-term-link">Latency</a>
+                <a href="/ko/term/Throughput/" class="related-term-link">Throughput</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.vllm.ai/" target="_blank" class="learn-link">📄 vLLM 공식 문서 - 고성능 LLM 추론</a>
+                <a href="https://huggingface.co/docs/transformers/main/en/llm_optims" target="_blank" class="learn-link">🎓 Hugging Face LLM 추론 최적화 가이드</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +379,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

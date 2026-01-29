@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>개인정보 보호책임자 | KAITRUST AI 백과사전</title>
     <meta name="description" content="조직 내 개인정보 보호를 총괄하는 책임자">
-    <meta name="keywords" content="개인정보 보호책임자, , AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
+    <meta name="keywords" content="개인정보 보호책임자, DPO, Data Protection Officer, AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%20%EB%B3%B4%ED%98%B8%EC%B1%85%EC%9E%84%EC%9E%90/">
 
     <!-- Open Graph -->
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,234 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>개인정보 보호책임자(DPO, Data Protection Officer)는 GDPR Article 37-39에 따라 조직 내 개인정보 보호를 총괄하는 독립적인 전문가입니다. 공공기관, 대규모 개인정보 처리 기업, 민감정보 처리 조직은 DPO 지정이 의무입니다.</p>
+                <p>DPO의 핵심 역할은 1) 개인정보 처리 활동 모니터링, 2) GDPR 준수 자문, 3) DPIA(개인정보 영향평가) 수행 지원, 4) 감독기관과의 협력 창구, 5) 정보주체 민원 처리, 6) 직원 교육 및 인식 제고입니다.</p>
+                <p>DPO는 조직 내에서 독립성이 보장되어야 합니다. 경영진에 직접 보고하며, 업무 수행으로 인한 해임이나 불이익을 받지 않아야 합니다. 이해충돌 방지를 위해 CEO, CFO, HR 책임자 등 겸직이 제한됩니다.</p>
+                <p>한국 개인정보보호법에서는 '개인정보 보호책임자'를 임원급으로 지정하도록 규정하고 있으며, 5만명 이상 정보주체의 민감정보를 처리하는 경우 전담 조직 구성이 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># DPO 업무 관리 시스템
+from dataclasses import dataclass, field
+from typing import List, Dict, Optional
+from datetime import datetime, timedelta
+from enum import Enum
+
+class TaskType(Enum):
+    """DPO 업무 유형"""
+    DPIA_REVIEW = "dpia_review"           # DPIA 검토
+    INCIDENT_RESPONSE = "incident"         # 사고 대응
+    DSR_HANDLING = "dsr"                   # 정보주체 요청 처리
+    COMPLIANCE_AUDIT = "audit"             # 컴플라이언스 감사
+    TRAINING = "training"                  # 교육
+    POLICY_UPDATE = "policy"               # 정책 업데이트
+    REGULATOR_LIAISON = "regulator"        # 감독기관 소통
+
+class Priority(Enum):
+    CRITICAL = 1  # 72시간 내 대응 필수
+    HIGH = 2      # 7일 내 대응
+    MEDIUM = 3    # 30일 내 대응
+    LOW = 4       # 분기 내 대응
+
+@dataclass
+class DPOTask:
+    """DPO 업무 항목"""
+    id: str
+    task_type: TaskType
+    title: str
+    description: str
+    priority: Priority
+    deadline: datetime
+    status: str = "pending"  # pending, in_progress, completed
+    related_processing: Optional[str] = None
+    notes: List[str] = field(default_factory=list)
+
+@dataclass
+class DPODashboard:
+    """DPO 업무 대시보드"""
+    organization: str
+    dpo_name: str
+    dpo_email: str
+    tasks: List[DPOTask] = field(default_factory=list)
+
+    # GDPR 법적 요구사항 타임라인
+    LEGAL_DEADLINES = {
+        "breach_notification_authority": 72,    # 시간 - Article 33
+        "breach_notification_subject": 0,       # 지체없이 - Article 34
+        "dsr_response": 30,                     # 일 - Article 12
+        "dsr_extension": 60,                    # 일 (복잡한 요청)
+    }
+
+    def create_breach_response_tasks(self, breach_id: str, breach_time: datetime) -> List[DPOTask]:
+        """개인정보 침해 사고 발생 시 업무 생성"""
+        tasks = []
+
+        # 72시간 내 감독기관 신고 (Article 33)
+        tasks.append(DPOTask(
+            id=f"BREACH-{breach_id}-01",
+            task_type=TaskType.INCIDENT_RESPONSE,
+            title="감독기관 침해 신고",
+            description="GDPR Article 33에 따른 72시간 내 감독기관 신고",
+            priority=Priority.CRITICAL,
+            deadline=breach_time + timedelta(hours=72),
+            related_processing=breach_id
+        ))
+
+        # 정보주체 통지 검토 (Article 34)
+        tasks.append(DPOTask(
+            id=f"BREACH-{breach_id}-02",
+            task_type=TaskType.INCIDENT_RESPONSE,
+            title="정보주체 통지 필요성 검토",
+            description="고위험 침해 시 정보주체 지체없이 통지 의무 검토",
+            priority=Priority.CRITICAL,
+            deadline=breach_time + timedelta(hours=48),
+            related_processing=breach_id
+        ))
+
+        # 침해 기록 문서화
+        tasks.append(DPOTask(
+            id=f"BREACH-{breach_id}-03",
+            task_type=TaskType.INCIDENT_RESPONSE,
+            title="침해 사고 기록 문서화",
+            description="침해 사실, 영향, 조치사항 기록 (Article 33(5))",
+            priority=Priority.HIGH,
+            deadline=breach_time + timedelta(days=7),
+            related_processing=breach_id
+        ))
+
+        self.tasks.extend(tasks)
+        return tasks
+
+    def handle_dsr(self, dsr_id: str, request_type: str, received_date: datetime) -> DPOTask:
+        """정보주체 권리 요청 처리"""
+        # 기본 30일, 복잡한 요청 시 60일까지 연장 가능
+        deadline = received_date + timedelta(days=30)
+
+        task = DPOTask(
+            id=f"DSR-{dsr_id}",
+            task_type=TaskType.DSR_HANDLING,
+            title=f"정보주체 요청 처리: {request_type}",
+            description=f"GDPR Article 12에 따른 1개월 내 응답 의무",
+            priority=Priority.HIGH,
+            deadline=deadline,
+            notes=[f"요청 유형: {request_type}", f"접수일: {received_date.isoformat()}"]
+        )
+        self.tasks.append(task)
+        return task
+
+    def get_overdue_tasks(self) -> List[DPOTask]:
+        """기한 초과 업무 조회"""
+        now = datetime.now()
+        return [t for t in self.tasks if t.deadline < now and t.status != "completed"]
+
+    def generate_compliance_report(self) -> Dict:
+        """컴플라이언스 현황 보고서"""
+        total = len(self.tasks)
+        completed = len([t for t in self.tasks if t.status == "completed"])
+        overdue = len(self.get_overdue_tasks())
+
+        return {
+            "organization": self.organization,
+            "dpo": self.dpo_name,
+            "report_date": datetime.now().isoformat(),
+            "statistics": {
+                "total_tasks": total,
+                "completed": completed,
+                "in_progress": len([t for t in self.tasks if t.status == "in_progress"]),
+                "pending": len([t for t in self.tasks if t.status == "pending"]),
+                "overdue": overdue,
+                "completion_rate": completed / total * 100 if total > 0 else 0
+            },
+            "risk_assessment": "HIGH" if overdue > 0 else "NORMAL",
+            "recommendations": self._get_recommendations(overdue)
+        }
+
+    def _get_recommendations(self, overdue_count: int) -> List[str]:
+        if overdue_count > 0:
+            return ["긴급: 기한 초과 업무 즉시 처리 필요", "감독기관 제재 위험 경고"]
+        return ["정상 운영 중", "정기 감사 일정 확인"]
+
+# 사용 예시
+dpo = DPODashboard(
+    organization="KAITRUST Corp",
+    dpo_name="홍길동",
+    dpo_email="dpo@kaitrust.ai"
+)
+
+# 침해 사고 대응 업무 생성
+breach_tasks = dpo.create_breach_response_tasks("B-2024-001", datetime.now())
+print(f"생성된 긴급 업무: {len(breach_tasks)}건")
+
+# 정보주체 요청 처리
+dsr = dpo.handle_dsr("DSR-2024-100", "삭제요청", datetime.now())
+print(f"DSR 처리 기한: {dsr.deadline}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">DPO:</strong> "이번 AI 프로젝트는 대규모 프로파일링이라 DPIA가 필수입니다. 제가 검토 의견 드릴 테니 개발 착수 전에 완료해 주세요."</p>
+                <p><strong class="role-junior">개발팀:</strong> "네, DPIA 템플릿 받을 수 있을까요? 개인정보 처리 목적하고 법적 근거부터 정리해서 보내드리겠습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "DPO의 독립성이 왜 중요한가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "DPO는 조직의 개인정보 처리를 객관적으로 모니터링해야 합니다. GDPR Article 38에서 업무 수행으로 인한 해임 금지, 경영진 직보, 이해충돌 방지를 규정한 것은 이 독립성을 보장하기 위함입니다. CEO나 IT 책임자 겸직이 제한되는 것도 같은 이유입니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">DPO:</strong> "정보주체 삭제 요청 API인데, 백업 데이터 처리 로직이 빠져 있어요. 30일 이내 응답해야 하는데 백업까지 삭제 가능한가요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "백업은 90일 보관 정책이 있어서 바로 삭제는 어렵습니다. 응답 시 '백업은 정책에 따라 90일 후 자동 삭제' 고지하고, 삭제 예정 목록에 추가하는 방식으로 처리하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>DPO 미지정 의무 위반 시 GDPR 최대 1,000만 유로 또는 매출 2% 과징금</li>
+                <li>DPO 독립성 침해(부당 해임, 업무 간섭) 시 제재 대상</li>
+                <li>이해충돌 직책 겸직 금지 - CEO, CFO, HR책임자, IT책임자 등</li>
+                <li class="info">DPO 연락처는 공개 필수 - 웹사이트, 개인정보처리방침에 명시</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%20%EC%98%81%ED%96%A5%ED%8F%89%EA%B0%80/" class="related-link">개인정보 영향평가</a>
+                <a href="/ko/term/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%9E%90%EA%B8%B0%EA%B2%B0%EC%A0%95%EA%B6%8C/" class="related-link">개인정보자기결정권</a>
+                <a href="/ko/term/AI%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">AI 거버넌스</a>
+                <a href="/ko/term/EU%20AI%20Act/" class="related-link">EU AI Act</a>
+                <a href="/ko/term/AI%20%EC%B1%85%EC%9E%84%EC%84%B1/" class="related-link">AI 책임성</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://gdpr-info.eu/art-37-gdpr/" target="_blank" rel="noopener">GDPR Article 37-39 - DPO 규정</a></li>
+                <li><span class="type-tutorial"></span><a href="https://edpb.europa.eu/our-work-tools/documents/public-consultations/2016/guidelines-data-protection-officers-dpos_en" target="_blank" rel="noopener">EDPB DPO 가이드라인</a></li>
+                <li><span class="type-book"></span><a href="https://www.pipc.go.kr/" target="_blank" rel="noopener">개인정보보호위원회 - 한국 개인정보 보호책임자 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +441,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

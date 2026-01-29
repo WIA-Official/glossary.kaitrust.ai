@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,131 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p><strong>Vitess</strong>는 MySQL의 수평 확장(horizontal scaling)을 가능하게 하는 데이터베이스 클러스터링 시스템입니다. YouTube에서 대규모 MySQL 워크로드를 처리하기 위해 개발되었으며, 현재 CNCF(Cloud Native Computing Foundation) 졸업 프로젝트입니다.</p>
+                <p>Vitess의 핵심 기능은 <strong>자동 샤딩</strong>(VSchema로 샤딩 로직 정의), <strong>쿼리 라우팅</strong>(애플리케이션은 단일 엔드포인트 사용), <strong>커넥션 풀링</strong>, <strong>쿼리 재작성</strong>(복잡한 쿼리 최적화), <strong>온라인 스키마 변경</strong> 등입니다.</p>
+                <p>Slack, Square, GitHub, HubSpot 등 대규모 서비스에서 MySQL을 페타바이트 규모로 운영하는 데 사용됩니다. Kubernetes 환경에 최적화되어 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Vitess VSchema 예시 (샤딩 설정)
+# 파일: vschema.json
+{
+  "sharded": true,
+  "vindexes": {
+    "hash": {
+      "type": "hash"
+    }
+  },
+  "tables": {
+    "users": {
+      "column_vindexes": [
+        {
+          "column": "user_id",
+          "name": "hash"
+        }
+      ]
+    },
+    "orders": {
+      "column_vindexes": [
+        {
+          "column": "user_id",
+          "name": "hash"
+        }
+      ]
+    }
+  }
+}
+
+# vtgate 연결 (MySQL 호환 프로토콜)
+mysql -h vtgate-host -P 15306 -u user -p
+
+# 애플리케이션에서는 일반 MySQL 드라이버 사용
+import mysql.connector
+
+conn = mysql.connector.connect(
+    host="vtgate-host",
+    port=15306,
+    user="app_user",
+    database="commerce"
+)
+
+# 쿼리는 Vitess가 자동으로 샤드에 라우팅
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM users WHERE user_id = 12345")
+cursor.execute("SELECT * FROM orders WHERE user_id = 12345")  # 같은 샤드</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>CTO:</strong> "MySQL 단일 인스턴스로는 더 이상 스케일 업이 안 돼요. 옵션이 뭐가 있죠?"</p>
+                <p><strong>DBA:</strong> "Vitess 도입하면 기존 MySQL 유지하면서 샤딩할 수 있어요. 애플리케이션 코드 변경 최소화하고요."</p>
+                <p><strong>CTO:</strong> "직접 샤딩하는 것과 뭐가 다른가요?"</p>
+                <p><strong>DBA:</strong> "VSchema로 샤딩 로직 선언하면 Vitess가 쿼리 라우팅, 조인 처리, 리밸런싱을 자동으로 해줍니다. 운영 부담이 크게 줄어요."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "MySQL 샤딩을 어떻게 구현하셨나요?"</p>
+                <p><strong>지원자:</strong> "Vitess를 도입해서 user_id 기반 해시 샤딩을 적용했습니다. VSchema로 샤딩 키를 정의하고, vtgate가 쿼리를 적절한 샤드로 라우팅합니다."</p>
+                <p><strong>면접관:</strong> "크로스 샤드 쿼리는 어떻게 처리하나요?"</p>
+                <p><strong>지원자:</strong> "Vitess가 scatter-gather 방식으로 여러 샤드에서 결과를 모아줍니다. 하지만 성능을 위해 가능하면 단일 샤드 쿼리로 설계하고, 크로스 샤드는 비동기 처리로 분리했습니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "이 쿼리 보면 WHERE 절에 user_id가 없어서 전체 샤드 스캔될 것 같아요."</p>
+                <p><strong>개발자:</strong> "아, 조회 조건에 샤딩 키를 안 넣었네요."</p>
+                <p><strong>리뷰어:</strong> "Vitess에서 샤딩 키 없는 쿼리는 모든 샤드에 브로드캐스트돼요. 가능하면 user_id 조건을 추가하거나, 불가피하면 캐시 레이어를 앞에 두세요."</p>
+                <p><strong>개발자:</strong> "알겠습니다. API 설계부터 다시 검토해볼게요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>샤딩 키 설계:</strong> 잘못된 샤딩 키는 핫스팟 발생, 데이터 마이그레이션 비용 증가</li>
+                <li><strong>크로스 샤드 쿼리:</strong> 여러 샤드 조인은 성능 저하, 설계 시 최소화</li>
+                <li><strong>운영 복잡성:</strong> Kubernetes 환경 필수, 모니터링/백업 체계 구축 필요</li>
+                <li><strong>SQL 제한:</strong> 일부 MySQL 기능(스토어드 프로시저, 트리거 등) 제한</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%83%A4%EB%94%A9/" class="related-link">샤딩</a>
+                <a href="/ko/term/%ED%8C%8C%ED%8B%B0%EC%85%94%EB%8B%9D/" class="related-link">파티셔닝</a>
+                <a href="/ko/term/%EB%A0%88%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98/" class="related-link">레플리케이션</a>
+                <a href="/ko/term/%EC%BB%A4%EB%84%A5%EC%85%98%20%ED%92%80/" class="related-link">커넥션 풀</a>
+                <a href="/ko/term/YugabyteDB/" class="related-link">YugabyteDB</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://vitess.io/docs/" target="_blank">Vitess 공식 문서</a></li>
+                <li><a href="https://planetscale.com/docs" target="_blank">PlanetScale (Vitess 기반 서비스) 문서</a></li>
+                <li><a href="https://www.youtube.com/watch?v=OCS45iy5v1M" target="_blank">Vitess at YouTube Scale</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +339,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivy (Trivy) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="종합 취약점 스캐너. 컨테이너, IaC, Git 저장소 검사.">
-    <meta name="keywords" content="Trivy, Trivy, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <title>Trivy (취약점 스캐너) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Trivy는 Aqua Security에서 개발한 오픈소스 취약점 스캐너입니다. 컨테이너 이미지, 파일시스템, Git 저장소, IaC 등에서 보안 취약점, 설정 오류, 비밀 정보를 탐지합니다.">
+    <meta name="keywords" content="Trivy, 취약점 스캐너, Vulnerability Scanner, 컨테이너 보안, IaC 스캔, SBOM, CVE, Aqua Security, DevSecOps, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Trivy/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Trivy/">
-    <meta property="og:title" content="Trivy (Trivy) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="종합 취약점 스캐너. 컨테이너, IaC, Git 저장소 검사.">
+    <meta property="og:title" content="Trivy (취약점 스캐너) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Aqua Security의 오픈소스 취약점 스캐너. 컨테이너, IaC, Git 저장소에서 보안 취약점과 설정 오류 탐지.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Trivy (Trivy) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="종합 취약점 스캐너. 컨테이너, IaC, Git 저장소 검사.">
+    <meta name="twitter:title" content="Trivy (취약점 스캐너) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Aqua Security의 오픈소스 취약점 스캐너. 컨테이너, IaC, Git 저장소에서 보안 취약점과 설정 오류 탐지.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Trivy",
-        "description": "종합 취약점 스캐너. 컨테이너, IaC, Git 저장소 검사.",
+        "alternateName": "취약점 스캐너",
+        "description": "Aqua Security에서 개발한 오픈소스 취약점 스캐너입니다. 컨테이너 이미지, 파일시스템, Git 저장소, IaC 등에서 보안 취약점, 설정 오류, 비밀 정보를 탐지합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">Trivy</h1>
-            <p class="term-english">Trivy</p>
+            <p class="term-english">종합 보안 취약점 스캐너 (Aqua Security)</p>
             <div class="term-description">
-                <p>종합 취약점 스캐너. 컨테이너, IaC, Git 저장소 검사.</p>
+                <p>Aqua Security에서 개발한 오픈소스 취약점 스캐너입니다. 컨테이너 이미지, 파일시스템, Git 저장소, Kubernetes, IaC(Terraform, CloudFormation) 등에서 보안 취약점(CVE), 설정 오류(Misconfiguration), 민감 정보(Secrets)를 탐지합니다. 빠른 속도와 간편한 사용법으로 DevSecOps 파이프라인의 핵심 도구입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,400 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Trivy는 Aqua Security에서 개발하고 CNCF(Cloud Native Computing Foundation)에서 호스팅하는 오픈소스 보안 스캐너입니다. "tri"(세 가지)와 "vy"(취약점)의 합성어로, 원래는 세 가지 대상(OS 패키지, 애플리케이션 의존성, IaC)을 스캔하는 것에서 시작했지만, 현재는 컨테이너, 파일시스템, Git 저장소, VM 이미지, Kubernetes 등 다양한 대상을 지원하는 종합 스캐너로 발전했습니다.</p>
+                <p>Trivy의 주요 스캔 대상은 네 가지입니다. 취약점(Vulnerabilities)은 NVD, GitHub Advisory Database 등을 참조하여 알려진 CVE를 탐지합니다. 설정 오류(Misconfigurations)는 Terraform, Dockerfile, Kubernetes 매니페스트의 보안 모범 사례 위반을 검사합니다. 비밀 정보(Secrets)는 API 키, 비밀번호, 인증서 등이 코드에 노출되어 있는지 탐지합니다. 라이선스(Licenses)는 오픈소스 컴포넌트의 라이선스 준수 여부를 확인합니다.</p>
+                <p>Trivy는 설치와 사용이 매우 간단합니다. 단일 바이너리로 배포되어 의존성 없이 실행되며, trivy image nginx:latest 같은 단순한 명령으로 즉시 스캔할 수 있습니다. 오프라인 환경에서도 취약점 DB를 다운로드하여 사용할 수 있고, 다양한 출력 형식(JSON, SARIF, CycloneDX SBOM)을 지원합니다. GitHub Actions, GitLab CI, Jenkins 등 모든 주요 CI/CD 플랫폼과 쉽게 통합됩니다.</p>
+                <p>Trivy Operator는 Kubernetes 클러스터 내에서 지속적으로 보안 스캔을 수행하는 컴포넌트입니다. 클러스터에 배포된 모든 워크로드를 자동으로 스캔하고, 결과를 Kubernetes CRD(Custom Resource Definition)로 저장합니다. 이를 통해 kubectl이나 Prometheus/Grafana로 보안 상태를 모니터링할 수 있습니다. Trivy는 Clair, Grype 등 다른 스캐너와 비교해 속도, 정확도, 사용 편의성에서 우수한 평가를 받습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="basic">기본 사용법</button>
+                <button class="code-tab" data-lang="iac">IaC/설정 스캔</button>
+                <button class="code-tab" data-lang="cicd">CI/CD 통합</button>
+            </div>
+            <div class="code-block active" data-lang="basic">
+                <pre><code class="language-bash"># Trivy 설치 및 기본 사용법
+
+# 1. 설치
+# macOS
+brew install trivy
+
+# Linux (Debian/Ubuntu)
+sudo apt-get install wget apt-transport-https gnupg lsb-release
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update && sudo apt-get install trivy
+
+# Docker로 실행
+docker run aquasec/trivy image nginx:latest
+
+# 2. 컨테이너 이미지 스캔
+trivy image nginx:latest
+trivy image python:3.9-slim
+trivy image myregistry.com/myapp:v1.0
+
+# 특정 심각도만 표시
+trivy image --severity HIGH,CRITICAL nginx:latest
+
+# 수정 가능한 취약점만 표시
+trivy image --ignore-unfixed nginx:latest
+
+# 3. 파일시스템 스캔 (프로젝트 디렉토리)
+trivy fs /path/to/project
+trivy fs .  # 현재 디렉토리
+
+# 4. Git 저장소 스캔
+trivy repo https://github.com/aquasecurity/trivy
+trivy repo .  # 로컬 Git 저장소
+
+# 5. SBOM 생성
+trivy image --format cyclonedx -o sbom.json nginx:latest
+trivy image --format spdx-json -o sbom.spdx.json nginx:latest
+
+# 6. 비밀 정보 스캔
+trivy fs --scanners secret /path/to/project
+trivy repo --scanners secret https://github.com/org/repo
+
+# 7. 라이선스 스캔
+trivy image --scanners license nginx:latest
+trivy fs --scanners license /path/to/project
+
+# 8. 출력 형식
+trivy image -f json nginx:latest > results.json   # JSON
+trivy image -f table nginx:latest                  # 테이블 (기본)
+trivy image -f sarif nginx:latest > results.sarif # SARIF (GitHub 연동)
+trivy image -f template --template "@html.tpl" nginx:latest > report.html
+
+# 9. 취약점 DB 관리
+trivy image --download-db-only              # DB만 다운로드
+trivy image --skip-db-update nginx:latest   # DB 업데이트 스킵
+trivy image --offline-scan nginx:latest     # 오프라인 모드
+
+# 10. 특정 취약점 무시 (.trivyignore)
+# echo "CVE-2023-12345" > .trivyignore
+trivy image --ignorefile .trivyignore nginx:latest
+
+# 11. 빌드 실패 조건 설정
+trivy image --exit-code 1 --severity CRITICAL nginx:latest
+# CRITICAL 취약점이 있으면 exit code 1 반환 (CI/CD에서 빌드 실패)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="iac">
+                <pre><code class="language-bash"># Trivy IaC (Infrastructure as Code) 및 설정 스캔
+
+# 1. Terraform 스캔
+trivy config /path/to/terraform/
+trivy config --tf-vars terraform.tfvars /path/to/terraform/
+
+# 2. Kubernetes 매니페스트 스캔
+trivy config /path/to/k8s-manifests/
+trivy config deployment.yaml
+
+# 3. Dockerfile 스캔
+trivy config --file-patterns "Dockerfile" /path/to/project/
+
+# 4. Helm 차트 스캔
+trivy config /path/to/helm-chart/
+
+# 5. CloudFormation 스캔
+trivy config /path/to/cloudformation/
+
+# 6. 모든 설정 오류 종류 표시
+trivy config --severity LOW,MEDIUM,HIGH,CRITICAL /path/to/config/
+
+# 예시: 발견되는 설정 오류
+# - Dockerfile에서 root 사용자로 실행
+# - Kubernetes에서 privileged 컨테이너
+# - Terraform에서 S3 버킷 암호화 미설정
+# - 민감한 환경 변수 하드코딩
+
+# 7. 커스텀 정책 적용 (Rego)
+# policies/custom-policy.rego
+cat << 'EOF' > policies/no-latest-tag.rego
+package appshield.kubernetes.KS001
+
+deny[msg] {
+    input.kind == "Deployment"
+    container := input.spec.template.spec.containers[_]
+    endswith(container.image, ":latest")
+    msg := sprintf("Container '%s' uses 'latest' tag", [container.name])
+}
+EOF
+
+trivy config --policy policies/ /path/to/k8s-manifests/
+
+# 8. 특정 체크 비활성화
+trivy config --skip-files "*.test.yaml" /path/to/config/
+trivy config --skip-dirs "tests/" /path/to/config/
+
+# 9. Kubernetes 클러스터 직접 스캔
+trivy k8s --report summary cluster
+trivy k8s --report all --namespace default cluster
+
+# 10. 취약한 Dockerfile 예시와 수정
+
+# 취약한 Dockerfile:
+# FROM ubuntu:latest
+# RUN apt-get update && apt-get install -y curl
+# COPY app /app
+# USER root
+# CMD ["/app"]
+
+# Trivy 결과:
+# - DS001: 'latest' 태그 사용
+# - DS002: root 사용자로 실행
+# - DS006: apt-get update 후 별도 레이어에서 install
+
+# 수정된 Dockerfile:
+# FROM ubuntu:22.04
+# RUN apt-get update && apt-get install -y --no-install-recommends curl \
+#     && rm -rf /var/lib/apt/lists/*
+# RUN useradd -m appuser
+# COPY --chown=appuser:appuser app /app
+# USER appuser
+# CMD ["/app"]</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="cicd">
+                <pre><code class="language-yaml"># GitHub Actions - Trivy 통합
+
+name: Security Scan with Trivy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+
+      # 컨테이너 이미지 취약점 스캔
+      - name: Scan image for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'myapp:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-image-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      # IaC 스캔 (Terraform, Kubernetes 등)
+      - name: Scan IaC for misconfigurations
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-config-results.sarif'
+
+      # 파일시스템 스캔 (의존성 취약점)
+      - name: Scan filesystem for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-fs-results.sarif'
+
+      # GitHub Security 탭에 결과 업로드
+      - name: Upload scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-image-results.sarif'
+
+      # SBOM 생성
+      - name: Generate SBOM
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'myapp:${{ github.sha }}'
+          format: 'cyclonedx'
+          output: 'sbom.json'
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.json
+
+---
+# GitLab CI - Trivy 통합
+
+stages:
+  - build
+  - scan
+
+variables:
+  IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+
+build:
+  stage: build
+  script:
+    - docker build -t $IMAGE_NAME .
+    - docker push $IMAGE_NAME
+
+trivy-scan:
+  stage: scan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  script:
+    # 이미지 취약점 스캔
+    - trivy image --exit-code 0 --severity HIGH,CRITICAL $IMAGE_NAME
+    - trivy image --exit-code 1 --severity CRITICAL $IMAGE_NAME
+  allow_failure: false
+
+trivy-config-scan:
+  stage: scan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  script:
+    - trivy config --exit-code 1 --severity HIGH,CRITICAL .
+  allow_failure: true  # 설정 오류는 경고만
+
+---
+# Trivy Operator (Kubernetes)
+
+# 1. 설치
+helm repo add aqua https://aquasecurity.github.io/helm-charts/
+helm repo update
+helm install trivy-operator aqua/trivy-operator \
+  --namespace trivy-system \
+  --create-namespace
+
+# 2. VulnerabilityReport 조회
+kubectl get vulnerabilityreports -A
+
+# 3. 특정 워크로드의 취약점 확인
+kubectl get vulnerabilityreport -n default -l trivy-operator.resource.name=nginx
+
+# 4. ConfigAuditReport 조회 (설정 오류)
+kubectl get configauditreports -A
+
+# 5. RBAC 리포트
+kubectl get rbacassessmentreports -A</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 컨테이너 보안 정책 수립에서</div>
+                    <blockquote class="conv-quote">
+                        "모든 컨테이너 이미지는 프로덕션 배포 전에 Trivy 스캔을 통과해야 합니다. CRITICAL 취약점이 있으면 빌드를 실패시키고, HIGH는 7일 내 수정 계획을 제출해야 합니다. CI/CD 파이프라인에 trivy image --exit-code 1 --severity CRITICAL을 추가해서 자동화했습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 취약점 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "Trivy 스캔 결과 총 47개 취약점이 발견됐습니다. CRITICAL 3개는 베이스 이미지의 openssl 취약점인데, alpine:3.19로 업그레이드하면 해결됩니다. HIGH 중 12개는 애플리케이션 의존성이라 npm update로 수정 가능합니다. 나머지는 --ignore-unfixed 옵션으로 아직 수정 버전이 없는 것들입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 IaC 보안 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "Trivy config 스캔 결과 Terraform 코드에서 S3 버킷 암호화 미설정, IAM 정책 과도한 권한, 보안 그룹 0.0.0.0/0 허용 등 15개 설정 오류가 발견됐습니다. 커스텀 Rego 정책도 추가해서 우리 조직의 보안 요구사항도 검사하고 있어요. PR마다 자동으로 스캔하니까 잘못된 설정이 메인에 머지되는 걸 막을 수 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>취약점 DB를 업데이트하지 않고 스캔</strong>
+                        <p>Trivy의 취약점 DB는 매일 업데이트됩니다. 오래된 DB로 스캔하면 최신 CVE를 탐지하지 못합니다. CI/CD에서는 캐시를 적절히 관리하고, --skip-db-update는 네트워크가 제한된 환경에서만 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>모든 취약점을 무시 처리</strong>
+                        <p>.trivyignore에 모든 취약점을 추가하면 스캔의 의미가 없습니다. 무시할 때는 반드시 사유를 문서화하고, 정기적으로 검토하세요. VEX(Vulnerability Exploitability eXchange)를 활용하여 "이 취약점은 우리 환경에서 악용 불가"를 명시적으로 기록하는 것이 좋습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>이미지만 스캔하고 IaC/비밀 정보 스캔 누락</strong>
+                        <p>Trivy는 취약점 스캔뿐 아니라 설정 오류, 비밀 정보 탐지도 지원합니다. --scanners vuln,secret,config 옵션으로 종합적인 스캔을 수행하세요. 특히 Git 저장소에 하드코딩된 API 키나 비밀번호는 큰 보안 위협입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>Trivy 베스트 프랙티스</strong>
+                        <p>CI/CD 파이프라인의 모든 단계에 Trivy를 통합하세요. 빌드 시 이미지 스캔, PR에서 IaC 스캔, 레지스트리에서 주기적 스캔을 수행합니다. Trivy Operator로 Kubernetes 클러스터를 지속적으로 모니터링하고, SBOM을 생성하여 의존성을 추적하세요. 결과를 SARIF로 내보내 GitHub Security 탭에서 일관되게 관리하는 것을 권장합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/SBOM/" class="related-term-link">SBOM</a>
+                <a href="/ko/term/CVE/" class="related-term-link">CVE</a>
+                <a href="/ko/term/Container%20Security/" class="related-term-link">Container Security</a>
+                <a href="/ko/term/DevSecOps/" class="related-term-link">DevSecOps</a>
+                <a href="/ko/term/OWASP/" class="related-term-link">OWASP</a>
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://trivy.dev/" target="_blank" class="learn-link">
+                    📘 Trivy 공식 문서
+                </a>
+                <a href="https://github.com/aquasecurity/trivy" target="_blank" class="learn-link">
+                    🔧 Trivy GitHub 저장소
+                </a>
+                <a href="https://aquasecurity.github.io/trivy-operator/" target="_blank" class="learn-link">
+                    🎮 Trivy Operator - Kubernetes 보안 스캔
+                </a>
+                <a href="https://github.com/aquasecurity/trivy-action" target="_blank" class="learn-link">
+                    🔄 Trivy GitHub Action
+                </a>
+                <a href="https://aquasecurity.github.io/trivy/latest/docs/scanner/vulnerability/" target="_blank" class="learn-link">
+                    📋 Trivy 취약점 스캔 가이드
+                </a>
+                <a href="https://aquasecurity.github.io/trivy/latest/docs/scanner/misconfiguration/" target="_blank" class="learn-link">
+                    🔍 Trivy IaC 스캔 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +740,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

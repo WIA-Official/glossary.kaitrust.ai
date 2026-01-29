@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,240 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>AI 실무 강령(AI Code of Practice)은 범용 AI(GPAI) 모델 공급자가 EU AI Act 의무를 준수하기 위해 따라야 할 실무 지침입니다. EU AI Act 제56조에 따라 AI 사무국이 개발을 주관하며, 업계, 학계, 시민사회의 참여로 작성됩니다.</p>
+                <p>주요 내용은 GPAI 모델의 투명성 의무(학습 데이터 요약, 저작권 정책), 시스템적 위험 평가 방법론, 사이버보안 조치, 에너지 효율 보고 등을 포함합니다. 실무 강령 준수는 법적 의무 충족의 '추정 적합성(Presumption of Conformity)'을 부여합니다.</p>
+                <p>2024년 9월부터 초안 작성이 시작되어 2025년 4월 최종본 발표 예정입니다. OpenAI, Google, Microsoft, Meta 등 주요 AI 기업들이 작성에 참여하고 있으며, 특히 저작권자의 학습 데이터 옵트아웃 메커니즘이 핵심 쟁점입니다.</p>
+                <p>실무 강령은 법적 구속력은 없지만, 준수하지 않는 기업은 EU AI Act 의무 충족을 별도로 입증해야 합니다. 따라서 대부분의 GPAI 공급자는 실무 강령을 자발적으로 채택할 것으로 예상됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># AI 실무 강령 준수 체크리스트 구현
+from dataclasses import dataclass, field
+from typing import List, Dict, Optional
+from datetime import datetime
+
+@dataclass
+class CodeOfPracticeRequirement:
+    """실무 강령 요구사항"""
+    id: str
+    category: str
+    description: str
+    article_reference: str
+    mandatory: bool
+    status: str = "not_started"  # not_started, in_progress, completed
+    evidence_url: Optional[str] = None
+
+@dataclass
+class GPAICodeOfPracticeCompliance:
+    """GPAI 실무 강령 준수 관리"""
+    model_name: str
+    provider_name: str
+    requirements: List[CodeOfPracticeRequirement] = field(default_factory=list)
+
+    def __post_init__(self):
+        self._initialize_requirements()
+
+    def _initialize_requirements(self):
+        """EU AI Act 기반 실무 강령 요구사항 초기화"""
+        requirements = [
+            # 투명성 요구사항
+            CodeOfPracticeRequirement(
+                id="COP-T01",
+                category="투명성",
+                description="학습 데이터 요약 공개",
+                article_reference="Article 53(1)(d)",
+                mandatory=True
+            ),
+            CodeOfPracticeRequirement(
+                id="COP-T02",
+                category="투명성",
+                description="저작권 정책 및 옵트아웃 메커니즘",
+                article_reference="Article 53(1)(c)",
+                mandatory=True
+            ),
+            CodeOfPracticeRequirement(
+                id="COP-T03",
+                category="투명성",
+                description="기술 문서 작성 및 유지",
+                article_reference="Article 53(1)(a)",
+                mandatory=True
+            ),
+            CodeOfPracticeRequirement(
+                id="COP-T04",
+                category="투명성",
+                description="다운스트림 사용자 정보 제공",
+                article_reference="Article 53(1)(b)",
+                mandatory=True
+            ),
+            # 에너지/환경
+            CodeOfPracticeRequirement(
+                id="COP-E01",
+                category="에너지",
+                description="학습 에너지 소비량 측정 및 보고",
+                article_reference="Article 53(1)(e)",
+                mandatory=True
+            ),
+            # 시스템적 위험 (해당 시)
+            CodeOfPracticeRequirement(
+                id="COP-SR01",
+                category="시스템적위험",
+                description="모델 평가 수행",
+                article_reference="Article 55(1)(a)",
+                mandatory=False  # 시스템적 위험 모델만 해당
+            ),
+            CodeOfPracticeRequirement(
+                id="COP-SR02",
+                category="시스템적위험",
+                description="적대적 테스트 (Red Teaming)",
+                article_reference="Article 55(1)(b)",
+                mandatory=False
+            ),
+            CodeOfPracticeRequirement(
+                id="COP-SR03",
+                category="시스템적위험",
+                description="사이버보안 보호 조치",
+                article_reference="Article 55(1)(d)",
+                mandatory=False
+            ),
+        ]
+        self.requirements.extend(requirements)
+
+    def update_requirement_status(self, req_id: str, status: str,
+                                   evidence_url: Optional[str] = None):
+        """요구사항 준수 상태 업데이트"""
+        for req in self.requirements:
+            if req.id == req_id:
+                req.status = status
+                if evidence_url:
+                    req.evidence_url = evidence_url
+                return True
+        return False
+
+    def get_compliance_summary(self) -> Dict:
+        """준수 현황 요약"""
+        mandatory = [r for r in self.requirements if r.mandatory]
+        completed_mandatory = [r for r in mandatory if r.status == "completed"]
+
+        return {
+            "model": self.model_name,
+            "provider": self.provider_name,
+            "total_requirements": len(self.requirements),
+            "mandatory_requirements": len(mandatory),
+            "completed_mandatory": len(completed_mandatory),
+            "compliance_rate": len(completed_mandatory) / len(mandatory) * 100,
+            "presumption_of_conformity": len(completed_mandatory) == len(mandatory),
+            "gap_items": [
+                {"id": r.id, "description": r.description}
+                for r in mandatory if r.status != "completed"
+            ]
+        }
+
+    def generate_transparency_report(self) -> Dict:
+        """투명성 보고서 생성 (실무 강령 준수용)"""
+        return {
+            "report_type": "GPAI_TRANSPARENCY_REPORT",
+            "code_of_practice_version": "2025-04",
+            "model_info": {
+                "name": self.model_name,
+                "provider": self.provider_name
+            },
+            "training_data_summary": {
+                "total_tokens": "미공개",  # 실제 구현 시 입력
+                "data_sources": [],
+                "cutoff_date": None
+            },
+            "copyright_policy": {
+                "opt_out_mechanism": "구현 필요",
+                "robots_txt_compliance": True,
+                "takedown_process": "구현 필요"
+            },
+            "energy_consumption": {
+                "training_kwh": None,
+                "carbon_footprint_kg": None
+            },
+            "generated_at": datetime.now().isoformat()
+        }
+
+# 사용 예시
+compliance = GPAICodeOfPracticeCompliance(
+    model_name="KAITRUST-LLM-70B",
+    provider_name="KAITRUST Corp"
+)
+
+# 요구사항 충족 업데이트
+compliance.update_requirement_status(
+    "COP-T01", "completed",
+    evidence_url="https://kaitrust.ai/model-card/training-data-summary"
+)
+
+print(compliance.get_compliance_summary())</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">법무팀:</strong> "AI 실무 강령 최종본이 4월에 나와요. 우리 LLM이 강령을 준수하면 EU AI Act 적합성 추정을 받을 수 있습니다."</p>
+                <p><strong class="role-junior">개발팀:</strong> "학습 데이터 요약과 저작권 옵트아웃 API는 준비됐고, 에너지 소비 측정 시스템을 구축 중입니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "AI 실무 강령의 의미와 중요성을 설명해 주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "실무 강령은 GPAI 공급자가 EU AI Act 의무를 이행하는 구체적 방법을 제시합니다. 준수 시 '추정 적합성'을 얻어 별도 입증 부담이 줄고, 미준수 시 각 의무를 개별적으로 입증해야 해서 실질적으로 필수입니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">컴플라이언스:</strong> "학습 데이터 요약이 실무 강령 요구사항을 충족하나요? 출처별 비율, 수집 기간이 포함되어야 해요."</p>
+                <p><strong class="role-junior">개발자:</strong> "data_summary.json에 출처별 토큰 수, 수집 기간, 라이선스 정보 추가했습니다. 옵트아웃된 데이터도 제외 로그 남깁니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>실무 강령 미준수 시 EU AI Act 의무 충족을 별도로 입증해야 함 (비용/시간 증가)</li>
+                <li>저작권 옵트아웃 메커니즘 부재 시 저작권 침해 소송 위험 증가</li>
+                <li>실무 강령은 정기적으로 업데이트됨 - 지속적인 모니터링 필요</li>
+                <li class="info">AI 사무국 웹사이트에서 실무 강령 초안 및 의견 수렴 일정 확인 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/EU%20AI%20Act/" class="related-link">EU AI Act</a>
+                <a href="/ko/term/AI%20%EC%82%AC%EB%AC%B4%EA%B5%AD/" class="related-link">AI 사무국</a>
+                <a href="/ko/term/AISP/" class="related-link">AISP</a>
+                <a href="/ko/term/%EA%B8%B0%EC%88%A0%EC%A0%81%20%EB%AC%B8%EC%84%9C%ED%99%94/" class="related-link">기술적 문서화</a>
+                <a href="/ko/term/AI%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">AI 거버넌스</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://digital-strategy.ec.europa.eu/en/policies/ai-code-practice" target="_blank" rel="noopener">EU AI 실무 강령 공식 페이지</a></li>
+                <li><span class="type-tutorial"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act Article 56 - Codes of Practice</a></li>
+                <li><span class="type-book"></span><a href="https://artificialintelligenceact.eu/article/56/" target="_blank" rel="noopener">AI Act Article 56 해설</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +447,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SSO (Single Sign-On) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="한 번의 로그인으로 여러 서비스에 접근하는 인증 방식. SAML, OAuth, OIDC 프로토콜 사용.">
-    <meta name="keywords" content="SSO, Single Sign-On, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="SSO(Single Sign-On)는 한 번의 로그인으로 여러 서비스에 접근하는 통합 인증 방식입니다. SAML, OAuth 2.0, OIDC 프로토콜을 사용하여 엔터프라이즈 및 소비자 애플리케이션의 인증을 단순화합니다.">
+    <meta name="keywords" content="SSO, Single Sign-On, SAML, OAuth, OIDC, 통합인증, Identity Provider, IdP, 인증, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/SSO/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/SSO/">
     <meta property="og:title" content="SSO (Single Sign-On) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="한 번의 로그인으로 여러 서비스에 접근하는 인증 방식. SAML, OAuth, OIDC 프로토콜 사용.">
+    <meta property="og:description" content="한 번의 로그인으로 여러 서비스에 접근하는 통합 인증 방식. SAML, OAuth, OIDC 프로토콜과 엔터프라이즈 IAM 핵심 개념.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SSO (Single Sign-On) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="한 번의 로그인으로 여러 서비스에 접근하는 인증 방식. SAML, OAuth, OIDC 프로토콜 사용.">
+    <meta name="twitter:description" content="한 번의 로그인으로 여러 서비스에 접근하는 통합 인증 방식. SAML, OAuth, OIDC 프로토콜과 엔터프라이즈 IAM 핵심 개념.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "SSO",
-        "description": "한 번의 로그인으로 여러 서비스에 접근하는 인증 방식. SAML, OAuth, OIDC 프로토콜 사용.",
+        "alternateName": "Single Sign-On",
+        "description": "한 번의 로그인으로 여러 서비스에 접근하는 통합 인증 방식입니다. SAML, OAuth 2.0, OIDC 프로토콜을 사용하여 엔터프라이즈 및 소비자 애플리케이션의 인증을 단순화합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">SSO</h1>
-            <p class="term-english">Single Sign-On</p>
+            <p class="term-english">Single Sign-On (통합 인증)</p>
             <div class="term-description">
-                <p>한 번의 로그인으로 여러 서비스에 접근하는 인증 방식. SAML, OAuth, OIDC 프로토콜 사용.</p>
+                <p>한 번의 로그인으로 여러 서비스와 애플리케이션에 접근할 수 있는 통합 인증 방식입니다. Identity Provider(IdP)가 사용자 인증을 중앙에서 관리하며, SAML 2.0, OAuth 2.0, OIDC 등의 프로토콜을 사용합니다. 현대 기업은 평균 371개의 SaaS 애플리케이션을 사용하며, SSO는 이러한 환경에서 보안과 사용자 경험을 모두 향상시키는 핵심 기술입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,517 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>SSO(Single Sign-On)는 사용자가 하나의 자격 증명으로 여러 애플리케이션에 접근할 수 있게 하는 인증 아키텍처입니다. 핵심은 Identity Provider(IdP)가 사용자 인증을 중앙에서 수행하고, 서비스 제공자(SP)들은 IdP의 인증 결과를 신뢰한다는 것입니다. 예를 들어, Google 계정으로 로그인하면 Gmail, YouTube, Google Drive에 별도 로그인 없이 접근할 수 있습니다. 이는 "인증의 위임"이라는 개념으로, 각 서비스가 자체적으로 비밀번호를 관리하는 대신 신뢰할 수 있는 IdP에 인증을 맡기는 것입니다.</p>
+                <p>SSO의 주요 프로토콜은 용도에 따라 선택됩니다. SAML 2.0은 XML 기반으로 엔터프라이즈 환경에서 Active Directory와의 통합, 규정 준수, 감사 요구사항에 적합합니다. OAuth 2.0은 인가(Authorization)에 초점을 맞추며, 서드파티 앱이 사용자 데이터에 접근할 권한을 얻는 데 사용됩니다. OIDC(OpenID Connect)는 OAuth 2.0 위에 인증 레이어를 추가한 것으로, 모바일 앱과 웹 애플리케이션에서 소셜 로그인을 구현할 때 가장 많이 사용됩니다. 2025년 현재 72%의 기업이 다중 프로토콜 SSO를 채택하고 있습니다.</p>
+                <p>SSO의 보안적 이점은 분명합니다. 웹 애플리케이션 공격의 80%가 탈취된 자격 증명을 이용하는데, SSO는 사용자가 기억해야 할 비밀번호 수를 줄여 강력한 비밀번호 사용을 유도하고, 피싱 공격 표면을 감소시킵니다. 또한 사용자 프로비저닝과 디프로비저닝이 중앙에서 관리되어, 퇴사자의 모든 시스템 접근을 즉시 차단할 수 있습니다. 하지만 IdP가 단일 실패점(SPOF)이 될 수 있으므로 MFA(다중 인증) 적용이 필수적입니다.</p>
+                <p>현대 SSO 구현에서는 "secure by design" 원칙을 따릅니다. SAML assertion은 HSM(Hardware Security Module)으로 서명하고, OIDC 토큰 수명은 15분으로 제한하며, SCIM을 통한 사용자 동기화는 AES-256으로 암호화합니다. Zero Trust 아키텍처에서 SSO는 지속적 검증의 진입점으로, 매 요청마다 컨텍스트(기기, 위치, 행동 패턴)를 평가하여 세션 유효성을 동적으로 판단합니다. AI 기반 공격이 2022년 이후 4,000% 증가한 현재, 적응형 인증과 결합된 SSO가 필수입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="oidc">OIDC (Node.js)</button>
+                <button class="code-tab" data-lang="saml">SAML (Python)</button>
+                <button class="code-tab" data-lang="spring">Spring Security</button>
+            </div>
+            <div class="code-block active" data-lang="oidc">
+                <pre><code class="language-javascript">// OIDC SSO 구현 예제 - Node.js (Passport.js)
+const express = require('express');
+const passport = require('passport');
+const { Issuer, Strategy } = require('openid-client');
+
+const app = express();
+
+// OIDC 프로바이더 설정 (예: Okta, Auth0, Keycloak)
+async function setupOIDC() {
+    // 1. IdP의 Discovery Document에서 설정 자동 로드
+    const issuer = await Issuer.discover(
+        'https://your-idp.com/.well-known/openid-configuration'
+    );
+    console.log('Discovered issuer:', issuer.metadata.issuer);
+
+    // 2. OIDC 클라이언트 등록
+    const client = new issuer.Client({
+        client_id: process.env.OIDC_CLIENT_ID,
+        client_secret: process.env.OIDC_CLIENT_SECRET,
+        redirect_uris: ['https://your-app.com/callback'],
+        response_types: ['code'],  // Authorization Code Flow
+    });
+
+    // 3. Passport 전략 설정
+    passport.use('oidc', new Strategy(
+        {
+            client,
+            params: {
+                // 최소한의 필요한 scope만 요청 (최소 권한 원칙)
+                scope: 'openid profile email',
+            },
+            // PKCE 활성화 (public client 보안 강화)
+            usePKCE: true,
+        },
+        (tokenSet, userinfo, done) => {
+            // ID Token 검증은 라이브러리가 자동 수행
+            // - 서명 검증 (JWKS 사용)
+            // - 발급자(iss) 확인
+            // - 대상(aud) 확인
+            // - 만료 시간(exp) 확인
+
+            console.log('ID Token claims:', tokenSet.claims());
+            console.log('User info:', userinfo);
+
+            // 사용자 정보로 세션 생성
+            return done(null, {
+                id: userinfo.sub,
+                email: userinfo.email,
+                name: userinfo.name,
+                // Access Token은 API 호출에 사용
+                accessToken: tokenSet.access_token,
+                // Refresh Token으로 세션 연장
+                refreshToken: tokenSet.refresh_token,
+            });
+        }
+    ));
+
+    return client;
+}
+
+// 세션 직렬화
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
+
+// 라우트 설정
+app.get('/login', passport.authenticate('oidc'));
+
+app.get('/callback',
+    passport.authenticate('oidc', {
+        failureRedirect: '/login-error',
+        successRedirect: '/dashboard'
+    })
+);
+
+// 로그아웃 (Single Logout)
+app.get('/logout', async (req, res) => {
+    const idToken = req.user?.idToken;
+    req.logout(() => {
+        // IdP에도 로그아웃 요청 (Single Logout)
+        const logoutUrl = `https://your-idp.com/logout?` +
+            `id_token_hint=${idToken}&` +
+            `post_logout_redirect_uri=${encodeURIComponent('https://your-app.com')}`;
+        res.redirect(logoutUrl);
+    });
+});
+
+// 보호된 리소스
+app.get('/dashboard', ensureAuthenticated, (req, res) => {
+    res.json({ user: req.user, message: 'Welcome!' });
+});
+
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/login');
+}
+
+setupOIDC().then(() => {
+    app.listen(3000, () => console.log('SSO app running on port 3000'));
+});</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="saml">
+                <pre><code class="language-python"># SAML SSO 구현 예제 - Python (Flask + python3-saml)
+from flask import Flask, request, redirect, session, url_for
+from onelogin.saml2.auth import OneLogin_Saml2_Auth
+from onelogin.saml2.utils import OneLogin_Saml2_Utils
+import json
+
+app = Flask(__name__)
+app.secret_key = 'your-secret-key'
+
+def init_saml_auth(req):
+    """SAML 인증 객체 초기화"""
+    auth = OneLogin_Saml2_Auth(req, custom_base_path='saml/')
+    return auth
+
+def prepare_flask_request(request):
+    """Flask 요청을 python3-saml 형식으로 변환"""
+    return {
+        'https': 'on' if request.scheme == 'https' else 'off',
+        'http_host': request.host,
+        'server_port': request.environ.get('SERVER_PORT', '443'),
+        'script_name': request.path,
+        'get_data': request.args.copy(),
+        'post_data': request.form.copy(),
+    }
+
+@app.route('/saml/login')
+def saml_login():
+    """SAML 인증 시작 - IdP로 리다이렉트"""
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+
+    # RelayState로 원래 요청 URL 보존
+    return_to = request.args.get('next', url_for('dashboard'))
+
+    # AuthnRequest 생성 및 IdP로 리다이렉트
+    sso_url = auth.login(return_to=return_to)
+    return redirect(sso_url)
+
+@app.route('/saml/acs', methods=['POST'])
+def saml_acs():
+    """Assertion Consumer Service - IdP 응답 처리"""
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+
+    # SAML Response 처리 및 검증
+    auth.process_response()
+    errors = auth.get_errors()
+
+    if errors:
+        return f'SAML Error: {", ".join(errors)}', 400
+
+    if not auth.is_authenticated():
+        return 'Not authenticated', 401
+
+    # SAML Assertion에서 사용자 정보 추출
+    session['saml_user'] = {
+        'name_id': auth.get_nameid(),
+        'name_id_format': auth.get_nameid_format(),
+        'session_index': auth.get_session_index(),
+        'attributes': auth.get_attributes(),
+    }
+
+    # 사용자 속성 매핑 (IdP 설정에 따라 다름)
+    attrs = auth.get_attributes()
+    session['user'] = {
+        'email': attrs.get('email', [None])[0],
+        'name': attrs.get('displayName', [None])[0],
+        'department': attrs.get('department', [None])[0],
+        'roles': attrs.get('memberOf', []),
+    }
+
+    # 원래 요청 URL로 리다이렉트
+    relay_state = request.form.get('RelayState', url_for('dashboard'))
+    return redirect(relay_state)
+
+@app.route('/saml/slo', methods=['GET', 'POST'])
+def saml_slo():
+    """Single Logout - 모든 SP에서 로그아웃"""
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+
+    if request.method == 'GET':
+        # SP 시작 SLO
+        name_id = session.get('saml_user', {}).get('name_id')
+        session_index = session.get('saml_user', {}).get('session_index')
+
+        return redirect(auth.logout(
+            name_id=name_id,
+            session_index=session_index,
+            return_to=url_for('index')
+        ))
+    else:
+        # IdP 시작 SLO 응답 처리
+        auth.process_slo()
+        session.clear()
+        return redirect(url_for('index'))
+
+@app.route('/saml/metadata')
+def saml_metadata():
+    """SP 메타데이터 제공 (IdP 등록용)"""
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+    settings = auth.get_settings()
+    metadata = settings.get_sp_metadata()
+    errors = settings.validate_metadata(metadata)
+
+    if errors:
+        return f'Metadata Error: {", ".join(errors)}', 400
+
+    return metadata, 200, {'Content-Type': 'text/xml'}
+
+@app.route('/dashboard')
+def dashboard():
+    """보호된 리소스"""
+    if 'user' not in session:
+        return redirect(url_for('saml_login', next=request.url))
+
+    return f"Welcome, {session['user']['name']}!"
+
+# settings.json 예시 (saml/settings.json)
+"""
+{
+    "sp": {
+        "entityId": "https://your-app.com/saml/metadata",
+        "assertionConsumerService": {
+            "url": "https://your-app.com/saml/acs",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        },
+        "singleLogoutService": {
+            "url": "https://your-app.com/saml/slo",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        }
+    },
+    "idp": {
+        "entityId": "https://your-idp.com",
+        "singleSignOnService": {
+            "url": "https://your-idp.com/sso",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "x509cert": "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
+    },
+    "security": {
+        "authnRequestsSigned": true,
+        "wantAssertionsSigned": true,
+        "wantMessagesSigned": true,
+        "signatureAlgorithm": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+    }
+}
+"""</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="spring">
+                <pre><code class="language-java">// Spring Security OAuth2/OIDC SSO 구현 예제
+// build.gradle에 의존성 추가
+// implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+// application.yml
+/*
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          okta:
+            client-id: ${OKTA_CLIENT_ID}
+            client-secret: ${OKTA_CLIENT_SECRET}
+            scope: openid, profile, email
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: openid, profile, email
+        provider:
+          okta:
+            issuer-uri: https://your-domain.okta.com
+*/
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Configuration
+@EnableWebSecurity
+public class SsoSecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(auth -> auth
+                // 공개 경로
+                .requestMatchers("/", "/login", "/error").permitAll()
+                // 관리자 전용
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                // 나머지는 인증 필요
+                .anyRequest().authenticated()
+            )
+            .oauth2Login(oauth2 -> oauth2
+                // 커스텀 로그인 페이지
+                .loginPage("/login")
+                // 로그인 성공 후 리다이렉트
+                .defaultSuccessUrl("/dashboard", true)
+                // 커스텀 UserService로 권한 매핑
+                .userInfoEndpoint(userInfo -> userInfo
+                    .oidcUserService(oidcUserService())
+                )
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/")
+                // OIDC RP-Initiated Logout
+                .logoutSuccessHandler(oidcLogoutSuccessHandler())
+            );
+
+        return http.build();
+    }
+
+    @Bean
+    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+        final OidcUserService delegate = new OidcUserService();
+
+        return userRequest -> {
+            // 기본 OIDC 사용자 정보 로드
+            OidcUser oidcUser = delegate.loadUser(userRequest);
+
+            // IdP의 그룹/역할 클레임을 Spring Security 권한으로 매핑
+            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+
+            // 기본 권한
+            mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+            // IdP 그룹을 역할로 변환 (예: Okta groups 클레임)
+            List<String> groups = oidcUser.getAttribute("groups");
+            if (groups != null) {
+                groups.stream()
+                    .map(group -> new SimpleGrantedAuthority("ROLE_" + group.toUpperCase()))
+                    .forEach(mappedAuthorities::add);
+            }
+
+            // 커스텀 클레임 처리 (예: 부서별 권한)
+            String department = oidcUser.getAttribute("department");
+            if ("IT".equals(department)) {
+                mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            }
+
+            return new DefaultOidcUser(
+                mappedAuthorities,
+                oidcUser.getIdToken(),
+                oidcUser.getUserInfo()
+            );
+        };
+    }
+
+    @Bean
+    public OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
+        OidcClientInitiatedLogoutSuccessHandler handler =
+            new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
+        handler.setPostLogoutRedirectUri("{baseUrl}");
+        return handler;
+    }
+}
+
+// 컨트롤러에서 사용자 정보 접근
+@RestController
+public class UserController {
+
+    @GetMapping("/api/me")
+    public Map<String, Object> getCurrentUser(
+            @AuthenticationPrincipal OidcUser oidcUser) {
+        return Map.of(
+            "sub", oidcUser.getSubject(),
+            "email", oidcUser.getEmail(),
+            "name", oidcUser.getFullName(),
+            "authorities", oidcUser.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList())
+        );
+    }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 IAM 아키텍처 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "엔터프라이즈 앱은 SAML로, 소비자용 앱은 OIDC로 가겠습니다. SAML은 AD 연동이 잘 되고 감사 로그 요구사항을 충족하고, OIDC는 모바일 친화적이고 소셜 로그인 구현이 쉽습니다. 72% 기업이 이렇게 멀티 프로토콜로 운영합니다. IdP는 Okta나 Azure AD 중 선택하고, MFA는 반드시 적용해야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "SSO가 IdP 단일 실패점(SPOF)이 될 수 있어서 고가용성 구성이 필수입니다. 그리고 토큰 수명을 15분으로 제한하고, PKCE를 활성화해야 합니다. 탈취된 자격증명이 공격의 80%를 차지하니까 SSO + MFA 조합으로 피싱 공격 표면을 줄여야 합니다. 퇴사자 계정 즉시 비활성화도 중앙화된 SSO에서만 제대로 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 개발팀 온보딩에서</div>
+                    <blockquote class="conv-quote">
+                        "새 서비스 추가할 때는 IdP에 SP 등록하고 SAML 메타데이터나 OIDC redirect_uri만 설정하면 됩니다. 직접 로그인 구현하지 마세요. scope는 openid profile email 정도만, 최소 권한으로 요청하고, ID 토큰 검증은 라이브러리가 알아서 합니다. JWKS 엔드포인트에서 공개키 가져와서 서명 검증하는 거예요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>MFA 없는 SSO</strong>
+                        <p>SSO만으로는 보안이 충분하지 않습니다. IdP가 탈취되면 모든 서비스가 위험합니다. SSO 위에 반드시 MFA를 적용하세요. AI 기반 공격이 4,000% 증가한 현재, 패스키(Passkey)나 하드웨어 토큰 같은 피싱 저항 MFA가 권장됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>잘못된 프로토콜 선택</strong>
+                        <p>SAML은 엔터프라이즈/레거시, OIDC는 현대 웹/모바일에 적합합니다. 모바일 앱에 SAML을 쓰면 XML 파싱 오버헤드와 UX 문제가 발생합니다. 새 프로젝트라면 OIDC를 기본으로 선택하세요. 나중에 인증이 필요해질 때를 대비해 OAuth만 필요해도 OIDC를 구현하는 것이 좋습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Single Logout 미구현</strong>
+                        <p>로그인만 통합하고 로그아웃을 각 서비스에서 따로 처리하면 세션 불일치가 발생합니다. SAML SLO나 OIDC RP-Initiated Logout을 구현해서 모든 서비스에서 동시에 로그아웃되도록 하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>SSO 베스트 프랙티스</strong>
+                        <p>OIDC 토큰 수명 15분 + Refresh Token, SAML assertion은 HSM 서명, PKCE 필수 활성화, scope 최소화(openid profile email), SCIM으로 자동 프로비저닝/디프로비저닝, IdP 고가용성 구성, 정책 기반 접근 제어로 역할/부서/위치에 따른 자동 권한 부여를 구현하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/OIDC/" class="related-term-link">OIDC</a>
+                <a href="/ko/term/OAuth/" class="related-term-link">OAuth 2.0</a>
+                <a href="/ko/term/SAML/" class="related-term-link">SAML</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+                <a href="/ko/term/MFA/" class="related-term-link">MFA</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://frontegg.com/guides/single-sign-on-sso" target="_blank" class="learn-link">
+                    📘 Frontegg - What SSO Means in 2025: A Modern Guide
+                </a>
+                <a href="https://clerk.com/articles/sso-best-practices-for-secure-scalable-logins" target="_blank" class="learn-link">
+                    📄 Clerk - 8 SSO Best Practices for 2025
+                </a>
+                <a href="https://www.authgear.com/post/oidc-vs-saml" target="_blank" class="learn-link">
+                    📝 Authgear - OIDC vs SAML: When to Use Each
+                </a>
+                <a href="https://guptadeepak.com/sso-deep-dive-saml-oauth-and-scim-in-enterprise-identity-management/" target="_blank" class="learn-link">
+                    📚 SSO Deep Dive: SAML, OAuth, SCIM
+                </a>
+                <a href="https://www.reco.ai/learn/sso-best-practices" target="_blank" class="learn-link">
+                    🔒 Reco AI - SSO Security Best Practices
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +857,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JWT (JSON Web Token) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="JSON 기반 토큰 인증 방식. Header.Payload.Signature 구조. 무상태 인증에 사용.">
-    <meta name="keywords" content="JWT, JSON Web Token, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="JWT는 JSON 형식의 자가 포함 토큰으로 사용자 인증과 정보 교환에 사용됩니다. Header.Payload.Signature 구조로 무상태(Stateless) 인증을 가능하게 합니다.">
+    <meta name="keywords" content="JWT, JSON Web Token, 토큰 인증, Access Token, Refresh Token, Bearer Token, HS256, RS256, 무상태 인증, 세션리스, JOSE, 클레임, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/JWT/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/JWT/">
     <meta property="og:title" content="JWT (JSON Web Token) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="JSON 기반 토큰 인증 방식. Header.Payload.Signature 구조. 무상태 인증에 사용.">
+    <meta property="og:description" content="JWT는 JSON 형식의 자가 포함 토큰으로 사용자 인증과 정보 교환에 사용됩니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="JWT (JSON Web Token) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="JSON 기반 토큰 인증 방식. Header.Payload.Signature 구조. 무상태 인증에 사용.">
+    <meta name="twitter:description" content="JWT는 JSON 형식의 자가 포함 토큰으로 사용자 인증과 정보 교환에 사용됩니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "JWT",
-        "description": "JSON 기반 토큰 인증 방식. Header.Payload.Signature 구조. 무상태 인증에 사용.",
+        "alternateName": "JSON Web Token",
+        "description": "JWT는 JSON 형식의 자가 포함 토큰으로 사용자 인증과 정보 교환에 사용됩니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">JWT</h1>
             <p class="term-english">JSON Web Token</p>
             <div class="term-description">
-                <p>JSON 기반 토큰 인증 방식. Header.Payload.Signature 구조. 무상태 인증에 사용.</p>
+                <p>JSON 형식의 자가 포함(Self-contained) 토큰으로 Header.Payload.Signature 구조를 가집니다. 서버 세션 없이 무상태(Stateless) 인증을 가능하게 합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,389 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>JWT(JSON Web Token)는 RFC 7519에 정의된 개방형 표준으로, 당사자 간 정보를 JSON 객체로 안전하게 전송하는 방법입니다. "자가 포함(Self-contained)"이란 토큰 자체에 필요한 모든 정보가 담겨 있어, 별도의 데이터베이스 조회 없이 토큰만으로 사용자를 인증할 수 있다는 의미입니다. 이로 인해 서버에 세션을 저장하지 않는 무상태(Stateless) 아키텍처가 가능합니다.</p>
+                <p>JWT는 세 부분으로 구성됩니다: Header(헤더), Payload(페이로드), Signature(서명)이며, 각 부분은 점(.)으로 구분됩니다. Header는 토큰 타입(JWT)과 서명 알고리즘(예: HS256, RS256)을 명시합니다. Payload는 클레임(Claims)을 담고 있는데, 표준 클레임(iss, sub, exp 등)과 사용자 정의 클레임이 있습니다. Signature는 Header와 Payload를 비밀 키로 서명한 값으로, 토큰 변조를 방지합니다.</p>
+                <p>HS256(HMAC-SHA256)은 대칭키 방식으로 같은 비밀 키로 서명과 검증을 합니다. 단순하지만 키를 안전하게 공유해야 하므로 단일 서비스에 적합합니다. RS256(RSA-SHA256)은 비대칭키 방식으로 개인키로 서명하고 공개키로 검증합니다. 마이크로서비스 환경에서 인증 서버만 개인키를 가지고, 다른 서비스들은 공개키로 검증할 수 있어 확장성이 좋습니다.</p>
+                <p>Access Token과 Refresh Token 패턴이 일반적입니다. Access Token은 짧은 수명(15분~1시간)을 가지며 API 요청에 사용됩니다. Refresh Token은 긴 수명(7일~30일)을 가지며 새 Access Token을 발급받는 데 사용합니다. Access Token이 탈취되어도 짧은 수명으로 피해를 최소화하고, Refresh Token Rotation을 적용하면 보안이 더 강화됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (PyJWT)</button>
+                <button class="code-tab" data-lang="node">Node.js (jsonwebtoken)</button>
+                <button class="code-tab" data-lang="structure">JWT 구조 분석</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># JWT 생성 및 검증 - Python PyJWT 라이브러리
+import jwt
+from datetime import datetime, timedelta
+from typing import Optional
+import secrets
+
+class JWTManager:
+    """JWT 토큰 관리 클래스"""
+
+    def __init__(self, secret_key: str = None, algorithm: str = "HS256"):
+        self.secret_key = secret_key or secrets.token_hex(32)
+        self.algorithm = algorithm
+        self.access_token_expire = timedelta(minutes=30)
+        self.refresh_token_expire = timedelta(days=7)
+
+    def create_access_token(self, user_id: str, roles: list = None) -> str:
+        """Access Token 생성"""
+        payload = {
+            "sub": user_id,           # Subject (사용자 ID)
+            "roles": roles or [],     # 사용자 역할
+            "type": "access",
+            "iat": datetime.utcnow(), # Issued At (발급 시간)
+            "exp": datetime.utcnow() + self.access_token_expire  # 만료 시간
+        }
+        return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+
+    def create_refresh_token(self, user_id: str) -> str:
+        """Refresh Token 생성"""
+        payload = {
+            "sub": user_id,
+            "type": "refresh",
+            "iat": datetime.utcnow(),
+            "exp": datetime.utcnow() + self.refresh_token_expire,
+            "jti": secrets.token_hex(16)  # 고유 토큰 ID (revocation용)
+        }
+        return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+
+    def verify_token(self, token: str) -> Optional[dict]:
+        """토큰 검증 및 페이로드 반환"""
+        try:
+            payload = jwt.decode(
+                token,
+                self.secret_key,
+                algorithms=[self.algorithm]
+            )
+            return payload
+        except jwt.ExpiredSignatureError:
+            print("토큰이 만료되었습니다")
+            return None
+        except jwt.InvalidTokenError as e:
+            print(f"유효하지 않은 토큰: {e}")
+            return None
+
+    def refresh_access_token(self, refresh_token: str) -> Optional[str]:
+        """Refresh Token으로 새 Access Token 발급"""
+        payload = self.verify_token(refresh_token)
+
+        if not payload:
+            return None
+
+        if payload.get("type") != "refresh":
+            print("Refresh Token이 아닙니다")
+            return None
+
+        # 새 Access Token 발급
+        return self.create_access_token(payload["sub"])
+
+
+# 사용 예시
+if __name__ == "__main__":
+    jwt_manager = JWTManager()
+
+    # 1. 로그인 시: 토큰 쌍 발급
+    user_id = "user_12345"
+    access_token = jwt_manager.create_access_token(user_id, ["user", "admin"])
+    refresh_token = jwt_manager.create_refresh_token(user_id)
+
+    print(f"Access Token: {access_token[:50]}...")
+    print(f"Refresh Token: {refresh_token[:50]}...")
+
+    # 2. API 요청 시: Access Token 검증
+    payload = jwt_manager.verify_token(access_token)
+    if payload:
+        print(f"인증된 사용자: {payload['sub']}, 역할: {payload['roles']}")
+
+    # 3. Access Token 만료 시: Refresh Token으로 갱신
+    new_access_token = jwt_manager.refresh_access_token(refresh_token)
+    print(f"새 Access Token: {new_access_token[:50]}...")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// JWT 생성 및 검증 - Node.js jsonwebtoken
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+
+class JWTManager {
+    constructor(secretKey = null) {
+        this.secretKey = secretKey || crypto.randomBytes(32).toString('hex');
+        this.accessTokenExpire = '30m';  // 30분
+        this.refreshTokenExpire = '7d';  // 7일
+    }
+
+    // Access Token 생성
+    createAccessToken(userId, roles = []) {
+        return jwt.sign(
+            {
+                sub: userId,
+                roles: roles,
+                type: 'access'
+            },
+            this.secretKey,
+            {
+                algorithm: 'HS256',
+                expiresIn: this.accessTokenExpire
+            }
+        );
+    }
+
+    // Refresh Token 생성
+    createRefreshToken(userId) {
+        return jwt.sign(
+            {
+                sub: userId,
+                type: 'refresh',
+                jti: crypto.randomBytes(16).toString('hex')
+            },
+            this.secretKey,
+            {
+                algorithm: 'HS256',
+                expiresIn: this.refreshTokenExpire
+            }
+        );
+    }
+
+    // 토큰 검증
+    verifyToken(token) {
+        try {
+            return jwt.verify(token, this.secretKey);
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                console.log('토큰이 만료되었습니다');
+            } else {
+                console.log(`유효하지 않은 토큰: ${error.message}`);
+            }
+            return null;
+        }
+    }
+
+    // 토큰에서 페이로드 추출 (검증 없이)
+    decode(token) {
+        return jwt.decode(token, { complete: true });
+    }
+}
+
+// Express 미들웨어 예시
+const authMiddleware = (jwtManager) => {
+    return (req, res, next) => {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'No token provided' });
+        }
+
+        const token = authHeader.split(' ')[1];
+        const payload = jwtManager.verifyToken(token);
+
+        if (!payload) {
+            return res.status(401).json({ error: 'Invalid token' });
+        }
+
+        req.user = payload;
+        next();
+    };
+};
+
+// 사용 예시
+const jwtManager = new JWTManager();
+
+// 로그인 API
+const login = (userId, roles) => {
+    return {
+        accessToken: jwtManager.createAccessToken(userId, roles),
+        refreshToken: jwtManager.createRefreshToken(userId),
+        expiresIn: 1800 // 30분 (초)
+    };
+};
+
+// 토큰 갱신 API
+const refreshTokens = (refreshToken) => {
+    const payload = jwtManager.verifyToken(refreshToken);
+
+    if (!payload || payload.type !== 'refresh') {
+        throw new Error('Invalid refresh token');
+    }
+
+    return {
+        accessToken: jwtManager.createAccessToken(payload.sub),
+        // Refresh Token Rotation: 새 Refresh Token도 발급
+        refreshToken: jwtManager.createRefreshToken(payload.sub)
+    };
+};
+
+console.log(login('user123', ['admin']));</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="structure">
+                <pre><code class="language-text">JWT 구조 분석
+==============
+
+JWT 형식: xxxxx.yyyyy.zzzzz
+          Header.Payload.Signature
+
+
+1. Header (헤더) - Base64Url 인코딩
+====================================
+{
+  "alg": "HS256",    // 서명 알고리즘
+  "typ": "JWT"       // 토큰 타입
+}
+
+인코딩: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+
+2. Payload (페이로드) - Base64Url 인코딩
+========================================
+{
+  // 등록된 클레임 (Registered Claims)
+  "iss": "https://api.example.com",  // 발급자
+  "sub": "user_12345",               // 주제 (사용자 ID)
+  "aud": "https://app.example.com",  // 대상자
+  "exp": 1735689600,                 // 만료 시간 (Unix timestamp)
+  "nbf": 1735686000,                 // 유효 시작 시간
+  "iat": 1735686000,                 // 발급 시간
+  "jti": "unique-token-id-123",      // JWT ID (고유 식별자)
+
+  // 사용자 정의 클레임
+  "roles": ["user", "admin"],
+  "permissions": ["read", "write"]
+}
+
+
+3. Signature (서명)
+====================
+HMACSHA256(
+  base64UrlEncode(header) + "." + base64UrlEncode(payload),
+  secret
+)
+
+
+완성된 JWT 예시
+================
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJzdWIiOiJ1c2VyXzEyMzQ1IiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.
+SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+
+알고리즘 선택 가이드
+====================
+HS256 (HMAC + SHA-256)
+- 대칭키: 같은 키로 서명/검증
+- 단일 서비스, 간단한 구조에 적합
+- 키 공유 필요
+
+RS256 (RSA + SHA-256)
+- 비대칭키: 개인키 서명, 공개키 검증
+- 마이크로서비스, 외부 연동에 적합
+- 인증 서버만 개인키 보유
+
+ES256 (ECDSA + SHA-256)
+- 비대칭키: 더 짧은 키 길이로 동등 보안
+- 모바일/IoT 환경에 적합</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 인증 시스템 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "Access Token은 15분, Refresh Token은 7일로 설정하고, Refresh Token Rotation을 적용해서 갱신할 때마다 새 Refresh Token을 발급합니다. 탈취된 Refresh Token 재사용을 감지하면 해당 사용자의 모든 세션을 무효화합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "JWT는 Base64 인코딩이지 암호화가 아닙니다. Payload에 민감한 정보를 넣으면 안 됩니다. 비밀번호, 신용카드 번호 같은 건 절대 담지 마세요. 필요하면 JWE(JSON Web Encryption)를 사용해서 페이로드를 암호화해야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 마이크로서비스 아키텍처 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "인증 서버에서 RS256으로 JWT를 발급하면, 각 마이크로서비스는 공개키만 가지고 토큰을 검증할 수 있어요. 비밀키 공유 없이 분산 검증이 가능해서 확장성이 좋습니다. JWKS 엔드포인트로 공개키를 제공하면 키 로테이션도 용이합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>민감정보 Payload 저장 금지</strong>
+                        <p>JWT Payload는 Base64 인코딩일 뿐 암호화가 아닙니다. 누구나 디코딩해서 내용을 볼 수 있으므로 비밀번호, 개인정보 등을 담지 마세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>alg: "none" 취약점</strong>
+                        <p>서명 알고리즘을 "none"으로 설정하면 서명 검증을 우회합니다. 라이브러리에서 허용 알고리즘 목록을 명시적으로 지정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>긴 만료 시간</strong>
+                        <p>Access Token을 너무 길게 설정하면(예: 1년) 탈취 시 오랜 기간 악용됩니다. 15분~1시간이 권장되며, Refresh Token으로 갱신하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>JWT 베스트 프랙티스</strong>
+                        <p>짧은 Access Token 수명 + Refresh Token Rotation, RS256 또는 ES256 사용, Payload 최소화, 만료 시간(exp) 필수 검증, 블랙리스트로 즉시 무효화 지원.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/OAuth/" class="related-term-link">OAuth</a>
+                <a href="/ko/term/Authentication/" class="related-term-link">Authentication</a>
+                <a href="/ko/term/Encryption/" class="related-term-link">Encryption</a>
+                <a href="/ko/term/SSL%2FTLS/" class="related-term-link">SSL/TLS</a>
+                <a href="/ko/term/API%20Gateway/" class="related-term-link">API Gateway</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://jwt.io/" target="_blank" class="learn-link">
+                    📄 JWT.io - JWT 디버거 & 소개
+                </a>
+                <a href="https://datatracker.ietf.org/doc/html/rfc7519" target="_blank" class="learn-link">
+                    🎓 RFC 7519 - JWT 공식 명세
+                </a>
+                <a href="https://auth0.com/learn/json-web-tokens/" target="_blank" class="learn-link">
+                    📖 Auth0 - JWT 학습 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +679,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

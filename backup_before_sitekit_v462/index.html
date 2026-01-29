@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 백과사전 | KAITRUST - AI 용어 완전 정복</title>
+    <meta name="description" content="AI 시대를 위한 종합 백과사전. AI/ML, 프로그래밍, 클라우드, 보안, AI 규제까지 1000개+ 핵심 용어를 한국어로 쉽게 설명합니다.">
+
+    <!-- Open Graph / SNS 공유 미리보기 -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://glossary.kaitrust.ai">
+    <meta property="og:title" content="AI 백과사전 | KAITRUST - 1000+ AI 용어 완전 정복">
+    <meta property="og:description" content="AI/ML, 프로그래밍, 클라우드, 보안, AI 규제까지 1000개+ 핵심 IT/AI 용어를 한국어로 쉽게 설명합니다.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI 백과사전 | KAITRUST - 1000+ AI 용어 완전 정복">
+    <meta name="twitter:description" content="AI/ML, 프로그래밍, 클라우드, 보안, AI 규제까지 1000개+ 핵심 IT/AI 용어를 한국어로 쉽게 설명합니다.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+    <link rel="canonical" href="https://glossary.kaitrust.ai">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        /* ========== Glossary Specific Styles ========== */
+        .hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 2rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(168, 85, 247, 0); }
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        /* Search Box */
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .search-box {
+            display: flex;
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 1.25rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            font-family: var(--font-main);
+            outline: none;
+        }
+
+        .search-box input::placeholder { color: #64748b; }
+
+        .search-box button {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-box button:hover { opacity: 0.9; }
+        .search-box button span { font-size: 1.3rem; }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(0, 245, 255, 0.05) 100%);
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .stat-item { text-align: center; }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label { font-size: 0.9rem; color: #64748b; margin-top: 0.25rem; }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: var(--dark);
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(168, 85, 247, 0.3);
+        }
+        #favCount { position: relative; top: 2px; }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .category-tab {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .category-tab:hover, .category-tab.active {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: var(--dark);
+            border-color: transparent;
+        }
+
+        /* Alphabet Index */
+        .alphabet-index {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.4rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(168, 85, 247, 0.1);
+        }
+
+        .index-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.2rem;
+            height: 2.2rem;
+            padding: 0 0.5rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 6px;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .index-btn:hover {
+            background: rgba(168, 85, 247, 0.3);
+            border-color: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .index-btn.active {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: var(--dark);
+            border-color: transparent;
+        }
+
+        .index-divider {
+            color: rgba(168, 85, 247, 0.3);
+            font-size: 1.2rem;
+            padding: 0 0.3rem;
+        }
+
+        /* Terms Grid */
+        .terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Term Card */
+        .term-card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .term-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .term-card:hover::before { transform: scaleX(1); }
+
+        .term-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.15);
+        }
+
+        .term-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .term-title { font-size: 1.2rem; font-weight: 700; color: #fff; }
+
+        .term-tag {
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .term-tag.ai { background: rgba(168, 85, 247, 0.2); color: #c4b5fd; }
+        .term-tag.regulation { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .term-tag.prog { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+        .term-tag.web { background: rgba(236, 72, 153, 0.2); color: #f9a8d4; }
+        .term-tag.cloud { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+        .term-tag.db { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+        .term-tag.devops { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+        .term-tag.security { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .term-tag.arch { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+        .term-tag.data { background: rgba(249, 115, 22, 0.2); color: #fdba74; }
+        .term-tag.net { background: rgba(20, 184, 166, 0.2); color: #5eead4; }
+
+        /* Special Badges */
+        .term-badge {
+            display: inline-block;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            margin-left: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .term-badge.new {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            color: white;
+            animation: badgePulse 2s infinite;
+        }
+
+        .term-badge.kaitrust-def {
+            background: linear-gradient(135deg, var(--primary), #00d4e0);
+            color: var(--dark);
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .term-english {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+        }
+
+        .term-definition { font-size: 0.95rem; color: #94a3b8; line-height: 1.7; }
+
+        .term-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+
+        .term-mini-tag {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 4px;
+            color: var(--primary);
+        }
+
+        .term-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .term-action-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .term-action-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--accent);
+        }
+
+        .term-action-btn.favorited { color: #f59e0b; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+
+        .empty-state span { font-size: 4rem; display: block; margin-bottom: 1rem; }
+
+        /* Random Term Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-content {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover { color: #fff; }
+
+        .modal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--dark);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-term { font-size: 2rem; font-weight: 900; color: #fff; margin-bottom: 0.5rem; }
+        .modal-english { font-family: var(--font-mono); font-size: 1rem; color: #64748b; margin-bottom: 1.5rem; }
+        .modal-definition { font-size: 1.1rem; color: #cbd5e1; line-height: 1.8; margin-bottom: 1.5rem; }
+
+        .modal-actions { display: flex; gap: 1rem; }
+
+        .modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.primary { background: linear-gradient(135deg, var(--accent), var(--primary)); color: var(--dark); }
+        .modal-btn.secondary { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .modal-btn:hover { transform: translateY(-2px); }
+
+        /* Hope Message */
+        .hope-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(0, 245, 255, 0.05));
+            border-radius: 24px;
+            margin: 3rem 0;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .hope-message h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem; }
+        .hope-message p { color: #94a3b8; line-height: 1.8; max-width: 600px; margin: 0 auto; }
+        .hope-emoji { font-size: 3rem; margin-bottom: 1rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 100px 1rem 2rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .terms-grid { grid-template-columns: 1fr; }
+            .stats-container { gap: 1rem; }
+            .stat-value { font-size: 1.8rem; }
+            .category-tabs { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 1rem; }
+            .action-buttons { flex-direction: column; }
+        }
+        /* 스크롤 프로그레스 바 */
+        .scroll-progress-bar {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 20px;
+            padding: 6px 16px;
+            backdrop-filter: blur(10px);
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .scroll-progress-bar .percent { color: #a855f7; }
+        .scroll-progress-bar .count { color: #00BCD4; }
+        /* Trip Navigator */
+        .trip-navigator {
+            position: fixed;
+            top: 145px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .trip-navigator button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        .trip-navigator .trip-up,
+        .trip-navigator .trip-down {
+            width: 32px;
+            height: 24px;
+            border-radius: 8px;
+        }
+        .trip-navigator .trip-label {
+            width: 50px;
+            height: 32px;
+            border-radius: 16px;
+            font-weight: 700;
+        }
+        .trip-navigator button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- 스크롤 프로그레스 바 -->
+    <div class="scroll-progress-bar" id="scrollProgressBar">
+        <span class="percent" id="scrollPct">0%</span> · <span class="count" id="scrollCnt">0/1,053</span> 용어
+    </div>
+    <!-- Trip Navigator -->
+    <div class="trip-navigator">
+        <button class="trip-up" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">⬆️</button>
+        <button class="trip-label">Trip</button>
+        <button class="trip-down" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" title="맨 아래로">⬇️</button>
+    </div>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Header -->
+            <div id="kaitrust-header"></div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge"><span>📚</span><span>AI Encyclopedia v2.0</span></div>
+            <h1>AI 시대를 위한<br>종합 백과사전</h1>
+            <p>AI/ML, 프로그래밍, 클라우드, 보안, AI 규제까지<br>개발자와 AI 전문가를 위한 필수 용어를 한국어로 쉽게 설명합니다</p>
+
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="용어 검색 (예: LLM, RAG, Kubernetes, 고위험 AI...)">
+                    <button id="searchBtn"><span>🔍</span></button>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn primary" id="randomBtn"><span>🎲</span> 오늘의 용어</button>
+                <button class="action-btn secondary" id="favoritesBtn"><span>⭐</span> 즐겨찾기 (<span id="favCount">0</span>)</button>
+                <a href="https://check.kaitrust.ai" target="_blank" class="action-btn secondary"><span>⚠️</span> 고위험 AI 판별기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item"><div class="stat-value" id="totalTerms">0</div><div class="stat-label">수록 용어</div></div>
+            <div class="stat-item"><div class="stat-value" id="totalCategories">0</div><div class="stat-label">카테고리</div></div>
+            <div class="stat-item"><div class="stat-value" id="latestYear">0</div><div class="stat-label">최신 기준</div></div>
+            <div class="stat-item"><div class="stat-value">∞</div><div class="stat-label">확장 중</div></div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="category-tabs" id="categoryTabs"><span class="category-tab active" data-category="all">📖 전체</span></div>
+
+        <!-- Alphabet Index -->
+        <div class="alphabet-index" id="alphabetIndex">
+            <span class="index-btn" data-index="ㄱ">ㄱ</span>
+            <span class="index-btn" data-index="ㄴ">ㄴ</span>
+            <span class="index-btn" data-index="ㄷ">ㄷ</span>
+            <span class="index-btn" data-index="ㄹ">ㄹ</span>
+            <span class="index-btn" data-index="ㅁ">ㅁ</span>
+            <span class="index-btn" data-index="ㅂ">ㅂ</span>
+            <span class="index-btn" data-index="ㅅ">ㅅ</span>
+            <span class="index-btn" data-index="ㅇ">ㅇ</span>
+            <span class="index-btn" data-index="ㅈ">ㅈ</span>
+            <span class="index-btn" data-index="ㅊ">ㅊ</span>
+            <span class="index-btn" data-index="ㅋ">ㅋ</span>
+            <span class="index-btn" data-index="ㅌ">ㅌ</span>
+            <span class="index-btn" data-index="ㅍ">ㅍ</span>
+            <span class="index-btn" data-index="ㅎ">ㅎ</span>
+            <span class="index-divider">|</span>
+            <span class="index-btn" data-index="A">A</span>
+            <span class="index-btn" data-index="B">B</span>
+            <span class="index-btn" data-index="C">C</span>
+            <span class="index-btn" data-index="D">D</span>
+            <span class="index-btn" data-index="E">E</span>
+            <span class="index-btn" data-index="F">F</span>
+            <span class="index-btn" data-index="G">G</span>
+            <span class="index-btn" data-index="H">H</span>
+            <span class="index-btn" data-index="I">I</span>
+            <span class="index-btn" data-index="J">J</span>
+            <span class="index-btn" data-index="K">K</span>
+            <span class="index-btn" data-index="L">L</span>
+            <span class="index-btn" data-index="M">M</span>
+            <span class="index-btn" data-index="N">N</span>
+            <span class="index-btn" data-index="O">O</span>
+            <span class="index-btn" data-index="P">P</span>
+            <span class="index-btn" data-index="Q">Q</span>
+            <span class="index-btn" data-index="R">R</span>
+            <span class="index-btn" data-index="S">S</span>
+            <span class="index-btn" data-index="T">T</span>
+            <span class="index-btn" data-index="U">U</span>
+            <span class="index-btn" data-index="V">V</span>
+            <span class="index-btn" data-index="W">W</span>
+            <span class="index-btn" data-index="X-Z">X-Z</span>
+        </div>
+
+        <div class="terms-grid" id="termsGrid"></div>
+        <div class="hope-message">
+            <div class="hope-emoji">🌟</div>
+            <h3>BENEFIT ALL HUMANITY</h3>
+            <p>AI 기술이 모두에게 희망이 될 수 있도록,<br>KAITRUST는 신뢰할 수 있는 AI 생태계를 만들어갑니다.</p>
+        </div>
+    </main>
+
+    <!-- Random Term Modal -->
+    <div class="modal-overlay" id="randomModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">✕</button>
+            <div class="modal-badge"><span>🎲</span><span>오늘의 용어</span></div>
+            <div class="modal-term" id="modalTerm">-</div>
+            <div class="modal-english" id="modalEnglish">-</div>
+            <div class="modal-definition" id="modalDefinition">-</div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" id="modalNext">다른 용어 🔄</button>
+                <button class="modal-btn primary" id="modalFav">즐겨찾기 추가 ⭐</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+                <div id="kaitrust-footer"></div>
+
+    <!-- Scripts -->
+    <script src="/data/glossary-terms.js"></script>
+    <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    (function() {
+        'use strict';
+
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let currentIndex = '';
+        let favorites = JSON.parse(localStorage.getItem('glossary_favorites') || '[]');
+
+        // 한글 초성 추출 함수
+        function getChosung(str) {
+            const cho = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+            const code = str.charCodeAt(0) - 44032;
+            if (code >= 0 && code <= 11171) return cho[Math.floor(code / 588)];
+            return str[0].toUpperCase();
+        }
+
+        const termsGrid = document.getElementById('termsGrid');
+        const categoryTabs = document.getElementById('categoryTabs');
+        const searchInput = document.getElementById('searchInput');
+        const randomModal = document.getElementById('randomModal');
+        const favCountEl = document.getElementById('favCount');
+
+        function init() {
+            const currentYear = new Date().getFullYear();
+            const categoryCount = Object.keys(CATEGORIES).length;
+
+            document.getElementById('currentYear').textContent = currentYear;
+            document.getElementById('totalTerms').textContent = GLOSSARY_TERMS.length;
+            document.getElementById('totalCategories').textContent = categoryCount;
+            document.getElementById('latestYear').textContent = currentYear;
+
+            renderCategoryTabs();
+            renderTerms();
+            updateFavCount();
+            setupEventListeners();
+
+            // 애니메이션 적용
+            animateValue('totalTerms', 0, GLOSSARY_TERMS.length, 1000);
+            animateValue('totalCategories', 0, categoryCount, 800);
+            animateValue('latestYear', 2020, currentYear, 1200);
+        }
+
+        function renderCategoryTabs() {
+            let tabsHTML = '<span class="category-tab active" data-category="all">📖 전체 (' + GLOSSARY_TERMS.length + ')</span>';
+            for (const [key, cat] of Object.entries(CATEGORIES)) {
+                const count = GLOSSARY_TERMS.filter(t => t.category === key).length;
+                tabsHTML += `<span class="category-tab" data-category="${key}">${cat.icon} ${cat.name} (${count})</span>`;
+            }
+            categoryTabs.innerHTML = tabsHTML;
+        }
+
+        function renderTerms() {
+            let filtered = GLOSSARY_TERMS;
+            if (currentCategory !== 'all') filtered = filtered.filter(t => t.category === currentCategory);
+            if (currentIndex) {
+                filtered = filtered.filter(t => {
+                    const firstChar = getChosung(t.term);
+                    if (currentIndex === 'X-Z') return ['X','Y','Z'].includes(firstChar);
+                    if (currentIndex === 'ㄱ') return ['ㄱ','ㄲ'].includes(firstChar);
+                    if (currentIndex === 'ㄷ') return ['ㄷ','ㄸ'].includes(firstChar);
+                    if (currentIndex === 'ㅂ') return ['ㅂ','ㅃ'].includes(firstChar);
+                    if (currentIndex === 'ㅅ') return ['ㅅ','ㅆ'].includes(firstChar);
+                    if (currentIndex === 'ㅈ') return ['ㅈ','ㅉ'].includes(firstChar);
+                    return firstChar === currentIndex;
+                });
+            }
+            if (searchQuery) {
+                const q = searchQuery.toLowerCase();
+                filtered = filtered.filter(t =>
+                    t.term.toLowerCase().includes(q) ||
+                    (t.english && t.english.toLowerCase().includes(q)) ||
+                    t.desc.toLowerCase().includes(q) ||
+                    (t.tags && t.tags.some(tag => tag.toLowerCase().includes(q)))
+                );
+            }
+
+            if (filtered.length === 0) {
+                termsGrid.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;"><span>🔍</span><p>검색 결과가 없습니다</p></div>';
+                return;
+            }
+
+            filtered.sort((a, b) => a.term.localeCompare(b.term, 'ko'));
+            let html = '';
+            filtered.forEach(term => {
+                const cat = CATEGORIES[term.category];
+                const isFav = favorites.includes(term.term);
+                const tagsHTML = term.tags ? term.tags.map(t => `<span class="term-mini-tag">${t}</span>`).join('') : '';
+                const termUrl = `/term.html?term=${encodeURIComponent(term.term)}`;
+                const badgesHTML = `${term.isNew ? '<span class="term-badge new">NEW</span>' : ''}${term.isKaitrustDef ? '<span class="term-badge kaitrust-def">KAITRUST 정의</span>' : ''}`;
+                html += `
+                    <div class="term-card" data-term="${term.term}" onclick="window.open('${termUrl}', '_blank')">
+                        <div class="term-header">
+                            <span class="term-title">${term.term}${badgesHTML}</span>
+                            <span class="term-tag ${term.category}">${cat.name}</span>
+                        </div>
+                        <div class="term-english">${term.english || ''}${term.korean ? ` (${term.korean})` : ''}</div>
+                        <div class="term-definition">${term.desc}</div>
+                        ${tagsHTML ? `<div class="term-tags">${tagsHTML}</div>` : ''}
+                        <div class="term-actions" onclick="event.stopPropagation()">
+                            <button class="term-action-btn ${isFav ? 'favorited' : ''}" data-action="favorite" data-term="${term.term}">${isFav ? '⭐ 저장됨' : '☆ 저장'}</button>
+                            <button class="term-action-btn" data-action="copy" data-term="${term.term}" data-def="${term.desc}">📋 복사</button>
+                            <a href="${termUrl}" target="_blank" class="term-action-btn" style="text-decoration:none; text-align:center;">🔗 상세</a>
+                        </div>
+                    </div>
+                `;
+            });
+            termsGrid.innerHTML = html;
+        }
+
+        function setupEventListeners() {
+            categoryTabs.addEventListener('click', (e) => {
+                if (e.target.classList.contains('category-tab')) {
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentCategory = e.target.dataset.category;
+                    currentIndex = ''; // 카테고리 변경 시 인덱스 초기화
+                    document.querySelectorAll('.index-btn').forEach(b => b.classList.remove('active'));
+                    renderTerms();
+                }
+            });
+
+            // Alphabet Index 클릭 이벤트
+            document.getElementById('alphabetIndex').addEventListener('click', (e) => {
+                if (e.target.classList.contains('index-btn')) {
+                    const clickedIndex = e.target.dataset.index;
+                    if (currentIndex === clickedIndex) {
+                        // 같은 버튼 다시 클릭하면 해제
+                        currentIndex = '';
+                        e.target.classList.remove('active');
+                    } else {
+                        document.querySelectorAll('.index-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        currentIndex = clickedIndex;
+                    }
+                    renderTerms();
+                }
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                currentIndex = ''; // 검색 시 인덱스 초기화
+                document.querySelectorAll('.index-btn').forEach(b => b.classList.remove('active'));
+                renderTerms();
+            });
+
+            termsGrid.addEventListener('click', (e) => {
+                const btn = e.target.closest('.term-action-btn');
+                if (!btn) return;
+                const action = btn.dataset.action;
+                const term = btn.dataset.term;
+                if (action === 'favorite') {
+                    toggleFavorite(term);
+                    btn.classList.toggle('favorited');
+                    btn.innerHTML = btn.classList.contains('favorited') ? '⭐ 저장됨' : '☆ 저장';
+                } else if (action === 'copy') {
+                    navigator.clipboard.writeText(`${term}: ${btn.dataset.def}`);
+                    btn.innerHTML = '✓ 복사됨';
+                    setTimeout(() => btn.innerHTML = '📋 복사', 1500);
+                }
+            });
+
+            document.getElementById('randomBtn').addEventListener('click', showRandomTerm);
+            document.getElementById('modalClose').addEventListener('click', () => randomModal.classList.remove('active'));
+            document.getElementById('modalNext').addEventListener('click', showRandomTerm);
+            document.getElementById('modalFav').addEventListener('click', () => {
+                toggleFavorite(document.getElementById('modalTerm').textContent);
+                renderTerms();
+            });
+            randomModal.addEventListener('click', (e) => { if (e.target === randomModal) randomModal.classList.remove('active'); });
+
+            document.getElementById('favoritesBtn').addEventListener('click', () => {
+                if (favorites.length === 0) { alert('저장된 용어가 없습니다.'); return; }
+                currentCategory = 'all';
+                const filtered = GLOSSARY_TERMS.filter(t => favorites.includes(t.term));
+                termsGrid.innerHTML = '';
+                filtered.forEach(term => {
+                    const cat = CATEGORIES[term.category];
+                    termsGrid.innerHTML += `
+                        <div class="term-card">
+                            <div class="term-header"><span class="term-title">${term.term}</span><span class="term-tag ${term.category}">${cat.name}</span></div>
+                            <div class="term-english">${term.english || ''}</div>
+                            <div class="term-definition">${term.desc}</div>
+                            <div class="term-actions">
+                                <button class="term-action-btn favorited" data-action="favorite" data-term="${term.term}">⭐ 저장됨</button>
+                                <button class="term-action-btn" data-action="copy" data-term="${term.term}" data-def="${term.desc}">📋 복사</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+
+            document.getElementById('langBtn').addEventListener('click', () => { if (window.wiaLangModal) window.wiaLangModal.open(); });
+        }
+
+        function toggleFavorite(term) {
+            const idx = favorites.indexOf(term);
+            if (idx > -1) favorites.splice(idx, 1);
+            else favorites.push(term);
+            localStorage.setItem('glossary_favorites', JSON.stringify(favorites));
+            updateFavCount();
+        }
+
+        function updateFavCount() { favCountEl.textContent = favorites.length; }
+
+        function showRandomTerm() {
+            const term = GLOSSARY_TERMS[Math.floor(Math.random() * GLOSSARY_TERMS.length)];
+            document.getElementById('modalTerm').textContent = term.term;
+            document.getElementById('modalEnglish').textContent = term.english || '';
+            document.getElementById('modalDefinition').textContent = term.desc;
+            randomModal.classList.add('active');
+        }
+
+        function animateValue(id, start, end, duration) {
+            const el = document.getElementById(id);
+            const range = end - start;
+            const startTime = performance.now();
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                el.textContent = Math.floor(start + range * progress);
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+
+        // WIA Language Modal: Site Kit에서 로드됨
+    })();
+    </script>
+
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+<script>
+(function(){
+    var pct = document.getElementById('scrollPct');
+    var cnt = document.getElementById('scrollCnt');
+    var total = 1053;
+    window.addEventListener('scroll', function(){
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        var p = Math.round((window.scrollY / h) * 100) || 0;
+        var c = Math.round((p / 100) * total);
+        if(pct) pct.textContent = p + '%';
+        if(cnt) cnt.textContent = c.toLocaleString() + '/1,053';
+    });
+})();
+</script>
+<script>
+// Trip Navigator - 자동 스크롤
+(function(){
+    var tripUp = document.querySelector('.trip-up');
+    var tripDown = document.querySelector('.trip-down');
+    var tripLabel = document.querySelector('.trip-label');
+    var autoScroll = null;
+    var scrollDir = 1; // 1=down, -1=up
+    
+    if(tripUp) tripUp.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+    if(tripDown) tripDown.addEventListener('click', function(){ window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); });
+    
+    if(tripLabel) {
+        tripLabel.addEventListener('click', function(){
+            if(autoScroll) {
+                clearInterval(autoScroll);
+                autoScroll = null;
+                tripLabel.textContent = 'Trip';
+                tripLabel.style.background = '';
+            } else {
+                autoScroll = setInterval(function(){
+                    window.scrollBy(0, scrollDir * 2);
+                    if(window.scrollY <= 0) scrollDir = 1;
+                    if(window.scrollY >= document.body.scrollHeight - window.innerHeight) scrollDir = -1;
+                }, 30);
+                tripLabel.textContent = 'Stop';
+                tripLabel.style.background = 'linear-gradient(135deg, #DC143C, #FF4500)';
+            }
+        });
+    }
+})();
+</script>
+</body>
+</html>

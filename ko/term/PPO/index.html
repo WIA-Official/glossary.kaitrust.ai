@@ -161,6 +161,29 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +225,146 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>PPO(Proximal Policy Optimization)는 강화학습(RL)에서 정책(policy)을 안정적으로 업데이트하는 알고리즘입니다. 특히 대형 언어 모델(LLM)의 RLHF(Reinforcement Learning from Human Feedback)에서 핵심 알고리즘으로 사용되며, ChatGPT, Claude 등의 학습에 활용됩니다.</p>
+                <p>PPO는 2017년 OpenAI의 John Schulman이 발표했습니다. 이전의 TRPO(Trust Region Policy Optimization)가 복잡한 2차 최적화를 필요로 했던 것과 달리, PPO는 간단한 클리핑(clipping) 기법으로 비슷한 성능을 달성하여 구현과 확장이 용이해졌습니다.</p>
+                <p>핵심 원리는 정책 업데이트 폭을 제한하는 것입니다. 새 정책과 이전 정책의 비율(ratio)이 특정 범위(예: 0.8~1.2)를 벗어나면 클리핑하여, 한 번에 너무 큰 변화가 일어나는 것을 방지합니다. 이로 인해 학습이 안정적으로 진행됩니다.</p>
+                <p>RLHF에서 PPO는 보상 모델(Reward Model)의 점수를 최대화하도록 LLM을 학습시킵니다. 인간 선호도를 반영한 보상 신호로 모델의 출력을 더 유용하고 안전하게 만드는 핵심 단계입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># RLHF에서 PPO 학습 예제 (trl 라이브러리 사용)
+from trl import PPOTrainer, PPOConfig, AutoModelForCausalLMWithValueHead
+from transformers import AutoTokenizer
+import torch
+
+# 1. 모델 및 토크나이저 로드
+model_name = "gpt2"  # 실제로는 더 큰 모델 사용
+model = AutoModelForCausalLMWithValueHead.from_pretrained(model_name)
+ref_model = AutoModelForCausalLMWithValueHead.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+# 2. PPO 설정
+ppo_config = PPOConfig(
+    model_name=model_name,
+    learning_rate=1e-5,
+    batch_size=4,
+    mini_batch_size=2,
+    ppo_epochs=4,           # PPO 업데이트 반복 횟수
+    clip_range=0.2,         # 클리핑 범위 (핵심 하이퍼파라미터)
+    target_kl=0.01,         # KL 발산 제한
+)
+
+# 3. PPO 트레이너 초기화
+ppo_trainer = PPOTrainer(
+    config=ppo_config,
+    model=model,
+    ref_model=ref_model,
+    tokenizer=tokenizer,
+)
+
+# 4. 학습 루프 (간소화)
+def compute_reward(response_text):
+    """보상 모델에서 점수 계산 (실제로는 별도 Reward Model 사용)"""
+    # 예시: 응답 길이에 따른 단순 보상
+    return len(response_text) * 0.01
+
+# 5. PPO 학습 스텝
+query_tensors = tokenizer.encode("AI의 장점은", return_tensors="pt")
+response_tensors = model.generate(query_tensors, max_new_tokens=50)
+
+# 보상 계산
+response_text = tokenizer.decode(response_tensors[0])
+reward = torch.tensor([compute_reward(response_text)])
+
+# PPO 업데이트
+stats = ppo_trainer.step([query_tensors[0]], [response_tensors[0]], [reward])
+print(f"PPO Loss: {stats['ppo/loss/total']:.4f}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"RLHF 파이프라인에서 SFT 후 PPO로 보상 모델 점수를 최적화하고 있습니다. clip_range=0.2로 설정하여 정책이 급격히 변하지 않도록 제어하고 있습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"PPO는 정책 그래디언트 방법의 일종으로, 클리핑을 통해 정책 업데이트 폭을 제한합니다. TRPO와 달리 1차 최적화만 사용하여 구현이 간단하고 확장성이 좋습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"최근에는 DPO(Direct Preference Optimization)가 PPO를 대체하는 경우도 있습니다. DPO는 보상 모델 없이 직접 선호도 데이터로 학습하여 RLHF 파이프라인을 단순화합니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>KL 페널티 없이 학습</strong>
+                        <p>KL 발산 제약 없이 PPO를 적용하면 모델이 보상 해킹(reward hacking)에 빠져 이상한 출력을 생성할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>너무 큰 clip_range 설정</strong>
+                        <p>clip_range가 너무 크면(예: 0.5) 정책이 급격히 변해 학습이 불안정해집니다. 보통 0.1~0.3 범위를 사용합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>참조 모델(ref_model)을 유지하여 KL 발산을 모니터링하고, 보상 모델의 품질을 충분히 검증한 후 PPO 학습을 시작하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/RLHF/" class="related-term-link">RLHF</a>
+                <a href="/ko/term/Reinforcement%20Learning/" class="related-term-link">Reinforcement Learning</a>
+                <a href="/ko/term/Reward%20Model/" class="related-term-link">Reward Model</a>
+                <a href="/ko/term/DPO/" class="related-term-link">DPO</a>
+                <a href="/ko/term/SFT/" class="related-term-link">SFT</a>
+                <a href="/ko/term/Fine-tuning/" class="related-term-link">Fine-tuning</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/1707.06347" target="_blank" class="learn-link">📝 PPO 논문 (Schulman et al., 2017)</a>
+                <a href="https://huggingface.co/docs/trl/ppo_trainer" target="_blank" class="learn-link">📄 TRL PPOTrainer 문서</a>
+                <a href="https://openai.com/research/learning-to-summarize-with-human-feedback" target="_blank" class="learn-link">🔬 OpenAI RLHF 연구</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +375,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

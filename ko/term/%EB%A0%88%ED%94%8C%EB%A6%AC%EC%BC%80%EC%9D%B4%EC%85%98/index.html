@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,122 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>레플리케이션(Replication)은 데이터베이스의 데이터를 여러 서버에 복제하는 기술입니다. 고가용성(HA), 읽기 부하 분산, 재해 복구(DR)를 위해 사용됩니다. Primary(Master) 서버가 쓰기를 처리하고, Replica(Slave) 서버들이 읽기를 처리하는 것이 일반적입니다.</p>
+                <p>비동기 레플리케이션은 Primary가 트랜잭션 커밋 후 즉시 응답하고, Replica에 비동기로 전파합니다. 성능은 좋지만 Primary 장애 시 데이터 유실 가능성이 있습니다. 동기 레플리케이션은 Replica 확인 후 커밋하여 데이터 안전성이 높지만 지연이 발생합니다.</p>
+                <p>반동기(Semi-synchronous) 레플리케이션은 최소 하나의 Replica가 받았음을 확인한 후 커밋합니다. 데이터 안전성과 성능의 균형을 맞추며, MySQL에서 많이 사용됩니다. 그룹 레플리케이션은 여러 노드가 동등하게 쓰기를 처리할 수 있습니다.</p>
+                <p>복제 지연(Replication Lag)은 Primary와 Replica 간 데이터 차이입니다. 읽기 직후 쓰기 시 최신 데이터가 보이지 않는 문제가 발생할 수 있어, 중요한 읽기는 Primary에서 하거나 지연을 모니터링해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>-- MySQL 레플리케이션 상태 확인 (Replica에서)
+SHOW REPLICA STATUS\G
+
+-- 복제 지연 확인
+SHOW REPLICA STATUS\G
+-- Seconds_Behind_Source: 0 이면 동기화 완료
+
+-- PostgreSQL 스트리밍 레플리케이션 설정 (Primary)
+-- postgresql.conf
+wal_level = replica
+max_wal_senders = 3
+synchronous_standby_names = 'replica1'
+
+-- Python에서 읽기/쓰기 분리
+class DatabaseRouter:
+    def __init__(self):
+        self.primary = create_engine('mysql://primary/db')
+        self.replicas = [
+            create_engine('mysql://replica1/db'),
+            create_engine('mysql://replica2/db'),
+        ]
+        self._replica_idx = 0
+
+    def get_write_connection(self):
+        return self.primary.connect()
+
+    def get_read_connection(self):
+        # 라운드 로빈으로 Replica 선택
+        conn = self.replicas[self._replica_idx].connect()
+        self._replica_idx = (self._replica_idx + 1) % len(self.replicas)
+        return conn
+
+# 사용
+router = DatabaseRouter()
+with router.get_write_connection() as conn:
+    conn.execute("INSERT INTO users (name) VALUES (%s)", ('Alice',))
+
+with router.get_read_connection() as conn:
+    result = conn.execute("SELECT * FROM users")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>시니어:</strong> Primary DB CPU가 80%예요. 읽기 쿼리가 대부분이니 Replica로 분산합시다.</p>
+                <p><strong>주니어:</strong> 읽기를 Replica로 보내면 데이터가 안 맞지 않을까요?</p>
+                <p><strong>시니어:</strong> 복제 지연이 1초 미만이면 대부분 괜찮아요. 단, 쓰기 직후 읽기는 Primary에서 해야 합니다.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 동기 레플리케이션과 비동기 레플리케이션의 차이점을 설명해주세요.</p>
+                <p><strong>지원자:</strong> 동기 레플리케이션은 Replica가 데이터를 받았음을 확인한 후 커밋하여 데이터 유실이 없지만 지연이 발생합니다. 비동기는 즉시 커밋하여 빠르지만, Primary 장애 시 아직 복제되지 않은 데이터가 유실될 수 있습니다.</p>
+                <p><strong>면접관:</strong> 복제 지연은 어떻게 해결하나요?</p>
+                <p><strong>지원자:</strong> Replica 성능을 높이거나, 병렬 복제를 활성화합니다. 애플리케이션에서는 쓰기 후 읽기를 Primary에서 하거나, 최소 지연 시간을 두고 읽습니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> 회원가입 직후 로그인에서 "사용자 없음" 에러가 가끔 발생해요.</p>
+                <p><strong>작성자:</strong> 읽기를 Replica에서 하는데 복제 지연 때문인가요?</p>
+                <p><strong>리뷰어:</strong> 네. 가입 직후 읽기는 Primary에서 하거나, session-based routing으로 같은 세션의 읽기를 Primary로 보내세요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>복제 지연:</strong> 쓰기 직후 읽기 시 데이터가 없을 수 있습니다. 중요한 읽기는 Primary에서 하거나 지연을 모니터링하세요.</li>
+                <li><strong>스플릿 브레인:</strong> Primary가 두 개가 되면 데이터 불일치가 발생합니다. 페일오버 시 기존 Primary를 확실히 차단하세요.</li>
+                <li><strong>바이너리 로그:</strong> 레플리케이션은 바이너리 로그에 의존합니다. 로그 보관 기간과 디스크 공간을 모니터링하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%A3%BC-%EB%B3%B5%EC%A0%9C%EB%B3%B8%20%EB%B3%B5%EC%A0%9C/" class="related-link">주-복제본 복제</a>
+                <a href="/ko/term/%EB%8B%A4%EC%A4%91%20%EB%A7%88%EC%8A%A4%ED%84%B0%20%EB%B3%B5%EC%A0%9C/" class="related-link">다중 마스터 복제</a>
+                <a href="/ko/term/%EC%83%A4%EB%94%A9/" class="related-link">샤딩</a>
+                <a href="/ko/term/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98/" class="related-link">트랜잭션</a>
+                <a href="/ko/term/%EC%BA%90%EC%8B%9C/" class="related-link">캐시</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://dev.mysql.com/doc/refman/8.0/en/replication.html" target="_blank">MySQL Replication</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/warm-standby.html" target="_blank">PostgreSQL High Availability</a></li>
+                <li><a href="https://www.youtube.com/watch?v=bI8Ry6GhMSE" target="_blank">Hussein Nasser - Database Replication</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +330,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

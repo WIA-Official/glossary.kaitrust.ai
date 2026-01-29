@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,190 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>OpsGenie는 Atlassian이 인수한 인시던트 관리 및 온콜(On-call) 관리 플랫폼입니다. 모니터링 도구에서 발생한 알림을 중앙에서 관리하고, 적절한 담당자에게 라우팅하며, 에스컬레이션 정책에 따라 알림을 전파합니다. SRE와 DevOps 팀의 장애 대응 워크플로우를 체계화합니다.</p>
+                <p>OpsGenie의 핵심 기능은 Alert 관리, 온콜 스케줄링, 에스컬레이션 정책입니다. Prometheus, Datadog, CloudWatch 등 200개 이상의 도구와 통합되어 알림을 수신하고, 중복 알림을 그룹화하며, 온콜 담당자에게 SMS, 전화, 앱 푸시로 알립니다.</p>
+                <p>온콜 스케줄은 팀원이 돌아가며 장애 대응을 담당하는 일정을 정의합니다. 주간/야간, 평일/주말을 구분하고, 휴가나 오버라이드도 관리합니다. 1차 담당자가 응답하지 않으면 자동으로 2차 담당자에게 에스컬레이션되어 알림 누락을 방지합니다.</p>
+                <p>OpsGenie는 Jira Service Management와 통합되어 알림에서 인시던트 티켓을 자동 생성하고, 타임라인 기록, 포스트모템 작성을 지원합니다. 비슷한 도구로 PagerDuty, Incident.io, Rootly가 있으며, OpsGenie는 Atlassian 생태계(Jira, Confluence, Statuspage)와의 연동이 강점입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Prometheus Alertmanager -> OpsGenie 연동
+# alertmanager.yml
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'opsgenie-critical'
+  group_by: ['alertname', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    # Critical 알림은 즉시 전송
+    - match:
+        severity: critical
+      receiver: 'opsgenie-critical'
+      continue: true
+    # Warning은 업무시간에만
+    - match:
+        severity: warning
+      receiver: 'opsgenie-warning'
+      active_time_intervals:
+        - business_hours
+
+receivers:
+  - name: 'opsgenie-critical'
+    opsgenie_configs:
+      - api_key: '<opsgenie-integration-api-key>'
+        message: '{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}'
+        description: '{{ .CommonAnnotations.description }}'
+        priority: 'P1'
+        tags: 'prometheus,{{ .GroupLabels.service }}'
+        # 알림 라우팅
+        responders:
+          - type: team
+            name: 'platform-oncall'
+        # 추가 상세 정보
+        details:
+          environment: '{{ .GroupLabels.environment }}'
+          runbook: '{{ .CommonAnnotations.runbook_url }}'
+
+  - name: 'opsgenie-warning'
+    opsgenie_configs:
+      - api_key: '<opsgenie-integration-api-key>'
+        priority: 'P3'
+        responders:
+          - type: team
+            name: 'platform-team'</code></pre>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># OpsGenie API를 통한 알림 생성 및 관리
+import requests
+
+OPSGENIE_API_KEY = "your-api-key"
+BASE_URL = "https://api.opsgenie.com/v2"
+
+headers = {
+    "Authorization": f"GenieKey {OPSGENIE_API_KEY}",
+    "Content-Type": "application/json"
+}
+
+# 알림 생성
+def create_alert(message: str, priority: str = "P3", **kwargs):
+    payload = {
+        "message": message,
+        "priority": priority,
+        "tags": kwargs.get("tags", []),
+        "details": kwargs.get("details", {}),
+        "responders": [
+            {"type": "team", "name": "platform-oncall"}
+        ]
+    }
+    response = requests.post(
+        f"{BASE_URL}/alerts",
+        headers=headers,
+        json=payload
+    )
+    return response.json()
+
+# 알림 닫기
+def close_alert(alert_id: str, note: str = "Issue resolved"):
+    payload = {"note": note}
+    response = requests.post(
+        f"{BASE_URL}/alerts/{alert_id}/close",
+        headers=headers,
+        json=payload
+    )
+    return response.json()
+
+# 온콜 담당자 조회
+def get_on_call(schedule_name: str):
+    response = requests.get(
+        f"{BASE_URL}/schedules/{schedule_name}/on-calls",
+        headers=headers
+    )
+    on_calls = response.json().get("data", {}).get("onCallParticipants", [])
+    return [p["name"] for p in on_calls]
+
+# 사용 예시
+create_alert(
+    message="Database connection pool exhausted",
+    priority="P1",
+    tags=["database", "production"],
+    details={
+        "service": "order-api",
+        "pod": "order-api-abc123",
+        "runbook": "https://wiki/runbooks/db-pool-exhausted"
+    }
+)</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">SRE:</strong> "지난 장애 때 30분 동안 아무도 응답 안 했어요. 온콜 담당자가 휴대폰을 무음으로 해놨다고..."</p>
+                <p><strong class="role-junior">주니어:</strong> "에스컬레이션 정책을 더 빠르게 설정하면 어떨까요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "P1은 5분 후 에스컬레이션, 10분 후 전체 팀 알림으로 바꿉시다. 그리고 OpsGenie 앱 알림 못 받으면 전화까지 가도록 설정하고요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "온콜 경험과 인시던트 관리 프로세스에 대해 말씀해주세요."</p>
+                <p><strong class="role-interviewee">지원자:</strong> "2주에 한 번 온콜을 섰고, OpsGenie로 알림을 받았습니다. P1 알림은 앱 푸시와 전화로 동시에 오고, 5분 내 ACK 안 하면 백업 담당자에게 에스컬레이션됐어요. 알림마다 Runbook 링크가 있어서 대응 절차를 따라할 수 있었고, 장애 후에는 Jira 티켓이 자동 생성되어 포스트모템을 작성했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 알림 설정에 runbook URL 추가해주세요. OpsGenie details에 runbook 필드가 있으면 담당자가 바로 대응 문서를 볼 수 있어요."</p>
+                <p><strong class="role-author">작성자:</strong> "알림 템플릿에 annotation으로 runbook_url 추가하고, OpsGenie details 매핑하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>알림 피로(Alert Fatigue)를 방지하세요. 너무 많은 알림은 중요한 알림을 무시하게 만듭니다. 알림을 그룹화하고, 중복 제거하며, 정보성 알림은 우선순위를 낮추세요.</li>
+                <li>에스컬레이션 정책을 반드시 설정하세요. 1차 담당자가 응답하지 않으면 백업 담당자에게 자동으로 알림이 가야 합니다. 응답 시간 SLA도 정의하세요.</li>
+                <li class="info">온콜 담당자 번아웃을 방지하세요. 야간 알림이 많으면 교대 주기를 짧게 하고, 알림 발생 원인을 근본적으로 해결하세요. 온콜 부담이 팀 간 불균형하면 안 됩니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Monitoring/" class="related-link">Monitoring</a>
+                <a href="/ko/term/SRE/" class="related-link">SRE</a>
+                <a href="/ko/term/Alerting/" class="related-link">Alerting</a>
+                <a href="/ko/term/PagerDuty/" class="related-link">PagerDuty</a>
+                <a href="/ko/term/Jira/" class="related-link">Jira</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://support.atlassian.com/opsgenie/" target="_blank">OpsGenie 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://www.atlassian.com/software/opsgenie/what-is-opsgenie" target="_blank">OpsGenie 소개</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.atlassian.com/incident-management/on-call" target="_blank">On-call 관리 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +397,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,296 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>TCP(Transmission Control Protocol)는 인터넷 프로토콜 스위트(TCP/IP)의 핵심 프로토콜로, 신뢰성 있고 순서가 보장된 데이터 전송을 담당합니다. 1974년 Vint Cerf와 Bob Kahn이 설계했으며, 현재 웹 브라우징(HTTP/HTTPS), 이메일(SMTP), 파일 전송(FTP) 등 대부분의 인터넷 서비스가 TCP를 기반으로 작동합니다.</p>
+                <p>TCP의 핵심은 3-way handshake입니다. 클라이언트가 SYN 패킷을 보내고, 서버가 SYN-ACK로 응답하면, 클라이언트가 ACK를 보내 연결이 수립됩니다. 연결 종료 시에는 4-way handshake(FIN → ACK → FIN → ACK)를 수행합니다. 이 과정에서 TIME_WAIT 상태가 발생하며, 고트래픽 서버에서는 이 상태의 소켓 관리가 중요한 튜닝 포인트가 됩니다.</p>
+                <p>TCP는 Flow Control과 Congestion Control로 네트워크 안정성을 보장합니다. Flow Control은 슬라이딩 윈도우 방식으로 수신자의 버퍼 오버플로우를 방지하고, Congestion Control은 Slow Start, Congestion Avoidance, Fast Retransmit 알고리즘으로 네트워크 혼잡을 관리합니다. 패킷 손실 시 자동으로 재전송하며, 시퀀스 번호로 순서를 보장합니다.</p>
+                <p>TCP vs UDP 선택은 서비스 특성에 따라 결정됩니다. TCP는 웹, 이메일, 파일 전송처럼 데이터 무결성이 중요한 서비스에 적합합니다. 반면 UDP는 실시간 스트리밍, 온라인 게임, VoIP처럼 약간의 패킷 손실보다 지연 시간이 더 중요한 서비스에 사용됩니다. 최근에는 HTTP/3에서 UDP 기반 QUIC 프로토콜을 사용하여 TCP의 연결 오버헤드를 줄이고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="bash">Bash</button>
+                <button class="code-tab" data-lang="javascript">Node.js</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python">import socket
+
+# === TCP 서버 ===
+def tcp_server():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # SO_REUSEADDR: TIME_WAIT 상태의 포트 재사용
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+    # Keep-Alive 설정 (연결 유지 확인)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+
+    server.bind(('0.0.0.0', 8080))
+    server.listen(5)  # 백로그 큐 크기
+    print("서버 대기 중... (포트 8080)")
+
+    while True:
+        client, addr = server.accept()
+        print(f"연결됨: {addr}")
+
+        # 타임아웃 설정
+        client.settimeout(30.0)
+
+        try:
+            data = client.recv(1024)
+            print(f"수신: {data.decode()}")
+            client.send(b"Hello from server!")
+        finally:
+            client.close()
+
+# === TCP 클라이언트 ===
+def tcp_client():
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # 연결 타임아웃 설정
+    client.settimeout(10.0)
+
+    try:
+        client.connect(('localhost', 8080))  # 3-way handshake 발생
+        client.send(b"Hello from client!")
+
+        response = client.recv(1024)
+        print(f"응답: {response.decode()}")
+    except socket.timeout:
+        print("연결 타임아웃!")
+    finally:
+        client.close()  # 4-way handshake로 연결 종료
+
+# === 소켓 상태 확인 (실무 디버깅) ===
+def check_socket_options(sock):
+    # TCP_NODELAY: Nagle 알고리즘 비활성화 (지연 감소)
+    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+
+    # 버퍼 크기 확인
+    recv_buf = sock.getsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF)
+    send_buf = sock.getsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF)
+    print(f"수신 버퍼: {recv_buf}, 송신 버퍼: {send_buf}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># TCP 연결 상태 확인
+netstat -ant | grep ESTABLISHED
+netstat -ant | grep TIME_WAIT | wc -l  # TIME_WAIT 소켓 개수
+
+# ss 명령어 (netstat보다 빠름)
+ss -t -a                    # 모든 TCP 소켓
+ss -t state established     # ESTABLISHED 상태만
+ss -t state time-wait       # TIME_WAIT 상태만
+ss -tlnp                    # 리스닝 포트와 프로세스
+
+# TCP 연결 테스트
+nc -zv google.com 443       # TCP 포트 연결 확인
+telnet google.com 80        # TCP 연결 테스트
+
+# tcpdump로 TCP 패킷 분석
+sudo tcpdump -i eth0 'tcp port 80' -n
+sudo tcpdump -i any 'tcp[tcpflags] & tcp-syn != 0'  # SYN 패킷만
+
+# 3-way handshake 확인
+sudo tcpdump -i eth0 'tcp[tcpflags] & (tcp-syn|tcp-ack) != 0' -n
+
+# TCP 커널 파라미터 확인 및 튜닝
+cat /proc/sys/net/ipv4/tcp_fin_timeout      # FIN_WAIT2 타임아웃
+cat /proc/sys/net/ipv4/tcp_tw_reuse         # TIME_WAIT 재사용
+cat /proc/sys/net/ipv4/tcp_keepalive_time   # Keep-Alive 시간
+
+# TIME_WAIT 최적화 (고트래픽 서버)
+sudo sysctl -w net.ipv4.tcp_tw_reuse=1
+sudo sysctl -w net.ipv4.tcp_fin_timeout=30
+
+# TCP 버퍼 크기 튜닝
+sudo sysctl -w net.core.rmem_max=16777216
+sudo sysctl -w net.core.wmem_max=16777216
+
+# 최대 연결 수 확인
+cat /proc/sys/net/core/somaxconn            # listen() 백로그 최대값
+ulimit -n                                    # 파일 디스크립터 제한</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="javascript">
+                <pre><code class="language-javascript">const net = require('net');
+
+// === TCP 서버 ===
+const server = net.createServer((socket) => {
+    console.log(`클라이언트 연결: ${socket.remoteAddress}:${socket.remotePort}`);
+
+    // Keep-Alive 설정 (30초마다 확인)
+    socket.setKeepAlive(true, 30000);
+
+    // Nagle 알고리즘 비활성화 (저지연)
+    socket.setNoDelay(true);
+
+    // 타임아웃 설정
+    socket.setTimeout(60000);
+
+    socket.on('data', (data) => {
+        console.log(`수신: ${data.toString()}`);
+        socket.write('Hello from server!');
+    });
+
+    socket.on('timeout', () => {
+        console.log('소켓 타임아웃');
+        socket.end();
+    });
+
+    socket.on('error', (err) => {
+        console.error(`소켓 에러: ${err.message}`);
+    });
+
+    socket.on('close', () => {
+        console.log('연결 종료');
+    });
+});
+
+// 백로그 설정
+server.listen(8080, '0.0.0.0', 511, () => {
+    console.log('TCP 서버 시작 (포트 8080)');
+});
+
+// === TCP 클라이언트 ===
+function tcpClient() {
+    const client = new net.Socket();
+
+    // 연결 타임아웃
+    client.setTimeout(10000);
+
+    client.connect(8080, 'localhost', () => {
+        console.log('서버에 연결됨 (3-way handshake 완료)');
+        client.write('Hello from client!');
+    });
+
+    client.on('data', (data) => {
+        console.log(`응답: ${data.toString()}`);
+        client.destroy();  // 연결 종료
+    });
+
+    client.on('error', (err) => {
+        if (err.code === 'ECONNREFUSED') {
+            console.error('연결 거부됨 - 서버가 실행 중인지 확인');
+        } else if (err.code === 'ETIMEDOUT') {
+            console.error('연결 타임아웃');
+        }
+    });
+}
+
+// === 연결 풀 (실무 패턴) ===
+const connections = new Map();
+
+function getConnection(host, port) {
+    const key = `${host}:${port}`;
+    if (!connections.has(key)) {
+        const socket = new net.Socket();
+        socket.connect(port, host);
+        socket.setKeepAlive(true, 30000);
+        connections.set(key, socket);
+    }
+    return connections.get(key);
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 이슈 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "서버에 TIME_WAIT 소켓이 3만 개나 쌓여 있어서 새 연결이 안 됩니다. tcp_tw_reuse를 활성화하고, 애플리케이션에서 Connection Pool을 사용하도록 수정해야 합니다. 그리고 Keep-Alive를 켜서 연결 재사용률을 높이면 핸드셰이크 오버헤드도 줄일 수 있어요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "TCP는 3-way handshake로 연결을 수립하고, 시퀀스 번호와 ACK로 순서 보장과 신뢰성을 제공합니다. Flow Control은 슬라이딩 윈도우로 수신자 버퍼를 관리하고, Congestion Control은 Slow Start와 AIMD로 네트워크 혼잡을 조절합니다. 실제 프로젝트에서 Nagle 알고리즘을 비활성화해서 실시간 응답 지연을 200ms에서 5ms로 줄인 경험이 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 아키텍처 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "게임 서버라면 TCP보다 UDP를 고려해보세요. TCP는 패킷 손실 시 재전송 대기로 지연이 생기는데, 실시간 게임에선 이게 치명적이에요. 아니면 WebSocket으로 연결 유지하면서 heartbeat로 끊김을 감지하는 방법도 있습니다. HTTP/3의 QUIC도 검토해볼 만합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>TIME_WAIT 소켓 폭발</strong>
+                        <p>짧은 연결을 대량으로 생성하면 TIME_WAIT 소켓이 쌓여 포트 고갈이 발생합니다. Connection Pool을 사용하고, Keep-Alive로 연결을 재사용하세요. 서버 측에서는 tcp_tw_reuse=1 설정을 고려하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Nagle 알고리즘으로 인한 지연</strong>
+                        <p>작은 패킷을 모아서 보내는 Nagle 알고리즘이 실시간 통신에서 200ms 이상 지연을 유발합니다. 채팅, 게임, 금융 거래 시스템에서는 TCP_NODELAY 옵션으로 비활성화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Keep-Alive 미설정으로 좀비 연결</strong>
+                        <p>네트워크 장애로 클라이언트가 사라져도 서버는 연결이 살아있다고 착각합니다. SO_KEEPALIVE를 설정하고, 애플리케이션 레벨에서도 heartbeat를 구현하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 TCP 설정</strong>
+                        <p>Connection Pool + Keep-Alive로 연결 재사용. 실시간 서비스는 TCP_NODELAY 활성화. 고트래픽 서버는 somaxconn, tcp_fin_timeout 튜닝. 항상 타임아웃을 설정하고 graceful shutdown을 구현하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/UDP/" class="related-term-link">UDP</a>
+                <a href="/ko/term/HTTP/" class="related-term-link">HTTP</a>
+                <a href="/ko/term/IP/" class="related-term-link">IP</a>
+                <a href="/ko/term/WebSocket/" class="related-term-link">WebSocket</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/" target="_blank" class="learn-link">
+                    📄 Cloudflare - TCP/IP 개요 (한글)
+                </a>
+                <a href="https://datatracker.ietf.org/doc/html/rfc793" target="_blank" class="learn-link">
+                    📖 RFC 793 - TCP 공식 명세서
+                </a>
+                <a href="https://www.youtube.com/watch?v=F27PLin3TV0" target="_blank" class="learn-link">
+                    🎬 TCP 3-way Handshake 시각화 영상
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +644,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

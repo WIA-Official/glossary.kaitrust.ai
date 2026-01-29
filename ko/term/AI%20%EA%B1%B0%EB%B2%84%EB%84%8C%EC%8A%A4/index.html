@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 거버넌스 | KAITRUST AI 백과사전</title>
     <meta name="description" content="AI 시스템의 개발과 운영에 대한 관리 체계">
-    <meta name="keywords" content="AI 거버넌스, , AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
+    <meta name="keywords" content="AI 거버넌스, AI Governance, AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/AI%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/">
 
     <!-- Open Graph -->
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -189,7 +190,7 @@
                 <span>AI 규제/윤리</span>
             </div>
             <h1 class="term-title">AI 거버넌스</h1>
-            
+            <p class="term-english">AI Governance</p>
             <div class="term-description">
                 <p>AI 시스템의 개발과 운영에 대한 관리 체계</p>
             </div>
@@ -202,6 +203,224 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>AI 거버넌스(AI Governance)는 AI 시스템의 개발, 배포, 운영 전 생명주기에 걸쳐 조직이 AI를 책임감 있게 관리하기 위한 정책, 프로세스, 조직 구조의 총체입니다. EU AI Act는 이를 법적 의무로 전환하여, AISP(AI 서비스 제공자)가 반드시 갖춰야 할 관리 체계를 규정합니다.</p>
+                <p>핵심 구성요소는 AI 전략 및 정책 수립, 위험 관리 프레임워크, 역할과 책임 정의(RACI), 윤리 원칙 적용, 모니터링 및 감사 체계입니다. ISO/IEC 42001(AI 관리시스템)은 이러한 거버넌스 체계의 국제 표준으로, EU AI Act 준수를 위한 실무 가이드라인을 제공합니다.</p>
+                <p>EU AI Act 제9조는 고위험 AI 시스템에 대해 위험 관리 시스템을 의무화하고, 제17조는 품질 관리 시스템(QMS) 구축을 요구합니다. 이는 문서화된 정책, 정의된 프로세스, 명확한 책임 체계를 포함해야 하며, 정기적인 검토와 업데이트가 필요합니다.</p>
+                <p>실무적으로는 AI 윤리위원회 설치, Chief AI Officer(CAIO) 또는 AI 거버넌스 담당자 지정, 모델 카드(Model Card) 및 데이터 시트 작성, 정기적인 편향성 및 공정성 평가가 권장됩니다. 한국에서도 과기정통부 AI 윤리 가이드라인과 금융위 AI 가이드라인에서 거버넌스 체계를 권고합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># AI 거버넌스 체크리스트 자동화 도구
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import List, Dict, Optional
+from datetime import datetime
+
+class RiskLevel(Enum):
+    UNACCEPTABLE = "unacceptable"
+    HIGH = "high"
+    LIMITED = "limited"
+    MINIMAL = "minimal"
+
+class ComplianceStatus(Enum):
+    COMPLIANT = "compliant"
+    PARTIAL = "partial"
+    NON_COMPLIANT = "non_compliant"
+    NOT_APPLICABLE = "not_applicable"
+
+@dataclass
+class GovernanceCheckItem:
+    """거버넌스 체크 항목"""
+    id: str
+    category: str
+    requirement: str
+    eu_ai_act_article: str
+    status: ComplianceStatus = ComplianceStatus.NON_COMPLIANT
+    evidence: Optional[str] = None
+    last_reviewed: Optional[datetime] = None
+
+@dataclass
+class AIGovernanceFramework:
+    """AI 거버넌스 프레임워크"""
+    organization: str
+    ai_system_name: str
+    risk_level: RiskLevel
+    checklist: List[GovernanceCheckItem] = field(default_factory=list)
+
+    def __post_init__(self):
+        self._initialize_checklist()
+
+    def _initialize_checklist(self):
+        """EU AI Act 기반 체크리스트 초기화"""
+        base_items = [
+            GovernanceCheckItem(
+                id="GOV-001",
+                category="위험관리",
+                requirement="위험 관리 시스템 수립 및 문서화",
+                eu_ai_act_article="Article 9"
+            ),
+            GovernanceCheckItem(
+                id="GOV-002",
+                category="데이터 거버넌스",
+                requirement="학습/검증/테스트 데이터 품질 관리 프로세스",
+                eu_ai_act_article="Article 10"
+            ),
+            GovernanceCheckItem(
+                id="GOV-003",
+                category="기술문서",
+                requirement="기술 문서 작성 및 최신 상태 유지",
+                eu_ai_act_article="Article 11"
+            ),
+            GovernanceCheckItem(
+                id="GOV-004",
+                category="기록보관",
+                requirement="자동 로깅 및 10년 보관 체계",
+                eu_ai_act_article="Article 12"
+            ),
+            GovernanceCheckItem(
+                id="GOV-005",
+                category="투명성",
+                requirement="사용자 대상 명확한 정보 제공",
+                eu_ai_act_article="Article 13"
+            ),
+            GovernanceCheckItem(
+                id="GOV-006",
+                category="인적감독",
+                requirement="인간 감독 체계 및 개입 메커니즘",
+                eu_ai_act_article="Article 14"
+            ),
+            GovernanceCheckItem(
+                id="GOV-007",
+                category="품질관리",
+                requirement="품질 관리 시스템(QMS) 운영",
+                eu_ai_act_article="Article 17"
+            ),
+        ]
+        self.checklist.extend(base_items)
+
+    def update_status(self, item_id: str, status: ComplianceStatus,
+                      evidence: str) -> bool:
+        """체크 항목 상태 업데이트"""
+        for item in self.checklist:
+            if item.id == item_id:
+                item.status = status
+                item.evidence = evidence
+                item.last_reviewed = datetime.now()
+                return True
+        return False
+
+    def get_compliance_score(self) -> Dict[str, float]:
+        """준수율 계산"""
+        total = len(self.checklist)
+        compliant = sum(1 for i in self.checklist
+                       if i.status == ComplianceStatus.COMPLIANT)
+        partial = sum(1 for i in self.checklist
+                     if i.status == ComplianceStatus.PARTIAL)
+
+        return {
+            "total_items": total,
+            "compliant_count": compliant,
+            "partial_count": partial,
+            "compliance_rate": (compliant + partial * 0.5) / total * 100,
+            "status": "READY" if compliant == total else "IN_PROGRESS"
+        }
+
+    def generate_gap_analysis(self) -> List[Dict]:
+        """Gap 분석 보고서 생성"""
+        gaps = []
+        for item in self.checklist:
+            if item.status != ComplianceStatus.COMPLIANT:
+                gaps.append({
+                    "id": item.id,
+                    "category": item.category,
+                    "requirement": item.requirement,
+                    "current_status": item.status.value,
+                    "action_required": self._get_remediation(item)
+                })
+        return gaps
+
+# 사용 예시
+framework = AIGovernanceFramework(
+    organization="KAITRUST Corp",
+    ai_system_name="AI 신용평가 시스템",
+    risk_level=RiskLevel.HIGH
+)
+
+# 준수 상태 업데이트
+framework.update_status(
+    "GOV-001",
+    ComplianceStatus.COMPLIANT,
+    "위험관리 문서 RMS-2024-001 참조"
+)
+
+print(f"준수율: {framework.get_compliance_score()}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">법무팀:</strong> "AI 거버넌스 체계 없이 EU 시장 진출은 불가능해요. ISO 42001 인증 준비와 함께 내부 AI 윤리위원회 구성이 시급합니다."</p>
+                <p><strong class="role-junior">개발팀:</strong> "모델 카드 템플릿 만들어서 배포했고, 모든 신규 모델은 거버넌스 검토 프로세스를 거치도록 CI/CD에 게이트 추가했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "AI 거버넌스 프레임워크 구축 경험이 있으신가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "ISO 42001 기반 거버넌스 체계를 수립했습니다. 역할별 RACI 매트릭스 정의, 모델 승인 위원회 운영, 분기별 편향성 감사 프로세스를 도입해 고위험 AI 3개 시스템의 EU 시장 출시 승인을 받았습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">컴플라이언스:</strong> "이 모델의 Model Card가 어디 있죠? 학습 데이터 출처, 성능 지표, 한계점이 문서화되어야 해요."</p>
+                <p><strong class="role-junior">개발자:</strong> "model_card.md 추가했습니다. Hugging Face 형식 따랐고, Fairness 지표도 보호 속성별로 기재했습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>거버넌스 체계 미비 시 EU 시장 진출 자체가 불가능 - CE 마킹 획득 불가</li>
+                <li>품질관리시스템(QMS) 없이 고위험 AI 출시 시 최대 3,500만 유로 또는 매출 7% 과징금</li>
+                <li>거버넌스 문서는 영어 또는 해당 EU 회원국 언어로 작성 필수</li>
+                <li class="info">ISO 42001 인증은 EU AI Act 준수의 "추정 적합성(Presumption of Conformity)" 부여</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/EU%20AI%20Act/" class="related-link">EU AI Act</a>
+                <a href="/ko/term/AI%20%EA%B0%90%EC%82%AC/" class="related-link">AI 감사</a>
+                <a href="/ko/term/AI%20%EC%9C%A4%EB%A6%AC%EC%9B%90%EC%B9%99/" class="related-link">AI 윤리원칙</a>
+                <a href="/ko/term/AI%20%EC%B1%85%EC%9E%84%EC%84%B1/" class="related-link">AI 책임성</a>
+                <a href="/ko/term/AISP/" class="related-link">AISP</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://www.iso.org/standard/81230.html" target="_blank" rel="noopener">ISO/IEC 42001 - AI 관리시스템 표준</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST AI Risk Management Framework</a></li>
+                <li><span class="type-book"></span><a href="https://oecd.ai/en/ai-principles" target="_blank" rel="noopener">OECD AI Principles</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +431,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

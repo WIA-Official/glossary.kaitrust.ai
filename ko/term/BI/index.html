@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,460 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 id="detail-title">상세 설명</h2>
+            <p>Business Intelligence(BI)는 조직의 데이터를 수집, 저장, 분석하여 의사결정에 활용 가능한 인사이트로 변환하는 기술, 프로세스, 도구의 총칭입니다. 과거 데이터를 기반으로 현재 상황을 파악하고(Descriptive), 왜 그런 일이 발생했는지 분석하며(Diagnostic), 미래를 예측하는(Predictive) 역할을 합니다.</p>
+            <p>현대 BI의 핵심은 셀프서비스(Self-Service) BI입니다. 과거에는 IT 부서나 데이터 전문가만 분석을 수행했지만, 지금은 비즈니스 사용자가 직접 데이터를 탐색하고 시각화할 수 있습니다. Tableau, Power BI, Looker, Metabase 같은 도구들이 드래그 앤 드롭 인터페이스로 복잡한 분석을 간소화합니다.</p>
+            <p>효과적인 BI 구현을 위해서는 데이터 인프라가 필수입니다. ETL/ELT 파이프라인으로 데이터를 수집하고, 데이터 웨어하우스(BigQuery, Snowflake, Redshift)에 저장하며, 데이터 모델링(Star Schema, Snowflake Schema)을 통해 분석에 최적화된 구조를 만듭니다. Semantic Layer는 비즈니스 용어와 기술적 데이터를 연결하여 일관된 지표 정의를 제공합니다.</p>
+            <p>BI의 발전 방향은 Embedded Analytics와 Augmented Analytics입니다. Embedded Analytics는 BI 기능을 자사 애플리케이션에 내장하여 사용자가 별도 도구 없이 인사이트를 얻게 합니다. Augmented Analytics는 AI/ML을 활용하여 자동으로 이상치를 탐지하고, 자연어 질문으로 데이터를 조회하며, 인사이트를 추천합니다.</p>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2>코드 예제</h2>
+            <div class="code-block" onclick="copyCode(this)">
+                <pre><code># BI 대시보드 설계 원칙 및 구현 예제
+
+# ============================================
+# 1. 효과적인 대시보드 설계 원칙
+# ============================================
+
+"""
+[대시보드 설계 5원칙]
+
+1. 목적 명확화 (Purpose)
+   - 누가 사용하나? (경영진, 운영팀, 분석가)
+   - 어떤 질문에 답해야 하나?
+   - 어떤 행동을 유도하나?
+
+2. 정보 계층화 (Hierarchy)
+   - 가장 중요한 지표를 상단/좌측에 배치
+   - 요약 → 상세 순서로 드릴다운
+   - 3초 내 핵심 메시지 전달
+
+3. 시각화 선택 (Visualization)
+   - 비교: 막대 차트
+   - 추세: 라인 차트
+   - 구성: 파이/도넛 차트
+   - 분포: 히스토그램/박스플롯
+   - 관계: 산점도
+
+4. 인터랙티브 (Interactive)
+   - 필터로 세그먼트 탐색
+   - 드릴다운으로 상세 분석
+   - 툴팁으로 추가 정보 제공
+
+5. 성능 최적화 (Performance)
+   - 사전 집계된 데이터 사용
+   - 증분 로딩 구현
+   - 캐싱 전략 수립
+"""
+
+# ============================================
+# 2. Semantic Layer 정의 (dbt Metrics)
+# ============================================
+
+# models/metrics/revenue_metrics.yml
+"""
+version: 2
+
+metrics:
+  - name: total_revenue
+    label: Total Revenue
+    model: ref('fct_orders')
+    description: "총 매출액"
+    calculation_method: sum
+    expression: order_amount
+    timestamp: order_date
+    time_grains: [day, week, month, quarter, year]
+    dimensions:
+      - product_category
+      - region
+      - channel
+    filters:
+      - field: order_status
+        operator: '='
+        value: "'completed'"
+
+  - name: average_order_value
+    label: Average Order Value
+    model: ref('fct_orders')
+    description: "평균 주문 금액"
+    calculation_method: average
+    expression: order_amount
+    timestamp: order_date
+    time_grains: [day, week, month]
+    dimensions:
+      - product_category
+      - customer_segment
+
+  - name: conversion_rate
+    label: Conversion Rate
+    model: ref('fct_user_events')
+    description: "구매 전환율"
+    calculation_method: derived
+    expression: "{{metric('purchases')}} / {{metric('page_views')}}"
+    timestamp: event_date
+    time_grains: [day, week, month]
+"""
+
+# ============================================
+# 3. Python으로 대시보드 데이터 준비
+# ============================================
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+
+def prepare_executive_dashboard_data(conn):
+    """경영진 대시보드용 데이터 준비"""
+
+    # 핵심 KPI 집계
+    kpi_query = """
+    WITH current_period AS (
+        SELECT
+            SUM(revenue) as total_revenue,
+            COUNT(DISTINCT customer_id) as unique_customers,
+            COUNT(*) as total_orders,
+            SUM(revenue) / COUNT(*) as aov
+        FROM orders
+        WHERE order_date >= DATE_TRUNC('month', CURRENT_DATE)
+    ),
+    previous_period AS (
+        SELECT
+            SUM(revenue) as total_revenue,
+            COUNT(DISTINCT customer_id) as unique_customers,
+            COUNT(*) as total_orders,
+            SUM(revenue) / COUNT(*) as aov
+        FROM orders
+        WHERE order_date >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')
+          AND order_date < DATE_TRUNC('month', CURRENT_DATE)
+    )
+    SELECT
+        c.total_revenue,
+        c.unique_customers,
+        c.total_orders,
+        c.aov,
+        (c.total_revenue - p.total_revenue) / p.total_revenue * 100 as revenue_growth,
+        (c.unique_customers - p.unique_customers) / p.unique_customers * 100 as customer_growth
+    FROM current_period c, previous_period p
+    """
+
+    kpis = pd.read_sql(kpi_query, conn)
+
+    # 일별 트렌드
+    trend_query = """
+    SELECT
+        DATE(order_date) as date,
+        SUM(revenue) as daily_revenue,
+        COUNT(*) as daily_orders,
+        COUNT(DISTINCT customer_id) as daily_customers
+    FROM orders
+    WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'
+    GROUP BY DATE(order_date)
+    ORDER BY date
+    """
+
+    trends = pd.read_sql(trend_query, conn)
+
+    # 카테고리별 분포
+    category_query = """
+    SELECT
+        product_category,
+        SUM(revenue) as revenue,
+        COUNT(*) as orders,
+        SUM(revenue) / SUM(SUM(revenue)) OVER() * 100 as revenue_share
+    FROM orders o
+    JOIN products p ON o.product_id = p.product_id
+    WHERE order_date >= DATE_TRUNC('month', CURRENT_DATE)
+    GROUP BY product_category
+    ORDER BY revenue DESC
+    """
+
+    categories = pd.read_sql(category_query, conn)
+
+    return {
+        'kpis': kpis.to_dict('records')[0],
+        'trends': trends.to_dict('records'),
+        'categories': categories.to_dict('records')
+    }
+
+# ============================================
+# 4. Looker LookML 예제
+# ============================================
+"""
+# views/orders.view.lkml
+view: orders {
+  sql_table_name: `project.dataset.orders` ;;
+
+  dimension: order_id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.order_id ;;
+  }
+
+  dimension_group: order {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    sql: ${TABLE}.order_date ;;
+  }
+
+  dimension: customer_id {
+    type: string
+    sql: ${TABLE}.customer_id ;;
+  }
+
+  dimension: revenue {
+    type: number
+    sql: ${TABLE}.revenue ;;
+    value_format_name: usd
+  }
+
+  dimension: revenue_tier {
+    type: tier
+    tiers: [0, 50, 100, 500, 1000]
+    style: integer
+    sql: ${revenue} ;;
+  }
+
+  measure: total_revenue {
+    type: sum
+    sql: ${revenue} ;;
+    value_format_name: usd_0
+    drill_fields: [order_id, customer_id, revenue]
+  }
+
+  measure: average_order_value {
+    type: average
+    sql: ${revenue} ;;
+    value_format_name: usd
+  }
+
+  measure: order_count {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
+  measure: customer_count {
+    type: count_distinct
+    sql: ${customer_id} ;;
+  }
+}
+
+# explores/orders.explore.lkml
+explore: orders {
+  label: "Orders Analysis"
+  description: "주문 데이터 분석"
+
+  join: customers {
+    type: left_outer
+    sql_on: ${orders.customer_id} = ${customers.customer_id} ;;
+    relationship: many_to_one
+  }
+
+  join: products {
+    type: left_outer
+    sql_on: ${orders.product_id} = ${products.product_id} ;;
+    relationship: many_to_one
+  }
+}
+"""
+
+# ============================================
+# 5. Tableau Prep 데이터 준비 (Python 대안)
+# ============================================
+def prepare_tableau_extract(source_df):
+    """Tableau용 데이터 추출 준비"""
+
+    df = source_df.copy()
+
+    # 날짜 필드 파싱
+    df['order_date'] = pd.to_datetime(df['order_date'])
+    df['order_year'] = df['order_date'].dt.year
+    df['order_month'] = df['order_date'].dt.month
+    df['order_week'] = df['order_date'].dt.isocalendar().week
+    df['order_day_of_week'] = df['order_date'].dt.day_name()
+
+    # 계산 필드 추가
+    df['revenue_per_item'] = df['revenue'] / df['quantity']
+    df['is_high_value'] = df['revenue'] > df['revenue'].quantile(0.75)
+
+    # 세그먼트 생성
+    df['customer_segment'] = pd.cut(
+        df.groupby('customer_id')['revenue'].transform('sum'),
+        bins=[0, 100, 500, 1000, float('inf')],
+        labels=['Bronze', 'Silver', 'Gold', 'Platinum']
+    )
+
+    # 이상치 플래그
+    df['is_outlier'] = (
+        (df['revenue'] < df['revenue'].quantile(0.01)) |
+        (df['revenue'] > df['revenue'].quantile(0.99))
+    )
+
+    return df
+
+# ============================================
+# 6. Embedded Analytics API 예제
+# ============================================
+import requests
+import jwt
+from datetime import datetime, timedelta
+
+class EmbeddedBIClient:
+    """Embedded BI 클라이언트 (Looker 스타일)"""
+
+    def __init__(self, base_url, client_id, client_secret):
+        self.base_url = base_url
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.access_token = None
+
+    def authenticate(self):
+        """OAuth2 인증"""
+        response = requests.post(
+            f"{self.base_url}/api/4.0/login",
+            data={
+                'client_id': self.client_id,
+                'client_secret': self.client_secret
+            }
+        )
+        self.access_token = response.json()['access_token']
+
+    def create_embed_url(self, dashboard_id, user_attributes, embed_domain):
+        """SSO Embed URL 생성"""
+        embed_params = {
+            'resource': {'dashboard': dashboard_id},
+            'user': {
+                'first_name': user_attributes.get('first_name', 'User'),
+                'last_name': user_attributes.get('last_name', ''),
+                'permissions': ['access_data', 'see_user_dashboards'],
+                'models': ['orders'],
+                'user_attributes': {
+                    'company_id': user_attributes.get('company_id'),
+                    'region': user_attributes.get('region')
+                }
+            },
+            'embed_domain': embed_domain,
+            'session_length': 3600,
+            'force_logout_login': True
+        }
+
+        # JWT 토큰 생성
+        token = jwt.encode(
+            {
+                **embed_params,
+                'exp': datetime.utcnow() + timedelta(hours=1)
+            },
+            self.client_secret,
+            algorithm='HS256'
+        )
+
+        return f"{self.base_url}/embed/dashboards/{dashboard_id}?embed_token={token}"
+
+    def run_query(self, model, view, fields, filters=None, sorts=None, limit=500):
+        """쿼리 실행"""
+        query_body = {
+            'model': model,
+            'view': view,
+            'fields': fields,
+            'filters': filters or {},
+            'sorts': sorts or [],
+            'limit': limit
+        }
+
+        response = requests.post(
+            f"{self.base_url}/api/4.0/queries/run/json",
+            headers={'Authorization': f'Bearer {self.access_token}'},
+            json=query_body
+        )
+
+        return response.json()
+
+# 사용 예제
+"""
+client = EmbeddedBIClient(
+    base_url='https://your-looker-instance.com',
+    client_id='your_client_id',
+    client_secret='your_client_secret'
+)
+
+client.authenticate()
+
+# 대시보드 임베드 URL 생성
+embed_url = client.create_embed_url(
+    dashboard_id='sales_overview',
+    user_attributes={
+        'company_id': 'ACME',
+        'region': 'APAC'
+    },
+    embed_domain='https://your-app.com'
+)
+"""
+
+print("BI 대시보드 설계 예제 완료")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section">
+            <h2>실무에서 이렇게 쓰여요</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-type="meeting">팀 미팅</button>
+                <button class="conv-tab" data-type="interview">기술 면접</button>
+                <button class="conv-tab" data-type="review">코드 리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong>비즈니스 분석가:</strong> "매출 리포트를 매번 수동으로 만들고 있는데, 자동화할 수 없을까요?"</p>
+                <p><strong>데이터 엔지니어:</strong> "Looker나 Metabase로 대시보드를 만들면 실시간으로 업데이트되고, 자동 이메일 발송도 설정할 수 있어요. 일단 자주 보는 지표부터 정리해주시면 Semantic Layer로 정의해드릴게요."</p>
+                <p><strong>비즈니스 분석가:</strong> "부서별로 보는 관점이 달라서 같은 지표도 정의가 다를 때가 있어요."</p>
+                <p><strong>데이터 엔지니어:</strong> "그래서 Semantic Layer가 중요해요. 회사 전체에서 사용하는 표준 지표 정의를 만들고, 각 대시보드에서 같은 정의를 참조하도록 하면 일관성이 유지돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong>면접관:</strong> "효과적인 BI 대시보드 설계에서 가장 중요하게 생각하는 원칙은 무엇인가요?"</p>
+                <p><strong>지원자:</strong> "가장 중요한 것은 목적 명확화입니다. 경영진용 대시보드는 핵심 KPI 3-5개를 한눈에 보여주고, 운영팀용은 실시간 모니터링과 알림에 초점을 맞춰야 합니다. 또한 정보 계층화가 중요한데, 가장 중요한 지표를 상단 좌측에 배치하고 드릴다운으로 상세 분석이 가능해야 합니다. 마지막으로 성능입니다. 아무리 좋은 대시보드도 로딩이 5초 이상 걸리면 사용하지 않게 되므로, 사전 집계와 캐싱 전략이 필수입니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong>리뷰어:</strong> "대시보드에 지표가 15개나 있는데, 너무 많은 것 같아요."</p>
+                <p><strong>개발자:</strong> "사용자 요청대로 다 넣었는데, 줄여야 할까요?"</p>
+                <p><strong>리뷰어:</strong> "밀러의 법칙에 따르면 사람이 한 번에 처리할 수 있는 정보는 7개 정도예요. 핵심 KPI 5개는 상단에 크게 배치하고, 나머지는 탭이나 드릴다운으로 분리하는 게 좋겠어요. 그리고 DAU와 WAU처럼 비슷한 지표는 하나의 차트에 통합하면 공간도 절약되고 비교도 쉬워요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2>주의사항</h2>
+            <ul class="warning-list">
+                <li>같은 지표가 부서마다 다르게 정의되면 혼란이 생기므로, Semantic Layer로 표준 정의를 관리하세요.</li>
+                <li>대시보드 로딩이 5초 이상 걸리면 사용률이 급감하므로, 사전 집계와 캐싱 전략이 필요합니다.</li>
+                <li>너무 많은 지표를 한 화면에 넣으면 정보 과부하가 발생하므로, 계층화와 드릴다운을 활용하세요.</li>
+                <li>권한 관리 없이 민감한 데이터를 노출하면 보안 문제가 발생할 수 있으니 Row-Level Security를 구현하세요.</li>
+                <li>셀프서비스 BI는 데이터 품질과 거버넌스 없이 잘못된 의사결정으로 이어질 수 있습니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2>관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Data%20Warehouse/" class="related-term-card">Data Warehouse</a>
+                <a href="/ko/term/ETL/" class="related-term-card">ETL</a>
+                <a href="/ko/term/OLAP/" class="related-term-card">OLAP</a>
+                <a href="/ko/term/BigQuery/" class="related-term-card">BigQuery</a>
+                <a href="/ko/term/Data%20Visualization/" class="related-term-card">Data Visualization</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2>더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://www.tableau.com/learn/articles/business-intelligence" target="_blank">Tableau: Business Intelligence 가이드</a></li>
+                <li><a href="https://docs.getdbt.com/docs/build/metrics" target="_blank">dbt: Metrics Layer 문서</a></li>
+                <li><a href="https://www.metabase.com/learn" target="_blank">Metabase: 오픈소스 BI 학습 자료</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +667,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

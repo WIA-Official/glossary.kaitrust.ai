@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,119 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>APM(Application Performance Monitoring)은 실시간으로 애플리케이션의 성능을 추적하고 분석하는 도구입니다. 단순한 서버 모니터링을 넘어 개별 요청이 DB 쿼리부터 외부 API 호출까지 어디서 얼마나 시간을 소비하는지 추적합니다. 장애가 발생하면 "어디가 느린지"를 정확히 파악할 수 있어 MTTR(Mean Time To Recovery)을 크게 단축시킵니다.</p>
+                <p>핵심 기능은 분산 추적(Distributed Tracing), 메트릭 수집, 에러 트래킹 3가지입니다. 분산 추적은 마이크로서비스 환경에서 하나의 요청이 여러 서비스를 거치는 흐름을 시각화합니다. Trace ID를 통해 "이 요청이 A 서비스 -> B 서비스 -> C 서비스를 거치며 총 2.3초가 걸렸고, B에서 1.8초를 소비했다"는 것을 알 수 있습니다.</p>
+                <p>대표적인 APM 도구로는 상용 서비스인 Datadog APM, New Relic, Dynatrace가 있고, 오픈소스로는 Jaeger, Zipkin, Elastic APM이 있습니다. 클라우드 환경에서는 AWS X-Ray, GCP Cloud Trace 같은 네이티브 서비스도 많이 사용됩니다. 선택 기준은 에이전트 오버헤드, 샘플링 정책, 비용, 기존 모니터링 스택과의 통합 여부입니다.</p>
+                <p>실무에서 APM을 도입하면 "느리다"는 막연한 불만 대신 "P99 응답시간이 2초를 초과했고, 원인은 Redis 커넥션 풀 고갈"처럼 데이터 기반의 논의가 가능해집니다. SLO(Service Level Objective) 설정과 알림 연동까지 구성하면 사용자가 불편을 느끼기 전에 선제적으로 대응할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># OpenTelemetry로 APM 트레이싱 구현 (Python/FastAPI)
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from fastapi import FastAPI
+import requests
+
+# 트레이서 설정
+provider = TracerProvider()
+processor = BatchSpanProcessor(OTLPSpanExporter(endpoint="http://otel-collector:4317"))
+provider.add_span_processor(processor)
+trace.set_tracer_provider(provider)
+
+tracer = trace.get_tracer(__name__)
+
+app = FastAPI()
+
+# FastAPI 자동 계측
+FastAPIInstrumentor.instrument_app(app)
+RequestsInstrumentor().instrument()
+
+@app.get("/api/orders/{order_id}")
+async def get_order(order_id: str):
+    # 커스텀 스팬으로 세부 구간 측정
+    with tracer.start_as_current_span("fetch_order_details") as span:
+        span.set_attribute("order.id", order_id)
+
+        # DB 조회 (자동 계측됨)
+        order = await fetch_from_db(order_id)
+
+        # 외부 API 호출 추적
+        with tracer.start_as_current_span("call_payment_service"):
+            payment = requests.get(f"http://payment-svc/orders/{order_id}")
+
+        span.set_attribute("order.total", order["total"])
+        return {"order": order, "payment": payment.json()}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "어제 밤에 P99 레이턴시 스파이크 났는데 APM 트레이스 확인해봤어요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "네, 확인했는데 payment 서비스에서 DB 커넥션 타임아웃이 집중적으로 발생했더라고요."</p>
+                <p><strong class="role-senior">시니어:</strong> "그럼 샘플링 레이트 올려서 해당 시간대 트레이스 더 뽑아보고, 슬로우 쿼리 로그랑 같이 비교해봐요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "마이크로서비스 환경에서 성능 이슈를 어떻게 디버깅하시나요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "APM의 분산 추적 기능을 활용합니다. Trace ID로 요청 전체 흐름을 따라가면서 어느 서비스의 어느 구간에서 지연이 발생하는지 워터폴 차트로 확인합니다. 특히 P99 같은 꼬리 지연 분석에 효과적이었습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 외부 API 호출 부분에 커스텀 스팬 추가해주세요. 나중에 이 구간 성능 추적하려면 APM에서 별도로 보여야 합니다."</p>
+                <p><strong class="role-author">작성자:</strong> "넵, 스팬 추가하고 vendor, endpoint 같은 attribute도 붙여서 필터링 가능하게 하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>샘플링 없이 모든 트레이스를 수집하면 비용 폭탄을 맞습니다. 프로덕션에서는 보통 1-10% 샘플링을 적용하고, 에러나 슬로우 요청만 100% 수집하는 head-based/tail-based 샘플링을 조합합니다.</li>
+                <li>APM 에이전트가 CPU/메모리를 소비합니다. 특히 Node.js 같은 싱글스레드 환경에서는 오버헤드가 눈에 띌 수 있으니 부하 테스트 시 에이전트 영향도 함께 측정하세요.</li>
+                <li class="info">민감한 정보(PII, 결제정보)가 스팬 attribute에 기록되지 않도록 주의하세요. APM 데이터는 여러 팀이 접근하므로 scrubbing 규칙을 미리 설정해두는 것이 좋습니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Datadog/" class="related-link">Datadog</a>
+                <a href="/ko/term/Prometheus/" class="related-link">Prometheus</a>
+                <a href="/ko/term/Grafana/" class="related-link">Grafana</a>
+                <a href="/ko/term/OpenTelemetry/" class="related-link">OpenTelemetry</a>
+                <a href="/ko/term/SRE/" class="related-link">SRE</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://opentelemetry.io/docs/" target="_blank">OpenTelemetry 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://docs.datadoghq.com/tracing/" target="_blank">Datadog APM 가이드</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.jaegertracing.io/docs/1.47/" target="_blank">Jaeger 분산 추적 튜토리얼</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +326,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

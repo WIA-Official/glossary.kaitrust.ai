@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -202,6 +228,318 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>파인튜닝(Fine-tuning)은 대규모 데이터로 사전 학습된 모델(Pre-trained Model)을 특정 도메인이나 작업에 맞게 추가 학습시키는 기법입니다. 처음부터 학습하는 것보다 훨씬 적은 데이터와 시간으로 높은 성능을 달성할 수 있습니다. 기반 모델의 일반적인 언어/비전 이해 능력을 유지하면서 특정 분야의 전문성을 더하는 방식입니다.</p>
+
+                <p>파인튜닝의 개념은 2018년 BERT의 등장과 함께 대중화되었습니다. 이전에도 전이학습(Transfer Learning)이 있었지만, Transformer 기반 대규모 언어 모델이 등장하면서 파인튜닝의 효과가 극적으로 향상되었습니다. 2023년 이후 LLM 시대에는 Instruction Tuning, RLHF(인간 피드백 강화학습), LoRA 같은 효율적인 파인튜닝 기법이 발전하여, 수십억 파라미터 모델도 소규모 GPU에서 파인튜닝할 수 있게 되었습니다.</p>
+
+                <p>파인튜닝 방법은 크게 세 가지로 나뉩니다. Full Fine-tuning은 모든 파라미터를 업데이트하는 전통적 방식입니다. PEFT(Parameter-Efficient Fine-Tuning)는 LoRA, QLoRA, Adapters 등을 사용해 소수의 파라미터만 학습하여 메모리와 시간을 절약합니다. Instruction Tuning은 명령-응답 쌍으로 모델을 학습시켜 지시를 더 잘 따르게 합니다. 2024-2025년에는 QLoRA와 Unsloth 같은 도구로 소비자용 GPU에서도 7B-70B 모델 파인튜닝이 가능해졌습니다.</p>
+
+                <p>실무에서 파인튜닝은 RAG로 해결하기 어려운 도메인 특화 작업에 적용됩니다. 의료, 법률, 금융 등 전문 용어와 맥락이 중요한 분야, 특정 출력 형식이나 스타일이 필요한 경우, 응답 속도가 중요하여 외부 검색을 줄여야 하는 경우에 효과적입니다. 다만 최신 정보 반영이 필요하면 RAG가, 도메인 지식 내재화가 필요하면 파인튜닝이 적합합니다. 많은 경우 두 기법을 함께 사용하는 하이브리드 접근이 최선입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Hugging Face와 PEFT를 사용한 LoRA 파인튜닝 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># LoRA 파인튜닝 예제
+# pip install transformers peft datasets accelerate bitsandbytes
+
+from transformers import (
+    AutoModelForCausalLM, AutoTokenizer,
+    TrainingArguments, Trainer, DataCollatorForLanguageModeling
+)
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from datasets import load_dataset
+import torch
+
+# 4비트 양자화로 모델 로드 (메모리 절약)
+model_name = "meta-llama/Llama-2-7b-hf"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    load_in_4bit=True,
+    device_map="auto",
+    torch_dtype=torch.float16,
+)
+
+# LoRA 설정
+lora_config = LoraConfig(
+    r=16,                    # LoRA rank
+    lora_alpha=32,           # 스케일링 파라미터
+    target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],  # 적용 레이어
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+# PEFT 모델 생성
+model = prepare_model_for_kbit_training(model)
+model = get_peft_model(model, lora_config)
+
+# 학습 가능한 파라미터 수 확인
+trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+total_params = sum(p.numel() for p in model.parameters())
+print(f"학습 가능 파라미터: {trainable_params:,} / {total_params:,} ({100 * trainable_params / total_params:.2f}%)")
+
+# 데이터셋 준비 (예: 한국어 지시 데이터)
+def preprocess(example):
+    prompt = f"### 질문: {example['instruction']}\n\n### 답변: {example['output']}"
+    return tokenizer(prompt, truncation=True, max_length=512)
+
+dataset = load_dataset("your_dataset", split="train")
+tokenized_dataset = dataset.map(preprocess, remove_columns=dataset.column_names)
+
+# 학습 설정
+training_args = TrainingArguments(
+    output_dir="./lora-output",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-4,
+    fp16=True,
+    logging_steps=10,
+    save_steps=100,
+)
+
+# 학습 실행
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset,
+    data_collator=DataCollatorForLanguageModeling(tokenizer, mlm=False),
+)
+trainer.train()
+
+# 어댑터 저장
+model.save_pretrained("./lora-adapter")</code></pre>
+                </div>
+
+                <p>OpenAI API를 통한 GPT 파인튜닝 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># OpenAI 파인튜닝 API
+# pip install openai
+
+from openai import OpenAI
+import json
+
+client = OpenAI()
+
+# 1. 학습 데이터 준비 (JSONL 형식)
+training_data = [
+    {
+        "messages": [
+            {"role": "system", "content": "당신은 친절한 고객 상담원입니다."},
+            {"role": "user", "content": "배송이 언제 오나요?"},
+            {"role": "assistant", "content": "주문 번호를 알려주시면 배송 현황을 확인해드리겠습니다."}
+        ]
+    },
+    # ... 더 많은 예시
+]
+
+# JSONL 파일로 저장
+with open("training_data.jsonl", "w", encoding="utf-8") as f:
+    for item in training_data:
+        f.write(json.dumps(item, ensure_ascii=False) + "\n")
+
+# 2. 파일 업로드
+file = client.files.create(
+    file=open("training_data.jsonl", "rb"),
+    purpose="fine-tune"
+)
+print(f"파일 ID: {file.id}")
+
+# 3. 파인튜닝 작업 생성
+fine_tune_job = client.fine_tuning.jobs.create(
+    training_file=file.id,
+    model="gpt-4o-mini-2024-07-18",  # 또는 gpt-3.5-turbo
+    hyperparameters={
+        "n_epochs": 3,
+        "learning_rate_multiplier": 1.0,
+    }
+)
+print(f"작업 ID: {fine_tune_job.id}")
+
+# 4. 작업 상태 확인
+job = client.fine_tuning.jobs.retrieve(fine_tune_job.id)
+print(f"상태: {job.status}")
+
+# 5. 완료 후 파인튜닝 모델 사용
+# fine_tuned_model = "ft:gpt-4o-mini:your-org::xxxx"
+# response = client.chat.completions.create(
+#     model=fine_tuned_model,
+#     messages=[{"role": "user", "content": "배송 문의드립니다"}]
+# )</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>2025년 1월 기준 파인튜닝 방법별 비교입니다.</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>방법</th>
+                        <th>메모리 요구량</th>
+                        <th>학습 속도</th>
+                        <th>성능</th>
+                        <th>적용 모델</th>
+                    </tr>
+                    <tr>
+                        <td>Full Fine-tuning</td>
+                        <td>매우 높음 (80GB+)</td>
+                        <td>느림</td>
+                        <td>최고</td>
+                        <td>7B 이하</td>
+                    </tr>
+                    <tr>
+                        <td>LoRA</td>
+                        <td>중간 (24GB)</td>
+                        <td>빠름</td>
+                        <td>높음</td>
+                        <td>70B 이하</td>
+                    </tr>
+                    <tr>
+                        <td>QLoRA (4bit)</td>
+                        <td>낮음 (8-16GB)</td>
+                        <td>빠름</td>
+                        <td>높음</td>
+                        <td>70B 이하</td>
+                    </tr>
+                    <tr>
+                        <td>Adapters</td>
+                        <td>낮음</td>
+                        <td>빠름</td>
+                        <td>중간</td>
+                        <td>모든 크기</td>
+                    </tr>
+                </table>
+
+                <p>클라우드 파인튜닝 서비스 가격 (2025년 1월):</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>서비스</th>
+                        <th>학습 비용</th>
+                        <th>추론 비용</th>
+                        <th>특징</th>
+                    </tr>
+                    <tr>
+                        <td>OpenAI GPT-4o-mini</td>
+                        <td>$3.00/1M 토큰</td>
+                        <td>$0.15/1M 입력</td>
+                        <td>가장 쉬운 시작</td>
+                    </tr>
+                    <tr>
+                        <td>Together AI</td>
+                        <td>$3.00/시간</td>
+                        <td>$0.20/1M 토큰</td>
+                        <td>오픈소스 모델 지원</td>
+                    </tr>
+                    <tr>
+                        <td>AWS Bedrock</td>
+                        <td>모델별 상이</td>
+                        <td>모델별 상이</td>
+                        <td>엔터프라이즈 통합</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-examples">
+                    <div class="conv-item">
+                        <div class="conv-context">💬 회의에서</div>
+                        <div class="conv-quote">"RAG로 해결 안 되는 의료 용어 문제는 파인튜닝이 답입니다. 5,000개 의료 Q&A 쌍으로 QLoRA 파인튜닝했더니 전문 용어 정확도가 60%에서 92%로 향상됐고, 응답 시간도 RAG 검색 없이 빨라졌습니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 면접에서</div>
+                        <div class="conv-quote">"LoRA와 Full Fine-tuning의 차이를 설명하면, LoRA는 저차원 행렬 분해로 원본 가중치는 동결하고 작은 어댑터만 학습합니다. 7B 모델 기준 학습 파라미터가 0.1% 수준이라 8GB GPU에서도 가능하면서 성능 손실은 5% 미만입니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 기술 토론에서</div>
+                        <div class="conv-quote">"파인튜닝 vs RAG 선택 기준은 명확해요. 도메인 지식을 내재화해야 하면 파인튜닝, 최신 정보가 계속 바뀌면 RAG입니다. 대부분은 둘 다 필요해서, 기본 지식은 파인튜닝하고 실시간 정보는 RAG로 보강하는 하이브리드를 추천합니다."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-list">
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>과적합(Overfitting) 무시</h4>
+                            <p>적은 데이터로 오래 학습하면 과적합이 발생합니다. 학습 데이터에서만 잘 동작하고 새로운 입력에는 성능이 저하됩니다. 검증 셋으로 모니터링하고 early stopping을 적용하세요.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>치명적 망각(Catastrophic Forgetting)</h4>
+                            <p>특정 도메인에 과하게 파인튜닝하면 기존에 학습한 일반 지식을 잊어버립니다. 학습률을 낮게 유지하고, 일반 데이터를 섞어서 학습하세요.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">✅</div>
+                        <div class="warning-content">
+                            <h4>올바른 접근법</h4>
+                            <p>최소 1,000개 이상의 고품질 예시로 시작하세요. 학습률은 기본값의 0.1-0.5배로 낮추고, 에폭은 1-3회로 제한하세요. LoRA rank는 8-32에서 시작하고 성능에 따라 조정하세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/Transfer%20Learning/" class="related-term-link">전이학습 (Transfer Learning)</a>
+                    <a href="/ko/term/LLM/" class="related-term-link">LLM (대규모 언어 모델)</a>
+                    <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                    <a href="/ko/term/LoRA/" class="related-term-link">LoRA</a>
+                    <a href="/ko/term/%EA%B2%BD%EC%82%AC%ED%95%98%EA%B0%95%EB%B2%95/" class="related-term-link">경사하강법</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <div class="learn-more">
+                    <a href="https://huggingface.co/docs/peft" target="_blank" class="learn-link">
+                        📄 Hugging Face PEFT - 효율적 파인튜닝 라이브러리
+                    </a>
+                    <a href="https://platform.openai.com/docs/guides/fine-tuning" target="_blank" class="learn-link">
+                        📄 OpenAI Fine-tuning 가이드
+                    </a>
+                    <a href="https://arxiv.org/abs/2106.09685" target="_blank" class="learn-link">
+                        📝 LoRA 논문 - Low-Rank Adaptation
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +550,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

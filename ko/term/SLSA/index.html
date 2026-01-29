@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,132 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>SLSA(Supply-chain Levels for Software Artifacts, 발음: 살사)는 Google이 주도하는 소프트웨어 공급망 보안 프레임워크입니다. 소프트웨어가 어디서 왔는지, 누가 빌드했는지, 변조되지 않았는지를 검증하는 표준을 정의합니다.</p>
+                <p>SLSA는 4단계(L1-L4) 성숙도 모델을 제시합니다. L1은 빌드 프로세스 문서화, L2는 호스팅된 빌드 서비스 사용, L3는 빌드 환경 격리와 출처 증명 생성, L4는 완전 재현 가능 빌드입니다. 대부분의 조직은 L3를 목표로 합니다.</p>
+                <p>핵심 개념은 "Provenance(출처 증명)"입니다. 빌드 시스템이 "이 아티팩트는 이 소스 코드에서, 이 빌더가, 이 시점에 빌드했다"는 증명을 서명하여 첨부합니다. 소비자는 이를 검증하여 신뢰할 수 있는 출처인지 확인합니다.</p>
+                <p>GitHub Actions, GitLab CI에서 SLSA provenance를 자동 생성하는 도구가 있습니다. slsa-github-generator, slsa-verifier로 L3 수준의 공급망 보안을 구현할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># GitHub Actions에서 SLSA L3 Provenance 생성
+# .github/workflows/slsa-build.yml
+name: SLSA Build
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    outputs:
+      hashes: \${{ steps.hash.outputs.hashes }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: make build
+      - name: Generate hash
+        id: hash
+        run: |
+          HASHES=\$(sha256sum dist/* | base64 -w0)
+          echo "hashes=\$HASHES" >> \$GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  provenance:
+    needs: [build]
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.0.0
+    with:
+      base64-subjects: "\${{ needs.build.outputs.hashes }}"
+      upload-assets: true
+
+# SLSA Provenance 검증
+slsa-verifier verify-artifact myapp-v1.0.tar.gz \
+  --provenance-path myapp-v1.0.tar.gz.intoto.jsonl \
+  --source-uri github.com/myorg/myapp \
+  --source-tag v1.0
+
+# Provenance 내용 확인
+cat myapp-v1.0.tar.gz.intoto.jsonl | jq '.payload | @base64d | fromjson'
+# {
+#   "buildType": "https://github.com/slsa-framework/slsa-github-generator/...",
+#   "builder": {"id": "https://github.com/slsa-framework/slsa-github-generator/..."},
+#   "invocation": {"configSource": {"uri": "git+https://github.com/myorg/myapp@refs/tags/v1.0"}},
+#   "materials": [{"uri": "git+https://github.com/myorg/myapp", "digest": {"sha1": "abc123"}}]
+# }</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">보안:</strong> "SolarWinds 같은 공급망 공격 방지하려면 SLSA L3 필요해요. 빌드 출처 증명을 생성하고 배포 전 검증해야 합니다."</p>
+                <p><strong class="role-junior">DevOps:</strong> "기존 파이프라인에 추가하기 어렵나요?"</p>
+                <p><strong class="role-senior">보안:</strong> "slsa-github-generator 쓰면 재사용 워크플로 하나 추가로 L3 달성 가능해요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "SLSA Level 3 요구사항을 설명해주세요."</p>
+                <p><strong class="role-interviewee">지원자:</strong> "L3는 호스팅된 빌드 서비스에서 격리된 환경으로 빌드하고, 빌드 시스템이 변조 불가능한 출처 증명(provenance)을 생성해야 합니다. Provenance에는 소스 코드 출처, 빌더 신원, 빌드 파라미터가 서명되어 포함됩니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "slsa-verifier에서 --source-uri가 잘못됐어요. 정확한 리포지토리 경로로 수정해주세요."</p>
+                <p><strong class="role-author">작성자:</strong> "확인했습니다. github.com/myorg/myapp으로 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li class="">SLSA L3 달성에는 호스팅된 빌드 서비스(GitHub Actions, Cloud Build 등)가 필수입니다. 로컬 빌드는 L2까지만 가능합니다.</li>
+                <li class="">Provenance 서명에는 Sigstore keyless 또는 자체 PKI를 사용합니다. 키 관리 전략을 먼저 수립하세요.</li>
+                <li class="info">SLSA는 공급망 '빌드' 단계에 집중합니다. 소스 코드 보안(코드 리뷰, 브랜치 보호)은 별도로 관리해야 합니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Sigstore/" class="related-link">Sigstore</a>
+                <a href="/ko/term/Cosign/" class="related-link">Cosign</a>
+                <a href="/ko/term/SBOM/" class="related-link">SBOM</a>
+                <a href="/ko/term/Supply%20Chain%20Security/" class="related-link">Supply Chain Security</a>
+                <a href="/ko/term/Provenance/" class="related-link">Provenance</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://slsa.dev/" target="_blank">SLSA 공식 사이트</a></li>
+                <li><span class="type-official"></span><a href="https://slsa.dev/spec/v1.0/requirements" target="_blank">SLSA 요구사항 명세</a></li>
+                <li><span class="type-tutorial"></span><a href="https://github.com/slsa-framework/slsa-github-generator" target="_blank">SLSA GitHub Generator</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +339,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

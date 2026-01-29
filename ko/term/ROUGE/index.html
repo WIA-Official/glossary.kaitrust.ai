@@ -161,6 +161,107 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhanced Sections */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+
+        .code-block {
+            position: relative;
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .code-block pre { margin: 0; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-left: 3px solid #a855f7;
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .conv-context { font-weight: 600; color: #a855f7; margin-bottom: 0.5rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; }
+
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+        }
+        .warning-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            color: #a855f7;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(168, 85, 247, 0.2); }
     </style>
 </head>
 <body>
@@ -202,6 +303,126 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>ROUGE(Recall-Oriented Understudy for Gisting Evaluation)</strong>는 텍스트 요약 품질을 자동으로 평가하는 지표군입니다. 생성된 요약과 참조 요약 간의 n-gram 중복을 측정하여 점수를 산출하며, ROUGE-1, ROUGE-2, ROUGE-L 등 다양한 변형이 있습니다.</p>
+                <p>ROUGE는 2004년 Chin-Yew Lin이 USC에서 개발했으며, 원래 문서 요약 시스템 평가를 위해 설계되었습니다. BLEU가 기계 번역의 정밀도(Precision)에 초점을 맞춘 반면, ROUGE는 재현율(Recall)을 강조하여 요약 평가에 더 적합합니다.</p>
+                <p>ROUGE의 핵심 원리는 n-gram 매칭입니다. ROUGE-1은 단어(unigram) 중복, ROUGE-2는 연속 2단어(bigram) 중복을 측정합니다. ROUGE-L은 최장 공통 부분 수열(LCS)을 사용하여 순서를 고려한 유사도를 계산합니다. 일반적으로 F1 점수(Precision과 Recall의 조화평균)를 최종 지표로 사용합니다.</p>
+                <p>실무에서 ROUGE는 요약, 질의응답, 대화 생성 등 NLG 태스크의 표준 평가 지표입니다. 다만 의미적 유사성을 완벽히 포착하지 못하는 한계가 있어, BERTScore, BLEURT 등 임베딩 기반 지표와 함께 사용하는 추세입니다. LLM 시대에는 GPT-4 기반 평가도 병행됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>rouge-score 라이브러리를 활용한 ROUGE 점수 계산 예제입니다.</p>
+                <div class="code-block" data-lang="python">
+                    <pre><code class="language-python"># pip install rouge-score
+from rouge_score import rouge_scorer
+
+# ROUGE Scorer 초기화
+scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
+
+# 참조 요약 (정답)
+reference = "인공지능은 기계가 인간처럼 학습하고 판단하는 기술입니다."
+
+# 생성된 요약 (모델 출력)
+candidate = "AI는 기계가 학습하고 추론하는 기술입니다."
+
+# ROUGE 점수 계산
+scores = scorer.score(reference, candidate)
+
+print("=== ROUGE Scores ===")
+for metric, score in scores.items():
+    print(f"{metric}:")
+    print(f"  Precision: {score.precision:.4f}")
+    print(f"  Recall:    {score.recall:.4f}")
+    print(f"  F1:        {score.fmeasure:.4f}")
+
+# 여러 샘플의 평균 계산
+def calculate_avg_rouge(references, candidates):
+    """여러 샘플의 평균 ROUGE 점수 계산"""
+    total_scores = {'rouge1': 0, 'rouge2': 0, 'rougeL': 0}
+    for ref, cand in zip(references, candidates):
+        scores = scorer.score(ref, cand)
+        for metric in total_scores:
+            total_scores[metric] += scores[metric].fmeasure
+    return {k: v / len(references) for k, v in total_scores.items()}</code></pre>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <div class="conv-quote">"요약 모델 성능은 ROUGE-L F1 기준 0.45입니다. 참조 요약과 약 45% 수준의 단어 중복이 있다는 의미예요."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <div class="conv-quote">"ROUGE-1은 단어 수준, ROUGE-2는 문구 수준의 유사도를 측정합니다. 추상적 요약에는 ROUGE-L이 더 적합해요."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <div class="conv-quote">"ROUGE만으로는 의미적 유사성 평가가 어렵습니다. BERTScore와 함께 사용하거나, LLM 기반 평가를 병행하는 게 좋아요."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div><strong>ROUGE만으로 품질 판단</strong>: ROUGE는 표면적 단어 중복만 측정합니다. 의미가 같아도 다른 표현이면 점수가 낮게 나옵니다.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div><strong>Stemmer 미사용</strong>: 영어는 use_stemmer=True로 어간 추출을 해야 공정한 비교가 됩니다. 한국어는 형태소 분석 전처리가 필요합니다.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div><strong>다중 지표 활용</strong>: ROUGE + BERTScore + Human Evaluation을 함께 사용하면 더 신뢰성 있는 평가가 가능합니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/BLEU/" class="related-term-link">BLEU</a>
+                <a href="/ko/term/BERTScore/" class="related-term-link">BERTScore</a>
+                <a href="/ko/term/Perplexity/" class="related-term-link">Perplexity</a>
+                <a href="/ko/term/F1%20Score/" class="related-term-link">F1 Score</a>
+                <a href="/ko/term/NLG/" class="related-term-link">NLG</a>
+                <a href="/ko/term/Summarization/" class="related-term-link">Summarization</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://aclanthology.org/W04-1013/" target="_blank" class="learn-link">
+                    📝 ROUGE 원본 논문 (Lin, 2004)
+                </a>
+                <a href="https://github.com/google-research/google-research/tree/master/rouge" target="_blank" class="learn-link">
+                    📄 Google Research rouge-score 라이브러리
+                </a>
+                <a href="https://huggingface.co/spaces/evaluate-metric/rouge" target="_blank" class="learn-link">
+                    🎓 Hugging Face Evaluate - ROUGE
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,6 +430,15 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>

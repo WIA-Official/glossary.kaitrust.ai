@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VPN (Virtual Private Network) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="암호화된 터널로 안전한 네트워크 연결. 원격 근무 필수.">
-    <meta name="keywords" content="VPN, Virtual Private Network, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="VPN(Virtual Private Network)은 암호화된 터널을 통해 안전한 네트워크 연결을 제공합니다. WireGuard, OpenVPN, IPSec 등의 프로토콜이 있으며, Zero Trust 시대에도 여전히 중요합니다.">
+    <meta name="keywords" content="VPN, Virtual Private Network, WireGuard, OpenVPN, IPSec, Zero Trust, ZTNA, 원격 근무, 네트워크 보안, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/VPN/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/VPN/">
     <meta property="og:title" content="VPN (Virtual Private Network) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="암호화된 터널로 안전한 네트워크 연결. 원격 근무 필수.">
+    <meta property="og:description" content="암호화된 터널로 안전한 네트워크 연결. WireGuard, Zero Trust 시대의 VPN 역할.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="VPN (Virtual Private Network) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="암호화된 터널로 안전한 네트워크 연결. 원격 근무 필수.">
+    <meta name="twitter:description" content="암호화된 터널로 안전한 네트워크 연결. WireGuard, Zero Trust 시대의 VPN 역할.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "VPN",
-        "description": "암호화된 터널로 안전한 네트워크 연결. 원격 근무 필수.",
+        "alternateName": "Virtual Private Network",
+        "description": "암호화된 터널을 통해 안전한 네트워크 연결을 제공합니다. WireGuard, OpenVPN, IPSec 등의 프로토콜이 있으며, Zero Trust 시대에도 여전히 중요합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">VPN</h1>
-            <p class="term-english">Virtual Private Network</p>
+            <p class="term-english">Virtual Private Network (가상 사설망)</p>
             <div class="term-description">
-                <p>암호화된 터널로 안전한 네트워크 연결. 원격 근무 필수.</p>
+                <p>VPN(Virtual Private Network)은 공용 네트워크를 통해 암호화된 터널을 생성하여 안전한 통신을 가능하게 합니다. WireGuard, OpenVPN, IPSec 등의 프로토콜이 있으며, 원격 근무와 기업 네트워크 보안에 필수적입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,372 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>VPN(Virtual Private Network)은 공용 인터넷을 통해 암호화된 "터널"을 생성하여 마치 전용 네트워크에 연결된 것처럼 안전하게 통신하는 기술입니다. VPN은 데이터 암호화, IP 주소 마스킹, 지역 제한 우회 등의 기능을 제공합니다. 기업에서는 원격 근무자가 사내 네트워크에 안전하게 접속하거나, 지사 간 네트워크를 연결하는 데 사용합니다.</p>
+                <p>VPN 프로토콜은 여러 세대를 거쳐 발전했습니다. IPSec은 네트워크 계층에서 작동하며 사이트 간 VPN에 많이 사용됩니다. OpenVPN은 SSL/TLS 기반의 오픈소스 솔루션으로 유연성이 높습니다. WireGuard는 2020년 Linux 커널에 통합된 최신 프로토콜로, 4,000줄 미만의 간결한 코드, 현대적 암호화(ChaCha20, Curve25519), 빠른 연결 속도가 특징입니다. 2025년 현재 WireGuard가 새로운 VPN 구축의 표준으로 자리잡고 있습니다.</p>
+                <p>Zero Trust 아키텍처의 부상으로 VPN의 역할이 변화하고 있습니다. 전통적인 VPN은 연결 후 네트워크 전체에 접근하는 "성벽" 모델이었습니다. 반면 Zero Trust Network Access(ZTNA)는 "신뢰하지 않고 항상 검증"하여 특정 리소스에만 세분화된 접근을 허용합니다. Tailscale, Cloudflare Access 같은 솔루션은 WireGuard 기반으로 ZTNA를 구현하여 VPN의 암호화 장점과 Zero Trust의 세분화된 접근 제어를 결합합니다.</p>
+                <p>SSL VPN(Fortinet, SonicWall 등)의 심각한 취약점이 지속적으로 발견되면서, 많은 조직이 WireGuard 기반 솔루션으로 마이그레이션하고 있습니다. WireGuard는 작은 코드베이스로 감사가 용이하고, 스텔스 모드로 UDP 포트 스캔에 응답하지 않아 공격 표면이 적습니다. Defguard, Netmaker 같은 솔루션은 WireGuard에 MFA, ACL, 중앙 관리 기능을 추가하여 엔터프라이즈 요구를 충족합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="wireguard">WireGuard 설정</button>
+                <button class="code-tab" data-lang="tailscale">Tailscale (ZTNA)</button>
+                <button class="code-tab" data-lang="openvpn">OpenVPN 설정</button>
+            </div>
+            <div class="code-block active" data-lang="wireguard">
+                <pre><code class="language-bash"># WireGuard VPN 서버 설정 (Ubuntu/Debian)
+# WireGuard는 Linux 커널 5.6+에 내장
+
+# 1. 설치
+sudo apt update && sudo apt install wireguard
+
+# 2. 키 쌍 생성 (서버)
+cd /etc/wireguard
+umask 077  # 파일 권한 제한
+wg genkey | tee server_private.key | wg pubkey > server_public.key
+
+# 3. 서버 설정 파일 (/etc/wireguard/wg0.conf)
+cat > /etc/wireguard/wg0.conf << 'EOF'
+[Interface]
+# 서버 개인키 (절대 공유 금지!)
+PrivateKey = SERVER_PRIVATE_KEY_HERE
+# VPN 내부 IP 주소
+Address = 10.0.0.1/24
+# 수신 포트 (UDP)
+ListenPort = 51820
+# 패킷 포워딩 활성화
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+
+# 클라이언트 피어 (각 사용자마다 추가)
+[Peer]
+# 클라이언트 공개키
+PublicKey = CLIENT_PUBLIC_KEY_HERE
+# 클라이언트에 할당할 IP
+AllowedIPs = 10.0.0.2/32
+# 선택: 동적 IP 클라이언트용 keepalive
+PersistentKeepalive = 25
+EOF
+
+# 4. 커널 IP 포워딩 활성화
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+sysctl -p
+
+# 5. WireGuard 시작
+sudo systemctl enable wg-quick@wg0
+sudo systemctl start wg-quick@wg0
+
+# 6. 상태 확인
+sudo wg show
+
+# === 클라이언트 설정 (/etc/wireguard/wg0.conf) ===
+cat > client_wg0.conf << 'EOF'
+[Interface]
+PrivateKey = CLIENT_PRIVATE_KEY_HERE
+Address = 10.0.0.2/24
+DNS = 1.1.1.1, 8.8.8.8
+
+[Peer]
+PublicKey = SERVER_PUBLIC_KEY_HERE
+# 서버 주소:포트
+Endpoint = vpn.example.com:51820
+# 모든 트래픽을 VPN으로 (전체 터널)
+AllowedIPs = 0.0.0.0/0
+# 또는 특정 네트워크만 (스플릿 터널)
+# AllowedIPs = 10.0.0.0/24, 192.168.1.0/24
+PersistentKeepalive = 25
+EOF
+
+# QR 코드 생성 (모바일 클라이언트용)
+# sudo apt install qrencode
+qrencode -t ansiutf8 < client_wg0.conf
+
+# 보안 참고:
+# - WireGuard는 4,000줄 미만의 간결한 코드 (OpenVPN: 100,000+줄)
+# - ChaCha20-Poly1305 암호화, Curve25519 키 교환
+# - 스텔스: 인증되지 않은 패킷에 응답 안 함 (포트 스캔 불가)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="tailscale">
+                <pre><code class="language-bash"># Tailscale - WireGuard 기반 Zero Trust VPN
+# 중앙 관리, SSO 통합, ACL로 세분화된 접근 제어
+
+# 1. 설치 (Linux)
+curl -fsSL https://tailscale.com/install.sh | sh
+
+# 2. 연결 (브라우저에서 SSO 인증)
+sudo tailscale up
+
+# 기업 SSO 연동 (SAML, OIDC)
+sudo tailscale up --login-server=https://login.tailscale.com
+
+# 3. 상태 확인
+tailscale status
+# 결과 예:
+# 100.64.0.1    my-laptop    user@example.com  linux   -
+# 100.64.0.2    office-pc    user@example.com  windows -
+# 100.64.0.3    server-prod  admin@example.com linux   -
+
+# 4. 다른 기기에 SSH 접속 (Tailscale IP 사용)
+ssh 100.64.0.3  # 또는
+ssh server-prod  # MagicDNS로 호스트명 사용
+
+# === ACL (Access Control List) 정책 예제 ===
+# tailscale.com 관리 콘솔에서 설정
+{
+  "acls": [
+    // 개발자는 개발 서버만 접근 가능
+    {
+      "action": "accept",
+      "src": ["group:developers"],
+      "dst": ["tag:dev:*"]
+    },
+    // 관리자는 모든 서버 접근 가능
+    {
+      "action": "accept",
+      "src": ["group:admins"],
+      "dst": ["*:*"]
+    },
+    // 모든 사용자는 사내 웹앱만 접근
+    {
+      "action": "accept",
+      "src": ["*"],
+      "dst": ["tag:webapp:80,443"]
+    }
+  ],
+  "tagOwners": {
+    "tag:dev": ["group:devops"],
+    "tag:prod": ["group:admins"],
+    "tag:webapp": ["group:admins"]
+  },
+  "groups": {
+    "group:developers": ["user1@example.com", "user2@example.com"],
+    "group:admins": ["admin@example.com"],
+    "group:devops": ["devops@example.com"]
+  }
+}
+
+# === Subnet Router (사내 네트워크 접근) ===
+# 사내에 Tailscale 노드를 설치하고 서브넷 라우터로 설정
+sudo tailscale up --advertise-routes=192.168.1.0/24
+
+# 관리 콘솔에서 라우트 승인 후, 모든 Tailscale 기기에서
+# 192.168.1.0/24 네트워크 접근 가능
+
+# === Exit Node (전체 인터넷 트래픽 VPN 경유) ===
+# 서버에서 Exit Node 활성화
+sudo tailscale up --advertise-exit-node
+
+# 클라이언트에서 Exit Node 사용
+tailscale up --exit-node=server-prod
+
+# 장점:
+# - WireGuard 기반으로 빠르고 안전
+# - NAT 통과 자동 처리 (DERP 릴레이)
+# - SSO/MFA 통합
+# - 세분화된 ACL로 Zero Trust 구현
+# - 설치 수분 내 완료 (전통적 VPN: 수 시간~수일)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="openvpn">
+                <pre><code class="language-bash"># OpenVPN 서버 설정 (Ubuntu/Debian)
+# 레거시 시스템이나 특수 요구사항에 사용
+
+# 1. 설치
+sudo apt update
+sudo apt install openvpn easy-rsa
+
+# 2. PKI 초기화 및 인증서 생성
+make-cadir ~/openvpn-ca
+cd ~/openvpn-ca
+./easyrsa init-pki
+./easyrsa build-ca nopass           # CA 생성
+./easyrsa gen-req server nopass     # 서버 인증서 요청
+./easyrsa sign-req server server    # 서버 인증서 서명
+./easyrsa gen-dh                    # DH 파라미터
+openvpn --genkey secret ta.key      # TLS-Auth 키
+
+# 3. 서버 설정 (/etc/openvpn/server.conf)
+cat > /etc/openvpn/server.conf << 'EOF'
+port 1194
+proto udp
+dev tun
+
+# 인증서 경로
+ca /etc/openvpn/ca.crt
+cert /etc/openvpn/server.crt
+key /etc/openvpn/server.key
+dh /etc/openvpn/dh.pem
+tls-auth /etc/openvpn/ta.key 0
+
+# VPN 네트워크
+server 10.8.0.0 255.255.255.0
+
+# 클라이언트가 서로 통신 가능
+client-to-client
+
+# 모든 트래픽을 VPN으로
+push "redirect-gateway def1 bypass-dhcp"
+push "dhcp-option DNS 1.1.1.1"
+
+# 보안 설정 (2025 권장)
+cipher AES-256-GCM
+auth SHA256
+tls-version-min 1.2
+tls-cipher TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384
+
+# 로깅
+log-append /var/log/openvpn.log
+verb 3
+EOF
+
+# 4. 클라이언트 인증서 생성
+./easyrsa gen-req client1 nopass
+./easyrsa sign-req client client1
+
+# 5. 클라이언트 설정 파일 (.ovpn)
+cat > client1.ovpn << 'EOF'
+client
+dev tun
+proto udp
+remote vpn.example.com 1194
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+
+<ca>
+# CA 인증서 내용
+</ca>
+
+<cert>
+# 클라이언트 인증서 내용
+</cert>
+
+<key>
+# 클라이언트 개인키 내용
+</key>
+
+<tls-auth>
+# ta.key 내용
+</tls-auth>
+key-direction 1
+
+cipher AES-256-GCM
+auth SHA256
+verb 3
+EOF
+
+# OpenVPN vs WireGuard:
+# OpenVPN: 100,000+ 줄 코드, 복잡한 설정, 인증서 관리 필요
+# WireGuard: 4,000줄 코드, 간단한 설정, 키 쌍만 사용
+# 새 프로젝트는 WireGuard 권장</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 현대화 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "레거시 SSL VPN에서 WireGuard 기반 솔루션으로 마이그레이션을 제안합니다. Fortinet VPN 취약점이 계속 발견되고 있고, WireGuard는 코드베이스가 작아 감사와 유지보수가 쉽습니다. Tailscale이나 자체 WireGuard 서버를 검토해볼 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 Zero Trust 도입 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "VPN만으로는 Zero Trust를 달성할 수 없습니다. VPN 연결 후에도 사용자가 모든 내부 리소스에 접근하는 것은 문제입니다. ZTNA를 적용해서 역할별로 필요한 서비스에만 접근하도록 ACL을 설정해야 합니다. Tailscale ACL이나 Cloudflare Access를 검토해보세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 원격 근무 보안 정책에서</div>
+                    <blockquote class="conv-quote">
+                        "원격 근무자는 반드시 VPN을 통해 사내 시스템에 접속해야 합니다. 스플릿 터널링으로 사내 트래픽만 VPN을 경유하면 성능도 좋고, 개인 인터넷 사용은 영향받지 않습니다. MFA도 필수로 적용하고, 기기 상태 검증도 추가하면 좋겠습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>VPN만으로 완전한 보안 착각</strong>
+                        <p>VPN은 전송 중 데이터를 암호화하지만, 연결 후 내부 위협에는 무방비입니다. VPN + Zero Trust 원칙(세분화된 접근 제어, 지속적 검증)을 함께 적용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>취약한 SSL VPN 방치</strong>
+                        <p>Fortinet, SonicWall, Ivanti 등 SSL VPN의 심각한 취약점이 지속 발견됩니다. 패치 적용을 미루지 마세요. 가능하면 WireGuard 기반 솔루션으로 마이그레이션을 검토하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>MFA 없이 VPN 운영</strong>
+                        <p>VPN 자격 증명만으로 인증하면 피싱이나 자격 증명 유출에 취약합니다. TOTP, 하드웨어 키(YubiKey), 또는 SSO 연동 MFA를 필수로 적용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>VPN 베스트 프랙티스</strong>
+                        <p>WireGuard 또는 WireGuard 기반 솔루션(Tailscale, Netmaker) 사용, MFA 필수, ACL로 세분화된 접근 제어, 스플릿 터널링으로 성능 최적화, 로깅 및 모니터링, 정기적 키 로테이션. Zero Trust 원칙과 함께 운영하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+                <a href="/ko/term/HTTPS/" class="related-term-link">HTTPS</a>
+                <a href="/ko/term/Cryptography/" class="related-term-link">Cryptography</a>
+                <a href="/ko/term/Authentication/" class="related-term-link">Authentication</a>
+                <a href="/ko/term/Firewall/" class="related-term-link">Firewall</a>
+                <a href="/ko/term/SSH/" class="related-term-link">SSH</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.wireguard.com/" target="_blank" class="learn-link">
+                    📘 WireGuard 공식 사이트
+                </a>
+                <a href="https://tailscale.com/kb/" target="_blank" class="learn-link">
+                    ☁️ Tailscale 지식 베이스
+                </a>
+                <a href="https://www.netmaker.io/" target="_blank" class="learn-link">
+                    🔧 Netmaker - 셀프 호스트 WireGuard 관리
+                </a>
+                <a href="https://www.techradar.com/pro/the-future-of-vpns-in-the-zero-trust-era" target="_blank" class="learn-link">
+                    📖 Zero Trust 시대의 VPN 미래
+                </a>
+                <a href="https://docs.openvpn.net/" target="_blank" class="learn-link">
+                    📄 OpenVPN 공식 문서
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +712,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

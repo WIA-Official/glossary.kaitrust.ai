@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,125 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>콜백(Callback)은 다른 함수에 인자로 전달되어 특정 시점에 호출되는 함수입니다. "나중에 다시 호출해줘(call back)"라는 의미에서 이름이 유래했으며, 이벤트 처리, 비동기 작업 완료 처리, 사용자 정의 동작 주입 등에 광범위하게 사용됩니다.</p>
+                <p>JavaScript에서 콜백은 비동기 프로그래밍의 기초입니다. 파일 읽기, HTTP 요청, 타이머 등 시간이 걸리는 작업이 완료되면 콜백 함수가 호출됩니다. 이 패턴을 통해 메인 스레드를 블로킹하지 않고 비동기 작업을 처리할 수 있습니다.</p>
+                <p>콜백의 단점은 중첩이 깊어지면 "콜백 지옥(Callback Hell)"이 발생한다는 것입니다. 여러 비동기 작업을 순차적으로 처리해야 할 때 코드가 피라미드 형태로 들여쓰기되어 가독성이 급격히 저하됩니다. 이를 해결하기 위해 Promise와 async/await가 등장했습니다.</p>
+                <p>콜백 패턴은 함수형 프로그래밍에서도 핵심적인 역할을 합니다. map, filter, reduce 같은 고차 함수들은 콜백을 받아 컬렉션의 각 요소를 처리합니다. 이벤트 리스너, 정렬 비교 함수, 미들웨어 등도 모두 콜백 패턴의 변형입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// JavaScript 콜백 예제
+
+// 1. 기본 콜백
+function greet(name, callback) {
+    console.log(`Hello, ${name}!`);
+    callback();
+}
+
+greet('Alice', () => console.log('Callback executed!'));
+
+// 2. 비동기 콜백 (타이머)
+console.log('Start');
+setTimeout(() => {
+    console.log('2초 후 실행');
+}, 2000);
+console.log('End');
+
+// 3. 에러 우선 콜백 (Node.js 패턴)
+function readFile(path, callback) {
+    // callback(error, data) 형태
+    fs.readFile(path, 'utf8', (err, data) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, data);
+    });
+}
+
+// 4. 콜백 지옥 예시 (안티패턴)
+getUser(userId, (user) => {
+    getOrders(user.id, (orders) => {
+        getOrderDetails(orders[0].id, (details) => {
+            // 점점 깊어지는 중첩...
+        });
+    });
+});
+
+// 5. 배열 메서드와 콜백
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(n => n * 2);
+const evens = numbers.filter(n => n % 2 === 0);</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>시니어:</strong> 이 레거시 코드, 콜백이 5단계나 중첩되어 있네요.</p>
+                <p><strong>주니어:</strong> Promise로 리팩토링해야 할까요?</p>
+                <p><strong>시니어:</strong> 네, 각 콜백을 Promise 반환 함수로 바꾸고 async/await로 평탄화하면 훨씬 읽기 쉬워져요. util.promisify도 유용해요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 콜백과 Promise의 차이점을 설명해주세요.</p>
+                <p><strong>지원자:</strong> 콜백은 함수를 인자로 전달하는 패턴이고, Promise는 비동기 작업의 결과를 나타내는 객체입니다. Promise는 체이닝이 가능해서 콜백 지옥을 피할 수 있고, catch로 에러를 일괄 처리할 수 있습니다.</p>
+                <p><strong>면접관:</strong> 에러 우선 콜백(error-first callback)이란?</p>
+                <p><strong>지원자:</strong> Node.js의 관례로, 콜백의 첫 번째 인자가 에러 객체입니다. 에러가 없으면 null이고, 있으면 에러 정보가 담깁니다. callback(err, result) 형태로 사용합니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> 이 콜백 에러 처리가 빠져있어요. 실패하면 어떻게 되나요?</p>
+                <p><strong>작성자:</strong> 아, 성공 케이스만 생각했네요.</p>
+                <p><strong>리뷰어:</strong> 에러 우선 패턴을 따르거나, Promise로 감싸서 try-catch로 처리하세요. 에러가 삼켜지면 디버깅이 정말 어려워요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>콜백 지옥:</strong> 중첩 콜백은 3단계 이하로 유지하세요. 그 이상이면 Promise, async/await, 또는 함수 분리를 고려하세요.</li>
+                <li><strong>에러 처리 필수:</strong> 에러 콜백을 무시하면 실패 시 아무 피드백 없이 작업이 중단됩니다. 항상 에러 케이스를 처리하세요.</li>
+                <li><strong>this 바인딩:</strong> 콜백 내부에서 this는 호출 컨텍스트에 따라 달라집니다. 화살표 함수나 bind()로 명시적으로 바인딩하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%ED%94%84%EB%A1%9C%EB%AF%B8%EC%8A%A4/" class="related-link">프로미스</a>
+                <a href="/ko/term/%EB%B9%84%EB%8F%99%EA%B8%B0/" class="related-link">비동기</a>
+                <a href="/ko/term/%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EB%A3%A8%ED%94%84/" class="related-link">이벤트 루프</a>
+                <a href="/ko/term/%ED%81%B4%EB%A1%9C%EC%A0%80/" class="related-link">클로저</a>
+                <a href="/ko/term/%EA%B3%A0%EC%B0%A8-%ED%95%A8%EC%88%98/" class="related-link">고차 함수</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Callback_function" target="_blank">MDN - Callback function</a></li>
+                <li><a href="https://javascript.info/callbacks" target="_blank">JavaScript.info - Introduction to callbacks</a></li>
+                <li><a href="http://callbackhell.com/" target="_blank">Callback Hell 해결 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +333,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

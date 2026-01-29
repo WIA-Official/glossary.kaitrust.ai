@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,295 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>개인정보 영향평가(DPIA, Data Protection Impact Assessment)는 GDPR Article 35에 따라 개인정보 처리가 정보주체의 권리와 자유에 미치는 영향을 사전에 평가하는 절차입니다. 고위험 처리 활동 시작 전 반드시 수행해야 합니다.</p>
+                <p>DPIA 의무 대상은 1) 자동화된 의사결정/프로파일링으로 법적 효과 발생, 2) 민감정보 또는 범죄 관련 정보 대규모 처리, 3) 공개 장소의 체계적인 모니터링입니다. 감독기관은 추가로 DPIA 필수 처리 활동 목록을 공개합니다.</p>
+                <p>DPIA 필수 포함 항목은 처리 활동 설명, 필요성/비례성 평가, 정보주체 권리 및 자유에 대한 위험 평가, 위험 완화 조치입니다. DPO 의견 수렴도 필수입니다.</p>
+                <p>EU AI Act에서 고위험 AI 시스템은 DPIA 의무 대상이며, 기본권 영향평가(FRIA)도 추가로 요구됩니다. AI 시스템의 투명성, 공정성, 차별 위험을 중점 평가해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># DPIA 자동화 평가 시스템
+from dataclasses import dataclass, field
+from typing import List, Dict, Optional
+from datetime import datetime
+from enum import Enum
+
+class RiskLevel(Enum):
+    """위험 수준"""
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    VERY_HIGH = "very_high"
+
+class DPIATrigger(Enum):
+    """DPIA 의무 트리거 (GDPR Article 35)"""
+    AUTOMATED_DECISION = "systematic_automated_decision"  # 자동화 의사결정
+    SENSITIVE_DATA_LARGE_SCALE = "sensitive_large_scale"  # 민감정보 대규모
+    PUBLIC_MONITORING = "public_area_monitoring"          # 공개장소 모니터링
+    PROFILING = "profiling_with_legal_effect"            # 법적효과 프로파일링
+    NEW_TECHNOLOGY = "new_technology_high_risk"          # 신기술 고위험
+    AI_HIGH_RISK = "ai_act_high_risk"                    # EU AI Act 고위험
+
+@dataclass
+class ProcessingActivity:
+    """개인정보 처리 활동"""
+    name: str
+    purpose: str
+    legal_basis: str
+    data_categories: List[str]
+    data_subjects: List[str]
+    recipients: List[str]
+    retention_period: str
+    transfers_outside_eea: bool = False
+    automated_decision: bool = False
+    profiling: bool = False
+    uses_ai: bool = False
+    ai_risk_level: Optional[str] = None
+
+@dataclass
+class DPIAAssessment:
+    """DPIA 평가"""
+    id: str
+    processing: ProcessingActivity
+    assessor: str
+    dpo_consulted: bool = False
+    created_at: datetime = field(default_factory=datetime.now)
+
+    # 평가 결과
+    triggers: List[DPIATrigger] = field(default_factory=list)
+    risks: List[Dict] = field(default_factory=list)
+    mitigations: List[Dict] = field(default_factory=list)
+    overall_risk: Optional[RiskLevel] = None
+    approved: bool = False
+
+    def check_dpia_required(self) -> Dict:
+        """DPIA 필요성 판단"""
+        triggers_found = []
+
+        # 자동화 의사결정 체크
+        if self.processing.automated_decision:
+            triggers_found.append(DPIATrigger.AUTOMATED_DECISION)
+
+        # 민감정보 대규모 처리 체크
+        sensitive_categories = ["health", "biometric", "genetic", "racial", "political", "religious", "sexual"]
+        if any(cat in self.processing.data_categories for cat in sensitive_categories):
+            triggers_found.append(DPIATrigger.SENSITIVE_DATA_LARGE_SCALE)
+
+        # 프로파일링 체크
+        if self.processing.profiling:
+            triggers_found.append(DPIATrigger.PROFILING)
+
+        # AI 고위험 체크
+        if self.processing.uses_ai and self.processing.ai_risk_level == "high":
+            triggers_found.append(DPIATrigger.AI_HIGH_RISK)
+
+        self.triggers = triggers_found
+
+        return {
+            "dpia_required": len(triggers_found) > 0,
+            "triggers": [t.value for t in triggers_found],
+            "legal_basis": "GDPR Article 35(3)" if triggers_found else None,
+            "recommendation": "DPIA 수행 필수" if triggers_found else "DPIA 권장 (선제적 평가)"
+        }
+
+    def assess_risks(self) -> List[Dict]:
+        """위험 평가"""
+        risks = []
+
+        # 데이터 범위 위험
+        if len(self.processing.data_subjects) > 1000:
+            risks.append({
+                "category": "데이터 규모",
+                "description": "대규모 정보주체 영향",
+                "likelihood": "high",
+                "impact": "high",
+                "risk_level": RiskLevel.HIGH
+            })
+
+        # 민감정보 위험
+        sensitive = ["health", "biometric", "genetic"]
+        if any(cat in self.processing.data_categories for cat in sensitive):
+            risks.append({
+                "category": "민감정보",
+                "description": "특수 범주 개인정보 처리",
+                "likelihood": "medium",
+                "impact": "very_high",
+                "risk_level": RiskLevel.VERY_HIGH
+            })
+
+        # 국외이전 위험
+        if self.processing.transfers_outside_eea:
+            risks.append({
+                "category": "국외이전",
+                "description": "EEA 외부 개인정보 이전",
+                "likelihood": "medium",
+                "impact": "high",
+                "risk_level": RiskLevel.HIGH
+            })
+
+        # AI 관련 위험
+        if self.processing.uses_ai:
+            risks.append({
+                "category": "AI 시스템",
+                "description": "알고리즘 편향, 투명성 부족 위험",
+                "likelihood": "medium",
+                "impact": "high",
+                "risk_level": RiskLevel.HIGH
+            })
+
+        self.risks = risks
+        return risks
+
+    def add_mitigation(self, risk_category: str, measure: str, residual_risk: RiskLevel):
+        """위험 완화 조치 추가"""
+        self.mitigations.append({
+            "risk_category": risk_category,
+            "measure": measure,
+            "residual_risk": residual_risk.value,
+            "implemented": False
+        })
+
+    def calculate_overall_risk(self) -> RiskLevel:
+        """전체 위험 수준 계산"""
+        if not self.risks:
+            return RiskLevel.LOW
+
+        risk_scores = {
+            RiskLevel.LOW: 1,
+            RiskLevel.MEDIUM: 2,
+            RiskLevel.HIGH: 3,
+            RiskLevel.VERY_HIGH: 4
+        }
+
+        max_risk = max(r["risk_level"] for r in self.risks)
+        self.overall_risk = max_risk
+        return max_risk
+
+    def generate_report(self) -> Dict:
+        """DPIA 보고서 생성"""
+        return {
+            "dpia_id": self.id,
+            "processing_activity": self.processing.name,
+            "assessment_date": self.created_at.isoformat(),
+            "assessor": self.assessor,
+            "dpo_consulted": self.dpo_consulted,
+            "section_1_description": {
+                "purpose": self.processing.purpose,
+                "legal_basis": self.processing.legal_basis,
+                "data_categories": self.processing.data_categories,
+                "data_subjects": self.processing.data_subjects
+            },
+            "section_2_necessity": {
+                "proportionality": "처리 목적 달성에 필요한 최소한의 정보만 처리",
+                "data_minimization": True
+            },
+            "section_3_risks": self.risks,
+            "section_4_mitigations": self.mitigations,
+            "conclusion": {
+                "overall_risk": self.overall_risk.value if self.overall_risk else "not_assessed",
+                "residual_risk_acceptable": self.overall_risk in [RiskLevel.LOW, RiskLevel.MEDIUM] if self.overall_risk else False,
+                "prior_consultation_required": self.overall_risk == RiskLevel.VERY_HIGH if self.overall_risk else False
+            }
+        }
+
+# 사용 예시
+processing = ProcessingActivity(
+    name="AI 채용 스크리닝 시스템",
+    purpose="이력서 자동 분석 및 후보자 순위화",
+    legal_basis="정당한 이익 (GDPR Article 6(1)(f))",
+    data_categories=["employment_history", "education", "skills"],
+    data_subjects=["job_applicants"],
+    recipients=["HR_department", "hiring_managers"],
+    retention_period="채용 완료 후 2년",
+    automated_decision=True,
+    profiling=True,
+    uses_ai=True,
+    ai_risk_level="high"
+)
+
+dpia = DPIAAssessment(
+    id="DPIA-2024-001",
+    processing=processing,
+    assessor="개인정보보호팀",
+    dpo_consulted=True
+)
+
+# DPIA 필요성 확인
+requirement = dpia.check_dpia_required()
+print(f"DPIA 필요: {requirement['dpia_required']}")
+print(f"트리거: {requirement['triggers']}")
+
+# 위험 평가
+risks = dpia.assess_risks()
+dpia.calculate_overall_risk()
+print(f"전체 위험 수준: {dpia.overall_risk.value}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">DPO:</strong> "이 AI 채용 시스템은 자동화 의사결정에 프로파일링까지 하니까 DPIA 트리거가 두 개나 걸립니다. 개발 착수 전에 평가 완료해야 해요."</p>
+                <p><strong class="role-junior">개발팀:</strong> "네, 데이터 최소화 원칙 적용해서 필수 항목만 수집하고, 알고리즘 편향 테스트 결과도 문서화하겠습니다. 완화조치 적용 후 잔여위험이 수용 가능한지 검토 부탁드립니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "DPIA가 필수인 경우는 언제인가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "GDPR Article 35(3)에 따라 자동화 의사결정으로 법적 효과가 발생하거나, 민감정보를 대규모로 처리하거나, 공개 장소를 체계적으로 모니터링할 때 의무입니다. EU AI Act에서는 고위험 AI 시스템도 DPIA 대상이며, 잔여위험이 높으면 감독기관 사전협의가 필요합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">컴플라이언스:</strong> "DPIA에서 '알고리즘 편향 위험'을 식별했는데 완화조치가 연 1회 감사뿐이에요. 실시간 모니터링 필요하지 않나요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "맞습니다. 모델 드리프트 모니터링 추가하고, 보호그룹별 결과 분포 대시보드도 만들겠습니다. 임계값 벗어나면 자동 알림 설정해서 잔여위험을 낮추겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>DPIA 미수행 의무 위반 시 GDPR 최대 1,000만 유로 또는 매출 2% 과징금</li>
+                <li>잔여위험이 '매우 높음'인 경우 감독기관 사전협의(Prior Consultation) 필수 - Article 36</li>
+                <li>DPO 의견 미수렴 시 DPIA 절차 하자로 인정될 수 있음</li>
+                <li class="info">DPIA는 일회성이 아닌 지속적 프로세스 - 처리 변경 시 재평가 필요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%20%EB%B3%B4%ED%98%B8%EC%B1%85%EC%9E%84%EC%9E%90/" class="related-link">개인정보 보호책임자</a>
+                <a href="/ko/term/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%9E%90%EA%B8%B0%EA%B2%B0%EC%A0%95%EA%B6%8C/" class="related-link">개인정보자기결정권</a>
+                <a href="/ko/term/AI%20%EA%B0%90%EC%82%AC/" class="related-link">AI 감사</a>
+                <a href="/ko/term/EU%20AI%20Act/" class="related-link">EU AI Act</a>
+                <a href="/ko/term/AI%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">AI 거버넌스</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://gdpr-info.eu/art-35-gdpr/" target="_blank" rel="noopener">GDPR Article 35 - DPIA 규정</a></li>
+                <li><span class="type-tutorial"></span><a href="https://edpb.europa.eu/our-work-tools/our-documents/guidelines/guidelines-data-protection-impact-assessment-dpia-and_en" target="_blank" rel="noopener">EDPB DPIA 가이드라인</a></li>
+                <li><span class="type-book"></span><a href="https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/data-protection-impact-assessments-dpias/" target="_blank" rel="noopener">ICO DPIA 실무 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +502,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

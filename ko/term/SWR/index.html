@@ -202,6 +202,178 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">SWR은 Vercel이 개발한 React용 데이터 페칭 라이브러리로, "stale-while-revalidate" HTTP 캐시 전략에서 이름을 따왔습니다. 먼저 캐시된 데이터를 반환하고(stale), 백그라운드에서 최신 데이터를 가져와(revalidate) 갱신합니다.</p>
+                <p style="margin-bottom: 1rem;">SWR의 핵심은 useSWR 훅입니다. 키(보통 API URL)와 fetcher 함수를 받아 data, error, isLoading 상태를 반환합니다. 같은 키로 여러 컴포넌트에서 호출해도 요청은 자동으로 중복 제거(deduplication)됩니다.</p>
+                <p style="margin-bottom: 1rem;">SWR은 포커스 시 자동 갱신, 폴링, 낙관적 업데이트, 에러 재시도 등 다양한 기능을 내장합니다. 또한 SSR과 완벽하게 호환되어 서버에서 가져온 데이터를 클라이언트로 전달할 수 있습니다.</p>
+                <p>TanStack Query(React Query)와 비교하면 SWR은 더 가볍고 단순합니다. 복잡한 캐싱 전략이나 mutation 관리가 필요하면 TanStack Query, 간단한 데이터 페칭에는 SWR이 적합합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>import useSWR, { useSWRConfig, mutate } from 'swr';
+
+// 기본 fetcher 함수
+const fetcher = (url: string) =&gt; fetch(url).then(res =&gt; res.json());
+
+// 기본 사용법
+function Profile() {
+  const { data, error, isLoading, isValidating } = useSWR(
+    '/api/user',
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      refreshInterval: 30000, // 30초마다 자동 갱신
+      dedupingInterval: 2000, // 2초 내 중복 요청 방지
+    }
+  );
+
+  if (error) return &lt;div&gt;에러가 발생했습니다&lt;/div&gt;;
+  if (isLoading) return &lt;div&gt;로딩중...&lt;/div&gt;;
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;{data.name}&lt;/h1&gt;
+      {isValidating &amp;&amp; &lt;span&gt;업데이트 중...&lt;/span&gt;}
+    &lt;/div&gt;
+  );
+}
+
+// 조건부 페칭
+function UserPosts({ userId }: { userId?: string }) {
+  // userId가 없으면 요청 안 함
+  const { data } = useSWR(
+    userId ? `/api/users/${userId}/posts` : null,
+    fetcher
+  );
+  return &lt;PostList posts={data} /&gt;;
+}
+
+// 낙관적 업데이트 (Optimistic Update)
+function TodoItem({ todo }: { todo: Todo }) {
+  const handleToggle = async () =&gt; {
+    // 즉시 UI 업데이트
+    mutate(
+      '/api/todos',
+      (todos: Todo[]) =&gt;
+        todos.map(t =&gt; t.id === todo.id ? { ...t, done: !t.done } : t),
+      { revalidate: false }
+    );
+
+    // 서버에 요청
+    await fetch(`/api/todos/${todo.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ done: !todo.done })
+    });
+
+    // 서버 데이터로 재검증
+    mutate('/api/todos');
+  };
+
+  return &lt;div onClick={handleToggle}&gt;{todo.title}&lt;/div&gt;;
+}
+
+// useSWRMutation으로 mutation 처리
+import useSWRMutation from 'swr/mutation';
+
+async function createPost(url: string, { arg }: { arg: { title: string } }) {
+  return fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg)
+  }).then(r =&gt; r.json());
+}
+
+function NewPost() {
+  const { trigger, isMutating } = useSWRMutation('/api/posts', createPost);
+
+  const handleSubmit = async (title: string) =&gt; {
+    await trigger({ title });
+    mutate('/api/posts'); // 목록 갱신
+  };
+
+  return &lt;button disabled={isMutating}&gt;{isMutating ? '저장중...' : '작성'}&lt;/button&gt;;
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">기술 미팅에서:</p>
+                    <p>"대시보드에서 같은 API를 5군데서 호출하고 있어요. SWR 쓰면 자동으로 중복 제거되고, 포커스할 때 최신 데이터로 갱신됩니다. 실시간 느낌도 나고요."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"stale-while-revalidate 전략이 뭔가요?" - "캐시된 오래된 데이터를 먼저 보여주고, 백그라운드에서 최신 데이터를 가져와 갱신합니다. 사용자는 즉시 콘텐츠를 보고, 곧 최신 상태로 업데이트됩니다."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">코드 리뷰에서:</p>
+                    <p>"좋아요 누를 때 서버 응답 기다리면 느려요. mutate로 낙관적 업데이트 먼저 하고, 실패하면 롤백하는 패턴 쓰세요. 체감 속도가 완전 달라집니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">useSWR의 키가 변경되면 새로운 요청이 발생합니다. 객체를 키로 사용할 때 참조가 매번 바뀌지 않도록 useMemo로 안정화하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">revalidateOnFocus가 기본으로 활성화되어 있어 탭 전환 시 불필요한 API 호출이 발생할 수 있습니다. 필요에 따라 비활성화하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">낙관적 업데이트 시 서버 요청이 실패하면 롤백 로직을 반드시 구현하세요. 그렇지 않으면 UI와 서버 상태가 불일치합니다.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/TanStack%20Query/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">TanStack Query</a>
+                <a href="/ko/term/React/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">React</a>
+                <a href="/ko/term/Hooks/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Hooks</a>
+                <a href="/ko/term/REST%20API/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">REST API</a>
+                <a href="/ko/term/Next.js/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Next.js</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://swr.vercel.app/ko" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> SWR 공식 문서 (한국어)
+                </a>
+                <a href="https://swr.vercel.app/docs/mutation" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> SWR Mutation Guide
+                </a>
+                <a href="https://web.dev/articles/stale-while-revalidate" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> web.dev - Stale-while-revalidate
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

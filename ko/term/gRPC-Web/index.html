@@ -161,6 +161,122 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhancement Section Styles */
+        .enhancement-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.8));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhancement-section h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .enhancement-section p, .enhancement-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+        }
+        .enhancement-section ul, .enhancement-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .enhancement-section strong {
+            color: #a855f7;
+        }
+        .code-block {
+            background: #0f172a;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .code-block .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-block .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .dialogue-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .dialogue-box .speaker {
+            font-weight: 600;
+            color: #818cf8;
+            margin-bottom: 0.25rem;
+        }
+        .dialogue-box p {
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-link {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #fff;
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #00f5ff;
+            text-decoration: none;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -202,6 +318,142 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="enhancement-section">
+            <h2>상세 설명</h2>
+            <p><strong>gRPC-Web</strong>은 웹 브라우저에서 gRPC 서비스를 호출할 수 있게 해주는 프로토콜입니다. 브라우저의 HTTP/2 제약으로 인해 일반 gRPC를 직접 사용할 수 없어 개발되었습니다.</p>
+            <p>브라우저에서 gRPC-Web 클라이언트가 요청을 보내면, <strong>프록시(Envoy 등)</strong>가 이를 표준 gRPC로 변환해 백엔드 서비스와 통신합니다. 이를 통해 프론트엔드도 gRPC의 이점을 활용할 수 있습니다.</p>
+            <ul>
+                <li><strong>브라우저 호환</strong>: 모든 최신 브라우저에서 동작</li>
+                <li><strong>타입 안정성</strong>: protobuf 기반 강타입 클라이언트</li>
+                <li><strong>서버 스트리밍</strong>: 서버에서 클라이언트로 스트림 지원</li>
+                <li><strong>코드 생성</strong>: .proto에서 TypeScript/JavaScript 코드 자동 생성</li>
+                <li><strong>압축된 페이로드</strong>: JSON 대비 작은 데이터 크기</li>
+            </ul>
+            <p>다만 양방향 스트리밍은 지원되지 않으며, 프록시 서버가 필수라는 제약이 있습니다.</p>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="enhancement-section">
+            <h2>코드 예제</h2>
+            <p><strong>proto 파일에서 클라이언트 생성</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code># protobuf 및 grpc-web 플러그인 설치 후
+protoc -I=. user.proto \
+  --js_out=import_style=commonjs:./generated \
+  --grpc-web_out=import_style=typescript,mode=grpcwebtext:./generated</code>
+            </div>
+            <p><strong>TypeScript 클라이언트 사용</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>import { UserServiceClient } from './generated/UserServiceClientPb';
+import { GetUserRequest, User } from './generated/user_pb';
+
+// 클라이언트 생성 (Envoy 프록시 주소)
+const client = new UserServiceClient('http://localhost:8080');
+
+// Unary 호출
+const request = new GetUserRequest();
+request.setId(1);
+
+client.getUser(request, {}, (err, response: User) => {
+    if (err) {
+        console.error(err);
+        return;
+    }
+    console.log(response.getName()); // "홍길동"
+    console.log(response.getEmail());
+});
+
+// Promise 래퍼 사용
+async function fetchUser(id: number): Promise&lt;User&gt; {
+    const request = new GetUserRequest();
+    request.setId(id);
+
+    return new Promise((resolve, reject) => {
+        client.getUser(request, {}, (err, response) => {
+            err ? reject(err) : resolve(response);
+        });
+    });
+}</code>
+            </div>
+            <p><strong>Envoy 프록시 설정 (간략)</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code># envoy.yaml 핵심 설정
+http_filters:
+  - name: envoy.filters.http.grpc_web  # gRPC-Web 변환
+  - name: envoy.filters.http.cors      # CORS 처리
+  - name: envoy.filters.http.router
+
+clusters:
+  - name: grpc_service
+    http2_protocol_options: {}  # HTTP/2로 백엔드 연결
+    load_assignment:
+      endpoints:
+        - endpoint:
+            address:
+              socket_address: { address: backend, port_value: 50051 }</code>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="enhancement-section">
+            <h2>실무 대화 예시</h2>
+            <div class="dialogue-box">
+                <p class="speaker">프론트엔드 개발자</p>
+                <p>"백엔드가 gRPC인데 우리도 gRPC-Web 써야 하나요? REST Gateway가 더 간단한 것 같은데."</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">백엔드 개발자</p>
+                <p>"타입 안정성이 필요하면 gRPC-Web이 좋아. proto 파일 하나로 프론트/백 타입이 일치하니까 API 문서 없이도 개발 가능하거든."</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">데브옵스</p>
+                <p>"걱정 마, 우리 인프라에 이미 Envoy 있어. gRPC-Web 필터만 추가하면 돼."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="enhancement-section">
+            <h2>주의사항</h2>
+            <div class="warning-box">
+                <p><strong>양방향 스트리밍 미지원</strong></p>
+                <p>브라우저 제약으로 클라이언트 스트리밍과 양방향 스트리밍은 지원되지 않습니다. 서버 스트리밍만 가능합니다.</p>
+            </div>
+            <div class="warning-box">
+                <p><strong>프록시 필수</strong></p>
+                <p>Envoy, nginx 등의 프록시가 반드시 필요합니다. 인프라 구성이 복잡해질 수 있습니다.</p>
+            </div>
+            <div class="warning-box">
+                <p><strong>디버깅 어려움</strong></p>
+                <p>바이너리 프로토콜이라 브라우저 개발자 도구에서 요청/응답을 직접 읽기 어렵습니다.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhancement-section">
+            <h2>관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/gRPC/" class="related-term-link">gRPC</a>
+                <a href="/ko/term/REST%20API/" class="related-term-link">REST API</a>
+                <a href="/ko/term/tRPC/" class="related-term-link">tRPC</a>
+                <a href="/ko/term/GraphQL/" class="related-term-link">GraphQL</a>
+                <a href="/ko/term/WebSocket/" class="related-term-link">WebSocket</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhancement-section">
+            <h2>더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://grpc.io/docs/platforms/web/" target="_blank">gRPC-Web 공식 문서</a></li>
+                <li><a href="https://github.com/grpc/grpc-web" target="_blank">GitHub - gRPC-Web</a></li>
+                <li><a href="https://www.envoyproxy.io/docs/envoy/latest/" target="_blank">Envoy Proxy 문서</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +464,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

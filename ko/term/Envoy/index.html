@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,259 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detailed-explanation">
+            <h2 id="detailed-explanation" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Envoy</strong>는 Lyft에서 개발한 고성능 L7(애플리케이션 레이어) 프록시로, 현재 CNCF 졸업 프로젝트입니다. 마이크로서비스 아키텍처에서 서비스 간 통신을 처리하며, Istio, AWS App Mesh 등 서비스 메시의 데이터 플레인으로 광범위하게 사용됩니다.</p>
+
+                <h3>핵심 특징</h3>
+                <ul>
+                    <li><strong>L7 프록시</strong>: HTTP/2, gRPC, WebSocket 등 애플리케이션 프로토콜 지원</li>
+                    <li><strong>동적 설정</strong>: xDS API를 통한 런타임 설정 변경 (재시작 불필요)</li>
+                    <li><strong>관측 가능성</strong>: 상세한 메트릭, 분산 트레이싱, 구조화된 로깅</li>
+                    <li><strong>로드 밸런싱</strong>: Round Robin, Least Connections, Ring Hash 등</li>
+                    <li><strong>서킷 브레이커</strong>: 장애 서비스 격리로 연쇄 실패 방지</li>
+                    <li><strong>TLS 종료/시작</strong>: 양방향 TLS(mTLS) 지원</li>
+                </ul>
+
+                <h3>Envoy 아키텍처</h3>
+                <ul>
+                    <li><strong>Listener</strong>: 다운스트림 연결을 수신하는 엔드포인트</li>
+                    <li><strong>Filter Chain</strong>: 요청/응답 처리 파이프라인</li>
+                    <li><strong>Cluster</strong>: 업스트림 서비스 그룹</li>
+                    <li><strong>Route</strong>: 요청을 적절한 클러스터로 매핑</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-example">
+            <h2 id="code-example" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>envoy.yaml - 기본 프록시 설정</h3>
+                <pre><code class="language-yaml"># envoy.yaml - HTTP 리버스 프록시 설정
+static_resources:
+  listeners:
+    - name: listener_0
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 8080
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_http
+                codec_type: AUTO
+                route_config:
+                  name: local_route
+                  virtual_hosts:
+                    - name: backend
+                      domains: ["*"]
+                      routes:
+                        # API 라우트
+                        - match:
+                            prefix: "/api/"
+                          route:
+                            cluster: api_service
+                            timeout: 30s
+                        # 정적 파일
+                        - match:
+                            prefix: "/"
+                          route:
+                            cluster: frontend_service
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+  clusters:
+    - name: api_service
+      connect_timeout: 5s
+      type: STRICT_DNS
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: api_service
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: api-server
+                      port_value: 3000
+      # 헬스체크
+      health_checks:
+        - timeout: 3s
+          interval: 10s
+          unhealthy_threshold: 3
+          healthy_threshold: 2
+          http_health_check:
+            path: /health
+      # 서킷 브레이커
+      circuit_breakers:
+        thresholds:
+          - priority: DEFAULT
+            max_connections: 1000
+            max_pending_requests: 1000
+            max_requests: 1000
+            max_retries: 3
+
+    - name: frontend_service
+      connect_timeout: 5s
+      type: STRICT_DNS
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: frontend_service
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: frontend
+                      port_value: 80
+
+admin:
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: 9901</code></pre>
+
+                <h3>Rate Limiting 설정</h3>
+                <pre><code class="language-yaml"># Rate limit 필터 설정
+http_filters:
+  - name: envoy.filters.http.ratelimit
+    typed_config:
+      "@type": type.googleapis.com/envoy.extensions.filters.http.ratelimit.v3.RateLimit
+      domain: my_domain
+      stage: 0
+      rate_limit_service:
+        grpc_service:
+          envoy_grpc:
+            cluster_name: ratelimit_service
+        transport_api_version: V3
+  - name: envoy.filters.http.router
+
+# Route level rate limit
+routes:
+  - match:
+      prefix: "/api/"
+    route:
+      cluster: api_service
+      rate_limits:
+        - actions:
+            - request_headers:
+                header_name: "x-api-key"
+                descriptor_key: "api_key"</code></pre>
+
+                <h3>mTLS 설정</h3>
+                <pre><code class="language-yaml"># TLS 리스너 설정
+filter_chains:
+  - filter_chain_match: {}
+    transport_socket:
+      name: envoy.transport_sockets.tls
+      typed_config:
+        "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
+        require_client_certificate: true
+        common_tls_context:
+          tls_certificates:
+            - certificate_chain:
+                filename: /etc/certs/server.crt
+              private_key:
+                filename: /etc/certs/server.key
+          validation_context:
+            trusted_ca:
+              filename: /etc/certs/ca.crt</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section" aria-labelledby="practical-dialogue">
+            <h2 id="practical-dialogue" class="section-title">실무 대화 예제</h2>
+            <div class="section-content">
+                <div class="dialogue-container">
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">백엔드 개발자</div>
+                        <div class="dialogue-content">"Istio를 도입하면서 사이드카 프록시라는 게 생겼는데, 이게 Envoy인가요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">인프라 엔지니어</div>
+                        <div class="dialogue-content">"맞아요. Istio는 Envoy를 사이드카로 주입해서 서비스 간 모든 트래픽을 가로채요. 서비스 코드 변경 없이 mTLS 암호화, 트래픽 관찰, 라우팅 정책을 적용할 수 있죠."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">백엔드 개발자</div>
+                        <div class="dialogue-content">"그런데 사이드카가 모든 파드에 붙으니까 리소스 오버헤드가 걱정되는데요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">인프라 엔지니어</div>
+                        <div class="dialogue-content">"Envoy 하나당 보통 50-100MB 메모리, 10-50ms 레이턴시 정도예요. 성능에 민감한 서비스라면 리소스 limit을 조정하거나, 최근에는 사이드카 없이 노드당 공유 프록시를 쓰는 방식(Cilium, Ambient Mesh)도 있어요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="cautions">
+            <h2 id="cautions" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="caution-box">
+                    <h3>설정 복잡도</h3>
+                    <p>Envoy YAML 설정은 매우 복잡합니다. 직접 작성보다는 Istio, Contour 같은 상위 레벨 도구를 사용하거나, xDS 컨트롤 플레인을 활용하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>리소스 오버헤드</h3>
+                    <p>사이드카 패턴으로 배포 시 파드당 추가 메모리/CPU가 필요합니다. 대규모 클러스터에서는 리소스 계획을 신중히 하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>디버깅 어려움</h3>
+                    <p>프록시 레이어가 추가되면 네트워크 문제 디버깅이 복잡해집니다. Envoy admin API와 상세 로깅 활용법을 익혀두세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>버전 호환성</h3>
+                    <p>xDS API 버전(v2, v3)에 주의하세요. 최신 Envoy는 v2를 지원하지 않을 수 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-terms">
+            <h2 id="related-terms" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms-grid">
+                    <a href="/ko/term/Istio/" class="related-term-card">
+                        <h3>Istio</h3>
+                        <p>Envoy를 데이터 플레인으로 사용하는 서비스 메시</p>
+                    </a>
+                    <a href="/ko/term/Ingress/" class="related-term-card">
+                        <h3>Ingress</h3>
+                        <p>K8s 외부 트래픽 라우팅. Envoy 기반 인그레스 컨트롤러 사용</p>
+                    </a>
+                    <a href="/ko/term/Kubernetes/" class="related-term-card">
+                        <h3>Kubernetes</h3>
+                        <p>Envoy가 사이드카로 배포되는 컨테이너 플랫폼</p>
+                    </a>
+                    <a href="/ko/term/gRPC/" class="related-term-card">
+                        <h3>gRPC</h3>
+                        <p>Envoy가 지원하는 고성능 RPC 프레임워크</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-more">
+            <h2 id="learn-more" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="resource-list">
+                    <li><a href="https://www.envoyproxy.io/docs/" target="_blank" rel="noopener noreferrer">Envoy 공식 문서</a> - 전체 기능 레퍼런스</li>
+                    <li><a href="https://www.envoyproxy.io/learn/" target="_blank" rel="noopener noreferrer">Envoy Learning Path</a> - 튜토리얼 및 예제</li>
+                    <li><a href="https://github.com/envoyproxy/envoy" target="_blank" rel="noopener noreferrer">Envoy GitHub</a> - 소스 코드</li>
+                    <li><a href="https://www.cncf.io/case-studies/?_sft_project=envoy" target="_blank" rel="noopener noreferrer">CNCF 사례 연구</a> - 기업 도입 사례</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +466,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

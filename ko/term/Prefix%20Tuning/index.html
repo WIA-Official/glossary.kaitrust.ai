@@ -52,126 +52,60 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
+
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .code-tab.active { background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
 
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="https://kaitrust.ai">홈</a>
             <span>›</span>
@@ -182,14 +116,13 @@
             <span class="current">Prefix Tuning</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
             <div class="term-category-badge">
                 <span>🤖</span>
                 <span>AI/ML</span>
             </div>
             <h1 class="term-title">Prefix Tuning</h1>
-            
+            <p class="term-english">Prefix-Tuning</p>
             <div class="term-description">
                 <p>입력에 학습 가능한 prefix를 추가하여 모델을 조정하는 방법</p>
             </div>
@@ -202,16 +135,243 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Prefix Tuning은 2021년 스탠포드 연구팀이 발표한 Parameter-Efficient Fine-Tuning(PEFT) 기법입니다. 기존 모델의 파라미터를 고정(freeze)한 채, 입력 시퀀스 앞에 학습 가능한 연속 벡터(prefix)를 추가하여 특정 태스크에 맞게 모델을 조정합니다.</p>
+                <p>Prefix Tuning의 핵심 아이디어는 Transformer의 모든 레이어에 가상의 토큰 임베딩을 주입하는 것입니다. 이 prefix 벡터들은 실제 어휘에 대응하지 않는 "soft prompt"로, 모델이 특정 태스크를 수행하도록 유도하는 컨텍스트 역할을 합니다.</p>
+                <p>기존 fine-tuning이 모델 전체 파라미터를 업데이트하는 반면, Prefix Tuning은 전체 파라미터의 0.1% 미만만 학습합니다. 예를 들어 GPT-2 Large(774M)를 fine-tuning하면 774M 파라미터가 필요하지만, Prefix Tuning은 약 250K 파라미터만 저장하면 됩니다.</p>
+                <p>실무에서 Prefix Tuning은 여러 태스크를 하나의 모델로 처리할 때 유용합니다. 태스크별로 별도의 prefix만 교체하면 되므로 멀티태스크 서빙이 효율적입니다. LoRA, Adapter 등 다른 PEFT 기법과 함께 LLM 커스터마이징의 핵심 기술로 자리잡았습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PrefixTuningConfig, get_peft_model, TaskType
+
+# 베이스 모델 로드
+model_name = "gpt2-medium"
+model = AutoModelForCausalLM.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+# Prefix Tuning 설정
+peft_config = PrefixTuningConfig(
+    task_type=TaskType.CAUSAL_LM,
+    num_virtual_tokens=20,        # prefix 길이
+    prefix_projection=True,       # MLP로 prefix 임베딩 생성
+    encoder_hidden_size=1024      # 인코더 히든 사이즈
+)
+
+# PEFT 모델 생성
+model = get_peft_model(model, peft_config)
+
+# 학습 가능한 파라미터 확인
+model.print_trainable_parameters()
+# trainable params: 983,040 || all params: 355,350,528 || trainable%: 0.2767
+
+# 학습 데이터 준비
+from datasets import Dataset
+
+train_data = [
+    {"text": "고객: 배송이 언제 오나요? 답변: 주문 후 2-3일 내 배송됩니다."},
+    {"text": "고객: 반품하고 싶어요. 답변: 7일 이내 무료 반품 가능합니다."},
+    {"text": "고객: 결제 방법은? 답변: 신용카드, 계좌이체, 간편결제 가능합니다."}
+]
+dataset = Dataset.from_list(train_data)
+
+def tokenize_function(examples):
+    return tokenizer(examples["text"], padding="max_length",
+                    truncation=True, max_length=128)
+
+tokenized_dataset = dataset.map(tokenize_function, batched=True)
+
+# 학습
+from transformers import Trainer, TrainingArguments
+
+training_args = TrainingArguments(
+    output_dir="./prefix_tuning_output",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    learning_rate=3e-2,  # prefix tuning은 높은 LR 사용
+    logging_steps=10
+)
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset
+)
+
+trainer.train()
+
+# 추론
+model.eval()
+input_text = "고객: 교환하려면 어떻게 하나요? 답변:"
+inputs = tokenizer(input_text, return_tensors="pt")
+outputs = model.generate(**inputs, max_new_tokens=50)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+
+# 모델 저장 (prefix 파라미터만 저장됨)
+model.save_pretrained("./my_prefix_model")
+
+# === 멀티 태스크 서빙 (prefix 교체) ===
+from peft import PeftModel
+
+base_model = AutoModelForCausalLM.from_pretrained("gpt2-medium")
+
+# 태스크별 prefix 로드
+customer_service_model = PeftModel.from_pretrained(base_model, "./prefix_customer_service")
+marketing_model = PeftModel.from_pretrained(base_model, "./prefix_marketing")
+legal_model = PeftModel.from_pretrained(base_model, "./prefix_legal")
+
+# 추론 시 태스크에 따라 prefix만 교체
+def generate_response(query: str, task: str) -> str:
+    if task == "customer_service":
+        model = customer_service_model
+    elif task == "marketing":
+        model = marketing_model
+    elif task == "legal":
+        model = legal_model
+    else:
+        model = base_model
+
+    inputs = tokenizer(query, return_tensors="pt")
+    outputs = model.generate(**inputs, max_new_tokens=100)
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+# === Prefix Tuning vs LoRA 비교 ===
+# Prefix Tuning:
+#   - 장점: 입력 길이가 증가하므로 추론 시 해석 가능
+#   - 단점: prefix가 실제 컨텍스트를 차지함
+#   - 파라미터: ~0.1-0.5%
+
+# LoRA:
+#   - 장점: 입력 길이 그대로, 더 좋은 성능
+#   - 단점: weight 수정이라 해석 어려움
+#   - 파라미터: ~0.1-1%
+
+# 결론: 대부분의 경우 LoRA가 더 좋은 선택
+
+# === Prompt Tuning (Prefix Tuning의 단순화 버전) ===
+# Prompt Tuning은 입력 임베딩에만 prefix 추가
+# Prefix Tuning은 모든 레이어의 hidden state에 추가
+
+from peft import PromptTuningConfig, PromptTuningInit
+
+prompt_tuning_config = PromptTuningConfig(
+    task_type=TaskType.CAUSAL_LM,
+    num_virtual_tokens=20,
+    prompt_tuning_init=PromptTuningInit.RANDOM  # 또는 TEXT
+)
+
+# TEXT 초기화: 자연어로 프롬프트 초기화
+# RANDOM 초기화: 랜덤 벡터로 시작</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <p class="conv-quote">"하나의 LLM으로 고객센터, 마케팅, 법무 3개 팀 챗봇을 운영하려고 해요. Prefix Tuning으로 각 팀별 prefix만 만들어두면 추론 시 prefix만 교체해서 서빙할 수 있어요. 모델 3개 띄우는 것보다 인프라 비용이 1/3로 줄어듭니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <p class="conv-quote">"Prefix Tuning과 LoRA의 차이점은 뭔가요?" - "둘 다 PEFT 기법이지만 접근 방식이 다릅니다. Prefix Tuning은 입력에 가상 토큰을 추가하는 방식이고, LoRA는 attention weight에 low-rank 행렬을 추가합니다. LoRA가 일반적으로 성능이 더 좋아서 최근에는 LoRA나 QLoRA를 더 많이 씁니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <p class="conv-quote">"Prefix Tuning의 prefix_projection 옵션은 reparameterization trick이에요. 직접 prefix 벡터를 학습하면 불안정한데, 작은 MLP를 통해 생성하면 학습이 안정화됩니다. 학습 후에는 MLP 없이 생성된 prefix만 사용해서 추론 오버헤드가 없어요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>너무 긴 prefix 사용</strong>
+                        <p>prefix 길이(num_virtual_tokens)를 너무 길게 설정하면 실제 입력 컨텍스트가 줄어듭니다. 대부분의 태스크에서 10-50 토큰이면 충분합니다. prefix가 길어진다고 성능이 비례해서 좋아지지 않습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>낮은 Learning Rate 사용</strong>
+                        <p>일반 fine-tuning에서 쓰는 1e-5 같은 낮은 LR을 쓰면 prefix가 거의 학습되지 않습니다. Prefix Tuning은 1e-2 ~ 5e-2 정도의 높은 LR이 필요합니다. 파라미터 수가 적어서 그래디언트가 작기 때문입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>prefix_projection 활성화</strong>
+                        <p>prefix_projection=True로 설정하면 학습 안정성이 크게 개선됩니다. 학습 시에만 작은 MLP를 사용하고, 추론 시에는 계산된 prefix만 사용하므로 추론 속도에 영향이 없습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/LoRA/" class="related-term-link">LoRA</a>
+                <a href="/ko/term/QLoRA/" class="related-term-link">QLoRA</a>
+                <a href="/ko/term/Fine-tuning/" class="related-term-link">Fine-tuning</a>
+                <a href="/ko/term/PEFT/" class="related-term-link">PEFT</a>
+                <a href="/ko/term/Prompt%20Tuning/" class="related-term-link">Prompt Tuning</a>
+                <a href="/ko/term/Adapter/" class="related-term-link">Adapter</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/2101.00190" target="_blank" class="learn-link">
+                    <span>📝 Prefix-Tuning 원본 논문 (Li & Liang, 2021)</span>
+                </a>
+                <a href="https://huggingface.co/docs/peft/conceptual_guides/prefix_tuning" target="_blank" class="learn-link">
+                    <span>📄 Hugging Face PEFT - Prefix Tuning 가이드</span>
+                </a>
+                <a href="https://github.com/huggingface/peft" target="_blank" class="learn-link">
+                    <span>🎓 PEFT 라이브러리 GitHub</span>
+                </a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

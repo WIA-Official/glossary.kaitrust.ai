@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWC (Speedy Web Compiler) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="Rust 기반 JS/TS 컴파일러. Babel 대비 20배 이상 빠름.">
-    <meta name="keywords" content="SWC, Speedy Web Compiler, AI 용어, KAITRUST, AI 백과사전, 웹개발">
+    <title>SWC | Rust 기반 JavaScript 컴파일러 | KAITRUST AI 백과사전</title>
+    <meta name="description" content="SWC(Speedy Web Compiler)는 Rust로 작성된 초고속 JavaScript/TypeScript 컴파일러입니다. Babel 대비 20배 이상 빠르며, Next.js, Parcel 등에서 기본 사용됩니다.">
+    <meta name="keywords" content="SWC, Speedy Web Compiler, Rust, JavaScript 컴파일러, TypeScript 컴파일러, Babel 대체, 트랜스파일러, 미니파이어, Next.js, Parcel, 빠른 빌드, 웹개발">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/SWC/">
 
     <!-- Open Graph -->
@@ -202,6 +202,163 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">SWC(Speedy Web Compiler)는 Rust로 작성된 초고속 JavaScript/TypeScript 컴파일러입니다. Babel과 동일한 기능(트랜스파일링, 압축, 번들링)을 제공하면서도 싱글 스레드에서 20배, 멀티코어에서 70배 이상 빠른 성능을 자랑합니다.</p>
+                <p style="margin-bottom: 1rem;">SWC는 Next.js 12부터 기본 컴파일러로 채택되었으며, Vite, Parcel 등 주요 빌드 도구에서도 지원됩니다. Rust의 저수준 최적화와 효율적인 메모리 관리 덕분에 대규모 프로젝트에서도 빠른 빌드 시간을 유지합니다.</p>
+                <p style="margin-bottom: 1rem;">SWC의 핵심 기능으로는 ES6+ 트랜스파일링, TypeScript/JSX 변환, 코드 압축(minification), 그리고 플러그인 시스템이 있습니다. Babel 플러그인을 대체하는 SWC 플러그인은 Wasm으로 작성하여 크로스 플랫폼 호환성을 제공합니다.</p>
+                <p>Turbopack은 SWC를 기반으로 한 차세대 번들러로, Webpack 대비 700배 빠른 업데이트 속도를 목표로 합니다. 대규모 코드베이스에서 개발 서버 시작 시간과 HMR 속도를 획기적으로 개선합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>// .swcrc 설정 파일
+{
+  "$schema": "https://json.schemastore.org/swcrc",
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true,
+      "decorators": true,
+      "dynamicImport": true
+    },
+    "transform": {
+      "react": {
+        "runtime": "automatic",
+        "importSource": "@emotion/react"
+      },
+      "legacyDecorator": true,
+      "decoratorMetadata": true
+    },
+    "target": "es2020",
+    "loose": false,
+    "minify": {
+      "compress": {
+        "unused": true,
+        "dead_code": true
+      },
+      "mangle": true
+    }
+  },
+  "module": {
+    "type": "es6",
+    "strict": true
+  },
+  "minify": true,
+  "sourceMaps": true
+}
+
+// next.config.js - SWC 커스텀 설정
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  compiler: {
+    // Emotion 지원
+    emotion: true,
+    // Styled Components 지원
+    styledComponents: true,
+    // 프로덕션에서 React DevTools 제거
+    reactRemoveProperties: process.env.NODE_ENV === 'production',
+    // console.log 제거
+    removeConsole: process.env.NODE_ENV === 'production'
+      ? { exclude: ['error', 'warn'] }
+      : false,
+  },
+  experimental: {
+    // Turbopack 사용 (dev 모드)
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },
+};
+
+module.exports = nextConfig;
+
+// 명령줄에서 SWC 직접 사용
+// npx swc src -d dist --source-maps --minify</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">기술 미팅에서:</p>
+                    <p>"CI 빌드 시간이 8분이나 걸리는데, Babel에서 SWC로 바꾸면 2분 안에 끝날 거예요. Next.js 12로 업그레이드하면 자동으로 SWC 쓰게 됩니다."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"SWC가 Babel보다 빠른 이유는요?" - "Rust로 작성되어 네이티브 바이너리로 실행되기 때문입니다. JavaScript 런타임 오버헤드가 없고, Rust의 zero-cost abstraction으로 최적화됩니다."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">코드 리뷰에서:</p>
+                    <p>"이 Babel 플러그인 SWC에서 지원 안 되면 어떡하죠?" - ".swcrc에서 못 하면 next.config.js의 webpack 설정으로 Babel loader 추가할 수 있어요. 근데 대부분 SWC 빌트인으로 대체 가능합니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">일부 Babel 플러그인(예: babel-plugin-macros)은 SWC에서 지원되지 않습니다. 마이그레이션 전 사용 중인 플러그인 호환성을 확인하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">SWC는 타입 체킹을 하지 않습니다. TypeScript 타입 검사는 별도로 tsc를 실행하거나 IDE의 타입 체커를 활용해야 합니다.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">SWC 플러그인 생태계는 Babel보다 작습니다. 커스텀 변환이 필요하면 Rust/Wasm으로 플러그인을 작성해야 할 수 있습니다.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/Babel/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Babel</a>
+                <a href="/ko/term/Bundler/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Bundler</a>
+                <a href="/ko/term/Vite/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Vite</a>
+                <a href="/ko/term/Next.js/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Next.js</a>
+                <a href="/ko/term/esbuild/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">esbuild</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://swc.rs/docs/getting-started" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> SWC 공식 문서 - Getting Started
+                </a>
+                <a href="https://nextjs.org/docs/architecture/nextjs-compiler" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Next.js 공식 문서 - SWC Compiler
+                </a>
+                <a href="https://turbo.build/pack/docs" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Turbopack 공식 문서
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

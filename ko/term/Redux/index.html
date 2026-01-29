@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redux (Redux State Management) | KAITRUST AI 백과사전</title>
+    <title>Redux (Redux Toolkit) | KAITRUST AI 백과사전</title>
     <meta name="description" content="JavaScript 앱의 예측 가능한 상태 관리 라이브러리. 단방향 데이터 흐름과 불변성 원칙.">
-    <meta name="keywords" content="Redux, Redux State Management, AI 용어, KAITRUST, AI 백과사전, 웹개발">
+    <meta name="keywords" content="Redux, Redux Toolkit, 상태관리, Store, Reducer, Action, Slice, RTK Query, 웹개발">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Redux/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Redux/">
-    <meta property="og:title" content="Redux (Redux State Management) | KAITRUST AI 백과사전">
+    <meta property="og:title" content="Redux (Redux Toolkit) | KAITRUST AI 백과사전">
     <meta property="og:description" content="JavaScript 앱의 예측 가능한 상태 관리 라이브러리. 단방향 데이터 흐름과 불변성 원칙.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
@@ -19,7 +19,7 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Redux (Redux State Management) | KAITRUST AI 백과사전">
+    <meta name="twitter:title" content="Redux (Redux Toolkit) | KAITRUST AI 백과사전">
     <meta name="twitter:description" content="JavaScript 앱의 예측 가능한 상태 관리 라이브러리. 단방향 데이터 흐름과 불변성 원칙.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
@@ -52,115 +52,48 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        .content-section { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; display: flex; align-items: center; gap: 0.5rem; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-container { position: relative; background: #1e293b; border-radius: 12px; margin: 1rem 0; overflow: hidden; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(168, 85, 247, 0.2); border-bottom: 1px solid rgba(168, 85, 247, 0.3); }
+        .code-lang { color: #a855f7; font-size: 0.85rem; font-weight: 500; }
+        .copy-btn { background: rgba(168, 85, 247, 0.3); border: none; color: #e2e8f0; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .code-container pre { margin: 0; padding: 1rem; overflow-x: auto; }
+        .code-container code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .dialogue-box { background: rgba(30, 41, 59, 0.8); border-left: 4px solid #a855f7; padding: 1.5rem; border-radius: 0 12px 12px 0; margin: 1rem 0; }
+        .dialogue-title { color: #a855f7; font-weight: 600; margin-bottom: 0.75rem; }
+        .dialogue-content { color: #cbd5e1; font-style: italic; }
+        .warning-box { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .warning-box ul { margin: 0; padding-left: 1.5rem; color: #fbbf24; }
+        .warning-box li { margin-bottom: 0.5rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+        .related-term-link { background: rgba(168, 85, 247, 0.2); color: #a855f7; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.4); transform: translateY(-2px); }
+        .learn-more-list { list-style: none; padding: 0; margin: 0; }
+        .learn-more-list li { margin-bottom: 0.75rem; }
+        .learn-more-list a { color: #38bdf8; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .learn-more-list a:hover { text-decoration: underline; }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
@@ -189,7 +122,7 @@
                 <span>웹개발</span>
             </div>
             <h1 class="term-title">Redux</h1>
-            <p class="term-english">Redux State Management</p>
+            <p class="term-english">Redux Toolkit</p>
             <div class="term-description">
                 <p>JavaScript 앱의 예측 가능한 상태 관리 라이브러리. 단방향 데이터 흐름과 불변성 원칙.</p>
             </div>
@@ -202,6 +135,275 @@
                 </a>
             </div>
         </article>
+
+        <!-- Detailed Description -->
+        <section class="content-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Redux는 2015년 Dan Abramov가 개발한 JavaScript 상태 관리 라이브러리로, Flux 아키텍처를 단순화한 구현체입니다. 세 가지 핵심 원칙이 있습니다. 단일 진실의 원천(Single Source of Truth) - 전체 앱 상태가 하나의 Store에 저장됩니다. 상태는 읽기 전용(State is Read-Only) - Action을 통해서만 변경 가능합니다. 순수 함수(Pure Functions) - Reducer는 이전 상태와 Action을 받아 새 상태를 반환하는 순수 함수입니다.</p>
+
+                <p>Redux의 데이터 흐름은 단방향입니다. 사용자 이벤트가 발생하면 dispatch(action)을 호출하고, Store가 Reducer를 실행하여 새 상태를 계산하며, 구독된 컴포넌트가 리렌더링됩니다. 이 예측 가능한 흐름은 디버깅을 쉽게 하고, 상태 변화를 추적할 수 있게 합니다. Redux DevTools로 시간 여행 디버깅(Time Travel Debugging)이 가능합니다.</p>
+
+                <p>Redux Toolkit(RTK)은 2019년에 공식 출시된 Redux의 현대적 구현체로, 보일러플레이트를 대폭 줄였습니다. createSlice로 Action과 Reducer를 한 번에 정의하고, Immer를 내장하여 불변성을 자동 처리합니다. configureStore가 DevTools, middleware 설정을 자동화합니다. RTK는 이제 Redux 사용의 표준 방식입니다.</p>
+
+                <p>RTK Query는 Redux Toolkit 1.6에서 추가된 데이터 페칭 라이브러리로, React Query와 유사한 캐싱, 자동 리페칭, 낙관적 업데이트를 제공합니다. createApi로 엔드포인트를 정의하면 자동으로 hooks(useGetUsersQuery, useCreateUserMutation 등)가 생성됩니다. 서버 상태 관리에 Redux와 별도 라이브러리를 조합할 필요가 없어졌습니다.</p>
+            </div>
+        </section>
+
+        <!-- Code Example -->
+        <section class="content-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Redux Toolkit Slice</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre><code>// features/cart/cartSlice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+}
+
+interface CartState {
+    items: CartItem[];
+    isOpen: boolean;
+}
+
+const initialState: CartState = {
+    items: [],
+    isOpen: false,
+};
+
+const cartSlice = createSlice({
+    name: 'cart',
+    initialState,
+    reducers: {
+        // Immer로 "변경"처럼 작성해도 불변성 자동 처리
+        addItem: (state, action: PayloadAction&lt;Omit&lt;CartItem, 'quantity'&gt;&gt;) =&gt; {
+            const existingItem = state.items.find(item =&gt; item.id === action.payload.id);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                state.items.push({ ...action.payload, quantity: 1 });
+            }
+        },
+
+        removeItem: (state, action: PayloadAction&lt;string&gt;) =&gt; {
+            state.items = state.items.filter(item =&gt; item.id !== action.payload);
+        },
+
+        updateQuantity: (state, action: PayloadAction&lt;{ id: string; quantity: number }&gt;) =&gt; {
+            const item = state.items.find(item =&gt; item.id === action.payload.id);
+            if (item) {
+                item.quantity = action.payload.quantity;
+            }
+        },
+
+        clearCart: (state) =&gt; {
+            state.items = [];
+        },
+
+        toggleCart: (state) =&gt; {
+            state.isOpen = !state.isOpen;
+        },
+    },
+});
+
+// Action creators 자동 생성
+export const { addItem, removeItem, updateQuantity, clearCart, toggleCart } = cartSlice.actions;
+
+// Selectors
+export const selectCartItems = (state: RootState) =&gt; state.cart.items;
+export const selectCartTotal = (state: RootState) =&gt;
+    state.cart.items.reduce((total, item) =&gt; total + item.price * item.quantity, 0);
+export const selectCartCount = (state: RootState) =&gt;
+    state.cart.items.reduce((count, item) =&gt; count + item.quantity, 0);
+
+export default cartSlice.reducer;</code></pre>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">RTK Query API</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre><code>// services/api.ts - RTK Query
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+interface User {
+    id: number;
+    name: string;
+    email: string;
+}
+
+export const api = createApi({
+    reducerPath: 'api',
+    baseQuery: fetchBaseQuery({
+        baseUrl: '/api',
+        prepareHeaders: (headers) =&gt; {
+            const token = localStorage.getItem('token');
+            if (token) {
+                headers.set('Authorization', `Bearer ${token}`);
+            }
+            return headers;
+        },
+    }),
+    tagTypes: ['User', 'Post'],
+    endpoints: (builder) =&gt; ({
+        // Query - GET 요청
+        getUsers: builder.query&lt;User[], void&gt;({
+            query: () =&gt; '/users',
+            providesTags: ['User'],
+        }),
+
+        getUser: builder.query&lt;User, number&gt;({
+            query: (id) =&gt; `/users/${id}`,
+            providesTags: (result, error, id) =&gt; [{ type: 'User', id }],
+        }),
+
+        // Mutation - POST/PUT/DELETE 요청
+        createUser: builder.mutation&lt;User, Omit&lt;User, 'id'&gt;&gt;({
+            query: (body) =&gt; ({
+                url: '/users',
+                method: 'POST',
+                body,
+            }),
+            invalidatesTags: ['User'], // 목록 자동 리페치
+        }),
+
+        updateUser: builder.mutation&lt;User, Partial&lt;User&gt; &amp; Pick&lt;User, 'id'&gt;&gt;({
+            query: ({ id, ...body }) =&gt; ({
+                url: `/users/${id}`,
+                method: 'PATCH',
+                body,
+            }),
+            invalidatesTags: (result, error, { id }) =&gt; [{ type: 'User', id }],
+        }),
+
+        deleteUser: builder.mutation&lt;void, number&gt;({
+            query: (id) =&gt; ({
+                url: `/users/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['User'],
+        }),
+    }),
+});
+
+// Hooks 자동 생성
+export const {
+    useGetUsersQuery,
+    useGetUserQuery,
+    useCreateUserMutation,
+    useUpdateUserMutation,
+    useDeleteUserMutation,
+} = api;
+
+// -------------------------------------------------
+
+// 컴포넌트에서 사용
+function UserList() {
+    const { data: users, isLoading, error } = useGetUsersQuery();
+    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+
+    if (isLoading) return &lt;div&gt;로딩 중...&lt;/div&gt;;
+    if (error) return &lt;div&gt;에러 발생&lt;/div&gt;;
+
+    return (
+        &lt;ul&gt;
+            {users?.map(user =&gt; (
+                &lt;li key={user.id}&gt;
+                    {user.name}
+                    &lt;button
+                        onClick={() =&gt; deleteUser(user.id)}
+                        disabled={isDeleting}
+                    &gt;
+                        삭제
+                    &lt;/button&gt;
+                &lt;/li&gt;
+            ))}
+        &lt;/ul&gt;
+    );
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-world Dialogue -->
+        <section class="content-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="section-content">
+                <div class="dialogue-box">
+                    <div class="dialogue-title">💼 상태관리 선택 논의</div>
+                    <div class="dialogue-content">
+                        "Redux vs Zustand vs Jotai, 뭘 써야 할까요?"<br><br>
+                        "규모가 크고 DevTools로 상태 추적이 중요하면 Redux Toolkit이 좋아요. 작은 프로젝트나 간단한 전역 상태면 Zustand가 더 가볍고요. 서버 상태가 대부분이면 TanStack Query만으로도 충분할 수 있어요. Redux는 복잡하지만 팀원들이 익숙하면 생산성이 높습니다."
+                    </div>
+                </div>
+
+                <div class="dialogue-box">
+                    <div class="dialogue-title">🔍 코드 리뷰</div>
+                    <div class="dialogue-content">
+                        "Reducer에서 state.items.push() 쓰면 불변성 위반 아닌가요?"<br><br>
+                        "Redux Toolkit의 createSlice 안에서는 괜찮아요. Immer가 내장되어 있어서 '변경'처럼 작성해도 내부적으로 불변성을 유지한 새 객체를 반환해요. 하지만 slice 밖에서 reducer를 직접 작성할 때는 여전히 불변성을 지켜야 합니다."
+                    </div>
+                </div>
+
+                <div class="dialogue-box">
+                    <div class="dialogue-title">📱 기술 면접</div>
+                    <div class="dialogue-content">
+                        "Redux에서 비동기 작업은 어떻게 처리하나요?"<br><br>
+                        "RTK Query 쓰면 가장 간단해요. 아니면 createAsyncThunk로 비동기 thunk를 만들고, extraReducers에서 pending/fulfilled/rejected 상태를 처리합니다. 예전엔 redux-saga나 redux-observable도 많이 썼지만, 지금은 RTK Query가 대부분의 경우를 커버합니다."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Warnings -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <ul>
+                        <li><strong>과도한 전역 상태</strong> - 모든 상태를 Redux에 넣지 마세요. 폼 입력, 모달 열림 같은 로컬 상태는 useState로 충분합니다. 여러 컴포넌트가 공유해야 하는 상태만 Redux에 두세요.</li>
+                        <li><strong>Legacy Redux 피하기</strong> - switch문 reducer, action type 상수, createStore는 구식입니다. 반드시 Redux Toolkit의 createSlice, configureStore를 사용하세요.</li>
+                        <li><strong>Selector 최적화</strong> - 매번 새 객체/배열을 반환하는 selector는 불필요한 리렌더링을 유발합니다. createSelector(reselect)로 메모이제이션하세요.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/React/" class="related-term-link">React</a>
+                    <a href="/ko/term/Zustand/" class="related-term-link">Zustand</a>
+                    <a href="/ko/term/Jotai/" class="related-term-link">Jotai</a>
+                    <a href="/ko/term/TanStack%20Query/" class="related-term-link">TanStack Query</a>
+                    <a href="/ko/term/MVC/" class="related-term-link">MVC</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learn More -->
+        <section class="content-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more-list">
+                    <li>📄 <a href="https://redux-toolkit.js.org/" target="_blank" rel="noopener">Redux Toolkit 공식 문서 →</a></li>
+                    <li>📘 <a href="https://redux-toolkit.js.org/rtk-query/overview" target="_blank" rel="noopener">RTK Query 가이드 →</a></li>
+                    <li>📗 <a href="https://redux.js.org/style-guide/" target="_blank" rel="noopener">Redux Style Guide (권장 패턴) →</a></li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +411,16 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-container').querySelector('code');
+            navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+                button.textContent = '복사됨!';
+                setTimeout(() => button.textContent = '복사', 2000);
+            });
+        }
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

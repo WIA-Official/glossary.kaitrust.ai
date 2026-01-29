@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,124 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>서브쿼리(Subquery)는 SQL 문 안에 포함된 또 다른 SELECT 문으로, 외부 쿼리가 사용할 결과를 제공합니다. 중첩 쿼리(Nested Query)라고도 부르며, WHERE, FROM, SELECT 절 등 다양한 위치에서 사용할 수 있습니다.</p>
+                <p>서브쿼리는 크게 스칼라 서브쿼리(단일 값 반환), 인라인 뷰(FROM 절에서 사용), 상관 서브쿼리(외부 쿼리 참조)로 구분됩니다. 복잡한 조건이나 계산이 필요할 때 유용하지만, 과도한 사용은 성능 저하를 유발할 수 있습니다.</p>
+                <p>일부 서브쿼리는 JOIN으로 변환하여 성능을 개선할 수 있습니다. 쿼리 옵티마이저가 자동으로 최적화하기도 하지만, 개발자가 의도적으로 변환하면 더 나은 실행 계획을 얻을 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>-- 스칼라 서브쿼리 (SELECT 절)
+SELECT
+    name,
+    salary,
+    (SELECT AVG(salary) FROM employees) as avg_salary
+FROM employees;
+
+-- WHERE 절 서브쿼리
+SELECT name, department
+FROM employees
+WHERE department_id IN (
+    SELECT id FROM departments
+    WHERE location = 'Seoul'
+);
+
+-- 상관 서브쿼리 (Correlated Subquery)
+SELECT e.name, e.salary
+FROM employees e
+WHERE e.salary > (
+    SELECT AVG(salary)
+    FROM employees
+    WHERE department_id = e.department_id
+);
+
+-- EXISTS 서브쿼리
+SELECT c.name
+FROM customers c
+WHERE EXISTS (
+    SELECT 1 FROM orders o
+    WHERE o.customer_id = c.id
+    AND o.order_date > '2024-01-01'
+);
+
+-- 인라인 뷰 (FROM 절 서브쿼리)
+SELECT dept_name, avg_salary
+FROM (
+    SELECT d.name as dept_name, AVG(e.salary) as avg_salary
+    FROM departments d
+    JOIN employees e ON d.id = e.department_id
+    GROUP BY d.name
+) dept_stats
+WHERE avg_salary > 5000000;</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>백엔드 개발자:</strong> 이 쿼리 너무 느린데, 서브쿼리가 여러 개 중첩되어 있어요.</p>
+                <p><strong>DBA:</strong> 상관 서브쿼리네요. 외부 쿼리 행마다 서브쿼리가 실행되니까 느릴 수밖에요.</p>
+                <p><strong>백엔드 개발자:</strong> JOIN으로 바꾸면 나아질까요?</p>
+                <p><strong>DBA:</strong> 네, 대부분의 경우 JOIN이 더 효율적이에요. 옵티마이저가 실행 계획을 더 잘 세울 수 있거든요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 서브쿼리와 JOIN의 차이점과 어떤 상황에서 서브쿼리를 사용하시나요?</p>
+                <p><strong>지원자:</strong> 서브쿼리는 복잡한 조건이나 단일 값을 구할 때 가독성이 좋습니다. 하지만 상관 서브쿼리는 행마다 실행되어 성능 이슈가 있어서, 가능하면 JOIN으로 변환하는 게 좋습니다. EXISTS는 데이터 존재 여부만 확인할 때 효율적입니다.</p>
+                <p><strong>면접관:</strong> 스칼라 서브쿼리의 주의점은요?</p>
+                <p><strong>지원자:</strong> 스칼라 서브쿼리는 반드시 단일 행, 단일 열을 반환해야 합니다. 여러 행이 반환되면 에러가 발생해요.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>시니어:</strong> 이 코드에서 서브쿼리가 세 번이나 같은 테이블을 조회하네요.</p>
+                <p><strong>주니어:</strong> 네, 조건마다 필요해서요.</p>
+                <p><strong>시니어:</strong> WITH 절(CTE)로 한 번 조회해서 재사용하거나, JOIN으로 리팩토링하면 성능이 훨씬 좋아질 거예요. 서브쿼리 중복은 피해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>상관 서브쿼리는 외부 쿼리 행 수만큼 반복 실행되어 성능 저하 가능</li>
+                <li>스칼라 서브쿼리는 반드시 단일 값만 반환해야 함</li>
+                <li>중첩이 깊어지면 가독성과 유지보수성이 떨어짐</li>
+                <li>IN 절 서브쿼리에서 NULL 값 처리에 주의 필요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%BF%BC%EB%A6%AC/" class="related-link">쿼리</a>
+                <a href="/ko/term/%EC%A1%B0%EC%9D%B8/" class="related-link">조인</a>
+                <a href="/ko/term/%EC%8B%A4%ED%96%89%20%EA%B3%84%ED%9A%8D/" class="related-link">실행 계획</a>
+                <a href="/ko/term/%EC%BF%BC%EB%A6%AC%20%EC%98%B5%ED%8B%B0%EB%A7%88%EC%9D%B4%EC%A0%80/" class="related-link">쿼리 옵티마이저</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://dev.mysql.com/doc/refman/8.0/en/subqueries.html" target="_blank">MySQL Subquery 공식 문서</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/functions-subquery.html" target="_blank">PostgreSQL Subquery Functions</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +332,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

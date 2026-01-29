@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,286 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detailed-explanation">
+            <h2 id="detailed-explanation" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>GitOps</strong>는 Git 저장소를 "단일 진실 공급원(Single Source of Truth)"으로 사용하여 인프라와 애플리케이션을 선언적으로 관리하는 운영 방식입니다. 2017년 Weaveworks가 처음 제안했으며, Kubernetes 환경에서 특히 강력한 효과를 발휘합니다.</p>
+
+                <h3>GitOps의 4가지 원칙</h3>
+                <ul>
+                    <li><strong>선언적(Declarative)</strong>: 시스템의 원하는 상태를 선언적으로 정의</li>
+                    <li><strong>버전 관리(Versioned)</strong>: 모든 변경사항은 Git에서 버전 관리</li>
+                    <li><strong>자동 적용(Automatically Applied)</strong>: 승인된 변경은 자동으로 시스템에 적용</li>
+                    <li><strong>지속적 조정(Continuously Reconciled)</strong>: 에이전트가 실제 상태와 원하는 상태를 지속적으로 비교하고 조정</li>
+                </ul>
+
+                <h3>Push vs Pull 모델</h3>
+                <ul>
+                    <li><strong>Push 모델</strong>: CI 파이프라인이 클러스터에 직접 배포 (전통적 방식)</li>
+                    <li><strong>Pull 모델</strong>: 클러스터 내 에이전트가 Git에서 변경사항을 가져와 적용 (GitOps 권장)</li>
+                </ul>
+                <p>Pull 모델은 클러스터 자격 증명을 외부에 노출하지 않아 보안적으로 우수합니다.</p>
+
+                <h3>주요 GitOps 도구</h3>
+                <ul>
+                    <li><strong>ArgoCD</strong>: UI가 강력한 GitOps CD 도구</li>
+                    <li><strong>Flux</strong>: 경량의 GitOps 툴킷</li>
+                    <li><strong>Jenkins X</strong>: Jenkins 기반 GitOps 플랫폼</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-example">
+            <h2 id="code-example" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>ArgoCD Application 정의</h3>
+                <pre><code class="language-yaml"># argocd-application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  # 소스 저장소 설정
+  source:
+    repoURL: https://github.com/myorg/my-app-config.git
+    targetRevision: main
+    path: deploy/production
+
+    # Helm 차트 사용 시
+    # helm:
+    #   valueFiles:
+    #     - values-prod.yaml
+
+    # Kustomize 사용 시
+    # kustomize:
+    #   namePrefix: prod-
+
+  # 대상 클러스터 및 네임스페이스
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: production
+
+  # 동기화 정책
+  syncPolicy:
+    automated:
+      prune: true           # Git에서 삭제된 리소스 자동 정리
+      selfHeal: true        # 수동 변경 자동 복구
+      allowEmpty: false     # 빈 Application 방지
+
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true
+
+    # 재시도 정책
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+
+  # 헬스 체크
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas  # HPA 관리 replicas 무시</code></pre>
+
+                <h3>ArgoCD ApplicationSet (멀티 클러스터)</h3>
+                <pre><code class="language-yaml"># applicationset.yaml - 여러 클러스터에 동시 배포
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: my-app-set
+  namespace: argocd
+spec:
+  generators:
+    # 클러스터별 배포
+    - clusters:
+        selector:
+          matchLabels:
+            env: production
+        values:
+          revision: main
+
+    - clusters:
+        selector:
+          matchLabels:
+            env: staging
+        values:
+          revision: develop
+
+  template:
+    metadata:
+      name: 'my-app-{{name}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/myorg/my-app-config.git
+        targetRevision: '{{values.revision}}'
+        path: deploy/{{metadata.labels.env}}
+      destination:
+        server: '{{server}}'
+        namespace: my-app
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true</code></pre>
+
+                <h3>GitOps 저장소 구조 예시</h3>
+                <pre><code class="language-text">my-app-config/
+├── README.md
+├── base/                          # 공통 리소스
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── configmap.yaml
+│   └── kustomization.yaml
+├── overlays/                      # 환경별 설정
+│   ├── development/
+│   │   ├── kustomization.yaml
+│   │   ├── replica-patch.yaml
+│   │   └── config-patch.yaml
+│   ├── staging/
+│   │   ├── kustomization.yaml
+│   │   └── replica-patch.yaml
+│   └── production/
+│       ├── kustomization.yaml
+│       ├── replica-patch.yaml
+│       ├── resource-patch.yaml
+│       └── hpa.yaml
+└── argocd/                        # ArgoCD Application 정의
+    ├── dev-app.yaml
+    ├── staging-app.yaml
+    └── prod-app.yaml</code></pre>
+
+                <h3>Kustomization으로 환경별 설정</h3>
+                <pre><code class="language-yaml"># overlays/production/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: production
+
+resources:
+  - ../../base
+
+# 이미지 태그 오버라이드
+images:
+  - name: myorg/my-app
+    newTag: v1.2.3
+
+# 환경별 패치
+patchesStrategicMerge:
+  - replica-patch.yaml
+  - resource-patch.yaml
+
+# ConfigMap 생성
+configMapGenerator:
+  - name: app-config
+    literals:
+      - ENV=production
+      - LOG_LEVEL=info
+
+# 라벨 추가
+commonLabels:
+  environment: production
+  team: platform</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section" aria-labelledby="practical-dialogue">
+            <h2 id="practical-dialogue" class="section-title">실무 대화 예제</h2>
+            <div class="section-content">
+                <div class="dialogue-container">
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">DevOps 엔지니어</div>
+                        <div class="dialogue-content">"프로덕션 배포할 때마다 kubectl apply를 수동으로 실행하고 있는데, 실수가 잦아요. 배포 이력도 추적이 안 되고..."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">플랫폼 엔지니어</div>
+                        <div class="dialogue-content">"GitOps를 도입하면 해결돼요. 모든 K8s 매니페스트를 Git에 저장하고, ArgoCD가 Git 변경을 감지해서 자동으로 클러스터에 적용해요. 배포는 Git commit이 되고, 롤백도 git revert로 끝이에요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">DevOps 엔지니어</div>
+                        <div class="dialogue-content">"그러면 누군가 kubectl로 직접 수정하면 어떻게 되죠?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">플랫폼 엔지니어</div>
+                        <div class="dialogue-content">"selfHeal 옵션을 켜면 ArgoCD가 Git 상태로 자동 복구해요. 수동 변경은 금방 덮어씌워지니까, 모든 변경은 반드시 Git을 통하게 강제되는 거죠. 이게 GitOps의 핵심이에요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="cautions">
+            <h2 id="cautions" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="caution-box">
+                    <h3>Secret 관리</h3>
+                    <p>Git에 평문 Secret을 저장하면 안 됩니다. Sealed Secrets, SOPS, External Secrets Operator, Vault 등을 사용하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>Drift 감지</h3>
+                    <p>selfHeal이 꺼져 있으면 수동 변경사항이 유지됩니다. 정기적으로 ArgoCD UI에서 Sync Status를 확인하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>CI/CD 분리</h3>
+                    <p>CI(빌드/테스트)와 CD(배포)를 분리하세요. CI는 이미지 빌드, CD는 GitOps 저장소 업데이트로 역할을 나눕니다.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>Prune 주의</h3>
+                    <p>prune: true 설정 시 Git에서 삭제된 리소스가 클러스터에서도 삭제됩니다. 실수로 삭제하면 프로덕션 서비스가 중단될 수 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-terms">
+            <h2 id="related-terms" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms-grid">
+                    <a href="/ko/term/Git/" class="related-term-card">
+                        <h3>Git</h3>
+                        <p>GitOps의 기반이 되는 버전 관리 시스템</p>
+                    </a>
+                    <a href="/ko/term/Flux/" class="related-term-card">
+                        <h3>Flux</h3>
+                        <p>CNCF 졸업 GitOps 도구</p>
+                    </a>
+                    <a href="/ko/term/IaC/" class="related-term-card">
+                        <h3>IaC</h3>
+                        <p>인프라 코드화. GitOps와 함께 사용</p>
+                    </a>
+                    <a href="/ko/term/Kubernetes/" class="related-term-card">
+                        <h3>Kubernetes</h3>
+                        <p>GitOps가 가장 많이 사용되는 플랫폼</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-more">
+            <h2 id="learn-more" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="resource-list">
+                    <li><a href="https://opengitops.dev/" target="_blank" rel="noopener noreferrer">OpenGitOps</a> - GitOps 원칙 및 표준</li>
+                    <li><a href="https://argo-cd.readthedocs.io/" target="_blank" rel="noopener noreferrer">ArgoCD 문서</a> - ArgoCD 공식 가이드</li>
+                    <li><a href="https://fluxcd.io/" target="_blank" rel="noopener noreferrer">Flux CD</a> - Flux 공식 사이트</li>
+                    <li><a href="https://www.weave.works/technologies/gitops/" target="_blank" rel="noopener noreferrer">Weaveworks GitOps</a> - GitOps 창시자의 가이드</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +493,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

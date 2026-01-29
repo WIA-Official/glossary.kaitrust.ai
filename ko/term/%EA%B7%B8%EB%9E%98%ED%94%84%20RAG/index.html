@@ -147,19 +147,148 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
+        .content-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
         }
-        .related-title {
-            font-size: 1.3rem;
+        .section-title {
+            font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .conversation-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+        }
+        .conversation-box .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .warning-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: #fbbf24;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #67e8f9;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .cost-table th, .cost-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .cost-table th {
+            background: rgba(168, 85, 247, 0.1);
+            color: #c4b5fd;
+            font-weight: 600;
+        }
+        .cost-table td {
+            color: #cbd5e1;
+        }
+        .cost-table tr:hover td {
+            background: rgba(168, 85, 247, 0.05);
         }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
+            .content-section { padding: 1.5rem; }
+            .cost-table { font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -202,6 +331,241 @@
                 </a>
             </div>
         </article>
+
+        <!-- Detailed Explanation Section -->
+        <section class="content-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>그래프 RAG(Graph RAG)는 기존 RAG(Retrieval-Augmented Generation)에 지식 그래프(Knowledge Graph)를 결합한 고급 검색 증강 생성 기법입니다. 일반 RAG가 문서 청크의 벡터 유사도만으로 검색하는 반면, 그래프 RAG는 엔티티(개체)와 그들 간의 관계를 구조화하여 더 정확하고 연관성 높은 정보를 검색합니다. 이를 통해 멀티홉(multi-hop) 추론이 필요한 복잡한 질문에도 효과적으로 답변할 수 있습니다.</p>
+
+                <p>그래프 RAG의 핵심 구성요소는 문서에서 엔티티와 관계를 추출하는 지식 그래프 구축, 그래프 기반 검색, 그리고 커뮤니티 요약입니다. 먼저 LLM을 활용해 문서에서 (주어, 관계, 목적어) 형태의 트리플을 추출하여 지식 그래프를 구축합니다. 검색 시에는 쿼리와 관련된 엔티티를 찾고, 그래프 순회를 통해 연결된 정보를 함께 가져옵니다. Microsoft의 GraphRAG는 추가로 Leiden 알고리즘으로 커뮤니티를 탐지하고 각 커뮤니티의 요약을 생성하여 글로벌 검색에 활용합니다.</p>
+
+                <p>그래프 RAG는 특히 "무엇이 무엇과 어떤 관계인가?"와 같은 관계 질의, 여러 문서에 걸친 정보를 종합해야 하는 질의, 그리고 전체 데이터셋에 대한 요약 질의에서 기존 RAG보다 우수한 성능을 보입니다. 예를 들어 "A 회사의 CEO가 투자한 다른 회사들은?"처럼 여러 단계의 관계 추론이 필요한 질문에 효과적입니다.</p>
+
+                <p>구현 방식으로는 Neo4j, Amazon Neptune 같은 그래프 데이터베이스와 벡터 스토어를 결합하거나, LlamaIndex의 KnowledgeGraphIndex, Microsoft의 GraphRAG 라이브러리를 활용할 수 있습니다. 다만 지식 그래프 구축에 LLM 호출이 많이 필요하여 초기 인덱싱 비용이 높고, 그래프 품질이 검색 성능에 직접 영향을 미치므로 엔티티/관계 추출의 정확도가 중요합니다.</p>
+            </div>
+        </section>
+
+        <!-- Code Example Section -->
+        <section class="content-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>LlamaIndex를 사용한 간단한 그래프 RAG 구현 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <code># pip install llama-index llama-index-llms-openai llama-index-graph-stores-neo4j
+
+import os
+from llama_index.core import (
+    SimpleDirectoryReader,
+    KnowledgeGraphIndex,
+    Settings,
+    StorageContext
+)
+from llama_index.llms.openai import OpenAI
+from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.graph_stores.neo4j import Neo4jGraphStore
+
+os.environ["OPENAI_API_KEY"] = "your-api-key"
+
+# LLM 및 임베딩 설정
+Settings.llm = OpenAI(model="gpt-4o-mini", temperature=0)
+Settings.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
+
+# 문서 로드
+documents = SimpleDirectoryReader("./data").load_data()
+
+# Neo4j 그래프 스토어 연결 (로컬 또는 Aura)
+graph_store = Neo4jGraphStore(
+    username="neo4j",
+    password="your-password",
+    url="bolt://localhost:7687",
+    database="neo4j"
+)
+
+storage_context = StorageContext.from_defaults(graph_store=graph_store)
+
+# 지식 그래프 인덱스 생성 (엔티티/관계 자동 추출)
+kg_index = KnowledgeGraphIndex.from_documents(
+    documents,
+    storage_context=storage_context,
+    max_triplets_per_chunk=10,  # 청크당 최대 트리플 수
+    include_embeddings=True,    # 벡터 검색도 함께 활용
+    show_progress=True
+)
+
+# 쿼리 엔진 생성
+query_engine = kg_index.as_query_engine(
+    include_text=True,           # 원본 텍스트도 포함
+    response_mode="tree_summarize",
+    embedding_mode="hybrid",     # 그래프 + 벡터 하이브리드
+    similarity_top_k=5
+)
+
+# 그래프 RAG 질의
+response = query_engine.query(
+    "삼성전자의 주요 협력사들과 그들 간의 관계를 설명해주세요."
+)
+print("=== 그래프 RAG 응답 ===")
+print(response)
+
+# 추출된 트리플 확인
+print("\n=== 추출된 지식 그래프 트리플 (샘플) ===")
+for node in list(kg_index.index_struct.table.values())[:5]:
+    print(f"- {node}")
+
+# 결과 예시:
+# === 그래프 RAG 응답 ===
+# 삼성전자의 주요 협력사로는 TSMC, SK하이닉스, 퀄컴 등이 있습니다.
+# TSMC는 삼성전자와 반도체 파운드리 시장에서 경쟁 관계이며...
+#
+# === 추출된 지식 그래프 트리플 (샘플) ===
+# - (삼성전자, 경쟁사, TSMC)
+# - (삼성전자, 공급, 애플)
+# - (SK하이닉스, 협력, 삼성전자)</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance & Cost Section -->
+        <section class="content-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>그래프 RAG는 기존 벡터 RAG에 비해 인덱싱 비용이 높지만, 복잡한 질의에서 더 나은 답변 품질을 제공합니다.</p>
+
+                <table class="cost-table">
+                    <thead>
+                        <tr>
+                            <th>항목</th>
+                            <th>벡터 RAG</th>
+                            <th>그래프 RAG (Local)</th>
+                            <th>그래프 RAG (Global)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>인덱싱 비용 (1MB 문서)</td>
+                            <td>$0.01~0.02</td>
+                            <td>$0.50~2.00</td>
+                            <td>$0.50~2.00</td>
+                        </tr>
+                        <tr>
+                            <td>쿼리 비용</td>
+                            <td>$0.01~0.03</td>
+                            <td>$0.02~0.05</td>
+                            <td>$0.10~0.50</td>
+                        </tr>
+                        <tr>
+                            <td>쿼리 지연시간</td>
+                            <td>1~3초</td>
+                            <td>2~5초</td>
+                            <td>5~15초</td>
+                        </tr>
+                        <tr>
+                            <td>단순 사실 질의 정확도</td>
+                            <td>높음</td>
+                            <td>높음</td>
+                            <td>보통</td>
+                        </tr>
+                        <tr>
+                            <td>멀티홉 추론 정확도</td>
+                            <td>낮음</td>
+                            <td>높음</td>
+                            <td>높음</td>
+                        </tr>
+                        <tr>
+                            <td>글로벌 요약 품질</td>
+                            <td>낮음</td>
+                            <td>보통</td>
+                            <td>매우 높음</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>비용 최적화 팁:</strong></p>
+                <ul style="color: #cbd5e1; margin-left: 1.5rem;">
+                    <li>인덱싱에 GPT-4o-mini 같은 저렴한 모델 사용</li>
+                    <li>트리플 추출 수를 청크당 5~10개로 제한</li>
+                    <li>단순 질의는 벡터 RAG, 복잡한 질의만 그래프 RAG 사용 (하이브리드)</li>
+                    <li>커뮤니티 요약은 변경된 부분만 점진적 업데이트</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Practical Conversation Section -->
+        <section class="content-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-box">
+                    <div class="speaker">PM:</div>
+                    <div>"우리 법률 문서 챗봇이 '이 법안과 관련된 모든 판례를 요약해줘' 같은 질문에 잘 못 답하는데, 개선 방법이 있을까요?"</div>
+                </div>
+                <div class="conversation-box">
+                    <div class="speaker">ML 엔지니어:</div>
+                    <div>"지금 벡터 RAG는 개별 문서 검색은 잘하지만 여러 문서에 걸친 관계 파악이 어려워요. 그래프 RAG로 전환하면 법안-판례-조문 간 관계를 지식 그래프로 구축해서 멀티홉 질의에 대응할 수 있습니다. 다만 인덱싱 비용이 높아서 증분 업데이트 전략도 함께 설계해야 해요."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Mistakes Section -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>모든 유형의 질의에 그래프 RAG를 사용함</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>단순 사실 질의는 벡터 RAG, 관계/요약 질의에만 그래프 RAG 활용</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>엔티티 추출 품질을 검증하지 않음</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>추출된 트리플 샘플을 정기적으로 검토하고 프롬프트 개선</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>대규모 데이터에 한 번에 전체 인덱싱 시도</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>배치 단위로 점진적 인덱싱하고 비용/품질 모니터링</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms Section -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                <a href="/ko/term/%EC%A7%80%EC%8B%9D%20%EA%B7%B8%EB%9E%98%ED%94%84/" class="related-term-link">지식 그래프</a>
+                <a href="/ko/term/%EB%B2%A1%ED%84%B0%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4/" class="related-term-link">벡터 데이터베이스</a>
+                <a href="/ko/term/Embedding/" class="related-term-link">임베딩</a>
+                <a href="/ko/term/%EC%B2%AD%ED%82%B9/" class="related-term-link">청킹</a>
+            </div>
+        </section>
+
+        <!-- Learn More Section -->
+        <section class="content-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://github.com/microsoft/graphrag" target="_blank">📄 Microsoft GraphRAG GitHub</a></li>
+                <li><a href="https://docs.llamaindex.ai/en/stable/examples/index_structs/knowledge_graph/" target="_blank">📄 LlamaIndex Knowledge Graph 가이드</a></li>
+                <li><a href="https://arxiv.org/abs/2404.16130" target="_blank">📄 GraphRAG 논문 (arXiv)</a></li>
+                <li><a href="https://www.youtube.com/watch?v=r09tJfON6kE" target="_blank">🎬 GraphRAG 설명 영상</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +576,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

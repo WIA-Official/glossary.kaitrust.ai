@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,178 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>AI 감사(AI Audit)는 AI 시스템이 관련 법규, 표준, 윤리 원칙을 준수하는지 독립적인 제3자가 체계적으로 검증하는 활동입니다. EU AI Act에서는 고위험 AI 시스템에 대해 정기적인 감사를 요구하며, 이는 시스템의 투명성, 공정성, 안전성을 확보하기 위한 핵심 메커니즘입니다.</p>
+                <p>AI 감사의 핵심 영역은 알고리즘 감사(편향성, 공정성 검증), 데이터 감사(학습 데이터 품질, 개인정보 처리), 프로세스 감사(개발 절차, 문서화), 성능 감사(정확도, 신뢰성)로 구분됩니다. 특히 고위험 AI의 경우 적합성 평가(Conformity Assessment)의 일환으로 필수적입니다.</p>
+                <p>적용 대상은 EU AI Act 부속서 III에 명시된 고위험 AI 시스템(의료 기기, 채용 시스템, 신용 평가 등)이며, 공급자(Provider)는 시장 출시 전 자체 적합성 평가 또는 제3자 감사를 받아야 합니다. 감사 결과는 기술 문서에 포함되어 최소 10년간 보관해야 합니다.</p>
+                <p>실무 대응을 위해서는 내부 AI 감사 체계 구축, 감사 추적성(Audit Trail) 확보를 위한 로깅 시스템 구현, 공인된 제3자 감사 기관과의 협력 체계 수립이 필요합니다. 한국에서도 금융위원회 AI 가이드라인에서 AI 감사를 권고하고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># AI 감사 추적 시스템 구현 예제
+import logging
+import hashlib
+from datetime import datetime
+from dataclasses import dataclass
+from typing import Dict, Any, List
+
+@dataclass
+class AuditRecord:
+    """AI 의사결정 감사 기록"""
+    timestamp: datetime
+    model_id: str
+    model_version: str
+    input_hash: str
+    output_hash: str
+    decision: Any
+    confidence: float
+    processing_time_ms: float
+    user_id: str
+
+class AIAuditLogger:
+    """EU AI Act 준수를 위한 감사 로거"""
+
+    def __init__(self, system_name: str, risk_level: str = "high"):
+        self.system_name = system_name
+        self.risk_level = risk_level
+        self.logger = logging.getLogger(f"ai_audit_{system_name}")
+        self._setup_secure_logging()
+
+    def _setup_secure_logging(self):
+        """변조 방지 로깅 설정"""
+        handler = logging.FileHandler(
+            f"audit_logs/{self.system_name}_{datetime.now().strftime('%Y%m')}.log",
+            encoding='utf-8'
+        )
+        formatter = logging.Formatter(
+            '%(asctime)s|%(levelname)s|%(message)s|%(checksum)s'
+        )
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+
+    def log_decision(self, model_id: str, model_version: str,
+                     inputs: Dict, outputs: Dict,
+                     confidence: float, user_id: str) -> AuditRecord:
+        """AI 의사결정 기록 - 감사 추적성 확보"""
+        record = AuditRecord(
+            timestamp=datetime.utcnow(),
+            model_id=model_id,
+            model_version=model_version,
+            input_hash=self._hash_data(inputs),
+            output_hash=self._hash_data(outputs),
+            decision=outputs.get('decision'),
+            confidence=confidence,
+            processing_time_ms=outputs.get('processing_time', 0),
+            user_id=user_id
+        )
+
+        # 무결성 체크섬 포함 로깅
+        log_entry = self._serialize_record(record)
+        self.logger.info(log_entry, extra={'checksum': self._compute_checksum(log_entry)})
+
+        return record
+
+    def _hash_data(self, data: Dict) -> str:
+        """입출력 데이터 해시화 (개인정보 보호)"""
+        return hashlib.sha256(str(data).encode()).hexdigest()[:16]
+
+    def _compute_checksum(self, data: str) -> str:
+        """로그 무결성 검증용 체크섬"""
+        return hashlib.sha256(data.encode()).hexdigest()[:8]
+
+    def generate_audit_report(self, start_date: datetime,
+                              end_date: datetime) -> Dict[str, Any]:
+        """감사 보고서 생성 - 규제 당국 제출용"""
+        return {
+            "system_name": self.system_name,
+            "risk_level": self.risk_level,
+            "report_period": {"start": start_date, "end": end_date},
+            "total_decisions": self._count_decisions(start_date, end_date),
+            "accuracy_metrics": self._calculate_accuracy(),
+            "fairness_metrics": self._calculate_fairness(),
+            "incident_summary": self._get_incidents(start_date, end_date),
+            "compliance_status": "COMPLIANT",
+            "generated_at": datetime.utcnow().isoformat()
+        }
+
+# 사용 예시
+audit_logger = AIAuditLogger("credit_scoring_ai", risk_level="high")
+
+# 신용 평가 결정 로깅
+audit_logger.log_decision(
+    model_id="credit_model_v2",
+    model_version="2.1.0",
+    inputs={"applicant_id": "HASH_12345", "income": "bracket_3"},
+    outputs={"decision": "APPROVED", "credit_limit": 50000},
+    confidence=0.92,
+    user_id="analyst_001"
+)</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">법무팀:</strong> "EU 시장 진출하려면 고위험 AI 감사 체계부터 갖춰야 해요. 내년 8월 고위험 AI 의무화 전에 제3자 감사 기관 선정해야 합니다."</p>
+                <p><strong class="role-junior">개발팀:</strong> "감사 추적성 확보를 위해 모든 AI 의사결정에 타임스탬프와 모델 버전을 로깅하도록 수정했습니다. 로그 보관 기간은 10년으로 설정했고요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "AI 감사 경험이 있으신가요? 어떤 항목들을 점검하셨나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "알고리즘 공정성 감사를 수행했습니다. 인종, 성별 등 보호 속성별 결과 편차를 분석하고, Disparate Impact Ratio가 0.8 이상 유지되도록 모니터링 체계를 구축했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">컴플라이언스:</strong> "이 추론 함수에 감사 로그가 없네요. 고위험 AI 분류되면 모든 결정에 추적 가능한 로그가 필수입니다."</p>
+                <p><strong class="role-junior">개발자:</strong> "AuditLogger 데코레이터 추가하겠습니다. 입력 해시, 출력, 신뢰도 점수까지 기록하도록 할게요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>감사 로그 미비 시 EU AI Act 위반으로 최대 1,500만 유로 또는 전년도 매출의 3% 과징금 부과</li>
+                <li>감사 기록은 최소 10년간 보관 의무 - 시스템 폐기 후에도 유지</li>
+                <li>제3자 감사는 EU AI Act 인증 기관(Notified Body)만 수행 가능</li>
+                <li class="info">내부 감사 체계를 먼저 구축하고, 외부 감사 전 자체 점검 수행 권장</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/EU%20AI%20Act/" class="related-link">EU AI Act</a>
+                <a href="/ko/term/AI%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">AI 거버넌스</a>
+                <a href="/ko/term/AI%20%EC%B1%85%EC%9E%84%EC%84%B1/" class="related-link">AI 책임성</a>
+                <a href="/ko/term/%EA%B8%B0%EC%88%A0%EC%A0%81%20%EB%AC%B8%EC%84%9C%ED%99%94/" class="related-link">기술적 문서화</a>
+                <a href="/ko/term/CE%20%EB%A7%88%ED%82%B9/" class="related-link">CE 마킹</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act 원문</a></li>
+                <li><span class="type-tutorial"></span><a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">EU 디지털전략 - AI 규제 프레임워크</a></li>
+                <li><span class="type-book"></span><a href="https://www.iso.org/standard/81230.html" target="_blank" rel="noopener">ISO/IEC 42001 - AI 관리시스템</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +385,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

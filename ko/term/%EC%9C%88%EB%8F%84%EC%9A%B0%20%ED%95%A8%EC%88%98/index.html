@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>윈도우 함수 (Window Function) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="그룹 내 행별 계산 수행. ROW_NUMBER, RANK.">
-    <meta name="keywords" content="윈도우 함수, Window Function, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="윈도우 함수는 그룹 내 각 행에 대해 집계 결과를 계산하면서도 개별 행을 유지하는 SQL 함수입니다. ROW_NUMBER, RANK, LAG, LEAD 등으로 순위, 누적 합계, 이동 평균을 구현합니다.">
+    <meta name="keywords" content="윈도우 함수, Window Function, ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD, OVER, PARTITION BY, 누적 합계, 이동 평균, SQL, PostgreSQL, MySQL, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EC%9C%88%EB%8F%84%EC%9A%B0%20%ED%95%A8%EC%88%98/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EC%9C%88%EB%8F%84%EC%9A%B0%20%ED%95%A8%EC%88%98/">
     <meta property="og:title" content="윈도우 함수 (Window Function) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="그룹 내 행별 계산 수행. ROW_NUMBER, RANK.">
+    <meta property="og:description" content="윈도우 함수는 그룹 내 각 행에 대해 집계 결과를 유지하면서 개별 행을 보존하는 SQL 함수입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="윈도우 함수 (Window Function) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="그룹 내 행별 계산 수행. ROW_NUMBER, RANK.">
+    <meta name="twitter:description" content="윈도우 함수는 그룹 내 각 행에 대해 집계 결과를 유지하면서 개별 행을 보존하는 SQL 함수입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "윈도우 함수",
-        "description": "그룹 내 행별 계산 수행. ROW_NUMBER, RANK.",
+        "alternateName": "Window Function",
+        "description": "윈도우 함수는 그룹 내 각 행에 대해 집계 결과를 유지하면서 개별 행을 보존하는 SQL 함수입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">윈도우 함수</h1>
             <p class="term-english">Window Function</p>
             <div class="term-description">
-                <p>그룹 내 행별 계산 수행. ROW_NUMBER, RANK.</p>
+                <p>그룹 내 각 행에 대해 집계 결과를 계산하면서도 개별 행을 유지하는 SQL 함수입니다. GROUP BY와 달리 행을 집계하지 않고, OVER 절로 정의된 윈도우(행 집합) 내에서 계산합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,303 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>윈도우 함수(Window Function)</strong>는 행 그룹에 대한 계산을 수행하면서도 개별 행을 유지하는 SQL 함수입니다. GROUP BY는 그룹당 한 행으로 집계하지만, 윈도우 함수는 모든 행을 보존하면서 각 행에 계산된 값을 추가합니다.</p>
+                <p><strong>OVER</strong> 절을 통해 윈도우를 정의합니다. <strong>PARTITION BY</strong>로 그룹을 나누고(선택적), <strong>ORDER BY</strong>로 정렬 순서를 지정합니다. 또한 <strong>ROWS</strong>나 <strong>RANGE</strong>로 윈도우 프레임(계산에 포함할 행 범위)을 세밀하게 조절할 수 있습니다.</p>
+                <p>대표적인 윈도우 함수: <strong>ROW_NUMBER</strong>(연속 순번), <strong>RANK</strong>(동점 시 같은 순위, 다음 순위 건너뜀), <strong>DENSE_RANK</strong>(동점 시 같은 순위, 다음 순위 연속), <strong>LAG/LEAD</strong>(이전/다음 행 값 참조), <strong>SUM/AVG/COUNT OVER</strong>(누적/이동 집계), <strong>FIRST_VALUE/LAST_VALUE</strong>(첫/마지막 값) 등이 있습니다.</p>
+                <p>순위 계산, 누적 합계, 이동 평균, 행 간 비교, 비율 계산 등 분석 작업에 필수적이며, 서브쿼리 없이 한 번의 테이블 스캔으로 복잡한 계산을 수행할 수 있어 성능 면에서도 유리합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="sql">SQL 기본</button>
+                <button class="code-tab" data-lang="analytics">분석 쿼리</button>
+                <button class="code-tab" data-lang="python">Python (pandas)</button>
+            </div>
+            <div class="code-block active" data-lang="sql">
+                <pre><code class="language-sql">-- ============================================
+-- 순위 함수: ROW_NUMBER, RANK, DENSE_RANK
+-- ============================================
+
+-- ROW_NUMBER: 연속 순번 부여
+SELECT
+    name,
+    department,
+    salary,
+    ROW_NUMBER() OVER (ORDER BY salary DESC) as overall_rank,
+    ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) as dept_rank
+FROM employees;
+
+-- RANK vs DENSE_RANK 비교 (동점 처리)
+-- salary: 100, 100, 90 일 때
+-- RANK:       1, 1, 3  (동점 후 순위 건너뜀)
+-- DENSE_RANK: 1, 1, 2  (동점 후 순위 연속)
+SELECT
+    name,
+    salary,
+    RANK() OVER (ORDER BY salary DESC) as rank,
+    DENSE_RANK() OVER (ORDER BY salary DESC) as dense_rank
+FROM employees;
+
+
+-- ============================================
+-- LAG / LEAD: 이전/다음 행 참조
+-- ============================================
+SELECT
+    order_date,
+    revenue,
+    LAG(revenue, 1, 0) OVER (ORDER BY order_date) as prev_day,
+    revenue - LAG(revenue, 1) OVER (ORDER BY order_date) as daily_change,
+    LEAD(revenue, 1) OVER (ORDER BY order_date) as next_day
+FROM daily_sales;
+
+
+-- ============================================
+-- 누적 합계 (Running Total)
+-- ============================================
+SELECT
+    order_date,
+    amount,
+    SUM(amount) OVER (ORDER BY order_date) as running_total,
+    SUM(amount) OVER () as grand_total,  -- 전체 합계
+    ROUND(amount * 100.0 / SUM(amount) OVER (), 2) as pct_of_total
+FROM orders;
+
+
+-- ============================================
+-- 윈도우 프레임: 이동 평균
+-- ============================================
+SELECT
+    order_date,
+    amount,
+    -- 최근 3일 이동 평균 (현재 행 포함 앞 2행)
+    AVG(amount) OVER (
+        ORDER BY order_date
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) as moving_avg_3days,
+    -- 전후 1일 포함 평균
+    AVG(amount) OVER (
+        ORDER BY order_date
+        ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+    ) as centered_avg
+FROM daily_sales;</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="analytics">
+                <pre><code class="language-sql">-- ============================================
+-- 실무 분석 쿼리 예제
+-- ============================================
+
+-- 1. 부서별 Top 3 급여자 추출
+WITH ranked AS (
+    SELECT
+        name,
+        department,
+        salary,
+        DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) as rn
+    FROM employees
+)
+SELECT * FROM ranked WHERE rn <= 3;
+
+
+-- 2. 고객별 최근 주문 3개
+SELECT * FROM (
+    SELECT
+        customer_id,
+        order_id,
+        order_date,
+        total_amount,
+        ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date DESC) as rn
+    FROM orders
+) t WHERE rn <= 3;
+
+
+-- 3. 월별 매출 + 전월 대비 증감률
+SELECT
+    DATE_TRUNC('month', order_date) as month,
+    SUM(amount) as revenue,
+    LAG(SUM(amount)) OVER (ORDER BY DATE_TRUNC('month', order_date)) as prev_month,
+    ROUND(
+        (SUM(amount) - LAG(SUM(amount)) OVER (ORDER BY DATE_TRUNC('month', order_date)))
+        * 100.0 / NULLIF(LAG(SUM(amount)) OVER (ORDER BY DATE_TRUNC('month', order_date)), 0),
+        2
+    ) as growth_rate_pct
+FROM orders
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY month;
+
+
+-- 4. 부서별 급여 분포 (본인 vs 부서 평균/최대)
+SELECT
+    name,
+    department,
+    salary,
+    ROUND(AVG(salary) OVER (PARTITION BY department), 0) as dept_avg,
+    MAX(salary) OVER (PARTITION BY department) as dept_max,
+    salary - AVG(salary) OVER (PARTITION BY department) as diff_from_avg,
+    FIRST_VALUE(name) OVER (PARTITION BY department ORDER BY salary DESC) as top_earner
+FROM employees;
+
+
+-- 5. 제품별 카테고리 내 순위 + 전체 순위
+SELECT
+    product_name,
+    category,
+    sales,
+    RANK() OVER (PARTITION BY category ORDER BY sales DESC) as category_rank,
+    RANK() OVER (ORDER BY sales DESC) as overall_rank,
+    NTILE(4) OVER (ORDER BY sales DESC) as quartile  -- 4분위
+FROM product_sales;</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># pandas에서 윈도우 함수 구현
+import pandas as pd
+
+# 샘플 데이터
+df = pd.DataFrame({
+    'name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
+    'department': ['Sales', 'Sales', 'IT', 'IT', 'IT'],
+    'salary': [60000, 55000, 70000, 65000, 70000]
+})
+
+# ROW_NUMBER: 그룹별 순번
+df['dept_row_num'] = df.groupby('department').cumcount() + 1
+
+# RANK: 그룹별 순위 (동점 시 같은 순위)
+df['dept_rank'] = df.groupby('department')['salary'].rank(method='min', ascending=False)
+
+# DENSE_RANK
+df['dept_dense_rank'] = df.groupby('department')['salary'].rank(method='dense', ascending=False)
+
+# LAG: 이전 행 값
+df_sorted = df.sort_values(['department', 'salary'], ascending=[True, False])
+df_sorted['prev_salary'] = df_sorted.groupby('department')['salary'].shift(1)
+
+# 누적 합계 (Running Total)
+df['cumsum_salary'] = df.groupby('department')['salary'].cumsum()
+
+# 이동 평균 (Rolling)
+sales_data = pd.DataFrame({
+    'date': pd.date_range('2024-01-01', periods=10),
+    'amount': [100, 120, 90, 110, 130, 100, 140, 120, 150, 130]
+})
+sales_data['moving_avg_3'] = sales_data['amount'].rolling(window=3).mean()
+
+# 전체 대비 비율
+df['pct_of_total'] = df['salary'] / df['salary'].sum() * 100
+df['pct_of_dept'] = df['salary'] / df.groupby('department')['salary'].transform('sum') * 100
+
+print("=== 부서별 순위 ===")
+print(df[['name', 'department', 'salary', 'dept_rank', 'dept_dense_rank']])
+
+print("\n=== 누적 합계 ===")
+print(df[['name', 'department', 'salary', 'cumsum_salary']])
+
+print("\n=== 이동 평균 ===")
+print(sales_data[['date', 'amount', 'moving_avg_3']])</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 데이터 분석 요청에서</div>
+                    <blockquote class="conv-quote">
+                        "고객별로 최근 주문 3개만 가져와야 하는데요."<br><br>
+                        "ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date DESC)로 순번 매기고, WHERE rn <= 3으로 필터링하면 됩니다. GROUP BY와 LIMIT 조합으로는 안 돼요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 최적화 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "이 쿼리에서 전체 평균이랑 부서 평균을 서브쿼리 두 개로 따로 구하고 있어요."<br><br>
+                        "윈도우 함수로 한 번에 해결할 수 있어요. AVG(salary) OVER()는 전체 평균, AVG(salary) OVER(PARTITION BY dept)는 부서 평균입니다. 테이블 스캔이 3번에서 1번으로 줄어요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "RANK와 DENSE_RANK의 차이점을 설명해주세요."<br><br>
+                        "값이 동일할 때 차이가 납니다. 예를 들어 점수가 100, 100, 90이면 RANK는 1, 1, 3이고 DENSE_RANK는 1, 1, 2입니다. RANK는 동점 수만큼 다음 순위를 건너뛰고, DENSE_RANK는 연속 순위를 부여합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>WHERE 절에서 직접 사용 불가</strong>
+                        <p>윈도우 함수는 SELECT, ORDER BY에서만 사용 가능합니다. WHERE에서 필터링하려면 서브쿼리나 CTE로 감싸야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>PARTITION BY 없이 대량 데이터 처리</strong>
+                        <p>PARTITION BY 없이 사용하면 전체 데이터가 하나의 윈도우가 되어 메모리 사용량이 급증할 수 있습니다. 가능하면 적절히 분할하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>프레임 기본값 주의</strong>
+                        <p>ORDER BY를 지정하면 기본 프레임이 RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW입니다. 의도와 다를 수 있으니 명시적으로 지정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>인덱스 활용</strong>
+                        <p>PARTITION BY, ORDER BY에 사용되는 컬럼에 인덱스가 있으면 성능이 크게 향상됩니다. 특히 대용량 데이터에서는 필수입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EC%BF%BC%EB%A6%AC/" class="related-term-link">쿼리</a>
+                <a href="/ko/term/%EC%84%9C%EB%B8%8C%EC%BF%BC%EB%A6%AC/" class="related-term-link">서브쿼리</a>
+                <a href="/ko/term/%EC%A1%B0%EC%9D%B8/" class="related-term-link">조인</a>
+                <a href="/ko/term/%EC%8B%A4%ED%96%89%20%EA%B3%84%ED%9A%8D/" class="related-term-link">실행 계획</a>
+                <a href="/ko/term/%EC%9D%B8%EB%8D%B1%EC%8A%A4/" class="related-term-link">인덱스</a>
+                <a href="/ko/term/%EC%BF%BC%EB%A6%AC%20%EC%98%B5%ED%8B%B0%EB%A7%88%EC%9D%B4%EC%A0%80/" class="related-term-link">쿼리 옵티마이저</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.postgresql.org/docs/current/tutorial-window.html" target="_blank" class="learn-link">
+                    📄 PostgreSQL - Window Functions Tutorial
+                </a>
+                <a href="https://dev.mysql.com/doc/refman/8.0/en/window-functions.html" target="_blank" class="learn-link">
+                    🎓 MySQL - Window Functions
+                </a>
+                <a href="https://modern-sql.com/feature/window-functions" target="_blank" class="learn-link">
+                    📖 Modern SQL - Window Functions 완벽 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +593,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

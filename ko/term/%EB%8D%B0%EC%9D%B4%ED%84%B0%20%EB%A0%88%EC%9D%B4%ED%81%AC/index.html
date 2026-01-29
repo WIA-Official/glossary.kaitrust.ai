@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -147,15 +148,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -202,6 +194,140 @@
                 </a>
             </div>
         </article>
+
+        <!-- 표준 6개 섹션 -->
+        <div class="term-sections">
+            <!-- 섹션 1: 상세 설명 -->
+            <section class="term-section" aria-labelledby="detail-title">
+                <h2 class="section-title" id="detail-title">상세 설명</h2>
+                <div class="detail-content">
+                    <p>데이터 레이크(Data Lake)는 구조화, 반구조화, 비구조화 데이터를 원시 형태 그대로 저장하는 중앙 집중식 저장소입니다. 전통적인 데이터 웨어하우스의 '스키마 온 라이트(Schema on Write)'와 달리, 데이터 레이크는 '스키마 온 리드(Schema on Read)' 방식으로 데이터 저장 시점이 아닌 읽기 시점에 스키마를 적용합니다.</p>
+                    <p>Amazon S3, Azure Data Lake Storage, Google Cloud Storage 같은 객체 스토리지가 기반 기술이며, 페타바이트 규모의 데이터를 저비용으로 저장할 수 있습니다. Parquet, ORC, Avro 같은 컬럼형 포맷을 사용하면 쿼리 성능과 압축 효율을 크게 높일 수 있습니다.</p>
+                    <p>데이터 레이크는 일반적으로 계층 구조(Zones)로 관리됩니다. Raw Zone에 원시 데이터를 수집하고, Bronze/Silver/Gold Zone을 거치며 데이터를 정제하고 가공합니다. AWS Glue Catalog나 Hive Metastore로 테이블 스키마와 파티션 정보를 관리합니다.</p>
+                    <p>AI/ML 학습 데이터 준비, 로그 분석, IoT 센서 데이터 수집 등 다양한 유스케이스에 활용되며, Spark, Presto, Trino 같은 분산 처리 엔진으로 대용량 데이터를 병렬 처리합니다.</p>
+                </div>
+            </section>
+
+            <!-- 섹션 2: 코드 예제 -->
+            <section class="term-section" aria-labelledby="code-title">
+                <h2 class="section-title" id="code-title">코드 예제</h2>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Python (PySpark + AWS)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre><code class="language-python"># AWS S3 기반 데이터 레이크 아키텍처
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+import boto3
+
+# S3 데이터 레이크 계층 구조
+DATA_LAKE = "s3://company-datalake"
+ZONES = {
+    "raw": f"{DATA_LAKE}/raw/",      # 원시 데이터
+    "bronze": f"{DATA_LAKE}/bronze/", # 정제된 데이터
+    "silver": f"{DATA_LAKE}/silver/", # 변환/집계 데이터
+    "gold": f"{DATA_LAKE}/gold/"      # 분석용 마트
+}
+
+# Spark 세션 초기화
+spark = SparkSession.builder \
+    .appName("DataLakeProcessing") \
+    .config("spark.sql.extensions",
+            "io.delta.sql.DeltaSparkSessionExtension") \
+    .getOrCreate()
+
+# Raw Zone: 원시 JSON 데이터 수집
+raw_events = spark.read \
+    .option("multiLine", True) \
+    .json(f"{ZONES['raw']}/events/2024/01/15/")
+
+# Bronze Zone: 정제 및 파티셔닝
+bronze_events = raw_events \
+    .dropDuplicates(["event_id"]) \
+    .withColumn("event_date", to_date("timestamp")) \
+    .withColumn("event_hour", hour("timestamp"))
+
+bronze_events.write \
+    .partitionBy("event_date", "event_hour") \
+    .mode("append") \
+    .parquet(f"{ZONES['bronze']}/events/")
+
+print(f"Processed {bronze_events.count()} events to Bronze Zone")
+
+# AWS Glue Catalog에 테이블 등록
+glue = boto3.client('glue')
+glue.create_table(
+    DatabaseName='bronze_db',
+    TableInput={
+        'Name': 'events',
+        'StorageDescriptor': {
+            'Location': f"{ZONES['bronze']}/events/",
+            'InputFormat': 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
+        }
+    }
+)</code></pre>
+                </div>
+            </section>
+
+            <!-- 섹션 3: 실무 대화 -->
+            <section class="term-section" aria-labelledby="conv-title">
+                <h2 class="section-title" id="conv-title">실무 대화</h2>
+                <div class="conversation-tabs">
+                    <button class="conv-tab active" data-tab="meeting">팀 미팅</button>
+                    <button class="conv-tab" data-tab="interview">기술 면접</button>
+                    <button class="conv-tab" data-tab="review">코드 리뷰</button>
+                </div>
+                <div class="conversation-content">
+                    <div class="conv-panel active" id="meeting">
+                        <div class="chat-bubble user">데이터 레이크에 데이터가 쌓이는데 아무도 어디에 뭐가 있는지 모르겠어요. 데이터 늪이 된 것 같아요.</div>
+                        <div class="chat-bubble assistant">데이터 카탈로그 도입이 시급합니다. AWS Glue Catalog나 DataHub로 메타데이터를 관리하고, Bronze/Silver/Gold 계층 구조를 명확히 해서 데이터 성숙도를 구분해야 해요. 거버넌스 없는 레이크는 늪이 됩니다.</div>
+                    </div>
+                    <div class="conv-panel" id="interview">
+                        <div class="chat-bubble user">데이터 레이크와 데이터 웨어하우스의 차이점은?</div>
+                        <div class="chat-bubble assistant">레이크는 Schema on Read로 원시 데이터를 저장하고 읽을 때 스키마를 적용해요. 웨어하우스는 Schema on Write로 저장 전에 정제합니다. 레이크는 유연하지만 ACID가 부족하고, 웨어하우스는 구조화되었지만 비용이 높아요. 레이크하우스는 둘을 결합한 아키텍처입니다.</div>
+                    </div>
+                    <div class="conv-panel" id="review">
+                        <div class="chat-bubble user">S3에 Parquet으로 저장하는데, 파티션 없이 flat하게 쓰고 있네요.</div>
+                        <div class="chat-bubble assistant">날짜나 자주 필터링하는 컬럼으로 파티셔닝해주세요. 예: partitionBy("event_date"). 파티션 프루닝으로 쿼리 시 스캔 데이터량을 90% 이상 줄일 수 있어요. 파일 크기는 128MB~1GB가 적정합니다.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 섹션 4: 주의사항 -->
+            <section class="term-section" aria-labelledby="warning-title">
+                <h2 class="section-title" id="warning-title">주의사항</h2>
+                <ul class="warning-list">
+                    <li>메타데이터 관리 없이 데이터를 쌓으면 '데이터 늪(Data Swamp)'이 됩니다. 카탈로그 필수입니다.</li>
+                    <li>기본적으로 ACID 트랜잭션을 지원하지 않으므로, Delta Lake나 Iceberg 도입을 검토하세요.</li>
+                    <li>소형 파일(Small Files)이 많으면 쿼리 성능이 급격히 저하됩니다. Compaction 작업을 정기적으로 수행하세요.</li>
+                    <li>접근 권한과 데이터 분류(PII, 민감정보) 관리가 없으면 보안 사고 위험이 높습니다.</li>
+                    <li class="info">파티션 키 선정 시 카디널리티가 너무 높으면(예: user_id) 파티션 폭발이 발생합니다. 날짜 기반 파티션을 우선 적용하세요.</li>
+                </ul>
+            </section>
+
+            <!-- 섹션 5: 관련 용어 -->
+            <section class="term-section" aria-labelledby="related-title">
+                <h2 class="section-title" id="related-title">관련 용어</h2>
+                <div class="related-links">
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A0%88%EC%9D%B4%ED%81%AC%ED%95%98%EC%9A%B0%EC%8A%A4/" class="related-link">데이터 레이크하우스</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%B9%B4%ED%83%88%EB%A1%9C%EA%B7%B8/" class="related-link">데이터 카탈로그</a>
+                    <a href="/ko/term/%EB%B9%85%EB%8D%B0%EC%9D%B4%ED%84%B0/" class="related-link">빅데이터</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/" class="related-link">데이터 파이프라인</a>
+                    <a href="/ko/term/Trino/" class="related-link">Trino</a>
+                </div>
+            </section>
+
+            <!-- 섹션 6: 더 배우기 -->
+            <section class="term-section" aria-labelledby="learn-title">
+                <h2 class="section-title" id="learn-title">더 배우기</h2>
+                <ul class="learn-links">
+                    <li><a href="https://aws.amazon.com/big-data/datalakes-and-analytics/" target="_blank" rel="noopener">AWS 데이터 레이크 아키텍처</a></li>
+                    <li><a href="https://delta.io/learn/" target="_blank" rel="noopener">Delta Lake 학습 자료</a></li>
+                    <li><a href="https://cloud.google.com/learn/what-is-a-data-lake" target="_blank" rel="noopener">Google Cloud - 데이터 레이크란?</a></li>
+                </ul>
+            </section>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -212,6 +338,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

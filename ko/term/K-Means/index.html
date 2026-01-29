@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,134 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>K-Means는 데이터를 K개의 군집(cluster)으로 분할하는 대표적인 비지도 학습 알고리즘입니다. 라벨이 없는 데이터에서 유사한 특성을 가진 그룹을 자동으로 찾아내며, 고객 세분화, 이미지 압축, 이상 탐지 등에 널리 활용됩니다.</p>
+                <p>1957년 Stuart Lloyd가 제안하고 1967년 James MacQueen이 명명한 K-Means는 60년 이상 사용되어 온 클래식 알고리즘입니다. 구현이 간단하고 빠르며, 대용량 데이터에도 효율적으로 동작해 여전히 가장 많이 사용되는 클러스터링 기법입니다.</p>
+                <p>알고리즘은 1) K개의 초기 중심점(centroid) 선택, 2) 각 데이터를 가장 가까운 중심점에 할당, 3) 각 군집의 평균으로 중심점 업데이트, 4) 수렴할 때까지 2-3 반복의 과정으로 동작합니다.</p>
+                <p>실무에서 최적의 K값은 Elbow Method(관성 그래프의 꺾이는 지점)나 Silhouette Score로 결정합니다. sklearn의 KMeans는 백만 개 데이터도 수 초 내에 처리 가능하며, MiniBatchKMeans는 더 큰 데이터셋에 적합합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 샘플 데이터 생성 (고객 데이터 시뮬레이션)
+np.random.seed(42)
+X = np.vstack([
+    np.random.randn(100, 2) + [0, 0],   # 그룹 1
+    np.random.randn(100, 2) + [5, 5],   # 그룹 2
+    np.random.randn(100, 2) + [10, 0]   # 그룹 3
+])
+
+# 데이터 표준화 (중요!)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Elbow Method로 최적 K 찾기
+inertias = []
+silhouettes = []
+K_range = range(2, 11)
+
+for k in K_range:
+    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+    kmeans.fit(X_scaled)
+    inertias.append(kmeans.inertia_)
+    silhouettes.append(silhouette_score(X_scaled, kmeans.labels_))
+
+# 최적 K로 클러스터링 (silhouette 최대값 기준)
+best_k = K_range[np.argmax(silhouettes)]
+print(f"최적 K: {best_k}")
+
+kmeans_final = KMeans(n_clusters=best_k, random_state=42, n_init=10)
+labels = kmeans_final.fit_predict(X_scaled)
+
+print(f"Silhouette Score: {silhouette_score(X_scaled, labels):.3f}")
+print(f"각 군집 크기: {np.bincount(labels)}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"K-Means로 고객 세분화를 진행했습니다. Elbow Method로 확인한 결과 K=5가 최적이고, Silhouette Score 0.62로 군집이 잘 분리되었습니다. VIP, 일반, 이탈 위험 등 5개 그룹으로 마케팅 전략을 수립할 수 있습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"K-Means는 거리 기반 알고리즘이라 스케일에 민감합니다. StandardScaler로 정규화가 필수이고, 초기 중심점 선택에 따라 결과가 달라지므로 k-means++나 여러 번 실행(n_init)으로 안정성을 높입니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"비구형(non-spherical) 군집이나 밀도가 다른 경우엔 K-Means보다 DBSCAN이 더 적합해요. 하지만 해석이 쉽고 속도가 빨라서 탐색적 분석 초기 단계에는 K-Means로 시작하는 게 좋습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>데이터 정규화 없이 클러스터링</strong>
+                        <p>스케일이 다른 피처가 있으면 거리 계산이 왜곡됩니다. StandardScaler나 MinMaxScaler로 반드시 정규화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>K값을 임의로 설정</strong>
+                        <p>직관에 의존하지 말고 Elbow Method와 Silhouette Score로 객관적으로 K를 결정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>n_init 파라미터 활용</strong>
+                        <p>초기값 의존성을 줄이려면 n_init=10 이상으로 설정해 여러 번 실행 후 최적 결과를 선택합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/DBSCAN/" class="related-term-link">DBSCAN</a>
+                <a href="/ko/term/Clustering/" class="related-term-link">Clustering</a>
+                <a href="/ko/term/Unsupervised%20Learning/" class="related-term-link">Unsupervised Learning</a>
+                <a href="/ko/term/KNN/" class="related-term-link">KNN</a>
+                <a href="/ko/term/PCA/" class="related-term-link">PCA</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://scikit-learn.org/stable/modules/clustering.html#k-means" target="_blank" class="learn-link">📄 scikit-learn K-Means 공식 문서</a>
+                <a href="https://www.naftaliharris.com/blog/visualizing-k-means-clustering/" target="_blank" class="learn-link">🎓 K-Means 시각화 인터랙티브 튜토리얼</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +364,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -147,15 +148,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -202,6 +194,145 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Apache Kafka는 LinkedIn에서 개발하고 Apache Software Foundation에 기증한 오픈소스 분산 이벤트 스트리밍 플랫폼입니다. 초당 수백만 건의 이벤트를 처리할 수 있는 높은 처리량과 내결함성을 제공하며, 실시간 데이터 파이프라인과 스트리밍 애플리케이션 구축의 핵심 인프라로 자리잡았습니다.</p>
+                <p>Kafka의 핵심 개념은 Topic(메시지 카테고리), Partition(병렬 처리 단위), Producer(메시지 발행자), Consumer(메시지 구독자)로 구성됩니다. 메시지는 디스크에 순차적으로 저장되어 높은 I/O 성능을 달성하며, Consumer Group을 통해 수평 확장이 가능합니다.</p>
+                <p>기존 ZooKeeper 기반 클러스터 관리에서 KRaft(Kafka Raft) 모드로 전환되어 운영 복잡성이 크게 감소했습니다. Kafka Connect는 다양한 데이터 소스와 싱크에 대한 커넥터를 제공하고, Kafka Streams는 실시간 스트림 처리 라이브러리를 제공합니다.</p>
+                <p>마이크로서비스 아키텍처에서 이벤트 기반 통신의 표준으로 활용되며, 로그 집계, 실시간 분석, CDC(Change Data Capture), 이벤트 소싱 패턴 구현에 필수적입니다. Confluent Platform은 Kafka를 기반으로 Schema Registry, ksqlDB 등 엔터프라이즈 기능을 추가로 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Kafka Producer/Consumer Python 예제 (kafka-python)
+from kafka import KafkaProducer, KafkaConsumer
+from kafka.errors import KafkaError
+import json
+from datetime import datetime
+
+# ========== Producer 설정 ==========
+producer = KafkaProducer(
+    bootstrap_servers=['kafka1:9092', 'kafka2:9092', 'kafka3:9092'],
+    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+    key_serializer=lambda k: k.encode('utf-8') if k else None,
+    acks='all',                    # 모든 복제본 확인
+    retries=3,                     # 재시도 횟수
+    compression_type='snappy',     # 압축 방식
+    batch_size=16384,              # 배치 크기 (bytes)
+    linger_ms=10                   # 배치 대기 시간
+)
+
+def send_event(topic: str, key: str, event: dict):
+    """이벤트를 Kafka 토픽으로 전송"""
+    try:
+        future = producer.send(topic, key=key, value=event)
+        record_metadata = future.get(timeout=10)
+        print(f"전송 성공: partition={record_metadata.partition}, "
+              f"offset={record_metadata.offset}")
+        return True
+    except KafkaError as e:
+        print(f"전송 실패: {e}")
+        return False
+
+# 이벤트 발행
+order_event = {
+    'event_id': 'evt_12345',
+    'order_id': 'ORD-2024-001',
+    'customer_id': 'cust_001',
+    'event_type': 'order_created',
+    'total_amount': 150000,
+    'timestamp': datetime.utcnow().isoformat()
+}
+
+send_event('order-events', key=order_event['customer_id'], event=order_event)
+producer.flush()
+
+# ========== Consumer 설정 ==========
+consumer = KafkaConsumer(
+    'order-events',
+    bootstrap_servers=['kafka1:9092', 'kafka2:9092'],
+    group_id='order-processor-group',
+    auto_offset_reset='earliest',
+    enable_auto_commit=False,      # 수동 오프셋 커밋
+    value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+)
+
+# 메시지 소비
+for message in consumer:
+    print(f"수신: partition={message.partition}, offset={message.offset}")
+    print(f"데이터: {message.value}")
+
+    # 비즈니스 로직 처리 후 커밋
+    consumer.commit()
+    break  # 예제용
+
+consumer.close()</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "주문 서비스와 결제 서비스 사이에 Kafka 토픽 하나 만들어서 비동기로 연결하죠. 순서 보장이 필요하니까 customer_id를 키로 써서 같은 파티션으로 보내면 돼요."</p>
+                <p><strong class="role-junior">주니어:</strong> "파티션 수는 어떻게 정하나요? Consumer 인스턴스 수랑 맞춰야 하나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "Consumer 수보다 파티션이 많거나 같아야 해요. 일단 6개로 시작하고, 처리량 보면서 늘려도 되는데 줄이는 건 안 돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-senior">면접관:</strong> "Kafka에서 메시지 순서를 보장하려면 어떻게 해야 하나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "같은 키를 가진 메시지는 같은 파티션으로 전송되고, 파티션 내에서는 순서가 보장됩니다. 전역 순서가 필요하면 파티션을 1개로 제한해야 하지만 처리량이 떨어집니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-senior">시니어:</strong> "auto.commit 쓰고 있네요. 메시지 처리 전에 커밋되면 데이터 유실될 수 있어요. 수동 커밋으로 바꾸고 처리 완료 후에 커밋하세요."</p>
+                <p><strong class="role-junior">주니어:</strong> "네, enable_auto_commit=False로 바꾸고 consumer.commit() 호출하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>파티션 수는 늘릴 수만 있고 줄이기 어려우므로 신중하게 결정</li>
+                <li>auto.commit 사용 시 메시지 처리 전 커밋으로 데이터 유실 가능</li>
+                <li>Consumer Group 내 Consumer 수가 파티션 수보다 많으면 일부 유휴 상태</li>
+                <li>replication.factor는 최소 3으로 설정하여 데이터 안전성 확보</li>
+                <li class="info">Consumer Lag 모니터링으로 처리 지연 조기 탐지 권장</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/" class="related-link">데이터 파이프라인</a>
+                <a href="/ko/term/Flink/" class="related-link">Apache Flink</a>
+                <a href="/ko/term/Spark/" class="related-link">Apache Spark</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A0%88%EC%9D%B4%ED%81%AC/" class="related-link">데이터 레이크</a>
+                <a href="/ko/term/%EB%B9%85%EB%8D%B0%EC%9D%B4%ED%84%B0/" class="related-link">빅데이터</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://kafka.apache.org/documentation/" target="_blank" rel="noopener">Apache Kafka 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://developer.confluent.io/" target="_blank" rel="noopener">Confluent Developer - 튜토리얼</a></li>
+                <li><span class="type-github"></span><a href="https://github.com/apache/kafka" target="_blank" rel="noopener">Apache Kafka GitHub</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +343,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,138 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Matplotlib은 2003년 John Hunter가 개발한 Python 시각화 라이브러리로, MATLAB 스타일의 플로팅을 Python에서 구현합니다. 과학 컴퓨팅과 데이터 분석 분야에서 20년 이상 표준으로 사용되며, NumPy와 함께 Python 데이터 생태계의 기반을 형성합니다.</p>
+                <p>pyplot 인터페이스는 MATLAB 사용자에게 친숙한 상태 기반 API를 제공하고, 객체 지향 API는 Figure와 Axes 객체를 직접 조작해 세밀한 제어를 가능하게 합니다. plt.figure()로 캔버스를 생성하고, plt.subplots()로 여러 그래프를 격자 배열로 구성합니다.</p>
+                <p>지원하는 차트 유형은 line plot, scatter plot, bar chart, histogram, pie chart, box plot, heatmap, contour plot 등 다양합니다. rcParams 설정으로 글꼴, 색상, 스타일을 전역 커스터마이징하고, PNG, PDF, SVG 등 다양한 포맷으로 고품질 출력이 가능합니다.</p>
+                <p>Seaborn, Plotly, Pandas plot은 내부적으로 Matplotlib을 사용하거나 호환됩니다. 논문, 보고서용 정적 시각화에 최적이며, 인터랙티브가 필요하면 Plotly나 Bokeh를 고려합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>import matplotlib.pyplot as plt
+import numpy as np
+
+# 스타일 설정
+plt.style.use('seaborn-v0_8-whitegrid')
+plt.rcParams['font.family'] = 'DejaVu Sans'
+plt.rcParams['figure.dpi'] = 100
+
+# 데이터 준비
+np.random.seed(42)
+x = np.linspace(0, 10, 100)
+y1 = np.sin(x)
+y2 = np.cos(x)
+
+# Figure와 Axes 생성 (2x2 서브플롯)
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+fig.suptitle('Matplotlib 시각화 예제', fontsize=16, fontweight='bold')
+
+# 1. 라인 플롯
+ax1 = axes[0, 0]
+ax1.plot(x, y1, 'b-', label='sin(x)', linewidth=2)
+ax1.plot(x, y2, 'r--', label='cos(x)', linewidth=2)
+ax1.set_xlabel('X축')
+ax1.set_ylabel('Y축')
+ax1.set_title('라인 플롯')
+ax1.legend(loc='upper right')
+ax1.grid(True, alpha=0.3)
+
+# 2. 스캐터 플롯 (색상 매핑)
+ax2 = axes[0, 1]
+scatter_x = np.random.randn(200)
+scatter_y = np.random.randn(200)
+colors = np.sqrt(scatter_x**2 + scatter_y**2)
+scatter = ax2.scatter(scatter_x, scatter_y, c=colors,
+                      cmap='viridis', alpha=0.7, s=50)
+ax2.set_title('스캐터 플롯')
+plt.colorbar(scatter, ax=ax2, label='거리')
+
+# 3. 히스토그램
+ax3 = axes[1, 0]
+data = np.random.normal(0, 1, 1000)
+ax3.hist(data, bins=30, edgecolor='white', alpha=0.7, color='steelblue')
+ax3.axvline(data.mean(), color='red', linestyle='--', label=f'평균: {data.mean():.2f}')
+ax3.set_xlabel('값')
+ax3.set_ylabel('빈도')
+ax3.set_title('히스토그램')
+ax3.legend()
+
+# 4. 히트맵
+ax4 = axes[1, 1]
+heatmap_data = np.random.rand(10, 10)
+im = ax4.imshow(heatmap_data, cmap='coolwarm', aspect='auto')
+ax4.set_title('히트맵')
+plt.colorbar(im, ax=ax4)
+
+plt.tight_layout()
+plt.savefig('visualization.png', dpi=300, bbox_inches='tight')
+plt.show()</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "보고서용 차트는 Matplotlib으로 그리세요. PDF 벡터 출력하면 확대해도 깨지지 않아요."</p>
+                <p><strong class="role-junior">주니어:</strong> "한글 폰트가 깨지는데 어떻게 해요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "rcParams에서 font.family를 'Malgun Gothic'으로 설정하고, axes.unicode_minus를 False로 해주면 돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "데이터 시각화 경험에 대해 말씀해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "Matplotlib으로 EDA 차트를 자동 생성하는 함수를 만들었습니다. subplots로 여러 변수의 분포와 상관관계를 한 번에 보여주고, savefig로 리포트에 삽입할 수 있게 했습니다. 인터랙티브가 필요한 대시보드는 Plotly를 사용했고요."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "plt.show() 전에 plt.tight_layout() 호출하세요. 서브플롯 간 레이블 겹침 방지됩니다."</p>
+                <p><strong class="role-junior">개발자:</strong> "네, 그리고 figsize도 (12, 8)로 키워서 가독성 높이겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>pyplot 상태 기반 API는 여러 Figure가 있을 때 혼란스러움 - 객체 지향 API(fig, ax) 권장</li>
+                <li>Jupyter에서 %matplotlib inline 없이 플롯이 표시 안 됨 - 노트북 초기화 시 설정 필수</li>
+                <li>대량 데이터 플롯 시 메모리 문제 - 10만 포인트 이상이면 rasterized=True 또는 다운샘플링</li>
+                <li class="info">savefig의 bbox_inches='tight' 옵션으로 여백을 자동 조절하면 레이아웃이 깔끔해짐</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Seaborn/" class="related-link">Seaborn</a>
+                <a href="/ko/term/Plotly/" class="related-link">Plotly</a>
+                <a href="/ko/term/NumPy/" class="related-link">NumPy</a>
+                <a href="/ko/term/Pandas/" class="related-link">Pandas</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://matplotlib.org/stable/tutorials/index.html" target="_blank" rel="noopener">Matplotlib 공식 튜토리얼</a></li>
+                <li><span class="type-tutorial"></span><a href="https://matplotlib.org/stable/gallery/index.html" target="_blank" rel="noopener">Matplotlib 갤러리 - 예제 모음</a></li>
+                <li><span class="type-book"></span><a href="https://github.com/rougier/scientific-visualization-book" target="_blank" rel="noopener">Scientific Visualization: Python + Matplotlib 책</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +345,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

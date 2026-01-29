@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,176 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Plotly는 2012년 설립된 동명의 회사가 개발한 인터랙티브 시각화 라이브러리입니다. Python(plotly.py), JavaScript(plotly.js), R에서 사용 가능하며, 웹 기반 인터랙티브 차트를 생성합니다. 줌, 팬, 호버, 클릭 이벤트를 지원해 탐색적 데이터 분석(EDA)과 대시보드 구축에 적합합니다.</p>
+                <p>Plotly Express는 고수준 API로, 한 줄의 코드로 복잡한 시각화를 생성합니다. px.scatter(), px.line(), px.bar() 등 직관적인 함수로 빠르게 차트를 만들고, 세부 커스터마이징이 필요하면 graph_objects 모듈을 사용합니다.</p>
+                <p>주요 차트 유형으로 scatter, line, bar, histogram, box plot, violin plot, heatmap, 3D scatter, choropleth(지도) 등을 제공합니다. facet 기능으로 데이터를 그룹별로 나눠 여러 서브플롯을 생성하고, animation_frame으로 시간에 따른 변화를 애니메이션으로 표현합니다.</p>
+                <p>Dash 프레임워크와 결합하면 본격적인 데이터 앱과 대시보드를 구축할 수 있습니다. Jupyter Notebook에서는 인라인 렌더링되고, HTML 파일로 내보내 웹 공유가 가능합니다. Chart Studio로 클라우드 호스팅도 지원합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import pandas as pd
+import numpy as np
+
+# 샘플 데이터
+np.random.seed(42)
+df = pd.DataFrame({
+    'date': pd.date_range('2024-01-01', periods=100),
+    'sales': np.cumsum(np.random.randn(100) * 10 + 50),
+    'category': np.random.choice(['A', 'B', 'C'], 100),
+    'region': np.random.choice(['North', 'South', 'East', 'West'], 100),
+    'profit': np.random.randn(100) * 20 + 100
+})
+
+# Plotly Express - 간단한 시각화
+fig1 = px.scatter(
+    df, x='sales', y='profit',
+    color='category',
+    size=abs(df['profit']),
+    hover_data=['date', 'region'],
+    title='Sales vs Profit by Category'
+)
+fig1.show()
+
+# 라인 차트 with 애니메이션
+fig2 = px.line(
+    df, x='date', y='sales',
+    color='category',
+    title='Sales Trend by Category'
+)
+fig2.update_layout(hovermode='x unified')
+fig2.show()
+
+# Facet 그리드 (여러 서브플롯)
+fig3 = px.histogram(
+    df, x='profit',
+    facet_col='category',
+    facet_row='region',
+    color='category',
+    title='Profit Distribution'
+)
+fig3.show()
+
+# Graph Objects - 세밀한 제어
+fig4 = go.Figure()
+
+fig4.add_trace(go.Scatter(
+    x=df['date'], y=df['sales'],
+    mode='lines+markers',
+    name='Sales',
+    line=dict(color='royalblue', width=2),
+    marker=dict(size=6)
+))
+
+fig4.add_trace(go.Bar(
+    x=df['date'], y=df['profit'],
+    name='Profit',
+    marker_color='lightgreen',
+    opacity=0.6,
+    yaxis='y2'
+))
+
+fig4.update_layout(
+    title='Sales and Profit Over Time',
+    xaxis_title='Date',
+    yaxis_title='Sales',
+    yaxis2=dict(title='Profit', overlaying='y', side='right'),
+    legend=dict(x=0.01, y=0.99),
+    hovermode='x unified'
+)
+fig4.show()
+
+# 서브플롯
+fig5 = make_subplots(
+    rows=2, cols=2,
+    subplot_titles=['Scatter', 'Histogram', 'Box', 'Heatmap']
+)
+
+fig5.add_trace(go.Scatter(x=df['sales'], y=df['profit'], mode='markers'), row=1, col=1)
+fig5.add_trace(go.Histogram(x=df['profit']), row=1, col=2)
+fig5.add_trace(go.Box(y=df['sales'], x=df['category']), row=2, col=1)
+
+# 히트맵
+corr_data = df[['sales', 'profit']].corr()
+fig5.add_trace(go.Heatmap(z=corr_data.values, x=corr_data.columns, y=corr_data.index), row=2, col=2)
+
+fig5.update_layout(height=800, showlegend=False)
+fig5.show()
+
+# HTML로 저장
+fig4.write_html('interactive_chart.html')
+
+# 이미지로 저장 (kaleido 필요)
+# fig4.write_image('chart.png', scale=2)</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "경영진 대시보드는 Plotly로 만들어요. 줌, 필터링 기능이 있어서 데이터 탐색을 직접 할 수 있거든요."</p>
+                <p><strong class="role-junior">주니어:</strong> "Matplotlib이랑 뭐가 달라요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "Matplotlib은 정적 이미지, Plotly는 인터랙티브 웹 차트예요. Jupyter에서 마우스 호버하면 값이 보이고, 줌인/아웃도 돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "데이터 시각화 경험에 대해 말씀해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "Plotly와 Dash로 실시간 모니터링 대시보드를 개발했습니다. px.scatter로 이상치 탐지 차트를, px.line으로 시계열 트렌드를 시각화하고, 콜백 함수로 드롭다운 필터와 연동했습니다. 차트를 HTML로 내보내 Slack으로 자동 공유하는 기능도 구현했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "update_layout에서 hovermode='x unified'로 설정하면 같은 x축의 모든 데이터 포인트를 한 번에 볼 수 있어요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, 시계열 차트에서 여러 라인 비교할 때 편하겠네요. 바로 적용하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>대량 데이터(10만 포인트 이상) 렌더링 시 브라우저 성능 저하 - 다운샘플링 또는 datashader 연동 권장</li>
+                <li>이미지 저장(write_image) 시 kaleido 패키지 필요 - pip install kaleido</li>
+                <li>Dash 앱 배포 시 서버 리소스 고려 - 동시 사용자 많으면 gunicorn 워커 스케일링 필요</li>
+                <li class="info">fig.update_traces()와 fig.update_layout()을 체이닝해서 스타일을 일괄 적용하면 코드가 깔끔해짐</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Matplotlib/" class="related-link">Matplotlib</a>
+                <a href="/ko/term/Seaborn/" class="related-link">Seaborn</a>
+                <a href="/ko/term/Streamlit/" class="related-link">Streamlit</a>
+                <a href="/ko/term/Pandas/" class="related-link">Pandas</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://plotly.com/python/" target="_blank" rel="noopener">Plotly Python 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://plotly.com/python/plotly-express/" target="_blank" rel="noopener">Plotly Express 튜토리얼</a></li>
+                <li><span class="type-article"></span><a href="https://dash.plotly.com/" target="_blank" rel="noopener">Dash - Plotly 기반 앱 프레임워크</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +383,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

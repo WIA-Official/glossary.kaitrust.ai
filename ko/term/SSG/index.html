@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSG (Static Site Generation) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="빌드 시 HTML 생성. 빠른 로딩. Gatsby, Hugo, Astro.">
-    <meta name="keywords" content="SSG, Static Site Generation, AI 용어, KAITRUST, AI 백과사전, 웹개발">
+    <title>SSG | Static Site Generation 정적 사이트 생성 | KAITRUST AI 백과사전</title>
+    <meta name="description" content="SSG(Static Site Generation)는 빌드 시점에 HTML을 미리 생성하는 렌더링 방식입니다. CDN에서 제공되어 빠른 로딩과 뛰어난 SEO를 제공하며, Next.js, Astro, Hugo 등에서 지원합니다.">
+    <meta name="keywords" content="SSG, Static Site Generation, 정적 사이트 생성, 빌드 타임 렌더링, getStaticProps, generateStaticParams, Next.js, Astro, Gatsby, Hugo, CDN, 프리렌더링, 정적 HTML, 웹개발">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/SSG/">
 
     <!-- Open Graph -->
@@ -202,6 +202,161 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">SSG(Static Site Generation)는 빌드 타임에 모든 페이지의 HTML을 미리 생성하는 렌더링 방식입니다. 서버나 CDN에서 이미 완성된 HTML 파일을 직접 제공하기 때문에, 서버 연산이 필요 없어 매우 빠른 로딩 속도를 제공합니다.</p>
+                <p style="margin-bottom: 1rem;">Next.js의 getStaticProps, Gatsby의 GraphQL 쿼리, Astro의 정적 생성 등이 대표적인 SSG 구현 방식입니다. 빌드 시점에 데이터를 가져와 HTML에 포함시키므로, CMS나 API에서 데이터를 받아 정적 페이지로 변환할 수 있습니다.</p>
+                <p style="margin-bottom: 1rem;">SSG는 블로그, 문서 사이트, 마케팅 페이지처럼 콘텐츠가 자주 변경되지 않는 사이트에 이상적입니다. CDN에 캐싱하면 전 세계 어디서든 빠른 응답 시간을 보장하며, 서버 부하도 거의 없습니다.</p>
+                <p>ISR(Incremental Static Regeneration)을 사용하면 SSG의 장점을 유지하면서도 주기적으로 페이지를 재생성할 수 있습니다. revalidate 옵션으로 특정 시간마다 백그라운드에서 페이지를 업데이트하여 최신 데이터를 반영합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>// Next.js SSG with getStaticProps
+// pages/blog/[slug].tsx
+
+interface Post {
+  slug: string;
+  title: string;
+  content: string;
+  publishedAt: string;
+}
+
+// 빌드 타임에 모든 경로 생성
+export async function getStaticPaths() {
+  const posts = await fetch('https://api.example.com/posts')
+    .then(res =&gt; res.json());
+
+  return {
+    paths: posts.map((post: Post) =&gt; ({
+      params: { slug: post.slug }
+    })),
+    fallback: 'blocking' // 새 경로는 SSR 후 캐시
+  };
+}
+
+// 빌드 타임에 데이터 페칭
+export async function getStaticProps({ params }: { params: { slug: string } }) {
+  const post = await fetch(`https://api.example.com/posts/${params.slug}`)
+    .then(res =&gt; res.json());
+
+  if (!post) {
+    return { notFound: true };
+  }
+
+  return {
+    props: { post },
+    revalidate: 3600 // ISR: 1시간마다 재생성
+  };
+}
+
+export default function BlogPost({ post }: { post: Post }) {
+  return (
+    &lt;article&gt;
+      &lt;h1&gt;{post.title}&lt;/h1&gt;
+      &lt;time&gt;{post.publishedAt}&lt;/time&gt;
+      &lt;div dangerouslySetInnerHTML={{ __html: post.content }} /&gt;
+    &lt;/article&gt;
+  );
+}
+
+// Astro SSG 예제
+// src/pages/blog/[slug].astro
+---
+export async function getStaticPaths() {
+  const posts = await fetch('https://api.example.com/posts').then(r =&gt; r.json());
+  return posts.map(post =&gt; ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+&lt;article&gt;
+  &lt;h1&gt;{post.title}&lt;/h1&gt;
+  &lt;Fragment set:html={post.content} /&gt;
+&lt;/article&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">기술 미팅에서:</p>
+                    <p>"문서 사이트는 SSG로 가는 게 맞아요. Vercel에 배포하면 CDN에서 바로 서빙되니까 응답 시간 50ms 이하로 나올 겁니다. ISR로 1시간마다 재생성하면 콘텐츠 업데이트도 자동이에요."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"SSG와 SSR의 차이점은요?" - "SSG는 빌드 타임, SSR은 요청 타임에 HTML을 생성합니다. SSG가 더 빠르지만 실시간 데이터가 필요하면 SSR이나 ISR을 사용해야 합니다."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">코드 리뷰에서:</p>
+                    <p>"이 페이지 getServerSideProps 쓰고 있는데, 데이터가 1시간에 한 번 바뀌잖아요. getStaticProps + revalidate로 바꾸면 서버 부하 확 줄어들어요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">페이지 수가 수만 개 이상이면 빌드 시간이 급격히 증가합니다. fallback: 'blocking'이나 on-demand revalidation을 활용하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">사용자별로 다른 콘텐츠를 보여줘야 하는 페이지(마이페이지, 장바구니 등)는 SSG가 적합하지 않습니다. 클라이언트 사이드 데이터 페칭을 함께 사용하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">빌드 시점의 데이터가 오래된 정보일 수 있습니다. 실시간성이 중요한 데이터는 ISR revalidate 주기를 짧게 설정하거나 SSR을 고려하세요.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/SSR/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">SSR</a>
+                <a href="/ko/term/ISR/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">ISR</a>
+                <a href="/ko/term/Next.js/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Next.js</a>
+                <a href="/ko/term/Astro/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Astro</a>
+                <a href="/ko/term/CDN/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">CDN</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Next.js 공식 문서 - Static Site Generation
+                </a>
+                <a href="https://docs.astro.build/en/concepts/why-astro/" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Astro 공식 문서 - Why Astro
+                </a>
+                <a href="https://www.gatsbyjs.com/docs/conceptual/overview-of-the-gatsby-build-process/" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Gatsby - Build Process Overview
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

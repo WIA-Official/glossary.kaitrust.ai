@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로드 밸런싱 (Load Balancing) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="트래픽을 여러 서버에 분산. L4, L7 방식.">
-    <meta name="keywords" content="로드 밸런싱, Load Balancing, AI 용어, KAITRUST, AI 백과사전, 네트워크">
+    <meta name="description" content="로드 밸런싱은 네트워크 트래픽을 여러 서버에 분산하여 고가용성과 성능을 확보하는 기술. L4/L7 계층 차이와 Round Robin, Least Connection 등 분산 알고리즘 설명.">
+    <meta name="keywords" content="로드 밸런싱, Load Balancing, 부하 분산, L4 로드밸런서, L7 로드밸런서, Round Robin, Least Connection, Health Check, 헬스체크, HAProxy, Nginx, AWS ELB, ALB, NLB, 고가용성, 네트워크, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%A1%9C%EB%93%9C%20%EB%B0%B8%EB%9F%B0%EC%8B%B1/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EB%A1%9C%EB%93%9C%20%EB%B0%B8%EB%9F%B0%EC%8B%B1/">
     <meta property="og:title" content="로드 밸런싱 (Load Balancing) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="트래픽을 여러 서버에 분산. L4, L7 방식.">
+    <meta property="og:description" content="로드 밸런싱은 네트워크 트래픽을 여러 서버에 분산하여 고가용성과 성능을 확보하는 기술. L4/L7 계층 차이와 Round Robin, Least Connection 등 분산 알고리즘 설명.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="로드 밸런싱 (Load Balancing) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="트래픽을 여러 서버에 분산. L4, L7 방식.">
+    <meta name="twitter:description" content="로드 밸런싱은 네트워크 트래픽을 여러 서버에 분산하여 고가용성과 성능을 확보하는 기술. L4/L7 계층 차이와 Round Robin, Least Connection 등 분산 알고리즘 설명.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "로드 밸런싱",
-        "description": "트래픽을 여러 서버에 분산. L4, L7 방식.",
+        "description": "로드 밸런싱은 네트워크 트래픽을 여러 서버에 분산하여 고가용성과 성능을 확보하는 기술. L4/L7 계층 차이와 Round Robin, Least Connection 등 분산 알고리즘 설명.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -161,6 +161,200 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        /* 비교 테이블 */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .compare-table th,
+        .compare-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+        }
+        .compare-table th {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            font-weight: 600;
+        }
+        .compare-table td {
+            color: #cbd5e1;
+        }
+        .compare-table tr:hover td {
+            background: rgba(168, 85, 247, 0.05);
+        }
+
+        /* 알고리즘 카드 */
+        .algorithm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .algorithm-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border-left: 3px solid #a855f7;
+        }
+        .algorithm-card h4 {
+            color: #f1f5f9;
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+        }
+        .algorithm-card p {
+            color: #94a3b8;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -191,7 +385,7 @@
             <h1 class="term-title">로드 밸런싱</h1>
             <p class="term-english">Load Balancing</p>
             <div class="term-description">
-                <p>트래픽을 여러 서버에 분산. L4, L7 방식.</p>
+                <p>네트워크 트래픽을 여러 서버에 분산하여 고가용성(High Availability)과 성능을 확보하는 기술. OSI 모델의 L4(전송 계층)와 L7(응용 계층)에서 동작하며, Round Robin, Least Connection 등 다양한 분산 알고리즘을 지원합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +396,402 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>로드 밸런싱(Load Balancing)은 들어오는 네트워크 트래픽을 여러 백엔드 서버에 분산하여 단일 서버의 과부하를 방지하고 서비스의 가용성과 응답 속도를 향상시키는 기술입니다. 식당에서 여러 카운터에 손님을 분산하는 것과 같은 원리로, 대규모 웹 서비스에서 필수적인 인프라 컴포넌트입니다.</p>
+                <p>로드 밸런서는 OSI 7계층 모델에서 동작하는 계층에 따라 L4(전송 계층)와 L7(응용 계층)로 구분됩니다. L4 로드 밸런서는 IP 주소와 TCP/UDP 포트 정보만으로 빠르게 분산하며, L7 로드 밸런서는 HTTP 헤더, URL, 쿠키 등 애플리케이션 레벨 정보를 기반으로 더 세밀한 라우팅이 가능합니다.</p>
+                <p>Health Check는 로드 밸런싱의 핵심 기능으로, 백엔드 서버의 상태를 주기적으로 확인하여 장애가 발생한 서버로는 트래픽을 보내지 않습니다. TCP 연결 체크, HTTP 응답 코드 확인, 커스텀 헬스체크 엔드포인트 등 다양한 방식을 지원하며, 이를 통해 무중단 서비스가 가능해집니다.</p>
+                <p>현대 클라우드 환경에서는 AWS ELB(ALB/NLB), GCP Cloud Load Balancing, Azure Load Balancer 등 관리형 서비스가 널리 사용됩니다. 온프레미스 환경에서는 HAProxy, Nginx, F5 BIG-IP 등이 대표적인 솔루션입니다. 마이크로서비스 아키텍처에서는 Kubernetes Ingress나 Service Mesh(Istio, Linkerd)가 내부 로드 밸런싱을 담당합니다.</p>
+            </div>
+        </section>
+
+        <!-- L4 vs L7 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">⚖️ L4 vs L7 로드 밸런서</h2>
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>L4 로드 밸런서</th>
+                        <th>L7 로드 밸런서</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>동작 계층</strong></td>
+                        <td>전송 계층 (TCP/UDP)</td>
+                        <td>응용 계층 (HTTP/HTTPS)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>분산 기준</strong></td>
+                        <td>IP, Port 정보</td>
+                        <td>URL, Header, Cookie, Host</td>
+                    </tr>
+                    <tr>
+                        <td><strong>속도</strong></td>
+                        <td>매우 빠름 (패킷 레벨)</td>
+                        <td>상대적으로 느림 (파싱 필요)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SSL 처리</strong></td>
+                        <td>패스스루 (백엔드에서 처리)</td>
+                        <td>SSL Termination 가능</td>
+                    </tr>
+                    <tr>
+                        <td><strong>사용 사례</strong></td>
+                        <td>DB, 게임 서버, TCP 기반 서비스</td>
+                        <td>웹 서비스, API Gateway, MSA</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AWS 서비스</strong></td>
+                        <td>NLB (Network Load Balancer)</td>
+                        <td>ALB (Application Load Balancer)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 분산 알고리즘 -->
+        <section class="term-section">
+            <h2 class="section-title">🔄 로드 밸런싱 알고리즘</h2>
+            <div class="algorithm-grid">
+                <div class="algorithm-card">
+                    <h4>Round Robin</h4>
+                    <p>요청을 순차적으로 서버에 분배. 가장 단순하고 널리 사용됨. 서버 성능이 동일할 때 효과적.</p>
+                </div>
+                <div class="algorithm-card">
+                    <h4>Weighted Round Robin</h4>
+                    <p>서버별 가중치를 부여하여 분배. 성능이 다른 서버 혼용 시 유용. (예: 3:1 비율)</p>
+                </div>
+                <div class="algorithm-card">
+                    <h4>Least Connections</h4>
+                    <p>현재 연결 수가 가장 적은 서버로 분배. 요청 처리 시간이 다양할 때 효과적.</p>
+                </div>
+                <div class="algorithm-card">
+                    <h4>IP Hash</h4>
+                    <p>클라이언트 IP 기반 해시로 동일 서버 연결. 세션 유지(Sticky Session)에 활용.</p>
+                </div>
+                <div class="algorithm-card">
+                    <h4>Least Response Time</h4>
+                    <p>응답 시간이 가장 빠른 서버로 분배. 실시간 성능 모니터링 필요.</p>
+                </div>
+                <div class="algorithm-card">
+                    <h4>Random</h4>
+                    <p>무작위로 서버 선택. 구현이 단순하고 부하가 균등하게 분산되는 경향.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="nginx">Nginx</button>
+                <button class="code-tab" data-lang="haproxy">HAProxy</button>
+                <button class="code-tab" data-lang="python">Python</button>
+            </div>
+            <div class="code-block active" data-lang="nginx">
+                <pre><code class="language-nginx"># /etc/nginx/nginx.conf - Nginx 로드 밸런서 설정
+
+http {
+    # 백엔드 서버 그룹 정의 (upstream)
+    upstream backend_servers {
+        # 분산 알고리즘 (기본: Round Robin)
+        # least_conn;           # Least Connections
+        # ip_hash;              # IP Hash (Sticky Session)
+        # random two least_conn; # 무작위 + Least Conn 혼합
+
+        # 서버 목록 (weight: 가중치, max_fails: 실패 허용 횟수)
+        server 10.0.0.1:8080 weight=3;
+        server 10.0.0.2:8080 weight=2;
+        server 10.0.0.3:8080 weight=1 backup;  # 백업 서버
+
+        # Health Check 설정
+        # max_fails=3: 3번 실패 시 비활성화
+        # fail_timeout=30s: 30초 후 재시도
+        server 10.0.0.4:8080 max_fails=3 fail_timeout=30s;
+
+        # 연결 유지 (Keep-Alive)
+        keepalive 32;
+    }
+
+    server {
+        listen 80;
+        server_name api.example.com;
+
+        location / {
+            proxy_pass http://backend_servers;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+            # 타임아웃 설정
+            proxy_connect_timeout 5s;
+            proxy_send_timeout 60s;
+            proxy_read_timeout 60s;
+        }
+
+        # L7 라우팅: URL 기반 분산
+        location /api/v2/ {
+            proxy_pass http://api_v2_servers;
+        }
+    }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="haproxy">
+                <pre><code class="language-haproxy"># /etc/haproxy/haproxy.cfg - HAProxy 설정
+
+global
+    log /dev/log local0
+    maxconn 4096
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    mode http
+    log global
+    option httplog
+    option dontlognull
+    timeout connect 5s
+    timeout client 30s
+    timeout server 30s
+    retries 3
+
+# 프론트엔드: 클라이언트 요청 수신
+frontend http_front
+    bind *:80
+    bind *:443 ssl crt /etc/ssl/certs/server.pem
+
+    # ACL 기반 라우팅
+    acl is_api path_beg /api
+    acl is_static path_end .css .js .png .jpg
+
+    use_backend api_servers if is_api
+    use_backend static_servers if is_static
+    default_backend web_servers
+
+# 백엔드: 실제 서버 그룹
+backend web_servers
+    balance roundrobin           # 알고리즘: roundrobin, leastconn, source
+    option httpchk GET /health   # HTTP Health Check
+    http-check expect status 200
+
+    server web1 10.0.0.1:8080 check weight 3
+    server web2 10.0.0.2:8080 check weight 2
+    server web3 10.0.0.3:8080 check backup   # 백업 서버
+
+backend api_servers
+    balance leastconn
+    option httpchk GET /api/health
+
+    # Sticky Session (쿠키 기반)
+    cookie SERVERID insert indirect nocache
+    server api1 10.0.0.10:8080 check cookie s1
+    server api2 10.0.0.11:8080 check cookie s2
+
+# 모니터링 대시보드
+listen stats
+    bind *:8404
+    stats enable
+    stats uri /stats
+    stats refresh 10s
+    stats auth admin:password</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># 간단한 로드 밸런서 구현 예제 (Python)
+import random
+import time
+from collections import defaultdict
+from typing import List, Optional
+
+class Server:
+    def __init__(self, host: str, port: int, weight: int = 1):
+        self.host = host
+        self.port = port
+        self.weight = weight
+        self.connections = 0
+        self.healthy = True
+        self.response_times = []
+
+    @property
+    def address(self) -> str:
+        return f"{self.host}:{self.port}"
+
+class LoadBalancer:
+    def __init__(self, servers: List[Server], algorithm: str = "round_robin"):
+        self.servers = servers
+        self.algorithm = algorithm
+        self.current_index = 0
+        self.weighted_index = 0
+
+    def get_healthy_servers(self) -> List[Server]:
+        return [s for s in self.servers if s.healthy]
+
+    def round_robin(self) -> Optional[Server]:
+        """순차적으로 서버 선택"""
+        healthy = self.get_healthy_servers()
+        if not healthy:
+            return None
+        server = healthy[self.current_index % len(healthy)]
+        self.current_index += 1
+        return server
+
+    def least_connections(self) -> Optional[Server]:
+        """연결 수가 가장 적은 서버 선택"""
+        healthy = self.get_healthy_servers()
+        if not healthy:
+            return None
+        return min(healthy, key=lambda s: s.connections)
+
+    def ip_hash(self, client_ip: str) -> Optional[Server]:
+        """IP 기반 해시로 서버 선택 (Sticky Session)"""
+        healthy = self.get_healthy_servers()
+        if not healthy:
+            return None
+        index = hash(client_ip) % len(healthy)
+        return healthy[index]
+
+    def weighted_round_robin(self) -> Optional[Server]:
+        """가중치 기반 라운드 로빈"""
+        healthy = self.get_healthy_servers()
+        if not healthy:
+            return None
+
+        # 가중치 리스트 생성
+        weighted_list = []
+        for server in healthy:
+            weighted_list.extend([server] * server.weight)
+
+        server = weighted_list[self.weighted_index % len(weighted_list)]
+        self.weighted_index += 1
+        return server
+
+    def get_server(self, client_ip: str = None) -> Optional[Server]:
+        """알고리즘에 따라 서버 반환"""
+        if self.algorithm == "round_robin":
+            return self.round_robin()
+        elif self.algorithm == "least_conn":
+            return self.least_connections()
+        elif self.algorithm == "ip_hash" and client_ip:
+            return self.ip_hash(client_ip)
+        elif self.algorithm == "weighted":
+            return self.weighted_round_robin()
+        return self.round_robin()
+
+# 사용 예제
+servers = [
+    Server("10.0.0.1", 8080, weight=3),
+    Server("10.0.0.2", 8080, weight=2),
+    Server("10.0.0.3", 8080, weight=1),
+]
+
+lb = LoadBalancer(servers, algorithm="weighted")
+
+# 10번 요청 분산 시뮬레이션
+for i in range(10):
+    server = lb.get_server()
+    print(f"Request {i+1} → {server.address}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "API 서버 앞에 ALB를 두고, 헬스체크 엔드포인트를 /health로 설정했습니다. Unhealthy 임계값은 3회로, 약 30초 내에 장애 서버가 자동으로 제외됩니다. 현재 타겟 그룹에 4대가 있어서 한 대가 죽어도 트래픽은 75%만 감소합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "L4 로드 밸런서는 TCP/UDP 레벨에서 IP와 포트만 보고 빠르게 분산하고, L7은 HTTP 헤더나 URL을 파싱해서 더 세밀한 라우팅이 가능합니다. 예를 들어 /api/v1은 레거시 서버로, /api/v2는 새 서버로 보내는 블루-그린 배포에 L7 ALB를 썼습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 상황에서</div>
+                    <blockquote class="conv-quote">
+                        "지금 Nginx upstream에서 502 에러가 나오는데, 백엔드 서버 3대 중 2대가 다운된 것 같습니다. max_fails 설정 때문에 아직 트래픽이 가고 있어요. 일단 수동으로 해당 서버를 upstream에서 제거하고, 나머지 1대에 모든 트래픽이 몰리니까 스케일 아웃 먼저 진행하겠습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Health Check 없이 운영</strong>
+                        <p>헬스체크를 설정하지 않으면 장애 서버로 계속 트래픽이 전달됩니다. 반드시 /health 엔드포인트를 만들고, DB 연결, 외부 API 상태까지 확인하는 종합 헬스체크를 구현하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>세션 불일치 (Sticky Session 미설정)</strong>
+                        <p>Round Robin에서 로그인 세션이 서버 메모리에 저장되면, 다음 요청이 다른 서버로 가면 로그아웃됩니다. Redis 세션 저장소를 사용하거나, IP Hash/쿠키 기반 Sticky Session을 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>단일 로드 밸런서 (SPOF)</strong>
+                        <p>로드 밸런서 자체가 단일 장애점(Single Point of Failure)이 되면 안 됩니다. Active-Standby 또는 Active-Active 이중화를 구성하고, DNS Failover를 함께 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 로드 밸런서 설정</strong>
+                        <p>헬스체크 간격 10-30초, 타임아웃 5초, Unhealthy 임계값 2-3회로 설정. Connection Draining을 활성화하여 서버 제거 시 기존 연결이 정상 종료되도록 하세요. 모니터링 대시보드로 서버별 요청 수와 응답 시간을 실시간 확인하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/DNS/" class="related-term-link">DNS</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+                <a href="/ko/term/Nginx/" class="related-term-link">Nginx</a>
+                <a href="/ko/term/%EB%A6%AC%EB%B2%84%EC%8A%A4%20%ED%94%84%EB%A1%9D%EC%8B%9C/" class="related-term-link">리버스 프록시</a>
+                <a href="/ko/term/TCP/" class="related-term-link">TCP</a>
+                <a href="/ko/term/HTTP/" class="related-term-link">HTTP</a>
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+                <a href="/ko/term/%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1/" class="related-term-link">고가용성</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://aws.amazon.com/ko/elasticloadbalancing/" target="_blank" class="learn-link">
+                    📄 AWS Elastic Load Balancing 공식 문서
+                </a>
+                <a href="https://nginx.org/en/docs/http/load_balancing.html" target="_blank" class="learn-link">
+                    📖 Nginx Load Balancing 가이드
+                </a>
+                <a href="https://www.haproxy.com/documentation/" target="_blank" class="learn-link">
+                    🔧 HAProxy Configuration Manual
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +799,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

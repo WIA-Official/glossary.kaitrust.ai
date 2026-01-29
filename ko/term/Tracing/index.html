@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,158 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>분산 트레이싱(Distributed Tracing)은 마이크로서비스 환경에서 하나의 요청이 여러 서비스를 거치는 경로를 추적하는 기술입니다. 2010년 Google의 Dapper 논문에서 시작되어, 현재는 OpenTelemetry가 표준으로 자리잡고 있습니다.</p>
+                <p>핵심 개념으로 Trace(전체 요청 경로), Span(개별 작업 단위), Context(서비스 간 전달되는 식별 정보)가 있습니다. 사용자 요청이 들어오면 고유한 Trace ID가 생성되고, 이 ID가 모든 서비스 호출에 전파되어 전체 경로를 연결합니다.</p>
+                <p>트레이싱의 핵심은 Context Propagation입니다. HTTP 헤더(traceparent, b3 등)나 gRPC 메타데이터로 Trace ID와 Span ID가 서비스 간에 전달됩니다. 각 서비스는 자신의 Span을 생성하고, 부모 Span ID로 연결하여 호출 트리를 구성합니다.</p>
+                <p>실무에서는 느린 API 응답, 간헐적 타임아웃, 에러 전파 경로를 분석할 때 필수적입니다. Jaeger, Zipkin, Grafana Tempo 같은 백엔드에 trace를 수집하고, 시각화된 워터폴 차트로 병목 지점을 찾습니다. 평균적으로 장애 원인 파악 시간이 80% 이상 단축됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="javascript">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>// OpenTelemetry를 사용한 Node.js 트레이싱 설정
+// tracing.js
+const { NodeSDK } = require('@opentelemetry/sdk-node');
+const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
+const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-grpc');
+const { Resource } = require('@opentelemetry/resources');
+const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
+
+const sdk = new NodeSDK({
+  resource: new Resource({
+    [SemanticResourceAttributes.SERVICE_NAME]: 'user-service',
+    [SemanticResourceAttributes.SERVICE_VERSION]: '1.0.0',
+    [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: process.env.NODE_ENV,
+  }),
+  traceExporter: new OTLPTraceExporter({
+    url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'http://tempo:4317',
+  }),
+  instrumentations: [
+    getNodeAutoInstrumentations({
+      '@opentelemetry/instrumentation-fs': { enabled: false },
+      '@opentelemetry/instrumentation-http': { enabled: true },
+      '@opentelemetry/instrumentation-express': { enabled: true },
+    }),
+  ],
+});
+
+sdk.start();
+
+// 애플리케이션 코드에서 커스텀 span 생성
+// userController.js
+const { trace, SpanStatusCode } = require('@opentelemetry/api');
+
+const tracer = trace.getTracer('user-service');
+
+async function createUser(req, res) {
+  // 커스텀 span 시작
+  const span = tracer.startSpan('createUser', {
+    attributes: {
+      'user.email': req.body.email,
+    },
+  });
+
+  try {
+    // 중첩 span으로 세부 작업 추적
+    const validationSpan = tracer.startSpan('validateInput');
+    await validateUserInput(req.body);
+    validationSpan.end();
+
+    const dbSpan = tracer.startSpan('saveToDatabase');
+    const user = await db.users.create(req.body);
+    dbSpan.setAttribute('db.rows_affected', 1);
+    dbSpan.end();
+
+    // 외부 서비스 호출 (자동으로 context 전파됨)
+    const notificationSpan = tracer.startSpan('sendWelcomeEmail');
+    await notificationService.sendWelcomeEmail(user.email);
+    notificationSpan.end();
+
+    span.setStatus({ code: SpanStatusCode.OK });
+    res.json({ success: true, user });
+
+  } catch (error) {
+    span.setStatus({
+      code: SpanStatusCode.ERROR,
+      message: error.message,
+    });
+    span.recordException(error);
+    res.status(500).json({ error: error.message });
+
+  } finally {
+    span.end();
+  }
+}
+
+// package.json 실행 스크립트
+// "start": "node --require ./tracing.js app.js"</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "주문 API가 간헐적으로 5초 넘게 걸려요. 로그만 봐서는 어디가 문제인지 모르겠어요."</p>
+                <p><strong class="role-junior">주니어:</strong> "Trace ID로 Jaeger에서 조회해볼게요. 아, 결제 서비스에서 3.2초, DB 쿼리에서 1.5초 걸리네요."</p>
+                <p><strong class="role-senior">시니어:</strong> "결제 서비스 쪽 span 펼쳐보세요. 외부 PG사 API 호출이 병목인 것 같아요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "마이크로서비스 환경에서 성능 문제를 어떻게 디버깅하셨나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "OpenTelemetry로 분산 트레이싱을 구현했습니다. 모든 서비스에 자동 계측을 적용하고, 중요 비즈니스 로직에는 커스텀 span을 추가했습니다. Grafana에서 trace와 로그를 연결해 특정 요청의 전체 경로와 각 구간 소요 시간을 한눈에 파악할 수 있었습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "외부 API 호출하는데 span이 없네요. 이러면 이 구간 시간을 측정할 수 없어요."</p>
+                <p><strong class="role-junior">개발자:</strong> "axios 요청에 tracer.startSpan 추가하겠습니다. 아, HTTP instrumentation이 자동으로 해주지 않나요?"</p>
+                <p><strong class="role-reviewer">리뷰어:</strong> "자동 계측은 있지만, 비즈니스 의미를 담은 커스텀 attribute 추가하면 검색이 편해요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>모든 요청을 트레이싱하면 오버헤드와 저장 비용 증가 - 샘플링 비율 조정 필요 (보통 1~10%)</li>
+                <li>비동기 작업(메시지 큐, 배치)에서 context가 끊어지기 쉬움 - 명시적 context 전파 구현</li>
+                <li>민감 정보가 span attribute에 포함되지 않도록 주의 - 비밀번호, 토큰 등 필터링</li>
+                <li class="info">Head-based 샘플링 대신 Tail-based 샘플링을 사용하면 에러나 느린 요청만 선택적으로 저장 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/OpenTelemetry/" class="related-link">OpenTelemetry</a>
+                <a href="/ko/term/Jaeger/" class="related-link">Jaeger</a>
+                <a href="/ko/term/Tempo/" class="related-link">Tempo</a>
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+                <a href="/ko/term/Logging/" class="related-link">Logging</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://opentelemetry.io/docs/concepts/signals/traces/" target="_blank" rel="noopener">OpenTelemetry Tracing 개념</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.jaegertracing.io/docs/1.50/" target="_blank" rel="noopener">Jaeger 공식 문서</a></li>
+                <li><span class="type-book"></span><a href="https://research.google/pubs/pub36356/" target="_blank" rel="noopener">Google Dapper 논문</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +365,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

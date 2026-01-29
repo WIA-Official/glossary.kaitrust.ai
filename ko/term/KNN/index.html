@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,149 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>KNN(K-Nearest Neighbors)은 가장 가까운 K개의 이웃 데이터를 기반으로 분류나 회귀를 수행하는 지도 학습 알고리즘입니다. 새로운 데이터가 들어오면 기존 데이터 중 가장 가까운 K개를 찾아 다수결(분류) 또는 평균(회귀)으로 예측합니다.</p>
+                <p>1951년 Evelyn Fix와 Joseph Hodges가 제안한 KNN은 "lazy learning" 알고리즘으로 불립니다. 학습 단계가 없이 모든 데이터를 저장하고, 예측 시에만 계산을 수행하기 때문입니다. 이해하기 쉽고 구현이 간단해 기초 ML 교육에 자주 사용됩니다.</p>
+                <p>거리 계산에는 유클리드 거리, 맨해튼 거리, 민코프스키 거리 등이 사용됩니다. 고차원 데이터에서는 "차원의 저주" 문제로 성능이 저하되므로 PCA 등으로 차원 축소가 필요합니다.</p>
+                <p>실무에서 KNN은 추천 시스템, 이상 탐지, 이미지 분류의 베이스라인으로 활용됩니다. K값은 보통 홀수(3, 5, 7)로 설정하며, 교차 검증으로 최적값을 찾습니다. 대용량 데이터에는 Ball Tree나 KD Tree로 검색 속도를 개선합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import cross_val_score, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import load_iris
+from sklearn.pipeline import Pipeline
+import numpy as np
+
+# 데이터 로드
+X, y = load_iris(return_X_y=True)
+
+# 파이프라인 구성 (정규화 + KNN)
+# KNN은 거리 기반이므로 정규화 필수!
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('knn', KNeighborsClassifier())
+])
+
+# 최적 K값 찾기 (GridSearchCV)
+param_grid = {
+    'knn__n_neighbors': [1, 3, 5, 7, 9, 11],
+    'knn__weights': ['uniform', 'distance'],  # uniform: 동일 가중, distance: 거리 반비례
+    'knn__metric': ['euclidean', 'manhattan']
+}
+
+grid_search = GridSearchCV(
+    pipeline, param_grid, cv=5, scoring='accuracy', n_jobs=-1
+)
+grid_search.fit(X, y)
+
+print(f"최적 파라미터: {grid_search.best_params_}")
+print(f"최고 정확도: {grid_search.best_score_:.4f}")
+
+# 최적 모델로 예측
+best_model = grid_search.best_estimator_
+new_sample = [[5.1, 3.5, 1.4, 0.2]]  # 새로운 꽃 데이터
+prediction = best_model.predict(new_sample)
+proba = best_model.predict_proba(new_sample)
+
+print(f"\n새 샘플 예측 클래스: {prediction[0]}")
+print(f"클래스별 확률: {proba[0]}")
+
+# K값에 따른 정확도 시각화
+k_values = range(1, 21)
+accuracies = []
+for k in k_values:
+    knn = Pipeline([
+        ('scaler', StandardScaler()),
+        ('knn', KNeighborsClassifier(n_neighbors=k))
+    ])
+    scores = cross_val_score(knn, X, y, cv=5)
+    accuracies.append(scores.mean())
+
+print(f"\n최적 K: {k_values[np.argmax(accuracies)]} (정확도: {max(accuracies):.4f})")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"베이스라인으로 KNN을 먼저 돌려봤는데 정확도 89%가 나왔습니다. K=5, distance 가중치로 설정했고요. 복잡한 모델 도입 전에 이 수치가 비교 기준이 됩니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"KNN은 lazy learning이라 학습 단계가 없고 모든 데이터를 저장합니다. 예측 시 O(n*d)의 시간 복잡도가 발생해서 대용량 데이터에는 Ball Tree나 KD Tree로 O(log n) 검색을 구현합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"고차원에서는 차원의 저주 때문에 모든 점이 비슷한 거리에 있게 됩니다. PCA로 차원을 줄이거나, Locality-Sensitive Hashing 같은 근사 최근접 이웃 알고리즘을 고려해야 해요."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>정규화 없이 KNN 적용</strong>
+                        <p>스케일이 큰 피처가 거리 계산을 지배합니다. StandardScaler나 MinMaxScaler로 반드시 정규화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>K값을 짝수로 설정</strong>
+                        <p>다수결 시 동점이 발생할 수 있습니다. 3, 5, 7 같은 홀수를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>불균형 데이터에는 distance 가중치 사용</strong>
+                        <p>weights='distance'로 설정하면 더 가까운 이웃에 높은 가중치를 부여해 정확도가 향상됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/K-Means/" class="related-term-link">K-Means</a>
+                <a href="/ko/term/Classification/" class="related-term-link">Classification</a>
+                <a href="/ko/term/Euclidean%20Distance/" class="related-term-link">Euclidean Distance</a>
+                <a href="/ko/term/PCA/" class="related-term-link">PCA</a>
+                <a href="/ko/term/Cross%20Validation/" class="related-term-link">Cross Validation</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://scikit-learn.org/stable/modules/neighbors.html" target="_blank" class="learn-link">📄 scikit-learn Nearest Neighbors 문서</a>
+                <a href="https://www.ibm.com/topics/knn" target="_blank" class="learn-link">🎓 IBM - K-Nearest Neighbors 개념 설명</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +379,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

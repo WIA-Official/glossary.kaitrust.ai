@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,223 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Ansible은 Red Hat이 개발한 IT 자동화 도구로, 서버 설정 관리(Configuration Management), 애플리케이션 배포, 오케스트레이션을 YAML 기반의 플레이북으로 수행합니다. 가장 큰 특징은 에이전트리스(Agentless) 방식으로, 대상 서버에 별도 소프트웨어 설치 없이 SSH만으로 작업을 수행합니다.</p>
+                <p>Ansible의 핵심 개념은 Inventory(대상 서버 목록), Playbook(실행할 작업), Module(개별 작업 단위), Role(재사용 가능한 플레이북 묶음)입니다. Playbook은 선언적(Declarative)으로 작성되어 "nginx가 설치되어 있고 실행 중이어야 한다"고 정의하면, Ansible이 현재 상태를 확인하고 필요한 작업만 수행합니다(멱등성).</p>
+                <p>Terraform과 자주 비교되는데, 둘은 역할이 다릅니다. Terraform은 인프라 프로비저닝(VM, 네트워크 생성)에 강하고, Ansible은 프로비저닝된 서버 위에 소프트웨어를 설치하고 설정하는 데 강합니다. 실무에서는 "Terraform으로 EC2 생성 -> Ansible로 nginx 설치"처럼 조합해서 사용합니다.</p>
+                <p>Ansible Galaxy는 커뮤니티가 만든 Role을 공유하는 저장소로, nginx, docker, kubernetes 같은 일반적인 설정은 검증된 Role을 가져다 쓸 수 있습니다. AWX(오픈소스) 또는 Ansible Tower(상용)를 사용하면 웹 UI에서 플레이북을 실행하고, 권한 관리와 감사 로그까지 관리할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># deploy-app.yml - 웹 애플리케이션 배포 플레이북
+---
+- name: Deploy Web Application
+  hosts: webservers
+  become: yes  # sudo 권한으로 실행
+  vars:
+    app_version: "{{ lookup('env', 'APP_VERSION') | default('latest') }}"
+    app_port: 8080
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+          - python3-docker
+        state: present
+        update_cache: yes
+
+    - name: Create app directory
+      file:
+        path: /opt/myapp
+        state: directory
+        mode: '0755'
+
+    - name: Copy docker-compose file
+      template:
+        src: templates/docker-compose.yml.j2
+        dest: /opt/myapp/docker-compose.yml
+      notify: Restart application
+
+    - name: Pull latest Docker image
+      docker_image:
+        name: "myregistry/myapp:{{ app_version }}"
+        source: pull
+        force_source: yes
+
+    - name: Ensure application is running
+      docker_compose:
+        project_src: /opt/myapp
+        state: present
+      register: output
+
+    - name: Wait for application to be healthy
+      uri:
+        url: "http://localhost:{{ app_port }}/health"
+        status_code: 200
+      retries: 10
+      delay: 5
+
+  handlers:
+    - name: Restart application
+      docker_compose:
+        project_src: /opt/myapp
+        state: present
+        restarted: yes
+
+# 실행: ansible-playbook -i inventory/prod deploy-app.yml -e "APP_VERSION=v1.2.3"</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "신규 서버 50대에 모니터링 에이전트 설치해야 하는데, Ansible로 한번에 밀면 될 것 같아요."</p>
+                <p><strong class="role-junior">주니어:</strong> "인벤토리에 새 서버 그룹 추가하고, 기존 datadog role 그대로 쓰면 되겠네요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "네, --limit으로 먼저 5대만 테스트하고 문제없으면 전체 적용해요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Configuration Management 도구 경험이 있으신가요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "Ansible을 주로 사용했습니다. 에이전트리스라 도입이 쉬웠고, YAML이라 팀원들 학습 곡선도 낮았어요. 200대 서버의 패키지 업데이트, 설정 변경을 플레이북으로 관리했고, AWX로 웹 UI에서 실행 이력과 권한을 관리했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 task에서 apt update를 매번 하면 느려요. update_cache_valid_time 옵션 써서 캐시 만료 시에만 업데이트하게 바꿔주세요."</p>
+                <p><strong class="role-author">작성자:</strong> "아, 맞다. cache_valid_time: 3600 추가할게요. 그리고 handler 빼먹은 것도 추가합니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>멱등성을 깨는 task를 조심하세요. shell/command 모듈은 항상 실행되므로 changed_when/creates 조건을 명시하거나, 가능하면 전용 모듈(apt, yum, file 등)을 사용하세요.</li>
+                <li>비밀번호, API 키 같은 시크릿은 플레이북에 평문으로 넣지 말고 ansible-vault로 암호화하세요. CI/CD에서는 vault password를 환경변수로 주입합니다.</li>
+                <li class="info">대규모 환경에서는 --forks 옵션으로 병렬 실행 수를 조절하세요. 기본값 5는 너무 적을 수 있고, 너무 높으면 네트워크 병목이 생깁니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Terraform/" class="related-link">Terraform</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+                <a href="/ko/term/IaC/" class="related-link">IaC</a>
+                <a href="/ko/term/SSH/" class="related-link">SSH</a>
+            </div>
+        </section>
+
+        <!-- 실제 장애 사례 -->
+        <section class="term-section" aria-labelledby="incident-title">
+            <h2 class="section-title" id="incident-title">🔥 실제 장애 사례</h2>
+            <div class="incident-list">
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">중견 기업 사례</span>
+                        <span class="incident-year">2021</span>
+                    </div>
+                    <h4 class="incident-title">멱등성 무시한 플레이북으로 전체 서버 설정 덮어쓰기</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> shell 모듈로 설정 파일을 직접 echo 덮어쓰기, changed_when 미설정으로 매번 실행</p>
+                        <p><strong>영향:</strong> 500대 서버의 수동 설정값이 일괄 초기화, 12시간 서비스 불안정</p>
+                        <p><strong>해결:</strong> 수동으로 각 서버 설정 복구, 백업에서 설정 파일 복원</p>
+                        <p><strong>교훈:</strong> shell/command 대신 전용 모듈 사용, 프로덕션 전 --check 모드로 dry-run 필수</p>
+                    </div>
+                </div>
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">스타트업 사례</span>
+                        <span class="incident-year">공통</span>
+                    </div>
+                    <h4 class="incident-title">Vault 비밀번호 Git 커밋으로 시크릿 노출</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> ansible-vault password를 .vault_pass 파일로 저장 후 .gitignore 누락</p>
+                        <p><strong>영향:</strong> DB 비밀번호, API 키가 공개 리포지토리에 노출</p>
+                        <p><strong>해결:</strong> 모든 시크릿 교체, 리포지토리 히스토리에서 파일 완전 제거</p>
+                        <p><strong>교훈:</strong> vault password는 환경변수 또는 CI/CD 시크릿 매니저 사용, git-secrets 훅 설정</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 이해도 퀴즈 -->
+        <section class="term-section" aria-labelledby="quiz-title">
+            <h2 class="section-title" id="quiz-title">📝 이해도 퀴즈</h2>
+            <div class="quiz-container" id="term-quiz">
+                <div class="quiz-item" data-correct="b">
+                    <p class="quiz-question"><strong>Q1.</strong> Ansible의 가장 큰 특징은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> A) GUI 기반 설정 관리</label>
+                        <label><input type="radio" name="q1" value="b"> B) 에이전트리스(Agentless) - 대상 서버에 별도 소프트웨어 설치 불필요</label>
+                        <label><input type="radio" name="q1" value="c"> C) Ruby 기반 DSL</label>
+                        <label><input type="radio" name="q1" value="d"> D) Windows 전용 도구</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="c">
+                    <p class="quiz-question"><strong>Q2.</strong> Ansible에서 시크릿(비밀번호, API 키)을 안전하게 관리하는 방법은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> A) 플레이북에 평문으로 작성</label>
+                        <label><input type="radio" name="q2" value="b"> B) 환경변수로 직접 전달</label>
+                        <label><input type="radio" name="q2" value="c"> C) ansible-vault로 암호화</label>
+                        <label><input type="radio" name="q2" value="d"> D) Git에 별도 브랜치로 관리</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="a">
+                    <p class="quiz-question"><strong>Q3.</strong> Terraform과 Ansible의 역할 차이는?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> A) Terraform은 인프라 프로비저닝, Ansible은 설정 관리 및 소프트웨어 배포</label>
+                        <label><input type="radio" name="q3" value="b"> B) 둘 다 완전히 동일한 역할</label>
+                        <label><input type="radio" name="q3" value="c"> C) Terraform은 설정 관리, Ansible은 인프라 프로비저닝</label>
+                        <label><input type="radio" name="q3" value="d"> D) Terraform은 Windows 전용, Ansible은 Linux 전용</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-submit" onclick="checkQuiz()">정답 확인</button>
+                <div class="quiz-result"></div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.ansible.com/" target="_blank" rel="noopener">Ansible 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://galaxy.ansible.com/" target="_blank" rel="noopener">Ansible Galaxy - Role 저장소</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.redhat.com/en/services/training/do007-ansible-essentials-simplicity-automation-technical-overview" target="_blank" rel="noopener">Red Hat Ansible 교육</a></li>
+                <li><span class="type-blog"></span><a href="https://techblog.woowahan.com/2719/" target="_blank" rel="noopener">우아한형제들 - Ansible 도입기</a></li>
+                <li><span class="type-video"></span><a href="https://www.youtube.com/watch?v=1id6ERvfozo" target="_blank" rel="noopener">Ansible 기초 튜토리얼</a></li>
+                <li><span class="type-book"></span><a href="https://www.ansiblefordevops.com/" target="_blank" rel="noopener">Ansible for DevOps (책)</a></li>
+            </ul>
+        </section>
+
+        <!-- 질문 & 기여 -->
+        <section class="term-section" aria-labelledby="community-title">
+            <h2 class="section-title" id="community-title">💬 질문 & 기여</h2>
+            <div class="community-actions">
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[Ansible] 질문: " class="community-btn btn-question" target="_blank">❓ 질문하기</a>
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[Ansible] 수정 제안: " class="community-btn btn-suggest" target="_blank">✏️ 수정 제안</a>
+            </div>
+            <p class="community-note">이 페이지에 오류가 있거나 추가하고 싶은 내용이 있다면 알려주세요!</p>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +430,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

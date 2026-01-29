@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,548 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detailed-explanation">
+            <h2 id="detailed-explanation" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p>
+                    <strong>프로파일링(Profiling)</strong>은 GDPR 제4조 제4항에서 정의하는 개념으로,
+                    개인에 관한 특정 측면을 평가하기 위해 개인정보를 자동화된 방식으로 처리하는 행위입니다.
+                    특히 업무 성과, 경제 상황, 건강, 개인 취향, 관심사, 신뢰도, 행동, 위치, 이동 등을
+                    분석하거나 예측하는 처리가 해당됩니다. AI 기반 추천 시스템, 신용평가, 채용 스크리닝,
+                    보험 리스크 평가 등 현대 AI 응용의 상당 부분이 프로파일링에 해당합니다.
+                </p>
+                <p>
+                    GDPR 제22조는 프로파일링을 포함하여 <em>오직 자동화된 처리에만 기반한 결정</em>으로
+                    법적 효력이나 이와 유사한 중대한 영향을 미치는 결정에 종속되지 않을 권리를 규정합니다.
+                    정보주체는 원칙적으로 인간 개입 없이 완전히 자동화된 의사결정에 종속되지 않을 권리가 있습니다.
+                    예외는 (a) 계약 체결/이행에 필요한 경우, (b) EU/회원국 법률이 허용하는 경우,
+                    (c) 정보주체의 명시적 동의가 있는 경우입니다. 이 경우에도 컨트롤러는 최소한
+                    인간 개입을 받을 권리, 자신의 관점을 표명할 권리, 결정에 이의를 제기할 권리를 보장해야 합니다.
+                </p>
+                <p>
+                    EU AI Act에서도 프로파일링은 특별히 다루어집니다. 제6조와 Annex III에서는
+                    자연인에 대한 프로파일링을 수행하는 AI 시스템 중 고용, 교육, 필수 서비스 접근,
+                    법 집행 등 영역에서 사용되는 것을 <em>고위험 AI</em>로 분류합니다.
+                    특히 신용평가, 보험 가격 책정, 채용 필터링, 복지 수급 자격 결정 등에 사용되는
+                    프로파일링 AI는 제9조-15조의 엄격한 요건(위험 관리, 데이터 거버넌스, 투명성,
+                    인간 감독, 정확성/견고성)을 충족해야 합니다.
+                </p>
+                <p>
+                    한국 개인정보보호법 제37조의2는 <em>자동화된 결정에 대한 권리</em>를 규정하며,
+                    정보주체는 완전히 자동화된 시스템으로 개인정보를 처리하여 법적 효력이나
+                    중대한 영향을 미치는 결정에 대해 설명을 요구하고 이의를 제기할 수 있습니다.
+                    개인정보처리자는 해당 결정이 자동화된 시스템에 의한 것임을 알리고,
+                    결정에 대한 설명과 검토를 요구할 권리를 보장해야 합니다.
+                    인공지능기본법에서도 AI 기반 자동화된 결정에 대한 설명요구권과
+                    인간 개입 요구권을 명시하고 있습니다.
+                </p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-example">
+            <h2 id="code-example" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <p>Python으로 프로파일링 시스템에서 GDPR/AI Act 요건을 준수하는 구현 예시입니다.</p>
+                <pre><code class="language-python">from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Optional, Callable
+import uuid
+import json
+
+class ProfilingCategory(Enum):
+    """프로파일링 유형 (GDPR Art.4(4))"""
+    WORK_PERFORMANCE = "work_performance"
+    ECONOMIC_SITUATION = "economic_situation"
+    HEALTH = "health"
+    PERSONAL_PREFERENCES = "personal_preferences"
+    INTERESTS = "interests"
+    RELIABILITY = "reliability"
+    BEHAVIOR = "behavior"
+    LOCATION = "location"
+    MOVEMENTS = "movements"
+
+class DecisionImpact(Enum):
+    """결정의 영향 수준"""
+    NO_IMPACT = "no_significant_impact"
+    SIGNIFICANT = "significant_effect"  # GDPR Art.22 적용
+    LEGAL = "legal_effect"  # GDPR Art.22 적용
+
+class LegalBasis(Enum):
+    """자동화된 결정의 법적 근거 (GDPR Art.22(2))"""
+    CONTRACT_NECESSARY = "necessary_for_contract"  # (a)
+    UNION_MEMBER_STATE_LAW = "authorized_by_law"  # (b)
+    EXPLICIT_CONSENT = "explicit_consent"  # (c)
+    NOT_APPLICABLE = "human_involved_not_solely_automated"
+
+@dataclass
+class ProfilingDecision:
+    """프로파일링 기반 결정 기록"""
+    decision_id: str = field(default_factory=lambda: f"DEC-{uuid.uuid4().hex[:8].upper()}")
+    data_subject_id: str = ""
+    profiling_categories: list[ProfilingCategory] = field(default_factory=list)
+    input_data_summary: dict = field(default_factory=dict)
+    model_output: dict = field(default_factory=dict)
+    final_decision: str = ""
+    impact_level: DecisionImpact = DecisionImpact.NO_IMPACT
+    legal_basis: LegalBasis = LegalBasis.NOT_APPLICABLE
+    human_reviewed: bool = False
+    human_reviewer: Optional[str] = None
+    review_timestamp: Optional[datetime] = None
+    explanation_provided: bool = False
+    objection_received: bool = False
+    created_at: datetime = field(default_factory=datetime.now)
+
+@dataclass
+class ObjectionRequest:
+    """프로파일링 결정에 대한 이의 신청"""
+    objection_id: str = field(default_factory=lambda: f"OBJ-{uuid.uuid4().hex[:8].upper()}")
+    decision_id: str = ""
+    data_subject_id: str = ""
+    objection_reason: str = ""
+    requested_action: str = ""  # reconsideration, human_review, explanation
+    submitted_at: datetime = field(default_factory=datetime.now)
+    status: str = "pending"  # pending, reviewing, resolved
+    resolution: Optional[str] = None
+    human_reviewer_assigned: Optional[str] = None
+
+class GDPRCompliantProfilingSystem:
+    """GDPR 제22조 준수 프로파일링 시스템"""
+
+    # GDPR 응답 기한
+    RESPONSE_DEADLINE_DAYS = 30
+
+    def __init__(self, organization: str):
+        self.organization = organization
+        self.decisions: dict[str, ProfilingDecision] = {}
+        self.objections: dict[str, ObjectionRequest] = {}
+        self.profiling_model: Optional[Callable] = None
+        self.high_risk_threshold = 0.7  # AI Act 고위험 임계값
+
+    def register_profiling_model(self, model: Callable):
+        """프로파일링 모델 등록"""
+        self.profiling_model = model
+
+    def assess_impact_level(
+        self,
+        decision_context: str,
+        categories: list[ProfilingCategory]
+    ) -> DecisionImpact:
+        """결정의 영향 수준 평가"""
+
+        # 법적 효력이 있는 결정
+        legal_effect_contexts = [
+            "credit_application", "loan_decision", "employment_termination",
+            "insurance_claim", "welfare_eligibility", "visa_decision"
+        ]
+
+        # 중대한 영향을 미치는 결정
+        significant_effect_contexts = [
+            "job_application", "insurance_pricing", "credit_scoring",
+            "educational_admission", "housing_application"
+        ]
+
+        if decision_context in legal_effect_contexts:
+            return DecisionImpact.LEGAL
+        elif decision_context in significant_effect_contexts:
+            return DecisionImpact.SIGNIFICANT
+        elif ProfilingCategory.HEALTH in categories:
+            return DecisionImpact.SIGNIFICANT
+        else:
+            return DecisionImpact.NO_IMPACT
+
+    def check_legal_basis_for_automated_decision(
+        self,
+        impact: DecisionImpact,
+        has_contract_necessity: bool,
+        has_explicit_consent: bool,
+        has_legal_authorization: bool
+    ) -> tuple[bool, LegalBasis]:
+        """자동화된 결정의 법적 근거 확인 (GDPR Art.22)"""
+
+        # 영향이 없거나 경미한 경우 Art.22 적용 안됨
+        if impact == DecisionImpact.NO_IMPACT:
+            return True, LegalBasis.NOT_APPLICABLE
+
+        # Art.22(2) 예외 확인
+        if has_contract_necessity:
+            return True, LegalBasis.CONTRACT_NECESSARY
+        elif has_legal_authorization:
+            return True, LegalBasis.UNION_MEMBER_STATE_LAW
+        elif has_explicit_consent:
+            return True, LegalBasis.EXPLICIT_CONSENT
+        else:
+            # 예외 없음 - 완전 자동화 결정 불가
+            return False, LegalBasis.NOT_APPLICABLE
+
+    def make_profiling_decision(
+        self,
+        data_subject_id: str,
+        input_data: dict,
+        decision_context: str,
+        categories: list[ProfilingCategory],
+        legal_basis_info: dict
+    ) -> ProfilingDecision:
+        """프로파일링 기반 결정 생성"""
+
+        if not self.profiling_model:
+            raise ValueError("Profiling model not registered")
+
+        # 영향 수준 평가
+        impact = self.assess_impact_level(decision_context, categories)
+
+        # 법적 근거 확인
+        allowed, legal_basis = self.check_legal_basis_for_automated_decision(
+            impact=impact,
+            has_contract_necessity=legal_basis_info.get("contract_necessary", False),
+            has_explicit_consent=legal_basis_info.get("explicit_consent", False),
+            has_legal_authorization=legal_basis_info.get("legal_authorization", False)
+        )
+
+        # 모델 실행
+        model_output = self.profiling_model(input_data)
+
+        # 결정 생성
+        decision = ProfilingDecision(
+            data_subject_id=data_subject_id,
+            profiling_categories=categories,
+            input_data_summary=self._summarize_input(input_data),
+            model_output=model_output,
+            impact_level=impact,
+            legal_basis=legal_basis
+        )
+
+        # 법적 근거 없이 고영향 결정인 경우 인간 검토 필수
+        if not allowed:
+            decision.final_decision = "REQUIRES_HUMAN_REVIEW"
+            decision.human_reviewed = False
+        else:
+            decision.final_decision = model_output.get("recommendation", "UNDETERMINED")
+
+            # Art.22(3) 안전장치: 고영향 결정에도 인간 검토 권장
+            if impact in [DecisionImpact.SIGNIFICANT, DecisionImpact.LEGAL]:
+                decision.human_reviewed = self._request_human_review(decision)
+
+        self.decisions[decision.decision_id] = decision
+        return decision
+
+    def _summarize_input(self, input_data: dict) -> dict:
+        """입력 데이터 요약 (개인정보 최소화)"""
+        return {
+            "data_categories": list(input_data.keys()),
+            "record_count": len(input_data),
+            "processed_at": datetime.now().isoformat()
+        }
+
+    def _request_human_review(self, decision: ProfilingDecision) -> bool:
+        """인간 검토 요청"""
+        # 실제 구현에서는 워크플로우 시스템 연동
+        decision.human_reviewer = "PENDING_ASSIGNMENT"
+        return False  # 아직 검토 완료 안됨
+
+    def complete_human_review(
+        self,
+        decision_id: str,
+        reviewer_id: str,
+        approved: bool,
+        notes: str = ""
+    ) -> ProfilingDecision:
+        """인간 검토 완료"""
+
+        decision = self.decisions.get(decision_id)
+        if not decision:
+            raise ValueError(f"Decision {decision_id} not found")
+
+        decision.human_reviewed = True
+        decision.human_reviewer = reviewer_id
+        decision.review_timestamp = datetime.now()
+
+        if approved:
+            if decision.final_decision == "REQUIRES_HUMAN_REVIEW":
+                decision.final_decision = decision.model_output.get("recommendation", "APPROVED")
+        else:
+            decision.final_decision = "REJECTED_BY_HUMAN_REVIEWER"
+
+        return decision
+
+    def provide_explanation(self, decision_id: str) -> dict:
+        """결정에 대한 설명 제공 (Art.22(3) + 인공지능기본법)"""
+
+        decision = self.decisions.get(decision_id)
+        if not decision:
+            return {"error": "Decision not found"}
+
+        explanation = {
+            "decision_id": decision_id,
+            "explanation_type": "algorithmic_decision",
+            "profiling_categories": [c.value for c in decision.profiling_categories],
+            "factors_considered": list(decision.input_data_summary.get("data_categories", [])),
+            "decision_outcome": decision.final_decision,
+            "impact_level": decision.impact_level.value,
+            "legal_basis": decision.legal_basis.value,
+            "human_involvement": {
+                "reviewed": decision.human_reviewed,
+                "reviewer": decision.human_reviewer,
+                "review_time": decision.review_timestamp.isoformat() if decision.review_timestamp else None
+            },
+            "your_rights": {
+                "request_human_intervention": True,
+                "express_point_of_view": True,
+                "contest_decision": True,
+                "request_restriction": True
+            },
+            "explanation_provided_at": datetime.now().isoformat()
+        }
+
+        decision.explanation_provided = True
+        return explanation
+
+    def submit_objection(
+        self,
+        decision_id: str,
+        data_subject_id: str,
+        reason: str,
+        requested_action: str = "human_review"
+    ) -> ObjectionRequest:
+        """결정에 대한 이의 제기 (Art.22(3))"""
+
+        objection = ObjectionRequest(
+            decision_id=decision_id,
+            data_subject_id=data_subject_id,
+            objection_reason=reason,
+            requested_action=requested_action
+        )
+
+        # 결정에 이의 신청 표시
+        if decision_id in self.decisions:
+            self.decisions[decision_id].objection_received = True
+
+        self.objections[objection.objection_id] = objection
+
+        # 인간 검토 요청인 경우 자동 할당
+        if requested_action == "human_review":
+            objection.human_reviewer_assigned = "PENDING_ASSIGNMENT"
+            objection.status = "reviewing"
+
+        return objection
+
+    def get_profiling_audit_report(self, time_period_days: int = 30) -> dict:
+        """프로파일링 감사 보고서"""
+
+        recent_decisions = [
+            d for d in self.decisions.values()
+            if (datetime.now() - d.created_at).days <= time_period_days
+        ]
+
+        by_impact = {"legal": 0, "significant": 0, "no_impact": 0}
+        by_legal_basis = {}
+        human_review_rate = 0
+        objection_rate = 0
+
+        for d in recent_decisions:
+            if d.impact_level == DecisionImpact.LEGAL:
+                by_impact["legal"] += 1
+            elif d.impact_level == DecisionImpact.SIGNIFICANT:
+                by_impact["significant"] += 1
+            else:
+                by_impact["no_impact"] += 1
+
+            basis = d.legal_basis.value
+            by_legal_basis[basis] = by_legal_basis.get(basis, 0) + 1
+
+        total = len(recent_decisions)
+        if total > 0:
+            human_review_rate = sum(1 for d in recent_decisions if d.human_reviewed) / total * 100
+            objection_rate = sum(1 for d in recent_decisions if d.objection_received) / total * 100
+
+        return {
+            "period_days": time_period_days,
+            "total_decisions": total,
+            "by_impact_level": by_impact,
+            "by_legal_basis": by_legal_basis,
+            "human_review_rate": f"{human_review_rate:.1f}%",
+            "objection_rate": f"{objection_rate:.1f}%",
+            "compliance_notes": [
+                "All significant/legal decisions require Art.22 legal basis",
+                "Human intervention must be available for all automated decisions"
+            ]
+        }
+
+# 사용 예시
+if __name__ == "__main__":
+    # 시스템 초기화
+    system = GDPRCompliantProfilingSystem("FinanceAI Corp")
+
+    # 간단한 프로파일링 모델 등록
+    def credit_scoring_model(data: dict) -> dict:
+        # 실제로는 ML 모델
+        score = 650 + (data.get("income", 0) / 1000) - (data.get("debt", 0) / 500)
+        return {
+            "credit_score": min(850, max(300, int(score))),
+            "recommendation": "APPROVED" if score > 600 else "DENIED",
+            "confidence": 0.85
+        }
+
+    system.register_profiling_model(credit_scoring_model)
+
+    # 프로파일링 결정 생성
+    decision = system.make_profiling_decision(
+        data_subject_id="USER123",
+        input_data={"income": 50000, "debt": 10000, "employment_years": 5},
+        decision_context="credit_application",
+        categories=[ProfilingCategory.ECONOMIC_SITUATION, ProfilingCategory.RELIABILITY],
+        legal_basis_info={"contract_necessary": True}
+    )
+
+    print(f"결정 ID: {decision.decision_id}")
+    print(f"영향 수준: {decision.impact_level.value}")
+    print(f"법적 근거: {decision.legal_basis.value}")
+
+    # 설명 요청
+    explanation = system.provide_explanation(decision.decision_id)
+    print(f"설명 제공: {explanation['your_rights']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="practical-conversation">
+            <h2 id="practical-conversation" class="section-title">실무 대화</h2>
+            <div class="section-content">
+                <div class="conversation-tabs">
+                    <button class="tab-button active" data-tab="meeting">회의</button>
+                    <button class="tab-button" data-tab="interview">면접</button>
+                    <button class="tab-button" data-tab="review">코드리뷰</button>
+                </div>
+
+                <div class="tab-content active" id="meeting">
+                    <div class="conversation">
+                        <div class="message">
+                            <span class="speaker">제품 매니저:</span>
+                            <p>"신규 AI 추천 시스템이 GDPR 프로파일링 규제에 해당하나요?"</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">DPO:</span>
+                            <p>"사용자의 행동, 관심사, 취향을 분석해서 콘텐츠를 추천한다면 GDPR 제4조의 프로파일링 정의에 해당해요. 핵심은 그 결정이 '법적 효력이나 이와 유사하게 중대한 영향'을 미치는지입니다. 콘텐츠 추천 정도면 Art.22 적용 대상은 아닐 수 있지만, 대출 승인이나 보험료 책정에 영향을 준다면 완전히 다른 얘기예요."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">법무팀:</span>
+                            <p>"AI Act에서 고위험으로 분류되는 프로파일링도 있나요?"</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">DPO:</span>
+                            <p>"네, Annex III에서 고용, 교육, 필수 서비스, 신용, 보험 등 영역의 프로파일링 AI를 고위험으로 분류해요. 채용 지원자 필터링, 신용점수 산출, 보험료 책정 등이 대표적입니다. 이 경우 위험 관리, 데이터 거버넌스, 인간 감독 등 제9-15조 요건을 모두 충족해야 해요."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="interview">
+                    <div class="conversation">
+                        <div class="message">
+                            <span class="speaker">면접관:</span>
+                            <p>"GDPR 제22조의 자동화된 의사결정에 대한 권리를 설명해주세요."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">지원자:</span>
+                            <p>"정보주체는 프로파일링을 포함하여 오직 자동화된 처리에만 기반한 결정으로 법적 효력이나 중대한 영향을 미치는 결정에 종속되지 않을 권리가 있습니다. 예외는 계약 필요성, 법률 허용, 명시적 동의 세 가지입니다. 예외가 적용되더라도 컨트롤러는 인간 개입을 받을 권리, 의견 표명권, 이의 제기권을 보장해야 합니다."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">면접관:</span>
+                            <p>"프로파일링에서 '법적 효력' 또는 '유사하게 중대한 영향'의 예시를 들어주세요."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">지원자:</span>
+                            <p>"법적 효력의 예로는 자동화된 대출 거절, 비자 거부, 복지 수급 자격 결정 등이 있습니다. 유사하게 중대한 영향의 예로는 채용 지원 자동 탈락, 보험료 대폭 인상, 신용한도 삭감, 온라인 서비스 접근 차단 등이 있습니다. 단순 광고 타겟팅이나 콘텐츠 추천은 대개 여기에 해당하지 않습니다."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="review">
+                    <div class="conversation">
+                        <div class="message">
+                            <span class="speaker">시니어:</span>
+                            <p>"프로파일링 결정 로직에서 'human_reviewed' 플래그만 있는데, Art.22(3)의 안전장치가 제대로 구현된 건가요?"</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">주니어:</span>
+                            <p>"아, 인간 검토뿐 아니라 세 가지 권리를 모두 보장해야 하는군요. 인간 개입 요청, 의견 표명, 결정 이의 제기. 각각을 별도 워크플로우로 구현하고 응답 기한도 추적해야겠습니다."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">시니어:</span>
+                            <p>"그리고 설명 제공 기능에서 GDPR Art.13/14의 사전 정보제공과 Art.22(3)의 설명을 구분해야 해요. 처리 전에 프로파일링이 있다는 것과 관련 로직에 대한 의미 있는 정보를 제공하고, 처리 후에는 구체적인 결정 이유를 설명할 수 있어야 합니다."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">주니어:</span>
+                            <p>"개인정보처리방침에 프로파일링 관련 정보를 추가하고, 결정 시점에 동적으로 설명을 생성하는 XAI 모듈을 연동하겠습니다. SHAP이나 LIME 같은 설명 가능 AI 기법을 적용하면 될 것 같아요."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="cautions">
+            <h2 id="cautions" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <ul class="caution-list">
+                    <li>
+                        <strong>영향 평가 정확성:</strong> 결정이 '법적 효력'이나 '유사하게 중대한 영향'을
+                        미치는지 정확히 평가해야 합니다. 과소평가하면 Art.22 위반으로
+                        최대 2,000만 유로 또는 매출의 4% 과징금 대상이 됩니다.
+                    </li>
+                    <li>
+                        <strong>인간 개입의 실질성:</strong> 형식적인 인간 검토가 아니라
+                        실질적인 개입이 가능해야 합니다. 검토자가 결정을 뒤집을 권한과
+                        충분한 정보를 가져야 하며, 검토 시간도 적절해야 합니다.
+                    </li>
+                    <li>
+                        <strong>설명 가능성 구현:</strong> 프로파일링 로직에 대한 '의미 있는 정보'를
+                        제공해야 합니다. 블랙박스 모델의 경우 XAI 기법을 적용하여
+                        개별 결정에 영향을 미친 요소를 설명할 수 있어야 합니다.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-terms">
+            <h2 id="related-terms" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <ul class="related-terms-list">
+                    <li><a href="/glossary/ko/term/%EC%9E%90%EB%8F%99%ED%99%94%EB%90%9C%20%EC%9D%98%EC%82%AC%EA%B2%B0%EC%A0%95/">자동화된 의사결정 (Automated Decision-Making)</a> - 프로파일링을 포함하는 상위 개념</li>
+                    <li><a href="/glossary/ko/term/%EC%A0%95%EB%B3%B4%EC%A3%BC%EC%B2%B4/">정보주체 (Data Subject)</a> - 프로파일링 대상이 되는 개인</li>
+                    <li><a href="/glossary/ko/term/%EC%B2%98%EB%A6%AC%EC%A0%95%EC%A7%80%EA%B6%8C/">처리정지권 (Right to Restriction)</a> - 프로파일링 정지를 요청할 수 있는 권리</li>
+                    <li><a href="/glossary/ko/term/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%20%ED%88%AC%EB%AA%85%EC%84%B1/">알고리즘 투명성 (Algorithm Transparency)</a> - 프로파일링 로직 공개 요건</li>
+                    <li><a href="/glossary/ko/term/%EC%9D%B8%EA%B0%84%20%EA%B0%90%EB%8F%85/">인간 감독 (Human Oversight)</a> - 프로파일링 결정에 대한 인간 개입</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-more">
+            <h2 id="learn-more" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more-list">
+                    <li>
+                        <a href="https://gdpr-info.eu/art-22-gdpr/" target="_blank" rel="noopener noreferrer">
+                            GDPR Article 22 - 자동화된 개인 의사결정 및 프로파일링
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://edpb.europa.eu/our-work-tools/general-guidance/guidelines-recommendations-best-practices_en" target="_blank" rel="noopener noreferrer">
+                            EDPB 가이드라인 - 자동화된 의사결정 및 프로파일링 해석
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.pipc.go.kr/np/cop/bbs/selectBoardList.do?bbsId=BS074" target="_blank" rel="noopener noreferrer">
+                            개인정보보호위원회 - 자동화된 결정에 대한 권리 가이드라인
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +755,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

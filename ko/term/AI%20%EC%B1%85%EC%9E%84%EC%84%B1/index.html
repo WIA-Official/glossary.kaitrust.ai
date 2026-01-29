@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,265 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>AI 책임성(AI Accountability)은 AI 시스템의 설계, 개발, 배포, 운영 결과에 대해 누가 어떤 책임을 지는지 명확히 하는 원칙입니다. EU AI Act는 공급자(Provider), 배포자(Deployer), 수입자(Importer), 유통업자(Distributor) 각각의 의무와 책임을 명시합니다.</p>
+                <p>공급자(Provider)는 EU AI Act에서 가장 무거운 책임을 집니다. 적합성 평가, CE 마킹, 기술 문서 작성, 품질관리시스템 운영, 시장 출시 후 모니터링, 사고 보고 등의 의무가 있습니다. 배포자(Deployer)는 사용자 고지, 인간 감독 유지, 공급자 지시 준수의 의무를 집니다.</p>
+                <p>책임 귀속 판단 시 중요한 개념은 '의도된 용도(Intended Purpose)'입니다. 공급자가 정의한 의도된 용도 내에서 발생한 문제는 공급자 책임이지만, 배포자가 이를 벗어나 사용한 경우 배포자가 공급자로 간주될 수 있습니다.</p>
+                <p>2024년 채택된 EU AI 책임지침(AI Liability Directive)은 AI로 인한 손해 배상 청구 시 원고의 입증 부담을 완화합니다. 피해자는 AI 시스템의 결함과 손해 간 인과관계 추정을 받을 수 있어, 기업의 책임 리스크가 증가합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># AI 책임 추적 및 관리 시스템
+from dataclasses import dataclass, field
+from typing import List, Dict, Optional
+from datetime import datetime
+from enum import Enum
+
+class ActorRole(Enum):
+    """EU AI Act 행위자 역할"""
+    PROVIDER = "provider"           # 공급자 (개발사)
+    DEPLOYER = "deployer"           # 배포자 (운영사)
+    IMPORTER = "importer"           # 수입자
+    DISTRIBUTOR = "distributor"     # 유통업자
+    AUTHORIZED_REP = "authorized_representative"  # EU 대리인
+
+@dataclass
+class Obligation:
+    """의무사항"""
+    id: str
+    description: str
+    eu_ai_act_article: str
+    applicable_roles: List[ActorRole]
+    compliance_status: str = "pending"
+
+@dataclass
+class AccountabilityRecord:
+    """책임 기록"""
+    timestamp: datetime
+    action_type: str
+    actor_role: ActorRole
+    actor_name: str
+    description: str
+    evidence_reference: Optional[str] = None
+
+@dataclass
+class AIAccountabilityFramework:
+    """AI 책임성 프레임워크"""
+    system_name: str
+    intended_purpose: str
+
+    # 역할별 책임자
+    provider: Dict = field(default_factory=dict)
+    deployer: Dict = field(default_factory=dict)
+    eu_representative: Optional[Dict] = None
+
+    # 의무 및 기록
+    obligations: List[Obligation] = field(default_factory=list)
+    accountability_records: List[AccountabilityRecord] = field(default_factory=list)
+
+    def __post_init__(self):
+        self._initialize_obligations()
+
+    def _initialize_obligations(self):
+        """EU AI Act 기반 의무사항 초기화"""
+        obligations = [
+            # 공급자 의무
+            Obligation(
+                id="OBL-P01",
+                description="적합성 평가 수행",
+                eu_ai_act_article="Article 43",
+                applicable_roles=[ActorRole.PROVIDER]
+            ),
+            Obligation(
+                id="OBL-P02",
+                description="기술 문서 작성 및 유지",
+                eu_ai_act_article="Article 11",
+                applicable_roles=[ActorRole.PROVIDER]
+            ),
+            Obligation(
+                id="OBL-P03",
+                description="품질관리시스템(QMS) 운영",
+                eu_ai_act_article="Article 17",
+                applicable_roles=[ActorRole.PROVIDER]
+            ),
+            Obligation(
+                id="OBL-P04",
+                description="시장 출시 후 모니터링",
+                eu_ai_act_article="Article 72",
+                applicable_roles=[ActorRole.PROVIDER]
+            ),
+            Obligation(
+                id="OBL-P05",
+                description="심각한 사고 보고 (72시간)",
+                eu_ai_act_article="Article 73",
+                applicable_roles=[ActorRole.PROVIDER, ActorRole.DEPLOYER]
+            ),
+            # 배포자 의무
+            Obligation(
+                id="OBL-D01",
+                description="공급자 지시에 따른 사용",
+                eu_ai_act_article="Article 26(1)",
+                applicable_roles=[ActorRole.DEPLOYER]
+            ),
+            Obligation(
+                id="OBL-D02",
+                description="인간 감독 체계 유지",
+                eu_ai_act_article="Article 26(2)",
+                applicable_roles=[ActorRole.DEPLOYER]
+            ),
+            Obligation(
+                id="OBL-D03",
+                description="사용자 대상 투명성 고지",
+                eu_ai_act_article="Article 26(5)",
+                applicable_roles=[ActorRole.DEPLOYER]
+            ),
+            Obligation(
+                id="OBL-D04",
+                description="입력 데이터의 관련성 보장",
+                eu_ai_act_article="Article 26(4)",
+                applicable_roles=[ActorRole.DEPLOYER]
+            ),
+        ]
+        self.obligations.extend(obligations)
+
+    def log_action(self, action_type: str, actor_role: ActorRole,
+                   actor_name: str, description: str,
+                   evidence_reference: Optional[str] = None):
+        """책임 추적 기록 추가"""
+        record = AccountabilityRecord(
+            timestamp=datetime.now(),
+            action_type=action_type,
+            actor_role=actor_role,
+            actor_name=actor_name,
+            description=description,
+            evidence_reference=evidence_reference
+        )
+        self.accountability_records.append(record)
+        return record
+
+    def check_role_obligations(self, role: ActorRole) -> Dict:
+        """역할별 의무 준수 현황"""
+        role_obligations = [o for o in self.obligations
+                          if role in o.applicable_roles]
+        compliant = [o for o in role_obligations
+                    if o.compliance_status == "compliant"]
+
+        return {
+            "role": role.value,
+            "total_obligations": len(role_obligations),
+            "compliant": len(compliant),
+            "compliance_rate": len(compliant) / len(role_obligations) * 100,
+            "pending": [
+                {"id": o.id, "description": o.description, "article": o.eu_ai_act_article}
+                for o in role_obligations if o.compliance_status != "compliant"
+            ]
+        }
+
+    def assess_liability_exposure(self) -> Dict:
+        """책임 리스크 평가"""
+        provider_compliance = self.check_role_obligations(ActorRole.PROVIDER)
+        deployer_compliance = self.check_role_obligations(ActorRole.DEPLOYER)
+
+        return {
+            "system": self.system_name,
+            "intended_purpose": self.intended_purpose,
+            "provider_liability": {
+                "entity": self.provider.get("name"),
+                "compliance_rate": provider_compliance["compliance_rate"],
+                "risk_level": "HIGH" if provider_compliance["compliance_rate"] < 80 else "LOW"
+            },
+            "deployer_liability": {
+                "entity": self.deployer.get("name"),
+                "compliance_rate": deployer_compliance["compliance_rate"],
+                "risk_level": "HIGH" if deployer_compliance["compliance_rate"] < 80 else "LOW"
+            },
+            "recommendations": self._generate_recommendations(provider_compliance, deployer_compliance)
+        }
+
+# 사용 예시
+framework = AIAccountabilityFramework(
+    system_name="AI 신용평가 시스템",
+    intended_purpose="금융기관 대출 심사 보조",
+    provider={"name": "KAITRUST Corp", "contact": "legal@kaitrust.ai"},
+    deployer={"name": "ABC Bank", "contact": "compliance@abcbank.com"}
+)
+
+# 책임 추적 기록
+framework.log_action(
+    action_type="CONFORMITY_ASSESSMENT",
+    actor_role=ActorRole.PROVIDER,
+    actor_name="KAITRUST Corp",
+    description="제3자 적합성 평가 완료",
+    evidence_reference="CERT-2025-001234"
+)
+
+print(framework.assess_liability_exposure())</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">법무팀:</strong> "AI 책임지침이 시행되면 피해자의 입증 부담이 줄어요. 우리 제품 배상 책임 보험 검토해야 합니다."</p>
+                <p><strong class="role-junior">개발팀:</strong> "의도된 용도를 명확히 문서화했고, 사용 제한사항도 API 문서와 계약서에 포함시켰습니다. 범위 밖 사용 시 면책되도록요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "AI 시스템에서 문제가 발생했을 때 누가 책임지나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "EU AI Act에서는 역할별로 책임을 구분합니다. 공급자는 시스템 자체의 적합성에, 배포자는 적절한 사용과 인간 감독에 책임집니다. 배포자가 의도된 용도를 벗어나 사용하면 공급자로 간주되어 책임이 전환될 수 있습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">컴플라이언스:</strong> "이 기능은 의도된 용도에 포함되나요? 문서에 없는 용도로 확장하면 책임 문제 생겨요."</p>
+                <p><strong class="role-junior">개발자:</strong> "의도된 용도 문서 업데이트하고 법무팀 검토 받겠습니다. 새 기능 추가 시 항상 범위 확인 프로세스 따르고 있습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>의도된 용도(Intended Purpose) 외 사용 시 배포자가 공급자 책임을 질 수 있음</li>
+                <li>AI 책임지침으로 피해자 입증 부담 완화 - 기업 배상 책임 리스크 증가</li>
+                <li>책임 추적을 위한 모든 결정 및 조치의 기록 유지 필수</li>
+                <li class="info">AI 전용 배상 책임 보험 도입 검토 권장 - 일반 보험으로 커버 안 될 수 있음</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/EU%20AI%20Act/" class="related-link">EU AI Act</a>
+                <a href="/ko/term/AI%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">AI 거버넌스</a>
+                <a href="/ko/term/AI%20%EC%9C%A4%EB%A6%AC%EC%9B%90%EC%B9%99/" class="related-link">AI 윤리원칙</a>
+                <a href="/ko/term/AI%20%EA%B0%90%EC%82%AC/" class="related-link">AI 감사</a>
+                <a href="/ko/term/AISP/" class="related-link">AISP</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52022PC0496" target="_blank" rel="noopener">EU AI 책임지침 제안서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act Chapter III - Provider/Deployer 의무</a></li>
+                <li><span class="type-book"></span><a href="https://artificialintelligenceact.eu/article/26/" target="_blank" rel="noopener">AI Act Article 26 해설 - 배포자 의무</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +472,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

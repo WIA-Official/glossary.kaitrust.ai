@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,120 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>채널(Channel)은 Go 언어에서 고루틴(goroutine) 간에 데이터를 안전하게 주고받기 위한 통신 메커니즘입니다. "공유 메모리로 통신하지 말고, 통신으로 메모리를 공유하라"는 Go의 철학을 구현한 핵심 기능으로, 동시성 프로그래밍에서 발생할 수 있는 경쟁 상태(race condition)를 방지합니다.</p>
+                <p>채널은 타입이 지정된 파이프라인으로 생각할 수 있습니다. make(chan int)로 정수를 전달하는 채널을 만들고, ch <- value로 값을 보내고, value := <-ch로 값을 받습니다. 기본적으로 채널은 동기적으로 동작하여, 보내는 쪽과 받는 쪽이 모두 준비될 때까지 블로킹됩니다.</p>
+                <p>버퍼 채널(buffered channel)은 make(chan int, 10)처럼 용량을 지정하여 생성합니다. 버퍼가 가득 차기 전까지는 보내는 쪽이 블로킹되지 않아 비동기적 통신이 가능합니다. 이는 생산자-소비자 패턴에서 성능 향상에 유용합니다.</p>
+                <p>select 문을 사용하면 여러 채널 연산을 동시에 기다릴 수 있습니다. 이를 통해 타임아웃 처리, 여러 소스에서 데이터 수신, 취소 신호 처리 등 복잡한 동시성 패턴을 우아하게 구현할 수 있습니다. close() 함수로 채널을 닫아 더 이상 값이 전송되지 않음을 알릴 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>package main
+
+import (
+    "fmt"
+    "time"
+)
+
+// 작업자 함수 - 채널로 결과 전송
+func worker(id int, jobs <-chan int, results chan<- int) {
+    for job := range jobs {
+        fmt.Printf("Worker %d processing job %d\n", id, job)
+        time.Sleep(time.Millisecond * 100)
+        results <- job * 2
+    }
+}
+
+func main() {
+    jobs := make(chan int, 5)
+    results := make(chan int, 5)
+
+    // 3개의 워커 고루틴 시작
+    for w := 1; w <= 3; w++ {
+        go worker(w, jobs, results)
+    }
+
+    // 5개의 작업 전송
+    for j := 1; j <= 5; j++ {
+        jobs <- j
+    }
+    close(jobs)
+
+    // 결과 수집
+    for r := 1; r <= 5; r++ {
+        result := <-results
+        fmt.Printf("Result: %d\n", result)
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>시니어:</strong> 여러 API에서 데이터 가져오는 부분, 순차 처리하면 너무 느려요.</p>
+                <p><strong>주니어:</strong> 고루틴으로 병렬 처리하면 될까요?</p>
+                <p><strong>시니어:</strong> 네, 각 API 호출을 고루틴으로 띄우고 결과를 채널로 수집하면 됩니다. errgroup 패키지 쓰면 에러 처리도 깔끔해요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> Go에서 뮤텍스 대신 채널을 사용하는 이유는 무엇인가요?</p>
+                <p><strong>지원자:</strong> 채널은 데이터 소유권을 이전하는 개념이라 경쟁 상태를 구조적으로 방지합니다. 뮤텍스는 공유 데이터를 보호하지만, 채널은 데이터를 복사하거나 이동시켜 한 번에 하나의 고루틴만 접근하도록 합니다.</p>
+                <p><strong>면접관:</strong> 버퍼 채널과 언버퍼 채널의 사용 시나리오를 설명해주세요.</p>
+                <p><strong>지원자:</strong> 언버퍼 채널은 동기화가 필요할 때 사용합니다. 보내는 쪽이 받는 쪽을 기다리므로 신호 전달에 적합해요. 버퍼 채널은 생산자-소비자 패턴에서 속도 차이를 흡수할 때 유용합니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> 이 채널 닫는 위치가 좀 애매한데요. 패닉 발생할 수 있어요.</p>
+                <p><strong>작성자:</strong> 어디가 문제인가요?</p>
+                <p><strong>리뷰어:</strong> 고루틴 안에서 채널을 닫고 있는데, 보내는 쪽에서 닫아야 합니다. 받는 쪽에서 닫으면 보내는 쪽에서 닫힌 채널에 쓰려다 패닉이 발생해요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>닫힌 채널에 전송 금지:</strong> close()된 채널에 값을 보내면 패닉이 발생합니다. 보내는 쪽에서만 채널을 닫아야 합니다.</li>
+                <li><strong>데드락 주의:</strong> 받을 고루틴이 없는 언버퍼 채널에 보내면 영원히 블로킹됩니다. select와 default 또는 타임아웃을 활용하세요.</li>
+                <li><strong>채널 누수:</strong> 고루틴이 채널에서 영원히 대기하면 메모리 누수가 발생합니다. context로 취소 신호를 전파하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EA%B3%A0%EB%A3%A8%ED%8B%B4/" class="related-link">고루틴</a>
+                <a href="/ko/term/%EB%AE%A4%ED%85%8D%EC%8A%A4/" class="related-link">뮤텍스</a>
+                <a href="/ko/term/%EB%8F%99%EC%8B%9C%EC%84%B1/" class="related-link">동시성</a>
+                <a href="/ko/term/%EC%8A%A4%EB%A0%88%EB%93%9C/" class="related-link">스레드</a>
+                <a href="/ko/term/%ED%81%90/" class="related-link">큐</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://go.dev/tour/concurrency" target="_blank">Go Tour - Concurrency</a></li>
+                <li><a href="https://gobyexample.com/channels" target="_blank">Go by Example: Channels</a></li>
+                <li><a href="https://www.youtube.com/watch?v=f6kdp27TYZs" target="_blank">Google I/O: Go Concurrency Patterns</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +328,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -202,6 +202,214 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">토큰 기반 인증(Token-based Authentication)은 서버가 세션 상태를 저장하지 않고, 클라이언트가 토큰을 보유하여 인증하는 방식입니다. 서버는 Stateless하게 동작하여 수평 확장이 용이하고, 마이크로서비스 아키텍처와 SPA(Single Page Application)에 적합합니다.</p>
+                <p style="margin-bottom: 1rem;">가장 널리 사용되는 토큰 형식은 JWT(JSON Web Token)입니다. JWT는 Header(알고리즘), Payload(클레임), Signature(서명)의 세 부분으로 구성됩니다. 서버는 비밀키로 토큰을 서명하고, 이후 요청에서 서명을 검증하여 토큰 위변조를 탐지합니다. 토큰 자체에 사용자 정보(ID, 역할 등)가 포함되어 별도 DB 조회 없이 인증이 가능합니다.</p>
+                <p style="margin-bottom: 1rem;">일반적인 토큰 기반 인증 흐름: 1) 사용자가 로그인(ID/PW, OAuth 등), 2) 서버가 Access Token(+ Refresh Token) 발급, 3) 클라이언트가 토큰을 저장(메모리, localStorage, httpOnly 쿠키), 4) API 요청 시 Authorization: Bearer {token} 헤더로 전송, 5) 서버가 토큰 검증 후 요청 처리.</p>
+                <p>Access Token은 짧은 만료 시간(5-15분), Refresh Token은 긴 만료 시간(며칠-주)으로 설정하는 것이 일반적입니다. Access Token 만료 시 Refresh Token으로 새 Access Token을 발급받습니다. Refresh Token도 탈취 위험이 있으므로 Rotation(사용 시 새로 발급)을 권장합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>// JWT 토큰 기반 인증 구현 (Node.js + jsonwebtoken)
+import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET!;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET!;
+
+interface TokenPayload {
+  userId: string;
+  email: string;
+  roles: string[];
+}
+
+// 토큰 생성
+function generateTokens(payload: TokenPayload) {
+  const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
+    expiresIn: '15m',  // Access Token: 15분
+    issuer: 'myapp.com'
+  });
+
+  const refreshToken = jwt.sign(
+    { userId: payload.userId },
+    REFRESH_TOKEN_SECRET,
+    { expiresIn: '7d' }  // Refresh Token: 7일
+  );
+
+  return { accessToken, refreshToken };
+}
+
+// 로그인 API
+app.post('/api/auth/login', async (req, res) =&gt; {
+  const { email, password } = req.body;
+
+  // 사용자 인증 (DB 조회)
+  const user = await authenticateUser(email, password);
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  // 토큰 발급
+  const tokens = generateTokens({
+    userId: user.id,
+    email: user.email,
+    roles: user.roles
+  });
+
+  // Refresh Token은 httpOnly 쿠키로 (XSS 방지)
+  res.cookie('refreshToken', tokens.refreshToken, {
+    httpOnly: true,
+    secure: true,        // HTTPS만
+    sameSite: 'strict',  // CSRF 방지
+    maxAge: 7 * 24 * 60 * 60 * 1000  // 7일
+  });
+
+  // Access Token은 응답 body로
+  res.json({ accessToken: tokens.accessToken });
+});
+
+// 인증 미들웨어
+function authenticate(req: Request, res: Response, next: NextFunction) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader?.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  const token = authHeader.slice(7);
+
+  try {
+    const payload = jwt.verify(token, ACCESS_TOKEN_SECRET) as TokenPayload;
+    req.user = payload;  // 요청 객체에 사용자 정보 첨부
+    next();
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ error: 'Token expired' });
+    }
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
+// 토큰 갱신 API (Refresh Token Rotation)
+app.post('/api/auth/refresh', async (req, res) =&gt; {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ error: 'No refresh token' });
+  }
+
+  try {
+    const payload = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET) as { userId: string };
+
+    // DB에서 사용자 최신 정보 조회
+    const user = await getUserById(payload.userId);
+
+    // 새 토큰 쌍 발급 (Rotation)
+    const tokens = generateTokens({
+      userId: user.id,
+      email: user.email,
+      roles: user.roles
+    });
+
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    res.json({ accessToken: tokens.accessToken });
+  } catch {
+    res.clearCookie('refreshToken');
+    return res.status(401).json({ error: 'Invalid refresh token' });
+  }
+});
+
+// 보호된 라우트
+app.get('/api/users/me', authenticate, (req, res) =&gt; {
+  res.json(req.user);
+});</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">인증 설계에서:</p>
+                    <p>"세션 vs 토큰 뭐가 좋을까요?" - "마이크로서비스면 토큰이 나아요. 각 서비스가 독립적으로 토큰 검증이 가능해서 인증 서버에 의존하지 않아요. 하지만 토큰 무효화가 어려우니 짧은 만료 시간 + Refresh Token 조합이 필수입니다."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"JWT를 어디에 저장해야 하나요?" - "Access Token은 메모리(변수)가 가장 안전하지만 새로고침 시 사라져요. localStorage는 XSS 취약, httpOnly 쿠키는 CSRF 취약. 실무에선 Access Token은 메모리, Refresh Token은 httpOnly 쿠키 조합을 많이 써요."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">보안 리뷰에서:</p>
+                    <p>"사용자가 비밀번호 변경하면 기존 토큰 어떻게 무효화해요?" - "JWT 자체 무효화는 불가능해서, 토큰에 버전(iat)을 넣고 DB에 마지막 로그아웃 시간을 저장해요. 검증 시 iat &lt; 로그아웃 시간이면 거부합니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">JWT에 민감한 정보(비밀번호, 신용카드 등)를 넣지 마세요. Payload는 Base64 인코딩일 뿐 암호화되지 않습니다. 누구나 디코딩하여 내용을 볼 수 있습니다.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">alg: none 공격에 주의하세요. 일부 라이브러리는 algorithm 검증을 건너뛸 수 있습니다. 토큰 검증 시 항상 예상하는 알고리즘(RS256, HS256 등)을 명시적으로 지정하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">시크릿 키를 코드에 하드코딩하지 마세요. 환경 변수나 시크릿 관리 도구(Vault 등)를 사용하고, 충분히 길고 랜덤한 키(최소 256비트)를 사용하세요.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/JWT/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">JWT</a>
+                <a href="/ko/term/OAuth%202.1/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">OAuth 2.1</a>
+                <a href="/ko/term/FIDO2/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">FIDO2</a>
+                <a href="/ko/term/Session/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Session</a>
+                <a href="/ko/term/Cookie/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Cookie</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://jwt.io/introduction" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> JWT.io - JSON Web Tokens 소개
+                </a>
+                <a href="https://datatracker.ietf.org/doc/html/rfc7519" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> RFC 7519 - JWT 사양
+                </a>
+                <a href="https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Auth0 - Refresh Tokens 가이드
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

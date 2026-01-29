@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,429 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detailed-explanation">
+            <h2 id="detailed-explanation" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p>
+                    <strong>조화된 표준(Harmonised Standards)</strong>은 EU 집행위원회의 요청에 따라
+                    유럽 표준화 기구(CEN, CENELEC, ETSI)가 개발하는 기술 표준으로, EU 법령의
+                    필수 요건을 충족하는 기술적 방법을 제공합니다. EU AI Act 제40조에 따르면,
+                    고위험 AI 시스템이 조화된 표준을 준수할 경우 해당 표준이 다루는 요건에 대해
+                    <em>적합성 추정(presumption of conformity)</em>의 효력을 받습니다.
+                    이는 별도의 입증 없이 법적 요건 충족이 추정됨을 의미합니다.
+                </p>
+                <p>
+                    EU AI Act에서 조화된 표준의 역할은 매우 중요합니다. 제41조에서는 EU 집행위원회가
+                    표준화 요청(standardisation request)을 통해 CEN, CENELEC, ETSI에
+                    AI 시스템 관련 조화된 표준 개발을 위임할 수 있다고 규정합니다. 현재 개발 중인
+                    주요 표준으로는 위험 관리 시스템(ISO/IEC 23894 기반), 데이터 거버넌스,
+                    기술 문서화, 로깅 및 추적성, 인간 감독, 정확성/견고성/사이버보안 등이 있습니다.
+                    이러한 표준들은 2025-2026년 사이에 순차적으로 공표될 예정입니다.
+                </p>
+                <p>
+                    조화된 표준은 자발적 적용이 원칙이지만, 적용 시 강력한 법적 혜택을 제공합니다.
+                    Regulation (EU) 1025/2012에 따라, 조화된 표준의 참조번호가
+                    EU 관보(Official Journal)에 게재되면 적합성 추정 효력이 발생합니다.
+                    기업이 조화된 표준 대신 다른 기술 솔루션을 사용할 경우, EU AI Act 제43조에 따른
+                    제3자 적합성 평가 과정에서 동등한 수준의 보호를 입증해야 합니다.
+                    이는 시간과 비용 측면에서 상당한 부담이 될 수 있습니다.
+                </p>
+                <p>
+                    국제 표준과의 관계도 중요한 고려사항입니다. ISO/IEC JTC 1/SC 42에서 개발하는
+                    AI 관련 국제 표준(ISO/IEC 22989, 23053, 23894 등)은 유럽 조화된 표준의
+                    기초가 됩니다. Vienna Agreement(CEN-ISO)와 Frankfurt Agreement(CENELEC-IEC)에 따라
+                    국제 표준을 유럽 표준으로 채택하는 절차가 마련되어 있습니다.
+                    한국 기업이 EU 시장을 대상으로 할 경우, ISO/IEC 국제 표준 준수가
+                    EU 조화된 표준 적합성 입증에 유리한 출발점이 됩니다.
+                </p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-example">
+            <h2 id="code-example" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <p>Python으로 조화된 표준 준수 상태를 추적하고 적합성 추정을 관리하는 시스템입니다.</p>
+                <pre><code class="language-python">from dataclasses import dataclass, field
+from datetime import date, datetime
+from enum import Enum
+from typing import Optional
+import hashlib
+
+class StandardizationBody(Enum):
+    """유럽 표준화 기구"""
+    CEN = "European Committee for Standardization"
+    CENELEC = "European Committee for Electrotechnical Standardization"
+    ETSI = "European Telecommunications Standards Institute"
+    ISO = "International Organization for Standardization"
+    IEC = "International Electrotechnical Commission"
+
+class StandardStatus(Enum):
+    """표준 상태"""
+    DRAFT = "draft"
+    PUBLISHED = "published"
+    HARMONISED = "harmonised_oj_published"  # EU 관보 게재
+    WITHDRAWN = "withdrawn"
+    SUPERSEDED = "superseded"
+
+class AIActRequirement(Enum):
+    """EU AI Act 필수 요건 (고위험 AI)"""
+    RISK_MANAGEMENT = "Art.9 - Risk management system"
+    DATA_GOVERNANCE = "Art.10 - Data and data governance"
+    TECHNICAL_DOCUMENTATION = "Art.11 - Technical documentation"
+    RECORD_KEEPING = "Art.12 - Record-keeping (logging)"
+    TRANSPARENCY = "Art.13 - Transparency and provision of information"
+    HUMAN_OVERSIGHT = "Art.14 - Human oversight"
+    ACCURACY_ROBUSTNESS = "Art.15 - Accuracy, robustness and cybersecurity"
+
+@dataclass
+class HarmonisedStandard:
+    """조화된 표준"""
+    reference: str  # 예: "EN ISO/IEC 23894:2024"
+    title: str
+    body: StandardizationBody
+    status: StandardStatus
+    ai_act_requirements: list[AIActRequirement]
+    oj_publication_date: Optional[date] = None  # EU 관보 게재일
+    withdrawal_date: Optional[date] = None
+    superseded_by: Optional[str] = None
+    iso_iec_base: Optional[str] = None  # 기반 국제 표준
+
+    def provides_presumption(self) -> bool:
+        """적합성 추정 효력 여부"""
+        if self.status != StandardStatus.HARMONISED:
+            return False
+        if self.oj_publication_date is None:
+            return False
+        if self.withdrawal_date and date.today() >= self.withdrawal_date:
+            return False
+        return True
+
+    def get_covered_requirements(self) -> list[str]:
+        """표준이 커버하는 AI Act 요건 목록"""
+        return [req.value for req in self.ai_act_requirements]
+
+@dataclass
+class ComplianceRecord:
+    """표준 준수 기록"""
+    standard_ref: str
+    ai_system_id: str
+    compliance_date: date
+    evidence_documents: list[str] = field(default_factory=list)
+    assessment_body: Optional[str] = None  # 제3자 평가기관
+    certificate_number: Optional[str] = None
+    valid_until: Optional[date] = None
+
+    def generate_record_hash(self) -> str:
+        """기록 무결성 해시"""
+        content = f"{self.standard_ref}|{self.ai_system_id}|{self.compliance_date}"
+        return hashlib.sha256(content.encode()).hexdigest()[:16]
+
+class HarmonisedStandardsRegistry:
+    """조화된 표준 등록 및 추적 시스템"""
+
+    # EU AI Act용 주요 조화된 표준 (예시)
+    AI_ACT_STANDARDS = {
+        "EN ISO/IEC 23894": {
+            "title": "AI Risk Management",
+            "requirements": [AIActRequirement.RISK_MANAGEMENT],
+            "iso_base": "ISO/IEC 23894:2023"
+        },
+        "EN ISO/IEC 25059": {
+            "title": "AI Quality Model",
+            "requirements": [AIActRequirement.ACCURACY_ROBUSTNESS],
+            "iso_base": "ISO/IEC 25059:2023"
+        },
+        "EN ISO/IEC 42001": {
+            "title": "AI Management System",
+            "requirements": [
+                AIActRequirement.RISK_MANAGEMENT,
+                AIActRequirement.DATA_GOVERNANCE,
+                AIActRequirement.RECORD_KEEPING
+            ],
+            "iso_base": "ISO/IEC 42001:2023"
+        }
+    }
+
+    def __init__(self):
+        self.standards: dict[str, HarmonisedStandard] = {}
+        self.compliance_records: list[ComplianceRecord] = []
+
+    def register_standard(self, standard: HarmonisedStandard) -> str:
+        """표준 등록"""
+        self.standards[standard.reference] = standard
+        return standard.reference
+
+    def check_presumption_of_conformity(
+        self,
+        ai_system_id: str,
+        requirement: AIActRequirement
+    ) -> dict:
+        """특정 요건에 대한 적합성 추정 확인"""
+
+        # 해당 요건을 커버하는 조화된 표준 찾기
+        covering_standards = [
+            std for std in self.standards.values()
+            if requirement in std.ai_act_requirements and std.provides_presumption()
+        ]
+
+        if not covering_standards:
+            return {
+                "has_presumption": False,
+                "reason": "No harmonised standard with OJ publication covers this requirement",
+                "alternative": "Third-party conformity assessment required (Art.43)"
+            }
+
+        # AI 시스템의 준수 기록 확인
+        relevant_records = [
+            rec for rec in self.compliance_records
+            if rec.ai_system_id == ai_system_id
+            and rec.standard_ref in [s.reference for s in covering_standards]
+        ]
+
+        if relevant_records:
+            record = relevant_records[0]
+            return {
+                "has_presumption": True,
+                "standard": record.standard_ref,
+                "compliance_date": record.compliance_date.isoformat(),
+                "certificate": record.certificate_number,
+                "legal_basis": "EU AI Act Article 40 - Presumption of conformity"
+            }
+
+        return {
+            "has_presumption": False,
+            "reason": "AI system has not demonstrated compliance with harmonised standard",
+            "available_standards": [s.reference for s in covering_standards]
+        }
+
+    def get_gap_analysis(self, ai_system_id: str) -> dict:
+        """AI 시스템의 표준 준수 갭 분석"""
+
+        all_requirements = list(AIActRequirement)
+        compliant = []
+        gaps = []
+
+        for req in all_requirements:
+            result = self.check_presumption_of_conformity(ai_system_id, req)
+            if result["has_presumption"]:
+                compliant.append({
+                    "requirement": req.value,
+                    "standard": result["standard"]
+                })
+            else:
+                gaps.append({
+                    "requirement": req.value,
+                    "status": "Gap identified",
+                    "recommendation": result.get("available_standards",
+                                                  ["Custom technical solution required"])
+                })
+
+        return {
+            "ai_system_id": ai_system_id,
+            "analysis_date": datetime.now().isoformat(),
+            "total_requirements": len(all_requirements),
+            "compliant_count": len(compliant),
+            "gap_count": len(gaps),
+            "compliant_requirements": compliant,
+            "gaps": gaps,
+            "overall_presumption_coverage": f"{len(compliant)/len(all_requirements)*100:.1f}%"
+        }
+
+    def record_compliance(
+        self,
+        standard_ref: str,
+        ai_system_id: str,
+        evidence_docs: list[str],
+        assessment_body: Optional[str] = None
+    ) -> ComplianceRecord:
+        """표준 준수 기록"""
+
+        if standard_ref not in self.standards:
+            raise ValueError(f"Standard {standard_ref} not registered")
+
+        record = ComplianceRecord(
+            standard_ref=standard_ref,
+            ai_system_id=ai_system_id,
+            compliance_date=date.today(),
+            evidence_documents=evidence_docs,
+            assessment_body=assessment_body,
+            certificate_number=f"CERT-{record.generate_record_hash()}" if assessment_body else None
+        )
+
+        self.compliance_records.append(record)
+        return record
+
+# 사용 예시
+if __name__ == "__main__":
+    registry = HarmonisedStandardsRegistry()
+
+    # 조화된 표준 등록
+    risk_std = HarmonisedStandard(
+        reference="EN ISO/IEC 23894:2024",
+        title="Information technology - AI Risk Management",
+        body=StandardizationBody.CEN,
+        status=StandardStatus.HARMONISED,
+        ai_act_requirements=[AIActRequirement.RISK_MANAGEMENT],
+        oj_publication_date=date(2025, 3, 15),
+        iso_iec_base="ISO/IEC 23894:2023"
+    )
+    registry.register_standard(risk_std)
+
+    # AI 시스템 준수 기록
+    registry.record_compliance(
+        standard_ref="EN ISO/IEC 23894:2024",
+        ai_system_id="AI-HR-RECRUIT-001",
+        evidence_docs=["risk_assessment_v2.pdf", "mitigation_plan.pdf"],
+        assessment_body="TUV Rheinland"
+    )
+
+    # 갭 분석 실행
+    analysis = registry.get_gap_analysis("AI-HR-RECRUIT-001")
+    print(f"적합성 추정 커버리지: {analysis['overall_presumption_coverage']}")
+    print(f"갭 수: {analysis['gap_count']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="practical-conversation">
+            <h2 id="practical-conversation" class="section-title">실무 대화</h2>
+            <div class="section-content">
+                <div class="conversation-tabs">
+                    <button class="tab-button active" data-tab="meeting">회의</button>
+                    <button class="tab-button" data-tab="interview">면접</button>
+                    <button class="tab-button" data-tab="review">코드리뷰</button>
+                </div>
+
+                <div class="tab-content active" id="meeting">
+                    <div class="conversation">
+                        <div class="message">
+                            <span class="speaker">컴플라이언스 매니저:</span>
+                            <p>"고위험 AI 시스템의 EU 시장 진출 준비 상황을 공유해주세요. 조화된 표준 적용 계획은 어떻게 되나요?"</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">기술 리드:</span>
+                            <p>"ISO/IEC 42001 AI 관리시스템 인증을 이미 취득했고, 이를 기반으로 EN ISO/IEC 42001 조화된 표준 전환을 준비 중입니다. 위험 관리 요건(제9조)과 데이터 거버넌스(제10조)에 대해서는 적합성 추정을 받을 수 있을 것으로 예상됩니다."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">법무팀:</span>
+                            <p>"조화된 표준이 아직 EU 관보에 게재되지 않은 상태에서 시장 진출 시기가 맞을까요?"</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">기술 리드:</span>
+                            <p>"현재 CEN-CENELEC에서 AI Act 관련 표준화 요청에 따른 작업이 진행 중이고, 2025년 중반부터 순차적으로 관보 게재될 예정입니다. 그 전까지는 공통 사양(Common Specifications)이나 제3자 적합성 평가로 대응해야 합니다."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="interview">
+                    <div class="conversation">
+                        <div class="message">
+                            <span class="speaker">면접관:</span>
+                            <p>"EU AI Act에서 조화된 표준의 역할과 적합성 추정에 대해 설명해주세요."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">지원자:</span>
+                            <p>"조화된 표준은 CEN, CENELEC, ETSI가 EU 집행위원회의 표준화 요청에 따라 개발하는 기술 표준입니다. AI Act 제40조에 따르면 고위험 AI 시스템이 조화된 표준을 준수하면 해당 요건에 대해 '적합성 추정'을 받습니다. 이는 별도 입증 없이 법적 요건 충족이 추정된다는 강력한 혜택입니다. 다만 표준이 EU 관보에 게재되어야 효력이 발생하며, 표준을 따르지 않을 경우 제3자 적합성 평가에서 동등한 보호 수준을 입증해야 합니다."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">면접관:</span>
+                            <p>"ISO/IEC 국제 표준과 EU 조화된 표준의 관계는 어떻게 되나요?"</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">지원자:</span>
+                            <p>"Vienna Agreement와 Frankfurt Agreement에 따라 ISO/IEC 국제 표준을 유럽 표준(EN)으로 채택하는 절차가 있습니다. 예를 들어 ISO/IEC 42001은 EN ISO/IEC 42001로 채택되어 조화된 표준이 될 수 있습니다. 한국 기업 입장에서는 국제 표준 인증이 EU 시장 진출의 좋은 출발점이 됩니다."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="review">
+                    <div class="conversation">
+                        <div class="message">
+                            <span class="speaker">시니어:</span>
+                            <p>"표준 준수 추적 모듈에서 적합성 추정 유효성 검증 로직을 봤는데, EU 관보 게재일만 체크하고 있네요. 빠진 게 있지 않나요?"</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">주니어:</span>
+                            <p>"아, 표준 철회(withdrawal) 여부도 확인해야 하는군요. 조화된 표준이 철회되거나 대체될 경우 적합성 추정 효력이 사라지니까요."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">시니어:</span>
+                            <p>"맞아요. 그리고 표준이 부분적으로만 요건을 커버하는 경우도 있어요. requirements_covered 필드와 실제 AI Act 요건을 매핑해서 어떤 부분에 적합성 추정이 적용되는지 명확히 추적해야 합니다."</p>
+                        </div>
+                        <div class="message">
+                            <span class="speaker">주니어:</span>
+                            <p>"이행 기간(transition period)도 고려해야겠네요. 새 표준이 발효되고 구 표준이 철회될 때까지의 유예 기간 동안에는 둘 다 유효하니까요."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="cautions">
+            <h2 id="cautions" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <ul class="caution-list">
+                    <li>
+                        <strong>자발적 적용의 함정:</strong> 조화된 표준 적용은 자발적이지만, 미적용 시
+                        제3자 적합성 평가에서 동등한 보호 수준을 직접 입증해야 합니다.
+                        이는 비용과 시간이 훨씬 많이 소요되며, 시장 진출 지연으로 이어질 수 있습니다.
+                    </li>
+                    <li>
+                        <strong>적합성 추정의 제한:</strong> 조화된 표준 준수가 자동으로 모든 AI Act 요건
+                        충족을 의미하지 않습니다. 각 표준은 특정 요건만 커버하므로,
+                        전체 요건 충족을 위해서는 여러 표준의 조합이나 추가 조치가 필요합니다.
+                    </li>
+                    <li>
+                        <strong>표준 업데이트 추적:</strong> 조화된 표준은 기술 발전에 따라 개정되며,
+                        구버전 철회 시 적합성 추정이 소멸합니다.
+                        EU 관보와 표준화 기구의 발표를 지속적으로 모니터링하고,
+                        이행 기간 내에 새 버전으로 전환해야 합니다.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-terms">
+            <h2 id="related-terms" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <ul class="related-terms-list">
+                    <li><a href="/glossary/ko/term/%ED%91%9C%EC%A4%80%ED%99%94%20%EA%B8%B0%EA%B5%AC/">표준화 기구 (Standardization Body)</a> - CEN, CENELEC, ETSI 등 표준 개발 기관</li>
+                    <li><a href="/glossary/ko/term/%EC%A0%81%ED%95%A9%EC%84%B1%20%EC%84%A0%EC%96%B8/">적합성 선언 (Declaration of Conformity)</a> - 조화된 표준 준수를 통한 CE 마킹의 기초</li>
+                    <li><a href="/glossary/ko/term/%EC%9C%84%ED%97%98%20%EA%B4%80%EB%A6%AC%20%EC%8B%9C%EC%8A%A4%ED%85%9C/">위험 관리 시스템 (Risk Management System)</a> - EN ISO/IEC 23894로 표준화되는 영역</li>
+                    <li><a href="/glossary/ko/term/%EC%9D%B8%EA%B0%84%20%EA%B0%90%EB%8F%85/">인간 감독 (Human Oversight)</a> - 조화된 표준 개발 대상 요건 중 하나</li>
+                    <li><a href="/glossary/ko/term/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%20%ED%88%AC%EB%AA%85%EC%84%B1/">알고리즘 투명성 (Algorithm Transparency)</a> - 기술 문서화 표준과 연관된 개념</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-more">
+            <h2 id="learn-more" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more-list">
+                    <li>
+                        <a href="https://ec.europa.eu/growth/single-market/european-standards_en" target="_blank" rel="noopener noreferrer">
+                            EU 집행위원회 유럽 표준 페이지 - 조화된 표준의 법적 프레임워크
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cencenelec.eu/areas-of-work/cen-cenelec-topics/artificial-intelligence/" target="_blank" rel="noopener noreferrer">
+                            CEN-CENELEC AI 표준화 - EU AI Act 지원 표준 개발 현황
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.iso.org/committee/6794475.html" target="_blank" rel="noopener noreferrer">
+                            ISO/IEC JTC 1/SC 42 - AI 국제 표준 개발 위원회
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +636,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

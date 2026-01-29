@@ -52,126 +52,65 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
+
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .code-tab.active { background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table td { color: #cbd5e1; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
 
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="https://kaitrust.ai">홈</a>
             <span>›</span>
@@ -182,14 +121,13 @@
             <span class="current">Prophet</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
             <div class="term-category-badge">
                 <span>🤖</span>
                 <span>AI/ML</span>
             </div>
             <h1 class="term-title">Prophet</h1>
-            <p class="term-english">Prophet</p>
+            <p class="term-english">Meta Prophet</p>
             <div class="term-description">
                 <p>Meta의 시계열 예측 라이브러리. 계절성, 휴일 효과 자동 처리.</p>
             </div>
@@ -202,16 +140,245 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Prophet은 Meta(구 Facebook)에서 2017년 오픈소스로 공개한 시계열 예측 라이브러리입니다. 비즈니스 시계열 데이터(매출, 트래픽, 재고 등)의 예측에 특화되어 있으며, 통계학 배경 없이도 쉽게 사용할 수 있도록 설계되었습니다.</p>
+                <p>Prophet은 분해 가능한 시계열 모델(decomposable time series model)을 사용합니다. y(t) = g(t) + s(t) + h(t) + e(t) 형태로, 추세(trend), 계절성(seasonality), 휴일 효과(holiday), 오차(error)로 시계열을 분해합니다. 각 컴포넌트를 독립적으로 모델링하여 해석 가능성이 높습니다.</p>
+                <p>핵심 강점은 결측치, 이상치, 추세 변화에 강건하다는 점입니다. 실제 비즈니스 데이터는 누락이나 급격한 변화가 흔한데, Prophet은 이를 자동으로 처리합니다. 또한 휴일, 이벤트의 효과를 명시적으로 모델링할 수 있어 프로모션, 공휴일 영향을 반영할 수 있습니다.</p>
+                <p>실무에서 Prophet은 수요 예측, 용량 계획, 마케팅 효과 분석에 널리 사용됩니다. Python과 R 인터페이스를 제공하며, 몇 줄의 코드로 예측과 시각화가 가능합니다. 다만 최근에는 NeuralProphet, TimeGPT 같은 딥러닝 기반 대안도 주목받고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>from prophet import Prophet
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 데이터 준비 (ds: 날짜, y: 값)
+df = pd.DataFrame({
+    'ds': pd.date_range(start='2023-01-01', periods=365, freq='D'),
+    'y': [100 + i*0.5 + 20*np.sin(i*2*np.pi/7) + np.random.randn()*5
+          for i in range(365)]
+})
+
+# 기본 모델 학습
+model = Prophet()
+model.fit(df)
+
+# 미래 예측 (30일)
+future = model.make_future_dataframe(periods=30)
+forecast = model.predict(future)
+
+# 예측 결과 시각화
+fig1 = model.plot(forecast)
+plt.title('Prophet 예측 결과')
+plt.show()
+
+# 컴포넌트 분해 시각화 (추세, 주간 계절성)
+fig2 = model.plot_components(forecast)
+plt.show()
+
+# === 고급 설정 ===
+
+# 휴일 효과 추가 (한국 공휴일)
+korean_holidays = pd.DataFrame({
+    'holiday': 'korean_holiday',
+    'ds': pd.to_datetime(['2024-01-01', '2024-02-09', '2024-02-10',
+                          '2024-02-11', '2024-03-01', '2024-05-05',
+                          '2024-05-15', '2024-06-06', '2024-08-15',
+                          '2024-09-16', '2024-09-17', '2024-09-18',
+                          '2024-10-03', '2024-10-09', '2024-12-25']),
+    'lower_window': 0,  # 휴일 전 영향 범위
+    'upper_window': 1   # 휴일 후 영향 범위
+})
+
+model_with_holidays = Prophet(holidays=korean_holidays)
+model_with_holidays.fit(df)
+
+# 계절성 커스터마이징
+model_custom = Prophet(
+    yearly_seasonality=True,
+    weekly_seasonality=True,
+    daily_seasonality=False,
+    seasonality_mode='multiplicative'  # 곱셈적 계절성
+)
+
+# 추가 계절성 (월간)
+model_custom.add_seasonality(
+    name='monthly',
+    period=30.5,
+    fourier_order=5
+)
+
+# 외부 변수(regressor) 추가
+df['promotion'] = [1 if i % 7 == 5 else 0 for i in range(365)]  # 토요일 프로모션
+
+model_with_regressor = Prophet()
+model_with_regressor.add_regressor('promotion')
+model_with_regressor.fit(df)
+
+# 미래 데이터에도 regressor 필요
+future_with_promo = model_with_regressor.make_future_dataframe(periods=30)
+future_with_promo['promotion'] = [1 if d.weekday() == 5 else 0
+                                   for d in future_with_promo['ds']]
+forecast = model_with_regressor.predict(future_with_promo)
+
+# 크로스 밸리데이션
+from prophet.diagnostics import cross_validation, performance_metrics
+
+cv_results = cross_validation(
+    model,
+    initial='180 days',  # 초기 학습 기간
+    period='30 days',    # 예측 간격
+    horizon='30 days'    # 예측 기간
+)
+metrics = performance_metrics(cv_results)
+print(f"MAPE: {metrics['mape'].mean():.2%}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 📊 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>Prophet은 오픈소스 라이브러리로 무료입니다. 학습 및 추론 시간은 데이터 크기와 설정에 따라 달라집니다.</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>항목</th>
+                        <th>일반적인 값</th>
+                        <th>비고</th>
+                    </tr>
+                    <tr>
+                        <td>라이선스</td>
+                        <td>MIT (무료)</td>
+                        <td>상용 사용 가능</td>
+                    </tr>
+                    <tr>
+                        <td>학습 시간 (1년 일간 데이터)</td>
+                        <td>1-5초</td>
+                        <td>Stan 백엔드 기준</td>
+                    </tr>
+                    <tr>
+                        <td>학습 시간 (5년 일간 데이터)</td>
+                        <td>5-30초</td>
+                        <td>계절성 복잡도에 따라 증가</td>
+                    </tr>
+                    <tr>
+                        <td>예측 시간 (1년 미래)</td>
+                        <td>~1초</td>
+                        <td>불확실성 구간 포함</td>
+                    </tr>
+                    <tr>
+                        <td>권장 최소 데이터</td>
+                        <td>1-2년</td>
+                        <td>연간 계절성 학습 위해</td>
+                    </tr>
+                </table>
+                <p><strong>대안 비교:</strong> NeuralProphet은 딥러닝 기반으로 복잡한 패턴에 강하지만 학습이 느립니다. TimeGPT(Nixtla)는 API 기반 서비스로 $0.99/1000 rows부터 시작합니다. ARIMA는 파라미터 튜닝이 복잡하지만 계산이 빠릅니다.</p>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <p class="conv-quote">"다음 분기 서버 용량 계획을 세워야 하는데, Prophet으로 트래픽 예측 모델 만들어 둔 게 있어요. 공휴일 효과까지 반영되어 있어서 설날, 추석 기간 피크도 예측 가능합니다. 불확실성 구간도 같이 보면서 버퍼를 잡으면 될 것 같아요."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <p class="conv-quote">"Prophet과 ARIMA의 차이점은 뭔가요?" - "ARIMA는 통계적 가정이 엄격하고 파라미터 튜닝이 복잡해요. Prophet은 비전문가도 쓸 수 있게 설계됐고, 결측치나 이상치에 강건합니다. 다만 고빈도 데이터(분단위)나 복잡한 다변량 관계에서는 딥러닝 모델이 더 나을 수 있어요."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <p class="conv-quote">"Prophet의 seasonality_mode를 multiplicative로 바꾸니까 예측이 훨씬 좋아졌어요. 우리 매출 데이터는 전체 규모에 비례해서 계절 변동이 커지거든요. 1월 100만원일 때 10% 변동이면 12월 500만원일 때는 50만원 변동이니까요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>데이터 부족 상태에서 사용</strong>
+                        <p>Prophet은 최소 1-2년 이상의 데이터가 있어야 연간 계절성을 학습할 수 있습니다. 데이터가 부족하면 yearly_seasonality=False로 설정하거나, 더 간단한 모델을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>외부 요인 무시</strong>
+                        <p>코로나 같은 특수 상황, 경쟁사 이벤트, 정책 변화는 Prophet이 자동으로 학습하지 못합니다. 이런 외부 변수는 add_regressor로 명시적으로 추가하거나, 해당 기간을 제외하고 학습해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>cross_validation으로 검증</strong>
+                        <p>Prophet 내장 cross_validation 함수로 반드시 모델을 검증하세요. MAPE, MAE 등 지표를 확인하고, 특정 기간에 오차가 큰지 분석해야 합니다. 과적합된 모델은 미래 예측에서 크게 빗나갑니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/ARIMA/" class="related-term-link">ARIMA</a>
+                <a href="/ko/term/Time%20Series/" class="related-term-link">Time Series</a>
+                <a href="/ko/term/Forecasting/" class="related-term-link">Forecasting</a>
+                <a href="/ko/term/Seasonality/" class="related-term-link">Seasonality</a>
+                <a href="/ko/term/NeuralProphet/" class="related-term-link">NeuralProphet</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://facebook.github.io/prophet/" target="_blank" class="learn-link">
+                    <span>📄 Prophet 공식 문서</span>
+                </a>
+                <a href="https://peerj.com/preprints/3190/" target="_blank" class="learn-link">
+                    <span>📝 Prophet 원본 논문</span>
+                </a>
+                <a href="https://github.com/facebook/prophet" target="_blank" class="learn-link">
+                    <span>🎓 Prophet GitHub 저장소</span>
+                </a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

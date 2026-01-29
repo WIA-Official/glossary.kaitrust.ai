@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,116 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Dockerfile은 Docker 이미지를 빌드하기 위한 텍스트 기반 스크립트입니다. 베이스 이미지 선택부터 의존성 설치, 애플리케이션 복사, 실행 명령어까지 컨테이너 환경을 코드로 정의합니다. "Infrastructure as Code"의 가장 기본적인 형태라 할 수 있습니다.</p>
+                <p>Dockerfile의 각 명령어(FROM, RUN, COPY 등)는 이미지의 새로운 레이어를 생성합니다. 레이어는 캐시되므로, 자주 변경되는 명령어를 아래쪽에 배치하면 빌드 시간을 크게 줄일 수 있습니다. 예를 들어, package.json만 먼저 복사해서 npm install 하면 코드 변경 시 의존성 캐시를 재사용합니다.</p>
+                <p>멀티스테이지 빌드는 최적화된 프로덕션 이미지를 만드는 핵심 기법입니다. 빌드 스테이지에서는 컴파일러와 개발 도구를 사용하고, 최종 스테이지에서는 실행 바이너리만 복사하여 이미지 크기를 수십 MB로 줄일 수 있습니다.</p>
+                <p>보안을 위해 non-root 사용자로 실행하고, .dockerignore로 불필요한 파일을 제외하며, 특정 버전의 베이스 이미지를 사용하는 것이 좋습니다. latest 태그는 재현성을 떨어뜨리므로 프로덕션에서는 지양합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="dockerfile">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># 멀티스테이지 빌드 - Node.js 애플리케이션
+# Stage 1: Build
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# 의존성 먼저 설치 (캐시 최적화)
+COPY package*.json ./
+RUN npm ci --only=production
+
+# 소스 코드 복사 및 빌드
+COPY . .
+RUN npm run build
+
+# Stage 2: Production
+FROM node:20-alpine AS production
+WORKDIR /app
+
+# 보안: non-root 사용자 생성
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# 빌드 결과물만 복사
+COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./
+
+# non-root 사용자로 실행
+USER nextjs
+
+# 헬스체크
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
+
+EXPOSE 3000
+CMD ["node", "dist/main.js"]</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "이미지 크기가 1.2GB인데 너무 커. 멀티스테이지 빌드로 줄여보자."</p>
+                <p><strong class="role-junior">주니어:</strong> "alpine 베이스 이미지 쓰고, devDependencies 빼면 될까요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "그것도 좋고, distroless 이미지 써보는 것도 고려해봐. 보안에도 좋아."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Dockerfile 빌드 속도를 최적화하는 방법을 설명해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "레이어 캐시를 활용합니다. 자주 변경되지 않는 의존성 설치를 먼저 하고, 소스 코드 복사를 나중에 합니다. 또한 .dockerignore로 불필요한 파일을 제외하고, BuildKit의 병렬 빌드 기능을 활용합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "FROM node:latest 대신 특정 버전 명시해주세요. 그리고 RUN 명령어 여러 개를 && 로 합치면 레이어 수가 줄어요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, root로 실행되고 있네요. USER 명령어로 non-root 사용자 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>latest 태그는 빌드 재현성이 없음 - 항상 특정 버전 명시 (예: node:20.10.0-alpine3.18)</li>
+                <li>시크릿을 COPY나 ENV로 넣지 말 것 - 이미지 히스토리에 남음. BuildKit secrets 사용</li>
+                <li>ADD보다 COPY 권장 - ADD는 원격 URL 다운로드, tar 압축 해제 등 예상치 못한 동작 있음</li>
+                <li class="info">docker build --no-cache 옵션으로 가끔 전체 재빌드하여 보안 업데이트 적용</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+                <a href="/ko/term/Earthly/" class="related-link">Earthly</a>
+                <a href="/ko/term/Helm/" class="related-link">Helm</a>
+                <a href="/ko/term/Environment%20Variable/" class="related-link">Environment Variable</a>
+                <a href="/ko/term/IaC/" class="related-link">IaC</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/" target="_blank" rel="noopener">Docker 공식 Dockerfile 베스트 프랙티스</a></li>
+                <li><span class="type-official"></span><a href="https://docs.docker.com/build/building/multi-stage/" target="_blank" rel="noopener">Multi-stage builds 공식 가이드</a></li>
+                <li><span class="type-tool"></span><a href="https://hadolint.github.io/hadolint/" target="_blank" rel="noopener">Hadolint - Dockerfile Linter</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +323,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

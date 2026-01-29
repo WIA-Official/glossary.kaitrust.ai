@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Svelte (Svelte Framework) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="컴파일 타임에 JavaScript로 변환되는 UI 프레임워크. Virtual DOM 없이 직접 DOM 조작.">
-    <meta name="keywords" content="Svelte, Svelte Framework, AI 용어, KAITRUST, AI 백과사전, 웹개발">
+    <title>Svelte | 컴파일러 기반 UI 프레임워크 | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Svelte는 빌드 시 순수 JavaScript로 컴파일되는 UI 프레임워크입니다. Virtual DOM 없이 직접 DOM을 조작하여 뛰어난 런타임 성능을 제공하며, 간결한 문법이 특징입니다.">
+    <meta name="keywords" content="Svelte, 스벨트, 컴파일러 프레임워크, Virtual DOM 없음, 리액티브, $ 구문, Svelte 5, Runes, Signals, 번들 크기, Rich Harris, 프론트엔드, 웹개발">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Svelte/">
 
     <!-- Open Graph -->
@@ -202,6 +202,197 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">Svelte는 Rich Harris가 개발한 컴파일러 기반 UI 프레임워크입니다. React, Vue와 달리 런타임 프레임워크 없이 빌드 시 순수 JavaScript로 컴파일됩니다. Virtual DOM diffing 없이 직접 DOM을 조작하여 작은 번들 크기와 뛰어난 런타임 성능을 제공합니다.</p>
+                <p style="margin-bottom: 1rem;">Svelte의 핵심 철학은 "Less code, more done"입니다. 리액티비티가 언어 수준에서 지원되어 $ 기호만으로 반응형 선언이 가능합니다. let count = 0; 만으로 반응형 변수가 되고, $: doubled = count * 2; 로 파생 값이 자동 계산됩니다. useState, useEffect 같은 훅이 필요 없습니다.</p>
+                <p style="margin-bottom: 1rem;">Svelte 5(2024)에서는 Runes라는 새로운 리액티비티 시스템이 도입되었습니다. $state(), $derived(), $effect() 등의 rune으로 더 명시적인 반응성 제어가 가능합니다. 기존 $ 문법과 공존하면서 컴포넌트 외부에서도 반응형 로직을 쉽게 재사용할 수 있게 되었습니다.</p>
+                <p>SvelteKit은 Next.js에 대응되는 Svelte의 풀스택 프레임워크입니다. 파일 기반 라우팅, SSR/SSG/ISR, API Routes, 레이아웃 시스템을 제공합니다. Vercel이 Svelte를 만든 Rich Harris를 채용하여 적극 지원하고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>&lt;!-- Svelte 5 Runes 예제 --&gt;
+&lt;script lang="ts"&gt;
+  // $state - 반응형 상태
+  let count = $state(0);
+  let name = $state('');
+  let items = $state&lt;string[]&gt;([]);
+
+  // $derived - 파생 값 (자동 계산)
+  const doubled = $derived(count * 2);
+  const isValid = $derived(name.length &gt;= 3);
+
+  // $effect - 사이드 이펙트 (useEffect 대체)
+  $effect(() =&gt; {
+    console.log(`Count changed: ${count}`);
+    // 클린업 함수 반환 가능
+    return () =&gt; console.log('Cleanup');
+  });
+
+  // 이벤트 핸들러
+  function increment() {
+    count++;  // 직접 변경 가능
+  }
+
+  function addItem() {
+    if (name) {
+      items.push(name);  // 배열 직접 수정 가능
+      name = '';
+    }
+  }
+
+  // Props 정의 (Svelte 5)
+  interface Props {
+    title: string;
+    onSave?: (data: string) =&gt; void;
+  }
+  let { title, onSave }: Props = $props();
+&lt;/script&gt;
+
+&lt;!-- 템플릿 - HTML과 거의 동일 --&gt;
+&lt;div class="container"&gt;
+  &lt;h1&gt;{title}&lt;/h1&gt;
+
+  &lt;button onclick={increment}&gt;
+    Count: {count} (doubled: {doubled})
+  &lt;/button&gt;
+
+  &lt;input
+    bind:value={name}
+    placeholder="이름 입력"
+    class:invalid={!isValid}
+  /&gt;
+
+  {#if isValid}
+    &lt;button onclick={addItem}&gt;추가&lt;/button&gt;
+  {/if}
+
+  &lt;ul&gt;
+    {#each items as item, index (item)}
+      &lt;li&gt;
+        {index + 1}. {item}
+        &lt;button onclick={() =&gt; items.splice(index, 1)}&gt;삭제&lt;/button&gt;
+      &lt;/li&gt;
+    {:else}
+      &lt;li&gt;항목이 없습니다&lt;/li&gt;
+    {/each}
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  /* 컴포넌트 스코프 CSS (자동 스코핑) */
+  .container {
+    padding: 1rem;
+  }
+
+  .invalid {
+    border-color: red;
+  }
+
+  button {
+    background: #ff3e00;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+&lt;/style&gt;
+
+&lt;!-- 재사용 가능한 반응형 로직 (Svelte 5) --&gt;
+&lt;!-- lib/counter.svelte.ts --&gt;
+&lt;script context="module" lang="ts"&gt;
+export function createCounter(initial = 0) {
+  let count = $state(initial);
+
+  return {
+    get count() { return count; },
+    increment: () =&gt; count++,
+    decrement: () =&gt; count--,
+    reset: () =&gt; count = initial
+  };
+}
+&lt;/script&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">프레임워크 선택에서:</p>
+                    <p>"번들 크기가 중요한 임베드 위젯이에요. React는 기본 30KB 이상인데, Svelte는 컴포넌트만 번들되어서 훨씬 작아요. 복잡한 상태 관리도 필요 없고 간결한 코드가 장점이에요."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"Svelte가 React보다 빠른 이유는?" - "Virtual DOM diffing이 없어요. Svelte는 컴파일 시점에 어떤 변수가 변경될 때 어떤 DOM을 업데이트할지 결정합니다. 런타임에 비교 연산이 없어서 빠르고, 번들에 프레임워크 코드가 포함되지 않아요."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">팀 기술 스택 논의에서:</p>
+                    <p>"Svelte 도입하면 채용이 어렵지 않나요?" - "생태계는 작지만 배우기 쉬워요. React 경험자면 며칠이면 적응합니다. 문법이 직관적이라 오히려 온보딩이 빨라요. 다만 복잡한 라이브러리가 필요하면 React 생태계가 유리합니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">생태계가 React/Vue보다 작습니다. 필요한 라이브러리가 없을 수 있으므로, 프로젝트 요구사항에 맞는 라이브러리 존재 여부를 먼저 확인하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">Svelte 5의 Runes는 기존 문법과 다릅니다. 기존 Svelte 4 프로젝트 마이그레이션 시 코드 수정이 필요할 수 있습니다. 공식 마이그레이션 가이드를 참고하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">TypeScript 지원이 완전하지 않을 수 있습니다. 특히 템플릿 내 타입 추론에서 React TSX보다 제한이 있을 수 있으므로, 복잡한 타입 사용 시 확인이 필요합니다.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/SvelteKit/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">SvelteKit</a>
+                <a href="/ko/term/React/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">React</a>
+                <a href="/ko/term/Vue/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Vue</a>
+                <a href="/ko/term/Virtual%20DOM/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Virtual DOM</a>
+                <a href="/ko/term/Signals/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Signals</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://svelte.dev/docs" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Svelte 공식 문서
+                </a>
+                <a href="https://svelte.dev/tutorial" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Svelte 인터랙티브 튜토리얼
+                </a>
+                <a href="https://kit.svelte.dev/docs" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> SvelteKit 문서
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

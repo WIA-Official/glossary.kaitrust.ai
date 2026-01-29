@@ -50,168 +50,218 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#devops">DevOps</a>
-            <span>›</span>
-            <span class="current">Prometheus</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span><a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span><a href="https://glossary.kaitrust.ai/#devops">DevOps</a><span>›</span><span class="current">Prometheus</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>🔧</span>
-                <span>DevOps</span>
-            </div>
+            <div class="term-category-badge"><span>🔧</span><span>DevOps</span></div>
             <h1 class="term-title">Prometheus</h1>
             <p class="term-english">프로메테우스</p>
-            <div class="term-description">
-                <p>시계열 메트릭 수집/저장 시스템. PromQL로 쿼리. Grafana와 함께.</p>
-            </div>
+            <div class="term-description"><p>시계열 메트릭 수집/저장 시스템. PromQL로 쿼리. Grafana와 함께.</p></div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#devops" class="term-action-btn btn-secondary">
-                    🔧 DevOps 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#devops" class="term-action-btn btn-secondary">🔧 DevOps 더보기</a>
             </div>
         </article>
+
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Prometheus는 SoundCloud에서 2012년 개발을 시작하여 2016년 CNCF(Cloud Native Computing Foundation)의 두 번째 졸업 프로젝트가 된 오픈소스 모니터링 시스템입니다. 시계열 데이터베이스(TSDB)를 내장하여 메트릭을 수집, 저장, 조회하는 올인원 솔루션입니다.</p>
+                <p>핵심 특징은 Pull 모델입니다. Prometheus가 설정된 대상(targets)에 HTTP로 접근하여 /metrics 엔드포인트에서 메트릭을 가져옵니다. 이 방식은 모니터링 대상이 Prometheus를 알 필요 없어 느슨한 결합을 유지합니다. 기본 수집 주기(scrape_interval)는 15초입니다.</p>
+                <p>PromQL(Prometheus Query Language)은 강력한 메트릭 조회 언어입니다. rate(), increase(), histogram_quantile() 같은 함수로 복잡한 계산을 표현할 수 있습니다. 예: rate(http_requests_total[5m])은 5분간 초당 요청 수를 계산합니다.</p>
+                <p>실무에서는 Prometheus + Grafana(시각화) + Alertmanager(알림) 조합이 표준입니다. Kubernetes 환경에서는 ServiceMonitor CRD로 자동 타겟 디스커버리가 가능하며, 대규모 환경에서는 Thanos나 Mimir로 장기 보관과 고가용성을 확보합니다.</p>
+            </div>
+        </section>
+
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># prometheus.yml - Prometheus 설정 파일
+global:
+  scrape_interval: 15s      # 메트릭 수집 주기
+  evaluation_interval: 15s  # 룰 평가 주기
+  external_labels:
+    cluster: 'production'
+    region: 'ap-northeast-2'
+
+# 알림 규칙 파일
+rule_files:
+  - '/etc/prometheus/rules/*.yml'
+
+# Alertmanager 설정
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+# 메트릭 수집 대상
+scrape_configs:
+  # Prometheus 자체 메트릭
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Kubernetes 서비스 디스커버리
+  - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      # prometheus.io/scrape: "true" 어노테이션이 있는 파드만 수집
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        target_label: __address__
+        regex: (.+)
+        replacement: ${1}:$1
+
+  # Node Exporter (서버 메트릭)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+---
+# alert-rules.yml - 알림 규칙
+groups:
+  - name: application
+    rules:
+      # 높은 에러율 알림
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(http_requests_total{status=~"5.."}[5m])) by (service)
+          /
+          sum(rate(http_requests_total[5m])) by (service)
+          > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.service }} 에러율 5% 초과"
+          description: "최근 5분간 에러율: {{ $value | humanizePercentage }}"
+
+      # 높은 레이턴시 알림
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service)
+          ) > 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.service }} P95 레이턴시 1초 초과"
+
+---
+# 유용한 PromQL 쿼리 예시
+
+# 1. CPU 사용률 (%)
+100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+
+# 2. 메모리 사용률 (%)
+(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+
+# 3. 초당 요청 수 (RPS)
+sum(rate(http_requests_total[5m])) by (service)
+
+# 4. P99 응답 시간
+histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))
+
+# 5. 파드 재시작 횟수 (최근 1시간)
+increase(kube_pod_container_status_restarts_total[1h])</code></pre>
+            </div>
+        </section>
+
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "Prometheus 메트릭 보관 기간이 15일인데, 월간 리포트 뽑으려면 장기 보관이 필요해요. Thanos 도입 검토해봤어요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "네, Thanos Sidecar로 S3에 저장하면 무제한 보관 가능하고, 비용도 월 50달러 정도면 충분할 것 같습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Prometheus의 Pull 모델과 Push 모델의 차이점은 뭔가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "Pull 모델은 Prometheus가 대상에서 메트릭을 가져와서 네트워크 문제 시 발견이 쉽고, Push 모델은 대상이 메트릭을 보내서 임시 작업에 적합합니다. Prometheus는 Pull 기본이지만 Pushgateway로 Push도 지원합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 rate() 쿼리에서 range가 scrape_interval보다 작으면 정확한 값이 안 나와요. [1m]을 최소 [2m]으로 올려야 해요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, 맞아요. scrape_interval이 15초니까 최소 4배인 1분 이상으로 설정하겠습니다."</p>
+            </div>
+        </section>
+
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>카디널리티(고유 레이블 조합 수)가 높으면 메모리 사용량이 급증합니다. user_id 같은 고카디널리티 레이블은 피하세요</li>
+                <li>Prometheus 단일 인스턴스는 SPOF입니다. 프로덕션에서는 2개 이상 운영하세요</li>
+                <li>rate() 함수의 range는 scrape_interval의 최소 4배 이상으로 설정해야 정확합니다</li>
+                <li class="info">장기 보관이 필요하면 Thanos, Mimir, VictoriaMetrics 같은 장기 저장소를 도입하세요</li>
+            </ul>
+        </section>
+
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Grafana/" class="related-link">Grafana</a>
+                <a href="/ko/term/Monitoring/" class="related-link">Monitoring</a>
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+                <a href="/ko/term/PagerDuty/" class="related-link">PagerDuty</a>
+                <a href="/ko/term/OpenTelemetry/" class="related-link">OpenTelemetry</a>
+            </div>
+        </section>
+
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://prometheus.io/docs/" target="_blank" rel="noopener">Prometheus 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://prometheus.io/docs/prometheus/latest/querying/basics/" target="_blank" rel="noopener">PromQL 기초 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://promlabs.com/promql-cheat-sheet/" target="_blank" rel="noopener">PromQL 치트시트</a></li>
+            </ul>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,157 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Jenkins는 2004년 Sun Microsystems에서 시작된 세계에서 가장 널리 사용되는 오픈소스 CI/CD 자동화 서버입니다. 1,800개 이상의 플러그인 생태계를 통해 거의 모든 개발 도구와 통합할 수 있으며, Java로 작성되어 크로스 플랫폼에서 동작합니다.</p>
+                <p>Jenkins의 핵심은 파이프라인입니다. Jenkinsfile이라는 Groovy DSL로 빌드, 테스트, 배포 단계를 코드로 정의합니다. Declarative Pipeline은 가독성이 좋고 초보자 친화적이며, Scripted Pipeline은 복잡한 로직을 유연하게 구현할 수 있습니다. 파이프라인 코드는 소스 저장소에 함께 관리되어 버전 관리가 가능합니다.</p>
+                <p>확장성 측면에서 Jenkins는 Master-Agent 아키텍처를 지원합니다. Master는 파이프라인 실행을 오케스트레이션하고, Agent(워커)에서 실제 빌드를 수행합니다. Kubernetes 환경에서는 Pod Agent로 동적으로 빌드 환경을 프로비저닝할 수 있어 리소스 효율성이 높습니다.</p>
+                <p>최근에는 GitHub Actions, GitLab CI, CircleCI 같은 SaaS 솔루션이 떠오르고 있지만, 온프레미스 환경이나 복잡한 레거시 빌드가 있는 기업에서는 여전히 Jenkins가 표준입니다. 관리 오버헤드는 높지만 커스터마이징의 자유도는 타의 추종을 불허합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="groovy">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>// Jenkinsfile - Declarative Pipeline 예제
+pipeline {
+    agent {
+        kubernetes {
+            yaml '''
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: maven
+                image: maven:3.9-eclipse-temurin-17
+                command: ['sleep', 'infinity']
+              - name: docker
+                image: docker:24-dind
+                securityContext:
+                  privileged: true
+            '''
+        }
+    }
+
+    environment {
+        DOCKER_REGISTRY = 'registry.company.com'
+        IMAGE_NAME = 'api-server'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                container('maven') {
+                    sh 'mvn clean verify -Dmaven.test.failure.ignore=false'
+                }
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                    jacoco execPattern: '**/target/*.exec'
+                }
+            }
+        }
+
+        stage('Build Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                container('docker') {
+                    sh """
+                        docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} .
+                        docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER}
+                    """
+                }
+            }
+        }
+
+        stage('Deploy to Staging') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh "kubectl set image deployment/api-server api=${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} -n staging"
+            }
+        }
+    }
+
+    post {
+        failure {
+            slackSend channel: '#build-alerts', color: 'danger',
+                      message: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">데브옵스:</strong> "Jenkins 마스터 업그레이드 해야 하는데, 플러그인 호환성 때문에 미루고 있어요. 언제 점검 시간 잡을까요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "그 전에 Jenkinsfile 문법이 deprecated 되는 부분 먼저 수정해야 할 것 같아요. `node` 블록 대신 `agent` 쓰는 식으로요."</p>
+                <p><strong class="role-senior">데브옵스:</strong> "좋아요. 테스트 Jenkins 인스턴스에서 먼저 검증하고 롤백 플랜 세워서 진행하죠."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Jenkins에서 빌드 시간을 단축하기 위해 어떤 방법을 쓰셨나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "parallel 스테이지로 독립적인 테스트를 동시에 돌리고, 캐시를 활용해서 의존성 다운로드 시간을 줄였습니다. 또 Kubernetes Pod Agent를 써서 빌드 환경을 빠르게 프로비저닝했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-senior">리뷰어:</strong> "Jenkinsfile에서 credentials를 하드코딩하면 안 됩니다. withCredentials 블록으로 바꾸세요."</p>
+                <p><strong class="role-junior">개발자:</strong> "네, Jenkins Credentials Store에 등록하고 credentials() 함수로 참조하도록 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>플러그인 버전 충돌과 보안 취약점이 자주 발생합니다. 주기적인 업데이트와 플러그인 최소화가 필요합니다</li>
+                <li>Scripted Pipeline의 무분별한 Groovy 코드는 유지보수 악몽입니다. Shared Library로 공통 로직을 분리하세요</li>
+                <li class="info">새 프로젝트는 GitHub Actions나 GitLab CI처럼 관리 부담이 적은 솔루션도 고려해보세요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Docker/" class="related-link">Docker</a>
+                <a href="/ko/term/Kubernetes/" class="related-link">Kubernetes</a>
+                <a href="/ko/term/GitOps/" class="related-link">GitOps</a>
+                <a href="/ko/term/ArgoCD/" class="related-link">ArgoCD</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://www.jenkins.io/doc/" target="_blank">Jenkins 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.jenkins.io/doc/book/pipeline/" target="_blank">Jenkins Pipeline 가이드</a></li>
+                <li><span class="type-community"></span><a href="https://github.com/jenkinsci/jenkins" target="_blank">Jenkins GitHub 레포지토리</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +364,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,232 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>데이터 웨어하우스(Data Warehouse)는 여러 소스에서 수집한 데이터를 분석 목적에 맞게 통합하고 정제하여 저장하는 중앙 집중식 저장소입니다. OLTP(Online Transaction Processing) 시스템과 달리 OLAP(Online Analytical Processing)에 최적화되어 복잡한 분석 쿼리를 빠르게 실행할 수 있습니다.</p>
+                <p>데이터 웨어하우스의 핵심 설계 패턴은 스타 스키마(Star Schema)입니다. 중앙에 사실 테이블(Fact Table)이 있고, 주변에 차원 테이블(Dimension Table)이 별 모양으로 연결됩니다. 사실 테이블에는 측정값(매출액, 수량 등)이, 차원 테이블에는 분석 관점(날짜, 제품, 지역 등)이 저장됩니다.</p>
+                <p>클라우드 기반 데이터 웨어하우스인 Snowflake, BigQuery, Redshift는 컴퓨팅과 스토리지를 분리하여 탄력적인 확장이 가능합니다. 필요할 때만 컴퓨팅 리소스를 늘렸다가 분석이 끝나면 줄일 수 있어 비용 효율적입니다. 특히 Snowflake의 가상 웨어하우스 개념은 여러 팀이 독립적으로 쿼리를 실행하면서도 동일한 데이터에 접근할 수 있게 합니다.</p>
+                <p>최근에는 데이터 레이크하우스(Data Lakehouse) 아키텍처가 등장하여 데이터 레이크의 저비용 저장과 데이터 웨어하우스의 성능을 결합합니다. Delta Lake, Apache Iceberg 같은 테이블 포맷이 이를 가능하게 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="sql">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>-- Star Schema 설계 예제: 판매 분석 데이터 웨어하우스
+
+-- 1. 차원 테이블: 날짜 차원
+CREATE TABLE dim_date (
+    date_key INT PRIMARY KEY,
+    full_date DATE NOT NULL,
+    year INT,
+    quarter INT,
+    month INT,
+    month_name VARCHAR(20),
+    week INT,
+    day_of_week INT,
+    day_name VARCHAR(20),
+    is_weekend BOOLEAN,
+    is_holiday BOOLEAN
+);
+
+-- 2. 차원 테이블: 제품 차원
+CREATE TABLE dim_product (
+    product_key INT PRIMARY KEY,
+    product_id VARCHAR(50),
+    product_name VARCHAR(200),
+    category VARCHAR(100),
+    subcategory VARCHAR(100),
+    brand VARCHAR(100),
+    unit_price DECIMAL(10, 2)
+);
+
+-- 3. 차원 테이블: 고객 차원
+CREATE TABLE dim_customer (
+    customer_key INT PRIMARY KEY,
+    customer_id VARCHAR(50),
+    customer_name VARCHAR(200),
+    segment VARCHAR(50),    -- Enterprise, SMB, Consumer
+    region VARCHAR(100),
+    country VARCHAR(100),
+    city VARCHAR(100)
+);
+
+-- 4. 사실 테이블: 판매 사실 (중앙)
+CREATE TABLE fact_sales (
+    sale_key BIGINT PRIMARY KEY,
+    date_key INT REFERENCES dim_date(date_key),
+    product_key INT REFERENCES dim_product(product_key),
+    customer_key INT REFERENCES dim_customer(customer_key),
+    -- 측정값 (Measures)
+    quantity INT,
+    unit_price DECIMAL(10, 2),
+    discount_amount DECIMAL(10, 2),
+    total_amount DECIMAL(12, 2),
+    profit DECIMAL(10, 2)
+);
+
+-- 분석 쿼리 예제: 월별 카테고리별 매출
+SELECT
+    d.year,
+    d.month_name,
+    p.category,
+    SUM(f.total_amount) AS total_sales,
+    SUM(f.profit) AS total_profit,
+    COUNT(DISTINCT f.customer_key) AS unique_customers
+FROM fact_sales f
+JOIN dim_date d ON f.date_key = d.date_key
+JOIN dim_product p ON f.product_key = p.product_key
+WHERE d.year = 2024
+GROUP BY d.year, d.month, d.month_name, p.category
+ORDER BY d.month, total_sales DESC;</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">데이터엔지니어:</strong> "현재 OLTP DB에서 직접 리포트 쿼리를 실행하고 있는데, 운영 DB에 부하를 주고 있어요. 데이터 웨어하우스 구축을 제안합니다."</p>
+                <p><strong class="role-junior">분석가:</strong> "그럼 실시간 데이터는 못 보는 건가요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "배치로 1시간마다 동기화하면 대부분의 분석에는 충분해요. 정말 실시간이 필요한 대시보드는 별도로 스트리밍 파이프라인을 구축하는 게 좋습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "스타 스키마와 스노우플레이크 스키마의 차이점을 설명해주세요."</p>
+                <p><strong class="role-interviewee">지원자:</strong> "스타 스키마는 차원 테이블이 비정규화되어 조인이 단순합니다. 스노우플레이크 스키마는 차원을 정규화해서 저장 공간은 절약되지만 조인이 복잡해져요. 현대 클라우드 DW는 컴퓨팅 파워가 충분해서 스타 스키마를 선호합니다. 쿼리 성능과 이해 용이성이 더 중요하거든요."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 사실 테이블에 surrogate key 대신 natural key를 사용했네요. 왜 그렇게 했나요?"</p>
+                <p><strong class="role-author">작성자:</strong> "아, surrogate key로 변경하겠습니다. SCD(Slowly Changing Dimension) 처리할 때 문제가 생길 수 있겠네요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>ETL/ELT 파이프라인 없이 수동으로 데이터를 넣으면 데이터 품질 문제가 발생합니다. 반드시 자동화된 파이프라인과 데이터 검증을 구축하세요.</li>
+                <li>클라우드 DW는 쿼리량에 따라 비용이 청구됩니다. 비효율적인 쿼리나 무한 루프가 예상치 못한 비용을 발생시킬 수 있으니 쿼리 비용 모니터링을 설정하세요.</li>
+                <li class="info">차원 테이블의 변경 이력을 추적하려면 SCD Type 2(Slowly Changing Dimension)를 적용하세요. 유효 시작일/종료일 컬럼을 추가하면 시점별 분석이 가능합니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/ETL/" class="related-link">ETL</a>
+                <a href="/ko/term/Delta%20Lake/" class="related-link">Delta Lake</a>
+                <a href="/ko/term/Databricks/" class="related-link">Databricks</a>
+                <a href="/ko/term/Feature%20Store/" class="related-link">Feature Store</a>
+                <a href="/ko/term/Data%20Lakehouse/" class="related-link">Data Lakehouse</a>
+            </div>
+        </section>
+
+        <!-- 실제 장애 사례 -->
+        <section class="term-section" aria-labelledby="incident-title">
+            <h2 class="section-title" id="incident-title">🔥 실제 장애 사례</h2>
+            <div class="incident-list">
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">리테일 기업</span>
+                        <span class="incident-year">2022</span>
+                    </div>
+                    <h4 class="incident-title">잘못된 쿼리로 BigQuery 비용 $30,000 발생</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> 분석가가 실수로 전체 테이블 스캔 쿼리를 무한 루프로 실행, 비용 제한 미설정</p>
+                        <p><strong>영향:</strong> 주말 동안 5TB 테이블 1000회 스캔, 예상치 못한 $30,000 청구</p>
+                        <p><strong>해결:</strong> 쿼리 강제 중단, Google 서포트에 비용 검토 요청</p>
+                        <p><strong>교훈:</strong> 쿼리 바이트 제한 설정, 슬롯 예약제 사용, 비용 알림 구성</p>
+                    </div>
+                </div>
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">스타트업 사례</span>
+                        <span class="incident-year">공통</span>
+                    </div>
+                    <h4 class="incident-title">ETL 실패로 리포트 데이터 불일치</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> 소스 시스템 스키마 변경을 ETL 파이프라인이 감지하지 못함</p>
+                        <p><strong>영향:</strong> 2주간 매출 리포트 수치 오류, 경영진 잘못된 의사결정</p>
+                        <p><strong>해결:</strong> 소스 데이터와 DW 데이터 일관성 검증 후 재적재</p>
+                        <p><strong>교훈:</strong> 데이터 품질 검증 자동화, 스키마 변경 감지 알림, 데이터 리콘실리에이션 프로세스 구축</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 이해도 퀴즈 -->
+        <section class="term-section" aria-labelledby="quiz-title">
+            <h2 class="section-title" id="quiz-title">📝 이해도 퀴즈</h2>
+            <div class="quiz-container" id="term-quiz">
+                <div class="quiz-item" data-correct="b">
+                    <p class="quiz-question"><strong>Q1.</strong> 스타 스키마(Star Schema)에서 사실 테이블(Fact Table)에 저장되는 것은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> A) 날짜, 제품명, 지역명</label>
+                        <label><input type="radio" name="q1" value="b"> B) 매출액, 수량 등 측정값(Measures)</label>
+                        <label><input type="radio" name="q1" value="c"> C) 고객 상세 정보</label>
+                        <label><input type="radio" name="q1" value="d"> D) ETL 로그</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="c">
+                    <p class="quiz-question"><strong>Q2.</strong> 클라우드 데이터 웨어하우스(Snowflake, BigQuery)의 핵심 장점은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> A) 무료로 사용 가능</label>
+                        <label><input type="radio" name="q2" value="b"> B) 로컬에서만 실행 가능</label>
+                        <label><input type="radio" name="q2" value="c"> C) 컴퓨팅과 스토리지 분리로 탄력적 확장 가능</label>
+                        <label><input type="radio" name="q2" value="d"> D) 실시간 트랜잭션 처리에 최적화</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="a">
+                    <p class="quiz-question"><strong>Q3.</strong> SCD Type 2(Slowly Changing Dimension Type 2)의 특징은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> A) 변경 이력을 유지하여 시점별 분석 가능 (유효 시작일/종료일)</label>
+                        <label><input type="radio" name="q3" value="b"> B) 변경 시 기존 레코드를 덮어씀</label>
+                        <label><input type="radio" name="q3" value="c"> C) 변경을 허용하지 않음</label>
+                        <label><input type="radio" name="q3" value="d"> D) 별도 테이블에 변경 로그만 저장</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-submit" onclick="checkQuiz()">정답 확인</button>
+                <div class="quiz-result"></div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://cloud.google.com/bigquery/docs" target="_blank" rel="noopener">Google BigQuery 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://docs.snowflake.com/" target="_blank" rel="noopener">Snowflake 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/" target="_blank" rel="noopener">Kimball Group - DW 설계 리소스</a></li>
+                <li><span class="type-blog"></span><a href="https://techblog.woowahan.com/2665/" target="_blank" rel="noopener">우아한형제들 - 데이터 웨어하우스 구축기</a></li>
+                <li><span class="type-video"></span><a href="https://www.youtube.com/watch?v=J326LIu-s-I" target="_blank" rel="noopener">Data Warehouse 기초 개념</a></li>
+                <li><span class="type-book"></span><a href="https://www.oreilly.com/library/view/the-data-warehouse/9781118530801/" target="_blank" rel="noopener">The Data Warehouse Toolkit (Kimball)</a></li>
+            </ul>
+        </section>
+
+        <!-- 질문 & 기여 -->
+        <section class="term-section" aria-labelledby="community-title">
+            <h2 class="section-title" id="community-title">💬 질문 & 기여</h2>
+            <div class="community-actions">
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[Data Warehouse] 질문: " class="community-btn btn-question" target="_blank">❓ 질문하기</a>
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[Data Warehouse] 수정 제안: " class="community-btn btn-suggest" target="_blank">✏️ 수정 제안</a>
+            </div>
+            <p class="community-note">이 페이지에 오류가 있거나 추가하고 싶은 내용이 있다면 알려주세요!</p>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +439,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

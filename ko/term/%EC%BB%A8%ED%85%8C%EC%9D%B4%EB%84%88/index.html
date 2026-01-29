@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,135 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>컨테이너(Container)는 애플리케이션과 그 실행에 필요한 모든 의존성(라이브러리, 설정 파일, 바이너리)을 하나의 패키지로 묶어 격리된 환경에서 실행하는 기술입니다. 가상머신과 달리 OS 커널을 공유하여 훨씬 가볍고 빠릅니다.</p>
+                <p>Docker는 2013년 등장하여 컨테이너 기술을 대중화했습니다. 컨테이너 이미지는 애플리케이션의 불변(Immutable) 스냅샷으로, 어디서나 동일하게 실행됩니다. "내 컴퓨터에서는 되는데"라는 문제를 해결합니다.</p>
+                <p>컨테이너 런타임에는 containerd, CRI-O 등이 있으며, Kubernetes에서 표준 인터페이스(CRI)를 통해 사용됩니다. Docker Desktop은 개발 환경에서, containerd는 프로덕션 환경에서 주로 사용됩니다.</p>
+                <p>이미지 레이어 시스템은 베이스 이미지 위에 변경사항만 쌓아 효율적인 저장과 배포를 가능하게 합니다. 멀티스테이지 빌드로 빌드 의존성과 런타임을 분리하여 최종 이미지 크기를 최소화할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="dockerfile">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Dockerfile: 멀티스테이지 빌드 예시
+# 빌드 스테이지
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+
+# 런타임 스테이지 (최소 이미지)
+FROM node:20-alpine AS runner
+WORKDIR /app
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 appuser
+
+COPY --from=builder --chown=appuser:nodejs /app/dist ./dist
+COPY --from=builder --chown=appuser:nodejs /app/node_modules ./node_modules
+
+USER appuser
+EXPOSE 3000
+ENV NODE_ENV=production
+
+CMD ["node", "dist/index.js"]
+
+---
+# docker-compose.yml: 멀티 컨테이너 구성
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://db:5432/mydb
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">DevOps:</strong> "이미지 빌드 시간이 너무 길어요. 레이어 캐싱 활용하게 Dockerfile 순서 좀 바꿔주세요."</p>
+                <p><strong class="role-junior">개발:</strong> "어떤 순서로 하면 되나요?"</p>
+                <p><strong class="role-senior">DevOps:</strong> "변경 빈도 낮은 거 먼저요. package.json 복사 후 npm install, 그다음 소스 코드 복사. 소스만 바뀌면 npm install 캐시 활용돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "컨테이너와 가상머신의 차이점을 설명해주세요."</p>
+                <p><strong class="role-interviewee">지원자:</strong> "VM은 하이퍼바이저 위에 각각 게스트 OS를 실행하지만, 컨테이너는 호스트 OS 커널을 공유합니다. 그래서 컨테이너는 수십 MB 크기에 수초 만에 시작되고, VM은 수 GB에 수분이 걸립니다. 컨테이너는 프로세스 격리, VM은 하드웨어 격리를 제공합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "Dockerfile에서 root로 실행하고 있네요. 보안상 non-root 유저 만들어서 실행하세요."</p>
+                <p><strong class="role-author">작성자:</strong> "USER 지시어로 권한 낮추겠습니다. UID 1000번대로 설정할게요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li class="">컨테이너에서 root로 프로세스를 실행하면 호스트 시스템에 보안 위험이 됩니다. 반드시 non-root 사용자를 생성하세요.</li>
+                <li class="">latest 태그는 버전 추적이 불가능합니다. 반드시 구체적인 버전 태그(예: node:20.10.0-alpine)를 사용하세요.</li>
+                <li class="info">멀티스테이지 빌드로 빌드 도구를 제외하면 이미지 크기를 50% 이상 줄일 수 있습니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Docker/" class="related-link">Docker</a>
+                <a href="/ko/term/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4/" class="related-link">쿠버네티스</a>
+                <a href="/ko/term/VM/" class="related-link">VM</a>
+                <a href="/ko/term/OCI/" class="related-link">OCI</a>
+                <a href="/ko/term/Container%20Registry/" class="related-link">Container Registry</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.docker.com/" target="_blank">Docker 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://opencontainers.org/" target="_blank">OCI (Open Container Initiative)</a></li>
+                <li><span class="type-tutorial"></span><a href="https://docs.docker.com/get-started/" target="_blank">Docker 시작 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +342,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

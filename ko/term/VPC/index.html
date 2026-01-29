@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,159 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>VPC(Virtual Private Cloud)는 퍼블릭 클라우드 내에서 논리적으로 격리된 프라이빗 네트워크 공간입니다. 온프레미스 데이터센터의 네트워크를 클라우드에서 재현할 수 있으며, IP 주소 범위, 서브넷, 라우팅 테이블, 게이트웨이를 완전히 제어합니다.</p>
+                <p>VPC는 서브넷으로 구분됩니다. 퍼블릭 서브넷은 인터넷 게이트웨이를 통해 외부와 통신하고, 프라이빗 서브넷은 NAT 게이트웨이를 통해서만 아웃바운드 통신이 가능합니다. 데이터베이스 같은 민감 리소스는 프라이빗 서브넷에 배치합니다.</p>
+                <p>보안 그룹(Security Group)은 인스턴스 레벨의 방화벽으로 인바운드/아웃바운드 트래픽을 제어합니다. 네트워크 ACL(NACL)은 서브넷 레벨에서 추가적인 보안 계층을 제공합니다. 두 가지를 조합하여 심층 방어(Defense in Depth)를 구현합니다.</p>
+                <p>VPC Peering으로 다른 VPC와 연결하고, Transit Gateway로 여러 VPC와 온프레미스 네트워크를 중앙에서 관리할 수 있습니다. PrivateLink를 사용하면 인터넷을 거치지 않고 AWS 서비스에 접근합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="terraform">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Terraform: AWS VPC 구성
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = {
+    Name = "main-vpc"
+  }
+}
+
+# 퍼블릭 서브넷 (AZ 2개)
+resource "aws_subnet" "public" {
+  count                   = 2
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.${count.index}.0/24"
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "public-subnet-${count.index + 1}"
+  }
+}
+
+# 프라이빗 서브넷 (DB용)
+resource "aws_subnet" "private" {
+  count             = 2
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.${count.index + 10}.0/24"
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+
+  tags = {
+    Name = "private-subnet-${count.index + 1}"
+  }
+}
+
+# 인터넷 게이트웨이
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+}
+
+# NAT 게이트웨이 (프라이빗 서브넷 아웃바운드용)
+resource "aws_nat_gateway" "main" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public[0].id
+}
+
+# 보안 그룹: 웹 서버
+resource "aws_security_group" "web" {
+  name        = "web-sg"
+  description = "Allow HTTP/HTTPS inbound"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# 보안 그룹: DB (웹 서버에서만 접근)
+resource "aws_security_group" "db" {
+  name        = "db-sg"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.web.id]  # 웹 SG에서만
+  }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">네트워크:</strong> "DB를 퍼블릭 서브넷에 두면 안 됩니다. 프라이빗 서브넷으로 옮기고 보안 그룹에서 웹 서버 SG만 허용하세요."</p>
+                <p><strong class="role-junior">개발:</strong> "그럼 로컬에서 DB 접속은 어떻게 하나요?"</p>
+                <p><strong class="role-senior">네트워크:</strong> "Bastion 호스트나 SSM Session Manager 쓰면 됩니다. 직접 외부 노출은 절대 안 돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "3-tier 아키텍처의 VPC 설계를 설명해주세요."</p>
+                <p><strong class="role-interviewee">지원자:</strong> "퍼블릭 서브넷에 ALB, 프라이빗 서브넷에 애플리케이션 서버, 별도 프라이빗 서브넷에 RDS를 배치합니다. 보안 그룹 체인으로 ALB→App→DB 방향으로만 통신을 허용하고, 각 티어는 최소 2개 AZ에 분산하여 고가용성을 확보합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "보안 그룹 인바운드에 0.0.0.0/0이 있네요. SSH 포트는 회사 IP 대역만 허용하세요."</p>
+                <p><strong class="role-author">작성자:</strong> "맞습니다. cidr_blocks를 회사 VPN 대역으로 제한하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li class="">데이터베이스, 내부 서비스는 절대 퍼블릭 서브넷에 배치하지 마세요. 프라이빗 서브넷에서 보안 그룹으로 접근을 제어합니다.</li>
+                <li class="">VPC CIDR 범위는 추후 확장을 고려해 넉넉하게 설정하세요. 나중에 변경하기 어렵습니다.</li>
+                <li class="info">VPC Flow Logs를 활성화하면 네트워크 트래픽을 모니터링하고 보안 감사에 활용할 수 있습니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/VM/" class="related-link">VM</a>
+                <a href="/ko/term/%EB%B0%A9%ED%99%94%EB%B2%BD/" class="related-link">방화벽</a>
+                <a href="/ko/term/%ED%94%84%EB%A1%9D%EC%8B%9C/" class="related-link">프록시</a>
+                <a href="/ko/term/%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C%20%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C/" class="related-link">하이브리드 클라우드</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.aws.amazon.com/vpc/" target="_blank">AWS VPC 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://cloud.google.com/vpc/docs" target="_blank">GCP VPC 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://aws.amazon.com/architecture/vpc-best-practices/" target="_blank">AWS VPC 모범 사례</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +366,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

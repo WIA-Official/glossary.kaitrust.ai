@@ -161,6 +161,15 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
     </style>
 </head>
 <body>
@@ -202,6 +211,176 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>세그멘테이션(Image Segmentation)은 이미지를 픽셀 단위로 분류하여 의미 있는 영역으로 분할하는 컴퓨터 비전 기술입니다. 단순히 이미지에 객체가 있는지 분류하거나(Classification), 바운딩 박스로 위치를 찾는(Detection) 것을 넘어, 객체의 정확한 경계를 픽셀 수준으로 구분합니다.</p>
+
+                <p>세그멘테이션은 세 가지 유형으로 나뉩니다. Semantic Segmentation은 같은 클래스의 모든 객체를 동일하게 분류합니다(예: 모든 자동차는 같은 색). Instance Segmentation은 같은 클래스라도 개별 객체를 구분합니다(예: 자동차1, 자동차2). Panoptic Segmentation은 두 방식을 결합하여 배경과 객체를 모두 구분합니다.</p>
+
+                <p>대표적인 세그멘테이션 모델들이 있습니다. U-Net은 의료 영상에서 시작되어 인코더-디코더 구조와 Skip Connection으로 유명합니다. DeepLab 시리즈는 Atrous Convolution과 ASPP를 도입했습니다. Mask R-CNN은 객체 탐지에 세그멘테이션 브랜치를 추가한 대표적인 Instance Segmentation 모델입니다. 최근에는 SAM(Segment Anything Model)이 프롬프트 기반 세그멘테이션을 선보였습니다.</p>
+
+                <p>실제 응용 분야가 매우 넓습니다. 자율주행에서는 도로, 차선, 보행자, 차량을 실시간으로 구분합니다. 의료영상에서는 CT/MRI에서 종양, 장기를 정밀하게 분리합니다. 위성영상에서는 건물, 도로, 녹지를 분석합니다. 영상 편집에서는 배경 제거나 객체 분리에 활용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <p>PyTorch와 Segmentation Models 라이브러리를 사용한 U-Net 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code>import torch
+import segmentation_models_pytorch as smp
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+
+# U-Net 모델 정의 (ResNet34 백본)
+model = smp.Unet(
+    encoder_name="resnet34",
+    encoder_weights="imagenet",
+    in_channels=3,
+    classes=21  # PASCAL VOC 클래스 수
+)
+
+# 데이터 증강 파이프라인
+transform = A.Compose([
+    A.Resize(256, 256),
+    A.HorizontalFlip(p=0.5),
+    A.RandomBrightnessContrast(p=0.2),
+    A.Normalize(mean=[0.485, 0.456, 0.406],
+                std=[0.229, 0.224, 0.225]),
+    ToTensorV2()
+])
+
+# 손실 함수: Dice Loss + Cross Entropy
+dice_loss = smp.losses.DiceLoss(mode='multiclass')
+ce_loss = torch.nn.CrossEntropyLoss()
+
+def combined_loss(pred, target):
+    return 0.5 * dice_loss(pred, target) + 0.5 * ce_loss(pred, target)
+
+# 추론
+model.eval()
+with torch.no_grad():
+    output = model(image_tensor)  # (B, C, H, W)
+    pred_mask = output.argmax(dim=1)  # (B, H, W)
+
+# IoU 계산
+def iou_score(pred, target, num_classes):
+    ious = []
+    for cls in range(num_classes):
+        pred_cls = (pred == cls)
+        target_cls = (target == cls)
+        intersection = (pred_cls & target_cls).sum()
+        union = (pred_cls | target_cls).sum()
+        if union > 0:
+            ious.append(intersection / union)
+    return torch.tensor(ious).mean()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">성능 & 비용</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>모델</th>
+                            <th>mIoU (PASCAL VOC)</th>
+                            <th>파라미터</th>
+                            <th>추론 속도</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>U-Net (ResNet34)</td>
+                            <td>~75%</td>
+                            <td>24M</td>
+                            <td>~30 FPS (GPU)</td>
+                        </tr>
+                        <tr>
+                            <td>DeepLabV3+</td>
+                            <td>~82%</td>
+                            <td>41M</td>
+                            <td>~15 FPS (GPU)</td>
+                        </tr>
+                        <tr>
+                            <td>Mask R-CNN</td>
+                            <td>~79% (Instance)</td>
+                            <td>44M</td>
+                            <td>~5 FPS (GPU)</td>
+                        </tr>
+                        <tr>
+                            <td>SegFormer-B4</td>
+                            <td>~84%</td>
+                            <td>64M</td>
+                            <td>~10 FPS (GPU)</td>
+                        </tr>
+                        <tr>
+                            <td>SAM (ViT-H)</td>
+                            <td>Zero-shot 우수</td>
+                            <td>636M</td>
+                            <td>~1 FPS (GPU)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <p><strong>"의료 영상 분석에서 mIoU 0.85 이상 달성한 세그멘테이션 모델을 배포했어요. Dice Loss와 Data Augmentation으로 성능을 끌어올렸습니다."</strong></p>
+                <p>영어로는 "We deployed a segmentation model achieving mIoU above 0.85 for medical imaging"이라고 표현합니다. "pixel-wise classification", "instance segmentation", "semantic parsing" 등의 용어도 자주 사용됩니다. 평가 지표로는 mIoU(mean Intersection over Union), Dice Score, Pixel Accuracy를 언급하세요.</p>
+            </div>
+        </section>
+
+        <!-- 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">1.</span> <strong>클래스 불균형:</strong> 배경이 대부분인 데이터에서 Dice Loss나 Focal Loss를 사용하세요. Cross Entropy만 쓰면 소수 클래스를 못 찾습니다.</li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">2.</span> <strong>해상도 손실:</strong> 다운샘플링이 심하면 작은 객체나 경계가 뭉개집니다. Skip Connection이나 Multi-scale 처리를 활용하세요.</li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">3.</span> <strong>라벨링 품질:</strong> 세그멘테이션 라벨은 픽셀 단위라 라벨링 비용이 높습니다. 라벨 노이즈가 성능에 큰 영향을 미칩니다.</li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">4.</span> <strong>실시간 처리:</strong> 자율주행 등에서는 정확도보다 속도가 중요할 수 있습니다. 경량화 모델(BiSeNet, ENet)을 고려하세요.</li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">5.</span> <strong>평가 지표 오해:</strong> Pixel Accuracy는 클래스 불균형에서 오해를 주기 쉽습니다. mIoU를 주요 지표로 사용하세요.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <li><a href="/ko/term/%EB%94%A5%EB%9F%AC%EB%8B%9D/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">딥러닝</a></li>
+                    <li><a href="/ko/term/%EC%86%90%EC%8B%A4%20%ED%95%A8%EC%88%98/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">손실 함수</a></li>
+                    <li><a href="/ko/term/%EC%A0%84%EC%9D%B4%20%ED%95%99%EC%8A%B5/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">전이 학습</a></li>
+                    <li><a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%A6%9D%EA%B0%95/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">데이터 증강</a></li>
+                    <li><a href="/ko/term/%EB%B2%A4%EC%B9%98%EB%A7%88%ED%81%AC/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #a855f7; text-decoration: none;">벤치마크</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.75rem;"><a href="https://github.com/qubvel/segmentation_models.pytorch" target="_blank" style="color: #00f5ff; text-decoration: none;">Segmentation Models PyTorch - GitHub</a></li>
+                    <li style="margin-bottom: 0.75rem;"><a href="https://segment-anything.com/" target="_blank" style="color: #00f5ff; text-decoration: none;">Segment Anything (SAM) - Meta AI</a></li>
+                    <li style="margin-bottom: 0.75rem;"><a href="https://paperswithcode.com/task/semantic-segmentation" target="_blank" style="color: #00f5ff; text-decoration: none;">Papers With Code - Semantic Segmentation</a></li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +391,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

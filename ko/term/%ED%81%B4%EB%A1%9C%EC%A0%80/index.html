@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,126 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>클로저(Closure)는 함수가 자신이 선언된 환경(렉시컬 환경)의 변수들을 기억하고 접근할 수 있는 기능입니다. 함수가 외부 함수의 스코프를 "닫아서(close over)" 가지고 다닌다는 의미에서 클로저라고 부릅니다. JavaScript, Python, Swift 등 일급 함수를 지원하는 언어에서 핵심 개념입니다.</p>
+                <p>클로저는 내부 함수가 외부 함수의 변수에 접근할 때 형성됩니다. 외부 함수가 실행을 마친 후에도 내부 함수는 외부 함수의 변수를 참조할 수 있습니다. 이는 변수가 가비지 컬렉션되지 않고 메모리에 유지되기 때문입니다.</p>
+                <p>클로저의 주요 활용 사례로는 데이터 은닉(private 변수 구현), 팩토리 함수, 커링, 이벤트 핸들러에서 상태 유지 등이 있습니다. React의 useState 훅도 클로저를 활용하여 상태를 유지합니다.</p>
+                <p>클로저는 강력하지만 주의가 필요합니다. 루프에서 클로저를 생성할 때 변수 캡처 시점 문제가 발생할 수 있고, 불필요한 클로저는 메모리 누수의 원인이 될 수 있습니다. let 키워드 사용이나 즉시 실행 함수(IIFE)로 이러한 문제를 해결할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// JavaScript 클로저 예제
+
+// 1. 기본 클로저
+function createCounter() {
+    let count = 0;  // private 변수
+    return {
+        increment: () => ++count,
+        decrement: () => --count,
+        getCount: () => count
+    };
+}
+
+const counter = createCounter();
+console.log(counter.increment());  // 1
+console.log(counter.increment());  // 2
+console.log(counter.getCount());   // 2
+
+// 2. 팩토리 함수
+function createMultiplier(multiplier) {
+    return (number) => number * multiplier;
+}
+
+const double = createMultiplier(2);
+const triple = createMultiplier(3);
+console.log(double(5));  // 10
+console.log(triple(5));  // 15
+
+// 3. 루프에서 클로저 문제 (var 사용 시)
+for (var i = 0; i < 3; i++) {
+    setTimeout(() => console.log(i), 100);
+}  // 3, 3, 3 출력 (의도치 않은 결과)
+
+// 해결: let 사용
+for (let i = 0; i < 3; i++) {
+    setTimeout(() => console.log(i), 100);
+}  // 0, 1, 2 출력 (정상)
+
+// 4. 이벤트 핸들러에서 클로저
+function setupButton(buttonId, message) {
+    document.getElementById(buttonId).addEventListener('click', () => {
+        alert(message);  // message를 클로저로 캡처
+    });
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>시니어:</strong> 이 컴포넌트에서 이전 상태 값을 참조해야 하는데, 클로저로 해결할 수 있어요.</p>
+                <p><strong>주니어:</strong> useState의 이전 값을 어떻게 가져오나요?</p>
+                <p><strong>시니어:</strong> setState에 함수를 전달하면 됩니다. prev => prev + 1 이렇게요. 클로저가 최신 상태를 캡처하게 해줘요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 클로저가 무엇이고 어떤 상황에서 유용한지 설명해주세요.</p>
+                <p><strong>지원자:</strong> 클로저는 함수가 선언될 때의 렉시컬 환경을 기억하는 기능입니다. 데이터 은닉, 상태 유지, 팩토리 패턴에 유용합니다. 예를 들어 카운터 함수에서 count 변수를 외부에서 직접 접근하지 못하게 하면서도 조작할 수 있게 합니다.</p>
+                <p><strong>면접관:</strong> 클로저의 단점이나 주의점은요?</p>
+                <p><strong>지원자:</strong> 캡처된 변수가 가비지 컬렉션되지 않아 메모리 누수가 발생할 수 있습니다. 또한 루프에서 var를 사용하면 의도치 않은 값이 캡처되는 문제가 있어 let을 사용해야 합니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> 이 이벤트 핸들러에서 클로저로 index를 캡처하고 있는데, 메모리 누수 없나요?</p>
+                <p><strong>작성자:</strong> 컴포넌트 언마운트 시 이벤트 리스너 제거하면 되죠?</p>
+                <p><strong>리뷰어:</strong> 맞아요. cleanup 함수에서 removeEventListener 호출하세요. 그래야 클로저가 참조하는 변수들도 해제됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>루프 변수 캡처:</strong> var로 선언된 루프 변수를 클로저가 캡처하면 최종 값만 참조합니다. let을 사용하거나 IIFE로 감싸세요.</li>
+                <li><strong>메모리 누수:</strong> 클로저가 큰 객체를 참조하면 가비지 컬렉션이 안 됩니다. 필요 없어지면 null로 설정하세요.</li>
+                <li><strong>디버깅 어려움:</strong> 클로저 내부 변수는 외부에서 직접 확인이 어렵습니다. 개발자 도구의 스코프 패널을 활용하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%8A%A4%EC%BD%94%ED%94%84/" class="related-link">스코프</a>
+                <a href="/ko/term/%EC%BD%9C%EB%B0%B1/" class="related-link">콜백</a>
+                <a href="/ko/term/%EA%B3%A0%EC%B0%A8-%ED%95%A8%EC%88%98/" class="related-link">고차 함수</a>
+                <a href="/ko/term/%EB%9E%8C%EB%8B%A4/" class="related-link">람다</a>
+                <a href="/ko/term/%EC%BB%A4%EB%A7%81/" class="related-link">커링</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Closures" target="_blank">MDN - 클로저</a></li>
+                <li><a href="https://javascript.info/closure" target="_blank">JavaScript.info - Closure</a></li>
+                <li><a href="https://www.youtube.com/watch?v=vKJpN5FAeF4" target="_blank">Fireship - Closures Explained</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +334,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,142 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>에포크(Epoch)는 전체 훈련 데이터셋을 한 번 완전히 학습하는 것을 의미하는 단위입니다. 예를 들어, 10만 개의 훈련 샘플이 있고 배치 사이즈가 100이라면, 1 에포크는 1,000번의 배치 학습(iteration)으로 구성됩니다.</p>
+                <p>에포크 개념은 신경망 학습 초기부터 사용되어온 기본적인 학습 단위입니다. 데이터를 한 번만 보는 것으로는 모델이 충분히 학습되지 않기 때문에, 여러 에포크에 걸쳐 같은 데이터를 반복 학습하여 가중치를 점진적으로 최적화합니다.</p>
+                <p>각 에포크마다 모델은 전체 데이터를 순회하면서 손실(loss)을 계산하고 역전파를 통해 가중치를 업데이트합니다. 일반적으로 에포크가 증가할수록 training loss는 감소하지만, validation loss는 어느 시점 이후 증가할 수 있습니다(과적합).</p>
+                <p>적절한 에포크 수는 데이터셋 크기, 모델 복잡도, 학습률에 따라 달라집니다. 실무에서는 보통 10~100 에포크 사이에서 시작하며, Early Stopping을 통해 validation loss가 더 이상 개선되지 않으면 학습을 조기 종료합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
+
+# 샘플 데이터 생성
+X = torch.randn(1000, 10)  # 1000개 샘플, 10개 피처
+y = torch.randint(0, 2, (1000,))  # 이진 분류
+
+dataset = TensorDataset(X, y)
+batch_size = 100  # 배치 사이즈
+train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
+# 간단한 모델
+model = nn.Sequential(
+    nn.Linear(10, 32),
+    nn.ReLU(),
+    nn.Linear(32, 2)
+)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+# 에포크 단위 학습
+num_epochs = 20
+for epoch in range(num_epochs):
+    epoch_loss = 0.0
+    num_batches = 0
+
+    # 1 에포크 = 전체 데이터셋 1회 순회
+    for batch_X, batch_y in train_loader:
+        optimizer.zero_grad()
+        outputs = model(batch_X)
+        loss = criterion(outputs, batch_y)
+        loss.backward()
+        optimizer.step()
+
+        epoch_loss += loss.item()
+        num_batches += 1
+
+    avg_loss = epoch_loss / num_batches
+    print(f"Epoch [{epoch+1}/{num_epochs}], "
+          f"Iterations: {num_batches}, "
+          f"Avg Loss: {avg_loss:.4f}")
+
+# 총 iterations = num_epochs * (데이터 수 / 배치 사이즈)
+# 이 경우: 20 * (1000/100) = 200 iterations
+print(f"\n총 iterations: {num_epochs * len(train_loader)}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"현재 50 에포크까지 학습했는데, validation loss가 30 에포크 이후로 계속 증가하고 있어요. Early Stopping을 30 에포크로 설정하거나, 정규화를 강화해야 할 것 같습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"Epoch과 Iteration의 차이는, Epoch이 전체 데이터를 한 번 도는 것이라면, Iteration은 한 배치를 처리하는 것입니다. 1만 개 데이터에 배치 100이면, 1 에포크는 100 이터레이션입니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"대규모 LLM 학습에서는 에포크 단위보다 토큰 수로 학습량을 측정해요. Chinchilla 논문에 따르면 모델 파라미터 수의 20배 토큰을 학습시키는 게 compute-optimal이라고 합니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>에포크 수를 고정값으로 설정</strong>
+                        <p>무조건 100 에포크 같은 고정값을 쓰면 과적합이나 불필요한 학습 시간이 발생합니다. Early Stopping으로 동적으로 종료하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Training Loss만 모니터링</strong>
+                        <p>Training loss만 보면 과적합을 감지할 수 없습니다. 매 에포크마다 validation loss를 함께 기록하고 비교해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 설정</strong>
+                        <p>Early Stopping patience를 5~10으로 설정하고, validation loss 기준으로 best model을 저장하세요. Learning rate scheduler와 함께 사용하면 더 효과적입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Batch%20Size/" class="related-term-link">Batch Size</a>
+                <a href="/ko/term/Iteration/" class="related-term-link">Iteration</a>
+                <a href="/ko/term/Learning%20Rate/" class="related-term-link">Learning Rate</a>
+                <a href="/ko/term/Overfitting/" class="related-term-link">Overfitting</a>
+                <a href="/ko/term/Early%20Stopping/" class="related-term-link">Early Stopping</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" target="_blank" class="learn-link">📄 PyTorch Training Loop 공식 튜토리얼</a>
+                <a href="https://www.tensorflow.org/guide/keras/training_with_built_in_methods" target="_blank" class="learn-link">🎓 TensorFlow/Keras Training 가이드</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +372,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,196 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Scaling(스케일링)</strong>은 시스템의 처리 용량을 조절하여 변화하는 부하에 대응하는 것입니다. 크게 <strong>수직 스케일링(Vertical Scaling, Scale-Up)</strong>과 <strong>수평 스케일링(Horizontal Scaling, Scale-Out)</strong> 두 가지 방식이 있습니다.</p>
+                <p>수직 스케일링은 단일 서버의 CPU, 메모리, 스토리지를 증가시키는 방식으로, 간단하지만 물리적 한계가 있습니다. 수평 스케일링은 서버 인스턴스 수를 늘리는 방식으로, 이론상 무한한 확장이 가능하지만 애플리케이션이 분산 환경에 적합하게 설계되어야 합니다. 클라우드 환경에서는 Auto Scaling을 통해 트래픽에 따라 자동으로 인스턴스를 조절하여 비용 효율성과 성능을 동시에 확보합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>Kubernetes HPA (Horizontal Pod Autoscaler)</h3>
+                <pre><code class="language-yaml"># hpa.yaml - CPU/메모리 기반 자동 스케일링
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-server-hpa
+  namespace: production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-server
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: http_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "1000"
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5분간 안정화
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      - type: Pods
+        value: 4
+        periodSeconds: 15
+      selectPolicy: Max</code></pre>
+
+                <h3>AWS Auto Scaling 설정 (Terraform)</h3>
+                <pre><code class="language-hcl"># autoscaling.tf
+resource "aws_autoscaling_group" "web" {
+  name                = "web-asg"
+  vpc_zone_identifier = var.private_subnets
+  target_group_arns   = [aws_lb_target_group.web.arn]
+
+  min_size         = 2
+  max_size         = 10
+  desired_capacity = 3
+
+  health_check_type         = "ELB"
+  health_check_grace_period = 300
+
+  launch_template {
+    id      = aws_launch_template.web.id
+    version = "$Latest"
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "web-server"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_policy" "scale_out" {
+  name                   = "scale-out"
+  autoscaling_group_name = aws_autoscaling_group.web.name
+  adjustment_type        = "ChangeInCapacity"
+  scaling_adjustment     = 2
+  cooldown               = 300
+}
+
+resource "aws_cloudwatch_metric_alarm" "high_cpu" {
+  alarm_name          = "high-cpu-utilization"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 120
+  statistic           = "Average"
+  threshold           = 70
+  alarm_actions       = [aws_autoscaling_policy.scale_out.arn]
+
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.web.name
+  }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 id="conv-title" class="section-title">실무 대화</h2>
+            <div class="section-content conversation-box">
+                <div class="conversation">
+                    <div class="message">
+                        <span class="speaker">CTO</span>
+                        <p>"다음 달 블랙프라이데이 프로모션 대비해서 트래픽 10배 증가에 대응할 수 있나요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">인프라 엔지니어</span>
+                        <p>"네, 현재 HPA 설정에서 maxReplicas를 50으로 늘리고, 노드 풀도 Auto Scaling 그룹 max를 조정하면 됩니다. 미리 부하 테스트로 검증해볼게요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">재무팀</span>
+                        <p>"평소에는 비용이 많이 나가지 않겠죠?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">인프라 엔지니어</span>
+                        <p>"물론이죠. minReplicas는 3으로 유지하고, 트래픽이 줄면 자동으로 스케일 다운됩니다. scaleDown 정책에 5분 안정화 윈도우를 설정해서 불필요한 축소는 방지하고 있어요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">개발팀장</span>
+                        <p>"데이터베이스도 스케일링 대응이 필요하지 않나요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">인프라 엔지니어</span>
+                        <p>"DB는 Read Replica를 미리 2대 더 추가하고, 연결 풀링을 강화할게요. 쓰기는 수직 스케일링으로 대응하고, 읽기는 수평으로 분산합니다."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <ul class="warning-list">
+                    <li><strong>Stateless 설계:</strong> 수평 스케일링을 위해서는 애플리케이션이 세션 상태를 서버에 저장하지 않아야 합니다. Redis나 외부 세션 스토어를 사용하세요.</li>
+                    <li><strong>Cold Start 문제:</strong> 새 인스턴스가 준비되는 시간을 고려해 스케일 업 정책을 여유있게 설정하세요. JVM 기반 앱은 특히 워밍업이 필요합니다.</li>
+                    <li><strong>비용 관리:</strong> maxReplicas를 무제한으로 설정하면 예상치 못한 트래픽 급증 시 비용 폭발이 발생할 수 있습니다.</li>
+                    <li><strong>데이터베이스 병목:</strong> 앱 서버만 스케일링해도 DB 연결 수 제한에 걸릴 수 있습니다. 연결 풀링과 DB 스케일링도 함께 계획하세요.</li>
+                    <li><strong>스케일 다운 주의:</strong> 너무 급격한 스케일 다운은 남은 인스턴스에 부하를 줄 수 있습니다. 안정화 윈도우를 적절히 설정하세요.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <ul class="related-terms">
+                    <li><a href="/ko/term/Container/">Container</a> - 빠른 스케일링을 가능하게 하는 경량 실행 환경</li>
+                    <li><a href="/ko/term/Kubernetes/">Kubernetes</a> - 컨테이너 오케스트레이션과 자동 스케일링</li>
+                    <li><a href="/ko/term/Monitoring/">Monitoring</a> - 스케일링 결정을 위한 메트릭 수집</li>
+                    <li><a href="/ko/term/Load%20Balancer/">Load Balancer</a> - 스케일 아웃된 인스턴스에 트래픽 분산</li>
+                    <li><a href="/ko/term/Prometheus/">Prometheus</a> - 커스텀 메트릭 기반 스케일링 지원</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more">
+                    <li><a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank" rel="noopener">Kubernetes HPA</a> - 공식 HPA 문서</li>
+                    <li><a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" target="_blank" rel="noopener">AWS Auto Scaling</a> - EC2 자동 스케일링 가이드</li>
+                    <li><a href="https://keda.sh/" target="_blank" rel="noopener">KEDA</a> - Kubernetes 이벤트 기반 오토스케일링</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +403,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

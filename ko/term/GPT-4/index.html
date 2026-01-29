@@ -161,6 +161,127 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table td { color: #cbd5e1; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
     </style>
 </head>
 <body>
@@ -202,6 +323,217 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>GPT-4는 2023년 3월 OpenAI가 공개한 대규모 멀티모달 언어 모델로, 텍스트와 이미지를 모두 입력받아 처리할 수 있습니다. 정확한 파라미터 수는 공개되지 않았으나, 1.7조 파라미터의 MoE(Mixture of Experts) 구조로 추정되며, 한 번에 8개 전문가 중 2개가 활성화됩니다.</p>
+                <p>GPT-4는 GPT-3.5 대비 다양한 벤치마크에서 크게 향상된 성능을 보입니다. 미국 변호사 시험에서 상위 10%(GPT-3.5는 하위 10%), SAT 수학에서 700점(GPT-3.5는 590점), 코딩 능력에서 HumanEval 67%(GPT-3.5는 48%)를 달성했습니다.</p>
+                <p>GPT-4 Turbo는 128K 컨텍스트 윈도우를 지원하여 약 300페이지 분량의 텍스트를 한 번에 처리할 수 있습니다. 또한 JSON 모드, 함수 호출(Function Calling), 시드 기반 재현성(Reproducible outputs) 등 개발자 친화적 기능을 제공합니다. 비용은 GPT-4 대비 3배 저렴합니다.</p>
+                <p>실무에서 GPT-4는 복잡한 추론, 코드 생성, 문서 분석, 멀티모달 작업에 주로 사용됩니다. Vision 기능을 활용한 차트 분석, UI 설계 리뷰, 이미지 기반 QA가 가능하며, Assistants API와 결합하면 RAG, Code Interpreter 등 고급 에이전트 기능을 구현할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>from openai import OpenAI
+import base64
+
+client = OpenAI(api_key="your-api-key")
+
+# GPT-4 Turbo with Vision (이미지 분석)
+def analyze_image(image_path: str, question: str) -> str:
+    with open(image_path, "rb") as f:
+        image_data = base64.standard_b64encode(f.read()).decode("utf-8")
+
+    response = client.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": question},
+                {"type": "image_url", "image_url": {
+                    "url": f"data:image/jpeg;base64,{image_data}",
+                    "detail": "high"  # low, high, auto
+                }}
+            ]
+        }],
+        max_tokens=1000
+    )
+    return response.choices[0].message.content
+
+# 재현 가능한 출력 (seed 사용)
+response = client.chat.completions.create(
+    model="gpt-4-turbo",
+    messages=[{"role": "user", "content": "Generate a haiku about coding."}],
+    seed=42,
+    temperature=1
+)
+print(f"System fingerprint: {response.system_fingerprint}")
+
+# JSON 모드 활용
+response = client.chat.completions.create(
+    model="gpt-4-turbo",
+    messages=[
+        {"role": "system", "content": "Extract entities as JSON with keys: persons, organizations, locations"},
+        {"role": "user", "content": "Apple CEO Tim Cook announced new products in Cupertino."}
+    ],
+    response_format={"type": "json_object"}
+)
+import json
+entities = json.loads(response.choices[0].message.content)
+
+# Assistants API with Code Interpreter
+assistant = client.beta.assistants.create(
+    name="Data Analyst",
+    instructions="You analyze data and create visualizations.",
+    model="gpt-4-turbo",
+    tools=[{"type": "code_interpreter"}]
+)
+
+thread = client.beta.threads.create()
+client.beta.threads.messages.create(
+    thread_id=thread.id,
+    role="user",
+    content="Analyze the attached CSV and plot sales trends."
+)
+
+run = client.beta.threads.runs.create_and_poll(
+    thread_id=thread.id,
+    assistant_id=assistant.id
+)
+
+# 긴 문서 처리 (128K 컨텍스트)
+with open("long_document.txt", "r") as f:
+    long_text = f.read()  # 최대 ~300페이지
+
+response = client.chat.completions.create(
+    model="gpt-4-turbo",
+    messages=[
+        {"role": "system", "content": "Summarize the key points of this document."},
+        {"role": "user", "content": long_text}
+    ],
+    max_tokens=2000
+)</code></pre>
+            </div>
+        </section>
+
+        <!-- 📊 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>2025년 1월 기준 OpenAI GPT-4 계열 모델 API 가격 정보입니다.</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>모델</th>
+                        <th>입력 (1M tokens)</th>
+                        <th>출력 (1M tokens)</th>
+                        <th>컨텍스트</th>
+                    </tr>
+                    <tr>
+                        <td>GPT-4o</td>
+                        <td>$2.50 ~ $5.00</td>
+                        <td>$10.00 ~ $15.00</td>
+                        <td>128K tokens</td>
+                    </tr>
+                    <tr>
+                        <td>GPT-4o-mini</td>
+                        <td>$0.15</td>
+                        <td>$0.60</td>
+                        <td>128K tokens</td>
+                    </tr>
+                    <tr>
+                        <td>GPT-4 Turbo</td>
+                        <td>$10.00</td>
+                        <td>$30.00</td>
+                        <td>128K tokens</td>
+                    </tr>
+                </table>
+                <p><strong>비용 최적화:</strong> GPT-4o-mini는 GPT-3.5 Turbo 대비 60% 저렴하면서 성능은 향상. 단순 작업은 mini, 복잡한 추론은 GPT-4o로 라우팅 권장.</p>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">기술 면접 상황</div>
+                    <p class="conv-quote">"GPT-4와 Claude 3를 비교하면 어떤 차이가 있나요?" - "GPT-4는 멀티모달과 함수 호출이 강점이고, Claude 3는 200K 컨텍스트와 문서 분석에서 우수합니다. 코딩 벤치마크는 비슷하지만, GPT-4가 OpenAI 생태계(DALL-E, Whisper) 연동이 쉽고, Claude는 헌법 AI 기반 안전성이 높습니다. 용도에 따라 선택해야 합니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">프로젝트 회의</div>
+                    <p class="conv-quote">"GPT-4 Vision으로 UI 스크린샷 분석이 가능한가요?" - "네, detail을 high로 설정하면 UI 요소를 정확히 인식합니다. 저희 프로젝트에서 앱 스크린샷을 분석해 접근성 이슈를 찾는 데 사용했는데, 버튼 대비 문제나 터치 영역 크기 등을 잘 잡아냈어요. 다만 이미지당 토큰 비용이 높으니 필요한 곳에만 선택적으로 사용하세요."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">코드 리뷰</div>
+                    <p class="conv-quote">"seed를 42로 고정했는데 왜 결과가 다르게 나오죠?" - "seed는 동일 system_fingerprint에서만 재현성이 보장됩니다. OpenAI가 모델을 업데이트하면 fingerprint가 바뀌어 결과도 달라질 수 있어요. 프로덕션에서는 fingerprint를 로깅하고, 중요한 출력은 캐싱하는 것을 권장합니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">1</span>
+                    <div>
+                        <strong>Vision 토큰 비용</strong>
+                        <p>이미지 분석 시 해상도에 따라 85~1,105 토큰이 소비됩니다. detail=high는 4배 이상 토큰을 사용하므로, 대량 처리 시 detail=low나 이미지 리사이징을 고려하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">2</span>
+                    <div>
+                        <strong>컨텍스트 윈도우 제한</strong>
+                        <p>128K 컨텍스트라도 너무 긴 입력은 성능이 저하됩니다. Lost in the Middle 현상으로 중간 정보가 무시될 수 있으니, 중요한 정보는 시작이나 끝에 배치하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">3</span>
+                    <div>
+                        <strong>모델 버전 관리</strong>
+                        <p>gpt-4-turbo는 최신 버전을 자동으로 가리키며 변경될 수 있습니다. 프로덕션에서는 gpt-4-turbo-2024-04-09 같은 고정 버전을 사용해 일관성을 유지하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/GPT/" class="related-term-link">GPT</a>
+                <a href="/ko/term/Multimodal/" class="related-term-link">Multimodal</a>
+                <a href="/ko/term/Function%20Calling/" class="related-term-link">Function Calling</a>
+                <a href="/ko/term/Claude/" class="related-term-link">Claude</a>
+                <a href="/ko/term/Gemini/" class="related-term-link">Gemini</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://openai.com/research/gpt-4" target="_blank" class="learn-link">
+                    <span>GPT-4 기술 보고서 (OpenAI)</span>
+                </a>
+                <a href="https://platform.openai.com/docs/guides/vision" target="_blank" class="learn-link">
+                    <span>GPT-4 Vision 가이드</span>
+                </a>
+                <a href="https://platform.openai.com/docs/assistants/overview" target="_blank" class="learn-link">
+                    <span>OpenAI Assistants API 문서</span>
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +544,26 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,172 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>OCR(Optical Character Recognition, 광학 문자 인식)은 이미지나 스캔 문서에서 텍스트를 추출하여 편집 가능한 디지털 텍스트로 변환하는 기술입니다. 종이 문서 디지털화, 명함 인식, 번호판 인식, 영수증 처리 등 다양한 분야에서 활용됩니다.</p>
+                <p>1920년대 Emanuel Goldberg의 기계 연구에서 시작되어, 1970년대 상업용 OCR 시스템이 등장했습니다. 2000년대 Tesseract 오픈소스 엔진이 공개되고, 2010년대 딥러닝 기반 OCR이 정확도를 획기적으로 높였습니다. 현재는 GPT-4V, Claude Vision 같은 멀티모달 LLM이 복잡한 문서도 이해합니다.</p>
+                <p>OCR 파이프라인은 이미지 전처리(노이즈 제거, 기울기 보정) → 텍스트 영역 검출(Text Detection) → 문자 인식(Text Recognition) → 후처리(맞춤법 교정, 레이아웃 복원) 단계로 구성됩니다. 딥러닝 모델은 CRNN, Transformer 기반 아키텍처가 주로 사용됩니다.</p>
+                <p>실무에서 OCR 선택 시 고려할 점은 지원 언어(한글 포함 여부), 정확도, 처리 속도, 비용입니다. 간단한 작업은 Tesseract, 고품질 문서는 Google Vision/AWS Textract, 복잡한 레이아웃은 멀티모달 LLM 조합이 효과적입니다. 한글 OCR은 네이버 CLOVA OCR이나 카카오 OCR도 좋은 선택입니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># OCR 구현 예제 (Tesseract + EasyOCR)
+# pip install pytesseract easyocr pillow
+
+import pytesseract
+from PIL import Image
+import easyocr
+
+# ===== 1. Tesseract OCR (오픈소스) =====
+# Tesseract 설치 필요: apt-get install tesseract-ocr tesseract-ocr-kor
+
+def tesseract_ocr(image_path):
+    """Tesseract로 텍스트 추출"""
+    image = Image.open(image_path)
+    # 한글 + 영어 인식
+    text = pytesseract.image_to_string(image, lang='kor+eng')
+    return text
+
+# 상세 정보 (위치, 신뢰도 포함)
+def tesseract_detailed(image_path):
+    image = Image.open(image_path)
+    data = pytesseract.image_to_data(image, lang='kor+eng', output_type=pytesseract.Output.DICT)
+    return data
+
+# ===== 2. EasyOCR (딥러닝 기반) =====
+def easy_ocr(image_path):
+    """EasyOCR로 텍스트 추출 (GPU 지원)"""
+    reader = easyocr.Reader(['ko', 'en'])  # 한글, 영어
+    results = reader.readtext(image_path)
+
+    # 결과: [(좌표, 텍스트, 신뢰도), ...]
+    for (bbox, text, confidence) in results:
+        print(f"텍스트: {text}, 신뢰도: {confidence:.2%}")
+
+    return results
+
+# ===== 3. Google Cloud Vision API =====
+# pip install google-cloud-vision
+from google.cloud import vision
+
+def google_vision_ocr(image_path):
+    """Google Vision API로 고품질 OCR"""
+    client = vision.ImageAnnotatorClient()
+
+    with open(image_path, 'rb') as f:
+        content = f.read()
+
+    image = vision.Image(content=content)
+    response = client.text_detection(image=image)
+    texts = response.text_annotations
+
+    if texts:
+        return texts[0].description  # 전체 텍스트
+    return ""
+
+# ===== 4. 이미지 전처리 (정확도 향상) =====
+import cv2
+import numpy as np
+
+def preprocess_image(image_path):
+    """OCR 전 이미지 품질 개선"""
+    img = cv2.imread(image_path)
+    # 그레이스케일 변환
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # 노이즈 제거
+    denoised = cv2.fastNlMeansDenoising(gray)
+    # 이진화 (Adaptive Threshold)
+    binary = cv2.adaptiveThreshold(
+        denoised, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY, 11, 2
+    )
+    return binary
+
+# 사용 예시
+# text = tesseract_ocr("document.png")
+# results = easy_ocr("receipt.jpg")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 검토 회의에서</div>
+                    <blockquote class="conv-quote">"영수증 처리라면 Google Vision이나 AWS Textract가 정확도가 높습니다. 비용이 부담되면 EasyOCR로 시작하고, 전처리(이진화, 기울기 보정)만 잘 해도 Tesseract로 90% 이상 정확도 나와요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"OCR 파이프라인은 전처리, 텍스트 검출, 문자 인식, 후처리로 구성됩니다. 딥러닝 이전에는 규칙 기반이었지만, 지금은 CRNN이나 Transformer 기반 모델이 주로 쓰입니다. 최근에는 GPT-4V 같은 멀티모달 LLM으로 복잡한 레이아웃도 처리합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 문제 해결 상황에서</div>
+                    <blockquote class="conv-quote">"한글 인식률이 낮으면 먼저 이미지 해상도 확인하세요. 300 DPI 이상이 좋고, 기울어진 문서는 deskew 처리가 필수입니다. 그래도 안 되면 네이버 CLOVA OCR 같은 한글 특화 서비스가 나을 수 있어요."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>전처리 없이 바로 OCR 적용</strong>
+                        <p>저품질 이미지에 OCR을 바로 돌리면 정확도가 급격히 떨어집니다. 노이즈 제거, 이진화, 기울기 보정 등 전처리가 필수입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>100% 정확도 기대</strong>
+                        <p>최고 수준의 OCR도 100% 완벽하지 않습니다. 후처리(맞춤법 검사, 정규표현식 검증)와 사람 검토 프로세스를 설계하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 접근법</strong>
+                        <p>데이터 특성에 맞는 OCR 엔진 선택 → 전처리 파이프라인 구축 → 신뢰도 기반 후처리 → 저신뢰도 결과 수동 검토 프로세스 구현</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Computer%20Vision/" class="related-term-link">Computer Vision</a>
+                <a href="/ko/term/CNN/" class="related-term-link">CNN</a>
+                <a href="/ko/term/Document%20AI/" class="related-term-link">Document AI</a>
+                <a href="/ko/term/Multimodal%20AI/" class="related-term-link">Multimodal AI</a>
+                <a href="/ko/term/NLP/" class="related-term-link">NLP</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://github.com/tesseract-ocr/tesseract" target="_blank" class="learn-link">📄 Tesseract OCR GitHub</a>
+                <a href="https://github.com/JaidedAI/EasyOCR" target="_blank" class="learn-link">🎓 EasyOCR (딥러닝 기반 OCR)</a>
+                <a href="https://cloud.google.com/vision/docs/ocr" target="_blank" class="learn-link">📘 Google Cloud Vision OCR 문서</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +402,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

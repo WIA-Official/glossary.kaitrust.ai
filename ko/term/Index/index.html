@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index (인덱스) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="데이터 검색 속도를 높이는 자료구조. B-Tree가 표준. 쿼리 성능 핵심.">
-    <meta name="keywords" content="Index, 인덱스, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="Index는 데이터베이스에서 검색 속도를 극대화하는 자료구조입니다. B-Tree, Hash, GIN, GiST 등 다양한 인덱스 유형으로 쿼리 성능을 최적화합니다.">
+    <meta name="keywords" content="Index, 인덱스, B-Tree, Hash Index, 복합 인덱스, 쿼리 최적화, 데이터베이스, PostgreSQL, MySQL, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Index/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Index/">
     <meta property="og:title" content="Index (인덱스) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="데이터 검색 속도를 높이는 자료구조. B-Tree가 표준. 쿼리 성능 핵심.">
+    <meta property="og:description" content="Index는 데이터베이스에서 검색 속도를 극대화하는 자료구조입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Index (인덱스) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="데이터 검색 속도를 높이는 자료구조. B-Tree가 표준. 쿼리 성능 핵심.">
+    <meta name="twitter:description" content="Index는 데이터베이스에서 검색 속도를 극대화하는 자료구조입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Index",
-        "description": "데이터 검색 속도를 높이는 자료구조. B-Tree가 표준. 쿼리 성능 핵심.",
+        "alternateName": "인덱스",
+        "description": "Index는 데이터베이스에서 검색 속도를 극대화하는 자료구조입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">Index</h1>
             <p class="term-english">인덱스</p>
             <div class="term-description">
-                <p>데이터 검색 속도를 높이는 자료구조. B-Tree가 표준. 쿼리 성능 핵심.</p>
+                <p>데이터베이스에서 검색 속도를 극대화하는 자료구조입니다. 책의 색인(목차)처럼 원하는 데이터를 빠르게 찾을 수 있도록 도와주며, B-Tree, Hash, GIN 등 다양한 유형이 있습니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,509 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>인덱스의 동작 원리</strong>는 책의 색인과 같습니다. 1000페이지 책에서 "데이터베이스"라는 단어를 찾으려면 전체를 읽어야 하지만, 색인이 있으면 해당 페이지로 바로 이동할 수 있습니다. 데이터베이스 인덱스도 마찬가지로 Full Table Scan 대신 인덱스를 통해 직접 데이터 위치로 접근합니다.</p>
+                <p><strong>B-Tree 인덱스</strong>는 가장 널리 사용되는 유형입니다. 균형 잡힌 트리 구조로 O(log n) 시간 복잡도를 보장하며, 범위 검색(BETWEEN, >, <)과 정렬(ORDER BY)에 효율적입니다. PostgreSQL, MySQL의 기본 인덱스 유형입니다.</p>
+                <p><strong>Hash 인덱스</strong>는 정확한 일치(=) 검색에 최적화되어 O(1) 성능을 제공합니다. 하지만 범위 검색이나 정렬에는 사용할 수 없습니다. Redis, DynamoDB 같은 Key-Value 스토어에서 주로 사용됩니다.</p>
+                <p><strong>복합 인덱스(Composite Index)</strong>는 여러 컬럼을 조합한 인덱스입니다. (city, created_at) 복합 인덱스는 "city = 'Seoul' AND created_at > '2024-01-01'" 쿼리에 효과적입니다. 컬럼 순서가 중요하며, 선행 컬럼부터 조건에 사용해야 인덱스가 활용됩니다.</p>
+                <p><strong>GIN(Generalized Inverted Index)</strong>은 배열, JSON, 전문 검색에 특화된 인덱스입니다. PostgreSQL에서 JSONB 컬럼이나 tsvector(전문 검색)에 사용됩니다. <strong>GiST(Generalized Search Tree)</strong>는 지리 데이터, 범위 타입 등 복잡한 데이터 유형에 적합합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="sql">SQL</button>
+                <button class="code-tab" data-lang="python">Python (SQLAlchemy)</button>
+                <button class="code-tab" data-lang="node">Node.js (Prisma)</button>
+            </div>
+            <div class="code-block active" data-lang="sql">
+                <pre><code class="language-sql">-- ============================================
+-- 1. 기본 인덱스 생성
+-- ============================================
+-- 단일 컬럼 인덱스
+CREATE INDEX idx_users_email ON users(email);
+
+-- 고유 인덱스 (중복 불허)
+CREATE UNIQUE INDEX idx_users_username ON users(username);
+
+-- 복합 인덱스 (컬럼 순서 중요!)
+CREATE INDEX idx_orders_user_date ON orders(user_id, created_at DESC);
+
+
+-- ============================================
+-- 2. 인덱스 유형별 생성 (PostgreSQL)
+-- ============================================
+-- B-Tree (기본값, 범위 검색/정렬에 효과적)
+CREATE INDEX idx_products_price ON products USING btree(price);
+
+-- Hash (정확한 일치 검색에 최적)
+CREATE INDEX idx_sessions_token ON sessions USING hash(token);
+
+-- GIN (JSONB, 배열, 전문검색)
+CREATE INDEX idx_products_tags ON products USING gin(tags);
+CREATE INDEX idx_articles_search ON articles USING gin(to_tsvector('korean', title || ' ' || content));
+
+-- GiST (지리 데이터, 범위 타입)
+CREATE INDEX idx_stores_location ON stores USING gist(location);
+
+
+-- ============================================
+-- 3. 부분 인덱스 (조건부 인덱스)
+-- ============================================
+-- 활성 사용자만 인덱싱 (저장공간 절약)
+CREATE INDEX idx_users_active ON users(email)
+WHERE status = 'active';
+
+-- 최근 주문만 인덱싱
+CREATE INDEX idx_orders_recent ON orders(user_id, created_at)
+WHERE created_at > NOW() - INTERVAL '3 months';
+
+
+-- ============================================
+-- 4. 인덱스 활용 확인 (EXPLAIN)
+-- ============================================
+-- 실행 계획 확인
+EXPLAIN ANALYZE
+SELECT * FROM users WHERE email = 'user@example.com';
+
+-- 결과 예시:
+-- Index Scan using idx_users_email on users
+--   Index Cond: (email = 'user@example.com')
+--   Execution Time: 0.05 ms
+
+-- 인덱스 미사용 시 (Full Table Scan):
+-- Seq Scan on users
+--   Filter: (email = 'user@example.com')
+--   Execution Time: 150 ms
+
+
+-- ============================================
+-- 5. 인덱스 관리
+-- ============================================
+-- 인덱스 목록 조회 (PostgreSQL)
+SELECT indexname, indexdef FROM pg_indexes
+WHERE tablename = 'users';
+
+-- 인덱스 사용 통계
+SELECT schemaname, relname, indexrelname,
+       idx_scan, idx_tup_read, idx_tup_fetch
+FROM pg_stat_user_indexes
+WHERE relname = 'users';
+
+-- 미사용 인덱스 찾기
+SELECT indexrelname FROM pg_stat_user_indexes
+WHERE idx_scan = 0 AND schemaname = 'public';
+
+-- 인덱스 삭제
+DROP INDEX idx_users_email;
+
+-- 인덱스 재구축 (블로트 제거)
+REINDEX INDEX idx_users_email;</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># 인덱스 관리 예제 - Python + SQLAlchemy
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Index, text
+from sqlalchemy.orm import declarative_base, Session
+from sqlalchemy.dialects.postgresql import JSONB, GIN
+from datetime import datetime
+
+Base = declarative_base()
+
+class User(Base):
+    """사용자 모델 - 인덱스 정의 예제"""
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String(255), nullable=False)
+    username = Column(String(100), nullable=False)
+    status = Column(String(20), default='active')
+    created_at = Column(DateTime, default=datetime.utcnow)
+    metadata = Column(JSONB)
+
+    # 테이블 레벨 인덱스 정의
+    __table_args__ = (
+        # 단일 컬럼 고유 인덱스
+        Index('idx_users_email', 'email', unique=True),
+        Index('idx_users_username', 'username', unique=True),
+
+        # 복합 인덱스
+        Index('idx_users_status_created', 'status', 'created_at'),
+
+        # 부분 인덱스 (활성 사용자만)
+        Index('idx_users_active_email', 'email',
+              postgresql_where=text("status = 'active'")),
+
+        # GIN 인덱스 (JSONB용)
+        Index('idx_users_metadata', 'metadata',
+              postgresql_using='gin'),
+    )
+
+
+class Order(Base):
+    """주문 모델 - 복합 인덱스 예제"""
+    __tablename__ = 'orders'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, nullable=False)
+    product_id = Column(Integer, nullable=False)
+    amount = Column(Integer, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        # 자주 사용되는 쿼리 패턴에 맞춘 복합 인덱스
+        Index('idx_orders_user_date', 'user_id', 'created_at'),
+        Index('idx_orders_product_amount', 'product_id', 'amount'),
+    )
+
+
+# 인덱스 활용 쿼리 예제
+class IndexQueryExamples:
+    def __init__(self, engine):
+        self.engine = engine
+
+    def check_index_usage(self, query: str):
+        """EXPLAIN ANALYZE로 인덱스 사용 확인"""
+        with Session(self.engine) as session:
+            result = session.execute(
+                text(f"EXPLAIN ANALYZE {query}")
+            )
+            plan = "\n".join([row[0] for row in result])
+
+            # 인덱스 사용 여부 판단
+            uses_index = "Index Scan" in plan or "Index Only Scan" in plan
+            print(f"인덱스 사용: {'예' if uses_index else '아니오 (Seq Scan)'}")
+            print(plan)
+            return uses_index
+
+    def get_unused_indexes(self):
+        """사용되지 않는 인덱스 조회"""
+        query = """
+        SELECT indexrelname as index_name,
+               pg_size_pretty(pg_relation_size(indexrelid)) as size
+        FROM pg_stat_user_indexes
+        WHERE idx_scan = 0
+          AND schemaname = 'public'
+        ORDER BY pg_relation_size(indexrelid) DESC
+        """
+        with Session(self.engine) as session:
+            result = session.execute(text(query))
+            return [{"index": row[0], "size": row[1]} for row in result]
+
+    def get_index_stats(self, table_name: str):
+        """테이블의 인덱스 통계 조회"""
+        query = f"""
+        SELECT indexrelname,
+               idx_scan as scans,
+               idx_tup_read as tuples_read,
+               idx_tup_fetch as tuples_fetched
+        FROM pg_stat_user_indexes
+        WHERE relname = '{table_name}'
+        ORDER BY idx_scan DESC
+        """
+        with Session(self.engine) as session:
+            result = session.execute(text(query))
+            return [dict(row._mapping) for row in result]
+
+
+# 사용 예시
+if __name__ == "__main__":
+    engine = create_engine("postgresql://localhost/mydb")
+
+    # 테이블 및 인덱스 생성
+    Base.metadata.create_all(engine)
+
+    # 인덱스 활용 확인
+    examples = IndexQueryExamples(engine)
+
+    # 인덱스 사용되는 쿼리
+    examples.check_index_usage(
+        "SELECT * FROM users WHERE email = 'test@example.com'"
+    )
+
+    # 미사용 인덱스 확인
+    unused = examples.get_unused_indexes()
+    print(f"미사용 인덱스: {unused}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// 인덱스 관리 예제 - Prisma + TypeScript
+// schema.prisma
+/*
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String   @unique
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  metadata  Json?
+  orders    Order[]
+
+  // 복합 인덱스
+  @@index([status, createdAt])
+  @@index([email, status])
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  amount    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  // 자주 사용되는 쿼리 패턴에 맞춘 인덱스
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([productId, amount])
+}
+
+model Product {
+  id    Int      @id @default(autoincrement())
+  name  String
+  price Decimal
+  tags  String[]
+
+  // 가격 범위 검색용
+  @@index([price])
+}
+*/
+
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient({
+    log: ['query'], // 실행되는 SQL 확인
+});
+
+// 인덱스 활용 쿼리 예제
+class IndexOptimizedQueries {
+    /**
+     * 인덱스를 효과적으로 사용하는 쿼리
+     */
+    async getUserByEmail(email: string) {
+        // idx_users_email (unique index) 사용
+        return prisma.user.findUnique({
+            where: { email },
+        });
+    }
+
+    /**
+     * 복합 인덱스 활용 - 컬럼 순서 중요!
+     */
+    async getActiveUsersByDate(startDate: Date, endDate: Date) {
+        // @@index([status, createdAt]) 사용
+        // status가 선행 컬럼이므로 status 조건 필수
+        return prisma.user.findMany({
+            where: {
+                status: 'active',
+                createdAt: {
+                    gte: startDate,
+                    lte: endDate,
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
+
+    /**
+     * 커버링 인덱스 - 인덱스만으로 결과 반환 (Index Only Scan)
+     */
+    async getUserEmails(status: string) {
+        // email만 선택하면 테이블 접근 없이 인덱스에서 직접 반환
+        return prisma.user.findMany({
+            where: { status },
+            select: { email: true }, // 인덱스 컬럼만 선택
+        });
+    }
+
+    /**
+     * 인덱스를 못 타는 안티패턴 예제
+     */
+    async antiPatternExamples() {
+        // 1. 함수 사용 - 인덱스 무효화
+        // WHERE LOWER(email) = 'test@example.com' -> Seq Scan
+        // 해결: 함수 인덱스 생성 또는 대소문자 통일
+
+        // 2. LIKE 앞부분 와일드카드 - 인덱스 무효화
+        // WHERE email LIKE '%@gmail.com' -> Seq Scan
+        const badPattern = await prisma.user.findMany({
+            where: { email: { contains: '@gmail.com' } },
+        });
+
+        // 3. OR 조건 - 인덱스 활용 어려움
+        // WHERE email = 'a' OR username = 'b'
+        // 각각 인덱스가 있어도 비효율적
+
+        // 4. 복합 인덱스 순서 무시
+        // @@index([status, createdAt])에서
+        // WHERE createdAt > '2024-01-01' (status 조건 없음) -> 인덱스 미사용
+
+        return badPattern;
+    }
+
+    /**
+     * 페이지네이션 최적화 - 커서 기반
+     */
+    async getOrdersOptimized(userId: number, cursor?: number, limit = 20) {
+        // OFFSET 대신 커서 사용 - 대용량 테이블에서 훨씬 빠름
+        // @@index([userId, createdAt]) 활용
+        return prisma.order.findMany({
+            where: {
+                userId,
+                ...(cursor && { id: { lt: cursor } }),
+            },
+            orderBy: { id: 'desc' },
+            take: limit,
+        });
+    }
+}
+
+// 인덱스 분석 유틸리티
+class IndexAnalyzer {
+    /**
+     * EXPLAIN ANALYZE 실행
+     */
+    async explainQuery(query: string) {
+        const result = await prisma.$queryRawUnsafe<{ 'QUERY PLAN': string }[]>(
+            `EXPLAIN ANALYZE ${query}`
+        );
+
+        const plan = result.map((r) => r['QUERY PLAN']).join('\n');
+        const usesIndex = plan.includes('Index Scan') || plan.includes('Index Only Scan');
+
+        console.log('쿼리 실행 계획:');
+        console.log(plan);
+        console.log(`\n인덱스 사용: ${usesIndex ? 'O' : 'X (성능 저하 가능)'}`);
+
+        return { plan, usesIndex };
+    }
+
+    /**
+     * 테이블 인덱스 목록 조회
+     */
+    async getTableIndexes(tableName: string) {
+        return prisma.$queryRaw`
+            SELECT indexname, indexdef
+            FROM pg_indexes
+            WHERE tablename = ${tableName}
+        `;
+    }
+}
+
+// 사용 예시
+async function main() {
+    const queries = new IndexOptimizedQueries();
+    const analyzer = new IndexAnalyzer();
+
+    // 이메일로 사용자 조회 (인덱스 사용)
+    const user = await queries.getUserByEmail('test@example.com');
+
+    // 쿼리 실행 계획 분석
+    await analyzer.explainQuery(
+        "SELECT * FROM \"User\" WHERE email = 'test@example.com'"
+    );
+
+    await prisma.$disconnect();
+}
+
+main();</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 쿼리 성능 이슈 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "이 쿼리가 3초나 걸리는 이유가 Full Table Scan 때문이에요. EXPLAIN 찍어보니 users 테이블에 email 인덱스가 없네요. 인덱스 하나 추가하면 0.01초로 줄일 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 인덱스 설계 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "복합 인덱스는 컬럼 순서가 중요합니다. (user_id, created_at) 순으로 만들어야 'user_id = ? AND created_at > ?' 쿼리에서 인덱스를 탈 수 있어요. 순서가 바뀌면 user_id 조건만으로는 인덱스를 못 탑니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 운영 환경 최적화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "인덱스를 너무 많이 만들면 INSERT, UPDATE가 느려져요. 쓰기가 많은 테이블은 꼭 필요한 인덱스만 유지하고, 미사용 인덱스는 정기적으로 정리해야 합니다. pg_stat_user_indexes에서 idx_scan이 0인 걸 찾아보세요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>과도한 인덱스 생성 금지</strong>
+                        <p>인덱스가 많으면 INSERT/UPDATE/DELETE 성능이 저하됩니다. 모든 컬럼에 인덱스를 만들지 말고, 실제 쿼리 패턴을 분석하여 필요한 것만 생성하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>함수/연산 사용 시 인덱스 무효화</strong>
+                        <p>WHERE LOWER(email) = 'test' 처럼 컬럼에 함수를 적용하면 인덱스를 사용하지 못합니다. 함수 인덱스를 별도로 생성하거나, 데이터 저장 시 정규화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>복합 인덱스 순서 무시</strong>
+                        <p>(A, B, C) 복합 인덱스에서 B만으로 검색하면 인덱스를 활용하지 못합니다. 선행 컬럼(A)부터 조건에 포함해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>인덱스 베스트 프랙티스</strong>
+                        <p>EXPLAIN ANALYZE로 쿼리 분석, 선택도(Selectivity) 높은 컬럼에 인덱스 생성, 커버링 인덱스 활용, 정기적인 미사용 인덱스 정리, REINDEX로 블로트 제거.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Query/" class="related-term-link">Query</a>
+                <a href="/ko/term/SQL/" class="related-term-link">SQL</a>
+                <a href="/ko/term/PostgreSQL/" class="related-term-link">PostgreSQL</a>
+                <a href="/ko/term/MySQL/" class="related-term-link">MySQL</a>
+                <a href="/ko/term/ORM/" class="related-term-link">ORM</a>
+                <a href="/ko/term/ACID/" class="related-term-link">ACID</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.postgresql.org/docs/current/indexes.html" target="_blank" class="learn-link">
+                    📄 PostgreSQL - 인덱스 공식 문서
+                </a>
+                <a href="https://use-the-index-luke.com/" target="_blank" class="learn-link">
+                    🎓 Use The Index, Luke - SQL 인덱싱 가이드
+                </a>
+                <a href="https://dev.mysql.com/doc/refman/8.0/en/optimization-indexes.html" target="_blank" class="learn-link">
+                    📖 MySQL - 인덱스 최적화
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +799,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

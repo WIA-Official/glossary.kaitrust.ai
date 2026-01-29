@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,426 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Jupyter</strong>는 대화형 컴퓨팅을 위한 오픈소스 플랫폼으로, 코드, 시각화, 마크다운 문서를 하나의 노트북에 통합합니다. 데이터 과학, 머신러닝, 교육 분야에서 사실상의 표준 도구입니다.</p>
+
+                <h3>Jupyter 생태계</h3>
+                <ul>
+                    <li><strong>Jupyter Notebook:</strong> 클래식 웹 기반 노트북 인터페이스</li>
+                    <li><strong>JupyterLab:</strong> 차세대 IDE 스타일 인터페이스</li>
+                    <li><strong>JupyterHub:</strong> 다중 사용자 Jupyter 서버</li>
+                    <li><strong>nbconvert:</strong> 노트북을 HTML, PDF, 슬라이드 등으로 변환</li>
+                    <li><strong>Voila:</strong> 노트북을 대시보드로 변환</li>
+                </ul>
+
+                <h3>지원 커널 (언어)</h3>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>커널</th><th>언어</th><th>용도</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>IPython</td><td>Python</td><td>데이터 과학, ML</td></tr>
+                        <tr><td>IRkernel</td><td>R</td><td>통계 분석</td></tr>
+                        <tr><td>IJulia</td><td>Julia</td><td>과학 계산</td></tr>
+                        <tr><td>Scala Kernel</td><td>Scala/Spark</td><td>빅데이터 처리</td></tr>
+                        <tr><td>IJavascript</td><td>JavaScript</td><td>웹 개발</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>노트북 베스트 프랙티스 템플릿</h3>
+                <pre><code class="language-python"># =============================================================================
+# 노트북 제목: 고객 이탈 분석
+# 작성자: Data Team
+# 작성일: 2024-01-15
+# 목적: 고객 이탈 예측 모델 개발 및 인사이트 도출
+# =============================================================================
+
+# %% [markdown]
+# ## 1. 환경 설정 및 라이브러리 임포트
+# 노트북 시작 시 필요한 모든 라이브러리를 한 곳에서 임포트합니다.
+
+# %%
+# 표준 라이브러리
+import os
+import sys
+from datetime import datetime
+import warnings
+warnings.filterwarnings('ignore')
+
+# 데이터 처리
+import numpy as np
+import pandas as pd
+
+# 시각화
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+plt.style.use('seaborn-v0_8-whitegrid')
+plt.rcParams['figure.figsize'] = (12, 6)
+plt.rcParams['font.family'] = 'NanumGothic'
+
+# 머신러닝
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+
+# 설정
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', 100)
+
+# 랜덤 시드 고정 (재현성)
+RANDOM_STATE = 42
+np.random.seed(RANDOM_STATE)
+
+print(f"Python 버전: {sys.version}")
+print(f"Pandas 버전: {pd.__version__}")
+print(f"실행 시간: {datetime.now()}")
+
+# %% [markdown]
+# ## 2. 데이터 로드 및 기본 탐색
+
+# %%
+# 데이터 경로 설정 (환경 변수 또는 설정 파일 사용 권장)
+DATA_PATH = os.getenv('DATA_PATH', '../data')
+
+# 데이터 로드
+df = pd.read_csv(f'{DATA_PATH}/customer_data.csv')
+
+# 기본 정보 확인
+print(f"데이터 크기: {df.shape}")
+print(f"\n데이터 타입:\n{df.dtypes}")
+print(f"\n결측치:\n{df.isnull().sum()}")
+
+df.head()
+
+# %% [markdown]
+# ## 3. 탐색적 데이터 분석 (EDA)
+
+# %%
+# 수치형 변수 기술 통계
+df.describe()
+
+# %%
+# 타겟 변수 분포
+fig, ax = plt.subplots(1, 2, figsize=(14, 5))
+
+df['churn'].value_counts().plot(kind='bar', ax=ax[0])
+ax[0].set_title('이탈 여부 분포')
+ax[0].set_xlabel('이탈 (1: 이탈, 0: 유지)')
+
+df['churn'].value_counts().plot(kind='pie', autopct='%1.1f%%', ax=ax[1])
+ax[1].set_title('이탈 비율')
+
+plt.tight_layout()
+plt.show()
+
+# %% [markdown]
+# ## 4. 데이터 전처리
+
+# %%
+def preprocess_data(df):
+    """데이터 전처리 함수 - 재사용 가능하게 함수화"""
+    df_processed = df.copy()
+
+    # 결측치 처리
+    df_processed['tenure'].fillna(df_processed['tenure'].median(), inplace=True)
+
+    # 범주형 인코딩
+    label_cols = ['gender', 'contract_type']
+    for col in label_cols:
+        le = LabelEncoder()
+        df_processed[col] = le.fit_transform(df_processed[col])
+
+    return df_processed
+
+df_processed = preprocess_data(df)
+df_processed.head()
+
+# %% [markdown]
+# ## 5. 모델 학습 및 평가
+
+# %%
+# 특성과 타겟 분리
+feature_cols = ['tenure', 'monthly_charges', 'total_charges', 'gender', 'contract_type']
+X = df_processed[feature_cols]
+y = df_processed['churn']
+
+# 학습/테스트 분할
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=RANDOM_STATE, stratify=y
+)
+
+# 스케일링
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# 모델 학습
+model = RandomForestClassifier(n_estimators=100, random_state=RANDOM_STATE)
+model.fit(X_train_scaled, y_train)
+
+# 예측 및 평가
+y_pred = model.predict(X_test_scaled)
+print(classification_report(y_test, y_pred))
+
+# %% [markdown]
+# ## 6. 결론 및 다음 단계
+# - 모델 정확도: XX%
+# - 주요 이탈 요인: tenure, monthly_charges
+# - 다음 단계: 하이퍼파라미터 튜닝, 앙상블 모델 시도</code></pre>
+
+                <h3>노트북 자동화 (papermill)</h3>
+                <pre><code class="language-python"># papermill을 사용한 노트북 파라미터화 및 자동 실행
+import papermill as pm
+from datetime import datetime
+
+# 파라미터화된 노트북 실행
+pm.execute_notebook(
+    input_path='analysis_template.ipynb',
+    output_path=f'outputs/analysis_{datetime.now().strftime("%Y%m%d")}.ipynb',
+    parameters={
+        'data_path': '/data/sales_2024.csv',
+        'start_date': '2024-01-01',
+        'end_date': '2024-01-31',
+        'target_metric': 'revenue'
+    },
+    kernel_name='python3'
+)
+
+# 배치 실행 (여러 파라미터 조합)
+regions = ['서울', '부산', '대구', '인천']
+for region in regions:
+    pm.execute_notebook(
+        input_path='regional_analysis.ipynb',
+        output_path=f'outputs/analysis_{region}.ipynb',
+        parameters={'region': region}
+    )
+    print(f"{region} 분석 완료")</code></pre>
+
+                <h3>Jupyter 매직 커맨드 활용</h3>
+                <pre><code class="language-python"># 유용한 Jupyter 매직 커맨드
+
+# 셀 실행 시간 측정
+%%time
+df.groupby('category').agg({'sales': ['sum', 'mean', 'count']})
+
+# 상세 프로파일링
+%%timeit -n 10 -r 3
+result = df.query('sales > 1000')
+
+# 외부 스크립트 실행
+%run utils/data_processing.py
+
+# 환경 변수 설정
+%env DATABASE_URL=postgresql://localhost/mydb
+
+# 디버깅
+%debug  # 에러 발생 후 디버거 진입
+
+# SQL 쿼리 (ipython-sql 확장)
+%load_ext sql
+%sql postgresql://user:pass@localhost/db
+%%sql
+SELECT * FROM customers LIMIT 10;
+
+# 파일 쓰기
+%%writefile utils/helper.py
+def clean_data(df):
+    return df.dropna()
+
+# 노트북 히스토리
+%history -n 1-10
+
+# 변수 목록
+%who_ls DataFrame
+
+# 시스템 명령
+!pip install pandas --upgrade
+!ls -la data/</code></pre>
+
+                <h3>노트북 협업 설정 (.pre-commit-config.yaml)</h3>
+                <pre><code class="language-yaml"># pre-commit hooks for Jupyter notebooks
+repos:
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.6.1
+    hooks:
+      - id: nbstripout
+        name: Strip notebook outputs
+
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.7.0
+    hooks:
+      - id: nbqa-black
+        name: Format notebook code with black
+      - id: nbqa-isort
+        name: Sort imports in notebooks
+      - id: nbqa-flake8
+        name: Lint notebooks with flake8
+
+  - repo: local
+    hooks:
+      - id: jupyter-nb-clear-output
+        name: Clear Jupyter notebook outputs
+        entry: jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace
+        files: \.ipynb$
+        language: system</code></pre>
+
+                <h3>JupyterHub 설정 (jupyterhub_config.py)</h3>
+                <pre><code class="language-python"># JupyterHub 다중 사용자 환경 설정
+c = get_config()
+
+# 인증 설정 (LDAP)
+from ldapauthenticator import LDAPAuthenticator
+c.JupyterHub.authenticator_class = LDAPAuthenticator
+c.LDAPAuthenticator.server_address = 'ldap.company.com'
+c.LDAPAuthenticator.bind_dn_template = 'uid={username},ou=users,dc=company,dc=com'
+
+# Spawner 설정 (Docker)
+c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
+c.DockerSpawner.image = 'jupyter/datascience-notebook:latest'
+c.DockerSpawner.network_name = 'jupyterhub-network'
+
+# 리소스 제한
+c.DockerSpawner.mem_limit = '4G'
+c.DockerSpawner.cpu_limit = 2
+
+# 사용자별 볼륨 마운트
+c.DockerSpawner.volumes = {
+    'jupyterhub-user-{username}': '/home/jovyan/work',
+    '/data/shared': {'bind': '/home/jovyan/shared', 'mode': 'ro'}
+}
+
+# 관리자 설정
+c.Authenticator.admin_users = {'admin', 'dataadmin'}
+
+# SSL 설정
+c.JupyterHub.ssl_cert = '/etc/ssl/certs/jupyterhub.crt'
+c.JupyterHub.ssl_key = '/etc/ssl/private/jupyterhub.key'</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">실무 대화 예시</h2>
+            <div class="section-content">
+                <div class="dialogue">
+                    <div class="dialogue-item">
+                        <span class="speaker">주니어 데이터 분석가:</span>
+                        <span class="speech">"Jupyter 노트북으로 분석하다가 커널이 자꾸 죽어요. 메모리 부족인 것 같은데..."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">시니어 분석가:</span>
+                        <span class="speech">"대용량 데이터 처리할 때는 chunk로 읽거나, 불필요한 컬럼 제거해. 그리고 del df; gc.collect()로 메모리 정리도 해봐."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">주니어 데이터 분석가:</span>
+                        <span class="speech">"노트북 파일을 Git으로 관리하려는데, 충돌이 자주 나요."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">시니어 분석가:</span>
+                        <span class="speech">"nbstripout으로 출력 셀 지우고 커밋해. 아니면 jupytext로 .py 파일과 동기화하면 Diff 보기도 좋아. 협업이 많으면 JupyterHub나 Colab Enterprise 고려해봐."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">주니어 데이터 분석가:</span>
+                        <span class="speech">"노트북을 프로덕션에 배포하고 싶은데, 가능한가요?"</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">시니어 분석가:</span>
+                        <span class="speech">"직접 배포는 권장하지 않아. 노트북에서 검증된 코드를 .py 모듈로 리팩토링하고, papermill로 자동화된 리포트 생성 정도는 괜찮아. 본격 서비스는 FastAPI 같은 프레임워크 써."</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <h4>재현성 문제</h4>
+                    <ul>
+                        <li>셀 실행 순서가 결과에 영향 - Kernel Restart & Run All로 검증</li>
+                        <li>랜덤 시드 고정 필수 (np.random.seed, RANDOM_STATE)</li>
+                        <li>환경 의존성 명시 (requirements.txt, environment.yml)</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>버전 관리</h4>
+                    <ul>
+                        <li>노트북 JSON 형식은 Git diff가 어려움</li>
+                        <li>출력 셀 포함 시 저장소 크기 급증</li>
+                        <li>pre-commit hooks로 출력 셀 자동 제거 설정</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>보안</h4>
+                    <ul>
+                        <li>API 키, 비밀번호를 노트북에 하드코딩 금지</li>
+                        <li>환경 변수 또는 시크릿 매니저 사용</li>
+                        <li>공개 저장소 커밋 전 민감 정보 확인</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/Gradio/" class="related-term-card">
+                        <h4>Gradio</h4>
+                        <p>ML 데모 UI 빌더</p>
+                    </a>
+                    <a href="/ko/term/Pandas/" class="related-term-card">
+                        <h4>Pandas</h4>
+                        <p>데이터 분석 라이브러리</p>
+                    </a>
+                    <a href="/ko/term/Python/" class="related-term-card">
+                        <h4>Python</h4>
+                        <p>데이터 과학 프로그래밍 언어</p>
+                    </a>
+                    <a href="/ko/term/MLOps/" class="related-term-card">
+                        <h4>MLOps</h4>
+                        <p>ML 운영 자동화</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <div class="resource-links">
+                    <a href="https://jupyter.org/documentation" class="resource-link" target="_blank">
+                        <span class="resource-icon">📚</span>
+                        <span>Jupyter 공식 문서</span>
+                    </a>
+                    <a href="https://jupyterlab.readthedocs.io/" class="resource-link" target="_blank">
+                        <span class="resource-icon">🔬</span>
+                        <span>JupyterLab 문서</span>
+                    </a>
+                    <a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks" class="resource-link" target="_blank">
+                        <span class="resource-icon">📖</span>
+                        <span>흥미로운 Jupyter 노트북 갤러리</span>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +633,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

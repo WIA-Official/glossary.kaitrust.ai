@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,106 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>컴파일러(Compiler)는 소스 코드 전체를 읽어 기계어나 다른 언어로 변환하는 프로그램입니다. 프로그래머가 작성한 고수준 언어(C, C++, Rust, Go 등)를 CPU가 직접 실행할 수 있는 저수준 코드로 번역하며, 이 과정에서 문법 검사, 타입 검사, 최적화까지 수행합니다.</p>
+                <p>컴파일 과정은 여러 단계로 나뉩니다. 먼저 어휘 분석(Lexing)에서 소스 코드를 토큰으로 분리하고, 구문 분석(Parsing)에서 추상 구문 트리(AST)를 생성합니다. 의미 분석에서 타입 검사와 변수 바인딩을 확인하고, 중간 코드 생성과 최적화를 거쳐 최종 기계어 코드를 출력합니다.</p>
+                <p>대표적인 컴파일러로 GCC(GNU Compiler Collection), Clang/LLVM, MSVC(Microsoft Visual C++), rustc(Rust 컴파일러) 등이 있습니다. 각각 다른 최적화 전략과 에러 메시지 스타일을 가지며, Clang은 특히 친절한 에러 메시지로 유명합니다.</p>
+                <p>Just-In-Time(JIT) 컴파일러는 실행 시점에 컴파일을 수행합니다. Java의 JVM, JavaScript의 V8 엔진이 대표적입니다. AOT(Ahead-Of-Time) 컴파일과 달리 런타임 정보를 활용한 최적화가 가능하지만, 초기 실행 속도가 느릴 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># GCC로 C 프로그램 컴파일
+gcc -o hello hello.c
+
+# 최적화 옵션과 함께 컴파일
+gcc -O2 -o hello_optimized hello.c
+
+# 디버그 정보 포함
+gcc -g -o hello_debug hello.c
+
+# Clang 사용
+clang -o hello hello.c
+
+# Rust 컴파일
+rustc main.rs
+
+# Go 컴파일 (빌드)
+go build -o myapp main.go
+
+# 컴파일 단계별 확인 (GCC)
+gcc -E hello.c > hello.i    # 전처리
+gcc -S hello.i              # 어셈블리 생성
+gcc -c hello.s              # 오브젝트 파일 생성
+gcc -o hello hello.o        # 링킹</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>시니어:</strong> 릴리스 빌드 시간이 너무 길어요. 최적화 레벨 좀 조정해볼까요?</p>
+                <p><strong>주니어:</strong> -O3이 가장 빠른 거 아닌가요?</p>
+                <p><strong>시니어:</strong> 실행 속도는 빠르지만 컴파일 시간이 길어요. 개발 중엔 -O0이나 -O1, 릴리스만 -O2 정도면 충분해요. -O3은 바이너리 크기도 커지고요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 컴파일러와 인터프리터의 차이점을 설명해주세요.</p>
+                <p><strong>지원자:</strong> 컴파일러는 전체 소스 코드를 한 번에 기계어로 변환하고, 인터프리터는 한 줄씩 실행합니다. 컴파일된 프로그램은 실행이 빠르지만 플랫폼별 빌드가 필요하고, 인터프리터 언어는 개발이 편리하지만 실행 속도가 상대적으로 느립니다.</p>
+                <p><strong>면접관:</strong> JIT 컴파일러는 어떤 장점이 있나요?</p>
+                <p><strong>지원자:</strong> 런타임 정보를 활용해 핫 경로를 집중 최적화할 수 있습니다. 자주 호출되는 함수를 인라인하거나, 실제 사용되는 타입에 맞춰 특수화할 수 있어요.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> 컴파일 경고가 몇 개 뜨는데, -Werror 추가하면 어떨까요?</p>
+                <p><strong>작성자:</strong> 기존 코드에서 경고가 좀 많아서요...</p>
+                <p><strong>리뷰어:</strong> 그럼 일단 -Wall -Wextra로 경고 다 확인하고, 하나씩 수정해요. 경고 무시하다 버그 되는 경우 많아요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>경고 무시 금지:</strong> 컴파일러 경고는 잠재적 버그의 신호입니다. -Wall -Werror 옵션으로 경고를 에러로 처리하세요.</li>
+                <li><strong>최적화 레벨 이해:</strong> 높은 최적화 레벨이 항상 좋은 것은 아닙니다. 디버깅이 어려워지고 특정 코드에서 예상치 못한 동작이 발생할 수 있습니다.</li>
+                <li><strong>크로스 컴파일:</strong> 다른 플랫폼용 바이너리를 생성할 때는 적절한 툴체인과 타겟 지정이 필요합니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%9D%B8%ED%84%B0%ED%94%84%EB%A6%AC%ED%84%B0/" class="related-link">인터프리터</a>
+                <a href="/ko/term/%EB%B9%8C%EB%93%9C/" class="related-link">빌드</a>
+                <a href="/ko/term/%EB%A7%81%EC%BB%A4/" class="related-link">링커</a>
+                <a href="/ko/term/%EB%B0%94%EC%9D%B4%ED%8A%B8%EC%BD%94%EB%93%9C/" class="related-link">바이트코드</a>
+                <a href="/ko/term/%EC%B5%9C%EC%A0%81%ED%99%94/" class="related-link">최적화</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://gcc.gnu.org/onlinedocs/" target="_blank">GCC Documentation</a></li>
+                <li><a href="https://clang.llvm.org/docs/" target="_blank">Clang Documentation</a></li>
+                <li><a href="https://craftinginterpreters.com/" target="_blank">Crafting Interpreters (Book)</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +314,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

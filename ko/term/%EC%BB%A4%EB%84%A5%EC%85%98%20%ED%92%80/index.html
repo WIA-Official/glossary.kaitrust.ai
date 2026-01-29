@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,139 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>커넥션 풀(Connection Pool)은 데이터베이스 연결을 미리 생성해두고 재사용하는 기법입니다. DB 연결은 TCP 핸드셰이크, 인증, 세션 초기화 등으로 비용이 높은 작업이므로, 매 요청마다 연결을 생성하고 닫는 대신 풀에서 가져다 쓰고 반환합니다.</p>
+                <p>커넥션 풀은 최소/최대 연결 수, 유휴 연결 타임아웃, 연결 검증 등을 설정할 수 있습니다. 적절한 크기 설정이 중요한데, 너무 작으면 대기가 발생하고, 너무 크면 DB 서버에 부담이 됩니다. 일반적으로 (CPU 코어 수 * 2) + 유효 스핀들 수가 권장됩니다.</p>
+                <p>애플리케이션 레벨(HikariCP, DBCP)과 미들웨어 레벨(pgBouncer, ProxySQL)에서 구현할 수 있습니다. 서버리스 환경에서는 연결 급증 문제가 있어 PgBouncer 같은 외부 풀러나 AWS RDS Proxy를 사용하기도 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Python - SQLAlchemy 커넥션 풀 설정
+from sqlalchemy import create_engine
+
+engine = create_engine(
+    'postgresql://user:password@localhost/mydb',
+    pool_size=10,           # 기본 풀 크기
+    max_overflow=20,        # 최대 추가 연결 수
+    pool_timeout=30,        # 연결 대기 타임아웃 (초)
+    pool_recycle=1800,      # 연결 재활용 주기 (초)
+    pool_pre_ping=True      # 연결 상태 확인
+)
+
+# Java - HikariCP 설정
+# application.yml
+spring:
+  datasource:
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 300000      # 5분
+      max-lifetime: 1800000     # 30분
+      connection-timeout: 30000 # 30초
+      validation-timeout: 5000
+      leak-detection-threshold: 60000
+
+# Node.js - pg Pool 설정
+const { Pool } = require('pg');
+
+const pool = new Pool({
+    host: 'localhost',
+    database: 'mydb',
+    user: 'user',
+    password: 'password',
+    max: 20,                    // 최대 연결 수
+    idleTimeoutMillis: 30000,   // 유휴 타임아웃
+    connectionTimeoutMillis: 10000
+});
+
+// 커넥션 사용
+const client = await pool.connect();
+try {
+    const result = await client.query('SELECT * FROM users WHERE id = $1', [userId]);
+    return result.rows;
+} finally {
+    client.release();  // 풀에 반환 (닫지 않음!)
+}
+
+// Django - 커넥션 풀 설정
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'localhost',
+        'NAME': 'mydb',
+        'CONN_MAX_AGE': 600,    # 연결 유지 시간 (초)
+        'CONN_HEALTH_CHECKS': True,
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>백엔드 개발자:</strong> 트래픽 급증할 때 "too many connections" 에러가 나요.</p>
+                <p><strong>DBA:</strong> 커넥션 풀 max_pool_size가 몇이에요? DB의 max_connections는요?</p>
+                <p><strong>백엔드 개발자:</strong> 풀은 서버당 50개인데, 서버가 10대라서 500개고, max_connections는 200이에요.</p>
+                <p><strong>DBA:</strong> 그럼 당연히 초과하죠. pgBouncer로 커넥션 풀링하거나, 애플리케이션 풀 크기를 줄여야 해요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 적절한 커넥션 풀 크기는 어떻게 정하시나요?</p>
+                <p><strong>지원자:</strong> HikariCP 공식에서는 (CPU 코어 수 * 2) + 유효 스핀들 수를 권장합니다. SSD라면 대략 코어 수의 2~3배 정도요. 하지만 실제로는 부하 테스트로 최적값을 찾아야 합니다. 쿼리 특성에 따라 달라지거든요.</p>
+                <p><strong>면접관:</strong> 커넥션 풀 관련해서 주의할 점은요?</p>
+                <p><strong>지원자:</strong> 연결을 반드시 반환해야 합니다. try-finally나 using 패턴으로 누수를 방지하고, leak detection 설정으로 문제를 조기에 발견해야 합니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>시니어:</strong> 여기 connection.close()가 finally 블록 안에 없네요.</p>
+                <p><strong>주니어:</strong> 예외 안 나면 닫히지 않나요?</p>
+                <p><strong>시니어:</strong> 중간에 예외 나면 연결이 반환 안 돼서 풀이 고갈됩니다. 항상 finally에서 반환하거나 with 문을 쓰세요. 커넥션 누수는 찾기 어려운 버그예요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>연결은 반드시 사용 후 풀에 반환해야 함 (finally 또는 with 문 사용)</li>
+                <li>전체 애플리케이션 인스턴스의 풀 합계가 DB max_connections를 초과하지 않도록 설정</li>
+                <li>오래된 연결은 DB에서 끊길 수 있으므로 pool_pre_ping 또는 validation 설정</li>
+                <li>트랜잭션 중에는 연결이 반환되지 않으므로 긴 트랜잭션 주의</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/pgBouncer/" class="related-link">pgBouncer</a>
+                <a href="/ko/term/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98/" class="related-link">트랜잭션</a>
+                <a href="/ko/term/%EB%8D%B0%EB%93%9C%EB%9D%BD/" class="related-link">데드락</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4/" class="related-link">데이터베이스</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing" target="_blank">HikariCP Pool Sizing 가이드</a></li>
+                <li><a href="https://www.pgbouncer.org/features.html" target="_blank">PgBouncer 공식 문서</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +347,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

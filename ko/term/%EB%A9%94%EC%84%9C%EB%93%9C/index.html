@@ -161,6 +161,34 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 CSS */
+        .term-section { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; display: flex; align-items: center; gap: 0.5rem; }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; margin: 1rem 0; overflow: hidden; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(168, 85, 247, 0.2); border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .code-lang { color: #a855f7; font-size: 0.85rem; font-weight: 500; }
+        .copy-btn { background: rgba(255,255,255,0.1); border: none; padding: 0.4rem 0.8rem; border-radius: 6px; color: #94a3b8; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .code-block pre { padding: 1rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .conv-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .conv-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .conv-tab.active, .conv-tab:hover { background: rgba(168, 85, 247, 0.2); border-color: rgba(168, 85, 247, 0.4); color: #a855f7; }
+        .conv-content { display: none; }
+        .conv-content.active { display: block; }
+        .conv-item { padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 0.75rem; }
+        .conv-speaker { color: #a855f7; font-weight: 500; margin-bottom: 0.5rem; }
+        .conv-quote { color: #cbd5e1; font-style: italic; line-height: 1.6; }
+        .warning-list, .resource-list { list-style: none; padding: 0; margin: 0; }
+        .warning-list li, .resource-list li { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; }
+        .warning-list li:last-child, .resource-list li:last-child { border-bottom: none; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .resource-list a { color: #a855f7; text-decoration: none; }
+        .resource-list a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -202,6 +230,126 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>메서드(Method)는 객체에 속한 함수로, 클래스가 수행할 수 있는 동작을 정의합니다. 일반 함수와 달리 메서드는 객체의 상태(필드)에 접근하고 수정할 수 있으며, 객체의 컨텍스트에서 실행됩니다.</p>
+                <p>메서드는 크게 세 종류로 나뉩니다. 인스턴스 메서드는 객체 인스턴스에서 호출되며 this/self를 통해 인스턴스 데이터에 접근합니다. 클래스 메서드는 클래스 자체에서 호출되며 cls를 통해 클래스 속성에 접근합니다. 정적 메서드는 인스턴스나 클래스와 무관하게 동작합니다.</p>
+                <p>메서드 오버로딩(같은 이름, 다른 파라미터)과 오버라이딩(상속받아 재정의)은 다형성을 구현하는 핵심 기법입니다. Java, C++은 오버로딩을 지원하지만, Python은 기본적으로 지원하지 않아 기본값이나 *args로 비슷한 효과를 냅니다.</p>
+                <p>getter/setter 메서드는 필드에 대한 접근을 제어합니다. Python의 @property 데코레이터나 Java의 접근자/설정자 패턴이 대표적입니다. 이를 통해 캡슐화를 유지하면서 값 검증이나 부가 로직을 추가할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Python</span>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+                <pre><code>class BankAccount:
+    interest_rate = 0.02  # 클래스 변수
+
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self._balance = balance  # 보호된 속성
+
+    # 인스턴스 메서드: self를 통해 인스턴스 접근
+    def deposit(self, amount):
+        if amount > 0:
+            self._balance += amount
+            return True
+        return False
+
+    def withdraw(self, amount):
+        if 0 < amount <= self._balance:
+            self._balance -= amount
+            return True
+        return False
+
+    # Property: getter/setter 역할
+    @property
+    def balance(self):
+        return self._balance
+
+    # 클래스 메서드: cls를 통해 클래스 접근
+    @classmethod
+    def set_interest_rate(cls, rate):
+        cls.interest_rate = rate
+
+    # 정적 메서드: 인스턴스/클래스와 무관
+    @staticmethod
+    def validate_amount(amount):
+        return isinstance(amount, (int, float)) and amount > 0
+
+# 사용 예시
+account = BankAccount("김개발", 1000)
+account.deposit(500)
+print(f"잔액: {account.balance}")  # 1500
+BankAccount.set_interest_rate(0.03)  # 클래스 메서드 호출</code></pre>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'meeting')">💼 회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'interview')">👔 면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'review')">🔍 코드 리뷰</button>
+            </div>
+            <div id="meeting" class="conv-content active">
+                <div class="conv-item"><div class="conv-speaker">주니어 개발자</div><div class="conv-quote">"이 유틸리티 함수를 어디에 둬야 할지 모르겠어요. 클래스 안에 넣어야 하나요?"</div></div>
+                <div class="conv-item"><div class="conv-speaker">시니어 개발자</div><div class="conv-quote">"인스턴스 상태를 사용하지 않는다면 정적 메서드나 모듈 레벨 함수로 두는 게 좋아요. 불필요하게 클래스에 묶을 필요 없습니다."</div></div>
+                <div class="conv-item"><div class="conv-speaker">주니어 개발자</div><div class="conv-quote">"정적 메서드와 클래스 메서드의 차이는 뭔가요?"</div></div>
+            </div>
+            <div id="interview" class="conv-content">
+                <div class="conv-item"><div class="conv-speaker">면접관</div><div class="conv-quote">"메서드 오버로딩과 오버라이딩의 차이를 설명해주세요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">지원자</div><div class="conv-quote">"오버로딩은 같은 이름의 메서드를 파라미터를 다르게 정의하는 것이고, 오버라이딩은 상위 클래스의 메서드를 하위 클래스에서 재정의하는 것입니다."</div></div>
+                <div class="conv-item"><div class="conv-speaker">면접관</div><div class="conv-quote">"Python에서 private 메서드를 만드는 방법은?"</div></div>
+                <div class="conv-item"><div class="conv-speaker">지원자</div><div class="conv-quote">"언더스코어 두 개로 시작하면 네임 맹글링이 적용됩니다. __method처럼요. 하지만 진정한 private은 아니고 관례상 내부용임을 표시하는 것입니다."</div></div>
+            </div>
+            <div id="review" class="conv-content">
+                <div class="conv-item"><div class="conv-speaker">리뷰어</div><div class="conv-quote">"이 메서드가 20줄이 넘어가네요. 하나의 메서드는 하나의 일만 해야 합니다. 분리해주세요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">작성자</div><div class="conv-quote">"검증, 변환, 저장 단계를 각각 private 메서드로 분리하겠습니다."</div></div>
+                <div class="conv-item"><div class="conv-speaker">리뷰어</div><div class="conv-quote">"그리고 self를 사용하지 않는 메서드는 @staticmethod로 표시해주세요. 의도가 명확해집니다."</div></div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>⚠️ <strong>단일 책임 원칙:</strong> 하나의 메서드는 하나의 작업만 수행해야 합니다. 너무 긴 메서드는 여러 작은 메서드로 분리하세요.</li>
+                <li>⚠️ <strong>부작용 명확히:</strong> 메서드가 객체 상태를 변경하는지, 순수 함수인지 명확히 해야 합니다. 이름에서 의도가 드러나면 좋습니다.</li>
+                <li>⚠️ <strong>this/self 혼동 주의:</strong> JavaScript의 this는 호출 방식에 따라 바뀝니다. 화살표 함수나 bind로 고정하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EA%B0%9D%EC%B2%B4%EC%A7%80%ED%96%A5%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D/" class="related-term">객체지향 프로그래밍</a>
+                <a href="/ko/term/%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4/" class="related-term">인터페이스</a>
+                <a href="/ko/term/%EB%8D%B0%EC%BD%94%EB%A0%88%EC%9D%B4%ED%84%B0/" class="related-term">데코레이터</a>
+                <a href="/ko/term/%ED%81%B4%EB%A1%9C%EC%A0%80/" class="related-term">클로저</a>
+                <a href="/ko/term/%EB%B3%80%EC%88%98/" class="related-term">변수</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li>📄 <a href="https://docs.python.org/ko/3/tutorial/classes.html" target="_blank" rel="noopener">Python 공식 - 클래스와 메서드</a></li>
+                <li>📘 <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Functions/Method_definitions" target="_blank" rel="noopener">MDN - 메서드 정의</a></li>
+                <li>🎬 <a href="https://www.youtube.com/results?search_query=method+vs+function" target="_blank" rel="noopener">YouTube - 메서드 vs 함수</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +360,10 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+        function copyCode(btn) { const code = btn.closest('.code-block').querySelector('code').textContent; navigator.clipboard.writeText(code).then(() => { const originalText = btn.textContent; btn.textContent = '✅ 복사됨'; setTimeout(() => btn.textContent = originalText, 2000); }); }
+        function showConv(btn, id) { document.querySelectorAll('.conv-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.conv-content').forEach(c => c.classList.remove('active')); btn.classList.add('active'); document.getElementById(id).classList.add('active'); }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

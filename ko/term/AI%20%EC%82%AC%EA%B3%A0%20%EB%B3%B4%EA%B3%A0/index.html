@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,241 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>AI 사고 보고(AI Incident Reporting)는 AI 시스템으로 인해 심각한 사고나 오작동이 발생했을 때 관계 당국에 이를 신고하는 법적 의무입니다. EU AI Act 제73조에 따라 고위험 AI 시스템의 공급자와 배포자는 사고 발생 인지 후 72시간 이내에 해당 회원국의 시장감시당국에 보고해야 합니다.</p>
+                <p>보고 대상 사고는 사망 또는 건강에 대한 심각한 피해, 기본권 침해, 재산 또는 환경에 대한 심각한 피해, EU 법률 위반을 초래한 경우입니다. 단순 오작동이 아닌 '심각한 사고(Serious Incident)'에 해당하는 경우에만 보고 의무가 발생합니다.</p>
+                <p>보고 내용에는 AI 시스템 식별 정보, 사고 발생 일시 및 장소, 사고의 성격과 심각도, 피해 규모, 취해진 시정 조치가 포함되어야 합니다. 초기 보고 후 15일 이내에 상세 보고서를 제출해야 하며, 조사 완료 후 최종 보고서도 필요합니다.</p>
+                <p>실무적으로는 사고 탐지 시스템, 에스컬레이션 프로세스, 법무팀 연락 체계를 사전에 구축해야 합니다. 한국에서도 개인정보 유출 사고 시 24시간 이내 신고 의무(개인정보보호법)가 있으며, AI 관련 사고에도 유사한 규정이 적용될 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># AI 사고 보고 시스템 구현 예제
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Optional, List
+import logging
+
+class IncidentSeverity(Enum):
+    CRITICAL = "critical"  # 사망, 심각한 건강 피해
+    HIGH = "high"          # 기본권 침해, 심각한 재산 피해
+    MEDIUM = "medium"      # 서비스 중단, 경미한 피해
+    LOW = "low"            # 오작동, 피해 없음
+
+class ReportStatus(Enum):
+    DETECTED = "detected"
+    INITIAL_REPORT = "initial_report"      # 72시간 내 초기 보고
+    DETAILED_REPORT = "detailed_report"    # 15일 내 상세 보고
+    FINAL_REPORT = "final_report"          # 조사 완료 후 최종 보고
+    CLOSED = "closed"
+
+@dataclass
+class AIIncident:
+    """AI 사고 기록"""
+    incident_id: str
+    ai_system_id: str
+    ai_system_name: str
+    detected_at: datetime
+    occurred_at: datetime
+    severity: IncidentSeverity
+    description: str
+    affected_parties: int
+    harm_type: List[str]  # ["death", "health", "rights", "property", "environment"]
+    status: ReportStatus = ReportStatus.DETECTED
+    initial_report_deadline: datetime = None
+    detailed_report_deadline: datetime = None
+
+    def __post_init__(self):
+        # EU AI Act: 72시간 내 초기 보고
+        self.initial_report_deadline = self.detected_at + timedelta(hours=72)
+        # 15일 내 상세 보고
+        self.detailed_report_deadline = self.detected_at + timedelta(days=15)
+
+class AIIncidentReporter:
+    """EU AI Act 준수 사고 보고 시스템"""
+
+    def __init__(self, organization: str, contact_email: str):
+        self.organization = organization
+        self.contact_email = contact_email
+        self.logger = logging.getLogger("ai_incident_reporter")
+        self.incidents: List[AIIncident] = []
+
+    def report_incident(self, ai_system_id: str, ai_system_name: str,
+                       description: str, severity: IncidentSeverity,
+                       harm_type: List[str], affected_parties: int) -> AIIncident:
+        """새 사고 등록 및 보고 프로세스 시작"""
+        incident = AIIncident(
+            incident_id=f"INC-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+            ai_system_id=ai_system_id,
+            ai_system_name=ai_system_name,
+            detected_at=datetime.now(),
+            occurred_at=datetime.now(),
+            severity=severity,
+            description=description,
+            affected_parties=affected_parties,
+            harm_type=harm_type
+        )
+        self.incidents.append(incident)
+
+        # 심각도에 따른 즉시 알림
+        if severity in [IncidentSeverity.CRITICAL, IncidentSeverity.HIGH]:
+            self._trigger_immediate_alert(incident)
+            self._notify_legal_team(incident)
+
+        self.logger.critical(
+            f"AI 사고 감지: {incident.incident_id} | "
+            f"시스템: {ai_system_name} | "
+            f"심각도: {severity.value} | "
+            f"72시간 보고 기한: {incident.initial_report_deadline}"
+        )
+
+        return incident
+
+    def _trigger_immediate_alert(self, incident: AIIncident):
+        """심각한 사고 발생 시 즉시 알림"""
+        alert_message = {
+            "type": "AI_SERIOUS_INCIDENT",
+            "incident_id": incident.incident_id,
+            "severity": incident.severity.value,
+            "deadline": incident.initial_report_deadline.isoformat(),
+            "action_required": "72시간 내 시장감시당국 보고 필수"
+        }
+        # Slack, Email, SMS 등으로 알림 발송
+        self.logger.warning(f"긴급 알림 발송: {alert_message}")
+
+    def _notify_legal_team(self, incident: AIIncident):
+        """법무팀 자동 통보"""
+        notification = {
+            "to": "legal@company.com",
+            "subject": f"[긴급] AI 사고 보고 의무 발생 - {incident.incident_id}",
+            "body": f"""
+            AI 시스템: {incident.ai_system_name}
+            사고 유형: {', '.join(incident.harm_type)}
+            영향 범위: {incident.affected_parties}명
+
+            EU AI Act Art.73에 따라 72시간 내 보고 필요
+            보고 기한: {incident.initial_report_deadline}
+            """
+        }
+        self.logger.info(f"법무팀 통보: {notification}")
+
+    def generate_initial_report(self, incident_id: str) -> dict:
+        """72시간 내 초기 보고서 생성"""
+        incident = next((i for i in self.incidents if i.incident_id == incident_id), None)
+        if not incident:
+            raise ValueError(f"사고를 찾을 수 없음: {incident_id}")
+
+        report = {
+            "report_type": "INITIAL_NOTIFICATION",
+            "eu_ai_act_article": "Article 73",
+            "submission_deadline": incident.initial_report_deadline.isoformat(),
+            "organization": self.organization,
+            "contact": self.contact_email,
+            "ai_system": {
+                "id": incident.ai_system_id,
+                "name": incident.ai_system_name
+            },
+            "incident": {
+                "id": incident.incident_id,
+                "detected_at": incident.detected_at.isoformat(),
+                "occurred_at": incident.occurred_at.isoformat(),
+                "severity": incident.severity.value,
+                "description": incident.description,
+                "harm_type": incident.harm_type,
+                "affected_parties": incident.affected_parties
+            },
+            "immediate_actions": "조사 진행 중, 시스템 일시 중단",
+            "generated_at": datetime.now().isoformat()
+        }
+
+        incident.status = ReportStatus.INITIAL_REPORT
+        return report
+
+# 사용 예시
+reporter = AIIncidentReporter(
+    organization="KAITRUST Corp",
+    contact_email="compliance@kaitrust.ai"
+)
+
+# 심각한 사고 보고
+incident = reporter.report_incident(
+    ai_system_id="MEDICAL-AI-001",
+    ai_system_name="AI 진단 보조 시스템",
+    description="잘못된 진단으로 인한 치료 지연 발생",
+    severity=IncidentSeverity.CRITICAL,
+    harm_type=["health"],
+    affected_parties=1
+)
+
+# 초기 보고서 생성
+initial_report = reporter.generate_initial_report(incident.incident_id)
+print(f"보고서 생성 완료: {initial_report['incident']['id']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">법무팀:</strong> "AI 사고 발생하면 72시간 내 보고입니다. 주말이라고 예외 없어요. 사고 대응 당직 체계 구축해야 해요."</p>
+                <p><strong class="role-junior">개발팀:</strong> "사고 탐지 시 자동으로 법무팀과 DPO에게 알림 가도록 설정했고, 초기 보고서 템플릿도 준비했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "AI 시스템 사고 대응 경험이 있으신가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "추천 시스템 오작동으로 부적절 콘텐츠가 노출된 사고를 처리했습니다. 30분 내 시스템 롤백, 2시간 내 영향 범위 파악, 24시간 내 근본 원인 분석을 완료했고, 사후 보고서 작성까지 담당했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">컴플라이언스:</strong> "이 예외 처리에서 심각한 오류 발생 시 사고 보고 시스템으로 연동되나요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "IncidentReporter 훅 추가했습니다. severity가 CRITICAL이면 자동으로 법무팀 알림까지 연동됩니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>72시간 보고 기한 미준수 시 최대 1,500만 유로 또는 매출 3% 과징금</li>
+                <li>사고 은폐 또는 허위 보고 시 가중 처벌 - 추가 형사 책임 가능</li>
+                <li>보고 의무는 공급자(Provider)와 배포자(Deployer) 모두에게 적용</li>
+                <li class="info">사고 대응 매뉴얼과 연락 체계를 사전에 문서화하고 정기 훈련 권장</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/EU%20AI%20Act/" class="related-link">EU AI Act</a>
+                <a href="/ko/term/AI%20%EA%B0%90%EC%82%AC/" class="related-link">AI 감사</a>
+                <a href="/ko/term/AI%20%EC%82%AC%EB%AC%B4%EA%B5%AD/" class="related-link">AI 사무국</a>
+                <a href="/ko/term/AI%20%EC%B1%85%EC%9E%84%EC%84%B1/" class="related-link">AI 책임성</a>
+                <a href="/ko/term/AISP/" class="related-link">AISP</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act Article 73 - 심각한 사고 보고</a></li>
+                <li><span class="type-tutorial"></span><a href="https://digital-strategy.ec.europa.eu/en/policies/ai-office" target="_blank" rel="noopener">EU AI Office - 사고 보고 가이드라인</a></li>
+                <li><span class="type-book"></span><a href="https://incidentdatabase.ai/" target="_blank" rel="noopener">AI Incident Database - 사례 학습</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +448,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

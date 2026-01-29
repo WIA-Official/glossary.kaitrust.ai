@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,172 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Polars는 2020년 Ritchie Vink가 Rust로 개발한 고성능 DataFrame 라이브러리입니다. Apache Arrow 메모리 포맷을 기반으로 하며, 멀티스레드 병렬 처리와 SIMD(Single Instruction Multiple Data) 최적화로 Pandas보다 10-100배 빠른 성능을 보여줍니다.</p>
+                <p>Lazy Evaluation이 핵심 기능입니다. df.lazy()로 LazyFrame을 생성하면 연산이 즉시 실행되지 않고 쿼리 플랜으로 누적됩니다. collect() 호출 시 최적화된 실행 계획으로 한 번에 처리해 불필요한 중간 결과 생성을 방지합니다. 컬럼 프루닝, 술어 푸시다운이 자동 적용됩니다.</p>
+                <p>표현식(Expression) 기반 API는 체이닝으로 복잡한 변환을 간결하게 표현합니다. pl.col("name").str.to_uppercase(), pl.col("age").cast(pl.Float64) 같은 표현식을 조합해 데이터 파이프라인을 구성합니다. groupby, join, window function도 표현식으로 작성합니다.</p>
+                <p>Pandas 코드를 거의 그대로 마이그레이션할 수 있으며, Pandas DataFrame과 상호 변환이 가능합니다. 대용량 데이터를 단일 머신에서 처리할 때 Spark 대안으로 각광받고 있으며, Rust/Python 모두에서 사용 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>import polars as pl
+
+# DataFrame 생성
+df = pl.DataFrame({
+    "name": ["Alice", "Bob", "Charlie", "Diana", "Eve"],
+    "age": [25, 30, 35, 28, 32],
+    "city": ["Seoul", "Busan", "Seoul", "Incheon", "Seoul"],
+    "salary": [50000, 60000, 70000, 55000, 65000]
+})
+
+# 파일 읽기/쓰기
+# df = pl.read_csv("data.csv")
+# df = pl.read_parquet("data.parquet")
+# df.write_parquet("output.parquet")
+
+# Eager Evaluation (즉시 실행)
+result = df.filter(pl.col("age") > 28).select(["name", "salary"])
+print(result)
+
+# Lazy Evaluation (지연 실행) - 권장
+lazy_df = (
+    df.lazy()
+    .filter(pl.col("age") > 25)
+    .with_columns([
+        (pl.col("salary") * 1.1).alias("new_salary"),
+        pl.col("name").str.to_uppercase().alias("name_upper")
+    ])
+    .group_by("city")
+    .agg([
+        pl.col("salary").mean().alias("avg_salary"),
+        pl.col("name").count().alias("count")
+    ])
+    .sort("avg_salary", descending=True)
+)
+
+# collect()로 실행
+result = lazy_df.collect()
+print(result)
+
+# 표현식 조합
+df_transformed = df.select([
+    pl.col("name"),
+    pl.col("age"),
+    pl.when(pl.col("salary") > 60000)
+      .then(pl.lit("High"))
+      .otherwise(pl.lit("Normal"))
+      .alias("salary_level"),
+    (pl.col("salary") / 12).round(2).alias("monthly_salary")
+])
+print(df_transformed)
+
+# Window 함수
+df_with_rank = df.with_columns([
+    pl.col("salary")
+      .rank(descending=True)
+      .over("city")
+      .alias("salary_rank_in_city"),
+    pl.col("salary")
+      .mean()
+      .over("city")
+      .alias("city_avg_salary")
+])
+print(df_with_rank)
+
+# Join
+departments = pl.DataFrame({
+    "name": ["Alice", "Bob", "Charlie"],
+    "department": ["Engineering", "Sales", "Engineering"]
+})
+
+joined = df.join(departments, on="name", how="left")
+print(joined)
+
+# 스트리밍 모드 (대용량 처리)
+# lazy_df = pl.scan_parquet("huge_file.parquet")
+# result = lazy_df.filter(pl.col("value") > 100).collect(streaming=True)
+
+# Pandas 변환
+pandas_df = df.to_pandas()
+polars_df = pl.from_pandas(pandas_df)
+
+# 성능 비교 (100만 행)
+import time
+large_df = pl.DataFrame({
+    "a": list(range(1_000_000)),
+    "b": list(range(1_000_000))
+})
+
+start = time.time()
+result = large_df.lazy().filter(pl.col("a") > 500000).group_by("b" ).agg(pl.col("a").sum()).collect()
+print(f"Polars: {time.time() - start:.3f}s")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "ETL 파이프라인을 Pandas에서 Polars로 바꿨더니 처리 시간이 30분에서 2분으로 줄었어요. Lazy mode 덕분이에요."</p>
+                <p><strong class="role-junior">주니어:</strong> "Pandas 코드 다 바꿔야 해요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "API가 비슷해서 70% 정도는 거의 그대로 쓸 수 있어요. df['col'] 대신 df.select() 쓰는 것만 익숙해지면 돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "대용량 데이터 처리 경험을 말씀해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "5GB CSV 파일을 Polars의 scan_csv와 Lazy mode로 처리했습니다. Pandas는 메모리 부족으로 실패했지만, Polars는 스트리밍으로 16GB RAM에서 처리 가능했습니다. 쿼리 최적화가 자동 적용되어 필요한 컬럼만 읽고, 필터 조건을 파일 스캔 단계에서 적용해 I/O를 최소화했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "lazy()로 시작해서 collect()로 끝내는 패턴을 쓰세요. Eager mode는 최적화 기회를 놓쳐요."</p>
+                <p><strong class="role-junior">개발자:</strong> "중간에 결과 확인하고 싶을 때는 어떻게 해요?"</p>
+                <p><strong class="role-reviewer">리뷰어:</strong> "head().collect()로 샘플만 확인하거나, explain()으로 쿼리 플랜을 보면 돼요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>인덱스 개념 없음 - Pandas처럼 df.loc[index] 사용 불가, row_nr()로 행 번호 생성 필요</li>
+                <li>일부 Pandas 기능 미지원 - MultiIndex, 일부 문자열 메서드 등은 다른 방식으로 구현</li>
+                <li>외부 라이브러리 호환성 - scikit-learn 등 일부 라이브러리는 Pandas 입력만 지원, to_pandas() 변환 필요</li>
+                <li class="info">explain()으로 쿼리 실행 계획을 확인하면 최적화 포인트를 파악할 수 있음</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Pandas/" class="related-link">Pandas</a>
+                <a href="/ko/term/NumPy/" class="related-link">NumPy</a>
+                <a href="/ko/term/Parquet/" class="related-link">Parquet</a>
+                <a href="/ko/term/Spark/" class="related-link">Spark</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://pola-rs.github.io/polars/py-polars/html/reference/" target="_blank" rel="noopener">Polars Python API Reference</a></li>
+                <li><span class="type-tutorial"></span><a href="https://pola-rs.github.io/polars-book/user-guide/" target="_blank" rel="noopener">Polars User Guide</a></li>
+                <li><span class="type-article"></span><a href="https://blog.jetbrains.com/datalore/2023/08/15/polars-vs-pandas/" target="_blank" rel="noopener">Polars vs Pandas 성능 비교</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +379,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

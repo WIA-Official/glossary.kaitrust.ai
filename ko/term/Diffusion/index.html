@@ -161,6 +161,127 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table td { color: #cbd5e1; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
     </style>
 </head>
 <body>
@@ -202,6 +323,193 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>디퓨전(Diffusion)은 데이터에 점진적으로 노이즈를 추가한 뒤, 그 역과정을 학습하여 노이즈로부터 원본 데이터를 복원하는 생성 모델 기법입니다. 물리학의 확산(diffusion) 현상에서 영감을 받았으며, 2020년 DDPM(Denoising Diffusion Probabilistic Models) 논문을 통해 이미지 생성에서 GAN을 능가하는 성능을 보여주며 주목받기 시작했습니다.</p>
+                <p>디퓨전의 역사적 기원은 2015년 Sohl-Dickstein의 "Deep Unsupervised Learning using Nonequilibrium Thermodynamics"까지 거슬러 올라가지만, 실용적인 이미지 생성은 2020년 Ho et al.의 DDPM에서 시작되었습니다. 이후 2021년 DALL-E 2, 2022년 Stable Diffusion, 2023년 DALL-E 3, Midjourney V5 등이 연달아 출시되며 AI 이미지 생성 시대를 열었습니다.</p>
+                <p>핵심 원리는 두 단계로 구성됩니다. Forward process(확산 과정)에서는 원본 이미지 x0에 T 스텝에 걸쳐 가우시안 노이즈를 점진적으로 추가하여 순수 노이즈 xT로 변환합니다. Reverse process(역확산 과정)에서는 신경망이 각 스텝에서 추가된 노이즈를 예측하고 제거하여 xT에서 x0를 복원합니다. 학습 목표는 예측 노이즈와 실제 노이즈 간의 MSE를 최소화하는 것입니다.</p>
+                <p>실무에서 디퓨전은 Stable Diffusion, DALL-E 3, Midjourney의 핵심 기술로 활용됩니다. GAN 대비 학습 안정성이 높고 모드 붕괴(mode collapse) 문제가 없어 다양한 이미지를 생성할 수 있습니다. 다만 샘플링에 수십~수백 스텝이 필요해 추론 속도가 느리다는 단점이 있어, DDIM, DPM-Solver 등 빠른 샘플러 연구가 활발합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># 디퓨전 핵심 개념 구현 (간소화 버전)
+import torch
+import torch.nn as nn
+import numpy as np
+
+class SimpleDiffusion:
+    """간단한 디퓨전 프로세스 구현"""
+    def __init__(self, timesteps=1000, beta_start=1e-4, beta_end=0.02):
+        self.timesteps = timesteps
+        # 선형 노이즈 스케줄
+        self.betas = torch.linspace(beta_start, beta_end, timesteps)
+        self.alphas = 1.0 - self.betas
+        self.alphas_cumprod = torch.cumprod(self.alphas, dim=0)
+
+    def forward_process(self, x0, t):
+        """Forward diffusion: x0에 노이즈 추가하여 xt 생성"""
+        sqrt_alpha_cumprod = torch.sqrt(self.alphas_cumprod[t])
+        sqrt_one_minus = torch.sqrt(1.0 - self.alphas_cumprod[t])
+        noise = torch.randn_like(x0)
+        xt = sqrt_alpha_cumprod * x0 + sqrt_one_minus * noise
+        return xt, noise
+
+    def reverse_step(self, xt, predicted_noise, t):
+        """Reverse diffusion: 예측 노이즈로 xt-1 복원"""
+        alpha = self.alphas[t]
+        alpha_cumprod = self.alphas_cumprod[t]
+        beta = self.betas[t]
+
+        # 평균 계산
+        mean = (1 / torch.sqrt(alpha)) * (
+            xt - (beta / torch.sqrt(1 - alpha_cumprod)) * predicted_noise
+        )
+        # 노이즈 추가 (t > 0일 때)
+        if t > 0:
+            noise = torch.randn_like(xt)
+            return mean + torch.sqrt(beta) * noise
+        return mean
+
+# 학습 루프 예시
+diffusion = SimpleDiffusion()
+model = nn.Sequential(nn.Linear(784, 512), nn.ReLU(), nn.Linear(512, 784))
+
+for epoch in range(100):
+    x0 = torch.randn(32, 784)  # 배치 데이터
+    t = torch.randint(0, 1000, (32,))  # 랜덤 타임스텝
+    xt, noise = diffusion.forward_process(x0, t[0])
+    predicted_noise = model(xt)
+    loss = nn.MSELoss()(predicted_noise, noise)
+    # loss.backward() 및 optimizer.step()...</code></pre>
+            </div>
+        </section>
+
+        <!-- 📊 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>2025년 1월 기준 주요 Diffusion 기반 이미지 생성 서비스 가격 비교입니다.</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>서비스</th>
+                        <th>월정액</th>
+                        <th>이미지당 비용</th>
+                        <th>무료 옵션</th>
+                    </tr>
+                    <tr>
+                        <td>DALL-E 3</td>
+                        <td>$20/월 (ChatGPT Plus)</td>
+                        <td>$0.016 ~ $0.04 (API)</td>
+                        <td>일 3장 무료</td>
+                    </tr>
+                    <tr>
+                        <td>Midjourney</td>
+                        <td>$10 ~ $30/월</td>
+                        <td>~$0.05 (Basic)</td>
+                        <td>없음</td>
+                    </tr>
+                    <tr>
+                        <td>Stable Diffusion</td>
+                        <td>무료 (로컬)</td>
+                        <td>$0.002+ (클라우드)</td>
+                        <td>셀프 호스팅 무료</td>
+                    </tr>
+                    <tr>
+                        <td>Stability AI API</td>
+                        <td>-</td>
+                        <td>$0.01/크레딧</td>
+                        <td>$1M 이하 무료</td>
+                    </tr>
+                </table>
+                <p><strong>선택 가이드:</strong> 예술적 품질은 Midjourney, API 연동/다양성은 DALL-E 3, 비용 효율/커스터마이징은 Stable Diffusion 로컬 권장. SDXL 로컬 실행 시 RTX 4090급 GPU($1,600+) 필요.</p>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">AI 기술 세미나에서</div>
+                    <p class="conv-quote">"디퓨전이 GAN을 대체한 핵심 이유는 학습 안정성입니다. GAN의 discriminator-generator 균형 문제나 모드 붕괴 없이, 단순한 노이즈 예측 MSE 손실로 안정적으로 학습됩니다. 대신 샘플링이 느려서 DDIM 같은 가속 기법이 필수적이에요."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">기술 면접에서</div>
+                    <p class="conv-quote">"디퓨전에서 노이즈 스케줄 설계가 중요합니다. 선형(linear)보다 코사인(cosine) 스케줄이 초반 스텝에서 정보 손실을 줄여 고품질 이미지 생성에 유리합니다. Stable Diffusion도 코사인 스케줄 변형을 사용합니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">제품 기획 미팅에서</div>
+                    <p class="conv-quote">"실시간 이미지 생성이 필요하면 LCM(Latent Consistency Model)이나 SDXL Turbo처럼 1-4스텝 생성이 가능한 distilled 모델을 검토해야 합니다. 기본 디퓨전 20-50스텝으로는 사용자 경험상 대기 시간이 너무 깁니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div>
+                        <strong>느린 샘플링 속도</strong>
+                        <p>기본 DDPM은 1000스텝 샘플링이 필요하여 이미지 한 장 생성에 수십 초가 소요됩니다. 프로덕션에서는 DDIM(50스텝), DPM-Solver(20스텝), 또는 distillation 모델 사용이 필수입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div>
+                        <strong>고해상도 생성의 VRAM 한계</strong>
+                        <p>512x512 이상 고해상도 생성 시 메모리 요구량이 급증합니다. Latent Diffusion처럼 압축된 잠재 공간에서 연산하거나, 타일링/업스케일링 파이프라인을 구축해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div>
+                        <strong>CFG 스케일 조정 필요</strong>
+                        <p>Classifier-Free Guidance 강도(CFG scale)가 너무 높으면 과포화된 부자연스러운 이미지가, 너무 낮으면 프롬프트 무시가 발생합니다. 보통 7-12 범위에서 시작하여 조정하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Diffusion%20Model/" class="related-term-link">Diffusion Model</a>
+                <a href="/ko/term/Stable%20Diffusion/" class="related-term-link">Stable Diffusion</a>
+                <a href="/ko/term/DALL-E/" class="related-term-link">DALL-E</a>
+                <a href="/ko/term/VAE/" class="related-term-link">VAE</a>
+                <a href="/ko/term/GAN/" class="related-term-link">GAN</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/2006.11239" target="_blank" class="learn-link">
+                    <span>📄</span> DDPM 원본 논문 - Denoising Diffusion Probabilistic Models
+                </a>
+                <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/" target="_blank" class="learn-link">
+                    <span>📖</span> Lilian Weng의 Diffusion Models 해설
+                </a>
+                <a href="https://huggingface.co/docs/diffusers" target="_blank" class="learn-link">
+                    <span>🤗</span> Hugging Face Diffusers 라이브러리 문서
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +520,26 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

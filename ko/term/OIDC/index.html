@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OIDC (OpenID Connect) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="OAuth 2.0 위에 구축된 인증 레이어. 현대적 SSO 표준.">
-    <meta name="keywords" content="OIDC, OpenID Connect, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="OIDC(OpenID Connect)는 OAuth 2.0 위에 구축된 인증 레이어로, JWT 기반 ID Token을 통해 사용자 신원을 검증합니다. 현대 SSO와 소셜 로그인의 표준 프로토콜입니다.">
+    <meta name="keywords" content="OIDC, OpenID Connect, OAuth 2.0, ID Token, JWT, SSO, 인증, Authorization Code Flow, PKCE, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/OIDC/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/OIDC/">
     <meta property="og:title" content="OIDC (OpenID Connect) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="OAuth 2.0 위에 구축된 인증 레이어. 현대적 SSO 표준.">
+    <meta property="og:description" content="OAuth 2.0 위에 구축된 인증 레이어. JWT ID Token과 현대적 SSO 표준의 핵심 프로토콜.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="OIDC (OpenID Connect) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="OAuth 2.0 위에 구축된 인증 레이어. 현대적 SSO 표준.">
+    <meta name="twitter:description" content="OAuth 2.0 위에 구축된 인증 레이어. JWT ID Token과 현대적 SSO 표준의 핵심 프로토콜.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "OIDC",
-        "description": "OAuth 2.0 위에 구축된 인증 레이어. 현대적 SSO 표준.",
+        "alternateName": "OpenID Connect",
+        "description": "OAuth 2.0 위에 구축된 인증 레이어로, JWT 기반 ID Token을 통해 사용자 신원을 검증합니다. 현대 SSO와 소셜 로그인의 표준 프로토콜입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">OIDC</h1>
-            <p class="term-english">OpenID Connect</p>
+            <p class="term-english">OpenID Connect (개방형 ID 연결)</p>
             <div class="term-description">
-                <p>OAuth 2.0 위에 구축된 인증 레이어. 현대적 SSO 표준.</p>
+                <p>OAuth 2.0 프로토콜 위에 구축된 인증(Authentication) 레이어입니다. "당신은 누구인가?"라는 질문에 답하며, JWT(JSON Web Token) 형식의 ID Token을 통해 사용자 신원 정보를 안전하게 전달합니다. Google, Microsoft, Apple 로그인 등 현대적 소셜 로그인과 SSO의 사실상 표준이며, 2024년 ISO/IEC 26131:2024로 국제 표준으로 승인되었습니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,529 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>OIDC(OpenID Connect)는 OAuth 2.0이 해결하지 못한 "인증"문제를 해결합니다. OAuth 2.0은 "이 앱이 내 데이터에 접근해도 되나요?"(인가)에만 초점을 맞추지만, "이 사용자가 누구인가?"(인증)는 다루지 않습니다. OIDC는 OAuth 2.0 플로우에 ID Token이라는 JWT를 추가하여 사용자 신원을 클라이언트에게 전달합니다. 예를 들어, "Google로 로그인"을 클릭하면 OIDC가 동작해서 앱에 당신의 이메일과 이름을 알려줍니다.</p>
+                <p>OIDC의 핵심 구성요소는 세 가지입니다. ID Token은 사용자 신원을 담은 JWT로, 발급자(iss), 대상(aud), 주체(sub), 만료시간(exp) 등의 클레임을 포함합니다. UserInfo 엔드포인트는 Access Token으로 접근하여 추가 사용자 정보(프로필 사진, 전화번호 등)를 얻는 곳입니다. Discovery Document(.well-known/openid-configuration)는 IdP의 모든 엔드포인트와 지원 기능을 자동으로 알려주어 클라이언트 설정을 단순화합니다. 개발자 친화적인 이 설계 덕분에 OAuth 2.0 경험자는 OIDC를 쉽게 채택할 수 있습니다.</p>
+                <p>OIDC의 인증 플로우는 애플리케이션 유형에 따라 선택됩니다. Authorization Code Flow(+ PKCE)는 웹앱과 모바일앱의 표준으로, 코드를 토큰으로 교환하는 가장 안전한 방식입니다. Implicit Flow는 더 이상 권장되지 않으며, 브라우저에서 토큰이 노출되는 위험이 있습니다. Hybrid Flow는 일부 토큰을 프론트채널에서, 나머지를 백채널에서 받아 유연성을 제공합니다. 2025년 현재 모든 public client(SPA, 모바일 앱)에서 PKCE는 필수입니다.</p>
+                <p>OIDC는 CI/CD 파이프라인에서도 혁신을 가져왔습니다. GitHub Actions는 OIDC를 사용해 AWS, GCP, Azure에 비밀번호 없이 인증합니다. 워크플로우가 실행될 때 GitHub가 JWT를 발급하고, 클라우드 프로바이더는 이 토큰의 클레임(리포지토리, 브랜치, 환경)을 검증하여 권한을 부여합니다. 이는 장기 credential을 코드에 저장하는 위험을 제거하고, 최소 권한 원칙을 자동화합니다. Kubernetes, HashiCorp Vault 등 현대 인프라 전체에서 OIDC 기반 workload identity가 표준이 되어가고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="node">Node.js</button>
+                <button class="code-tab" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="github">GitHub Actions</button>
+            </div>
+            <div class="code-block active" data-lang="node">
+                <pre><code class="language-javascript">// OIDC ID Token 검증 예제 - Node.js
+const jwt = require('jsonwebtoken');
+const jwksClient = require('jwks-rsa');
+const axios = require('axios');
+
+// OIDC 프로바이더 설정
+const ISSUER = 'https://accounts.google.com';
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+
+// Discovery Document에서 JWKS URI 가져오기
+async function getJwksUri(issuer) {
+    const discoveryUrl = `${issuer}/.well-known/openid-configuration`;
+    const response = await axios.get(discoveryUrl);
+
+    console.log('OIDC Discovery Document:', {
+        issuer: response.data.issuer,
+        authorization_endpoint: response.data.authorization_endpoint,
+        token_endpoint: response.data.token_endpoint,
+        userinfo_endpoint: response.data.userinfo_endpoint,
+        jwks_uri: response.data.jwks_uri,
+    });
+
+    return response.data.jwks_uri;
+}
+
+// JWKS 클라이언트 생성 (키 캐싱 포함)
+let client;
+async function initJwksClient() {
+    const jwksUri = await getJwksUri(ISSUER);
+    client = jwksClient({
+        jwksUri,
+        cache: true,           // 키 캐싱 활성화
+        cacheMaxEntries: 5,    // 최대 5개 키 캐시
+        cacheMaxAge: 600000,   // 10분 캐시
+        rateLimit: true,       // 요청 제한
+        jwksRequestsPerMinute: 10,
+    });
+}
+
+// kid로 공개키 가져오기
+function getSigningKey(kid) {
+    return new Promise((resolve, reject) => {
+        client.getSigningKey(kid, (err, key) => {
+            if (err) return reject(err);
+            resolve(key.getPublicKey());
+        });
+    });
+}
+
+// ID Token 검증 함수
+async function verifyIdToken(idToken) {
+    // 1. 토큰 디코딩 (검증 전)
+    const decoded = jwt.decode(idToken, { complete: true });
+    if (!decoded) {
+        throw new Error('Invalid token format');
+    }
+
+    console.log('Token Header:', decoded.header);
+    console.log('Token Payload:', decoded.payload);
+
+    // 2. 헤더에서 알고리즘과 키 ID 확인
+    const { alg, kid } = decoded.header;
+    if (alg !== 'RS256') {
+        throw new Error(`Unsupported algorithm: ${alg}`);
+    }
+
+    // 3. JWKS에서 공개키 가져오기
+    const publicKey = await getSigningKey(kid);
+
+    // 4. 토큰 검증 (서명, 만료, 발급자, 대상)
+    const verified = jwt.verify(idToken, publicKey, {
+        algorithms: ['RS256'],
+        issuer: ISSUER,
+        audience: CLIENT_ID,
+        clockTolerance: 5,  // 5초 오차 허용
+    });
+
+    // 5. 추가 클레임 검증
+    // nonce 검증 (CSRF 방지 - 세션에 저장된 값과 비교)
+    // if (verified.nonce !== sessionNonce) throw new Error('Invalid nonce');
+
+    // at_hash 검증 (Access Token 바인딩)
+    // 생략: access_token의 해시가 at_hash와 일치하는지 확인
+
+    return {
+        sub: verified.sub,          // 사용자 고유 식별자
+        email: verified.email,
+        emailVerified: verified.email_verified,
+        name: verified.name,
+        picture: verified.picture,
+        issuedAt: new Date(verified.iat * 1000),
+        expiresAt: new Date(verified.exp * 1000),
+    };
+}
+
+// 사용 예시
+async function main() {
+    await initJwksClient();
+
+    const idToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ii4uLiJ9...';
+
+    try {
+        const user = await verifyIdToken(idToken);
+        console.log('Verified user:', user);
+    } catch (error) {
+        console.error('Token verification failed:', error.message);
+    }
+}
+
+// Express 미들웨어로 사용
+function oidcAuth(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Missing token' });
+    }
+
+    const token = authHeader.substring(7);
+    verifyIdToken(token)
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => {
+            res.status(401).json({ error: err.message });
+        });
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># OIDC Authorization Code Flow + PKCE 구현 - Python (FastAPI)
+import secrets
+import hashlib
+import base64
+from urllib.parse import urlencode
+import httpx
+from jose import jwt, JWTError
+from jose.exceptions import ExpiredSignatureError
+from fastapi import FastAPI, Request, HTTPException, Depends
+from fastapi.responses import RedirectResponse
+from pydantic import BaseModel
+
+app = FastAPI()
+
+# OIDC 설정
+OIDC_CONFIG = {
+    "issuer": "https://accounts.google.com",
+    "client_id": "your-client-id",
+    "client_secret": "your-client-secret",
+    "redirect_uri": "http://localhost:8000/callback",
+    "scopes": ["openid", "profile", "email"],
+}
+
+# 세션 저장소 (실제로는 Redis 등 사용)
+sessions = {}
+
+
+def generate_pkce():
+    """PKCE code_verifier와 code_challenge 생성"""
+    # 1. code_verifier: 43-128자의 랜덤 문자열
+    code_verifier = secrets.token_urlsafe(64)
+
+    # 2. code_challenge: code_verifier의 SHA256 해시를 Base64 URL 인코딩
+    digest = hashlib.sha256(code_verifier.encode()).digest()
+    code_challenge = base64.urlsafe_b64encode(digest).rstrip(b'=').decode()
+
+    return code_verifier, code_challenge
+
+
+async def get_oidc_config(issuer: str):
+    """Discovery Document에서 OIDC 설정 가져오기"""
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{issuer}/.well-known/openid-configuration"
+        )
+        return response.json()
+
+
+async def get_jwks(jwks_uri: str):
+    """JWKS(공개키 세트) 가져오기"""
+    async with httpx.AsyncClient() as client:
+        response = await client.get(jwks_uri)
+        return response.json()
+
+
+@app.get("/login")
+async def login(request: Request):
+    """로그인 시작 - IdP로 리다이렉트"""
+    # PKCE 생성
+    code_verifier, code_challenge = generate_pkce()
+
+    # state (CSRF 방지)
+    state = secrets.token_urlsafe(32)
+
+    # nonce (리플레이 공격 방지)
+    nonce = secrets.token_urlsafe(32)
+
+    # 세션에 저장 (토큰 교환 시 검증용)
+    session_id = secrets.token_urlsafe(16)
+    sessions[session_id] = {
+        "code_verifier": code_verifier,
+        "state": state,
+        "nonce": nonce,
+    }
+
+    # OIDC 설정 가져오기
+    oidc_config = await get_oidc_config(OIDC_CONFIG["issuer"])
+
+    # Authorization URL 구성
+    params = {
+        "client_id": OIDC_CONFIG["client_id"],
+        "response_type": "code",
+        "scope": " ".join(OIDC_CONFIG["scopes"]),
+        "redirect_uri": OIDC_CONFIG["redirect_uri"],
+        "state": state,
+        "nonce": nonce,
+        "code_challenge": code_challenge,
+        "code_challenge_method": "S256",  # PKCE 필수
+    }
+
+    auth_url = f"{oidc_config['authorization_endpoint']}?{urlencode(params)}"
+
+    response = RedirectResponse(url=auth_url)
+    response.set_cookie("oidc_session", session_id, httponly=True, secure=True)
+    return response
+
+
+@app.get("/callback")
+async def callback(request: Request, code: str, state: str):
+    """IdP로부터 콜백 처리"""
+    # 세션 확인
+    session_id = request.cookies.get("oidc_session")
+    if not session_id or session_id not in sessions:
+        raise HTTPException(400, "Invalid session")
+
+    session_data = sessions[session_id]
+
+    # state 검증 (CSRF 방지)
+    if state != session_data["state"]:
+        raise HTTPException(400, "Invalid state")
+
+    # OIDC 설정 가져오기
+    oidc_config = await get_oidc_config(OIDC_CONFIG["issuer"])
+
+    # Authorization Code를 토큰으로 교환
+    async with httpx.AsyncClient() as client:
+        token_response = await client.post(
+            oidc_config["token_endpoint"],
+            data={
+                "grant_type": "authorization_code",
+                "code": code,
+                "redirect_uri": OIDC_CONFIG["redirect_uri"],
+                "client_id": OIDC_CONFIG["client_id"],
+                "client_secret": OIDC_CONFIG["client_secret"],
+                "code_verifier": session_data["code_verifier"],  # PKCE
+            },
+        )
+
+    if token_response.status_code != 200:
+        raise HTTPException(400, f"Token exchange failed: {token_response.text}")
+
+    tokens = token_response.json()
+    id_token = tokens["id_token"]
+    access_token = tokens["access_token"]
+
+    # ID Token 검증
+    jwks = await get_jwks(oidc_config["jwks_uri"])
+
+    try:
+        # JWT 검증 (서명, 만료, 발급자, 대상)
+        claims = jwt.decode(
+            id_token,
+            jwks,
+            algorithms=["RS256"],
+            audience=OIDC_CONFIG["client_id"],
+            issuer=OIDC_CONFIG["issuer"],
+        )
+
+        # nonce 검증 (리플레이 공격 방지)
+        if claims.get("nonce") != session_data["nonce"]:
+            raise HTTPException(400, "Invalid nonce")
+
+    except ExpiredSignatureError:
+        raise HTTPException(401, "Token expired")
+    except JWTError as e:
+        raise HTTPException(401, f"Token validation failed: {str(e)}")
+
+    # 세션 정리
+    del sessions[session_id]
+
+    # 사용자 정보 반환 (실제로는 세션 생성)
+    return {
+        "user": {
+            "sub": claims["sub"],
+            "email": claims.get("email"),
+            "name": claims.get("name"),
+            "picture": claims.get("picture"),
+        },
+        "access_token": access_token,
+    }
+
+
+@app.get("/userinfo")
+async def userinfo(access_token: str):
+    """UserInfo 엔드포인트에서 추가 사용자 정보 가져오기"""
+    oidc_config = await get_oidc_config(OIDC_CONFIG["issuer"])
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            oidc_config["userinfo_endpoint"],
+            headers={"Authorization": f"Bearer {access_token}"},
+        )
+
+    return response.json()</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="github">
+                <pre><code class="language-yaml"># GitHub Actions OIDC를 사용한 AWS 인증 (비밀번호 없음!)
+# .github/workflows/deploy.yml
+
+name: Deploy to AWS with OIDC
+
+on:
+  push:
+    branches: [main]
+
+# OIDC 토큰 발급을 위한 권한
+permissions:
+  id-token: write   # OIDC 토큰 요청 허용
+  contents: read    # 코드 체크아웃 허용
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # GitHub OIDC로 AWS 인증 (장기 credential 불필요!)
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # AWS IAM Role ARN (OIDC 신뢰 관계 설정 필요)
+          role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsRole
+          # 세션 이름 (CloudTrail 추적용)
+          role-session-name: github-actions-${{ github.run_id }}
+          # AWS 리전
+          aws-region: ap-northeast-2
+
+      # OIDC 토큰 확인 (디버깅용)
+      - name: Check OIDC token claims
+        run: |
+          # GitHub가 발급한 OIDC 토큰 요청
+          OIDC_TOKEN=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" \
+            | jq -r '.value')
+
+          # 토큰 페이로드 확인 (서명 검증 없이 디코딩만)
+          echo "OIDC Token Claims:"
+          echo $OIDC_TOKEN | cut -d. -f2 | base64 -d 2>/dev/null | jq .
+
+          # 주요 클레임:
+          # - iss: https://token.actions.githubusercontent.com
+          # - sub: repo:owner/repo:ref:refs/heads/main
+          # - aud: sts.amazonaws.com
+          # - repository: owner/repo
+          # - ref: refs/heads/main
+          # - workflow: Deploy to AWS
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync ./dist s3://my-bucket/
+          echo "Deployed with OIDC authentication!"
+
+---
+# AWS IAM Role 신뢰 정책 (Trust Policy)
+# 이 정책을 role에 적용해야 GitHub Actions가 인증 가능
+
+# {
+#   "Version": "2012-10-17",
+#   "Statement": [
+#     {
+#       "Effect": "Allow",
+#       "Principal": {
+#         "Federated": "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"
+#       },
+#       "Action": "sts:AssumeRoleWithWebIdentity",
+#       "Condition": {
+#         "StringEquals": {
+#           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+#         },
+#         "StringLike": {
+#           "token.actions.githubusercontent.com:sub": "repo:my-org/my-repo:*"
+#         }
+#       }
+#     }
+#   ]
+# }
+
+# OIDC Provider 생성 (AWS CLI)
+# aws iam create-open-id-connect-provider \
+#   --url https://token.actions.githubusercontent.com \
+#   --client-id-list sts.amazonaws.com \
+#   --thumbprint-list 6938fd4d98bab03faadb97b34396831e3780aea1</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 인증 아키텍처 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "OAuth 2.0만 쓰지 말고 OIDC를 구현합시다. 어차피 나중에 '이 사용자가 누구야?'라는 질문이 나올 텐데, OAuth는 인가만 하고 인증은 안 해요. OIDC는 ID Token으로 사용자 신원을 받을 수 있고, UserInfo 엔드포인트로 프로필 정보도 가져올 수 있습니다. Discovery Document 덕분에 설정도 자동화됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "Implicit Flow 쓰지 마세요, 토큰이 URL에 노출되니까 위험해요. Authorization Code Flow + PKCE로 바꿔야 합니다. SPA나 모바일 같은 public client에서도 PKCE가 필수예요. code_verifier를 SHA256 해시해서 code_challenge로 보내고, 토큰 교환할 때 원본 verifier로 검증하는 방식입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 DevOps 파이프라인 설계에서</div>
+                    <blockquote class="conv-quote">
+                        "GitHub Actions에서 AWS_SECRET_ACCESS_KEY 저장하지 마세요. OIDC로 연결하면 GitHub가 JWT 발급하고 AWS가 검증해서 임시 credential을 줍니다. IAM Role 신뢰 정책에서 repository와 branch 조건을 걸면 main 브랜치에서만 배포 가능하게 제한할 수 있어요. 장기 credential 없이 최소 권한 원칙을 자동화하는 거죠."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>ID Token 검증 생략</strong>
+                        <p>ID Token을 받아서 그냥 디코딩만 하면 안 됩니다. 반드시 서명 검증(JWKS), 발급자(iss), 대상(aud), 만료시간(exp), nonce를 모두 확인해야 합니다. 공격자가 조작한 토큰을 그대로 신뢰하면 계정 탈취가 가능합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Implicit Flow 사용</strong>
+                        <p>Implicit Flow는 토큰이 URL fragment에 노출되어 브라우저 히스토리, Referer 헤더로 유출될 수 있습니다. 2021년부터 OAuth 2.0 Security BCP에서 공식적으로 비권장됩니다. Authorization Code Flow + PKCE를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>redirect_uri 검증 미흡</strong>
+                        <p>redirect_uri를 와일드카드로 허용하면 Open Redirect 공격에 취약합니다. 정확한 URI만 화이트리스트로 등록하고, 프로토콜(https), 도메인, 경로까지 정확히 일치하는지 검증해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>OIDC 베스트 프랙티스</strong>
+                        <p>항상 PKCE 사용, ID Token 수명 15분 이하, state와 nonce로 CSRF/리플레이 방지, JWKS 키 캐싱 및 주기적 갱신, scope 최소화(openid profile email), confidential client는 client_secret 보안 관리, Access Token은 서버에서만 사용하고 클라이언트에 노출 최소화를 지키세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/OAuth/" class="related-term-link">OAuth 2.0</a>
+                <a href="/ko/term/SSO/" class="related-term-link">SSO</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+                <a href="/ko/term/SAML/" class="related-term-link">SAML</a>
+                <a href="/ko/term/PKCE/" class="related-term-link">PKCE</a>
+                <a href="/ko/term/Authentication/" class="related-term-link">Authentication</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://openid.net/specs/openid-connect-core-1_0.html" target="_blank" class="learn-link">
+                    📄 OpenID Connect Core 1.0 공식 스펙
+                </a>
+                <a href="https://connect2id.com/learn/openid-connect" target="_blank" class="learn-link">
+                    📘 Connect2id - OpenID Connect Explained
+                </a>
+                <a href="https://developers.google.com/identity/openid-connect/openid-connect" target="_blank" class="learn-link">
+                    🔐 Google OpenID Connect 가이드
+                </a>
+                <a href="https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect" target="_blank" class="learn-link">
+                    📚 GitHub Actions OIDC 보안 가이드
+                </a>
+                <a href="https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc" target="_blank" class="learn-link">
+                    ☁️ Microsoft Entra OIDC 문서
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +869,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,154 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Logging(로깅)은 애플리케이션이 실행되는 동안 발생하는 이벤트, 상태, 오류를 시간순으로 기록하는 것입니다. 로그는 디버깅, 모니터링, 보안 감사, 성능 분석에 필수적인 데이터 소스입니다. 잘 설계된 로깅 시스템은 장애 발생 시 원인을 빠르게 파악하게 해줍니다.</p>
+                <p>로그 레벨은 일반적으로 DEBUG, INFO, WARN, ERROR, FATAL로 구분합니다. 개발 환경에서는 DEBUG 레벨까지 상세히 기록하고, 프로덕션에서는 INFO 이상만 기록하여 로그 볼륨을 관리합니다. 로그 레벨은 환경 변수로 런타임에 변경할 수 있어야 장애 시 임시로 DEBUG 로그를 활성화할 수 있습니다.</p>
+                <p>구조화된 로그(Structured Logging)는 JSON 같은 형식으로 로그를 남겨 검색과 분석을 용이하게 합니다. 단순 텍스트 로그("User 123 logged in")보다 JSON 로그({"event": "login", "userId": 123, "ip": "1.2.3.4"})가 로그 분석 도구에서 필터링과 집계가 쉽습니다.</p>
+                <p>중앙 집중식 로그 관리는 현대 마이크로서비스에서 필수입니다. 각 서비스의 로그를 ELK 스택(Elasticsearch, Logstash, Kibana), Loki+Grafana, Datadog, Splunk 같은 시스템으로 수집하여 한곳에서 검색하고 대시보드로 시각화합니다. 분산 시스템에서는 trace ID를 로그에 포함하여 요청 흐름을 추적합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Python 구조화된 로깅 설정 (structlog)
+import structlog
+import logging
+
+# 구조화된 로거 설정
+structlog.configure(
+    processors=[
+        structlog.stdlib.filter_by_level,
+        structlog.stdlib.add_logger_name,
+        structlog.stdlib.add_log_level,
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
+        structlog.processors.UnicodeDecoder(),
+        # JSON 출력 (프로덕션)
+        structlog.processors.JSONRenderer()
+    ],
+    wrapper_class=structlog.stdlib.BoundLogger,
+    context_class=dict,
+    logger_factory=structlog.stdlib.LoggerFactory(),
+    cache_logger_on_first_use=True,
+)
+
+log = structlog.get_logger()
+
+# 컨텍스트와 함께 로깅
+def process_order(order_id: str, user_id: str):
+    # 요청별 컨텍스트 바인딩
+    log_ctx = log.bind(
+        order_id=order_id,
+        user_id=user_id,
+        trace_id=get_trace_id()  # 분산 추적 ID
+    )
+
+    log_ctx.info("order_processing_started")
+
+    try:
+        result = payment_service.charge(order_id)
+        log_ctx.info(
+            "payment_completed",
+            amount=result.amount,
+            currency=result.currency
+        )
+    except PaymentError as e:
+        log_ctx.error(
+            "payment_failed",
+            error_code=e.code,
+            error_message=str(e)
+        )
+        raise</code></pre>
+            </div>
+            <div class="code-block" data-lang="json">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// 구조화된 로그 출력 예시 (JSON Lines)
+{"timestamp": "2024-01-15T09:30:00.123Z", "level": "info", "event": "order_processing_started", "order_id": "ORD-12345", "user_id": "USR-789", "trace_id": "abc123", "service": "order-api"}
+{"timestamp": "2024-01-15T09:30:00.456Z", "level": "info", "event": "payment_completed", "order_id": "ORD-12345", "user_id": "USR-789", "trace_id": "abc123", "amount": 59900, "currency": "KRW"}
+{"timestamp": "2024-01-15T09:30:01.789Z", "level": "error", "event": "payment_failed", "order_id": "ORD-12346", "user_id": "USR-790", "trace_id": "def456", "error_code": "INSUFFICIENT_FUNDS", "error_message": "Card declined"}
+
+// Node.js 구조화된 로깅 (Pino)
+const pino = require('pino');
+const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+  formatters: {
+    level: (label) => ({ level: label })
+  },
+  timestamp: pino.stdTimeFunctions.isoTime
+});
+
+// 자식 로거로 컨텍스트 추가
+const reqLogger = logger.child({
+  requestId: req.id,
+  userId: req.user?.id
+});
+reqLogger.info({ path: req.path }, 'request received');</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">DevOps:</strong> "로그 스토리지 비용이 너무 많이 나와요. DEBUG 레벨 로그가 프로덕션에서 남고 있는 서비스가 있는 것 같은데..."</p>
+                <p><strong class="role-junior">개발자:</strong> "결제 서비스에서 DEBUG가 켜져 있었네요. INFO로 바꾸면 로그 볼륨이 80% 줄 거예요."</p>
+                <p><strong class="role-senior">시니어:</strong> "그리고 로그에 PII(개인정보) 안 남도록 마스킹 처리 확인해주세요. 이메일, 전화번호 같은 거요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "분산 시스템에서 장애 추적은 어떻게 하셨나요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "모든 요청에 trace ID를 생성해서 로그에 포함시켰습니다. Kibana에서 trace ID로 검색하면 해당 요청이 거쳐간 모든 서비스의 로그를 시간순으로 볼 수 있어요. 나중에는 OpenTelemetry로 전환해서 트레이싱과 로깅을 통합했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "catch 블록에서 `console.log(error)` 대신 로거 사용해주세요. 그리고 에러 객체 전체를 남기면 스택트레이스도 검색 가능해져요."</p>
+                <p><strong class="role-author">작성자:</strong> "`logger.error({ err, orderId }, 'Failed to process order')` 이런 형태로 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>민감한 정보(비밀번호, API 키, 개인정보)는 절대 로그에 남기지 마세요. 실수로 남길 경우 보안 사고가 됩니다. 마스킹 처리하거나 필터링 미들웨어를 사용하세요.</li>
+                <li>로그 볼륨이 너무 크면 비용도 높아지고 검색도 느려집니다. 샘플링(예: 성공 요청은 10%만 기록)이나 로그 레벨 조정으로 관리하세요.</li>
+                <li class="info">로그 메시지는 사람이 읽기 쉽고 검색 가능하게 작성하세요. "Error occurred" 대신 "Payment failed for order {orderId} with error {errorCode}"처럼 구체적으로.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+                <a href="/ko/term/Loki/" class="related-link">Loki</a>
+                <a href="/ko/term/OpenTelemetry/" class="related-link">OpenTelemetry</a>
+                <a href="/ko/term/Monitoring/" class="related-link">Monitoring</a>
+                <a href="/ko/term/Tracing/" class="related-link">Distributed Tracing</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://www.structlog.org/" target="_blank">structlog - Python 구조화 로깅</a></li>
+                <li><span class="type-official"></span><a href="https://github.com/pinojs/pino" target="_blank">Pino - 초고속 Node.js 로거</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.elastic.co/kr/elastic-stack" target="_blank">ELK 스택 소개</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +361,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

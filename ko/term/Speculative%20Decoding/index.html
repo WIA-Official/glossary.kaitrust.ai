@@ -3,211 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speculative Decoding | KAITRUST AI 백과사전</title>
-    <meta name="description" content="작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법">
-    <meta name="keywords" content="Speculative Decoding, , AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <title>Speculative Decoding (추측적 디코딩) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법. 출력 품질 유지하면서 2-3배 속도 향상.">
+    <meta name="keywords" content="Speculative Decoding, 추측적 디코딩, LLM 추론 최적화, Draft Model, AI 용어, KAITRUST, AI 백과사전, AI/ML">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Speculative%20Decoding/">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Speculative%20Decoding/">
-    <meta property="og:title" content="Speculative Decoding | KAITRUST AI 백과사전">
-    <meta property="og:description" content="작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법">
+    <meta property="og:title" content="Speculative Decoding (추측적 디코딩) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법. 출력 품질 유지하면서 2-3배 속도 향상.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Speculative Decoding | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법">
-    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta name="twitter:title" content="Speculative Decoding (추측적 디코딩) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법. 출력 품질 유지하면서 2-3배 속도 향상.">
 
-    <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "DefinedTerm",
-        "name": "Speculative Decoding",
-        "description": "작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법",
-        "inDefinedTermSet": {
-            "@type": "DefinedTermSet",
-            "name": "KAITRUST AI 백과사전",
-            "url": "https://glossary.kaitrust.ai/"
-        }
-    }
+    {"@context": "https://schema.org", "@type": "DefinedTerm", "name": "Speculative Decoding", "description": "작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법. 출력 품질 유지하면서 2-3배 속도 향상.", "inDefinedTermSet": {"@type": "DefinedTermSet", "name": "KAITRUST AI 백과사전", "url": "https://glossary.kaitrust.ai/"}}
     </script>
 
     <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
-    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <!-- Common CSS -->
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .breadcrumb a:hover { color: var(--primary); }
-        .breadcrumb span { color: #64748b; }
-        .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; } .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; } .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
-            <span>›</span>
-            <span class="current">Speculative Decoding</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span><a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span><a href="https://glossary.kaitrust.ai/#ai">AI/ML</a><span>›</span><span class="current">Speculative Decoding</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>🤖</span>
-                <span>AI/ML</span>
-            </div>
+            <div class="term-category-badge"><span>🤖</span><span>AI/ML</span></div>
             <h1 class="term-title">Speculative Decoding</h1>
-            
+            <p class="term-english">추측적 디코딩</p>
             <div class="term-description">
-                <p>작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법</p>
+                <p>작은 모델로 초안을 생성하고 큰 모델로 검증하는 추론 가속 기법. 출력 품질 유지하면서 2-3배 속도 향상.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
-                    🤖 AI/ML 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">🤖 AI/ML 더보기</a>
             </div>
         </article>
+
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Speculative Decoding은 작고 빠른 "draft model"이 여러 토큰을 미리 생성하고, 크고 정확한 "target model"이 이를 한 번에 검증하는 LLM 추론 가속 기법입니다. CPU의 분기 예측(branch prediction)과 유사한 아이디어로, 예측이 맞으면 큰 이득을 얻고, 틀려도 손해가 작습니다. 핵심은 draft가 틀려도 target model의 출력 분포가 100% 보존된다는 수학적 보장입니다.</p>
+                <p>2022년 DeepMind의 "Fast Inference from Transformers via Speculative Decoding" 논문에서 제안되었습니다. 기존 autoregressive 생성은 토큰 하나마다 거대 모델의 forward pass가 필요해 느렸습니다. 70B 모델은 초당 10-20 토큰밖에 생성하지 못합니다. Speculative Decoding은 이 병목을 영리한 병렬화로 해결합니다. Google의 Gemini, Anthropic의 Claude 등 상용 모델에서도 내부적으로 유사한 최적화가 적용되고 있습니다.</p>
+                <p>동작 원리: 1) Draft model이 k개 토큰 생성 (예: "The quick brown fox") 2) Target model이 k+1개 위치의 로짓을 한 번에 계산 (병렬 forward) 3) 각 위치에서 draft 토큰을 acceptance sampling으로 검증 4) 불일치 시점에서 target 분포로 교정된 토큰 생성. 이 과정에서 acceptance probability에 따라 확률적으로 토큰을 accept/reject하여 target model 단독 생성과 동일한 분포를 보장합니다.</p>
+                <p>vLLM, TensorRT-LLM, Hugging Face TGI, llama.cpp 등 주요 추론 엔진이 지원합니다. Draft model은 target의 1/10~1/5 크기가 적당하며(예: Llama 70B + Llama 8B), 반드시 같은 토크나이저를 써야 합니다. 코드 생성, JSON 출력, 번역 등 예측 가능한 패턴에서 acceptance rate가 70-90%에 달해 3-4배 속도 향상이 가능합니다. Self-Speculative Decoding, Medusa(multiple heads), EAGLE 등 변형 기법도 활발히 연구되고 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Speculative Decoding 개념 구현 (간소화)
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+def speculative_decode(prompt, target_model, draft_model, tokenizer,
+                       k=5, max_tokens=100):
+    """
+    k: draft model이 한 번에 생성할 토큰 수
+    """
+    input_ids = tokenizer.encode(prompt, return_tensors='pt')
+    generated = input_ids.clone()
+
+    for _ in range(max_tokens // k):
+        # 1. Draft model로 k개 토큰 빠르게 생성
+        draft_ids = generated.clone()
+        for _ in range(k):
+            with torch.no_grad():
+                logits = draft_model(draft_ids).logits[:, -1, :]
+                next_token = logits.argmax(dim=-1, keepdim=True)
+                draft_ids = torch.cat([draft_ids, next_token], dim=-1)
+
+        draft_tokens = draft_ids[:, generated.shape[1]:]  # 새로 생성된 k개
+
+        # 2. Target model로 한 번에 검증 (병렬!)
+        with torch.no_grad():
+            # draft_ids 전체를 한 번에 forward
+            target_logits = target_model(draft_ids).logits
+
+        # 3. 일치하는 토큰까지만 accept
+        accepted = 0
+        for i in range(k):
+            target_pred = target_logits[:, generated.shape[1] + i - 1, :].argmax()
+            draft_pred = draft_tokens[:, i]
+            if target_pred == draft_pred:
+                accepted += 1
+            else:
+                # 불일치: target의 예측으로 교체
+                generated = torch.cat([generated, target_pred.unsqueeze(0).unsqueeze(0)], dim=-1)
+                break
+        else:
+            # 모두 일치: k개 전부 accept
+            generated = draft_ids
+
+        if tokenizer.eos_token_id in generated[0]:
+            break
+
+    return tokenizer.decode(generated[0])
+
+# vLLM에서 Speculative Decoding 사용 (실제 프로덕션)
+from vllm import LLM, SamplingParams
+
+llm = LLM(
+    model="meta-llama/Llama-3-70b-instruct",
+    speculative_model="meta-llama/Llama-3-8b-instruct",  # Draft model
+    num_speculative_tokens=5,  # 한 번에 추측할 토큰 수
+    tensor_parallel_size=4
+)
+
+sampling_params = SamplingParams(temperature=0.0, max_tokens=500)
+output = llm.generate("Explain quantum computing:", sampling_params)
+# 일반 디코딩 대비 2-3x 빠름!
+
+# === Medusa (Multi-Head Speculative Decoding) ===
+# 별도 draft model 없이 target model에 추가 head를 붙임
+from transformers import AutoModelForCausalLM
+import torch.nn as nn
+
+class MedusaHead(nn.Module):
+    """Medusa: 각 head가 다음 n번째 토큰을 예측"""
+    def __init__(self, hidden_size, vocab_size, num_heads=4):
+        super().__init__()
+        self.heads = nn.ModuleList([
+            nn.Sequential(
+                nn.Linear(hidden_size, hidden_size),
+                nn.SiLU(),
+                nn.Linear(hidden_size, vocab_size)
+            )
+            for _ in range(num_heads)
+        ])
+
+    def forward(self, hidden_states):
+        # 각 head가 +1, +2, +3, +4 위치 토큰 예측
+        return [head(hidden_states) for head in self.heads]
+
+# Medusa 장점: 별도 draft model 로드 불필요, 메모리 절약
+# 단점: 추가 head 학습 필요
+
+# === 성능 측정 예시 ===
+import time
+
+def benchmark_generation(model, prompt, max_tokens=100, runs=5):
+    """토큰 생성 속도 측정"""
+    times = []
+    for _ in range(runs):
+        start = time.perf_counter()
+        output = model.generate(prompt, max_tokens=max_tokens)
+        elapsed = time.perf_counter() - start
+        times.append(elapsed)
+
+    tokens_per_sec = max_tokens / (sum(times) / len(times))
+    return tokens_per_sec
+
+# 일반 디코딩 vs Speculative Decoding 비교
+# 일반: ~15 tokens/sec (70B model)
+# Speculative: ~40-50 tokens/sec (with 8B draft)
+
+# === Draft 모델 선택 가이드 ===
+# Target 모델    | 추천 Draft 모델        | Acceptance Rate
+# Llama 70B      | Llama 8B               | 70-85%
+# Llama 405B     | Llama 70B 또는 8B      | 60-80%
+# Mixtral 8x22B  | Mistral 7B             | 65-80%
+# GPT-4          | GPT-3.5 Turbo (내부)   | 75-90%
+
+# === EAGLE (Lossless Acceleration) ===
+# EAGLE는 별도 draft 모델 대신 target 모델의 hidden states를 재활용
+# 장점: 추가 모델 로드 불필요, 메모리 효율적
+# 단점: 추가 head 학습 필요
+
+# === Self-Speculative Decoding ===
+# 동일 모델의 초기 레이어만 사용해서 draft 생성
+# 작은 서브넷이 빠르게 예측, 전체 모델이 검증
+
+# === 언제 Speculative Decoding이 효과적인가? ===
+# 1. 코드 생성 (예측 가능한 문법 구조)
+# 2. JSON/XML 출력 (정형화된 포맷)
+# 3. 번역 (입력과 출력 구조 유사)
+# 4. 수학 계산 (결정론적 패턴)
+
+# 비효율적인 경우:
+# - 창의적 글쓰기 (예측 어려움)
+# - 높은 temperature 샘플링
+# - 아주 짧은 출력
+
+# === Lookahead Decoding (병렬 검증 변형) ===
+# 여러 후보 경로를 동시에 탐색
+# Tree-based speculation으로 더 높은 acceptance rate
+
+# === TensorRT-LLM에서 사용 ===
+# NVIDIA TensorRT-LLM도 Speculative Decoding 지원
+# config에서 speculative_decoding 활성화
+
+# === Acceptance Rate 모니터링 ===
+def monitor_acceptance_rate(draft_ids, target_ids, window=100):
+    """실시간 acceptance rate 추적"""
+    accepted = sum(d == t for d, t in zip(draft_ids, target_ids))
+    rate = accepted / len(draft_ids)
+    print(f"Acceptance Rate: {rate:.1%}")
+    # rate < 50%면 draft 모델 변경 고려
+    return rate
+
+# === 비용 절감 계산 ===
+# Target model: 70B, 15 tokens/sec, $10/1M tokens
+# Draft model: 8B, 100 tokens/sec, $1/1M tokens
+# Acceptance rate: 75%
+# 평균 추측 토큰: 5개 중 3.75개 수락
+# 속도 향상: (1 + 3.75) / (1 + 1) = 2.4배
+# 비용: target 호출 횟수 60% 감소
+
+# === 주요 추론 엔진 지원 현황 ===
+# | 엔진          | 지원 | 비고                      |
+# |--------------|-----|--------------------------|
+# | vLLM         | O   | speculative_model 파라미터 |
+# | TensorRT-LLM | O   | config 설정               |
+# | llama.cpp    | O   | --speculative 플래그      |
+# | HF TGI       | O   | speculation_config        |
+# | Ollama       | X   | 미지원 (2024.12 기준)      |
+
+# === 실전 튜닝 팁 ===
+# 1. num_speculative_tokens: 5가 기본, 8까지 실험
+# 2. 정형 출력(JSON)에서 더 공격적으로 (10+)
+# 3. 창의적 글쓰기는 3 이하로 보수적으로
+# 4. 실시간 모니터링으로 acceptance rate 추적
+
+# === Batch Speculative Decoding ===
+# 여러 요청을 배치로 처리할 때도 적용 가능
+# continuous batching과 조합하여 throughput 극대화
+
+# === Prompt Lookup Decoding ===
+# 입력 프롬프트에서 반복되는 패턴을 draft로 활용
+# 코드 수정, 문서 편집 등에서 효과적
+# 별도 draft 모델 없이 입력 자체가 힌트 역할
+
+# === DistillSpec ===
+# Target 모델을 teacher로 draft 모델 증류(distillation)
+# 태스크 특화된 draft 모델로 acceptance rate 향상</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 LLM 서빙 최적화 회의에서</div>
+                    <blockquote class="conv-quote">"Speculative Decoding 적용하면 Llama 70B 추론 속도가 2배 빨라져요. 8B 모델을 draft로 쓰면 되는데, 같은 토크나이저 쓰는 게 중요합니다. vLLM에서는 speculative_model 파라미터만 추가하면 돼요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"Speculative Decoding은 작은 draft model이 k개 토큰을 추측하고, 큰 target model이 병렬로 검증합니다. 핵심은 target의 출력 분포가 100% 유지된다는 점이에요. Draft가 틀려도 target이 교정하니까 품질 저하 없이 속도만 향상됩니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 비용 절감 논의에서</div>
+                    <blockquote class="conv-quote">"코드 생성이나 JSON 출력 같은 정형화된 태스크에서 Speculative Decoding이 특히 효과적이에요. 예측 가능한 패턴이 많아서 acceptance rate가 70-80% 나오고, 추론 비용이 거의 절반으로 줄어요."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Draft와 Target의 토크나이저 불일치</strong>
+                        <p>서로 다른 토크나이저를 쓰면 토큰 경계가 맞지 않아 검증이 불가능합니다. 반드시 같은 토크나이저(같은 모델 패밀리)를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>너무 큰 k값 설정</strong>
+                        <p>k(추측 토큰 수)가 너무 크면 rejection이 많아져 오히려 느려질 수 있습니다. 보통 4-8이 최적이며, 태스크별로 튜닝이 필요합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>같은 패밀리 모델(예: Llama 70B + Llama 8B)을 사용하고, k=5부터 시작해 acceptance rate를 모니터링하세요. vLLM, TGI 등 검증된 프레임워크 사용을 권장합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Autoregressive/" class="related-term-link">Autoregressive</a>
+                <a href="/ko/term/KV%20Cache/" class="related-term-link">KV Cache</a>
+                <a href="/ko/term/vLLM/" class="related-term-link">vLLM</a>
+                <a href="/ko/term/Quantization/" class="related-term-link">Quantization</a>
+                <a href="/ko/term/Inference/" class="related-term-link">Inference</a>
+                <a href="/ko/term/Batch%20Processing/" class="related-term-link">Batch Processing</a>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/2211.17192" target="_blank" class="learn-link">📝 논문: Fast Inference from Transformers via Speculative Decoding</a>
+                <a href="https://docs.vllm.ai/en/latest/models/spec_decode.html" target="_blank" class="learn-link">📄 vLLM Speculative Decoding 문서</a>
+                <a href="https://huggingface.co/blog/assisted-generation" target="_blank" class="learn-link">🎓 Hugging Face Assisted Generation 가이드</a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
+    <script>function copyCode(btn) { const codeBlock = btn.parentElement.querySelector('code'); navigator.clipboard.writeText(codeBlock.textContent).then(() => { btn.textContent = '✅ 복사됨!'; setTimeout(() => btn.textContent = '📋 복사', 2000); }); }</script>
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>

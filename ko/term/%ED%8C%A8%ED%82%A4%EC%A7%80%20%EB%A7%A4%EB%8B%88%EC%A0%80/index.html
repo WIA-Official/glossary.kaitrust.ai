@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,110 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>패키지 매니저(Package Manager)는 소프트웨어 라이브러리의 설치, 업데이트, 제거, 의존성 관리를 자동화하는 도구입니다. 개발자가 직접 라이브러리를 다운로드하고 경로를 설정하는 수고를 덜어주며, 버전 충돌 문제도 해결해줍니다. 현대 소프트웨어 개발에서 필수적인 도구입니다.</p>
+                <p>언어별로 대표적인 패키지 매니저가 있습니다. JavaScript는 npm과 yarn, pnpm을, Python은 pip과 conda, poetry를, Rust는 cargo를, Go는 go mod를 사용합니다. 각 패키지 매니저는 중앙 저장소(registry)에서 패키지를 가져옵니다.</p>
+                <p>의존성 관리는 패키지 매니저의 핵심 기능입니다. package.json, requirements.txt, Cargo.toml 등의 파일에 프로젝트가 필요로 하는 패키지와 버전을 명시합니다. lock 파일(package-lock.json, Cargo.lock 등)은 정확한 버전을 기록하여 재현 가능한 빌드를 보장합니다.</p>
+                <p>시맨틱 버저닝(SemVer)을 이해하면 의존성을 더 잘 관리할 수 있습니다. MAJOR.MINOR.PATCH 형식에서 ^1.2.3은 1.x.x 범위, ~1.2.3은 1.2.x 범위를 의미합니다. 버전 범위를 적절히 지정하면 보안 패치를 자동으로 받으면서도 호환성을 유지할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># npm (JavaScript)
+npm init -y                    # 프로젝트 초기화
+npm install express            # 패키지 설치
+npm install -D typescript      # 개발 의존성 설치
+npm update                     # 패키지 업데이트
+npm audit                      # 보안 취약점 검사
+
+# pip (Python)
+pip install requests           # 패키지 설치
+pip install -r requirements.txt # 파일에서 설치
+pip freeze > requirements.txt  # 의존성 내보내기
+pip install --upgrade pip      # pip 자체 업그레이드
+
+# cargo (Rust)
+cargo new myproject            # 프로젝트 생성
+cargo add serde                # 패키지 추가
+cargo build                    # 빌드
+cargo update                   # 의존성 업데이트
+
+# go mod (Go)
+go mod init myproject          # 모듈 초기화
+go get github.com/gin-gonic/gin # 패키지 추가
+go mod tidy                    # 미사용 의존성 정리
+
+# pnpm (npm 대안, 효율적인 디스크 사용)
+pnpm install                   # node_modules 설치
+pnpm add lodash                # 패키지 추가</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>시니어:</strong> node_modules가 너무 커서 CI 빌드가 느려요. pnpm으로 바꾸면 어떨까요?</p>
+                <p><strong>주니어:</strong> pnpm이 npm과 뭐가 다른가요?</p>
+                <p><strong>시니어:</strong> 심볼릭 링크로 패키지를 공유해서 디스크 사용량이 훨씬 적어요. 설치 속도도 빠르고요. 기존 package.json을 그대로 쓸 수 있어서 마이그레이션도 쉽습니다.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> package-lock.json의 역할이 무엇인가요?</p>
+                <p><strong>지원자:</strong> 의존성 트리의 정확한 버전을 기록합니다. package.json에 ^1.0.0으로 지정하면 1.x.x 범위에서 변할 수 있지만, lock 파일이 있으면 모든 환경에서 동일한 버전이 설치됩니다. 재현 가능한 빌드에 필수적입니다.</p>
+                <p><strong>면접관:</strong> devDependencies와 dependencies의 차이는요?</p>
+                <p><strong>지원자:</strong> dependencies는 프로덕션에 필요한 패키지이고, devDependencies는 개발 시에만 필요한 테스트 도구, 린터 등입니다. npm install --production은 devDependencies를 제외합니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> 이 패키지 버전이 ^대신 *로 되어 있는데, 위험해요.</p>
+                <p><strong>작성자:</strong> 항상 최신 버전 쓰려고 했는데요.</p>
+                <p><strong>리뷰어:</strong> 메이저 버전 변경 시 breaking change가 있을 수 있어요. ^로 지정하면 패치와 마이너 업데이트만 받아서 안전합니다.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>lock 파일 커밋:</strong> package-lock.json, Cargo.lock 등은 반드시 버전 관리에 포함하세요. 없으면 환경마다 다른 버전이 설치됩니다.</li>
+                <li><strong>보안 취약점 점검:</strong> npm audit, pip-audit 등으로 정기적으로 취약점을 확인하세요. 오래된 패키지는 보안 위험이 있습니다.</li>
+                <li><strong>의존성 지옥:</strong> 서로 다른 패키지가 같은 라이브러리의 다른 버전을 요구하면 충돌이 발생합니다. 의존성을 정기적으로 정리하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%B9%8C%EB%93%9C/" class="related-link">빌드</a>
+                <a href="/ko/term/%EB%B2%88%EB%93%A4%EB%9F%AC/" class="related-link">번들러</a>
+                <a href="/ko/term/CI-CD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/%EB%AA%A8%EB%93%88/" class="related-link">모듈</a>
+                <a href="/ko/term/%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC/" class="related-link">라이브러리</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://docs.npmjs.com/" target="_blank">npm Documentation</a></li>
+                <li><a href="https://pip.pypa.io/en/stable/" target="_blank">pip Documentation</a></li>
+                <li><a href="https://doc.rust-lang.org/cargo/" target="_blank">Cargo Book</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +318,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

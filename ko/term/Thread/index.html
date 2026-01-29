@@ -161,6 +161,160 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active {
+            display: block;
+        }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        /* 코드 구문 하이라이팅 */
+        .keyword { color: #c792ea; }
+        .function { color: #82aaff; }
+        .string { color: #c3e88d; }
+        .comment { color: #546e7a; }
+        .decorator { color: #ffcb6b; }
+        .number { color: #f78c6c; }
     </style>
 </head>
 <body>
@@ -202,6 +356,378 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Thread(스레드)는 프로세스 내에서 실행되는 가장 작은 실행 단위입니다. 하나의 프로세스는 최소 하나의 스레드(메인 스레드)를 가지며, 필요에 따라 여러 스레드를 생성하여 동시에 작업을 수행할 수 있습니다. 스레드는 프로세스의 코드, 데이터, 힙 영역을 공유하지만, 각자 독립적인 스택과 레지스터를 가집니다. 이러한 특성 덕분에 스레드 간 통신이 프로세스 간 통신(IPC)보다 빠르고 효율적입니다.</p>
+                <p>프로세스와 스레드의 핵심적인 차이는 메모리 공유 여부입니다. 프로세스는 독립된 메모리 공간을 가지므로 서로 직접 접근할 수 없지만, 같은 프로세스 내의 스레드들은 힙 메모리를 공유합니다. 프로세스 생성은 전체 메모리 복사가 필요해 비용이 크지만, 스레드 생성은 스택만 할당하면 되어 상대적으로 가볍습니다. 다만, 메모리 공유로 인해 한 스레드의 오류가 전체 프로세스에 영향을 줄 수 있습니다.</p>
+                <p>멀티스레딩의 장점은 CPU 활용률 극대화, 응답성 향상, 자원 공유 효율성입니다. 단일 스레드에서 I/O 대기 시간 동안 CPU가 놀게 되지만, 멀티스레딩에서는 다른 스레드가 CPU를 활용할 수 있습니다. 그러나 단점도 명확합니다. 동기화 문제(Race Condition), 교착 상태(Deadlock), 디버깅 어려움, 컨텍스트 스위칭 오버헤드 등이 발생할 수 있습니다. 스레드 수가 과도하면 오히려 성능이 저하됩니다.</p>
+                <p>실무에서 스레드는 병렬 처리와 비동기 작업에 핵심적으로 활용됩니다. 웹 서버는 요청마다 스레드를 할당하여 동시 처리하고, GUI 애플리케이션은 UI 스레드와 작업 스레드를 분리하여 반응성을 유지합니다. 최근에는 스레드 풀(Thread Pool)을 사용하여 스레드 생성/소멸 비용을 줄이고, Java의 ExecutorService, Python의 ThreadPoolExecutor 같은 고수준 API로 스레드를 관리합니다. 또한 async/await 패턴과 코루틴이 많은 경우 스레드를 대체하고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="java">Java Thread</button>
+                <button class="code-tab" data-lang="python">Python threading</button>
+            </div>
+
+            <!-- Java Thread -->
+            <div class="code-block active" data-lang="java">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// Java Thread 예제 - 다양한 스레드 생성 및 동기화
+
+import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
+
+public class ThreadExample {
+
+    // 1. Thread 클래스 상속
+    static class MyThread extends Thread {
+        private String name;
+
+        public MyThread(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            for (int i = 0; i < 5; i++) {
+                System.out.println(name + ": " + i);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
+    // 2. Runnable 인터페이스 구현 (권장)
+    static class MyRunnable implements Runnable {
+        private String name;
+
+        public MyRunnable(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            System.out.println(name + " 실행 중 - " +
+                Thread.currentThread().getName());
+        }
+    }
+
+    // 3. 동기화 예제 - synchronized
+    static class Counter {
+        private int count = 0;
+
+        // synchronized 메서드
+        public synchronized void increment() {
+            count++;
+        }
+
+        // synchronized 블록
+        public void incrementWithBlock() {
+            synchronized(this) {
+                count++;
+            }
+        }
+
+        public int getCount() {
+            return count;
+        }
+    }
+
+    // 4. ReentrantLock 사용
+    static class SafeCounter {
+        private int count = 0;
+        private final ReentrantLock lock = new ReentrantLock();
+
+        public void increment() {
+            lock.lock();
+            try {
+                count++;
+            } finally {
+                lock.unlock();  // 반드시 finally에서 해제
+            }
+        }
+
+        public int getCount() {
+            return count;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        // Thread 클래스 사용
+        MyThread t1 = new MyThread("Thread-1");
+        t1.start();
+
+        // Runnable 사용
+        Thread t2 = new Thread(new MyRunnable("Runnable-1"));
+        t2.start();
+
+        // Lambda 표현식 (Java 8+)
+        Thread t3 = new Thread(() -> {
+            System.out.println("Lambda Thread 실행");
+        });
+        t3.start();
+
+        // ExecutorService - 스레드 풀 (권장)
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+
+        for (int i = 0; i < 10; i++) {
+            final int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " - " +
+                    Thread.currentThread().getName());
+            });
+        }
+
+        // Future를 통한 결과 받기
+        Future<Integer> future = executor.submit(() -> {
+            Thread.sleep(1000);
+            return 42;
+        });
+
+        System.out.println("결과: " + future.get());  // 블로킹
+
+        executor.shutdown();
+        executor.awaitTermination(5, TimeUnit.SECONDS);
+
+        // CompletableFuture (Java 8+, 비동기 체이닝)
+        CompletableFuture.supplyAsync(() -> "Hello")
+            .thenApply(s -> s + " World")
+            .thenAccept(System.out::println)
+            .join();
+    }
+}</code></pre>
+            </div>
+
+            <!-- Python threading -->
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Python threading 예제 - 스레드 생성 및 동기화
+
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from queue import Queue
+
+# 1. 기본 스레드 생성 - Thread 클래스
+def worker(name: str, delay: float) -> None:
+    """작업 함수"""
+    print(f"{name} 시작")
+    time.sleep(delay)
+    print(f"{name} 완료")
+
+# 함수 기반 스레드
+t1 = threading.Thread(target=worker, args=("Worker-1", 1))
+t1.start()
+t1.join()  # 스레드 종료 대기
+
+# 2. Thread 클래스 상속
+class MyThread(threading.Thread):
+    def __init__(self, name: str):
+        super().__init__()
+        self.name = name
+        self.result = None
+
+    def run(self):
+        print(f"{self.name} 실행 중")
+        time.sleep(0.5)
+        self.result = f"{self.name} 결과"
+
+thread = MyThread("Custom-Thread")
+thread.start()
+thread.join()
+print(thread.result)
+
+# 3. 동기화 - Lock
+counter = 0
+lock = threading.Lock()
+
+def increment_with_lock():
+    global counter
+    for _ in range(100000):
+        with lock:  # context manager 사용 권장
+            counter += 1
+
+threads = [threading.Thread(target=increment_with_lock) for _ in range(4)]
+for t in threads:
+    t.start()
+for t in threads:
+    t.join()
+print(f"Counter: {counter}")  # 400000
+
+# 4. RLock (재진입 가능한 락)
+rlock = threading.RLock()
+
+def recursive_function(n: int):
+    with rlock:
+        if n > 0:
+            print(f"Level {n}")
+            recursive_function(n - 1)
+
+# 5. Condition - 스레드 간 신호
+condition = threading.Condition()
+items = []
+
+def producer():
+    for i in range(5):
+        with condition:
+            items.append(i)
+            print(f"Produced: {i}")
+            condition.notify()  # 대기 중인 스레드 깨우기
+        time.sleep(0.1)
+
+def consumer():
+    for _ in range(5):
+        with condition:
+            while not items:
+                condition.wait()  # 신호 대기
+            item = items.pop(0)
+            print(f"Consumed: {item}")
+
+# 6. ThreadPoolExecutor (권장)
+def fetch_url(url: str) -> dict:
+    """URL 데이터 가져오기 시뮬레이션"""
+    time.sleep(0.5)  # 네트워크 지연 시뮬레이션
+    return {"url": url, "status": 200}
+
+urls = [f"https://api.example.com/{i}" for i in range(10)]
+
+with ThreadPoolExecutor(max_workers=4) as executor:
+    # submit으로 개별 제출
+    futures = {executor.submit(fetch_url, url): url for url in urls}
+
+    for future in as_completed(futures):
+        url = futures[future]
+        try:
+            result = future.result()
+            print(f"{url}: {result['status']}")
+        except Exception as e:
+            print(f"{url} 실패: {e}")
+
+# 7. Queue를 이용한 생산자-소비자 패턴
+task_queue = Queue()
+
+def queue_producer():
+    for i in range(10):
+        task_queue.put(f"Task-{i}")
+    task_queue.put(None)  # 종료 신호
+
+def queue_consumer():
+    while True:
+        task = task_queue.get()
+        if task is None:
+            break
+        print(f"Processing: {task}")
+        task_queue.task_done()
+
+# 8. daemon 스레드 - 메인 종료 시 자동 종료
+daemon_thread = threading.Thread(target=worker, args=("Daemon", 10))
+daemon_thread.daemon = True  # 데몬 스레드 설정
+daemon_thread.start()
+# 메인 종료 시 데몬 스레드도 종료됨
+
+# 9. 현재 스레드 정보
+print(f"현재 스레드: {threading.current_thread().name}")
+print(f"활성 스레드 수: {threading.active_count()}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서: 스레드 동기화 질문</div>
+                    <p class="conv-quote">"스레드 동기화에는 여러 방법이 있습니다. 가장 기본은 synchronized 키워드나 Lock을 사용한 상호 배제입니다. 하지만 단순 카운터라면 AtomicInteger 같은 원자적 연산이 더 효율적이고, 읽기가 많은 경우 ReentrantReadWriteLock을 사용합니다. Java 21부터는 Virtual Thread가 도입되어 가벼운 동시성 처리가 가능해졌고, synchronized 대신 ReentrantLock을 쓰면 타임아웃, 인터럽트, 공정성 설정 같은 세밀한 제어가 가능합니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 디버깅 중: 데드락 발생</div>
+                    <p class="conv-quote">"서버가 응답이 없어서 jstack으로 스레드 덤프를 떴더니 데드락이 발견됐습니다. Thread-1이 Lock-A를 잡고 Lock-B를 기다리고, Thread-2가 Lock-B를 잡고 Lock-A를 기다리는 상황이에요. 해결책으로 락 획득 순서를 일관되게 정하거나, tryLock으로 타임아웃을 설정하고, 가능하면 락의 범위를 줄여서 홀딩 시간을 최소화해야 합니다. 장기적으로는 락-프리 자료구조나 메시지 큐 패턴 도입을 검토해야 할 것 같습니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서: 스레드 풀 설정</div>
+                    <p class="conv-quote">"스레드 풀 크기가 CPU 코어 수의 10배로 설정되어 있네요. 이 작업이 CPU-bound인지 I/O-bound인지 확인해봐야 합니다. CPU-bound라면 코어 수 정도가 적당하고, I/O-bound라면 대기 시간 비율에 따라 더 늘릴 수 있어요. 또한 Executors.newFixedThreadPool 대신 ThreadPoolExecutor를 직접 생성해서 큐 크기와 rejection 정책을 명시하는 게 프로덕션에서 더 안전합니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">🔄</span>
+                    <div>
+                        <strong>Race Condition (경쟁 조건)</strong>
+                        <p>여러 스레드가 공유 자원에 동시 접근할 때 실행 순서에 따라 결과가 달라지는 문제입니다. 읽기-수정-쓰기 연산이 원자적이지 않으면 발생합니다. synchronized, Lock, 또는 Atomic 클래스로 해결하세요. 단, 과도한 동기화는 성능 저하와 데드락의 원인이 됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">🔒</span>
+                    <div>
+                        <strong>Deadlock (교착 상태)</strong>
+                        <p>두 개 이상의 스레드가 서로 상대방이 가진 락을 기다리며 무한 대기하는 상태입니다. 예방하려면: 1) 락 획득 순서를 일관되게 유지, 2) tryLock으로 타임아웃 설정, 3) 락 홀딩 시간 최소화, 4) 데드락 감지 도구 활용. jstack, VisualVM으로 스레드 덤프를 분석하면 데드락을 진단할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">📊</span>
+                    <div>
+                        <strong>스레드 풀 관리</strong>
+                        <p>스레드를 무한정 생성하면 메모리 부족과 컨텍스트 스위칭 오버헤드로 성능이 급락합니다. 반드시 스레드 풀을 사용하고, 적절한 크기를 설정하세요. CPU-bound 작업은 코어 수, I/O-bound 작업은 코어 수 * (1 + 대기시간/작업시간)이 기준입니다. 큐 크기와 rejection 정책도 명시적으로 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">👁️</span>
+                    <div>
+                        <strong>가시성(Visibility) 문제</strong>
+                        <p>한 스레드가 변경한 값을 다른 스레드가 보지 못하는 문제입니다. CPU 캐시와 컴파일러 최적화 때문에 발생합니다. Java에서는 volatile 키워드로 가시성을 보장하고, Python의 GIL은 어느 정도 보호해주지만 명시적 동기화가 권장됩니다. happens-before 관계를 이해하는 것이 중요합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Process/" class="related-term-link">Process</a>
+                <a href="/ko/term/Concurrency/" class="related-term-link">Concurrency</a>
+                <a href="/ko/term/Multithreading/" class="related-term-link">Multithreading</a>
+                <a href="/ko/term/Mutex/" class="related-term-link">Mutex</a>
+                <a href="/ko/term/%EB%8D%B0%EB%93%9C%EB%9D%BD/" class="related-term-link">Deadlock</a>
+                <a href="/ko/term/Async/" class="related-term-link">Async/Await</a>
+                <a href="/ko/term/Coroutine/" class="related-term-link">Coroutine</a>
+                <a href="/ko/term/Semaphore/" class="related-term-link">Semaphore</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/" target="_blank" rel="noopener" class="learn-link">
+                    <span>📄 Oracle - Java Concurrency Tutorial</span>
+                </a>
+                <a href="https://docs.python.org/3/library/threading.html" target="_blank" rel="noopener" class="learn-link">
+                    <span>📄 Python threading 공식 문서</span>
+                </a>
+                <a href="https://jenkov.com/tutorials/java-concurrency/index.html" target="_blank" rel="noopener" class="learn-link">
+                    <span>🎓 Jenkov - Java Concurrency 심화</span>
+                </a>
+                <a href="https://realpython.com/intro-to-python-threading/" target="_blank" rel="noopener" class="learn-link">
+                    <span>🎓 Real Python - Threading 가이드</span>
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +738,37 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            // 탭 활성화
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            // 코드 블록 표시
+            section.querySelectorAll('.code-block').forEach(block => {
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                } else {
+                    block.classList.remove('active');
+                }
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

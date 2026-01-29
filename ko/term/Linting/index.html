@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,153 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Linting(린팅)은 소스 코드를 실행하지 않고 정적으로 분석하여 잠재적인 오류, 버그, 스타일 위반, 의심스러운 코드 패턴을 찾아내는 과정입니다. Linter(린터)라는 도구가 이 분석을 수행하며, 코드 품질과 일관성을 유지하는 데 핵심적인 역할을 합니다.</p>
+                <p>현대 개발에서 널리 사용되는 린터로는 JavaScript/TypeScript의 ESLint, Python의 Pylint/Ruff/flake8, Rust의 Clippy, Go의 golangci-lint, C/C++의 clang-tidy 등이 있습니다. 각 언어 생태계마다 표준으로 자리잡은 린터가 있어 팀 간 코드 스타일 통일에 기여합니다.</p>
+                <p>Linting은 크게 세 가지를 검사합니다. 첫째, 구문 오류와 타입 문제 같은 잠재적 버그입니다. 둘째, 들여쓰기, 따옴표 스타일, 세미콜론 사용 같은 코드 스타일입니다. 셋째, 사용하지 않는 변수, 너무 복잡한 함수, 안전하지 않은 코드 패턴 같은 코드 품질 문제입니다.</p>
+                <p>린팅은 CI/CD 파이프라인에 통합하여 Pull Request 시점에 자동으로 검사하고, 린트 오류가 있으면 병합을 막는 것이 일반적입니다. IDE 확장이나 pre-commit hook과 연동하면 커밋 전에 로컬에서 먼저 검사할 수 있어 개발 사이클이 빨라집니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="javascript">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// .eslintrc.js - ESLint 설정 파일
+module.exports = {
+  root: true,
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json',
+    ecmaVersion: 2022,
+    sourceType: 'module'
+  },
+  plugins: ['@typescript-eslint', 'import', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:import/typescript',
+    'prettier'  // Prettier와 충돌 규칙 비활성화
+  ],
+  rules: {
+    // 타입 안전성
+    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/strict-boolean-expressions': 'warn',
+
+    // 코드 품질
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error', {
+      argsIgnorePattern: '^_'
+    }],
+
+    // import 정리
+    'import/order': ['error', {
+      groups: ['builtin', 'external', 'internal'],
+      'newlines-between': 'always',
+      alphabetize: { order: 'asc' }
+    }]
+  },
+  ignorePatterns: ['dist/', 'node_modules/', '*.config.js']
+};</code></pre>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># pyproject.toml - Ruff/Pylint 설정 (Python)
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "S",   # flake8-bandit (보안)
+]
+ignore = ["E501"]  # line too long (Formatter가 처리)
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["S101"]  # 테스트에서 assert 허용
+
+[tool.pylint.messages_control]
+disable = ["missing-docstring", "too-few-public-methods"]
+max-line-length = 100
+good-names = ["i", "j", "k", "x", "y", "id"]
+
+# pre-commit 설정 (.pre-commit-config.yaml)
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">리드:</strong> "ESLint 규칙 중에 팀에서 자주 무시하는 거 있으면 논의해서 조정하자. 의미 없이 eslint-disable 남발하는 건 좋지 않아."</p>
+                <p><strong class="role-junior">주니어:</strong> "no-console 규칙 때문에 디버깅할 때 불편한데, warn 레벨로 낮추면 어떨까요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "좋아요. 그리고 CI에서 린트 에러가 있으면 머지 못 하게 막혀 있으니까, 로컬에서 커밋 전에 한 번 돌려보는 습관 들이면 좋아요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "코드 품질을 유지하기 위해 어떤 도구를 사용하셨나요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "ESLint와 Prettier를 함께 사용했습니다. Husky와 lint-staged를 설정해서 커밋 시 변경된 파일만 린팅하게 했고, GitHub Actions에서도 PR마다 전체 린트를 돌렸습니다. 린트 규칙은 eslint-config-airbnb를 베이스로 팀에 맞게 커스터마이징했어요."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 함수에 `// eslint-disable-next-line @typescript-eslint/no-explicit-any` 붙어있는데, 왜 any를 써야 했는지 코멘트 달아주세요."</p>
+                <p><strong class="role-author">작성자:</strong> "서드파티 라이브러리 타입이 없어서 임시로 any 썼습니다. 이슈 만들어서 @types 패키지 찾거나 직접 선언 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>린터와 포매터(Prettier 등)를 함께 쓸 때 규칙 충돌이 발생할 수 있습니다. eslint-config-prettier를 extends 마지막에 넣어 충돌을 방지하세요.</li>
+                <li>너무 엄격한 규칙은 오히려 생산성을 떨어뜨립니다. 팀에서 자주 비활성화하는 규칙은 토론 후 조정하는 것이 좋습니다.</li>
+                <li class="info">린트 설정은 프로젝트 시작 시 정하고 점진적으로 강화하세요. 기존 프로젝트에 엄격한 규칙을 한번에 적용하면 수천 개의 에러가 발생합니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Static%20Analysis/" class="related-link">Static Analysis</a>
+                <a href="/ko/term/Code%20Review/" class="related-link">Code Review</a>
+                <a href="/ko/term/Pre-commit/" class="related-link">Pre-commit</a>
+                <a href="/ko/term/TypeScript/" class="related-link">TypeScript</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://eslint.org/docs/latest/" target="_blank">ESLint 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://docs.astral.sh/ruff/" target="_blank">Ruff - 초고속 Python Linter</a></li>
+                <li><span class="type-tutorial"></span><a href="https://typescript-eslint.io/" target="_blank">typescript-eslint 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +360,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

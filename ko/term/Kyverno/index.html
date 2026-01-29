@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,150 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Kyverno는 Kubernetes 네이티브 정책 관리 도구로, YAML만으로 정책을 정의할 수 있어 Rego 언어를 배울 필요가 없습니다. 2019년 Nirmata에서 개발되었으며, CNCF 프로젝트로 채택되었습니다.</p>
+                <p>Kyverno의 정책 타입은 validate(검증), mutate(변경), generate(생성), verifyImages(이미지 검증) 4가지입니다. validate로 리소스 스펙을 검증하고, mutate로 기본값을 주입하며, generate로 연관 리소스를 자동 생성합니다.</p>
+                <p>verifyImages는 Cosign, Notary로 서명된 이미지만 배포하도록 강제합니다. SLSA 출처 증명(attestation)도 검증 가능하여 공급망 보안을 구현할 수 있습니다.</p>
+                <p>OPA Gatekeeper와 비교하면 학습 곡선이 낮고 Kubernetes 친화적입니다. 단, 매우 복잡한 정책 로직은 Rego가 더 강력할 수 있습니다. 팀의 숙련도와 정책 복잡도에 따라 선택합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Kyverno 설치
+helm repo add kyverno https://kyverno.github.io/kyverno/
+helm install kyverno kyverno/kyverno -n kyverno --create-namespace
+
+# ClusterPolicy: 리소스 제한 필수
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-resource-limits
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: require-limits
+      match:
+        resources:
+          kinds:
+            - Pod
+      validate:
+        message: "CPU and memory limits are required"
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  limits:
+                    cpu: "?*"
+                    memory: "?*"
+
+---
+# ClusterPolicy: 서명된 이미지만 허용
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: verify-image-signature
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: verify-cosign-signature
+      match:
+        resources:
+          kinds:
+            - Pod
+          namespaces:
+            - production
+      verifyImages:
+        - imageReferences:
+            - "ghcr.io/myorg/*"
+          attestors:
+            - entries:
+                - keyless:
+                    issuer: "https://token.actions.githubusercontent.com"
+                    subject: "https://github.com/myorg/*"
+
+---
+# ClusterPolicy: 기본 레이블 자동 추가 (mutate)
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-default-labels
+spec:
+  rules:
+    - name: add-team-label
+      match:
+        resources:
+          kinds:
+            - Deployment
+      mutate:
+        patchStrategicMerge:
+          metadata:
+            labels:
+              +(managed-by): kyverno</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">플랫폼:</strong> "Kyverno로 이미지 서명 검증 정책 넣으려고요. verifyImages 쓰면 Cosign 서명 확인 가능해요."</p>
+                <p><strong class="role-junior">개발팀:</strong> "기존 Gatekeeper랑 같이 쓸 수 있나요?"</p>
+                <p><strong class="role-senior">플랫폼:</strong> "네, 둘 다 Admission Webhook이라 공존 가능해요. 근데 역할 중복 안 되게 분리하는 게 좋아요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Kyverno와 OPA Gatekeeper 차이점을 설명해주세요."</p>
+                <p><strong class="role-interviewee">지원자:</strong> "Kyverno는 YAML 기반으로 정책을 작성하여 학습 곡선이 낮고, mutate와 generate로 리소스 변경/생성이 가능합니다. Gatekeeper는 Rego 언어로 복잡한 로직을 표현할 수 있습니다. 또한 Kyverno는 verifyImages로 이미지 서명 검증을 네이티브로 지원합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "validationFailureAction이 audit인데, 프로덕션에선 enforce로 바꿔야 실제로 차단돼요."</p>
+                <p><strong class="role-author">작성자:</strong> "맞아요, 테스트 끝나면 enforce로 전환하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li class="">validationFailureAction: Audit은 위반을 기록만 하고 차단하지 않습니다. 정책 테스트 후 Enforce로 전환하세요.</li>
+                <li class="">너무 많은 mutate 정책은 리소스 원본 추적을 어렵게 합니다. 변경 내역을 annotation으로 기록하는 것을 고려하세요.</li>
+                <li class="info">Kyverno 정책 리포트(PolicyReport)로 클러스터 전체 준수 현황을 모니터링할 수 있습니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/OPA/" class="related-link">OPA</a>
+                <a href="/ko/term/Gatekeeper/" class="related-link">Gatekeeper</a>
+                <a href="/ko/term/Cosign/" class="related-link">Cosign</a>
+                <a href="/ko/term/SLSA/" class="related-link">SLSA</a>
+                <a href="/ko/term/RBAC/" class="related-link">RBAC</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://kyverno.io/docs/" target="_blank">Kyverno 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://kyverno.io/policies/" target="_blank">Kyverno 정책 라이브러리</a></li>
+                <li><span class="type-tutorial"></span><a href="https://nirmata.com/kyverno-tutorials/" target="_blank">Kyverno 튜토리얼</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +357,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

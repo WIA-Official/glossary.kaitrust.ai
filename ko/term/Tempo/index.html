@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,170 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Grafana Tempo는 2020년 Grafana Labs에서 출시한 대규모 분산 추적(Distributed Tracing) 백엔드입니다. 기존 Jaeger, Zipkin 대비 운영 비용이 월등히 저렴하고, Grafana 에코시스템과 완벽하게 통합됩니다.</p>
+                <p>Tempo의 핵심 특징은 인덱싱 없이 오브젝트 스토리지에 trace 데이터를 직접 저장한다는 점입니다. Cassandra, Elasticsearch 같은 인덱싱 DB가 필요 없어 운영 비용이 80% 이상 절감됩니다. S3, GCS, Azure Blob 등 저렴한 오브젝트 스토리지를 사용합니다.</p>
+                <p>Tempo는 OpenTelemetry, Jaeger, Zipkin, OpenCensus 등 모든 주요 trace 프로토콜을 지원합니다. trace ID로 직접 조회하거나, Grafana에서 Loki 로그의 trace ID를 클릭하면 해당 trace를 바로 시각화할 수 있습니다. 이를 Exemplars라고 합니다.</p>
+                <p>실무에서는 Grafana, Loki, Prometheus와 함께 관측성 스택(Observability Stack)을 구성합니다. 로그에서 trace로, trace에서 메트릭으로 자연스럽게 이동하며 문제를 추적할 수 있어, 마이크로서비스 환경의 디버깅 시간이 크게 단축됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Helm으로 Grafana Tempo 설치
+# values.yaml
+tempo:
+  storage:
+    trace:
+      backend: s3
+      s3:
+        bucket: tempo-traces
+        endpoint: s3.amazonaws.com
+        region: ap-northeast-2
+
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+    jaeger:
+      protocols:
+        thrift_http:
+          endpoint: 0.0.0.0:14268
+        grpc:
+          endpoint: 0.0.0.0:14250
+    zipkin:
+      endpoint: 0.0.0.0:9411
+
+# 설치 명령
+# helm repo add grafana https://grafana.github.io/helm-charts
+# helm install tempo grafana/tempo -f values.yaml
+
+---
+# OpenTelemetry Collector 설정 (Tempo로 trace 전송)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-config
+data:
+  config.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+
+    processors:
+      batch:
+        timeout: 1s
+        send_batch_size: 1000
+
+    exporters:
+      otlp:
+        endpoint: tempo.monitoring.svc.cluster.local:4317
+        tls:
+          insecure: true
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp]
+
+---
+# Grafana에서 Tempo 데이터소스 설정
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+data:
+  tempo.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Tempo
+        type: tempo
+        url: http://tempo.monitoring.svc.cluster.local:3100
+        jsonData:
+          tracesToLogs:
+            datasourceUid: loki
+            tags: ['service.name']
+            mappedTags: [{ key: 'service.name', value: 'app' }]
+            mapTagNamesEnabled: true
+            spanStartTimeShift: '-1h'
+            spanEndTimeShift: '1h'
+          tracesToMetrics:
+            datasourceUid: prometheus
+            tags: [{ key: 'service.name', value: 'service' }]</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "Jaeger Elasticsearch 클러스터 비용이 월 500만원 넘어요. Tempo로 전환하면 S3 비용만 내면 되니까 90% 이상 절감됩니다."</p>
+                <p><strong class="role-junior">주니어:</strong> "인덱싱이 없으면 trace 검색이 느리지 않나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "trace ID로 직접 조회하거나 Loki 로그에서 trace ID 클릭하면 바로 보여요. Grafana 연동이 핵심이에요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "분산 추적 시스템 운영 경험을 설명해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "Grafana Tempo를 사용해 일 1억 건 이상의 span을 처리했습니다. S3 저장으로 Jaeger 대비 운영 비용을 85% 절감했고, Loki의 로그에서 trace ID를 클릭하면 바로 trace를 볼 수 있어 장애 분석 시간이 평균 30분에서 5분으로 단축됐습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 API에서 외부 서비스 호출하는데 trace propagation 설정하셨나요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "네, OpenTelemetry SDK로 traceparent 헤더 자동 전파되게 했어요. Tempo에서 전체 호출 체인 확인 가능합니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>인덱싱이 없어 service name, operation 기반 검색 불가 - trace ID 직접 조회 또는 Loki/Prometheus 연동 필수</li>
+                <li>고가용성 구성 시 ingesters 간 데이터 복제 설정 필요 - replication_factor 2 이상 권장</li>
+                <li>오브젝트 스토리지 지연으로 최근 trace 조회에 수 초 딜레이 가능 - querier 캐시 설정 확인</li>
+                <li class="info">TraceQL을 사용하면 Tempo에서 직접 trace를 쿼리할 수 있음 (Tempo 2.0+)</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Tracing/" class="related-link">Tracing</a>
+                <a href="/ko/term/Grafana/" class="related-link">Grafana</a>
+                <a href="/ko/term/Jaeger/" class="related-link">Jaeger</a>
+                <a href="/ko/term/OpenTelemetry/" class="related-link">OpenTelemetry</a>
+                <a href="/ko/term/Loki/" class="related-link">Loki</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://grafana.com/docs/tempo/latest/" target="_blank" rel="noopener">Grafana Tempo 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://grafana.com/blog/2020/10/27/announcing-grafana-tempo-a-massively-scalable-distributed-tracing-system/" target="_blank" rel="noopener">Tempo 출시 블로그</a></li>
+                <li><span class="type-book"></span><a href="https://grafana.com/docs/tempo/latest/traceql/" target="_blank" rel="noopener">TraceQL 쿼리 언어 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +377,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

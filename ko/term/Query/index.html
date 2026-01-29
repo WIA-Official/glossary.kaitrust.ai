@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Query (쿼리) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="DB에서 정보 요청하는 명령. SQL SELECT가 대표적.">
-    <meta name="keywords" content="Query, 쿼리, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="Query는 데이터베이스에서 정보를 요청하는 명령입니다. SELECT, INSERT, UPDATE, DELETE 등 SQL 명령문부터 NoSQL의 find(), aggregate()까지 다양한 쿼리 패턴을 다룹니다.">
+    <meta name="keywords" content="Query, 쿼리, SQL, SELECT, WHERE, JOIN, 서브쿼리, 쿼리 최적화, 데이터베이스, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Query/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Query/">
     <meta property="og:title" content="Query (쿼리) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="DB에서 정보 요청하는 명령. SQL SELECT가 대표적.">
+    <meta property="og:description" content="Query는 데이터베이스에서 정보를 요청하는 명령입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Query (쿼리) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="DB에서 정보 요청하는 명령. SQL SELECT가 대표적.">
+    <meta name="twitter:description" content="Query는 데이터베이스에서 정보를 요청하는 명령입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Query",
-        "description": "DB에서 정보 요청하는 명령. SQL SELECT가 대표적.",
+        "alternateName": "쿼리",
+        "description": "Query는 데이터베이스에서 정보를 요청하는 명령입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">Query</h1>
             <p class="term-english">쿼리</p>
             <div class="term-description">
-                <p>DB에서 정보 요청하는 명령. SQL SELECT가 대표적.</p>
+                <p>데이터베이스에서 정보를 요청하거나 조작하는 명령입니다. SQL의 SELECT, INSERT, UPDATE, DELETE부터 NoSQL의 find(), aggregate()까지, 데이터를 다루는 모든 명령문을 통칭합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,702 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>쿼리(Query)</strong>는 데이터베이스에 "질문"을 던지는 것입니다. "서울에 사는 20대 사용자를 모두 찾아줘"라는 요청을 SQL이나 NoSQL 문법으로 표현한 것이 쿼리입니다. 데이터 조회뿐 아니라 삽입, 수정, 삭제까지 모든 데이터 조작 명령을 포함합니다.</p>
+                <p><strong>SELECT 쿼리</strong>는 가장 자주 사용되는 조회 명령입니다. FROM으로 테이블을 지정하고, WHERE로 조건을 걸고, ORDER BY로 정렬하며, LIMIT로 개수를 제한합니다. JOIN을 통해 여러 테이블을 연결하고, GROUP BY와 집계 함수(COUNT, SUM, AVG)로 데이터를 요약할 수 있습니다.</p>
+                <p><strong>서브쿼리(Subquery)</strong>는 쿼리 안에 포함된 또 다른 쿼리입니다. "평균 급여보다 높은 직원 조회"처럼 다른 쿼리 결과를 조건으로 사용할 때 활용합니다. 스칼라 서브쿼리(단일 값), 인라인 뷰(FROM절), EXISTS/IN 서브쿼리(WHERE절) 등 다양한 형태가 있습니다.</p>
+                <p><strong>쿼리 실행 순서</strong>는 SQL 문법 순서와 다릅니다. FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT 순으로 처리됩니다. 이 순서를 이해해야 올바른 쿼리를 작성하고 성능을 최적화할 수 있습니다.</p>
+                <p><strong>쿼리 최적화</strong>는 성능의 핵심입니다. EXPLAIN으로 실행 계획을 분석하고, 인덱스를 활용하며, N+1 문제를 방지하고, 불필요한 컬럼 조회를 피해야 합니다. Slow Query Log를 모니터링하여 병목 쿼리를 찾아 개선하는 것이 중요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="sql">SQL</button>
+                <button class="code-tab" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="node">Node.js</button>
+            </div>
+            <div class="code-block active" data-lang="sql">
+                <pre><code class="language-sql">-- ============================================
+-- 1. 기본 SELECT 쿼리
+-- ============================================
+-- 전체 조회
+SELECT * FROM users;
+
+-- 특정 컬럼만 조회 (권장)
+SELECT id, name, email FROM users;
+
+-- 조건 필터링
+SELECT * FROM users
+WHERE status = 'active'
+  AND created_at >= '2024-01-01';
+
+-- 정렬과 페이지네이션
+SELECT * FROM orders
+ORDER BY created_at DESC
+LIMIT 20 OFFSET 0;
+
+
+-- ============================================
+-- 2. JOIN - 테이블 연결
+-- ============================================
+-- INNER JOIN: 양쪽 모두 일치하는 데이터
+SELECT u.name, o.total_amount, o.created_at
+FROM users u
+INNER JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed';
+
+-- LEFT JOIN: 왼쪽 테이블 기준 (주문 없는 사용자도 포함)
+SELECT u.name, COUNT(o.id) as order_count
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name;
+
+-- 다중 JOIN
+SELECT u.name, p.name as product_name, oi.quantity
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+JOIN products p ON oi.product_id = p.id
+WHERE o.id = 12345;
+
+
+-- ============================================
+-- 3. 집계 쿼리 (GROUP BY)
+-- ============================================
+-- 카테고리별 상품 수
+SELECT category, COUNT(*) as product_count
+FROM products
+GROUP BY category
+ORDER BY product_count DESC;
+
+-- 월별 매출 통계
+SELECT
+    DATE_TRUNC('month', created_at) as month,
+    COUNT(*) as order_count,
+    SUM(total_amount) as revenue,
+    AVG(total_amount) as avg_order_value
+FROM orders
+WHERE status = 'completed'
+GROUP BY DATE_TRUNC('month', created_at)
+HAVING SUM(total_amount) > 1000000
+ORDER BY month DESC;
+
+
+-- ============================================
+-- 4. 서브쿼리 (Subquery)
+-- ============================================
+-- 스칼라 서브쿼리: 평균보다 높은 가격의 상품
+SELECT name, price
+FROM products
+WHERE price > (SELECT AVG(price) FROM products);
+
+-- IN 서브쿼리: 주문한 적 있는 사용자
+SELECT * FROM users
+WHERE id IN (
+    SELECT DISTINCT user_id FROM orders
+    WHERE created_at >= '2024-01-01'
+);
+
+-- EXISTS: 리뷰가 있는 상품
+SELECT p.name FROM products p
+WHERE EXISTS (
+    SELECT 1 FROM reviews r WHERE r.product_id = p.id
+);
+
+-- 인라인 뷰 (FROM절 서브쿼리)
+SELECT category, avg_price
+FROM (
+    SELECT category, AVG(price) as avg_price
+    FROM products
+    GROUP BY category
+) as category_stats
+WHERE avg_price > 50000;
+
+
+-- ============================================
+-- 5. 윈도우 함수 (고급)
+-- ============================================
+-- 순위 매기기
+SELECT
+    name,
+    category,
+    price,
+    RANK() OVER (PARTITION BY category ORDER BY price DESC) as price_rank
+FROM products;
+
+-- 누적 합계
+SELECT
+    created_at::date as date,
+    total_amount,
+    SUM(total_amount) OVER (ORDER BY created_at) as cumulative_revenue
+FROM orders;
+
+-- 이전 행 비교 (전일 대비)
+SELECT
+    date,
+    revenue,
+    revenue - LAG(revenue) OVER (ORDER BY date) as diff_from_yesterday
+FROM daily_sales;
+
+
+-- ============================================
+-- 6. 데이터 조작 쿼리 (DML)
+-- ============================================
+-- INSERT
+INSERT INTO users (name, email, status)
+VALUES ('홍길동', 'hong@example.com', 'active');
+
+-- UPDATE
+UPDATE users
+SET status = 'inactive', updated_at = NOW()
+WHERE last_login_at < NOW() - INTERVAL '6 months';
+
+-- DELETE (주의!)
+DELETE FROM sessions
+WHERE expires_at < NOW();
+
+-- UPSERT (PostgreSQL)
+INSERT INTO user_settings (user_id, theme, language)
+VALUES (1, 'dark', 'ko')
+ON CONFLICT (user_id)
+DO UPDATE SET theme = EXCLUDED.theme, language = EXCLUDED.language;</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># 쿼리 예제 - Python + SQLAlchemy
+from sqlalchemy import create_engine, text, select, func, and_, or_
+from sqlalchemy.orm import Session, declarative_base, relationship
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Numeric
+from datetime import datetime, timedelta
+
+Base = declarative_base()
+
+# 모델 정의
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100))
+    email = Column(String(255))
+    status = Column(String(20))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    orders = relationship("Order", back_populates="user")
+
+class Order(Base):
+    __tablename__ = 'orders'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    total_amount = Column(Numeric(10, 2))
+    status = Column(String(20))
+    created_at = Column(DateTime)
+    user = relationship("User", back_populates="orders")
+
+
+class QueryExamples:
+    def __init__(self, engine):
+        self.engine = engine
+
+    def basic_select(self):
+        """기본 SELECT 쿼리"""
+        with Session(self.engine) as session:
+            # ORM 스타일
+            users = session.query(User).filter(
+                User.status == 'active'
+            ).order_by(User.created_at.desc()).limit(10).all()
+
+            # 2.0 스타일 (권장)
+            stmt = select(User).where(
+                User.status == 'active'
+            ).order_by(User.created_at.desc()).limit(10)
+            users = session.scalars(stmt).all()
+
+            return users
+
+    def complex_filter(self):
+        """복잡한 조건 필터"""
+        with Session(self.engine) as session:
+            one_month_ago = datetime.utcnow() - timedelta(days=30)
+
+            # AND, OR 조건
+            stmt = select(User).where(
+                and_(
+                    User.status == 'active',
+                    or_(
+                        User.email.like('%@gmail.com'),
+                        User.created_at >= one_month_ago
+                    )
+                )
+            )
+            return session.scalars(stmt).all()
+
+    def join_query(self):
+        """JOIN 쿼리"""
+        with Session(self.engine) as session:
+            # 사용자와 주문 조인
+            stmt = (
+                select(User.name, Order.total_amount, Order.created_at)
+                .join(Order, User.id == Order.user_id)
+                .where(Order.status == 'completed')
+                .order_by(Order.created_at.desc())
+            )
+            results = session.execute(stmt).all()
+
+            # Eager Loading으로 N+1 방지
+            from sqlalchemy.orm import selectinload
+            stmt = select(User).options(
+                selectinload(User.orders)
+            ).where(User.status == 'active')
+            users_with_orders = session.scalars(stmt).all()
+
+            return results
+
+    def aggregate_query(self):
+        """집계 쿼리"""
+        with Session(self.engine) as session:
+            # 월별 매출 통계
+            stmt = (
+                select(
+                    func.date_trunc('month', Order.created_at).label('month'),
+                    func.count(Order.id).label('order_count'),
+                    func.sum(Order.total_amount).label('revenue'),
+                    func.avg(Order.total_amount).label('avg_order')
+                )
+                .where(Order.status == 'completed')
+                .group_by(func.date_trunc('month', Order.created_at))
+                .having(func.sum(Order.total_amount) > 1000000)
+                .order_by(text('month DESC'))
+            )
+            return session.execute(stmt).all()
+
+    def subquery_example(self):
+        """서브쿼리 예제"""
+        with Session(self.engine) as session:
+            # 주문한 적 있는 사용자
+            order_subquery = (
+                select(Order.user_id)
+                .where(Order.created_at >= datetime(2024, 1, 1))
+                .distinct()
+                .subquery()
+            )
+
+            stmt = select(User).where(
+                User.id.in_(select(order_subquery.c.user_id))
+            )
+            return session.scalars(stmt).all()
+
+    def raw_sql(self):
+        """Raw SQL 쿼리 (복잡한 경우)"""
+        with Session(self.engine) as session:
+            result = session.execute(text("""
+                SELECT u.name,
+                       COUNT(o.id) as order_count,
+                       SUM(o.total_amount) as total_spent
+                FROM users u
+                LEFT JOIN orders o ON u.id = o.user_id
+                WHERE u.status = :status
+                GROUP BY u.id, u.name
+                HAVING COUNT(o.id) > :min_orders
+                ORDER BY total_spent DESC
+            """), {"status": "active", "min_orders": 5})
+
+            return [dict(row._mapping) for row in result]
+
+    def pagination(self, page: int = 1, per_page: int = 20):
+        """페이지네이션"""
+        with Session(self.engine) as session:
+            offset = (page - 1) * per_page
+
+            # 전체 개수
+            count_stmt = select(func.count(User.id)).where(User.status == 'active')
+            total = session.scalar(count_stmt)
+
+            # 페이지 데이터
+            stmt = (
+                select(User)
+                .where(User.status == 'active')
+                .order_by(User.id)
+                .offset(offset)
+                .limit(per_page)
+            )
+            users = session.scalars(stmt).all()
+
+            return {
+                "data": users,
+                "total": total,
+                "page": page,
+                "per_page": per_page,
+                "total_pages": (total + per_page - 1) // per_page
+            }
+
+
+# 사용 예시
+if __name__ == "__main__":
+    engine = create_engine("postgresql://localhost/mydb")
+    examples = QueryExamples(engine)
+
+    # 기본 조회
+    users = examples.basic_select()
+
+    # 집계 쿼리
+    stats = examples.aggregate_query()
+    print(stats)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// 쿼리 예제 - Node.js + Prisma
+import { PrismaClient, Prisma } from '@prisma/client';
+
+const prisma = new PrismaClient({
+    log: ['query'], // 실행되는 SQL 확인
+});
+
+class QueryExamples {
+    /**
+     * 기본 SELECT 쿼리
+     */
+    async basicSelect() {
+        // 전체 조회
+        const users = await prisma.user.findMany({
+            where: { status: 'active' },
+            orderBy: { createdAt: 'desc' },
+            take: 10,
+        });
+
+        // 특정 컬럼만 조회
+        const emails = await prisma.user.findMany({
+            select: { id: true, email: true },
+            where: { status: 'active' },
+        });
+
+        return users;
+    }
+
+    /**
+     * 복잡한 조건 필터
+     */
+    async complexFilter() {
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
+
+        // AND, OR 조건
+        const users = await prisma.user.findMany({
+            where: {
+                AND: [
+                    { status: 'active' },
+                    {
+                        OR: [
+                            { email: { contains: '@gmail.com' } },
+                            { createdAt: { gte: oneMonthAgo } },
+                        ],
+                    },
+                ],
+            },
+        });
+
+        // NOT 조건
+        const notDeleted = await prisma.user.findMany({
+            where: {
+                NOT: { status: 'deleted' },
+            },
+        });
+
+        return users;
+    }
+
+    /**
+     * JOIN (관계 포함)
+     */
+    async joinQuery() {
+        // 사용자와 주문 함께 조회
+        const usersWithOrders = await prisma.user.findMany({
+            where: { status: 'active' },
+            include: {
+                orders: {
+                    where: { status: 'completed' },
+                    orderBy: { createdAt: 'desc' },
+                    take: 5,
+                },
+            },
+        });
+
+        // 중첩 관계 (주문 -> 주문상품 -> 상품)
+        const ordersWithDetails = await prisma.order.findMany({
+            include: {
+                user: { select: { name: true, email: true } },
+                orderItems: {
+                    include: {
+                        product: { select: { name: true, price: true } },
+                    },
+                },
+            },
+        });
+
+        return usersWithOrders;
+    }
+
+    /**
+     * 집계 쿼리
+     */
+    async aggregateQuery() {
+        // 기본 집계
+        const stats = await prisma.order.aggregate({
+            _count: { id: true },
+            _sum: { totalAmount: true },
+            _avg: { totalAmount: true },
+            _min: { totalAmount: true },
+            _max: { totalAmount: true },
+            where: { status: 'completed' },
+        });
+
+        // GROUP BY
+        const categoryStats = await prisma.product.groupBy({
+            by: ['category'],
+            _count: { id: true },
+            _avg: { price: true },
+            orderBy: { _count: { id: 'desc' } },
+        });
+
+        // HAVING
+        const popularCategories = await prisma.product.groupBy({
+            by: ['category'],
+            _count: { id: true },
+            having: {
+                id: { _count: { gt: 10 } },
+            },
+        });
+
+        return { stats, categoryStats };
+    }
+
+    /**
+     * Raw SQL 쿼리 (복잡한 경우)
+     */
+    async rawQuery() {
+        // 타입 안전 Raw SQL
+        const result = await prisma.$queryRaw<
+            { name: string; order_count: bigint; total_spent: number }[]
+        >`
+            SELECT u.name,
+                   COUNT(o.id) as order_count,
+                   COALESCE(SUM(o.total_amount), 0) as total_spent
+            FROM "User" u
+            LEFT JOIN "Order" o ON u.id = o.user_id
+            WHERE u.status = 'active'
+            GROUP BY u.id, u.name
+            HAVING COUNT(o.id) > 5
+            ORDER BY total_spent DESC
+        `;
+
+        // 동적 쿼리
+        const status = 'active';
+        const dynamicResult = await prisma.$queryRaw`
+            SELECT * FROM "User" WHERE status = ${status}
+        `;
+
+        return result;
+    }
+
+    /**
+     * 페이지네이션
+     */
+    async pagination(page = 1, perPage = 20) {
+        const skip = (page - 1) * perPage;
+
+        // 트랜잭션으로 데이터와 카운트 동시 조회
+        const [users, total] = await prisma.$transaction([
+            prisma.user.findMany({
+                where: { status: 'active' },
+                orderBy: { id: 'asc' },
+                skip,
+                take: perPage,
+            }),
+            prisma.user.count({
+                where: { status: 'active' },
+            }),
+        ]);
+
+        return {
+            data: users,
+            meta: {
+                total,
+                page,
+                perPage,
+                totalPages: Math.ceil(total / perPage),
+            },
+        };
+    }
+
+    /**
+     * 커서 기반 페이지네이션 (대용량 최적화)
+     */
+    async cursorPagination(cursor?: number, limit = 20) {
+        const users = await prisma.user.findMany({
+            take: limit + 1, // 다음 페이지 존재 여부 확인
+            ...(cursor && {
+                cursor: { id: cursor },
+                skip: 1, // 커서 자체는 제외
+            }),
+            orderBy: { id: 'asc' },
+        });
+
+        const hasNextPage = users.length > limit;
+        const data = hasNextPage ? users.slice(0, -1) : users;
+        const nextCursor = hasNextPage ? data[data.length - 1]?.id : null;
+
+        return { data, nextCursor, hasNextPage };
+    }
+
+    /**
+     * 트랜잭션 쿼리
+     */
+    async transactionQuery(fromUserId: number, toUserId: number, amount: number) {
+        return prisma.$transaction(async (tx) => {
+            // 1. 출금
+            const sender = await tx.wallet.update({
+                where: { userId: fromUserId },
+                data: { balance: { decrement: amount } },
+            });
+
+            // 잔액 체크
+            if (sender.balance < 0) {
+                throw new Error('잔액 부족');
+            }
+
+            // 2. 입금
+            await tx.wallet.update({
+                where: { userId: toUserId },
+                data: { balance: { increment: amount } },
+            });
+
+            // 3. 거래 기록
+            return tx.transaction.create({
+                data: { fromUserId, toUserId, amount, type: 'transfer' },
+            });
+        });
+    }
+}
+
+// 사용 예시
+async function main() {
+    const examples = new QueryExamples();
+
+    // 기본 조회
+    const users = await examples.basicSelect();
+
+    // 집계
+    const stats = await examples.aggregateQuery();
+    console.log(stats);
+
+    // 커서 페이지네이션
+    let cursor: number | undefined;
+    do {
+        const { data, nextCursor } = await examples.cursorPagination(cursor);
+        console.log(`Fetched ${data.length} users`);
+        cursor = nextCursor ?? undefined;
+    } while (cursor);
+
+    await prisma.$disconnect();
+}
+
+main();</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 이슈 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "이 API가 느린 이유가 N+1 쿼리 때문이에요. 사용자 목록 조회할 때 각 사용자의 주문을 별도 쿼리로 가져오고 있거든요. JOIN이나 Eager Loading으로 한 번에 가져오면 쿼리 수를 100개에서 1개로 줄일 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "SELECT * 대신 필요한 컬럼만 명시해주세요. 특히 이 테이블에 BLOB 컬럼이 있어서 불필요하게 큰 데이터를 전송하게 됩니다. select: { id, name, email } 이렇게 바꾸면 응답 크기가 90% 줄어들 거예요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 분석 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "Slow Query Log를 분석해보니 이 집계 쿼리가 5초 이상 걸리네요. 매번 전체 테이블을 스캔하고 있어요. 날짜 범위 조건을 추가하고 적절한 인덱스를 만들면 0.1초로 줄일 수 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>SQL Injection 방지</strong>
+                        <p>사용자 입력을 쿼리에 직접 연결하지 마세요. 반드시 파라미터 바인딩(Prepared Statement)을 사용하세요. "WHERE id = " + userId 대신 "WHERE id = $1"로 작성합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>N+1 쿼리 문제 방지</strong>
+                        <p>루프 안에서 쿼리를 실행하면 성능이 급격히 저하됩니다. JOIN, Eager Loading, 또는 IN 절로 한 번에 조회하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>OFFSET 페이지네이션 주의</strong>
+                        <p>OFFSET이 커지면 성능이 급격히 저하됩니다(OFFSET 10000은 10000개를 읽고 버림). 대용량 데이터는 커서 기반 페이지네이션을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>쿼리 베스트 프랙티스</strong>
+                        <p>EXPLAIN으로 실행 계획 분석, 필요한 컬럼만 SELECT, 인덱스 활용, 적절한 LIMIT 설정, Slow Query 모니터링, 복잡한 쿼리는 뷰나 함수로 캡슐화.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/SQL/" class="related-term-link">SQL</a>
+                <a href="/ko/term/Index/" class="related-term-link">Index</a>
+                <a href="/ko/term/ORM/" class="related-term-link">ORM</a>
+                <a href="/ko/term/NoSQL/" class="related-term-link">NoSQL</a>
+                <a href="/ko/term/ACID/" class="related-term-link">ACID</a>
+                <a href="/ko/term/PostgreSQL/" class="related-term-link">PostgreSQL</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.postgresql.org/docs/current/sql-select.html" target="_blank" class="learn-link">
+                    📄 PostgreSQL - SELECT 쿼리 공식 문서
+                </a>
+                <a href="https://mode.com/sql-tutorial/" target="_blank" class="learn-link">
+                    🎓 Mode - SQL 튜토리얼
+                </a>
+                <a href="https://sqlbolt.com/" target="_blank" class="learn-link">
+                    📖 SQLBolt - 인터랙티브 SQL 학습
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +992,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

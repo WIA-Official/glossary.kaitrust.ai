@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,162 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Seaborn은 2012년 Michael Waskom이 개발한 Python 통계 시각화 라이브러리입니다. Matplotlib 위에 구축되어 있으며, 더 간결한 API와 미려한 기본 스타일로 통계적 데이터 탐색을 쉽게 합니다. Pandas DataFrame과 긴밀하게 통합됩니다.</p>
+                <p>통계적 시각화에 특화되어 있습니다. 분포 시각화(histplot, kdeplot, boxplot, violinplot), 범주형 데이터(catplot, barplot, countplot), 회귀 분석(regplot, lmplot), 상관관계(heatmap, pairplot)를 한 줄 코드로 생성합니다.</p>
+                <p>FacetGrid와 PairGrid로 다변량 분석을 수행합니다. 데이터를 행/열로 분할해 여러 서브플롯을 생성하고, hue 파라미터로 추가 변수를 색상으로 인코딩합니다. relplot, catplot, displot 등 Figure-level 함수로 복잡한 시각화를 간단히 구성합니다.</p>
+                <p>테마(set_theme), 색상 팔레트(color_palette), 컨텍스트(set_context)로 시각화 스타일을 일괄 설정합니다. 기본 스타일이 학술 논문 수준으로 깔끔해 별도 커스터마이징 없이도 발표용으로 사용 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+# 테마 설정
+sns.set_theme(style="whitegrid", palette="husl", font_scale=1.1)
+
+# 샘플 데이터
+tips = sns.load_dataset("tips")
+iris = sns.load_dataset("iris")
+
+# 1. 분포 시각화
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# 히스토그램 + KDE
+sns.histplot(tips['total_bill'], kde=True, ax=axes[0, 0], color='steelblue')
+axes[0, 0].set_title('Total Bill Distribution')
+
+# 박스플롯
+sns.boxplot(x='day', y='total_bill', hue='sex', data=tips, ax=axes[0, 1])
+axes[0, 1].set_title('Total Bill by Day and Sex')
+
+# 바이올린 플롯
+sns.violinplot(x='day', y='tip', data=tips, ax=axes[1, 0], inner='box')
+axes[1, 0].set_title('Tip Distribution by Day')
+
+# KDE 플롯 (2D)
+sns.kdeplot(x=tips['total_bill'], y=tips['tip'], ax=axes[1, 1], fill=True)
+axes[1, 1].set_title('2D Density Plot')
+
+plt.tight_layout()
+plt.show()
+
+# 2. 회귀 분석 시각화
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# 회귀선이 포함된 산점도
+sns.regplot(x='total_bill', y='tip', data=tips, ax=axes[0],
+            scatter_kws={'alpha': 0.5}, line_kws={'color': 'red'})
+axes[0].set_title('Tip vs Total Bill with Regression Line')
+
+# 카테고리별 회귀선 (lmplot - Figure-level)
+# sns.lmplot(x='total_bill', y='tip', hue='smoker', col='time', data=tips)
+
+# 잔차 플롯
+sns.residplot(x='total_bill', y='tip', data=tips, ax=axes[1])
+axes[1].set_title('Residual Plot')
+
+plt.tight_layout()
+plt.show()
+
+# 3. 상관관계 히트맵
+plt.figure(figsize=(10, 8))
+corr = iris.drop('species', axis=1).corr()
+mask = np.triu(np.ones_like(corr, dtype=bool))  # 상삼각 마스킹
+sns.heatmap(corr, mask=mask, annot=True, fmt='.2f', cmap='coolwarm',
+            center=0, square=True, linewidths=.5)
+plt.title('Feature Correlation Heatmap')
+plt.show()
+
+# 4. Pair Plot (다변량 관계)
+sns.pairplot(iris, hue='species', diag_kind='kde',
+             plot_kws={'alpha': 0.6}, height=2.5)
+plt.suptitle('Iris Dataset Pair Plot', y=1.02)
+plt.show()
+
+# 5. FacetGrid (조건부 시각화)
+g = sns.FacetGrid(tips, col='time', row='smoker', hue='sex', height=4)
+g.map_dataframe(sns.scatterplot, x='total_bill', y='tip')
+g.add_legend()
+g.fig.suptitle('Tips by Time, Smoker, and Sex', y=1.02)
+plt.show()
+
+# 6. 카테고리별 집계
+plt.figure(figsize=(10, 6))
+sns.barplot(x='day', y='total_bill', hue='sex', data=tips, errorbar='ci')
+plt.title('Average Total Bill by Day and Sex')
+plt.show()
+
+# 이미지 저장
+# plt.savefig('seaborn_plot.png', dpi=300, bbox_inches='tight')</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "EDA할 때 pairplot 먼저 돌려봐요. 변수 간 관계가 한눈에 보여요."</p>
+                <p><strong class="role-junior">주니어:</strong> "Matplotlib이랑 뭐가 달라요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "Seaborn은 통계 시각화에 특화되어 있고, DataFrame 컬럼명 그대로 쓸 수 있어서 코드가 훨씬 간결해요. 기본 스타일도 예쁘고요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "탐색적 데이터 분석(EDA) 경험을 말씀해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "Seaborn으로 EDA 자동화 함수를 만들었습니다. histplot으로 수치형 변수 분포, countplot으로 범주형 변수 빈도, heatmap으로 상관관계를 자동 생성하고, pairplot으로 다변량 관계를 탐색했습니다. 이상치는 boxplot으로 시각화해 전처리 기준을 정했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "hue로 그룹을 나눌 때 palette 설정하면 색맹 친화적 색상 쓸 수 있어요. palette='colorblind' 추천해요."</p>
+                <p><strong class="role-junior">개발자:</strong> "접근성 고려해서 바로 적용하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>Figure-level(relplot, catplot) vs Axes-level(scatterplot, boxplot) 함수 구분 - Figure-level은 서브플롯 지원, Axes-level은 기존 axes에 추가</li>
+                <li>대량 데이터에서 pairplot 느림 - 변수가 많으면 일부만 선택하거나 샘플링 필요</li>
+                <li>Matplotlib과 혼용 시 스타일 충돌 - sns.set_theme() 이후 Matplotlib 설정이 변경됨</li>
+                <li class="info">sns.load_dataset()으로 연습용 데이터셋(tips, iris, titanic 등) 바로 로드 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Matplotlib/" class="related-link">Matplotlib</a>
+                <a href="/ko/term/Plotly/" class="related-link">Plotly</a>
+                <a href="/ko/term/Pandas/" class="related-link">Pandas</a>
+                <a href="/ko/term/NumPy/" class="related-link">NumPy</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://seaborn.pydata.org/tutorial.html" target="_blank" rel="noopener">Seaborn 공식 튜토리얼</a></li>
+                <li><span class="type-tutorial"></span><a href="https://seaborn.pydata.org/examples/index.html" target="_blank" rel="noopener">Seaborn 갤러리 - 예제 모음</a></li>
+                <li><span class="type-article"></span><a href="https://seaborn.pydata.org/api.html" target="_blank" rel="noopener">Seaborn API Reference</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +369,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

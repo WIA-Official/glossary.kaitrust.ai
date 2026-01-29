@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HPA | KAITRUST AI 백과사전</title>
-    <meta name="description" content="Horizontal Pod Autoscaler, Pod 수를 자동 조정">
-    <meta name="keywords" content="HPA, , AI 용어, KAITRUST, AI 백과사전, 클라우드">
+    <title>HPA (Horizontal Pod Autoscaler) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Kubernetes에서 CPU/메모리 사용량에 따라 Pod 수를 자동으로 조정하는 오토스케일러.">
+    <meta name="keywords" content="HPA, Horizontal Pod Autoscaler, AI 용어, KAITRUST, AI 백과사전, 클라우드">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/HPA/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/HPA/">
-    <meta property="og:title" content="HPA | KAITRUST AI 백과사전">
-    <meta property="og:description" content="Horizontal Pod Autoscaler, Pod 수를 자동 조정">
+    <meta property="og:title" content="HPA (Horizontal Pod Autoscaler) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Kubernetes에서 CPU/메모리 사용량에 따라 Pod 수를 자동으로 조정하는 오토스케일러.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="HPA | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="Horizontal Pod Autoscaler, Pod 수를 자동 조정">
+    <meta name="twitter:title" content="HPA (Horizontal Pod Autoscaler) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Kubernetes에서 CPU/메모리 사용량에 따라 Pod 수를 자동으로 조정하는 오토스케일러.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "HPA",
-        "description": "Horizontal Pod Autoscaler, Pod 수를 자동 조정",
+        "description": "Kubernetes에서 CPU/메모리 사용량에 따라 Pod 수를 자동으로 조정하는 오토스케일러.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -40,178 +40,336 @@
 
     <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
     <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <!-- Common CSS -->
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .code-tab.active { background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#cloud">클라우드</a>
-            <span>›</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai/#cloud">클라우드</a><span>›</span>
             <span class="current">HPA</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>☁️</span>
-                <span>클라우드</span>
-            </div>
+            <div class="term-category-badge"><span>☁️</span><span>클라우드</span></div>
             <h1 class="term-title">HPA</h1>
-            
+            <p class="term-english">Horizontal Pod Autoscaler</p>
             <div class="term-description">
-                <p>Horizontal Pod Autoscaler, Pod 수를 자동 조정</p>
+                <p>Kubernetes에서 CPU/메모리 사용량에 따라 Pod 수를 자동으로 조정하는 오토스케일러.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#cloud" class="term-action-btn btn-secondary">
-                    ☁️ 클라우드 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#cloud" class="term-action-btn btn-secondary">☁️ 클라우드 더보기</a>
             </div>
         </article>
+
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>HPA(Horizontal Pod Autoscaler)는 Kubernetes의 핵심 오토스케일링 컴포넌트로, 워크로드의 CPU/메모리 사용량이나 커스텀 메트릭을 기반으로 Pod 복제본(replica) 수를 자동으로 조정합니다. 수평 스케일링(Scale Out/In)을 통해 트래픽 증가에 대응하고, 유휴 시간에는 리소스를 절약합니다.</p>
+                <p>HPA는 기본적으로 15초마다 메트릭을 확인하고(--horizontal-pod-autoscaler-sync-period), 목표 사용률(예: CPU 50%)과 현재 사용률의 차이를 계산해 필요한 replica 수를 결정합니다. 급격한 스케일 변동을 방지하기 위해 스케일 다운에는 5분의 안정화 윈도우가 기본 적용됩니다.</p>
+                <p>Kubernetes 1.23부터 HPA v2가 안정화되어, CPU/메모리 외에도 Prometheus 등 외부 메트릭, 심지어 다른 오브젝트의 메트릭까지 기준으로 스케일링할 수 있습니다. 예를 들어 Kafka 큐 길이나 HTTP 요청 수 기반 스케일링이 가능합니다.</p>
+                <p>실무에서 HPA는 웹 서버, API 서버 등 무상태(stateless) 워크로드에 필수적입니다. 하지만 HPA만으로는 노드 자원이 부족하면 스케일 아웃이 안 되므로, Cluster Autoscaler(CA)나 Karpenter와 함께 사용해야 완전한 자동 스케일링이 가능합니다.</p>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="kubectl">kubectl 명령</button>
+                <button class="code-tab" data-lang="yaml">YAML 매니페스트</button>
+                <button class="code-tab" data-lang="custom">커스텀 메트릭</button>
+            </div>
+            <div class="code-block" data-lang="kubectl">
+                <pre><code class="language-bash"># 간단한 HPA 생성 (CPU 50% 기준)
+kubectl autoscale deployment web-app \
+  --cpu-percent=50 \
+  --min=2 \
+  --max=10
+
+# HPA 상태 확인
+kubectl get hpa web-app
+# NAME      REFERENCE            TARGETS   MINPODS   MAXPODS   REPLICAS
+# web-app   Deployment/web-app   35%/50%   2         10        3
+
+# HPA 상세 정보 확인
+kubectl describe hpa web-app
+
+# HPA 이벤트 및 스케일링 이력 확인
+kubectl get hpa web-app -o yaml
+
+# 실시간 모니터링
+kubectl get hpa -w
+
+# HPA 삭제
+kubectl delete hpa web-app</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="yaml" style="display: none;">
+                <pre><code class="language-yaml"># HPA v2 전체 설정 예제
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-app-hpa
+  namespace: production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app
+  minReplicas: 2
+  maxReplicas: 20
+  metrics:
+  # CPU 기반 스케일링
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  # 메모리 기반 스케일링
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 70
+  # 스케일 다운 안정화 설정
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5분
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60  # 분당 최대 10% 감소
+    scaleUp:
+      stabilizationWindowSeconds: 0  # 즉시 스케일 업
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15  # 15초마다 최대 2배 증가
+      - type: Pods
+        value: 4
+        periodSeconds: 15  # 15초마다 최대 4개 증가</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="custom" style="display: none;">
+                <pre><code class="language-yaml"># 커스텀/외부 메트릭 기반 HPA
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: queue-processor-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: queue-processor
+  minReplicas: 1
+  maxReplicas: 50
+  metrics:
+  # Prometheus 커스텀 메트릭 (요청 처리량)
+  - type: Pods
+    pods:
+      metric:
+        name: http_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "100"  # Pod당 100 RPS 유지
+  # 외부 메트릭 (Kafka 큐 길이)
+  - type: External
+    external:
+      metric:
+        name: kafka_consumergroup_lag
+        selector:
+          matchLabels:
+            topic: orders
+            consumergroup: order-processor
+      target:
+        type: AverageValue
+        averageValue: "1000"  # 큐 길이 1000 기준
+---
+# 필수: Deployment에 리소스 요청 설정
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        resources:
+          requests:
+            cpu: "100m"    # HPA 계산에 필수
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "HPA를 CPU 50%, 메모리 70% 기준으로 설정하고 min 3, max 20으로 운영하고 있습니다. 피크 타임에 자동으로 15개까지 스케일 아웃되고, 야간에는 3개로 줄어들어 비용이 40% 절감됐어요. 스케일 다운 안정화 윈도우를 10분으로 늘려서 불필요한 스케일 진동을 방지했습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "HPA와 Cluster Autoscaler를 함께 구성해 완전 자동 스케일링을 구현했습니다. HPA가 Pod를 늘리면 CA가 노드를 추가하고, Pod가 줄면 CA가 노드를 축소하는 방식이죠. Prometheus Adapter를 연동해 RPS 기반 스케일링도 적용했고, behavior 설정으로 스케일 업은 공격적으로, 스케일 다운은 보수적으로 조정했습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 트러블슈팅에서</div>
+                    <blockquote class="conv-quote">
+                        "HPA가 스케일 아웃을 안 하는데 메트릭이 'unknown'으로 나오네요. Deployment에 resources.requests가 빠져있어서 CPU 사용률을 계산할 수 없는 겁니다. requests를 추가하고 metrics-server가 정상인지도 확인해보세요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>resources.requests 미설정</strong>
+                        <p>HPA는 (현재 사용량 / requests) 비율로 사용률을 계산합니다. requests가 없으면 CPU 사용률을 알 수 없어 HPA가 동작하지 않습니다. Deployment에 반드시 requests를 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>스케일링 임계값을 너무 낮게 설정</strong>
+                        <p>CPU 30% 같이 낮은 임계값은 사소한 부하 변동에도 스케일링이 발생해 Pod가 자주 생성/삭제됩니다(thrashing). 일반적으로 50-70%가 적절하며, behavior로 안정화 윈도우를 조정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 접근법</strong>
+                        <p>HPA behavior를 활용해 스케일 업은 빠르게(stabilizationWindowSeconds: 0), 스케일 다운은 천천히(300초 이상) 설정하세요. VPA(Vertical Pod Autoscaler)와 함께 사용해 적절한 requests 값도 자동으로 조정할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+                <a href="/ko/term/KEDA/" class="related-term-link">KEDA</a>
+                <a href="/ko/term/GKE/" class="related-term-link">GKE</a>
+                <a href="/ko/term/EKS/" class="related-term-link">EKS</a>
+                <a href="/ko/term/VPA/" class="related-term-link">VPA</a>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://kubernetes.io/ko/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank" class="learn-link">
+                    📄 Kubernetes HPA 공식 문서
+                </a>
+                <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/" target="_blank" class="learn-link">
+                    🎓 HPA 실습 가이드
+                </a>
+                <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#horizontalpodautoscaler-v2-autoscaling" target="_blank" class="learn-link">
+                    📖 HPA v2 API 레퍼런스
+                </a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,135 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>CNAPP(Cloud-Native Application Protection Platform)은 클라우드 네이티브 애플리케이션의 전체 라이프사이클을 보호하는 통합 보안 플랫폼입니다. 기존에 분리되어 있던 CSPM(Cloud Security Posture Management), CWPP(Cloud Workload Protection Platform), CIEM(Cloud Infrastructure Entitlement Management) 기능을 하나로 통합합니다.</p>
+                <p>Gartner가 2021년에 정의한 이 개념은 개발(Dev)부터 운영(Ops)까지 전 과정의 보안을 단일 플랫폼에서 관리할 수 있게 합니다. 코드 스캔, IaC 보안, 컨테이너 이미지 취약점 분석, 런타임 보호, 클라우드 설정 오류 탐지를 통합적으로 수행합니다.</p>
+                <p>CNAPP의 핵심 가치는 컨텍스트 기반 리스크 우선순위화입니다. 단순히 취약점 목록을 나열하는 것이 아니라, "이 취약점이 있는 컨테이너가 인터넷에 노출되어 있고, 중요 데이터에 접근 권한이 있다"와 같이 실제 공격 경로를 분석하여 우선순위를 정합니다.</p>
+                <p>주요 벤더로는 Wiz, Palo Alto Prisma Cloud, Aqua Security, Lacework, Orca Security 등이 있으며, 멀티클라우드 환경에서의 일관된 보안 정책 적용과 가시성 확보에 강점을 가집니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># CNAPP 통합 파이프라인 예시 (GitHub Actions + Wiz CLI)
+name: CNAPP Security Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  cnapp-scan:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. IaC 보안 스캔 (Shift-Left)
+      - name: Terraform Security Scan
+        uses: wiz-sec/wiz-cli-action@v1
+        with:
+          scan-type: iac
+          path: ./terraform
+          policy: "High severity findings block"
+
+      # 2. 컨테이너 이미지 취약점 스캔
+      - name: Container Image Scan
+        run: |
+          wiz-cli docker scan ${{ env.IMAGE_TAG }} \
+            --policy "Critical CVE blocks" \
+            --output sarif > container-scan.sarif
+
+      # 3. 시크릿 탐지
+      - name: Secret Detection
+        run: |
+          wiz-cli secrets scan ./src \
+            --exclude ".git,node_modules"
+
+      # 4. SBOM 생성 및 업로드
+      - name: Generate SBOM
+        run: |
+          syft ${{ env.IMAGE_TAG }} -o spdx-json > sbom.json
+          wiz-cli sbom upload --sbom sbom.json
+
+# 런타임 보호 정책 (Kubernetes)
+# wiz-runtime-policy.yaml
+apiVersion: wiz.io/v1
+kind: RuntimePolicy
+metadata:
+  name: production-workload-protection
+spec:
+  scope:
+    namespaces: ["production"]
+  rules:
+    - name: block-privileged-containers
+      action: Block
+    - name: detect-crypto-mining
+      action: Alert
+    - name: prevent-lateral-movement
+      action: Block</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">보안팀:</strong> "CSPM, CWPP, 시크릿 스캐너 다 따로 쓰고 있는데 알림이 너무 많아요. CNAPP으로 통합하면 어떨까요?"</p>
+                <p><strong class="role-junior">DevOps:</strong> "통합되면 좋겠네요. 지금은 같은 취약점이 여러 도구에서 중복으로 떠요."</p>
+                <p><strong class="role-senior">CISO:</strong> "CNAPP은 공격 경로 분석으로 우선순위를 잡아줘요. Critical 취약점이 1000개 있어도 실제 위험한 건 10개뿐일 수 있거든요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "클라우드 보안 전략을 어떻게 수립하시겠어요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "CNAPP 기반으로 DevSecOps 파이프라인을 구축합니다. CI에서 IaC 스캔과 이미지 취약점 검사를 수행하고, 런타임에서는 CWPP로 워크로드를 보호합니다. CSPM으로 클라우드 설정 오류를 지속 모니터링하고, 공격 경로 분석으로 실제 위험에 집중합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">보안:</strong> "이 Terraform 코드, CNAPP 스캔에서 S3 버킷 퍼블릭 액세스 설정 오류가 잡혔어요."</p>
+                <p><strong class="role-author">개발자:</strong> "아, block_public_acls 설정을 빼먹었네요. 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>CNAPP 도입 시 기존 보안 도구와의 중복을 정리하세요. 같은 영역을 여러 도구가 커버하면 알림 피로(alert fatigue)가 발생합니다.</li>
+                <li>에이전트 기반 vs 에이전트리스 방식의 장단점을 고려하세요. 에이전트리스는 배포가 쉽지만 런타임 보호에 한계가 있습니다.</li>
+                <li class="info">멀티클라우드 환경에서는 모든 CSP를 지원하는 CNAPP을 선택하고, 통합 대시보드에서 일관된 정책을 적용하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/CWPP/" class="related-link">CWPP</a>
+                <a href="/ko/term/CSPM/" class="related-link">CSPM</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-link">Zero Trust</a>
+                <a href="/ko/term/SBOM/" class="related-link">SBOM</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://www.gartner.com/en/documents/4001348" target="_blank">Gartner CNAPP 정의</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.wiz.io/academy/what-is-cnapp" target="_blank">Wiz CNAPP 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://www.aquasec.com/cloud-native-academy/cnapp/" target="_blank">Aqua CNAPP Academy</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +342,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

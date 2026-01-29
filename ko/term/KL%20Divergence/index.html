@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,137 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>KL Divergence(Kullback-Leibler Divergence)는 두 확률 분포 P와 Q 사이의 차이를 측정하는 정보 이론 기반 지표입니다. "P를 Q로 근사할 때 얼마나 정보가 손실되는가"를 정량화하며, 값이 0이면 두 분포가 동일함을 의미합니다.</p>
+                <p>1951년 Solomon Kullback과 Richard Leibler가 제안한 KL Divergence는 상대 엔트로피(relative entropy)라고도 불립니다. Cross-Entropy에서 엔트로피 H(P)를 빼면 KL Divergence가 되며, 분류 문제의 손실 함수와 깊은 연관이 있습니다.</p>
+                <p>수학적으로 D_KL(P||Q) = sum(P(x) * log(P(x)/Q(x)))입니다. 비대칭적이라 D_KL(P||Q) != D_KL(Q||P)이며, 이 특성이 VAE의 정규화, Knowledge Distillation 등에서 중요하게 활용됩니다.</p>
+                <p>실무에서 VAE의 latent space 정규화, 모델 증류(student가 teacher를 모방), 강화학습의 PPO(정책 변화 제한), Adversarial Training 등에 핵심적으로 사용됩니다. 2025년 연구에서는 GKL(Generalized KL) Divergence가 RobustBench에서 SOTA를 달성했습니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import torch
+import torch.nn.functional as F
+import numpy as np
+from scipy.special import kl_div as scipy_kl
+
+# NumPy로 KL Divergence 직접 구현
+def kl_divergence_numpy(p, q, epsilon=1e-10):
+    """KL(P || Q): P가 실제 분포, Q가 근사 분포"""
+    p = np.array(p) + epsilon
+    q = np.array(q) + epsilon
+    return np.sum(p * np.log(p / q))
+
+# 예시: 실제 분포 vs 예측 분포
+p_true = [0.1, 0.2, 0.3, 0.4]      # 실제 분포
+q_approx = [0.25, 0.25, 0.25, 0.25]  # 균등 분포 (나쁜 근사)
+q_good = [0.12, 0.22, 0.28, 0.38]    # 좋은 근사
+
+print(f"KL(P || Q_bad): {kl_divergence_numpy(p_true, q_approx):.4f}")
+print(f"KL(P || Q_good): {kl_divergence_numpy(p_true, q_good):.4f}")
+
+# PyTorch KLDivLoss (Knowledge Distillation 예시)
+# 주의: PyTorch는 입력이 log_softmax여야 함
+teacher_logits = torch.tensor([[2.0, 1.0, 0.5, 0.1]])
+student_logits = torch.tensor([[1.8, 1.1, 0.4, 0.2]])
+
+temperature = 2.0  # soft label을 위한 온도
+teacher_soft = F.softmax(teacher_logits / temperature, dim=-1)
+student_log_soft = F.log_softmax(student_logits / temperature, dim=-1)
+
+# reduction='batchmean'이 수학적 정의와 일치
+kl_loss = F.kl_div(student_log_soft, teacher_soft, reduction='batchmean')
+print(f"Knowledge Distillation KL Loss: {kl_loss.item():.4f}")
+
+# VAE에서의 KL Divergence (잠재 공간 정규화)
+def vae_kl_loss(mu, log_var):
+    """q(z|x) ~ N(mu, sigma^2)와 p(z) ~ N(0, 1) 사이의 KL"""
+    return -0.5 * torch.sum(1 + log_var - mu.pow(2) - log_var.exp())
+
+mu = torch.randn(32, 64)       # 배치 32, 잠재 차원 64
+log_var = torch.randn(32, 64)
+print(f"VAE KL Loss: {vae_kl_loss(mu, log_var).item():.2f}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"Knowledge Distillation에서 student 모델이 teacher의 soft label을 얼마나 잘 모방하는지 KL Divergence로 측정합니다. temperature 2~4 정도로 설정하면 soft label이 더 부드러워져서 학습이 안정적이에요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"KL Divergence는 비대칭이라 D_KL(P||Q)와 D_KL(Q||P)가 다릅니다. VAE에서는 근사 분포 q(z|x)를 사전 분포 p(z)=N(0,1)에 가깝게 만들기 위해 KL 항을 loss에 포함시킵니다. 이게 latent space를 정규화하는 역할을 해요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"PPO에서 KL penalty를 쓰는 이유는 정책이 급격히 변하면 학습이 불안정해지기 때문이에요. 이전 정책과의 KL Divergence를 제한해서 안정적인 업데이트를 보장합니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>PyTorch KLDivLoss에 reduction='mean' 사용</strong>
+                        <p>수학적 정의와 맞지 않습니다. reduction='batchmean'을 사용해야 올바른 KL Divergence 값이 계산됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>P와 Q 순서 혼동</strong>
+                        <p>D_KL(P||Q)에서 P는 실제(target) 분포, Q는 근사(prediction) 분포입니다. 순서가 바뀌면 전혀 다른 값이 나옵니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>0 확률에 epsilon 추가</strong>
+                        <p>Q(x)=0인 곳에서 P(x)>0이면 KL이 무한대가 됩니다. 1e-10 정도의 작은 값을 더해 수치 안정성을 확보하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Cross%20Entropy/" class="related-term-link">Cross Entropy</a>
+                <a href="/ko/term/VAE/" class="related-term-link">VAE</a>
+                <a href="/ko/term/Knowledge%20Distillation/" class="related-term-link">Knowledge Distillation</a>
+                <a href="/ko/term/Entropy/" class="related-term-link">Entropy</a>
+                <a href="/ko/term/PPO/" class="related-term-link">PPO</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://pytorch.org/docs/stable/generated/torch.nn.KLDivLoss.html" target="_blank" class="learn-link">📄 PyTorch KLDivLoss 공식 문서</a>
+                <a href="https://www.datacamp.com/tutorial/kl-divergence" target="_blank" class="learn-link">🎓 DataCamp - KL Divergence 튜토리얼</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +367,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

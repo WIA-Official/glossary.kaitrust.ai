@@ -52,166 +52,238 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
+
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .code-tab.active { background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
-            <span>›</span>
-            <span class="current">CatBoost</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span><a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span><a href="https://glossary.kaitrust.ai/#ai">AI/ML</a><span>›</span><span class="current">CatBoost</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>🤖</span>
-                <span>AI/ML</span>
-            </div>
+            <div class="term-category-badge"><span>🤖</span><span>AI/ML</span></div>
             <h1 class="term-title">CatBoost</h1>
-            <p class="term-english">CatBoost</p>
+            <p class="term-english">Categorical Boosting</p>
             <div class="term-description">
                 <p>Yandex의 그래디언트 부스팅. 범주형 특성 자동 처리.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
-                    🤖 AI/ML 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">🤖 AI/ML 더보기</a>
             </div>
         </article>
+
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>CatBoost(Categorical Boosting)는 러시아 검색 기업 Yandex가 2017년에 오픈소스로 공개한 그래디언트 부스팅 라이브러리입니다. XGBoost, LightGBM과 함께 3대 GBDT(Gradient Boosted Decision Trees) 라이브러리로, 특히 범주형 특성(Categorical Features) 처리에 특화되어 있습니다.</p>
+
+                <p>CatBoost의 가장 큰 차별점은 범주형 특성을 자동으로 처리한다는 점입니다. 기존 GBDT 라이브러리들은 범주형 특성을 원-핫 인코딩이나 라벨 인코딩으로 전처리해야 했지만, CatBoost는 Target Statistics라는 기법으로 범주형 특성을 수치화하면서도 Target Leakage를 방지합니다.</p>
+
+                <p>또한 CatBoost는 Ordered Boosting이라는 독자적인 알고리즘을 사용합니다. 기존 GBDT는 동일한 데이터로 잔차를 계산하고 학습하여 과적합 위험이 있었지만, CatBoost는 데이터 순서를 섞어 학습과 예측에 사용하는 데이터를 분리함으로써 더 일반화된 모델을 만듭니다.</p>
+
+                <p>실무에서 CatBoost는 테이블 데이터 대회(Kaggle)에서 자주 우승하며, 특히 전처리 시간을 줄이면서도 높은 성능을 원할 때 선택됩니다. 금융 리스크 모델링, 추천 시스템, CTR 예측 등 범주형 특성이 많은 도메인에서 강점을 보입니다.</p>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs"><button class="code-tab active" data-lang="python">Python</button></div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># CatBoost를 사용한 분류 모델
+from catboost import CatBoostClassifier, Pool
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, roc_auc_score
+import pandas as pd
+
+# 샘플 데이터 (범주형 특성 포함)
+data = pd.DataFrame({
+    'age': [25, 30, 35, 40, 45, 50, 55, 60] * 100,
+    'gender': ['M', 'F', 'M', 'F', 'M', 'F', 'M', 'F'] * 100,
+    'city': ['Seoul', 'Busan', 'Seoul', 'Daegu', 'Busan', 'Seoul', 'Daegu', 'Busan'] * 100,
+    'income': [3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000] * 100,
+    'target': [0, 1, 0, 1, 1, 0, 1, 0] * 100
+})
+
+# 범주형 특성 지정
+cat_features = ['gender', 'city']
+
+# 학습/테스트 분리
+X = data.drop('target', axis=1)
+y = data['target']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# CatBoost Pool 생성 (범주형 특성 자동 처리)
+train_pool = Pool(X_train, y_train, cat_features=cat_features)
+test_pool = Pool(X_test, cat_features=cat_features)
+
+# 모델 학습
+model = CatBoostClassifier(
+    iterations=500,
+    learning_rate=0.05,
+    depth=6,
+    l2_leaf_reg=3,
+    verbose=100
+)
+model.fit(train_pool)
+
+# 예측 및 평가
+predictions = model.predict(test_pool)
+probabilities = model.predict_proba(test_pool)[:, 1]
+
+print(f"Accuracy: {accuracy_score(y_test, predictions):.4f}")
+print(f"AUC-ROC: {roc_auc_score(y_test, probabilities):.4f}")
+
+# 특성 중요도 확인
+feature_importance = model.get_feature_importance()
+for name, importance in zip(X.columns, feature_importance):
+    print(f"{name}: {importance:.2f}")</code></pre>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">기술 미팅에서</div>
+                    <p class="conv-quote">"대출 심사 모델에서 직업군, 거주지역 같은 범주형 특성이 30개가 넘는데, 전처리하는 것보다 CatBoost를 쓰면 cat_features만 지정해주면 됩니다. 라벨 인코딩보다 Target Encoding 효과를 자동으로 얻으면서 leakage도 방지됩니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">면접 질문</div>
+                    <p class="conv-quote">"CatBoost의 Ordered Boosting은 학습 데이터를 무작위로 섞어서 현재 샘플을 예측할 때 이전 샘플들만 사용해 잔차를 계산합니다. 이로 인해 prediction shift가 줄어들고 과적합이 완화됩니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">코드 리뷰에서</div>
+                    <p class="conv-quote">"CatBoost에서 early_stopping_rounds를 설정하면 validation loss가 개선되지 않을 때 학습이 자동 중단됩니다. iterations를 크게 잡고 early stopping을 쓰는 게 최적 반복 횟수를 찾는 좋은 방법이에요."</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">🏷️</span>
+                    <div>
+                        <strong>범주형 특성 명시 필수</strong>
+                        <p>cat_features를 지정하지 않으면 CatBoost가 범주형 특성을 수치로 잘못 해석합니다. 문자열 타입은 자동 감지되지만, 숫자로 인코딩된 범주형(예: 지역코드)은 반드시 명시해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⏱️</span>
+                    <div>
+                        <strong>학습 시간</strong>
+                        <p>Ordered Boosting으로 인해 XGBoost나 LightGBM보다 학습 시간이 길 수 있습니다. 대용량 데이터에서는 task_type='GPU'를 설정하거나 subsample 파라미터를 조정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">🔢</span>
+                    <div>
+                        <strong>고카디널리티 주의</strong>
+                        <p>범주형 특성의 고유 값이 너무 많으면(예: 사용자 ID) Target Statistics 계산이 불안정해집니다. 이 경우 hashing이나 embedding 기법을 먼저 고려하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/XGBoost/" class="related-term-link">XGBoost</a>
+                <a href="/ko/term/LightGBM/" class="related-term-link">LightGBM</a>
+                <a href="/ko/term/Gradient%20Boosting/" class="related-term-link">Gradient Boosting</a>
+                <a href="/ko/term/Feature%20Engineering/" class="related-term-link">Feature Engineering</a>
+                <a href="/ko/term/Cross%20Validation/" class="related-term-link">Cross Validation</a>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://catboost.ai/" target="_blank" class="learn-link"><span>📄</span><span>CatBoost 공식 사이트</span></a>
+                <a href="https://github.com/catboost/catboost" target="_blank" class="learn-link"><span>💻</span><span>CatBoost GitHub 저장소</span></a>
+                <a href="https://catboost.ai/en/docs/" target="_blank" class="learn-link"><span>📚</span><span>CatBoost 공식 문서</span></a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

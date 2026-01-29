@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,135 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>해시(Hash)는 임의 크기의 데이터를 고정 크기의 값으로 변환하는 함수의 결과물입니다. 해시 함수는 동일한 입력에 항상 같은 출력을 생성하며, 출력에서 입력을 역산하기 어렵습니다(단방향성). 해시는 해시 테이블, 암호화, 데이터 무결성 검증, 블록체인 등에 광범위하게 사용됩니다.</p>
+                <p>해시 테이블(Hash Table)은 키-값 쌍을 저장하는 자료구조로, 해시 함수를 사용해 키를 배열 인덱스로 변환합니다. 이론적으로 O(1) 시간에 검색, 삽입, 삭제가 가능합니다. Python의 dict, JavaScript의 Object/Map, Java의 HashMap이 해시 테이블 기반입니다.</p>
+                <p>암호학적 해시 함수(SHA-256, SHA-3, bcrypt 등)는 보안에 특화되어 있습니다. 충돌 저항성(다른 입력이 같은 출력을 만들기 어려움), 역상 저항성(출력에서 입력 추측이 어려움)을 갖습니다. 비밀번호 저장, 디지털 서명, 블록체인에 사용됩니다.</p>
+                <p>해시 충돌(Collision)은 서로 다른 입력이 같은 해시 값을 만드는 현상입니다. 해시 테이블에서는 체이닝(Chaining)이나 개방 주소법(Open Addressing)으로 충돌을 처리합니다. 좋은 해시 함수는 충돌을 최소화하고 값을 균등하게 분포시킵니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Python 해시 예제
+
+import hashlib
+from collections import defaultdict
+
+# 1. 기본 해시 함수
+text = "Hello, World!"
+hash_value = hash(text)
+print(f"Python hash: {hash_value}")
+
+# 2. SHA-256 해시
+sha256_hash = hashlib.sha256(text.encode()).hexdigest()
+print(f"SHA-256: {sha256_hash}")
+# 출력: dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f
+
+# 3. 파일 무결성 검증
+def file_hash(filepath):
+    sha256 = hashlib.sha256()
+    with open(filepath, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b''):
+            sha256.update(chunk)
+    return sha256.hexdigest()
+
+# 4. 해시 테이블 (dict) 활용
+user_cache = {}
+user_cache['alice'] = {'name': 'Alice', 'age': 30}
+user_cache['bob'] = {'name': 'Bob', 'age': 25}
+print(user_cache.get('alice'))  # O(1) 조회
+
+# 5. 충돌 처리 예시 (체이닝)
+class HashTable:
+    def __init__(self, size=10):
+        self.size = size
+        self.table = [[] for _ in range(size)]
+
+    def _hash(self, key):
+        return hash(key) % self.size
+
+    def set(self, key, value):
+        index = self._hash(key)
+        for i, (k, v) in enumerate(self.table[index]):
+            if k == key:
+                self.table[index][i] = (key, value)
+                return
+        self.table[index].append((key, value))
+
+    def get(self, key):
+        index = self._hash(key)
+        for k, v in self.table[index]:
+            if k == key:
+                return v
+        return None</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>시니어:</strong> 비밀번호를 SHA-256으로 저장하고 있는데, bcrypt로 바꿔야 해요.</p>
+                <p><strong>주니어:</strong> SHA-256이면 충분히 안전하지 않나요?</p>
+                <p><strong>시니어:</strong> SHA-256은 빠른 해시라서 GPU로 초당 수십억 개를 시도할 수 있어요. bcrypt는 일부러 느리게 설계되어 브루트포스가 어렵습니다. 솔트도 자동으로 처리해줘요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 해시 테이블의 시간 복잡도와 최악의 경우를 설명해주세요.</p>
+                <p><strong>지원자:</strong> 평균적으로 O(1)이지만, 모든 키가 같은 버킷에 들어가면 O(n)이 됩니다. 이를 방지하려면 좋은 해시 함수와 적절한 로드 팩터 관리가 필요합니다. 보통 로드 팩터가 0.75를 넘으면 리사이징합니다.</p>
+                <p><strong>면접관:</strong> 해시 충돌 해결 방법들을 비교해주세요.</p>
+                <p><strong>지원자:</strong> 체이닝은 각 버킷에 연결 리스트를 두어 충돌을 처리하고, 구현이 간단합니다. 개방 주소법은 다른 빈 슬롯을 찾아 저장하며, 캐시 효율이 좋지만 삭제가 복잡합니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> API 토큰을 MD5로 해싱하고 있는데, MD5는 더 이상 안전하지 않아요.</p>
+                <p><strong>작성자:</strong> 충돌 공격이 가능하다고요?</p>
+                <p><strong>리뷰어:</strong> 네, SHA-256이나 SHA-3로 교체하세요. 보안 관련 해시는 항상 최신 권장 알고리즘을 사용해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>비밀번호에 빠른 해시 사용 금지:</strong> SHA-256, MD5는 비밀번호용이 아닙니다. bcrypt, Argon2, scrypt를 사용하세요.</li>
+                <li><strong>MD5, SHA-1 사용 금지:</strong> 암호학적으로 깨진 알고리즘입니다. 보안 목적으로는 SHA-256 이상을 사용하세요.</li>
+                <li><strong>해시 테이블 크기:</strong> 너무 작으면 충돌이 많아지고, 너무 크면 메모리 낭비입니다. 동적 리사이징을 구현하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%94%95%EC%85%94%EB%84%88%EB%A6%AC/" class="related-link">딕셔너리</a>
+                <a href="/ko/term/%EC%95%94%ED%98%B8%ED%99%94/" class="related-link">암호화</a>
+                <a href="/ko/term/%EB%B8%94%EB%A1%9D%EC%B2%B4%EC%9D%B8/" class="related-link">블록체인</a>
+                <a href="/ko/term/%EC%BA%90%EC%8B%9C/" class="related-link">캐시</a>
+                <a href="/ko/term/%EC%9E%90%EB%A3%8C%EA%B5%AC%EC%A1%B0/" class="related-link">자료구조</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://docs.python.org/3/library/hashlib.html" target="_blank">Python hashlib Documentation</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/Hash_function" target="_blank">Wikipedia - Hash Function</a></li>
+                <li><a href="https://www.youtube.com/watch?v=KyUTuwz_b7Q" target="_blank">Computerphile - Hashing Algorithms</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +343,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

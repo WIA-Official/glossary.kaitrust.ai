@@ -161,6 +161,124 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhanced Sections */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+
+        .code-block {
+            position: relative;
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .code-block pre { margin: 0; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .spec-table th, .spec-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .spec-table th {
+            background: rgba(168, 85, 247, 0.2);
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+        .spec-table td { color: #cbd5e1; }
+
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-left: 3px solid #a855f7;
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .conv-context { font-weight: 600; color: #a855f7; margin-bottom: 0.5rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; }
+
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+        }
+        .warning-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            color: #a855f7;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(168, 85, 247, 0.2); }
     </style>
 </head>
 <body>
@@ -202,6 +320,180 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Ray</strong>는 분산 컴퓨팅을 위한 오픈소스 프레임워크로, 머신러닝 워크로드를 여러 머신에서 쉽게 병렬 실행할 수 있게 해줍니다. UC Berkeley의 RISELab에서 개발되었으며, Python 코드를 최소한의 수정만으로 분산 환경에서 실행할 수 있어 ML 엔지니어들에게 인기가 높습니다.</p>
+                <p>Ray는 2017년 UC Berkeley에서 시작되었고, 2019년 상용 서비스 Anyscale이 설립되었습니다. 기존 Spark, Dask 등 분산 프레임워크는 특정 워크로드에 최적화되어 있지만, Ray는 범용 분산 컴퓨팅을 목표로 하여 강화학습, 하이퍼파라미터 튜닝, 모델 서빙 등 다양한 ML 태스크를 지원합니다.</p>
+                <p>Ray의 핵심은 Task(함수)와 Actor(클래스) 기반 분산 프로그래밍 모델입니다. @ray.remote 데코레이터 하나로 함수를 분산 태스크로 변환할 수 있으며, Ray Tune(하이퍼파라미터 튜닝), Ray Train(분산 학습), Ray Serve(모델 서빙) 등 ML 전용 라이브러리를 제공합니다.</p>
+                <p>실무에서 Ray는 대규모 ML 학습 파이프라인의 표준으로 자리잡고 있습니다. OpenAI, Uber, Shopify 등 글로벌 기업에서 사용하며, 특히 LLM Fine-tuning과 강화학습에서 활발히 활용됩니다. Anyscale의 관리형 서비스를 통해 클라우드에서 손쉽게 Ray 클러스터를 운영할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Ray를 활용한 분산 하이퍼파라미터 튜닝 예제입니다.</p>
+                <div class="code-block" data-lang="python">
+                    <pre><code class="language-python"># pip install ray[tune] torch
+import ray
+from ray import tune
+from ray.tune.schedulers import ASHAScheduler
+
+# Ray 초기화
+ray.init()
+
+# 학습 함수 정의
+def train_model(config):
+    """하이퍼파라미터 config로 모델 학습"""
+    import torch
+    import torch.nn as nn
+
+    model = nn.Sequential(
+        nn.Linear(10, config["hidden"]),
+        nn.ReLU(),
+        nn.Linear(config["hidden"], 1)
+    )
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=config["lr"])
+
+    for epoch in range(10):
+        loss = torch.rand(1).item()  # 실제로는 학습 로직
+        tune.report({"loss": loss, "epoch": epoch})
+
+# 하이퍼파라미터 검색 공간
+search_space = {
+    "lr": tune.loguniform(1e-4, 1e-2),
+    "hidden": tune.choice([32, 64, 128, 256]),
+}
+
+# ASHA 스케줄러 (조기 종료)
+scheduler = ASHAScheduler(max_t=10, grace_period=1, reduction_factor=2)
+
+# 분산 하이퍼파라미터 튜닝 실행
+tuner = tune.Tuner(
+    train_model,
+    param_space=search_space,
+    tune_config=tune.TuneConfig(
+        metric="loss",
+        mode="min",
+        num_samples=20,  # 20개 시도
+        scheduler=scheduler,
+    ),
+)
+results = tuner.fit()
+
+print(f"Best config: {results.get_best_result().config}")</code></pre>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 📊 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p><strong>2025년 1월 기준</strong> Ray 및 Anyscale 가격 정보입니다.</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>옵션</th>
+                        <th>가격</th>
+                        <th>특징</th>
+                    </tr>
+                    <tr>
+                        <td>Ray OSS (오픈소스)</td>
+                        <td>무료</td>
+                        <td>셀프 호스팅, 커뮤니티 지원</td>
+                    </tr>
+                    <tr>
+                        <td>Anyscale Platform</td>
+                        <td>~$0.50/시간~</td>
+                        <td>관리형 서비스, Pay-as-you-go</td>
+                    </tr>
+                    <tr>
+                        <td>Anyscale Enterprise</td>
+                        <td>커스텀 견적</td>
+                        <td>SLA, 전용 지원, 거버넌스</td>
+                    </tr>
+                </table>
+                <p><strong>비용 절감 팁:</strong></p>
+                <ul style="color: #cbd5e1; margin-left: 1.5rem;">
+                    <li>Spot Instance 활용 시 최대 60% 비용 절감 가능</li>
+                    <li>자동 스케일링으로 유휴 리소스 최소화</li>
+                    <li>신규 가입 시 $100 크레딧 제공</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <div class="conv-quote">"학습 시간이 너무 오래 걸리니까 Ray로 분산 학습을 구성하면 좋겠어요. 노드 10개로 늘리면 학습 시간을 1/8로 줄일 수 있습니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <div class="conv-quote">"Ray는 Task와 Actor 기반의 분산 프로그래밍 모델을 제공합니다. @ray.remote 데코레이터로 함수를 분산 태스크로 쉽게 변환할 수 있어요."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <div class="conv-quote">"하이퍼파라미터 튜닝은 Ray Tune, 분산 학습은 Ray Train, 서빙은 Ray Serve로 통일하면 전체 ML 파이프라인을 일관되게 관리할 수 있습니다."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div><strong>작은 태스크를 과도하게 분산</strong>: 태스크 오버헤드가 있으므로, 너무 작은 작업을 분산하면 오히려 느려집니다. 배치로 묶어서 분산하세요.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div><strong>Object Store 메모리 무시</strong>: Ray는 객체를 공유 메모리에 저장합니다. 대용량 데이터 전송 시 메모리 부족이 발생할 수 있으니 ray.put()을 활용하세요.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div><strong>Dashboard 활용</strong>: Ray Dashboard(localhost:8265)로 태스크 상태, 메모리 사용량, 병목 지점을 실시간 모니터링하세요.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Distributed%20Training/" class="related-term-link">Distributed Training</a>
+                <a href="/ko/term/Hyperparameter%20Tuning/" class="related-term-link">Hyperparameter Tuning</a>
+                <a href="/ko/term/Reinforcement%20Learning/" class="related-term-link">Reinforcement Learning</a>
+                <a href="/ko/term/Model%20Serving/" class="related-term-link">Model Serving</a>
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+                <a href="/ko/term/PyTorch/" class="related-term-link">PyTorch</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.ray.io/" target="_blank" class="learn-link">
+                    📄 Ray 공식 문서
+                </a>
+                <a href="https://www.anyscale.com/blog" target="_blank" class="learn-link">
+                    🎓 Anyscale Blog - Ray 튜토리얼
+                </a>
+                <a href="https://arxiv.org/abs/1712.05889" target="_blank" class="learn-link">
+                    📝 Ray 논문 (OSDI 2018)
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,6 +501,15 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>

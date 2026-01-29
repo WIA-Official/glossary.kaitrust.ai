@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,124 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p><strong>Upstash</strong>는 서버리스 환경에 최적화된 Redis와 Kafka 클라우드 서비스입니다. HTTP/REST API를 제공하여 기존 TCP 기반 Redis 클라이언트 없이도 엣지 환경(Vercel Edge Functions, Cloudflare Workers)에서 쉽게 사용할 수 있습니다.</p>
+                <p>주요 특징으로는 <strong>요청 기반 과금</strong>(사용한 만큼만 비용 지불), <strong>자동 스케일링</strong>, <strong>글로벌 복제</strong>(낮은 지연시간), <strong>TLS 암호화</strong> 등이 있습니다. Redis 외에도 QStash(메시지 큐), Vector(벡터 DB) 서비스도 제공합니다.</p>
+                <p>서버리스 아키텍처에서 콜드 스타트 문제 없이 세션 관리, 캐싱, rate limiting 등을 구현하는 데 적합합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// Upstash Redis with REST API
+import { Redis } from '@upstash/redis'
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+})
+
+// Edge Function에서 캐시 사용
+export default async function handler(req) {
+  const userId = req.query.id
+
+  // 캐시 확인
+  const cached = await redis.get(`user:${userId}`)
+  if (cached) {
+    return Response.json(cached)
+  }
+
+  // DB 조회 후 캐시 저장 (60초 TTL)
+  const user = await fetchUserFromDB(userId)
+  await redis.setex(`user:${userId}`, 60, user)
+  return Response.json(user)
+}
+
+// Rate Limiting with Upstash
+import { Ratelimit } from "@upstash/ratelimit"
+
+const ratelimit = new Ratelimit({
+  redis: redis,
+  limiter: Ratelimit.slidingWindow(10, "10 s"), // 10초에 10회
+})
+
+export async function middleware(req) {
+  const ip = req.ip ?? "127.0.0.1"
+  const { success } = await ratelimit.limit(ip)
+
+  if (!success) {
+    return new Response("Too Many Requests", { status: 429 })
+  }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>프론트엔드 개발자:</strong> "Vercel Edge Function에서 Redis 쓰려는데 연결이 안 돼요."</p>
+                <p><strong>백엔드 개발자:</strong> "Edge 런타임은 TCP 연결이 안 돼서 일반 Redis 클라이언트가 작동 안 해요. Upstash 쓰면 HTTP REST로 통신해서 됩니다."</p>
+                <p><strong>프론트엔드 개발자:</strong> "성능은 괜찮아요?"</p>
+                <p><strong>백엔드 개발자:</strong> "글로벌 리전 지원해서 지연시간 10ms 미만이에요. 서버리스라 콜드 스타트도 없고요."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "서버리스 환경에서 상태 관리를 어떻게 하나요?"</p>
+                <p><strong>지원자:</strong> "Upstash Redis를 사용합니다. HTTP REST API를 제공해서 Edge Function에서도 사용 가능하고, 요청 기반 과금이라 서버리스의 비용 효율성을 유지할 수 있습니다."</p>
+                <p><strong>면접관:</strong> "세션 관리 구현 경험이 있나요?"</p>
+                <p><strong>지원자:</strong> "네, JWT + Upstash 조합으로 리프레시 토큰을 저장하고, TTL로 자동 만료 처리했습니다. Rate limiting도 @upstash/ratelimit 라이브러리로 쉽게 구현했습니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "여기서 매 요청마다 Redis 인스턴스를 새로 생성하고 있네요."</p>
+                <p><strong>개발자:</strong> "서버리스라 어쩔 수 없는 거 아닌가요?"</p>
+                <p><strong>리뷰어:</strong> "파일 최상단에서 한 번 생성하면 웜 스타트 시 재사용돼요. 함수 밖으로 빼주세요. 비용이랑 성능 둘 다 좋아집니다."</p>
+                <p><strong>개발자:</strong> "아, 그렇군요. 모듈 레벨로 이동하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>요청 비용:</strong> 무료 티어 이후 요청당 과금되므로 불필요한 Redis 호출 최적화 필요</li>
+                <li><strong>데이터 영속성:</strong> 캐시 용도로 설계되어 중요 데이터는 별도 DB에 저장</li>
+                <li><strong>연결 제한:</strong> REST API라 Pub/Sub, Lua 스크립트 등 일부 기능 제한</li>
+                <li><strong>환경변수 보안:</strong> REST URL과 토큰 노출 시 전체 데이터 접근 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%BA%90%EC%8B%9C/" class="related-link">캐시</a>
+                <a href="/ko/term/%EC%BB%A4%EB%84%A5%EC%85%98%20%ED%92%80/" class="related-link">커넥션 풀</a>
+                <a href="/ko/term/%EB%A0%88%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98/" class="related-link">레플리케이션</a>
+                <a href="/ko/term/%EC%83%A4%EB%94%A9/" class="related-link">샤딩</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://upstash.com/docs" target="_blank">Upstash 공식 문서</a></li>
+                <li><a href="https://upstash.com/blog/redis-at-edge" target="_blank">Redis at the Edge with Upstash</a></li>
+                <li><a href="https://github.com/upstash/ratelimit" target="_blank">@upstash/ratelimit GitHub</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +332,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

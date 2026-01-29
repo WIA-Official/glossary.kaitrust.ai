@@ -202,7 +202,274 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;"><strong>StatefulSet</strong>은 상태가 있는(Stateful) 애플리케이션을 관리하기 위한 Kubernetes 워크로드 리소스입니다. Deployment와 달리 각 Pod에 고유한 네트워크 ID와 안정적인 영구 스토리지를 제공하며, 순서대로 배포/삭제됩니다.</p>
+
+                <p style="margin-bottom: 1rem;"><strong>StatefulSet vs Deployment:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>고유 Pod 이름:</strong> myapp-0, myapp-1, myapp-2 (랜덤 접미사 아님)</li>
+                    <li><strong>Headless Service:</strong> 각 Pod에 DNS 엔트리 제공 (myapp-0.myapp-svc)</li>
+                    <li><strong>순서 보장:</strong> 0부터 순차적으로 생성, 역순으로 삭제</li>
+                    <li><strong>PVC 보존:</strong> Pod 삭제 시 PersistentVolumeClaim 유지</li>
+                </ul>
+
+                <p style="margin-bottom: 1rem;"><strong>주요 사용 사례:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>데이터베이스:</strong> MySQL, PostgreSQL, MongoDB 클러스터</li>
+                    <li><strong>메시지 브로커:</strong> Kafka, RabbitMQ, ZooKeeper</li>
+                    <li><strong>분산 캐시:</strong> Redis Cluster, Memcached</li>
+                    <li><strong>분산 스토리지:</strong> Elasticsearch, Cassandra</li>
+                </ul>
+
+                <p style="margin-bottom: 1rem;"><strong>Pod 관리 정책:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>OrderedReady (기본):</strong> 순차적 생성/삭제, 이전 Pod Ready 후 다음 생성</li>
+                    <li><strong>Parallel:</strong> 모든 Pod 동시 생성/삭제 (순서 무관한 경우)</li>
+                </ul>
+
+                <p><strong>업데이트 전략:</strong> RollingUpdate(역순 롤링), OnDelete(수동 삭제 시 업데이트), partition(특정 인덱스 이상만 업데이트) 옵션을 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">PostgreSQL StatefulSet 예제</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># postgres-statefulset.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-headless
+  labels:
+    app: postgres
+spec:
+  ports:
+    - port: 5432
+      name: postgres
+  clusterIP: None  # Headless Service
+  selector:
+    app: postgres
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  serviceName: postgres-headless  # Headless Service 연결
+  replicas: 3
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+              name: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+  # PersistentVolumeClaim 템플릿
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 10Gi
+
+  # 업데이트 전략
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0  # 모든 Pod 업데이트
+
+  # Pod 관리 정책
+  podManagementPolicy: OrderedReady</code></pre>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">Pod DNS 및 접근</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># StatefulSet Pod DNS 형식
+# {pod-name}.{headless-service}.{namespace}.svc.cluster.local
+
+# 예시: postgres StatefulSet (3 replicas)
+# postgres-0.postgres-headless.default.svc.cluster.local
+# postgres-1.postgres-headless.default.svc.cluster.local
+# postgres-2.postgres-headless.default.svc.cluster.local
+
+# 같은 네임스페이스에서 접근
+psql -h postgres-0.postgres-headless -U postgres
+
+# 애플리케이션 연결 문자열 (Primary)
+postgresql://postgres:password@postgres-0.postgres-headless:5432/mydb
+
+# kubectl로 상태 확인
+kubectl get statefulset postgres
+# NAME       READY   AGE
+# postgres   3/3     10m
+
+kubectl get pods -l app=postgres
+# NAME         READY   STATUS    RESTARTS   AGE
+# postgres-0   1/1     Running   0          10m
+# postgres-1   1/1     Running   0          9m
+# postgres-2   1/1     Running   0          8m
+
+# PVC 확인 (Pod별 별도 PVC)
+kubectl get pvc
+# NAME                    STATUS   VOLUME    CAPACITY   ACCESS MODES
+# postgres-data-postgres-0   Bound   pvc-xxx   10Gi       RWO
+# postgres-data-postgres-1   Bound   pvc-yyy   10Gi       RWO
+# postgres-data-postgres-2   Bound   pvc-zzz   10Gi       RWO</code></pre>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">Canary 업데이트 (partition)</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># partition을 사용한 단계적 롤아웃
+# partition=2면 인덱스 2 이상 Pod만 업데이트 (postgres-2만)
+
+# 1. partition 설정으로 일부만 업데이트
+kubectl patch statefulset postgres -p \
+  '{"spec":{"updateStrategy":{"type":"RollingUpdate","rollingUpdate":{"partition":2}}}}'
+
+# 2. 이미지 업데이트 (postgres-2만 업데이트됨)
+kubectl set image statefulset/postgres postgres=postgres:16
+
+# 3. postgres-2 테스트 후 partition 낮추기
+kubectl patch statefulset postgres -p \
+  '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":1}}}}'
+# postgres-1, postgres-2 업데이트됨
+
+# 4. 전체 롤아웃
+kubectl patch statefulset postgres -p \
+  '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":0}}}}'
+# postgres-0, postgres-1, postgres-2 모두 업데이트됨</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">아키텍처 설계</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">개발자:</strong> "DB를 Kubernetes에 올리려는데 Deployment로 하면 될까요?"</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">시니어:</strong> "DB는 StatefulSet을 써야 해. Deployment는 Pod 이름이 랜덤이고, PVC도 Pod 삭제되면 관리가 어려워. StatefulSet은 postgres-0, postgres-1처럼 고정 이름이고, 각 Pod마다 전용 PVC가 유지돼."</p>
+                    <p style="color: #94a3b8;"><strong style="color: #f1f5f9;">개발자:</strong> "마스터-슬레이브 구성은요?"</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">시니어:</strong> "postgres-0을 마스터로 고정하고, postgres-1, postgres-2를 슬레이브로 설정해. Headless Service 덕분에 각 Pod에 직접 DNS로 접근할 수 있어서 역할 분리가 쉬워."</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">기술 면접</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">면접관:</strong> "StatefulSet과 Deployment의 차이점을 설명해주세요."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">지원자:</strong> "세 가지 주요 차이가 있습니다. 첫째, Pod 이름이 고정됩니다. Deployment는 랜덤 해시가 붙지만 StatefulSet은 0, 1, 2처럼 순차 인덱스입니다. 둘째, Headless Service와 함께 각 Pod에 고유 DNS가 부여됩니다. 셋째, PVC가 Pod와 1:1로 매핑되어 Pod가 재시작되어도 같은 볼륨을 사용합니다."</p>
+                    <p style="color: #94a3b8;"><strong style="color: #f1f5f9;">면접관:</strong> "언제 StatefulSet을 사용해야 하나요?"</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">지원자:</strong> "데이터베이스, Kafka, ZooKeeper처럼 각 인스턴스가 고유한 ID를 가지고 영구 저장소가 필요한 경우입니다. 반면 웹 서버처럼 상태가 없는 앱은 Deployment가 적합해요."</p>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">트러블슈팅</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">운영팀:</strong> "StatefulSet 스케일아웃이 안 돼요. Pod가 Pending 상태예요."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">개발자:</strong> "PVC 프로비저닝 문제일 가능성이 높아요. StorageClass가 제대로 설정되어 있는지, 그리고 스토리지 용량이 충분한지 확인해보세요. kubectl describe pvc로 이벤트 확인하면 원인 나올 거예요."</p>
+                    <p style="color: #94a3b8;"><strong style="color: #f1f5f9;">운영팀:</strong> "Pod 삭제했는데 PVC가 남아있어요."</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">개발자:</strong> "StatefulSet은 의도적으로 PVC를 삭제하지 않아요. 데이터 보존을 위해서죠. 정말 삭제하려면 수동으로 kubectl delete pvc 해야 해요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #e2e8f0; line-height: 1.8; margin-left: 1.5rem;">
+                <li style="margin-bottom: 0.75rem;"><strong>PVC 자동 삭제 안 됨:</strong> StatefulSet 또는 Pod 삭제 시 PVC는 유지됩니다. 데이터 보존을 위한 설계이지만, 불필요한 PVC가 쌓일 수 있으니 정리가 필요합니다.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>Headless Service 필수:</strong> StatefulSet은 clusterIP: None인 Headless Service가 필요합니다. 일반 Service로는 개별 Pod DNS가 생성되지 않습니다.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>순서 의존성:</strong> OrderedReady 정책에서 이전 Pod가 Ready가 아니면 다음 Pod가 생성되지 않습니다. 하나가 문제면 전체 스케일아웃이 막힐 수 있습니다.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>노드 장애 시 복구:</strong> Pod가 실행되던 노드가 장애나면 자동 재스케줄링에 시간이 걸릴 수 있습니다. Kubernetes가 노드 상태를 확인하는 타임아웃을 고려하세요.</li>
+                <li><strong>스토리지 클래스:</strong> volumeClaimTemplates의 storageClassName이 클러스터에 존재하고 동적 프로비저닝을 지원하는지 확인하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                <a href="/ko/term/Deployment/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Deployment</a>
+                <a href="/ko/term/PersistentVolume/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">PersistentVolume</a>
+                <a href="/ko/term/Headless%20Service/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Headless Service</a>
+                <a href="/ko/term/VPA/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">VPA</a>
+                <a href="/ko/term/Operator/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Operator</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <ul style="color: #e2e8f0; line-height: 2; margin-left: 1.5rem;">
+                <li><a href="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">Kubernetes StatefulSet 공식 문서</a></li>
+                <li><a href="https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">StatefulSet 튜토리얼</a></li>
+                <li><a href="https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">MySQL StatefulSet 예제</a></li>
+            </ul>
+        </section>
     </main>
+
+    <script>
+    function copyCode(button) {
+        const code = button.parentElement.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            button.textContent = '복사됨!';
+            setTimeout(() => button.textContent = '복사', 2000);
+        });
+    }
+    </script>
 
     <!-- Footer -->
     <div id="kaitrust-footer"></div>

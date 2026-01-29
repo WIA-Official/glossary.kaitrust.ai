@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,329 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Gradio</strong>는 머신러닝 모델을 위한 웹 기반 데모 UI를 빠르게 구축할 수 있는 Python 라이브러리입니다. 2022년 Hugging Face에 인수되어 허깅페이스 생태계의 핵심 도구로 자리잡았습니다.</p>
+
+                <h3>Gradio의 핵심 특징</h3>
+                <ul>
+                    <li><strong>빠른 프로토타이핑:</strong> 몇 줄의 코드로 인터랙티브 UI 생성</li>
+                    <li><strong>다양한 입출력 컴포넌트:</strong> 이미지, 오디오, 텍스트, 파일 등</li>
+                    <li><strong>공유 가능한 링크:</strong> 임시 공개 URL 자동 생성</li>
+                    <li><strong>Hugging Face Spaces 통합:</strong> 무료 호스팅 지원</li>
+                    <li><strong>API 자동 생성:</strong> REST API 엔드포인트 자동 생성</li>
+                </ul>
+
+                <h3>주요 컴포넌트</h3>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>컴포넌트</th><th>용도</th><th>예시</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>gr.Textbox</td><td>텍스트 입출력</td><td>챗봇, 번역</td></tr>
+                        <tr><td>gr.Image</td><td>이미지 입출력</td><td>이미지 분류, 생성</td></tr>
+                        <tr><td>gr.Audio</td><td>오디오 입출력</td><td>음성 인식, TTS</td></tr>
+                        <tr><td>gr.Chatbot</td><td>대화형 인터페이스</td><td>LLM 채팅</td></tr>
+                        <tr><td>gr.File</td><td>파일 업로드/다운로드</td><td>문서 처리</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>기본 이미지 분류 데모</h3>
+                <pre><code class="language-python"># 이미지 분류 모델 데모 UI
+import gradio as gr
+from transformers import pipeline
+
+# 사전 학습된 이미지 분류 모델 로드
+classifier = pipeline("image-classification", model="google/vit-base-patch16-224")
+
+def classify_image(image):
+    """이미지를 분류하고 결과 반환"""
+    results = classifier(image)
+    return {result['label']: result['score'] for result in results}
+
+# Gradio 인터페이스 생성
+demo = gr.Interface(
+    fn=classify_image,
+    inputs=gr.Image(type="pil", label="이미지를 업로드하세요"),
+    outputs=gr.Label(num_top_classes=5, label="분류 결과"),
+    title="이미지 분류 데모",
+    description="이미지를 업로드하면 AI가 분류합니다.",
+    examples=[
+        ["examples/cat.jpg"],
+        ["examples/dog.jpg"],
+        ["examples/car.jpg"]
+    ],
+    cache_examples=True
+)
+
+demo.launch(share=True)  # 공개 링크 생성</code></pre>
+
+                <h3>LLM 챗봇 인터페이스</h3>
+                <pre><code class="language-python"># LLM 기반 챗봇 데모
+import gradio as gr
+from openai import OpenAI
+
+client = OpenAI()
+
+def chat_with_gpt(message, history):
+    """GPT와 대화하는 함수"""
+    # 대화 이력을 OpenAI 형식으로 변환
+    messages = [{"role": "system", "content": "당신은 친절한 AI 어시스턴트입니다."}]
+
+    for human, assistant in history:
+        messages.append({"role": "user", "content": human})
+        messages.append({"role": "assistant", "content": assistant})
+
+    messages.append({"role": "user", "content": message})
+
+    # 스트리밍 응답
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=messages,
+        stream=True
+    )
+
+    partial_message = ""
+    for chunk in response:
+        if chunk.choices[0].delta.content:
+            partial_message += chunk.choices[0].delta.content
+            yield partial_message
+
+# Chatbot 인터페이스
+demo = gr.ChatInterface(
+    fn=chat_with_gpt,
+    title="GPT-4 챗봇",
+    description="GPT-4와 대화해보세요!",
+    examples=["안녕하세요!", "Python에서 리스트와 튜플의 차이점은?", "오늘 날씨가 어때?"],
+    retry_btn="다시 시도",
+    undo_btn="실행 취소",
+    clear_btn="대화 초기화"
+)
+
+demo.launch()</code></pre>
+
+                <h3>복합 입력 ML 데모 (Blocks API)</h3>
+                <pre><code class="language-python"># Blocks API를 사용한 복잡한 레이아웃
+import gradio as gr
+import torch
+from diffusers import StableDiffusionPipeline
+
+# Stable Diffusion 모델 로드
+pipe = StableDiffusionPipeline.from_pretrained(
+    "runwayml/stable-diffusion-v1-5",
+    torch_dtype=torch.float16
+)
+pipe = pipe.to("cuda")
+
+def generate_image(prompt, negative_prompt, num_steps, guidance_scale):
+    """이미지 생성 함수"""
+    image = pipe(
+        prompt=prompt,
+        negative_prompt=negative_prompt,
+        num_inference_steps=num_steps,
+        guidance_scale=guidance_scale
+    ).images[0]
+    return image
+
+# Blocks API로 커스텀 레이아웃
+with gr.Blocks(theme=gr.themes.Soft()) as demo:
+    gr.Markdown("# Stable Diffusion 이미지 생성기")
+    gr.Markdown("텍스트 프롬프트로 이미지를 생성하세요!")
+
+    with gr.Row():
+        with gr.Column(scale=2):
+            prompt = gr.Textbox(
+                label="프롬프트",
+                placeholder="생성하고 싶은 이미지를 설명하세요...",
+                lines=3
+            )
+            negative_prompt = gr.Textbox(
+                label="네거티브 프롬프트",
+                placeholder="제외하고 싶은 요소...",
+                lines=2
+            )
+
+            with gr.Row():
+                num_steps = gr.Slider(
+                    minimum=10, maximum=50, value=30, step=1,
+                    label="추론 스텝 수"
+                )
+                guidance_scale = gr.Slider(
+                    minimum=1, maximum=20, value=7.5, step=0.5,
+                    label="가이던스 스케일"
+                )
+
+            generate_btn = gr.Button("이미지 생성", variant="primary")
+
+        with gr.Column(scale=3):
+            output_image = gr.Image(label="생성된 이미지", type="pil")
+
+    # 예제
+    gr.Examples(
+        examples=[
+            ["A beautiful sunset over mountains, digital art", "blurry, low quality", 30, 7.5],
+            ["A cute robot reading a book, cartoon style", "realistic, photo", 30, 7.5],
+        ],
+        inputs=[prompt, negative_prompt, num_steps, guidance_scale],
+        outputs=output_image,
+        fn=generate_image,
+        cache_examples=True
+    )
+
+    # 이벤트 연결
+    generate_btn.click(
+        fn=generate_image,
+        inputs=[prompt, negative_prompt, num_steps, guidance_scale],
+        outputs=output_image
+    )
+
+# Hugging Face Spaces 배포용 설정
+demo.queue()  # 요청 큐잉 활성화
+demo.launch(server_name="0.0.0.0", server_port=7860)</code></pre>
+
+                <h3>API로 Gradio 앱 호출</h3>
+                <pre><code class="language-python"># Gradio 앱의 자동 생성된 API 사용하기
+from gradio_client import Client
+
+# Hugging Face Spaces에 배포된 앱 연결
+client = Client("username/my-gradio-app")
+
+# API 호출
+result = client.predict(
+    "Hello, how are you?",  # 입력 텍스트
+    api_name="/predict"      # 엔드포인트
+)
+print(result)
+
+# 비동기 호출
+job = client.submit(
+    "Generate a story about AI",
+    api_name="/generate"
+)
+print(job.result())  # 결과 대기</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">실무 대화 예시</h2>
+            <div class="section-content">
+                <div class="dialogue">
+                    <div class="dialogue-item">
+                        <span class="speaker">ML 엔지니어:</span>
+                        <span class="speech">"새로 학습한 모델을 팀원들에게 빨리 데모해야 하는데, 프론트엔드 개발할 시간이 없어요."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">시니어 엔지니어:</span>
+                        <span class="speech">"Gradio 써봐. 10줄 정도면 웹 데모 만들 수 있어. share=True 하면 임시 공개 URL도 생성돼."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">ML 엔지니어:</span>
+                        <span class="speech">"영구적으로 배포하려면 어떻게 하나요?"</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">시니어 엔지니어:</span>
+                        <span class="speech">"Hugging Face Spaces에 무료로 호스팅할 수 있어. GPU도 쓸 수 있고, 도커로 패키징해서 자체 서버에 배포해도 돼."</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">ML 엔지니어:</span>
+                        <span class="speech">"Streamlit이랑 뭐가 다른가요?"</span>
+                    </div>
+                    <div class="dialogue-item">
+                        <span class="speaker">시니어 엔지니어:</span>
+                        <span class="speech">"Gradio는 ML 모델 데모에 특화되어 있어. 입출력 컴포넌트가 풍부하고, API가 자동 생성돼. Streamlit은 더 범용적인 데이터 앱에 적합해."</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <h4>보안 고려사항</h4>
+                    <ul>
+                        <li>share=True 링크는 72시간 후 만료 - 프로덕션용이 아님</li>
+                        <li>사용자 입력 검증 필수 - 악의적 입력 방지</li>
+                        <li>민감한 모델은 인증 기능 추가 필요</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>성능 고려사항</h4>
+                    <ul>
+                        <li>대규모 모델은 queue() 활성화로 동시 요청 관리</li>
+                        <li>GPU 메모리 부족 시 모델 언로딩 전략 필요</li>
+                        <li>이미지/오디오 처리 시 파일 크기 제한 설정</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>배포 시 주의점</h4>
+                    <ul>
+                        <li>Hugging Face Spaces 무료 티어는 리소스 제한 있음</li>
+                        <li>requirements.txt에 정확한 버전 명시</li>
+                        <li>모델 파일은 Git LFS 또는 Hugging Face Hub 사용</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/Hugging%20Face/" class="related-term-card">
+                        <h4>Hugging Face</h4>
+                        <p>ML 모델 허브 및 생태계</p>
+                    </a>
+                    <a href="/ko/term/Streamlit/" class="related-term-card">
+                        <h4>Streamlit</h4>
+                        <p>데이터 앱 프레임워크</p>
+                    </a>
+                    <a href="/ko/term/Jupyter/" class="related-term-card">
+                        <h4>Jupyter</h4>
+                        <p>대화형 노트북 환경</p>
+                    </a>
+                    <a href="/ko/term/MLOps/" class="related-term-card">
+                        <h4>MLOps</h4>
+                        <p>ML 모델 운영 및 배포</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <div class="resource-links">
+                    <a href="https://www.gradio.app/docs" class="resource-link" target="_blank">
+                        <span class="resource-icon">📚</span>
+                        <span>Gradio 공식 문서</span>
+                    </a>
+                    <a href="https://huggingface.co/spaces" class="resource-link" target="_blank">
+                        <span class="resource-icon">🚀</span>
+                        <span>Hugging Face Spaces</span>
+                    </a>
+                    <a href="https://www.gradio.app/guides" class="resource-link" target="_blank">
+                        <span class="resource-icon">📖</span>
+                        <span>Gradio 가이드 및 튜토리얼</span>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +536,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

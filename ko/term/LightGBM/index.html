@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,136 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>LightGBM(Light Gradient Boosting Machine)은 Microsoft에서 개발한 고성능 그래디언트 부스팅 프레임워크입니다. 의사결정 트리 기반의 앙상블 학습 알고리즘으로, XGBoost와 함께 Kaggle 등 ML 경진대회에서 가장 많이 사용되는 알고리즘입니다.</p>
+                <p>2017년 NIPS 논문으로 발표된 LightGBM은 기존 GBDT(Gradient Boosting Decision Tree)의 느린 학습 속도를 해결하기 위해 개발되었습니다. 히스토그램 기반 알고리즘과 Leaf-wise 성장 전략을 도입하여 속도와 메모리 효율성을 크게 개선했습니다.</p>
+                <p>LightGBM의 핵심 기술은 GOSS(Gradient-based One-Side Sampling)와 EFB(Exclusive Feature Bundling)입니다. GOSS는 그래디언트가 큰 샘플을 우선 학습하고, EFB는 희소 피처들을 묶어 차원을 줄입니다. 이를 통해 1억 건 이상의 대용량 데이터도 빠르게 학습할 수 있습니다.</p>
+                <p>실무에서 LightGBM은 CTR 예측, 사기 탐지, 추천 시스템 등 테이블 데이터 기반 ML 문제에서 핵심적으로 사용됩니다. GPU 학습 지원, 범주형 피처 자동 처리, 병렬/분산 학습 기능으로 기업 환경에서도 널리 활용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import lightgbm as lgb
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_breast_cancer
+from sklearn.metrics import accuracy_score, roc_auc_score
+
+# 데이터 로드
+data = load_breast_cancer()
+X_train, X_test, y_train, y_test = train_test_split(
+    data.data, data.target, test_size=0.2, random_state=42
+)
+
+# LightGBM 데이터셋 생성
+train_data = lgb.Dataset(X_train, label=y_train)
+valid_data = lgb.Dataset(X_test, label=y_test, reference=train_data)
+
+# 하이퍼파라미터 설정
+params = {
+    'objective': 'binary',
+    'metric': 'auc',
+    'boosting_type': 'gbdt',
+    'num_leaves': 31,
+    'learning_rate': 0.05,
+    'feature_fraction': 0.8,
+    'bagging_fraction': 0.8,
+    'bagging_freq': 5,
+    'verbose': -1
+}
+
+# 모델 학습 (Early Stopping 적용)
+model = lgb.train(
+    params,
+    train_data,
+    num_boost_round=1000,
+    valid_sets=[valid_data],
+    callbacks=[lgb.early_stopping(50), lgb.log_evaluation(100)]
+)
+
+# 예측 및 평가
+y_pred = model.predict(X_test)
+y_pred_binary = [1 if p > 0.5 else 0 for p in y_pred]
+
+print(f"Accuracy: {accuracy_score(y_test, y_pred_binary):.4f}")
+print(f"AUC: {roc_auc_score(y_test, y_pred):.4f}")
+
+# 피처 중요도 확인
+importance = model.feature_importance(importance_type='gain')
+print(f"Top 5 Features: {sorted(zip(data.feature_names, importance), key=lambda x: -x[1])[:5]}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"이번 CTR 예측 모델은 LightGBM으로 개발했습니다. 1억 건 학습 데이터를 30분 만에 처리했고, AUC 0.82를 달성했습니다. 피처 중요도 분석 결과 사용자 세션 길이가 가장 중요한 변수로 나왔습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"LightGBM은 Leaf-wise 트리 성장 방식을 사용해서 XGBoost의 Level-wise보다 더 깊은 트리를 효율적으로 만들 수 있습니다. 다만 오버피팅 위험이 있어서 num_leaves와 max_depth를 적절히 조절해야 합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"범주형 피처가 많은 데이터는 LightGBM의 categorical_feature 옵션을 쓰는 게 좋습니다. 원핫 인코딩보다 학습 속도도 빠르고 메모리도 덜 씁니다. GOSS 샘플링으로 대용량 데이터 처리 속도도 XGBoost보다 2-3배 빠릅니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>num_leaves를 너무 크게 설정</strong>
+                        <p>num_leaves가 크면 트리가 깊어져 오버피팅이 발생합니다. 보통 2^max_depth보다 작게 설정해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 설정</strong>
+                        <p>num_leaves는 31~127 사이로 시작하고, early_stopping을 반드시 사용하세요. 검증 데이터로 최적 반복 횟수를 자동으로 찾아야 합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/XGBoost/" class="related-term-link">XGBoost</a>
+                <a href="/ko/term/Gradient%20Boosting/" class="related-term-link">Gradient Boosting</a>
+                <a href="/ko/term/Random%20Forest/" class="related-term-link">Random Forest</a>
+                <a href="/ko/term/CatBoost/" class="related-term-link">CatBoost</a>
+                <a href="/ko/term/Feature%20Engineering/" class="related-term-link">Feature Engineering</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://lightgbm.readthedocs.io/" target="_blank" class="learn-link">📄 LightGBM 공식 문서</a>
+                <a href="https://github.com/microsoft/LightGBM" target="_blank" class="learn-link">🎓 GitHub 저장소</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +366,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

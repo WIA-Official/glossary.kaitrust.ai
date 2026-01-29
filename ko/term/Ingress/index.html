@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,316 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detailed-explanation">
+            <h2 id="detailed-explanation" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Ingress</strong>는 Kubernetes 클러스터 외부에서 내부 서비스로의 HTTP/HTTPS 트래픽을 관리하는 API 오브젝트입니다. 단순히 포트를 노출하는 Service와 달리, Ingress는 도메인 기반 라우팅, TLS 종료, 로드 밸런싱 등 L7(애플리케이션 계층) 기능을 제공합니다.</p>
+
+                <h3>Ingress vs Service</h3>
+                <ul>
+                    <li><strong>ClusterIP</strong>: 클러스터 내부에서만 접근 가능</li>
+                    <li><strong>NodePort</strong>: 각 노드의 포트로 외부 노출 (30000-32767)</li>
+                    <li><strong>LoadBalancer</strong>: 클라우드 LB 생성, 서비스당 하나</li>
+                    <li><strong>Ingress</strong>: 하나의 LB로 여러 서비스에 도메인/경로 기반 라우팅</li>
+                </ul>
+
+                <h3>Ingress의 핵심 기능</h3>
+                <ul>
+                    <li><strong>호스트 기반 라우팅</strong>: api.example.com, web.example.com 분리</li>
+                    <li><strong>경로 기반 라우팅</strong>: /api, /static 각각 다른 서비스로</li>
+                    <li><strong>TLS 종료</strong>: HTTPS 인증서 관리</li>
+                    <li><strong>리다이렉트</strong>: HTTP를 HTTPS로 자동 리다이렉트</li>
+                    <li><strong>Rate Limiting</strong>: 요청 속도 제한 (컨트롤러 종류에 따라)</li>
+                </ul>
+
+                <h3>주요 Ingress Controller</h3>
+                <ul>
+                    <li><strong>NGINX Ingress</strong>: 가장 널리 사용, 안정적</li>
+                    <li><strong>Traefik</strong>: 자동 서비스 발견, Let's Encrypt 통합</li>
+                    <li><strong>HAProxy</strong>: 고성능 로드 밸런싱</li>
+                    <li><strong>AWS ALB Controller</strong>: AWS Application Load Balancer 활용</li>
+                    <li><strong>Istio Gateway</strong>: 서비스 메시와 통합</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-example">
+            <h2 id="code-example" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>기본 Ingress 리소스</h3>
+                <pre><code class="language-yaml"># ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app-ingress
+  namespace: production
+  annotations:
+    # NGINX Ingress 설정
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+spec:
+  ingressClassName: nginx  # Ingress Controller 지정
+  tls:
+    - hosts:
+        - api.example.com
+        - web.example.com
+      secretName: example-tls  # TLS 인증서 Secret
+  rules:
+    # 호스트 기반 라우팅
+    - host: api.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 80
+    - host: web.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-service
+                port:
+                  number: 80</code></pre>
+
+                <h3>경로 기반 라우팅</h3>
+                <pre><code class="language-yaml"># path-based-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: path-routing-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: example.com
+      http:
+        paths:
+          # /api/* -> api-service
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 8080
+          # /static/* -> static-service
+          - path: /static(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: static-service
+                port:
+                  number: 80
+          # 나머지 -> frontend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80</code></pre>
+
+                <h3>TLS 인증서 Secret</h3>
+                <pre><code class="language-yaml"># tls-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: example-tls
+  namespace: production
+type: kubernetes.io/tls
+data:
+  tls.crt: LS0tLS1CRUdJTi...  # base64 encoded
+  tls.key: LS0tLS1CRUdJTi...  # base64 encoded
+---
+# cert-manager로 자동 발급 (권장)
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: example-cert
+  namespace: production
+spec:
+  secretName: example-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - api.example.com
+    - web.example.com</code></pre>
+
+                <h3>NGINX Ingress 고급 설정</h3>
+                <pre><code class="language-yaml"># advanced-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: advanced-ingress
+  annotations:
+    # Rate Limiting
+    nginx.ingress.kubernetes.io/limit-rps: "10"
+    nginx.ingress.kubernetes.io/limit-connections: "5"
+
+    # CORS
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://example.com"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE"
+
+    # 타임아웃
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+
+    # WebSocket 지원
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$request_uri"
+
+    # 커스텀 헤더
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header X-Frame-Options "SAMEORIGIN";
+      add_header X-Content-Type-Options "nosniff";
+
+    # Basic Auth
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: admin.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: admin-service
+                port:
+                  number: 80</code></pre>
+
+                <h3>AWS ALB Ingress</h3>
+                <pre><code class="language-yaml"># aws-alb-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aws-alb-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:...
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/success-codes: "200,301"
+spec:
+  rules:
+    - host: api.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 80</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section" aria-labelledby="practical-dialogue">
+            <h2 id="practical-dialogue" class="section-title">실무 대화 예제</h2>
+            <div class="section-content">
+                <div class="dialogue-container">
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">백엔드 개발자</div>
+                        <div class="dialogue-content">"서비스마다 LoadBalancer를 만들었더니 AWS 비용이 너무 많이 나와요. 서비스가 10개면 LB도 10개잖아요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">DevOps 엔지니어</div>
+                        <div class="dialogue-content">"Ingress를 사용하세요. 하나의 로드밸런서로 도메인이나 경로 기반으로 여러 서비스에 라우팅할 수 있어요. api.example.com은 API 서비스로, web.example.com은 프론트엔드로 보내는 식이죠."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">백엔드 개발자</div>
+                        <div class="dialogue-content">"HTTPS 인증서는 어떻게 관리해요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">DevOps 엔지니어</div>
+                        <div class="dialogue-content">"cert-manager와 함께 쓰면 Let's Encrypt 인증서를 자동 발급하고 갱신해요. Ingress에 annotation 하나 추가하면 끝이에요. 수동으로 인증서 갱신할 필요 없이요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="cautions">
+            <h2 id="cautions" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="caution-box">
+                    <h3>Ingress Controller 필수</h3>
+                    <p>Ingress 리소스만 만들어서는 동작하지 않습니다. NGINX, Traefik 등 Ingress Controller를 먼저 설치해야 합니다.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>Annotation 호환성</h3>
+                    <p>Ingress Controller마다 annotation이 다릅니다. NGINX Ingress용 annotation은 Traefik에서 동작하지 않습니다.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>PathType 주의</h3>
+                    <p>Prefix, Exact, ImplementationSpecific 중 올바른 타입을 선택하세요. Prefix는 /api가 /api와 /api/users 모두 매칭합니다.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>TLS Secret 네임스페이스</h3>
+                    <p>TLS Secret은 Ingress와 같은 네임스페이스에 있어야 합니다. 다른 네임스페이스의 Secret은 참조할 수 없습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-terms">
+            <h2 id="related-terms" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms-grid">
+                    <a href="/ko/term/Kubernetes/" class="related-term-card">
+                        <h3>Kubernetes</h3>
+                        <p>Ingress가 동작하는 컨테이너 오케스트레이션 플랫폼</p>
+                    </a>
+                    <a href="/ko/term/Envoy/" class="related-term-card">
+                        <h3>Envoy</h3>
+                        <p>일부 Ingress Controller의 기반이 되는 프록시</p>
+                    </a>
+                    <a href="/ko/term/Helm/" class="related-term-card">
+                        <h3>Helm</h3>
+                        <p>Ingress Controller를 설치하는 패키지 매니저</p>
+                    </a>
+                    <a href="/ko/term/Istio/" class="related-term-card">
+                        <h3>Istio</h3>
+                        <p>Gateway로 Ingress 기능을 제공하는 서비스 메시</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-more">
+            <h2 id="learn-more" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="resource-list">
+                    <li><a href="https://kubernetes.io/docs/concepts/services-networking/ingress/" target="_blank" rel="noopener noreferrer">Kubernetes Ingress 공식 문서</a> - 개념 및 예제</li>
+                    <li><a href="https://kubernetes.github.io/ingress-nginx/" target="_blank" rel="noopener noreferrer">NGINX Ingress Controller</a> - 가장 인기 있는 컨트롤러</li>
+                    <li><a href="https://doc.traefik.io/traefik/providers/kubernetes-ingress/" target="_blank" rel="noopener noreferrer">Traefik Ingress</a> - 자동 발견 기능의 컨트롤러</li>
+                    <li><a href="https://cert-manager.io/docs/" target="_blank" rel="noopener noreferrer">cert-manager</a> - 인증서 자동 관리</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +523,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

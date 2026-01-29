@@ -156,6 +156,140 @@
             margin-bottom: 1.5rem;
             color: #f1f5f9;
         }
+        /* Term Section Styles */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+        /* Code Block */
+        .code-block-wrapper {
+            position: relative;
+            margin: 1rem 0;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            color: #e2e8f0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        /* Conversation Examples */
+        .conversation-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .conversation-item:last-child {
+            margin-bottom: 0;
+        }
+        .conversation-context {
+            color: #a855f7;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .conversation-text {
+            color: #e2e8f0;
+            font-style: italic;
+        }
+        /* Warning Items */
+        .warning-item {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+        .warning-item:last-child {
+            margin-bottom: 0;
+        }
+        .warning-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .warning-content strong {
+            color: #f1f5f9;
+        }
+        /* Related Terms */
+        .related-terms-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+        /* Learn More */
+        .learn-more-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .learn-more-list li {
+            margin-bottom: 0.75rem;
+        }
+        .learn-more-list a {
+            color: #67e8f9;
+            text-decoration: none;
+        }
+        .learn-more-list a:hover {
+            text-decoration: underline;
+        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -202,6 +336,202 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>QLoRA(Quantized Low-Rank Adaptation)는 2023년 워싱턴 대학교 Tim Dettmers 팀이 발표한 혁신적인 파인튜닝 기법입니다. 65B 파라미터의 대형 언어 모델을 단일 48GB GPU에서 파인튜닝할 수 있게 해주어, 기존에 수백 GB의 메모리가 필요했던 LLM 맞춤화를 일반 개발자도 접근 가능하게 만들었습니다. 핵심 아이디어는 기본 모델을 4-bit로 양자화하고, 학습 가능한 LoRA 어댑터만 16-bit로 유지하는 것입니다.</p>
+
+                <p>QLoRA의 세 가지 핵심 혁신이 있습니다. 첫째, NF4(NormalFloat 4-bit) 양자화입니다. 일반적인 INT4와 달리 정규분포에 최적화된 데이터 타입으로, 신경망 가중치의 분포 특성에 맞춰 정보 손실을 최소화합니다. 둘째, Double Quantization으로 양자화 상수(scale factor) 자체도 양자화하여 추가로 메모리를 절감합니다. 셋째, Paged Optimizers로 GPU 메모리 부족 시 CPU RAM으로 자동 스왑하여 OOM(Out of Memory) 오류를 방지합니다.</p>
+
+                <p>QLoRA의 성능은 놀랍습니다. 원 논문에서 Guanaco-65B 모델은 단 24시간의 파인튜닝으로 ChatGPT 대비 99.3% 성능을 달성했습니다. 메모리 사용량은 Full Fine-tuning 대비 약 75% 감소하면서도, 품질 저하는 미미합니다. 이는 기본 모델의 지식을 양자화된 형태로 보존하면서, 태스크 특화 지식은 LoRA 어댑터가 학습하기 때문입니다. 하지만 추론 시에도 양자화된 베이스 모델을 사용하므로 약간의 성능 저하가 있을 수 있습니다.</p>
+
+                <p>실무에서 QLoRA는 Hugging Face의 PEFT, bitsandbytes 라이브러리를 통해 쉽게 사용할 수 있습니다. Llama, Mistral, Qwen 등 주요 오픈소스 LLM 대부분이 QLoRA 파인튜닝을 지원합니다. 특히 도메인 특화 챗봇, 커스텀 어시스턴트 개발에 널리 활용되며, 개인 PC(RTX 3090/4090)에서 7B~13B 모델을, A100 80GB에서 70B급 모델을 파인튜닝할 수 있습니다. Axolotl, LLaMA-Factory 같은 파인튜닝 프레임워크에서 기본 지원됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Hugging Face PEFT와 bitsandbytes를 사용한 QLoRA 파인튜닝 예제입니다:</p>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre class="code-block"><code>import torch
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    BitsAndBytesConfig,
+    TrainingArguments
+)
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from trl import SFTTrainer
+from datasets import load_dataset
+
+# 1. 4-bit 양자화 설정 (QLoRA 핵심)
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,                    # 4-bit 양자화 활성화
+    bnb_4bit_quant_type="nf4",            # NormalFloat4 (QLoRA 권장)
+    bnb_4bit_compute_dtype=torch.bfloat16, # 연산은 bfloat16으로
+    bnb_4bit_use_double_quant=True        # Double Quantization
+)
+
+# 2. 양자화된 모델 로드
+model_name = "mistralai/Mistral-7B-v0.1"
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    quantization_config=bnb_config,
+    device_map="auto",
+    trust_remote_code=True
+)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+# 3. LoRA 설정
+lora_config = LoraConfig(
+    r=64,                          # LoRA rank (높을수록 표현력 증가)
+    lora_alpha=16,                 # 스케일링 계수
+    target_modules=[               # 어댑터 적용 레이어
+        "q_proj", "k_proj", "v_proj", "o_proj",
+        "gate_proj", "up_proj", "down_proj"
+    ],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+# 4. 모델에 LoRA 적용
+model = prepare_model_for_kbit_training(model)
+model = get_peft_model(model, lora_config)
+
+# 학습 가능한 파라미터 확인
+model.print_trainable_parameters()
+# 출력: trainable params: 83,886,080 || all params: 7,242,M || 1.16%
+
+# 5. 데이터셋 준비 (예: Alpaca 형식)
+dataset = load_dataset("tatsu-lab/alpaca", split="train[:1000]")
+
+def format_prompt(example):
+    return f"""### Instruction:
+{example['instruction']}
+
+### Input:
+{example['input']}
+
+### Response:
+{example['output']}"""
+
+# 6. 학습 설정
+training_args = TrainingArguments(
+    output_dir="./qlora-output",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-4,
+    fp16=True,
+    logging_steps=10,
+    save_strategy="epoch",
+    optim="paged_adamw_8bit"        # Paged Optimizer (OOM 방지)
+)
+
+# 7. SFTTrainer로 학습
+trainer = SFTTrainer(
+    model=model,
+    train_dataset=dataset,
+    formatting_func=format_prompt,
+    max_seq_length=512,
+    tokenizer=tokenizer,
+    args=training_args
+)
+
+trainer.train()
+
+# 8. LoRA 어댑터 저장 (용량 매우 작음: ~100-500MB)
+model.save_pretrained("./qlora-adapter")
+
+# 9. 추론: 어댑터 로드하여 사용
+from peft import PeftModel
+base_model = AutoModelForCausalLM.from_pretrained(
+    model_name, quantization_config=bnb_config, device_map="auto"
+)
+model = PeftModel.from_pretrained(base_model, "./qlora-adapter")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-item">
+                    <div class="conversation-context">💼 회의에서</div>
+                    <p class="conversation-text">"저희 예산으로 A100 여러 장은 무리고, 단일 RTX 4090으로 Mistral 7B QLoRA 파인튜닝하면 도메인 특화 챗봇 만들 수 있습니다. 학습 시간은 약 6-8시간 예상됩니다."</p>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-context">👔 면접에서</div>
+                    <p class="conversation-text">"QLoRA의 핵심은 NF4 양자화입니다. 일반 INT4와 달리 정규분포에 최적화되어 있어서, 신경망 가중치의 분포 특성에 맞춰 정보 손실을 최소화합니다. 메모리는 75% 절감하면서 성능 저하는 1-2% 수준입니다."</p>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-context">🔧 기술 토론에서</div>
+                    <p class="conversation-text">"QLoRA로 파인튜닝한 모델 배포할 때 선택지가 두 가지예요. 양자화된 베이스 + LoRA 어댑터 그대로 서빙하거나, 어댑터를 merge해서 전체 가중치 모델로 만들 수 있습니다. 후자가 추론 속도는 더 빠르고요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div class="warning-content">
+                        <strong>너무 낮은 rank 설정:</strong> r=8 같은 낮은 rank는 간단한 태스크에는 충분하지만, 복잡한 도메인 지식 학습에는 r=32~64 이상이 필요합니다. rank가 낮으면 학습 용량이 부족해 underfitting됩니다.
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div class="warning-content">
+                        <strong>bitsandbytes 버전 미스매치:</strong> CUDA 버전과 bitsandbytes 버전이 맞지 않으면 4-bit 양자화가 실패합니다. CUDA 11.8 이상과 최신 bitsandbytes(0.41+)를 사용하고, pip install bitsandbytes --upgrade로 업데이트하세요.
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div class="warning-content">
+                        <strong>Best Practice:</strong> target_modules에 attention 레이어(q_proj, k_proj, v_proj, o_proj)뿐 아니라 MLP 레이어(gate_proj, up_proj, down_proj)도 포함하면 성능이 향상됩니다. gradient_checkpointing=True로 추가 메모리 절감도 가능합니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms-grid">
+                    <a href="/ko/term/LoRA/" class="related-term-link">LoRA</a>
+                    <a href="/ko/term/Quantization/" class="related-term-link">Quantization</a>
+                    <a href="/ko/term/Fine-tuning/" class="related-term-link">Fine-tuning</a>
+                    <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                    <a href="/ko/term/Hugging%20Face/" class="related-term-link">Hugging Face</a>
+                    <a href="/ko/term/Prefix%20Tuning/" class="related-term-link">Prefix Tuning</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more-list">
+                    <li>📄 원 논문: <a href="https://arxiv.org/abs/2305.14314" target="_blank" rel="noopener">QLoRA: Efficient Finetuning of Quantized LLMs</a></li>
+                    <li>📘 PEFT 공식 문서: <a href="https://huggingface.co/docs/peft" target="_blank" rel="noopener">Hugging Face PEFT Documentation</a></li>
+                    <li>🛠️ bitsandbytes: <a href="https://github.com/TimDettmers/bitsandbytes" target="_blank" rel="noopener">GitHub Repository</a></li>
+                    <li>📖 실전 가이드: <a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes" target="_blank" rel="noopener">Making LLMs even more accessible with bitsandbytes</a></li>
+                    <li>🎓 Axolotl 프레임워크: <a href="https://github.com/OpenAccess-AI-Collective/axolotl" target="_blank" rel="noopener">간편한 QLoRA 파인튜닝 도구</a></li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +542,16 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(button) {
+        const codeBlock = button.nextElementSibling.querySelector('code');
+        const text = codeBlock.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            button.textContent = '✅ 복사됨!';
+            setTimeout(() => { button.textContent = '📋 복사'; }, 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

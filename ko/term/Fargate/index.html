@@ -161,6 +161,136 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            border-radius: 2px;
+        }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .section-content strong { color: #e2e8f0; }
+        .section-content ul, .section-content ol { margin: 1rem 0; padding-left: 1.5rem; }
+        .section-content li { margin-bottom: 0.5rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(100, 116, 139, 0.2);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+        .code-tab:hover { background: rgba(100, 116, 139, 0.3); }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.5);
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 6px;
+            color: #a855f7;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.3); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conversation-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conversation-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .conversation-text { color: #e2e8f0; line-height: 1.7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.2rem; flex-shrink: 0; }
+        .warning-content { color: #fca5a5; line-height: 1.6; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(100, 116, 139, 0.2);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.4);
+            color: #a855f7;
+        }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-more-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .learn-more-link:hover { color: #93c5fd; }
     </style>
 </head>
 <body>
@@ -202,6 +332,403 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>AWS Fargate</strong>는 서버리스 컨테이너 컴퓨팅 엔진으로, EC2 인스턴스를 관리하지 않고도 컨테이너를 실행할 수 있습니다. ECS(Elastic Container Service)와 EKS(Elastic Kubernetes Service) 모두에서 사용 가능하며, 태스크/Pod 단위로 리소스를 할당하고 과금합니다.</p>
+                <p>Fargate의 핵심 특징:</p>
+                <ul>
+                    <li><strong>서버리스</strong>: 서버 프로비저닝, OS 패치, 클러스터 관리가 필요 없음</li>
+                    <li><strong>세밀한 과금</strong>: vCPU/메모리 사용량 기준 초 단위 과금 (최소 1분)</li>
+                    <li><strong>보안 격리</strong>: 각 태스크가 자체 커널에서 실행되어 완전 격리</li>
+                    <li><strong>AWS 통합</strong>: VPC, IAM, CloudWatch, ALB/NLB 네이티브 통합</li>
+                </ul>
+                <p>리소스 구성 옵션:</p>
+                <ul>
+                    <li><strong>vCPU</strong>: 0.25 ~ 16 vCPU (0.25 단위)</li>
+                    <li><strong>메모리</strong>: 0.5GB ~ 120GB (vCPU에 따라 범위 제한)</li>
+                    <li><strong>Ephemeral Storage</strong>: 기본 20GB, 최대 200GB까지 확장 가능</li>
+                    <li><strong>Fargate Spot</strong>: 최대 70% 할인, 중단 가능한 워크로드용</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-tab="ecs-fargate">ECS Fargate</button>
+                <button class="code-tab" data-tab="eks-fargate">EKS Fargate</button>
+                <button class="code-tab" data-tab="terraform">Terraform</button>
+            </div>
+            <div class="code-block active" id="ecs-fargate">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code># ECS Fargate 클러스터 생성
+aws ecs create-cluster --cluster-name my-fargate-cluster
+
+# Task Definition 등록 (Fargate용)
+cat &gt; task-definition.json &lt;&lt;'EOF'
+{
+  "family": "my-web-app",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::123456789:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::123456789:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "web",
+      "image": "nginx:latest",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/my-web-app",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "essential": true
+    }
+  ]
+}
+EOF
+
+aws ecs register-task-definition --cli-input-json file://task-definition.json
+
+# Fargate 서비스 생성
+aws ecs create-service \
+  --cluster my-fargate-cluster \
+  --service-name my-web-service \
+  --task-definition my-web-app:1 \
+  --desired-count 3 \
+  --launch-type FARGATE \
+  --network-configuration "awsvpcConfiguration={
+    subnets=[subnet-1234,subnet-5678],
+    securityGroups=[sg-1234],
+    assignPublicIp=ENABLED
+  }" \
+  --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:...,containerName=web,containerPort=80"
+
+# Fargate Spot 사용 (비용 절감)
+aws ecs create-service \
+  --cluster my-fargate-cluster \
+  --service-name batch-service \
+  --capacity-provider-strategy "capacityProvider=FARGATE_SPOT,weight=4" \
+  --capacity-provider-strategy "capacityProvider=FARGATE,weight=1"</code>
+            </div>
+            <div class="code-block" id="eks-fargate">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code># EKS에서 Fargate 프로파일 생성
+eksctl create fargateprofile \
+  --cluster my-cluster \
+  --name fp-default \
+  --namespace default \
+  --namespace kube-system
+
+# 특정 레이블 기반 Fargate 프로파일
+eksctl create fargateprofile \
+  --cluster my-cluster \
+  --name fp-production \
+  --namespace production \
+  --labels "compute=fargate"
+
+# Fargate에서 실행할 Pod 배포
+cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-fargate
+  namespace: default
+  labels:
+    compute: fargate  # Fargate 프로파일 매칭
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+        compute: fargate
+    spec:
+      containers:
+        - name: web
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            # Fargate는 requests 기반으로 리소스 할당
+            requests:
+              cpu: "256m"
+              memory: "512Mi"
+            limits:
+              cpu: "512m"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+spec:
+  type: LoadBalancer
+  selector:
+    app: web
+  ports:
+    - port: 80
+      targetPort: 80
+EOF
+
+# Fargate Pod 확인
+kubectl get pods -o wide
+# NODE 컬럼에 fargate-ip-xxx 형식으로 표시
+
+# Fargate 리소스 사용량 확인
+kubectl top pods</code>
+            </div>
+            <div class="code-block" id="terraform">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code># Terraform ECS Fargate 구성
+resource "aws_ecs_cluster" "main" {
+  name = "my-fargate-cluster"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
+  # Capacity Provider 설정
+  configuration {
+    execute_command_configuration {
+      logging = "OVERRIDE"
+      log_configuration {
+        cloud_watch_log_group_name = aws_cloudwatch_log_group.ecs_exec.name
+      }
+    }
+  }
+}
+
+# Fargate Capacity Provider 연결
+resource "aws_ecs_cluster_capacity_providers" "main" {
+  cluster_name = aws_ecs_cluster.main.name
+
+  capacity_providers = ["FARGATE", "FARGATE_SPOT"]
+
+  default_capacity_provider_strategy {
+    base              = 1        # 최소 1개는 FARGATE
+    weight            = 1
+    capacity_provider = "FARGATE"
+  }
+
+  default_capacity_provider_strategy {
+    base              = 0
+    weight            = 4        # 80%는 FARGATE_SPOT
+    capacity_provider = "FARGATE_SPOT"
+  }
+}
+
+# Task Definition
+resource "aws_ecs_task_definition" "app" {
+  family                   = "my-app"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 256
+  memory                   = 512
+  execution_role_arn       = aws_iam_role.ecs_execution.arn
+  task_role_arn            = aws_iam_role.ecs_task.arn
+
+  # Ephemeral Storage 확장 (기본 20GB)
+  ephemeral_storage {
+    size_in_gib = 50
+  }
+
+  container_definitions = jsonencode([
+    {
+      name  = "app"
+      image = "${aws_ecr_repository.app.repository_url}:latest"
+
+      portMappings = [{
+        containerPort = 8080
+        protocol      = "tcp"
+      }]
+
+      environment = [
+        { name = "ENV", value = "production" }
+      ]
+
+      secrets = [
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = aws_secretsmanager_secret.db_password.arn
+        }
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = "/ecs/my-app"
+          "awslogs-region"        = "ap-northeast-2"
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
+    }
+  ])
+}
+
+# Fargate 서비스
+resource "aws_ecs_service" "app" {
+  name            = "my-app-service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.app.arn
+  desired_count   = 3
+
+  # Fargate Spot 혼합 전략
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+    weight            = 1
+    base              = 1  # 최소 1개는 안정적인 FARGATE
+  }
+
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 4  # 나머지 80%는 Spot
+  }
+
+  network_configuration {
+    subnets          = var.private_subnets
+    security_groups  = [aws_security_group.app.id]
+    assign_public_ip = false
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.app.arn
+    container_name   = "app"
+    container_port   = 8080
+  }
+
+  # Auto Scaling 연동
+  lifecycle {
+    ignore_changes = [desired_count]
+  }
+}
+
+# Application Auto Scaling
+resource "aws_appautoscaling_target" "ecs" {
+  max_capacity       = 20
+  min_capacity       = 2
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
+
+resource "aws_appautoscaling_policy" "cpu" {
+  name               = "cpu-target-tracking"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.ecs.resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.ecs.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+    target_value = 50.0
+  }
+}</code>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">실무 대화 예시</h2>
+            <div class="conversation-examples">
+                <div class="conversation-item">
+                    <div class="conversation-label">아키텍처 선택 회의</div>
+                    <div class="conversation-text">"EC2 vs Fargate 어떤 걸 써야 하나요?" "운영 부담 최소화하려면 Fargate입니다. OS 패치, 보안 업데이트, 클러스터 용량 관리 다 AWS가 해줘요. 다만 vCPU당 단가는 EC2보다 20-30% 비싸요. 운영 인력 비용까지 감안하면 소규모 팀은 Fargate가 TCO가 낮고, 대규모면 EC2가 유리합니다."</div>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-label">비용 최적화 논의</div>
+                    <div class="conversation-text">"Fargate 비용을 줄이는 방법이 있나요?" "세 가지 방법이 있습니다. 첫째, Fargate Spot은 최대 70% 저렴하니까 배치 작업, 개발 환경에 활용하세요. 둘째, 리소스 사이징을 정확히 하세요. 256 CPU/512MB 최소 단위부터 시작해서 실제 사용량 보고 조정하면 됩니다. 셋째, ARM64(Graviton) 사용하면 20% 추가 절감됩니다."</div>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-label">마이그레이션 검토</div>
+                    <div class="conversation-text">"기존 EC2 기반 ECS를 Fargate로 전환하려는데 고려사항이 있나요?" "네, 몇 가지 있어요. Docker 볼륨 마운트 대신 EFS나 S3 사용해야 하고, 호스트 네트워크 모드는 awsvpc로 변경 필요합니다. DaemonSet 패턴은 사이드카로 바꿔야 해요. 그리고 GPU 워크로드는 Fargate에서 안 됩니다."</div>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-label">면접 질문</div>
+                    <div class="conversation-text">"Fargate와 Lambda의 차이점은 뭔가요?" "둘 다 서버리스지만 용도가 다릅니다. Lambda는 이벤트 기반 단발성 함수 실행에 적합하고 최대 15분 제한이 있어요. Fargate는 지속 실행되는 컨테이너 워크로드용입니다. API 서버, 백그라운드 워커처럼 항상 떠 있어야 하는 서비스는 Fargate, 트리거 기반 짧은 작업은 Lambda가 맞습니다."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div class="warning-content"><strong>콜드 스타트</strong>: Fargate 태스크 시작에 30초~1분 소요됩니다. Scale Out 시 지연이 있으니 Scheduled Scaling으로 미리 확장하거나 최소 태스크 수를 확보하세요.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div class="warning-content"><strong>DaemonSet 미지원</strong>: EKS Fargate에서 DaemonSet은 작동하지 않습니다. Fluent Bit 같은 로깅 에이전트는 사이드카 컨테이너로 배포하세요.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div class="warning-content"><strong>리소스 제한</strong>: 최대 4 vCPU/30GB(EKS) 또는 16 vCPU/120GB(ECS) 제한이 있습니다. 대용량 컴퓨팅은 EC2 사용을 검토하세요.</div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div class="warning-content"><strong>Fargate Spot 중단</strong>: 2분 전 SIGTERM 알림 후 종료됩니다. Graceful Shutdown 구현하고, 중요 워크로드는 일반 Fargate와 혼합 사용하세요.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="related-terms">
+                <a href="../ECS/" class="related-term-link">ECS</a>
+                <a href="../EKS/" class="related-term-link">EKS</a>
+                <a href="../EC2/" class="related-term-link">EC2</a>
+                <a href="../Docker/" class="related-term-link">Docker</a>
+                <a href="../Lambda/" class="related-term-link">Lambda</a>
+                <a href="../Serverless/" class="related-term-link">Serverless</a>
+                <a href="../Container/" class="related-term-link">Container</a>
+                <a href="../ALB/" class="related-term-link">ALB</a>
+                <a href="../ECR/" class="related-term-link">ECR</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://aws.amazon.com/fargate/" target="_blank" class="learn-more-link">
+                    <span>📚</span> AWS Fargate 공식 문서
+                </a>
+                <a href="https://aws.amazon.com/fargate/pricing/" target="_blank" class="learn-more-link">
+                    <span>💰</span> Fargate 요금 계산기
+                </a>
+                <a href="https://docs.aws.amazon.com/eks/latest/userguide/fargate.html" target="_blank" class="learn-more-link">
+                    <span>🔧</span> EKS Fargate 가이드
+                </a>
+                <a href="https://aws.amazon.com/blogs/containers/" target="_blank" class="learn-more-link">
+                    <span>📖</span> AWS Containers 블로그
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +739,26 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement.querySelector('code');
+            navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+                btn.textContent = '✅ 복사됨!';
+                setTimeout(() => btn.textContent = '📋 복사', 2000);
+            });
+        }
+        document.querySelectorAll('.code-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                tab.parentElement.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                tab.parentElement.parentElement.querySelectorAll('.code-block').forEach(block => {
+                    block.classList.remove('active');
+                    if (block.id === tabId) block.classList.add('active');
+                });
+            });
+        });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

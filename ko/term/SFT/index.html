@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SFT (Supervised Fine-Tuning) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="라벨링된 데이터로 모델을 지도학습 방식으로 파인튜닝. RLHF 전 단계.">
-    <meta name="keywords" content="SFT, Supervised Fine-Tuning, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <meta name="description" content="라벨링된 데이터로 모델을 지도학습 방식으로 파인튜닝. RLHF 전 단계. LLM 정렬의 핵심.">
+    <meta name="keywords" content="SFT, Supervised Fine-Tuning, RLHF, Instruction Tuning, AI 용어, KAITRUST, AI 백과사전, AI/ML">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/SFT/">
 
     <!-- Open Graph -->
@@ -40,174 +40,326 @@
 
     <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
     <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <!-- Common CSS -->
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
-            <span>›</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a><span>›</span>
             <span class="current">SFT</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>🤖</span>
-                <span>AI/ML</span>
-            </div>
+            <div class="term-category-badge"><span>🤖</span><span>AI/ML</span></div>
             <h1 class="term-title">SFT</h1>
             <p class="term-english">Supervised Fine-Tuning</p>
             <div class="term-description">
-                <p>라벨링된 데이터로 모델을 지도학습 방식으로 파인튜닝. RLHF 전 단계.</p>
+                <p>라벨링된 데이터로 모델을 지도학습 방식으로 파인튜닝. RLHF 전 단계. ChatGPT 같은 챗봇의 핵심 학습 방법.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
-                    🤖 AI/ML 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">🤖 AI/ML 더보기</a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>SFT(Supervised Fine-Tuning)는 사전 학습된 LLM을 고품질의 (입력, 출력) 쌍 데이터로 지도학습하는 과정입니다. "사용자가 이렇게 질문하면 이렇게 답해야 한다"는 것을 직접 보여주는 방식으로, Instruction Tuning이라고도 불립니다.</p>
+                <p>GPT-3.5/4, Claude, Llama 2 Chat 등 모든 대화형 LLM은 SFT를 거칩니다. Base 모델(GPT-3)은 단순히 다음 토큰을 예측하지만, SFT를 거친 모델(ChatGPT)은 사용자 질문에 적절히 응답합니다. OpenAI는 이 과정에 수천 명의 인간 레이블러를 동원했습니다.</p>
+                <p>일반적인 LLM 정렬 파이프라인은 Pretraining -> SFT -> RLHF 순서입니다. SFT로 기본적인 대화 능력과 지시 따르기를 학습하고, RLHF로 더 섬세한 선호도를 반영합니다. 최근에는 DPO(Direct Preference Optimization)로 RLHF를 대체하는 추세입니다.</p>
+                <p>Alpaca, Vicuna 등 오픈소스 모델들이 GPT-3.5 출력을 SFT 데이터로 활용해 성공을 거두면서, 합성 데이터 기반 SFT가 주목받고 있습니다. 1천~1만 개의 고품질 데이터만으로도 상당한 성능 향상이 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
+from trl import SFTTrainer
+from datasets import load_dataset
+
+# 모델과 토크나이저 로드
+model_name = "meta-llama/Llama-2-7b-hf"
+model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype="auto")
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+# SFT 데이터셋 로드 (Instruction-Output 형식)
+dataset = load_dataset("tatsu-lab/alpaca", split="train")
+
+# 데이터 포맷팅 함수
+def format_instruction(example):
+    """Alpaca 형식의 프롬프트 생성"""
+    if example.get("input"):
+        return f"""### Instruction:
+{example['instruction']}
+
+### Input:
+{example['input']}
+
+### Response:
+{example['output']}"""
+    else:
+        return f"""### Instruction:
+{example['instruction']}
+
+### Response:
+{example['output']}"""
+
+# 학습 설정
+training_args = TrainingArguments(
+    output_dir="./llama-2-7b-sft",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-5,
+    warmup_ratio=0.03,
+    logging_steps=10,
+    save_strategy="epoch",
+    bf16=True,
+)
+
+# SFT Trainer 사용
+trainer = SFTTrainer(
+    model=model,
+    args=training_args,
+    train_dataset=dataset,
+    formatting_func=format_instruction,
+    max_seq_length=2048,
+    tokenizer=tokenizer,
+)
+
+# 학습 실행
+trainer.train()
+trainer.save_model("./llama-2-7b-sft-final")
+
+# A100 80GB 기준: 7B 모델 SFT ~4시간, 52K 샘플
+
+# === LoRA + SFT (메모리 효율적) ===
+from peft import LoraConfig, get_peft_model
+
+lora_config = LoraConfig(
+    r=16,                          # LoRA rank
+    lora_alpha=32,                 # 스케일링 팩터
+    target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+model_lora = get_peft_model(model, lora_config)
+model_lora.print_trainable_parameters()
+# trainable params: 4,194,304 || all params: 6,742,609,920 || trainable%: 0.0622
+
+# LoRA SFT는 RTX 4090 24GB로도 7B 모델 학습 가능!
+
+# === ChatML 형식 데이터 ===
+def format_chatml(example):
+    """ChatML 형식 (OpenAI, Mistral 호환)"""
+    return f"""&lt;|im_start|&gt;system
+You are a helpful AI assistant.&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+{example['instruction']}&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+{example['output']}&lt;|im_end|&gt;"""
+
+# === 고품질 데이터 생성 (GPT-4 활용) ===
+from openai import OpenAI
+import json
+
+client = OpenAI()
+
+def generate_sft_data(topic: str, num_samples: int = 10):
+    """GPT-4로 SFT 데이터 합성"""
+    samples = []
+    for _ in range(num_samples):
+        response = client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[{
+                "role": "user",
+                "content": f"""다음 주제에 대한 Q&A 데이터를 생성하세요.
+주제: {topic}
+
+JSON 형식:
+{{"instruction": "사용자 질문", "output": "상세하고 정확한 답변"}}"""
+            }],
+            response_format={"type": "json_object"}
+        )
+        samples.append(json.loads(response.choices[0].message.content))
+    return samples
+
+# === 평가 메트릭 ===
+def evaluate_sft_model(model, tokenizer, test_prompts):
+    """SFT 모델 품질 평가"""
+    results = []
+    for prompt in test_prompts:
+        inputs = tokenizer(prompt, return_tensors="pt")
+        outputs = model.generate(**inputs, max_new_tokens=200)
+        response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        results.append({"prompt": prompt, "response": response})
+    return results
+
+# GPT-4로 응답 품질 평가 (LLM-as-Judge)
+def evaluate_with_gpt4(responses):
+    """GPT-4로 응답 품질 점수 매기기"""
+    scores = []
+    for r in responses:
+        response = client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[{
+                "role": "user",
+                "content": f"""다음 응답의 품질을 1-10점으로 평가하세요.
+질문: {r['prompt']}
+응답: {r['response']}
+점수 (숫자만):"""
+            }]
+        )
+        scores.append(int(response.choices[0].message.content.strip()))
+    return sum(scores) / len(scores)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 LLM 커스터마이징 미팅에서</div>
+                    <blockquote class="conv-quote">"Base Llama 모델은 대화를 못 해요. 우리 도메인에 맞는 Q&A 데이터 1만 개 정도 만들어서 SFT 돌리면 됩니다. LoRA 쓰면 A100 1대로 하루면 충분해요. RLHF까지 갈 필요 없이 SFT만으로도 충분히 쓸만합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"SFT는 LLM이 지시를 따르도록 학습하는 과정입니다. Pretraining된 모델은 단순 텍스트 완성만 하지만, SFT를 거치면 '요약해줘', '번역해줘' 같은 명령을 이해합니다. ChatGPT는 SFT + RLHF로 만들어졌고, 최근엔 DPO가 더 효율적인 대안으로 떠오르고 있어요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 데이터 품질 논의에서</div>
+                    <blockquote class="conv-quote">"SFT 성공의 80%는 데이터 품질입니다. LIMA 논문 보면 1,000개의 고품질 데이터가 52,000개 Alpaca 데이터보다 성능이 좋아요. 양보다 질이에요. GPT-4로 합성 데이터 만들고 사람이 검수하는 게 가성비 최고입니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>저품질 데이터로 대량 SFT</strong>
+                        <p>노이즈가 많은 데이터로 SFT하면 모델 성능이 오히려 하락합니다. 1만 개 고품질 > 100만 개 저품질입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Catastrophic Forgetting</strong>
+                        <p>특정 도메인에만 SFT하면 일반 능력이 사라집니다. 다양한 태스크를 혼합하거나 LoRA로 원본 지식을 보존하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>프롬프트 형식을 일관되게 유지하고, 도메인 데이터와 일반 데이터를 8:2로 혼합하세요. Learning rate은 base보다 10배 낮게 시작합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Fine-tuning/" class="related-term-link">Fine-tuning</a>
+                <a href="/ko/term/RLHF/" class="related-term-link">RLHF</a>
+                <a href="/ko/term/DPO/" class="related-term-link">DPO</a>
+                <a href="/ko/term/LoRA/" class="related-term-link">LoRA</a>
+                <a href="/ko/term/Instruction%20Tuning/" class="related-term-link">Instruction Tuning</a>
+                <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/2203.02155" target="_blank" class="learn-link">📝 InstructGPT 논문 (OpenAI)</a>
+                <a href="https://arxiv.org/abs/2305.11206" target="_blank" class="learn-link">📝 LIMA: Less Is More for Alignment</a>
+                <a href="https://huggingface.co/docs/trl/sft_trainer" target="_blank" class="learn-link">🎓 TRL SFTTrainer 가이드</a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>

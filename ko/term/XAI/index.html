@@ -147,19 +147,135 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
+        .content-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
-        .related-title {
-            font-size: 1.3rem;
+        .content-section h2 {
+            font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: #f1f5f9;
+        }
+        .content-section p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .conversation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .conversation-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            border-left: 3px solid #a855f7;
+        }
+        .mistake-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .mistake-item {
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            border-left: 3px solid #ef4444;
+        }
+        .mistake-item.correct {
+            background: rgba(34, 197, 94, 0.1);
+            border-left-color: #22c55e;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+        }
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .resource-link {
+            color: #60a5fa;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .cost-table th, .cost-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            color: #cbd5e1;
+        }
+        .cost-table th {
+            color: #f1f5f9;
+            font-weight: 600;
         }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
+            .content-section { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -174,18 +290,18 @@
         <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
+            <span>&#8250;</span>
             <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
+            <span>&#8250;</span>
             <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
-            <span>›</span>
+            <span>&#8250;</span>
             <span class="current">XAI</span>
         </nav>
 
         <!-- Term Header -->
         <article class="term-detail-header">
             <div class="term-category-badge">
-                <span>🤖</span>
+                <span>&#129302;</span>
                 <span>AI/ML</span>
             </div>
             <h1 class="term-title">XAI</h1>
@@ -195,13 +311,252 @@
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
+                    &#128218; 전체 용어 보기
                 </a>
                 <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
-                    🤖 AI/ML 더보기
+                    &#129302; AI/ML 더보기
                 </a>
             </div>
         </article>
+
+        <!-- Detailed Explanation -->
+        <section class="content-section">
+            <h2>&#128214; 상세 설명</h2>
+            <p>XAI(Explainable AI, 설명 가능한 인공지능)는 AI 모델의 의사결정 과정을 인간이 이해할 수 있도록 해석하고 설명하는 기술 분야입니다. 딥러닝 모델이 복잡해지면서 '블랙박스' 문제가 대두되었고, 모델이 왜 특정 결정을 내렸는지 이해할 수 없는 상황이 많아졌습니다. XAI는 이러한 불투명성을 해소하여 AI 시스템에 대한 신뢰를 구축하고, 규제 요건을 충족하며, 모델 개선에 필요한 인사이트를 제공합니다.</p>
+            <p>XAI 기법은 크게 두 가지로 분류됩니다. 첫째, 모델 자체가 해석 가능한 **Intrinsic(내재적) 방법**으로, 의사결정 트리나 선형 회귀처럼 구조 자체가 투명한 모델을 사용합니다. 둘째, **Post-hoc(사후) 방법**으로, 복잡한 블랙박스 모델을 학습 후 별도의 기법으로 설명합니다. LIME(Local Interpretable Model-agnostic Explanations)과 SHAP(SHapley Additive exPlanations)이 대표적인 post-hoc 기법입니다.</p>
+            <p>LIME은 개별 예측에 대해 국소적으로 해석 가능한 모델을 학습하여 설명을 생성합니다. 입력 데이터 주변의 샘플들을 생성하고, 원본 모델의 예측을 사용해 단순한 해석 가능 모델(예: 선형 모델)을 학습합니다. SHAP은 게임 이론의 Shapley 값을 기반으로 각 특성(feature)이 예측에 기여한 정도를 수학적으로 정량화합니다. SHAP 값은 일관성(consistency), 지역 정확도(local accuracy), 미귀속(missingness) 등의 이론적 속성을 만족합니다.</p>
+            <p>XAI는 의료 진단, 금융 신용 평가, 법적 의사결정, 자율주행 등 설명 책임이 요구되는 도메인에서 필수적입니다. EU AI Act와 같은 규제에서도 고위험 AI 시스템에 대한 투명성 요구가 강화되고 있어, XAI의 중요성은 계속 증가하고 있습니다. Grad-CAM(이미지 분류), Attention Visualization(NLP), Feature Importance(정형 데이터) 등 도메인에 특화된 XAI 기법들도 활발히 연구되고 있습니다.</p>
+        </section>
+
+        <!-- Code Example -->
+        <section class="content-section">
+            <h2>&#128187; 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">&#128203; 복사</button>
+                <pre><code># XAI 예제: SHAP과 LIME을 사용한 모델 설명
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_breast_cancer
+import shap
+import lime.lime_tabular
+
+# 데이터 로드 및 준비
+data = load_breast_cancer()
+X = pd.DataFrame(data.data, columns=data.feature_names)
+y = data.target
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# 모델 학습
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+print(f"모델 정확도: {model.score(X_test, y_test):.4f}")
+
+# ============================================
+# SHAP (SHapley Additive exPlanations)
+# ============================================
+# TreeExplainer: 트리 기반 모델에 최적화
+explainer = shap.TreeExplainer(model)
+shap_values = explainer.shap_values(X_test)
+
+# 단일 예측에 대한 SHAP 설명
+sample_idx = 0
+print(f"\n[SHAP] 샘플 {sample_idx}의 예측: {model.predict(X_test.iloc[[sample_idx]])[0]}")
+print("주요 기여 특성:")
+feature_importance = pd.DataFrame({
+    'feature': X.columns,
+    'shap_value': shap_values[1][sample_idx]  # class 1에 대한 기여
+}).sort_values('shap_value', key=abs, ascending=False)
+print(feature_importance.head(5))
+
+# 전체 데이터에 대한 특성 중요도 요약
+print("\n[SHAP] 전역 특성 중요도 (평균 절대값):")
+mean_shap = np.abs(shap_values[1]).mean(axis=0)
+global_importance = pd.DataFrame({
+    'feature': X.columns,
+    'importance': mean_shap
+}).sort_values('importance', ascending=False)
+print(global_importance.head(10))
+
+# ============================================
+# LIME (Local Interpretable Model-agnostic Explanations)
+# ============================================
+lime_explainer = lime.lime_tabular.LimeTabularExplainer(
+    training_data=X_train.values,
+    feature_names=X.columns.tolist(),
+    class_names=['악성', '양성'],
+    mode='classification'
+)
+
+# 단일 예측에 대한 LIME 설명
+lime_exp = lime_explainer.explain_instance(
+    data_row=X_test.iloc[sample_idx].values,
+    predict_fn=model.predict_proba,
+    num_features=10
+)
+
+print(f"\n[LIME] 샘플 {sample_idx}의 설명:")
+print("특성별 기여도:")
+for feature, weight in lime_exp.as_list():
+    print(f"  {feature}: {weight:.4f}")
+
+# ============================================
+# Permutation Importance (순열 중요도)
+# ============================================
+from sklearn.inspection import permutation_importance
+
+perm_importance = permutation_importance(
+    model, X_test, y_test, n_repeats=30, random_state=42
+)
+
+print("\n[Permutation Importance] 특성 중요도:")
+perm_df = pd.DataFrame({
+    'feature': X.columns,
+    'importance_mean': perm_importance.importances_mean,
+    'importance_std': perm_importance.importances_std
+}).sort_values('importance_mean', ascending=False)
+print(perm_df.head(10))</code></pre>
+            </div>
+        </section>
+
+        <!-- Performance & Cost -->
+        <section class="content-section">
+            <h2>&#128202; 성능 & 비용</h2>
+            <table class="cost-table">
+                <thead>
+                    <tr>
+                        <th>기법</th>
+                        <th>계산 복잡도</th>
+                        <th>적용 범위</th>
+                        <th>설명 범위</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SHAP (TreeExplainer)</td>
+                        <td>O(T*L*D) - 빠름</td>
+                        <td>트리 기반 모델</td>
+                        <td>전역 + 국소</td>
+                    </tr>
+                    <tr>
+                        <td>SHAP (KernelExplainer)</td>
+                        <td>O(N*2^M) - 느림</td>
+                        <td>모든 모델</td>
+                        <td>전역 + 국소</td>
+                    </tr>
+                    <tr>
+                        <td>LIME</td>
+                        <td>O(N*M) - 중간</td>
+                        <td>모든 모델</td>
+                        <td>국소</td>
+                    </tr>
+                    <tr>
+                        <td>Grad-CAM</td>
+                        <td>O(1) - 빠름</td>
+                        <td>CNN 모델</td>
+                        <td>국소 (이미지)</td>
+                    </tr>
+                    <tr>
+                        <td>Permutation Importance</td>
+                        <td>O(M*R) - 중간</td>
+                        <td>모든 모델</td>
+                        <td>전역</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #94a3b8;">
+                * T: 트리 수, L: 최대 잎 노드, D: 특성 차원, N: 샘플 수, M: 특성 수, R: 반복 횟수
+            </p>
+            <p style="margin-top: 1rem;">
+                <strong>성능 팁:</strong> SHAP TreeExplainer는 XGBoost, LightGBM 등 트리 기반 모델에서 수초 내 계산 가능. 딥러닝 모델에는 DeepExplainer나 GradientExplainer 사용. LIME은 샘플당 수백 번의 모델 호출이 필요하므로 대규모 배치 분석 시 병렬 처리 권장.
+            </p>
+        </section>
+
+        <!-- Practical Usage -->
+        <section class="content-section">
+            <h2>&#128483; 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-list">
+                <div class="conversation-item">
+                    <p><strong>"이 대출 거절 결정에 대해 XAI로 설명을 붙여주세요."</strong></p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">-> 규제 준수를 위해 고객에게 거절 사유를 설명해야 할 때</p>
+                </div>
+                <div class="conversation-item">
+                    <p><strong>"SHAP summary plot 보니까 이 피처가 예측에 가장 큰 영향을 주네요."</strong></p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">-> 모델 디버깅이나 피처 엔지니어링 방향 결정 시</p>
+                </div>
+                <div class="conversation-item">
+                    <p><strong>"Grad-CAM으로 모델이 어디를 보고 판단했는지 시각화해 봅시다."</strong></p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">-> 이미지 분류 모델의 주의 영역 확인 시</p>
+                </div>
+                <div class="conversation-item">
+                    <p><strong>"EU AI Act 대응으로 XAI 리포트가 필수예요."</strong></p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">-> 고위험 AI 시스템의 규제 준수 논의 시</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Mistakes -->
+        <section class="content-section">
+            <h2>&#9888; 흔한 실수 & 주의사항</h2>
+            <div class="mistake-list">
+                <div class="mistake-item">
+                    <p><strong>SHAP 값을 인과관계로 오해</strong></p>
+                    <p style="color: #f87171; margin-top: 0.5rem;">SHAP 값은 상관관계 기반의 기여도이지, 인과적 영향을 의미하지 않습니다. 특성 A의 SHAP 값이 높다고 해서 A를 바꾸면 결과가 바뀐다는 보장은 없습니다.</p>
+                </div>
+                <div class="mistake-item">
+                    <p><strong>LIME의 불안정성 무시</strong></p>
+                    <p style="color: #f87171; margin-top: 0.5rem;">LIME은 무작위 샘플링에 기반하므로, 같은 입력에 대해 실행할 때마다 설명이 달라질 수 있습니다. 중요한 결정에는 여러 번 실행하여 일관성을 확인하세요.</p>
+                </div>
+                <div class="mistake-item">
+                    <p><strong>복잡한 모델에 KernelExplainer 무분별 사용</strong></p>
+                    <p style="color: #f87171; margin-top: 0.5rem;">KernelExplainer는 모델에 구애받지 않지만 매우 느립니다. 트리 모델에는 TreeExplainer, 딥러닝에는 DeepExplainer를 사용하세요.</p>
+                </div>
+                <div class="mistake-item correct">
+                    <p><strong>올바른 접근: 목적에 맞는 XAI 기법 선택</strong></p>
+                    <p style="color: #4ade80; margin-top: 0.5rem;">전역적 이해가 필요하면 SHAP summary plot, 개별 예측 설명에는 LIME이나 SHAP force plot, 이미지 모델에는 Grad-CAM 등 용도에 맞게 선택하세요.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms -->
+        <section class="content-section">
+            <h2>&#128279; 관련 용어</h2>
+            <div class="related-terms">
+                <a href="../Interpretable%20ML/" class="related-term-link">Interpretable ML</a>
+                <a href="../Feature%20Importance/" class="related-term-link">Feature Importance</a>
+                <a href="../Black%20Box/" class="related-term-link">Black Box</a>
+                <a href="../Gradient/" class="related-term-link">Gradient</a>
+                <a href="../Attention/" class="related-term-link">Attention</a>
+                <a href="../Random%20Forest/" class="related-term-link">Random Forest</a>
+            </div>
+        </section>
+
+        <!-- Learn More -->
+        <section class="content-section">
+            <h2>&#128218; 더 배우기</h2>
+            <div class="resource-list">
+                <a href="https://shap.readthedocs.io/" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; SHAP 공식 문서
+                </a>
+                <a href="https://github.com/marcotcr/lime" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; LIME GitHub
+                </a>
+                <a href="https://christophm.github.io/interpretable-ml-book/" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; Interpretable ML Book (무료)
+                </a>
+                <a href="https://arxiv.org/abs/1705.07874" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; SHAP 논문 (Lundberg & Lee, 2017)
+                </a>
+                <a href="https://arxiv.org/abs/1602.04938" class="resource-link" target="_blank" rel="noopener">
+                    &#128279; LIME 논문 (Ribeiro et al., 2016)
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +567,16 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            const originalText = button.innerHTML;
+            button.innerHTML = '&#10003; 복사됨';
+            setTimeout(() => { button.innerHTML = originalText; }, 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

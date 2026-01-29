@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -202,6 +228,219 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>콘텐츠 기반 필터링(Content-Based Filtering)은 아이템의 속성(특징)을 분석하여 사용자가 과거에 좋아했던 아이템과 유사한 아이템을 추천하는 알고리즘입니다. 예를 들어, 사용자가 액션 영화를 많이 봤다면 다른 액션 영화를 추천합니다. 이 방식은 아이템 자체의 메타데이터(장르, 키워드, 설명 등)를 활용하므로 새로운 사용자의 행동 데이터가 없어도 어느 정도 추천이 가능합니다.</p>
+
+                <p>콘텐츠 기반 필터링은 1990년대 정보 검색(Information Retrieval) 연구에서 발전했으며, TF-IDF와 코사인 유사도 같은 전통적인 텍스트 분석 기법이 기반이 됩니다. 2010년대 이후 딥러닝의 발전과 함께 Word2Vec, BERT 등의 임베딩 기법이 도입되어 의미적 유사성을 더 정확하게 포착할 수 있게 되었습니다. 2024-2025년에는 LLM 기반 임베딩(OpenAI Embeddings, Cohere Embed)이 추천 시스템의 품질을 크게 향상시키고 있습니다.</p>
+
+                <p>핵심 작동 원리는 세 단계로 구성됩니다. 첫째, 아이템 프로파일링 단계에서 각 아이템의 특징을 벡터로 표현합니다. 둘째, 사용자 프로파일링 단계에서 사용자가 상호작용한 아이템들의 특징을 집계하여 사용자 선호 벡터를 생성합니다. 셋째, 매칭 단계에서 사용자 프로파일과 후보 아이템 간의 유사도를 계산하여 순위를 매깁니다. 유사도 측정에는 코사인 유사도, 유클리드 거리, 자카드 유사도 등이 사용됩니다.</p>
+
+                <p>실무에서는 협업 필터링(Collaborative Filtering)과 결합한 하이브리드 시스템이 일반적입니다. Netflix는 콘텐츠 특징과 사용자 시청 기록을 모두 활용하며, Spotify는 오디오 특징 분석과 청취 패턴을 결합합니다. 콘텐츠 기반 필터링의 장점은 콜드 스타트(신규 아이템) 문제에 강하다는 것이고, 단점은 사용자가 이미 알고 있는 유형의 아이템만 추천하는 필터 버블(Filter Bubble) 현상입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>TF-IDF와 코사인 유사도를 사용한 콘텐츠 기반 추천 시스템 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># 콘텐츠 기반 영화 추천 시스템
+# pip install scikit-learn pandas numpy
+
+import pandas as pd
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# 샘플 영화 데이터
+movies = pd.DataFrame({
+    'movie_id': [1, 2, 3, 4, 5],
+    'title': ['인셉션', '인터스텔라', '다크나이트', '어벤져스', '아이언맨'],
+    'genres': ['SF 액션 스릴러', 'SF 드라마 우주', '액션 범죄 스릴러', 'SF 액션 히어로', 'SF 액션 히어로'],
+    'description': [
+        '꿈 속의 꿈 레벨 잠재의식 추출 미션',
+        '웜홀 블랙홀 시간팽창 인류구원 우주탐사',
+        '고담시티 조커 배트맨 범죄와의 전쟁',
+        '어벤져스 어셈블 히어로팀 지구방위',
+        '토니스타크 아크리액터 슈트 히어로탄생'
+    ]
+})
+
+# 장르와 설명을 결합하여 콘텐츠 특징 생성
+movies['content'] = movies['genres'] + ' ' + movies['description']
+
+# TF-IDF 벡터화
+tfidf = TfidfVectorizer(max_features=100)
+tfidf_matrix = tfidf.fit_transform(movies['content'])
+
+# 아이템 간 유사도 행렬 계산
+similarity_matrix = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+def recommend_movies(movie_title, top_n=3):
+    """특정 영화와 유사한 영화 추천"""
+    # 영화 인덱스 찾기
+    idx = movies[movies['title'] == movie_title].index[0]
+
+    # 해당 영화와 다른 영화들의 유사도
+    sim_scores = list(enumerate(similarity_matrix[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+
+    # 자기 자신 제외하고 top_n개 추천
+    sim_scores = sim_scores[1:top_n+1]
+
+    recommendations = []
+    for i, score in sim_scores:
+        recommendations.append({
+            'title': movies.iloc[i]['title'],
+            'similarity': round(score, 3)
+        })
+
+    return recommendations
+
+# 테스트: 인셉션과 유사한 영화 추천
+print("'인셉션'을 좋아한다면:")
+for rec in recommend_movies('인셉션'):
+    print(f"  - {rec['title']} (유사도: {rec['similarity']})")</code></pre>
+                </div>
+
+                <p>임베딩 기반 콘텐츠 추천 시스템 (Sentence Transformers 활용) 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># 시맨틱 임베딩 기반 추천
+# pip install sentence-transformers numpy
+
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
+# 다국어 임베딩 모델 로드
+model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+
+# 아이템 설명
+items = [
+    {"id": 1, "name": "Python 입문서", "desc": "초보자를 위한 파이썬 프로그래밍 기초"},
+    {"id": 2, "name": "Django 가이드", "desc": "파이썬 웹 프레임워크 장고 실무 튜토리얼"},
+    {"id": 3, "name": "React 실전", "desc": "자바스크립트 리액트 프론트엔드 개발"},
+    {"id": 4, "name": "머신러닝 기초", "desc": "파이썬으로 배우는 인공지능 알고리즘"},
+    {"id": 5, "name": "SQL 마스터", "desc": "데이터베이스 쿼리 작성과 최적화"},
+]
+
+# 아이템 임베딩 생성
+descriptions = [item["desc"] for item in items]
+embeddings = model.encode(descriptions)
+
+def find_similar_items(query, top_k=3):
+    """검색 쿼리와 유사한 아이템 찾기"""
+    query_embedding = model.encode([query])
+
+    # 코사인 유사도 계산
+    similarities = np.dot(embeddings, query_embedding.T).flatten()
+    top_indices = np.argsort(similarities)[::-1][:top_k]
+
+    results = []
+    for idx in top_indices:
+        results.append({
+            "name": items[idx]["name"],
+            "score": float(similarities[idx])
+        })
+    return results
+
+# 사용자 관심사 기반 추천
+user_interest = "파이썬 AI 학습하고 싶어요"
+print(f"'{user_interest}'에 대한 추천:")
+for item in find_similar_items(user_interest):
+    print(f"  - {item['name']} (점수: {item['score']:.3f})")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-examples">
+                    <div class="conv-item">
+                        <div class="conv-context">💬 회의에서</div>
+                        <div class="conv-quote">"신규 상품 콜드 스타트 문제를 해결하기 위해 콘텐츠 기반 필터링을 도입했습니다. 상품 설명 텍스트를 BERT로 임베딩해서 기존 인기 상품과의 유사도를 계산하니, 신상품도 등록 즉시 추천 목록에 노출됩니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 면접에서</div>
+                        <div class="conv-quote">"콘텐츠 기반과 협업 필터링의 하이브리드 시스템을 구축한 경험이 있습니다. 신규 사용자에게는 콘텐츠 기반으로 시작하고, 행동 데이터가 쌓이면 협업 필터링 비중을 점진적으로 높이는 방식으로 CTR을 25% 개선했습니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 기술 토론에서</div>
+                        <div class="conv-quote">"콘텐츠 기반의 한계인 필터 버블 문제를 해결하려면 탐색(exploration) 로직이 필요해요. 유사도가 높은 아이템만 추천하면 사용자가 새로운 카테고리를 발견할 기회가 없으니, 일정 비율로 다양한 아이템을 노출하는 게 좋습니다."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-list">
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>메타데이터 품질 무시</h4>
+                            <p>콘텐츠 기반 필터링의 성능은 아이템 메타데이터 품질에 직결됩니다. 불완전하거나 일관성 없는 태그, 누락된 설명은 추천 품질을 크게 저하시킵니다. 데이터 정제가 먼저입니다.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>과잉 특화(Over-Specialization)</h4>
+                            <p>사용자가 본 아이템과 너무 유사한 것만 추천하면 다양성이 떨어집니다. "액션 영화만 봤으니 액션만 추천"하면 사용자 만족도와 장기 engagement가 감소합니다.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">✅</div>
+                        <div class="warning-content">
+                            <h4>올바른 접근법</h4>
+                            <p>메타데이터 표준화 파이프라인을 구축하고, 탐색-활용(Exploration-Exploitation) 밸런스를 위해 Multi-Armed Bandit이나 다양성 점수를 적용하세요. A/B 테스트로 추천 다양성과 클릭률의 최적점을 찾으세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D/" class="related-term-link">머신러닝 (Machine Learning)</a>
+                    <a href="/ko/term/Word2Vec/" class="related-term-link">Word2Vec</a>
+                    <a href="/ko/term/Vector%20Database/" class="related-term-link">벡터 데이터베이스</a>
+                    <a href="/ko/term/%ED%8C%8C%EC%9D%B8%ED%8A%9C%EB%8B%9D/" class="related-term-link">파인튜닝 (Fine-tuning)</a>
+                    <a href="/ko/term/Embedding/" class="related-term-link">임베딩 (Embedding)</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <div class="learn-more">
+                    <a href="https://developers.google.com/machine-learning/recommendation/content-based/basics" target="_blank" class="learn-link">
+                        📄 Google ML - 콘텐츠 기반 필터링 기초
+                    </a>
+                    <a href="https://www.sbert.net/docs/pretrained_models.html" target="_blank" class="learn-link">
+                        🎓 Sentence Transformers - 시맨틱 임베딩 모델
+                    </a>
+                    <a href="https://arxiv.org/abs/1606.07792" target="_blank" class="learn-link">
+                        📝 Wide & Deep Learning 논문 - 하이브리드 추천 시스템
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +451,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABAC (Attribute-Based Access Control) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="속성 기반 접근 제어. 사용자, 리소스, 환경 속성으로 권한 결정.">
-    <meta name="keywords" content="ABAC, Attribute-Based Access Control, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="ABAC는 속성 기반 접근 제어 모델입니다. 사용자, 리소스, 환경의 속성을 조합하여 동적으로 권한을 결정합니다. RBAC보다 유연한 세밀한 권한 관리가 가능합니다.">
+    <meta name="keywords" content="ABAC, Attribute-Based Access Control, 속성기반 접근제어, RBAC, 접근 제어, 권한 관리, IAM, 보안, 인가, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/ABAC/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/ABAC/">
     <meta property="og:title" content="ABAC (Attribute-Based Access Control) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="속성 기반 접근 제어. 사용자, 리소스, 환경 속성으로 권한 결정.">
+    <meta property="og:description" content="ABAC는 속성 기반 접근 제어 모델입니다. 사용자, 리소스, 환경의 속성을 조합하여 동적으로 권한을 결정합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ABAC (Attribute-Based Access Control) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="속성 기반 접근 제어. 사용자, 리소스, 환경 속성으로 권한 결정.">
+    <meta name="twitter:description" content="ABAC는 속성 기반 접근 제어 모델입니다. 사용자, 리소스, 환경의 속성을 조합하여 동적으로 권한을 결정합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "ABAC",
-        "description": "속성 기반 접근 제어. 사용자, 리소스, 환경 속성으로 권한 결정.",
+        "alternateName": "Attribute-Based Access Control",
+        "description": "ABAC는 속성 기반 접근 제어 모델입니다. 사용자, 리소스, 환경의 속성을 조합하여 동적으로 권한을 결정합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +328,7 @@
             <h1 class="term-title">ABAC</h1>
             <p class="term-english">Attribute-Based Access Control</p>
             <div class="term-description">
-                <p>속성 기반 접근 제어. 사용자, 리소스, 환경 속성으로 권한 결정.</p>
+                <p>속성 기반 접근 제어 모델. 사용자, 리소스, 환경의 속성을 조합하여 동적으로 권한을 결정합니다. RBAC보다 세밀한 정책 표현이 가능합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,292 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>ABAC(Attribute-Based Access Control)는 NIST가 정의한 차세대 접근 제어 모델입니다. 기존 RBAC(역할 기반)가 "역할"이라는 단일 속성에 의존하는 반면, ABAC는 주체(Subject), 리소스(Resource), 행위(Action), 환경(Environment)의 다양한 속성을 조합하여 접근 여부를 동적으로 결정합니다. 이를 통해 "마케팅팀 직원이 근무시간에 미국 IP에서 고객 데이터에 접근"처럼 복잡한 조건을 표현할 수 있습니다.</p>
+                <p>ABAC의 핵심은 정책 엔진(PDP: Policy Decision Point)입니다. 접근 요청이 들어오면 PEP(Policy Enforcement Point)가 요청 컨텍스트를 수집하고, PDP가 정책을 평가하여 허용/거부를 결정합니다. AWS IAM, Azure RBAC(실제로는 ABAC 혼합), Kubernetes OPA가 ABAC를 구현한 대표적 사례입니다. 정책은 XACML, Rego, Cedar 같은 DSL로 작성됩니다.</p>
+                <p>ABAC의 장점은 유연성과 확장성입니다. 새로운 접근 시나리오가 생겨도 역할을 추가할 필요 없이 속성 기반 정책만 수정하면 됩니다. 단점은 정책 설계 복잡도와 성능입니다. 속성이 많아질수록 정책 평가 시간이 늘어나며, 정책 충돌이나 섀도우 권한 탐지가 어려워집니다. 대규모 조직에서는 RBAC와 ABAC를 혼합한 Policy-Based Access Control(PBAC)을 사용합니다.</p>
+                <p>AI/ML 시스템에서 ABAC는 특히 중요합니다. 모델 접근, 데이터셋 권한, 추론 API 호출을 사용자 부서, 프로젝트, 데이터 민감도, 시간대 등 다양한 속성으로 제어할 수 있습니다. MLOps 플랫폼에서 "Data Scientist가 승인된 학습 데이터에만 접근" 같은 정책을 ABAC로 구현하면 데이터 거버넌스를 자동화할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="opa">OPA/Rego</button>
+                <button class="code-tab" data-lang="python">Python (Casbin)</button>
+                <button class="code-tab" data-lang="aws">AWS IAM Policy</button>
+            </div>
+            <div class="code-block active" data-lang="opa">
+                <pre><code class="language-rego"># ABAC Policy - OPA (Open Policy Agent) Rego
+package authz
+
+default allow = false
+
+# 정책: 근무시간에 본인 부서 데이터만 접근 허용
+allow {
+    # 주체(Subject) 속성
+    input.user.department == input.resource.department
+    input.user.role == "analyst"
+
+    # 환경(Environment) 속성
+    is_business_hours(input.context.time)
+
+    # 행위(Action) 속성
+    input.action in ["read", "list"]
+
+    # 리소스(Resource) 속성
+    input.resource.classification != "top_secret"
+}
+
+# 관리자는 모든 접근 허용
+allow {
+    input.user.role == "admin"
+}
+
+# 근무시간 체크 (09:00-18:00)
+is_business_hours(time) {
+    hour := time_hour(time)
+    hour >= 9
+    hour < 18
+}
+
+# 시간 파싱
+time_hour(time) = hour {
+    parts := split(time, "T")
+    time_parts := split(parts[1], ":")
+    hour := to_number(time_parts[0])
+}
+
+# 사용 예시 - 요청 데이터
+# input = {
+#   "user": {"id": "u001", "department": "marketing", "role": "analyst"},
+#   "action": "read",
+#   "resource": {"type": "customer_data", "department": "marketing", "classification": "internal"},
+#   "context": {"time": "2026-01-26T10:30:00Z", "ip": "192.168.1.100"}
+# }</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># ABAC 구현 - Python Casbin 라이브러리
+import casbin
+
+# 모델 정의 (model.conf)
+model_text = """
+[request_definition]
+r = sub, obj, act
+
+[policy_definition]
+p = sub_dept, obj_dept, obj_class, act
+
+[policy_effect]
+e = some(where (p.eft == allow))
+
+[matchers]
+m = r.sub.department == p.sub_dept && \
+    r.obj.department == p.obj_dept && \
+    r.obj.classification == p.obj_class && \
+    r.act == p.act
+"""
+
+# 정책 정의 (policy.csv)
+# p, marketing, marketing, internal, read
+# p, engineering, engineering, internal, read
+# p, engineering, engineering, internal, write
+# p, admin, *, *, *
+
+class ABACEnforcer:
+    def __init__(self):
+        self.enforcer = casbin.Enforcer("model.conf", "policy.csv")
+
+    def check_access(self, user: dict, resource: dict, action: str) -> bool:
+        """ABAC 정책 평가"""
+        return self.enforcer.enforce(user, resource, action)
+
+    def add_policy(self, sub_dept, obj_dept, obj_class, act):
+        """정책 동적 추가"""
+        self.enforcer.add_policy(sub_dept, obj_dept, obj_class, act)
+
+# 사용 예시
+enforcer = ABACEnforcer()
+
+user = {"id": "alice", "department": "marketing", "role": "analyst"}
+resource = {"id": "doc-001", "department": "marketing", "classification": "internal"}
+
+# 접근 체크
+if enforcer.check_access(user, resource, "read"):
+    print("✅ 접근 허용")
+else:
+    print("❌ 접근 거부")
+
+# AWS Cognito + Lambda ABAC 예시
+import boto3
+
+def lambda_handler(event, context):
+    """API Gateway Authorizer로 ABAC 구현"""
+    claims = event['requestContext']['authorizer']['claims']
+
+    user_attrs = {
+        'department': claims.get('custom:department'),
+        'clearance': claims.get('custom:clearance_level'),
+        'project': claims.get('custom:project_id')
+    }
+
+    resource_attrs = extract_resource_attrs(event['resource'])
+
+    # ABAC 평가
+    allowed = evaluate_abac_policy(user_attrs, resource_attrs, event['httpMethod'])
+
+    if allowed:
+        return generate_policy('Allow', event['methodArn'])
+    else:
+        return generate_policy('Deny', event['methodArn'])</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="aws">
+                <pre><code class="language-json">// AWS IAM Policy - ABAC 예시 (태그 기반)
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowAccessToMatchingProject",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::data-bucket/*",
+            "Condition": {
+                // 사용자 태그와 리소스 태그 일치 시 허용
+                "StringEquals": {
+                    "s3:ExistingObjectTag/project": "${aws:PrincipalTag/project}",
+                    "s3:ExistingObjectTag/department": "${aws:PrincipalTag/department}"
+                },
+                // 근무시간 제한 (선택)
+                "DateGreaterThan": {
+                    "aws:CurrentTime": "2026-01-01T09:00:00Z"
+                },
+                "DateLessThan": {
+                    "aws:CurrentTime": "2026-12-31T18:00:00Z"
+                }
+            }
+        },
+        {
+            "Sid": "DenySensitiveDataWithoutClearance",
+            "Effect": "Deny",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::data-bucket/sensitive/*",
+            "Condition": {
+                "StringNotEquals": {
+                    "aws:PrincipalTag/clearance": "top_secret"
+                }
+            }
+        }
+    ]
+}
+
+// IAM 사용자/역할에 태그 설정
+// aws iam tag-user --user-name alice \
+//   --tags Key=project,Value=ml-platform Key=department,Value=engineering Key=clearance,Value=secret
+
+// S3 객체에 태그 설정
+// aws s3api put-object-tagging --bucket data-bucket --key training-data.csv \
+//   --tagging 'TagSet=[{Key=project,Value=ml-platform},{Key=department,Value=engineering}]'</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 IAM 설계 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "RBAC만으로는 '마케팅팀이지만 한국 지역 고객 데이터만 볼 수 있다' 같은 정책을 표현하기 어렵습니다. ABAC로 부서, 지역, 데이터 분류 속성을 조합하면 역할 폭발 없이 세밀한 제어가 가능해요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 클라우드 보안 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "AWS에서 ABAC 적용하려면 IAM 태그와 리소스 태그를 일관되게 관리해야 합니다. SCP로 태그 필수 정책을 먼저 설정하고, 변수 치환으로 사용자 태그와 리소스 태그를 매칭하세요. 태그 없으면 접근 거부되게요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 MLOps 데이터 거버넌스 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "학습 데이터 접근을 ABAC로 제어합시다. 데이터셋에 민감도(PII/PHI/Public), 프로젝트, 승인 상태 태그를 붙이고, ML 엔지니어의 프로젝트 할당과 매칭하면 자동으로 승인된 데이터만 접근 가능합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>속성 관리 없는 ABAC 도입</strong>
+                        <p>ABAC는 정확한 속성 데이터에 의존합니다. 사용자 부서, 프로젝트 할당 등 속성이 최신 상태가 아니면 권한 오류가 발생합니다. 속성 동기화 파이프라인과 정기 감사를 먼저 구축하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>정책 충돌 방치</strong>
+                        <p>여러 ABAC 정책이 충돌할 때 어떤 정책이 우선하는지 불명확하면 보안 홀이 생깁니다. "명시적 거부 우선" 같은 충돌 해결 규칙을 문서화하고, 정책 시뮬레이터로 테스트하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>성능 고려 없이 복잡한 정책</strong>
+                        <p>속성이 많고 조건이 복잡하면 매 요청마다 정책 평가 오버헤드가 커집니다. OPA 같은 엔진은 Partial Evaluation, 정책 번들링으로 최적화하거나, 캐싱 레이어를 추가하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>ABAC 베스트 프랙티스</strong>
+                        <p>RBAC로 기본 역할을 정의하고 ABAC로 세분화하는 하이브리드 접근을 권장합니다. 속성 스키마를 표준화하고, 모든 정책 변경은 버전 관리하며, 정기적으로 "누가 무엇에 접근 가능한지" 접근 리뷰를 수행하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/RBAC/" class="related-term-link">RBAC</a>
+                <a href="/ko/term/OPA/" class="related-term-link">OPA</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+                <a href="/ko/term/Authentication/" class="related-term-link">Authentication</a>
+                <a href="/ko/term/Authorization/" class="related-term-link">Authorization</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://csrc.nist.gov/publications/detail/sp/800-162/final" target="_blank" class="learn-link">
+                    📄 NIST SP 800-162 - ABAC 공식 가이드
+                </a>
+                <a href="https://www.openpolicyagent.org/docs/latest/" target="_blank" class="learn-link">
+                    🎓 OPA 공식 문서 - ABAC 구현
+                </a>
+                <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html" target="_blank" class="learn-link">
+                    📖 AWS IAM ABAC 튜토리얼
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +632,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

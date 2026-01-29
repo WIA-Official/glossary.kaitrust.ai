@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authorization (인가) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="인증된 사용자의 권한을 확인하는 과정. RBAC, ABAC 모델. 접근 제어의 핵심.">
-    <meta name="keywords" content="Authorization, 인가, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="Authorization(인가)은 인증된 사용자가 특정 리소스에 접근할 권한이 있는지 확인하는 과정입니다. RBAC, ABAC, ReBAC 등 다양한 접근 제어 모델이 있습니다.">
+    <meta name="keywords" content="Authorization, 인가, RBAC, ABAC, ReBAC, PBAC, 접근 제어, Access Control, 권한 관리, Zero Trust, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Authorization/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Authorization/">
     <meta property="og:title" content="Authorization (인가) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="인증된 사용자의 권한을 확인하는 과정. RBAC, ABAC 모델. 접근 제어의 핵심.">
+    <meta property="og:description" content="인증된 사용자가 특정 리소스에 접근할 권한이 있는지 확인하는 과정. RBAC, ABAC 등 접근 제어 모델의 핵심 개념.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Authorization (인가) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="인증된 사용자의 권한을 확인하는 과정. RBAC, ABAC 모델. 접근 제어의 핵심.">
+    <meta name="twitter:description" content="인증된 사용자가 특정 리소스에 접근할 권한이 있는지 확인하는 과정. RBAC, ABAC 등 접근 제어 모델의 핵심 개념.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Authorization",
-        "description": "인증된 사용자의 권한을 확인하는 과정. RBAC, ABAC 모델. 접근 제어의 핵심.",
+        "alternateName": "인가",
+        "description": "인증된 사용자가 특정 리소스에 접근할 권한이 있는지 확인하는 과정입니다. RBAC, ABAC, ReBAC 등 다양한 접근 제어 모델이 있습니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">Authorization</h1>
-            <p class="term-english">인가</p>
+            <p class="term-english">인가 (접근 권한 부여)</p>
             <div class="term-description">
-                <p>인증된 사용자의 권한을 확인하는 과정. RBAC, ABAC 모델. 접근 제어의 핵심.</p>
+                <p>인증(Authentication)된 사용자가 특정 리소스에 접근할 권한이 있는지 확인하는 과정입니다. "이 사용자가 이 작업을 수행해도 되는가?"에 대한 답을 제공하며, RBAC, ABAC, ReBAC 등 다양한 접근 제어 모델이 있습니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,361 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Authorization(인가)은 Authentication(인증)과 함께 보안의 핵심 축을 이루는 개념입니다. 인증이 "당신은 누구인가?"를 확인한다면, 인가는 "당신은 무엇을 할 수 있는가?"를 결정합니다. 예를 들어, 회사 시스템에 로그인(인증)한 후 급여 데이터에 접근하려면 HR 부서 권한(인가)이 필요합니다. 이 두 개념은 종종 혼동되지만, 보안 설계에서 명확히 구분해야 합니다.</p>
+                <p>인가 모델은 시스템의 복잡성에 따라 진화해왔습니다. RBAC(Role-Based Access Control)는 역할 기반으로 권한을 부여합니다(예: admin, editor, viewer). ABAC(Attribute-Based Access Control)는 사용자, 리소스, 환경의 속성을 조합해 더 세밀한 제어가 가능합니다(예: "부서=HR AND 시간=업무시간"). ReBAC(Relationship-Based Access Control)는 리소스 간 관계를 기반으로 합니다(예: "이 문서의 작성자이면 편집 가능"). 현대 시스템에서는 RBAC를 기본으로 하고 ABAC로 세부 조정하는 하이브리드 접근이 일반적입니다.</p>
+                <p>최소 권한 원칙(Principle of Least Privilege)은 인가 설계의 핵심입니다. 사용자에게 업무 수행에 필요한 최소한의 권한만 부여해야 합니다. 과도한 권한은 내부자 위협, 계정 탈취 시 피해 확대, 규정 준수 위반의 위험을 높입니다. 특히 AI 에이전트와 API 키에 대한 권한 관리는 최소 권한 원칙을 더욱 엄격히 적용해야 합니다.</p>
+                <p>Zero Trust 아키텍처에서 인가는 일회성이 아닌 지속적 검증입니다. 전통적 모델은 로그인 시 한 번 권한을 확인했지만, Zero Trust는 매 요청마다 컨텍스트(위치, 기기, 시간, 행동 패턴)를 평가해 동적으로 권한을 결정합니다. PBAC(Policy-Based Access Control)는 이러한 복잡한 인가 로직을 중앙에서 관리하고, API, 서비스, 프론트엔드 전체에 일관되게 적용하는 현대적 접근법입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="rbac">RBAC (Node.js)</button>
+                <button class="code-tab" data-lang="abac">ABAC (Python)</button>
+                <button class="code-tab" data-lang="opa">OPA/Rego</button>
+            </div>
+            <div class="code-block active" data-lang="rbac">
+                <pre><code class="language-javascript">// RBAC (Role-Based Access Control) 구현 예제 - Node.js
+const express = require('express');
+const app = express();
+
+// 역할별 권한 정의
+const PERMISSIONS = {
+    admin: ['create', 'read', 'update', 'delete', 'manage_users'],
+    editor: ['create', 'read', 'update'],
+    viewer: ['read']
+};
+
+// 사용자-역할 매핑 (실제로는 DB에서 조회)
+const USER_ROLES = {
+    'user_001': ['admin'],
+    'user_002': ['editor'],
+    'user_003': ['viewer', 'editor']  // 복수 역할 가능
+};
+
+// 권한 확인 함수
+function hasPermission(userId, requiredPermission) {
+    const userRoles = USER_ROLES[userId] || [];
+    return userRoles.some(role =>
+        PERMISSIONS[role]?.includes(requiredPermission)
+    );
+}
+
+// 인가 미들웨어
+function authorize(requiredPermission) {
+    return (req, res, next) => {
+        const userId = req.user?.id;  // 인증 미들웨어에서 설정
+
+        if (!userId) {
+            return res.status(401).json({ error: 'Not authenticated' });
+        }
+
+        if (!hasPermission(userId, requiredPermission)) {
+            return res.status(403).json({
+                error: 'Forbidden',
+                message: `Permission '${requiredPermission}' required`
+            });
+        }
+
+        next();
+    };
+}
+
+// 라우트에 인가 적용
+app.get('/api/posts', authorize('read'), (req, res) => {
+    res.json({ posts: ['post1', 'post2'] });
+});
+
+app.post('/api/posts', authorize('create'), (req, res) => {
+    res.json({ message: 'Post created' });
+});
+
+app.delete('/api/posts/:id', authorize('delete'), (req, res) => {
+    res.json({ message: 'Post deleted' });
+});
+
+app.delete('/api/users/:id', authorize('manage_users'), (req, res) => {
+    res.json({ message: 'User deleted' });
+});
+
+// 403 vs 401 구분이 중요!
+// 401 Unauthorized: 인증 안 됨 (누군지 모름)
+// 403 Forbidden: 인증됨, 인가 안 됨 (권한 없음)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="abac">
+                <pre><code class="language-python"># ABAC (Attribute-Based Access Control) 구현 예제 - Python
+from datetime import datetime
+from typing import Dict, Any
+from functools import wraps
+from flask import request, jsonify, g
+
+class ABACPolicy:
+    """ABAC 정책 엔진"""
+
+    def __init__(self):
+        self.policies = []
+
+    def add_policy(self, name: str, condition: callable, effect: str = "allow"):
+        """정책 추가"""
+        self.policies.append({
+            "name": name,
+            "condition": condition,
+            "effect": effect
+        })
+
+    def evaluate(self, subject: Dict, resource: Dict, action: str, environment: Dict) -> bool:
+        """정책 평가 - 모든 조건을 평가하여 접근 허용 여부 결정"""
+        context = {
+            "subject": subject,      # 사용자 속성 (역할, 부서, 직급 등)
+            "resource": resource,    # 리소스 속성 (소유자, 민감도 등)
+            "action": action,        # 수행할 작업
+            "environment": environment  # 환경 속성 (시간, IP, 기기 등)
+        }
+
+        for policy in self.policies:
+            if policy["condition"](context):
+                return policy["effect"] == "allow"
+
+        return False  # 기본: 거부 (Deny by default)
+
+
+# ABAC 정책 정의
+abac = ABACPolicy()
+
+# 정책 1: 관리자는 모든 작업 허용
+abac.add_policy(
+    name="admin_full_access",
+    condition=lambda ctx: ctx["subject"].get("role") == "admin",
+    effect="allow"
+)
+
+# 정책 2: 업무 시간에만 민감한 데이터 접근 허용
+abac.add_policy(
+    name="sensitive_data_business_hours",
+    condition=lambda ctx: (
+        ctx["resource"].get("sensitivity") == "high" and
+        9 <= ctx["environment"].get("hour", 0) <= 18 and
+        ctx["subject"].get("department") == ctx["resource"].get("department")
+    ),
+    effect="allow"
+)
+
+# 정책 3: 리소스 소유자는 자신의 리소스에 모든 권한
+abac.add_policy(
+    name="owner_full_access",
+    condition=lambda ctx: ctx["subject"].get("id") == ctx["resource"].get("owner_id"),
+    effect="allow"
+)
+
+# 정책 4: 같은 부서원은 읽기 허용
+abac.add_policy(
+    name="department_read",
+    condition=lambda ctx: (
+        ctx["action"] == "read" and
+        ctx["subject"].get("department") == ctx["resource"].get("department")
+    ),
+    effect="allow"
+)
+
+
+# Flask 인가 데코레이터
+def abac_authorize(action: str, get_resource: callable):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            # 컨텍스트 수집
+            subject = {
+                "id": g.user.id,
+                "role": g.user.role,
+                "department": g.user.department
+            }
+            resource = get_resource(*args, **kwargs)
+            environment = {
+                "hour": datetime.now().hour,
+                "ip": request.remote_addr,
+                "user_agent": request.user_agent.string
+            }
+
+            # ABAC 평가
+            if not abac.evaluate(subject, resource, action, environment):
+                return jsonify({"error": "Forbidden"}), 403
+
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
+
+
+# 사용 예시
+@app.route('/api/documents/<doc_id>', methods=['GET'])
+@abac_authorize(action="read", get_resource=lambda doc_id: get_document(doc_id))
+def get_document_api(doc_id):
+    return jsonify(get_document(doc_id))</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="opa">
+                <pre><code class="language-rego"># OPA (Open Policy Agent) Rego 정책 예제
+# 중앙화된 정책 관리로 마이크로서비스 전체에 일관된 인가 적용
+
+package authz
+
+import future.keywords.if
+import future.keywords.in
+
+# 기본: 접근 거부
+default allow := false
+
+# 관리자는 모든 접근 허용
+allow if {
+    input.user.role == "admin"
+}
+
+# RBAC: 역할 기반 권한 확인
+allow if {
+    # 사용자 역할에 해당하는 권한 조회
+    permissions := role_permissions[input.user.role]
+    # 요청한 액션이 권한 목록에 포함되어 있는지 확인
+    input.action in permissions
+}
+
+role_permissions := {
+    "editor": ["read", "create", "update"],
+    "viewer": ["read"],
+    "moderator": ["read", "update", "delete"]
+}
+
+# ABAC: 속성 기반 세부 제어
+# 민감한 데이터는 같은 부서 + 업무 시간에만 접근
+allow if {
+    input.resource.sensitivity == "high"
+    input.user.department == input.resource.department
+    is_business_hours
+}
+
+is_business_hours if {
+    hour := time.clock(time.now_ns())[0]
+    hour >= 9
+    hour <= 18
+}
+
+# ReBAC: 리소스 소유자는 모든 권한
+allow if {
+    input.user.id == input.resource.owner_id
+}
+
+# API 호출 예시 (curl)
+# curl -X POST http://localhost:8181/v1/data/authz/allow \
+#   -H "Content-Type: application/json" \
+#   -d '{
+#     "input": {
+#       "user": {"id": "user_123", "role": "editor", "department": "engineering"},
+#       "resource": {"id": "doc_456", "owner_id": "user_789", "department": "engineering", "sensitivity": "low"},
+#       "action": "update"
+#     }
+#   }'
+# 응답: {"result": true}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 권한 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "기본 RBAC로 시작하되, 민감한 데이터 접근에는 ABAC 정책을 추가합시다. 예를 들어 급여 정보는 HR 역할 + 같은 부서 + 업무 시간이라는 복합 조건으로 제어하는 거죠. OPA로 중앙화하면 모든 서비스에 일관된 정책을 적용할 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "401과 403을 구분해서 응답해야 합니다. 토큰이 없거나 만료되면 401 Unauthorized, 토큰은 유효하지만 권한이 없으면 403 Forbidden입니다. 지금 코드는 둘 다 401로 응답하는데, 클라이언트가 재로그인이 필요한 건지 권한 요청이 필요한 건지 구분할 수 없어요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 감사 대응에서</div>
+                    <blockquote class="conv-quote">
+                        "최소 권한 원칙을 적용했습니다. 모든 API 키와 서비스 계정은 필요한 권한만 부여하고, 분기별로 권한 리뷰를 수행합니다. 퇴사자의 경우 즉시 권한 회수가 자동화되어 있고, 감사 로그에서 모든 권한 변경 이력을 추적할 수 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Role Explosion (역할 폭발)</strong>
+                        <p>RBAC만 사용할 때 세밀한 제어를 위해 역할이 기하급수적으로 늘어나는 현상입니다. "engineering_viewer_project_a_readonly" 같은 역할이 수백 개 생기면 관리가 불가능합니다. ABAC를 병행하여 속성으로 세부 제어하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>하드코딩된 권한 검사</strong>
+                        <p>코드 전체에 if (user.role === 'admin')이 흩어져 있으면 정책 변경 시 모든 코드를 수정해야 합니다. 권한 로직은 중앙화된 미들웨어나 정책 엔진으로 분리하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>프론트엔드에만 의존하는 권한 검사</strong>
+                        <p>UI에서 버튼을 숨기는 것만으로는 불충분합니다. API 레벨에서도 반드시 인가 검사를 수행해야 합니다. 공격자는 브라우저 개발자 도구나 직접 API 호출로 UI 제어를 우회할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>Authorization 베스트 프랙티스</strong>
+                        <p>최소 권한 원칙 적용, 권한 변경 감사 로그, 정기적 권한 리뷰, 퇴사자 즉시 권한 회수, 서비스 계정/API 키 권한 최소화, Zero Trust 기반 지속적 검증을 구현하세요. PBAC/OPA로 정책을 코드와 분리하면 유지보수성이 크게 향상됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Authentication/" class="related-term-link">Authentication</a>
+                <a href="/ko/term/RBAC/" class="related-term-link">RBAC</a>
+                <a href="/ko/term/ABAC/" class="related-term-link">ABAC</a>
+                <a href="/ko/term/OAuth/" class="related-term-link">OAuth</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+                <a href="/ko/term/OPA/" class="related-term-link">OPA</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.okta.com/identity-101/role-based-access-control-vs-attribute-based-access-control/" target="_blank" class="learn-link">
+                    📘 Okta - RBAC vs ABAC 비교 가이드
+                </a>
+                <a href="https://www.openpolicyagent.org/docs/latest/" target="_blank" class="learn-link">
+                    📄 OPA 공식 문서 - 정책 기반 인가
+                </a>
+                <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/saas-multitenant-api-access-authorization/access-control-types.html" target="_blank" class="learn-link">
+                    ☁️ AWS - 접근 제어 유형 가이드
+                </a>
+                <a href="https://www.permit.io/blog/rbac-vs-abac-and-rebac-choosing-the-right-authorization-model" target="_blank" class="learn-link">
+                    📝 Permit.io - RBAC vs ABAC vs ReBAC 선택 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +701,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,282 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>IP(Internet Protocol)는 인터넷에서 데이터를 주고받기 위한 핵심 프로토콜입니다. 모든 네트워크 장치에는 고유한 IP 주소가 할당되며, 이 주소를 통해 전 세계 수십억 개의 장치가 서로를 식별하고 통신합니다. IP 주소는 인터넷의 우편번호와 같아서, 데이터 패킷이 목적지까지 정확하게 도달할 수 있도록 라우팅됩니다.</p>
+                <p>현재 널리 사용되는 IPv4는 32비트 주소 체계로, 약 43억 개(2^32)의 주소를 제공합니다. 192.168.1.1처럼 0~255 범위의 숫자 4개를 점으로 구분하여 표기합니다. 그러나 인터넷 사용자 폭증으로 IPv4 주소가 2011년에 고갈되었고, 이를 해결하기 위해 128비트 체계의 IPv6(2001:0db8:85a3::8a2e:0370:7334 형태)가 도입되었습니다. IPv6는 약 340언데실리온(3.4 x 10^38)개의 주소를 제공합니다.</p>
+                <p>IP 주소는 공인 IP와 사설 IP로 구분됩니다. 공인 IP는 인터넷에서 직접 접근 가능한 고유 주소이고, 사설 IP(10.x.x.x, 172.16~31.x.x, 192.168.x.x)는 내부 네트워크에서만 사용됩니다. 가정이나 회사에서는 공유기(NAT)를 통해 하나의 공인 IP를 여러 기기가 공유합니다. DHCP 서버는 네트워크에 연결된 장치에 자동으로 IP 주소를 할당해줍니다.</p>
+                <p>서브넷(Subnet)은 큰 네트워크를 작은 단위로 분할하는 기술입니다. CIDR(Classless Inter-Domain Routing) 표기법(예: 192.168.1.0/24)으로 네트워크 범위를 표현하며, /24는 앞 24비트가 네트워크 주소임을 의미합니다. 클라우드 환경에서 VPC 설계, 방화벽 규칙 설정 시 CIDR 이해가 필수입니다. 실무에서는 IP 지오로케이션을 활용해 사용자 위치 기반 서비스나 이상 접근 탐지에 활용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="bash">Bash</button>
+                <button class="code-tab" data-lang="javascript">Node.js</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python">import socket
+import ipaddress
+import requests
+
+# 내 공인 IP 확인
+my_public_ip = requests.get("https://api.ipify.org").text
+print(f"공인 IP: {my_public_ip}")
+
+# 내 사설 IP 확인
+my_private_ip = socket.gethostbyname(socket.gethostname())
+print(f"사설 IP: {my_private_ip}")
+
+# IP 주소 유효성 검사 및 분석
+def analyze_ip(ip_str):
+    try:
+        ip = ipaddress.ip_address(ip_str)
+        print(f"IP: {ip}")
+        print(f"버전: IPv{ip.version}")
+        print(f"사설 IP: {ip.is_private}")
+        print(f"루프백: {ip.is_loopback}")
+        print(f"멀티캐스트: {ip.is_multicast}")
+    except ValueError:
+        print("유효하지 않은 IP 주소")
+
+analyze_ip("192.168.1.100")
+analyze_ip("8.8.8.8")
+
+# CIDR 네트워크 분석
+network = ipaddress.ip_network("192.168.1.0/24")
+print(f"네트워크: {network.network_address}")
+print(f"브로드캐스트: {network.broadcast_address}")
+print(f"호스트 수: {network.num_addresses - 2}")  # 네트워크/브로드캐스트 제외
+print(f"서브넷 마스크: {network.netmask}")
+
+# 특정 IP가 네트워크에 포함되는지 확인
+if ipaddress.ip_address("192.168.1.50") in network:
+    print("192.168.1.50은 해당 네트워크에 속함")
+
+# IP 지오로케이션 (무료 API)
+def get_ip_location(ip):
+    response = requests.get(f"http://ip-api.com/json/{ip}")
+    data = response.json()
+    return f"{data['country']}, {data['city']} ({data['isp']})"
+
+print(get_ip_location("8.8.8.8"))  # United States, Ashburn (Google LLC)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># 내 공인 IP 확인 (여러 방법)
+curl -s https://api.ipify.org
+curl -s ifconfig.me
+curl -s icanhazip.com
+dig +short myip.opendns.com @resolver1.opendns.com
+
+# 내 사설 IP 확인
+ip addr show | grep "inet " | grep -v 127.0.0.1
+hostname -I
+ifconfig | grep "inet " | awk '{print $2}'
+
+# 특정 IP 정보 조회 (whois)
+whois 8.8.8.8
+
+# IP 지오로케이션 확인
+curl -s "http://ip-api.com/json/8.8.8.8" | jq
+# 출력: {"country":"United States","city":"Ashburn",...}
+
+# 포트 스캔 (nmap)
+nmap -sP 192.168.1.0/24  # 네트워크 내 활성 호스트 탐색
+nmap -p 80,443 google.com  # 특정 포트 확인
+
+# 라우팅 경로 추적
+traceroute google.com
+traceroute -n 8.8.8.8  # DNS 해석 없이
+
+# 네트워크 인터페이스 설정 확인
+ip route show  # 라우팅 테이블
+ip link show   # 인터페이스 목록
+
+# ARP 테이블 (IP ↔ MAC 매핑)
+arp -a
+
+# 서브넷 계산 (ipcalc 설치 필요)
+ipcalc 192.168.1.0/24
+# Network:   192.168.1.0/24
+# Netmask:   255.255.255.0
+# HostMin:   192.168.1.1
+# HostMax:   192.168.1.254
+# Broadcast: 192.168.1.255
+# Hosts/Net: 254
+
+# NAT 테이블 확인 (Linux, root 권한)
+iptables -t nat -L -n</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="javascript">
+                <pre><code class="language-javascript">const os = require('os');
+const dns = require('dns');
+const https = require('https');
+
+// 사설 IP 확인
+function getPrivateIP() {
+    const interfaces = os.networkInterfaces();
+    for (const name in interfaces) {
+        for (const iface of interfaces[name]) {
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return iface.address;
+            }
+        }
+    }
+    return '127.0.0.1';
+}
+console.log('사설 IP:', getPrivateIP());
+
+// 공인 IP 확인
+async function getPublicIP() {
+    return new Promise((resolve, reject) => {
+        https.get('https://api.ipify.org', (res) => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => resolve(data));
+        }).on('error', reject);
+    });
+}
+getPublicIP().then(ip => console.log('공인 IP:', ip));
+
+// IP 주소 유효성 검사
+function isValidIPv4(ip) {
+    const parts = ip.split('.');
+    if (parts.length !== 4) return false;
+    return parts.every(part => {
+        const num = parseInt(part, 10);
+        return num >= 0 && num <= 255 && part === String(num);
+    });
+}
+
+function isValidIPv6(ip) {
+    const pattern = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+    return pattern.test(ip);
+}
+
+// 사설 IP 여부 확인
+function isPrivateIP(ip) {
+    const parts = ip.split('.').map(Number);
+    return (
+        parts[0] === 10 ||
+        (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) ||
+        (parts[0] === 192 && parts[1] === 168)
+    );
+}
+
+console.log(isPrivateIP('192.168.1.1'));  // true
+console.log(isPrivateIP('8.8.8.8'));      // false
+
+// CIDR 범위 내 IP 확인
+function ipInCIDR(ip, cidr) {
+    const [range, bits] = cidr.split('/');
+    const mask = ~(2 ** (32 - parseInt(bits)) - 1);
+    const ipNum = ip.split('.').reduce((acc, oct) => (acc << 8) + parseInt(oct), 0);
+    const rangeNum = range.split('.').reduce((acc, oct) => (acc << 8) + parseInt(oct), 0);
+    return (ipNum & mask) === (rangeNum & mask);
+}
+
+console.log(ipInCIDR('192.168.1.50', '192.168.1.0/24'));  // true
+console.log(ipInCIDR('192.168.2.1', '192.168.1.0/24'));   // false</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 클라우드 VPC 설계 미팅에서</div>
+                    <blockquote class="conv-quote">
+                        "VPC CIDR을 10.0.0.0/16으로 잡으면 65,000개 이상의 IP를 사용할 수 있습니다. 퍼블릭 서브넷은 10.0.1.0/24, 프라이빗 서브넷은 10.0.10.0/24로 분리하고, NAT Gateway를 통해 프라이빗 서브넷에서 외부 통신하도록 구성하죠."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안팀과의 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "이번 로그 분석에서 동일 공인 IP에서 1분에 500건 이상의 요청이 들어오고 있어요. IP 지오로케이션 확인 결과 해외 VPN으로 보이는데, 일단 해당 IP 대역(/24)을 방화벽에서 차단하고, Rate Limiting을 적용해야 할 것 같습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "IPv4 고갈 문제를 해결하기 위해 NAT와 CIDR이 도입되었고, 장기적으로는 IPv6로 전환이 진행 중입니다. AWS에서는 듀얼스택 모드로 IPv4/IPv6를 동시 지원할 수 있고, 실제로 모바일 네트워크에서는 IPv6 비율이 50%를 넘었습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>공인 IP를 코드에 하드코딩</strong>
+                        <p>공인 IP는 ISP나 클라우드 환경에 따라 변경될 수 있습니다. 환경변수나 DNS를 사용하세요. 특히 Auto Scaling 환경에서는 IP가 수시로 바뀝니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>CIDR 범위 계산 실수</strong>
+                        <p>/24는 256개(사용가능 254개), /16은 65,536개입니다. VPC 설계 시 너무 좁은 범위를 할당하면 나중에 확장이 어렵습니다. AWS VPC는 생성 후 CIDR 변경이 불가능합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>X-Forwarded-For 헤더 무시</strong>
+                        <p>로드밸런서/프록시 뒤에서는 클라이언트 IP가 프록시 IP로 보입니다. X-Forwarded-For 헤더를 파싱해야 실제 클라이언트 IP를 얻을 수 있습니다. 단, 스푸핑 방지를 위해 신뢰할 수 있는 프록시만 허용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 IP 관리 방법</strong>
+                        <p>VPC 설계 시 충분한 CIDR 범위 확보(/16 권장). 서브넷은 가용영역별로 분리. 보안그룹은 IP 범위(/32 또는 /24)로 세밀하게 제어. Elastic IP는 비용이 발생하므로 사용하지 않을 때 해제하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/DNS/" class="related-term-link">DNS</a>
+                <a href="/ko/term/TCP/" class="related-term-link">TCP</a>
+                <a href="/ko/term/HTTP/" class="related-term-link">HTTP</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+                <a href="/ko/term/VPC/" class="related-term-link">VPC</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/network-layer/internet-protocol/" target="_blank" class="learn-link">
+                    📄 Cloudflare - IP 주소란 무엇인가?
+                </a>
+                <a href="https://www.subnet-calculator.com/" target="_blank" class="learn-link">
+                    🔢 Subnet Calculator - CIDR 계산기
+                </a>
+                <a href="https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/vpc-ip-addressing.html" target="_blank" class="learn-link">
+                    📖 AWS VPC IP 주소 지정 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +630,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

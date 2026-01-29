@@ -202,6 +202,200 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">Twelve-Factor App은 2011년 Heroku 개발자들이 제안한 현대적인 SaaS 애플리케이션 개발 방법론입니다. 클라우드 네이티브 환경에서 배포, 확장, 유지보수가 쉬운 앱을 만들기 위한 12가지 원칙을 정의합니다. 컨테이너, 서버리스, 마이크로서비스 시대에 더욱 중요해졌습니다.</p>
+                <p style="margin-bottom: 1rem;">핵심 원칙: 1) Codebase - 버전 관리되는 하나의 코드베이스, 2) Dependencies - 명시적 의존성 선언, 3) Config - 환경변수로 설정 분리, 4) Backing Services - DB/캐시 등을 교체 가능한 리소스로 취급, 5) Build/Release/Run - 빌드와 실행 단계 분리, 6) Processes - 상태 없는 프로세스로 실행.</p>
+                <p style="margin-bottom: 1rem;">추가 원칙: 7) Port Binding - 자체 포트 바인딩으로 서비스 노출, 8) Concurrency - 프로세스 복제로 수평 확장, 9) Disposability - 빠른 시작과 graceful shutdown, 10) Dev/Prod Parity - 개발/운영 환경 일치, 11) Logs - 이벤트 스트림으로 로그 처리, 12) Admin Processes - 관리 작업을 일회성 프로세스로 실행.</p>
+                <p>이 원칙들은 Docker, Kubernetes 환경과 자연스럽게 맞습니다. 환경변수 설정(ConfigMap/Secret), 상태 없는 컨테이너, 수평 확장(HPA), 헬스체크, 로그 수집(Fluentd) 등이 모두 Twelve-Factor 원칙을 따릅니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>// Twelve-Factor App 원칙 적용 예제
+
+// 3. Config - 환경변수로 설정 분리
+// ❌ 안티패턴: 하드코딩
+const dbUrl = 'postgres://user:pass@localhost:5432/mydb';
+
+// ✅ 환경변수 사용
+const config = {
+  database: {
+    url: process.env.DATABASE_URL,
+    pool: parseInt(process.env.DB_POOL_SIZE || '10')
+  },
+  redis: {
+    url: process.env.REDIS_URL
+  },
+  port: parseInt(process.env.PORT || '3000'),
+  logLevel: process.env.LOG_LEVEL || 'info'
+};
+
+// 필수 환경변수 검증 (시작 시점에)
+const required = ['DATABASE_URL', 'REDIS_URL', 'JWT_SECRET'];
+for (const key of required) {
+  if (!process.env[key]) {
+    console.error(`Missing required env var: ${key}`);
+    process.exit(1);
+  }
+}
+
+// 4. Backing Services - 교체 가능한 리소스
+// 환경변수만 바꾸면 로컬 Redis → AWS ElastiCache 전환 가능
+const redis = new Redis(process.env.REDIS_URL);
+
+// 6. Processes - Stateless 프로세스
+// ❌ 메모리에 세션 저장 (스케일링 불가)
+const sessions = new Map();
+
+// ✅ 외부 저장소(Redis)에 세션 저장
+app.use(session({
+  store: new RedisStore({ client: redis }),
+  secret: process.env.SESSION_SECRET
+}));
+
+// 9. Disposability - Graceful Shutdown
+async function gracefulShutdown(signal: string) {
+  console.log(`Received ${signal}, shutting down gracefully...`);
+
+  // 1. 새 요청 거부
+  server.close();
+
+  // 2. 진행 중인 작업 완료 대기
+  await Promise.all([
+    redis.quit(),
+    prisma.$disconnect(),
+    closeDbPool()
+  ]);
+
+  console.log('Cleanup complete, exiting');
+  process.exit(0);
+}
+
+process.on('SIGTERM', () =&gt; gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () =&gt; gracefulShutdown('SIGINT'));
+
+// 11. Logs - stdout으로 출력 (수집은 인프라가 담당)
+// ❌ 파일에 직접 로깅
+// fs.appendFileSync('/var/log/app.log', message);
+
+// ✅ stdout으로 구조화된 로그
+import pino from 'pino';
+const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+  // JSON 형식으로 stdout 출력 → Fluentd/Datadog이 수집
+});
+
+logger.info({ userId, action: 'login' }, 'User logged in');
+
+// Kubernetes 배포 예시
+/*
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: database-url
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: log-level
+        livenessProbe:   # 9. Disposability
+          httpGet:
+            path: /health
+            port: 3000
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+*/</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">클라우드 마이그레이션에서:</p>
+                    <p>"온프레미스 앱을 K8s로 옮기려는데 문제가 많아요." - "Twelve-Factor 체크해보세요. 설정이 파일에 하드코딩되어 있거나, 로컬 파일시스템에 상태 저장하면 컨테이너화가 어려워요. 환경변수, 외부 스토리지로 바꿔야 합니다."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"Twelve-Factor에서 가장 중요한 원칙은?" - "저는 Config와 Stateless Processes를 꼽겠어요. 환경변수로 설정을 분리하면 같은 코드로 어디든 배포 가능하고, 상태 없는 프로세스는 수평 확장과 장애 복구의 기본이 됩니다."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">장애 대응에서:</p>
+                    <p>"배포 후 Pod이 계속 재시작돼요." - "Graceful shutdown 구현했나요? SIGTERM 받으면 진행 중인 요청 마무리하고 DB 커넥션 정리해야 해요. 안 그러면 readiness 실패하고 무한 재시작될 수 있어요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">모든 상황에 적합하지는 않습니다. 레거시 시스템, 특수 하드웨어 의존성이 있는 앱 등에는 모든 원칙을 적용하기 어려울 수 있습니다. 점진적으로 적용하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">Stateless가 무상태를 의미하지만, 상태 자체가 없는 건 아닙니다. 세션, 캐시 등의 상태는 Redis, 외부 DB에 저장해야 합니다. "상태를 프로세스 외부로"가 핵심입니다.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">Dev/Prod Parity를 위해 Docker Compose 등으로 로컬 개발 환경도 프로덕션과 유사하게 구성하세요. "내 컴퓨터에선 됐는데" 문제를 줄일 수 있습니다.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">쿠버네티스</a>
+                <a href="/ko/term/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">컨테이너</a>
+                <a href="/ko/term/CI%2FCD/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">CI/CD</a>
+                <a href="/ko/term/Microservice/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Microservice</a>
+                <a href="/ko/term/Cloud%20Native/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Cloud Native</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://12factor.net/ko/" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> 12factor.net - 공식 사이트 (한국어)
+                </a>
+                <a href="https://www.redhat.com/en/topics/cloud-native-apps/what-is-the-12-factor-app" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Red Hat - Twelve-Factor App 소개
+                </a>
+                <a href="https://cloud.google.com/architecture/twelve-factor-app-development-on-gcp" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Google Cloud - GCP에서의 Twelve-Factor
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

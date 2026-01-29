@@ -161,6 +161,34 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 CSS */
+        .term-section { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; display: flex; align-items: center; gap: 0.5rem; }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; margin: 1rem 0; overflow: hidden; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(168, 85, 247, 0.2); border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .code-lang { color: #a855f7; font-size: 0.85rem; font-weight: 500; }
+        .copy-btn { background: rgba(255,255,255,0.1); border: none; padding: 0.4rem 0.8rem; border-radius: 6px; color: #94a3b8; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .code-block pre { padding: 1rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .conv-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .conv-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .conv-tab.active, .conv-tab:hover { background: rgba(168, 85, 247, 0.2); border-color: rgba(168, 85, 247, 0.4); color: #a855f7; }
+        .conv-content { display: none; }
+        .conv-content.active { display: block; }
+        .conv-item { padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 0.75rem; }
+        .conv-speaker { color: #a855f7; font-weight: 500; margin-bottom: 0.5rem; }
+        .conv-quote { color: #cbd5e1; font-style: italic; line-height: 1.6; }
+        .warning-list, .resource-list { list-style: none; padding: 0; margin: 0; }
+        .warning-list li, .resource-list li { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; }
+        .warning-list li:last-child, .resource-list li:last-child { border-bottom: none; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .resource-list a { color: #a855f7; text-decoration: none; }
+        .resource-list a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -202,6 +230,122 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>변수(Variable)는 프로그램에서 데이터를 저장하고 참조하기 위한 이름이 붙은 메모리 공간입니다. 변수를 통해 숫자, 문자열, 객체 등 다양한 값을 저장하고 나중에 사용할 수 있습니다.</p>
+                <p>변수에는 스코프(범위)가 있습니다. 전역 변수는 프로그램 전체에서 접근 가능하고, 지역 변수는 선언된 블록 내에서만 유효합니다. JavaScript의 var는 함수 스코프, let/const는 블록 스코프를 가집니다.</p>
+                <p>변수의 불변성(immutability)은 중요한 개념입니다. JavaScript의 const, Python의 관례적 대문자 변수명, Rust의 기본 불변 바인딩은 값이 변경되지 않음을 나타냅니다. 불변 변수는 버그를 줄이고 코드 이해를 쉽게 합니다.</p>
+                <p>타입 시스템에 따라 변수 선언 방식이 다릅니다. 정적 타입 언어(Java, TypeScript)는 타입을 명시하고, 동적 타입 언어(Python, JavaScript)는 런타임에 타입이 결정됩니다. 타입 추론을 지원하는 언어에서는 컴파일러가 타입을 자동으로 유추합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">JavaScript</span>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+                <pre><code>// 변수 선언 방식
+var oldWay = "함수 스코프 (권장하지 않음)";
+let mutableVar = "블록 스코프, 재할당 가능";
+const immutableRef = "블록 스코프, 재할당 불가";
+
+// 스코프 예시
+function scopeExample() {
+    let blockScoped = "함수 내부";
+
+    if (true) {
+        let innerVar = "블록 내부";
+        var functionVar = "함수 스코프";
+        console.log(blockScoped);  // 접근 가능
+    }
+
+    console.log(functionVar);  // 접근 가능 (var)
+    // console.log(innerVar);  // 에러! (let은 블록 스코프)
+}
+
+// 호이스팅
+console.log(hoisted);  // undefined (var는 호이스팅)
+var hoisted = "값";
+// console.log(notHoisted);  // 에러! (let/const는 TDZ)
+let notHoisted = "값";
+
+// 구조 분해 할당
+const user = { name: "김개발", age: 30 };
+const { name, age } = user;
+
+const numbers = [1, 2, 3];
+const [first, second] = numbers;
+
+// const와 객체 변경
+const config = { debug: true };
+config.debug = false;  // 가능 (참조는 불변, 내용은 변경 가능)
+// config = {};  // 에러! (재할당 불가)</code></pre>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'meeting')">💼 회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'interview')">👔 면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'review')">🔍 코드 리뷰</button>
+            </div>
+            <div id="meeting" class="conv-content active">
+                <div class="conv-item"><div class="conv-speaker">주니어 개발자</div><div class="conv-quote">"전역 변수를 써도 되나요? 여러 곳에서 필요한 설정값이거든요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">시니어 개발자</div><div class="conv-quote">"전역 변수는 피하는 게 좋아요. 싱글톤 패턴이나 의존성 주입으로 관리하면 테스트도 쉽고 부작용도 줄어들어요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">주니어 개발자</div><div class="conv-quote">"환경 변수는 어떻게 관리하는 게 좋을까요?"</div></div>
+            </div>
+            <div id="interview" class="conv-content">
+                <div class="conv-item"><div class="conv-speaker">면접관</div><div class="conv-quote">"JavaScript에서 var, let, const의 차이점을 설명해주세요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">지원자</div><div class="conv-quote">"var는 함수 스코프이고 호이스팅됩니다. let은 블록 스코프이고 재할당 가능합니다. const도 블록 스코프이지만 재할당이 불가능합니다. 현대 코드에서는 const를 기본으로, 필요할 때만 let을 사용합니다."</div></div>
+                <div class="conv-item"><div class="conv-speaker">면접관</div><div class="conv-quote">"클로저에서 변수 캡처는 어떻게 동작하나요?"</div></div>
+                <div class="conv-item"><div class="conv-speaker">지원자</div><div class="conv-quote">"클로저는 생성 시점의 스코프를 기억합니다. var는 루프에서 마지막 값만 캡처되는 문제가 있지만, let은 각 반복마다 새 바인딩을 만들어서 이 문제를 해결합니다."</div></div>
+            </div>
+            <div id="review" class="conv-content">
+                <div class="conv-item"><div class="conv-speaker">리뷰어</div><div class="conv-quote">"이 변수 이름이 너무 짧아요. 'x'보다는 'userCount'처럼 의미 있는 이름을 사용하세요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">작성자</div><div class="conv-quote">"루프 인덱스라서 짧게 썼는데, 의미가 있는 변수는 명확한 이름으로 바꾸겠습니다."</div></div>
+                <div class="conv-item"><div class="conv-speaker">리뷰어</div><div class="conv-quote">"그리고 let으로 선언했는데 재할당이 없네요. const로 바꾸면 의도가 더 명확해져요."</div></div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>⚠️ <strong>전역 변수 최소화:</strong> 전역 변수는 충돌과 부작용을 일으킵니다. 모듈이나 클로저로 스코프를 제한하세요.</li>
+                <li>⚠️ <strong>const 우선 사용:</strong> 기본적으로 const를 사용하고, 재할당이 필요할 때만 let을 사용하세요. var는 피하세요.</li>
+                <li>⚠️ <strong>의미 있는 이름:</strong> 변수명은 그 역할을 명확히 나타내야 합니다. 약어보다 풀네임을 사용하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%ED%83%80%EC%9E%85/" class="related-term">타입</a>
+                <a href="/ko/term/%ED%81%B4%EB%A1%9C%EC%A0%80/" class="related-term">클로저</a>
+                <a href="/ko/term/%EC%8A%A4%ED%83%9D/" class="related-term">스택</a>
+                <a href="/ko/term/%EC%86%8C%EC%9C%A0%EA%B6%8C/" class="related-term">소유권</a>
+                <a href="/ko/term/%EB%A9%94%EC%84%9C%EB%93%9C/" class="related-term">메서드</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li>📄 <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Grammar_and_types#%EB%B3%80%EC%88%98" target="_blank" rel="noopener">MDN - JavaScript 변수</a></li>
+                <li>📘 <a href="https://docs.python.org/ko/3/tutorial/classes.html#scopes-and-namespaces" target="_blank" rel="noopener">Python - 스코프와 네임스페이스</a></li>
+                <li>🎬 <a href="https://www.youtube.com/results?search_query=javascript+var+let+const" target="_blank" rel="noopener">YouTube - var vs let vs const</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +356,10 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+        function copyCode(btn) { const code = btn.closest('.code-block').querySelector('code').textContent; navigator.clipboard.writeText(code).then(() => { const originalText = btn.textContent; btn.textContent = '✅ 복사됨'; setTimeout(() => btn.textContent = originalText, 2000); }); }
+        function showConv(btn, id) { document.querySelectorAll('.conv-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.conv-content').forEach(c => c.classList.remove('active')); btn.classList.add('active'); document.getElementById(id).classList.add('active'); }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

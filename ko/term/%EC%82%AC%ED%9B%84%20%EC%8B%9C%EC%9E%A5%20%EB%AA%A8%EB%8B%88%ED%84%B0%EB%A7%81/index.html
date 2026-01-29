@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,245 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>사후 시장 모니터링(Post-Market Monitoring, PMM)은 AI 시스템이 시장에 출시된 후 그 성능, 안전성, 규정 준수 상태를 지속적으로 감시하는 활동입니다. EU AI Act 제72조에서 고위험 AI 제공자에게 사후 시장 모니터링 시스템 구축을 의무화하고 있습니다.</p>
+                <p>PMM의 핵심 목적은 배포 후 발생하는 문제를 조기에 탐지하는 것입니다. 학습 시점과 운영 시점의 데이터 분포 차이(Data Drift), 모델 성능 저하(Model Degradation), 예기치 못한 편향 발현, 오용 사례 등을 모니터링합니다. 심각한 위험 발견 시 즉각 당국에 보고해야 합니다.</p>
+                <p>EU AI Act 제72조는 PMM 시스템에 대해 운영 전 수명 주기 동안 관련 데이터의 능동적/체계적 수집, 분석, 기록을 요구합니다. 제공자는 필요시 시정 조치를 취하고, 심각한 사고는 시장 감시 당국에 보고해야 합니다.</p>
+                <p>기술적으로 PMM은 실시간 추론 로깅, 성능 지표 대시보드, 드리프트 탐지 알림, 사용자 피드백 수집 시스템 등으로 구현됩니다. MLOps 파이프라인에 통합되어 자동화된 모니터링과 알림이 이루어져야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn">복사</button>
+                <pre><code># 사후 시장 모니터링 시스템 구현 예제
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Dict, List, Optional
+from enum import Enum
+import numpy as np
+
+class AlertSeverity(Enum):
+    INFO = "info"
+    WARNING = "warning"
+    CRITICAL = "critical"
+
+@dataclass
+class MonitoringAlert:
+    """모니터링 알림"""
+    alert_id: str
+    severity: AlertSeverity
+    metric_name: str
+    current_value: float
+    threshold: float
+    message: str
+    timestamp: datetime
+    requires_authority_report: bool = False
+
+class PostMarketMonitor:
+    """EU AI Act 제72조 준수 사후 시장 모니터링 시스템"""
+
+    def __init__(self, model_id: str, baseline_metrics: Dict):
+        self.model_id = model_id
+        self.baseline_metrics = baseline_metrics
+        self.alerts: List[MonitoringAlert] = []
+        self.inference_logs: List[Dict] = []
+
+    def log_inference(self, input_data: Dict, output: Dict,
+                       latency_ms: float, user_feedback: Optional[str] = None):
+        """추론 로깅 (제72조: 관련 데이터의 능동적 수집)"""
+        log_entry = {
+            "timestamp": datetime.now().isoformat(),
+            "model_id": self.model_id,
+            "input_hash": hash(str(input_data)),  # 개인정보 보호
+            "output": output,
+            "latency_ms": latency_ms,
+            "user_feedback": user_feedback
+        }
+        self.inference_logs.append(log_entry)
+
+    def detect_data_drift(self, recent_inputs: np.ndarray,
+                          baseline_inputs: np.ndarray,
+                          drift_threshold: float = 0.1) -> Optional[MonitoringAlert]:
+        """데이터 드리프트 탐지"""
+        # 간단한 통계적 드리프트 측정 (실제로는 KS test 등 사용)
+        recent_mean = np.mean(recent_inputs, axis=0)
+        baseline_mean = np.mean(baseline_inputs, axis=0)
+        drift_score = np.mean(np.abs(recent_mean - baseline_mean))
+
+        if drift_score > drift_threshold:
+            alert = MonitoringAlert(
+                alert_id=f"DRIFT-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+                severity=AlertSeverity.WARNING,
+                metric_name="data_drift",
+                current_value=drift_score,
+                threshold=drift_threshold,
+                message=f"입력 데이터 분포 변화 감지: {drift_score:.4f}",
+                timestamp=datetime.now()
+            )
+            self.alerts.append(alert)
+            return alert
+        return None
+
+    def monitor_performance(self, recent_accuracy: float,
+                            degradation_threshold: float = 0.1) -> Optional[MonitoringAlert]:
+        """성능 저하 모니터링"""
+        baseline_accuracy = self.baseline_metrics.get("accuracy", 0.9)
+        degradation = baseline_accuracy - recent_accuracy
+
+        if degradation > degradation_threshold:
+            severity = AlertSeverity.CRITICAL if degradation > 0.2 else AlertSeverity.WARNING
+
+            alert = MonitoringAlert(
+                alert_id=f"PERF-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+                severity=severity,
+                metric_name="accuracy_degradation",
+                current_value=recent_accuracy,
+                threshold=baseline_accuracy - degradation_threshold,
+                message=f"모델 성능 저하: {baseline_accuracy:.2%} -> {recent_accuracy:.2%}",
+                timestamp=datetime.now(),
+                requires_authority_report=severity == AlertSeverity.CRITICAL
+            )
+            self.alerts.append(alert)
+            return alert
+        return None
+
+    def monitor_fairness(self, group_metrics: Dict[str, float],
+                          disparity_threshold: float = 0.15) -> Optional[MonitoringAlert]:
+        """공정성 모니터링 (그룹 간 성능 격차)"""
+        if len(group_metrics) < 2:
+            return None
+
+        max_disparity = max(group_metrics.values()) - min(group_metrics.values())
+
+        if max_disparity > disparity_threshold:
+            alert = MonitoringAlert(
+                alert_id=f"FAIR-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+                severity=AlertSeverity.WARNING,
+                metric_name="fairness_disparity",
+                current_value=max_disparity,
+                threshold=disparity_threshold,
+                message=f"그룹 간 성능 격차 증가: {max_disparity:.2%}",
+                timestamp=datetime.now()
+            )
+            self.alerts.append(alert)
+            return alert
+        return None
+
+    def report_serious_incident(self, incident_description: str) -> Dict:
+        """심각한 사고 보고서 생성 (제72조: 당국 보고 의무)"""
+        report = {
+            "report_type": "EU_AI_Act_Article_72_Serious_Incident",
+            "model_id": self.model_id,
+            "incident_timestamp": datetime.now().isoformat(),
+            "description": incident_description,
+            "related_alerts": [
+                {
+                    "alert_id": a.alert_id,
+                    "severity": a.severity.value,
+                    "metric": a.metric_name,
+                    "value": a.current_value
+                } for a in self.alerts if a.requires_authority_report
+            ],
+            "corrective_actions_planned": [],
+            "status": "pending_authority_notification"
+        }
+        return report
+
+    def generate_periodic_report(self, period_days: int = 30) -> Dict:
+        """정기 모니터링 보고서"""
+        return {
+            "report_period": f"Last {period_days} days",
+            "model_id": self.model_id,
+            "generated_at": datetime.now().isoformat(),
+            "total_inferences": len(self.inference_logs),
+            "alerts_summary": {
+                "total": len(self.alerts),
+                "critical": sum(1 for a in self.alerts if a.severity == AlertSeverity.CRITICAL),
+                "warning": sum(1 for a in self.alerts if a.severity == AlertSeverity.WARNING)
+            },
+            "compliance_status": "compliant" if not any(
+                a.severity == AlertSeverity.CRITICAL for a in self.alerts
+            ) else "requires_attention"
+        }
+
+# 사용 예시
+monitor = PostMarketMonitor(
+    model_id="CREDIT-MODEL-v2",
+    baseline_metrics={"accuracy": 0.92, "f1": 0.89}
+)
+
+# 일별 모니터링
+monitor.monitor_performance(recent_accuracy=0.88)
+monitor.monitor_fairness({"male": 0.90, "female": 0.85})
+
+# 정기 보고서 생성
+report = monitor.generate_periodic_report()
+print(f"준수 상태: {report['compliance_status']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conversation-title">
+            <h2 id="conversation-title" class="section-title">실무 대화</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-target="meeting11">회의</button>
+                <button class="conv-tab" data-target="interview11">면접</button>
+                <button class="conv-tab" data-target="review11">코드리뷰</button>
+            </div>
+            <div class="conv-content active" id="meeting11" data-label="회의">
+                <p><strong class="role-pm">PM:</strong> 모델 배포 후 모니터링은 어떻게 하고 있나요?</p>
+                <p><strong class="role-junior">ML엔지니어:</strong> 기본적인 latency와 error rate만 보고 있습니다.</p>
+                <p><strong class="role-senior">시니어:</strong> EU AI Act 제72조에서 사후 시장 모니터링을 의무화하고 있어요. 성능 지표, 데이터 드리프트, 공정성 지표까지 모니터링해야 합니다. 심각한 이슈 발견 시 당국 보고 의무도 있어요.</p>
+            </div>
+            <div class="conv-content" id="interview11" data-label="면접">
+                <p><strong class="role-interviewer">면접관:</strong> 운영 중인 AI 모델의 성능 저하를 어떻게 탐지하나요?</p>
+                <p><strong class="role-candidate">지원자:</strong> 세 가지 축으로 모니터링합니다. 첫째, 데이터 드리프트 탐지로 입력 분포 변화를 감지합니다. 둘째, Ground Truth가 확보되면 실제 성능을 측정하고, 셋째 사용자 피드백과 클레임을 분석합니다. 모든 지표는 Grafana 대시보드에서 실시간 확인 가능하고, 임계치 초과 시 Slack 알림이 발송됩니다.</p>
+            </div>
+            <div class="conv-content" id="review11" data-label="코드리뷰">
+                <p><strong class="role-senior">시니어:</strong> 추론 로깅이 없네요. PMM을 위해 필수입니다.</p>
+                <p><strong class="role-junior">주니어:</strong> 개인정보 이슈는 없나요?</p>
+                <p><strong class="role-senior">시니어:</strong> 좋은 질문이에요. 입력 데이터는 해시만 저장하고, 통계적 분석에 필요한 집계 정보만 남기세요. 보존 기간도 명시하고요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li class="critical">EU AI Act 제72조에 따라 심각한 사고(serious incident) 발생 시 15일 이내 시장 감시 당국에 보고해야 합니다. 보고 지연 시 과징금이 부과될 수 있습니다.</li>
+                <li>모니터링 데이터 수집 시 GDPR 개인정보 보호 요건을 준수해야 합니다. 최소 필요 데이터만 수집하고, 보존 기간을 명시하세요.</li>
+                <li class="info">사후 시장 모니터링은 일회성이 아닌 모델 수명 주기 전체에 걸쳐 지속되어야 합니다. 자동화된 파이프라인 구축이 필수입니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%8B%9C%EC%9E%A5%20%EA%B0%90%EC%8B%9C%20%EB%8B%B9%EA%B5%AD/" class="related-link">시장 감시 당국</a>
+                <a href="/ko/term/%EC%8B%9C%EC%9E%A5%20%EA%B0%90%EC%8B%9C/" class="related-link">시장 감시</a>
+                <a href="/ko/term/%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80/" class="related-link">모델 평가</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%92%88%EC%A7%88%20%EA%B4%80%EB%A6%AC/" class="related-link">데이터 품질 관리</a>
+                <a href="/ko/term/%EB%A0%88%EB%93%9C%ED%8C%80%20%ED%85%8C%EC%8A%A4%ED%8A%B8/" class="related-link">레드팀 테스트</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-tool"></span><a href="https://evidentlyai.com/" target="_blank" rel="noopener">Evidently AI - ML 모니터링 도구</a><span class="resource-meta">도구</span></li>
+                <li><span class="type-tool"></span><a href="https://www.whylabs.ai/" target="_blank" rel="noopener">WhyLabs - AI 모니터링 플랫폼</a><span class="resource-meta">도구</span></li>
+                <li><span class="type-official"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act 제72조 원문</a><span class="resource-meta">법령</span></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +452,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,217 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Staging(스테이징)</strong>은 프로덕션 환경에 배포하기 전 최종 검증을 수행하는 테스트 환경입니다. 실제 프로덕션과 가능한 동일하게 구성하여 배포 전 문제를 사전에 발견하고 수정할 수 있습니다.</p>
+                <p>스테이징 환경은 프로덕션과 동일한 인프라 구성(서버 스펙, 네트워크, 보안 설정), 유사한 데이터 볼륨, 동일한 배포 파이프라인을 사용해야 합니다. QA팀의 수동 테스트, 통합 테스트, 성능 테스트, 보안 스캔 등이 이 환경에서 수행됩니다. "스테이징에서 성공했으면 프로덕션에서도 성공한다"는 신뢰를 구축하는 것이 목표입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>환경별 Kubernetes 설정 (Kustomize)</h3>
+                <pre><code class="language-yaml"># base/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-server
+spec:
+  selector:
+    matchLabels:
+      app: api-server
+  template:
+    metadata:
+      labels:
+        app: api-server
+    spec:
+      containers:
+      - name: api
+        image: myapp/api-server
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secrets
+---
+# overlays/staging/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: staging
+resources:
+- ../../base
+replicas:
+- name: api-server
+  count: 2  # 프로덕션보다 적은 레플리카
+configMapGenerator:
+- name: app-config
+  literals:
+  - ENV=staging
+  - LOG_LEVEL=debug
+  - DB_HOST=staging-db.internal
+  - FEATURE_NEW_UI=true  # 스테이징에서 먼저 테스트
+images:
+- name: myapp/api-server
+  newTag: staging-latest</code></pre>
+
+                <h3>GitHub Actions 스테이징 배포 파이프라인</h3>
+                <pre><code class="language-yaml"># .github/workflows/staging-deploy.yaml
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    types: [labeled]
+
+jobs:
+  deploy-staging:
+    if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'deploy-staging')
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build and Push Image
+      run: |
+        docker build -t ${{ vars.REGISTRY }}/api-server:staging-${{ github.sha }} .
+        docker push ${{ vars.REGISTRY }}/api-server:staging-${{ github.sha }}
+
+    - name: Deploy to Staging
+      run: |
+        kubectl config use-context staging-cluster
+        cd k8s/overlays/staging
+        kustomize edit set image myapp/api-server=${{ vars.REGISTRY }}/api-server:staging-${{ github.sha }}
+        kustomize build | kubectl apply -f -
+        kubectl rollout status deployment/api-server -n staging --timeout=5m
+
+    - name: Run Smoke Tests
+      run: |
+        sleep 30  # 안정화 대기
+        curl -f https://staging.myapp.com/health
+        npm run test:smoke -- --env=staging
+
+    - name: Notify on Slack
+      if: always()
+      uses: slackapi/slack-github-action@v1
+      with:
+        payload: |
+          {
+            "text": "Staging 배포 ${{ job.status }}: ${{ github.sha }}"
+          }</code></pre>
+
+                <h3>스테이징 데이터 관리</h3>
+                <pre><code class="language-bash">#!/bin/bash
+# staging-data-sync.sh - 프로덕션 데이터 익명화 후 스테이징으로 복제
+
+set -e
+
+PROD_DB="prod-db.internal"
+STAGING_DB="staging-db.internal"
+BACKUP_FILE="/tmp/staging_data_$(date +%Y%m%d).sql"
+
+echo "=== 프로덕션 데이터 덤프 ==="
+pg_dump -h $PROD_DB -U readonly \
+  --exclude-table=audit_logs \
+  --exclude-table=sessions \
+  myapp > $BACKUP_FILE
+
+echo "=== 민감 데이터 익명화 ==="
+# 이메일 익명화
+sed -i "s/[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]*\.[a-zA-Z]*/user_XXX@example.com/g" $BACKUP_FILE
+
+# 전화번호 마스킹
+sed -i "s/010-[0-9]\{4\}-[0-9]\{4\}/010-XXXX-XXXX/g" $BACKUP_FILE
+
+echo "=== 스테이징 DB 복원 ==="
+psql -h $STAGING_DB -U admin myapp < $BACKUP_FILE
+
+echo "=== 정리 ==="
+rm $BACKUP_FILE
+echo "스테이징 데이터 동기화 완료"</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 id="conv-title" class="section-title">실무 대화</h2>
+            <div class="section-content conversation-box">
+                <div class="conversation">
+                    <div class="message">
+                        <span class="speaker">QA 엔지니어</span>
+                        <p>"스테이징에서 테스트 완료했는데, 프로덕션 배포해도 괜찮을까요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">DevOps 엔지니어</span>
+                        <p>"스테이징 환경 설정이 프로덕션과 동일한지 먼저 확인할게요. 최근에 프로덕션 인프라 변경이 있었거든요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">개발팀장</span>
+                        <p>"스테이징 데이터는 얼마나 최신인가요? 데이터 양에 따라 성능이 달라질 수 있어서요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">DevOps 엔지니어</span>
+                        <p>"매주 일요일에 프로덕션 데이터를 익명화해서 스테이징에 동기화하고 있어요. 볼륨은 프로덕션의 30% 수준인데, 성능 테스트가 필요하면 별도 로드 테스트 환경을 쓰는 게 좋겠어요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">보안팀</span>
+                        <p>"스테이징에 실제 고객 데이터가 있으면 안 되는 거 아시죠?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">DevOps 엔지니어</span>
+                        <p>"물론이죠. 이메일, 전화번호, 카드 정보 등 PII 데이터는 모두 마스킹 처리됩니다. 매번 동기화 시 자동으로 스크립트가 돌아요."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <ul class="warning-list">
+                    <li><strong>환경 동기화:</strong> 스테이징과 프로덕션의 인프라 설정이 다르면 "스테이징에서는 됐는데..."라는 상황이 발생합니다. IaC로 환경 설정을 코드화하세요.</li>
+                    <li><strong>데이터 보안:</strong> 프로덕션 데이터를 복제할 때 반드시 PII(개인식별정보)를 익명화해야 합니다. 규정 위반과 보안 사고를 예방하세요.</li>
+                    <li><strong>외부 서비스 격리:</strong> 결제, 이메일 발송 등 외부 서비스는 스테이징용 샌드박스를 사용하세요. 실수로 실제 고객에게 알림이 가면 안 됩니다.</li>
+                    <li><strong>비용 관리:</strong> 스테이징을 프로덕션과 완전 동일하게 유지하면 비용이 2배가 됩니다. 레플리카 수, 인스턴스 스펙을 적절히 조절하세요.</li>
+                    <li><strong>접근 제어:</strong> 스테이징 환경에 대한 접근 권한을 관리하고, 프로덕션과 혼동하지 않도록 시각적 구분(배너, 색상)을 추가하세요.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <ul class="related-terms">
+                    <li><a href="/ko/term/Environment%20Variable/">Environment Variable</a> - 환경별 설정 관리</li>
+                    <li><a href="/ko/term/CI%2FCD/">CI/CD</a> - 스테이징 자동 배포 파이프라인</li>
+                    <li><a href="/ko/term/Integration%20Test/">Integration Test</a> - 스테이징에서 수행하는 테스트</li>
+                    <li><a href="/ko/term/Blue-Green/">Blue-Green Deployment</a> - 스테이징과 유사한 환경 전환 전략</li>
+                    <li><a href="/ko/term/Kustomize/">Kustomize</a> - 환경별 설정 관리 도구</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more">
+                    <li><a href="https://12factor.net/dev-prod-parity" target="_blank" rel="noopener">The Twelve-Factor App: Dev/Prod Parity</a> - 환경 일관성 원칙</li>
+                    <li><a href="https://martinfowler.com/bliki/TestEnvironmentManagement.html" target="_blank" rel="noopener">Test Environment Management</a> - Martin Fowler의 테스트 환경 관리</li>
+                    <li><a href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/" target="_blank" rel="noopener">Kustomize</a> - Kubernetes 환경별 설정</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +424,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

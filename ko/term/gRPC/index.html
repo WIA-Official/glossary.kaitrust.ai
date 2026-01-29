@@ -161,6 +161,122 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhancement Section Styles */
+        .enhancement-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.8));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhancement-section h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .enhancement-section p, .enhancement-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+        }
+        .enhancement-section ul, .enhancement-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .enhancement-section strong {
+            color: #a855f7;
+        }
+        .code-block {
+            background: #0f172a;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .code-block .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-block .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .dialogue-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .dialogue-box .speaker {
+            font-weight: 600;
+            color: #818cf8;
+            margin-bottom: 0.25rem;
+        }
+        .dialogue-box p {
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-link {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #fff;
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #00f5ff;
+            text-decoration: none;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -202,6 +318,157 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="enhancement-section">
+            <h2>상세 설명</h2>
+            <p><strong>gRPC(gRPC Remote Procedure Call)</strong>는 Google이 개발한 고성능 RPC 프레임워크입니다. <strong>Protocol Buffers(protobuf)</strong>를 기본 직렬화 포맷으로 사용하며, HTTP/2 기반으로 동작합니다.</p>
+            <p>REST API의 텍스트 기반 JSON과 달리, gRPC는 <strong>바이너리 프로토콜</strong>을 사용해 더 작은 페이로드와 빠른 직렬화/역직렬화를 제공합니다. 마이크로서비스 간 통신에서 특히 강점을 발휘합니다.</p>
+            <ul>
+                <li><strong>양방향 스트리밍</strong>: 클라이언트/서버 간 실시간 데이터 스트림</li>
+                <li><strong>코드 생성</strong>: .proto 파일에서 클라이언트/서버 코드 자동 생성</li>
+                <li><strong>다양한 언어 지원</strong>: Go, Java, Python, Node.js 등 10개 이상 지원</li>
+                <li><strong>강타입</strong>: 스키마 기반으로 타입 안정성 보장</li>
+                <li><strong>Deadline/Timeout</strong>: 요청별 타임아웃 설정 내장</li>
+            </ul>
+            <p>Kubernetes, Envoy, etcd 등 클라우드 네이티브 도구들이 gRPC를 채택하고 있어 마이크로서비스 아키텍처의 사실상 표준이 되었습니다.</p>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="enhancement-section">
+            <h2>코드 예제</h2>
+            <p><strong>.proto 파일 정의</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>syntax = "proto3";
+
+package user;
+
+// 서비스 정의
+service UserService {
+    // 단일 요청-응답
+    rpc GetUser(GetUserRequest) returns (User);
+
+    // 서버 스트리밍
+    rpc ListUsers(ListUsersRequest) returns (stream User);
+
+    // 양방향 스트리밍
+    rpc Chat(stream ChatMessage) returns (stream ChatMessage);
+}
+
+// 메시지 타입 정의
+message User {
+    int32 id = 1;
+    string name = 2;
+    string email = 3;
+}
+
+message GetUserRequest {
+    int32 id = 1;
+}</code>
+            </div>
+            <p><strong>Node.js 서버 구현</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>const grpc = require('@grpc/grpc-js');
+const protoLoader = require('@grpc/proto-loader');
+
+// proto 파일 로드
+const packageDefinition = protoLoader.loadSync('user.proto');
+const userProto = grpc.loadPackageDefinition(packageDefinition).user;
+
+// 서비스 구현
+const server = new grpc.Server();
+server.addService(userProto.UserService.service, {
+    getUser: (call, callback) => {
+        const user = { id: call.request.id, name: '홍길동', email: 'hong@example.com' };
+        callback(null, user);
+    },
+    listUsers: (call) => {
+        users.forEach(user => call.write(user));
+        call.end();
+    },
+});
+
+server.bindAsync('0.0.0.0:50051', grpc.ServerCredentials.createInsecure(), () => {
+    server.start();
+});</code>
+            </div>
+            <p><strong>Node.js 클라이언트</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>const client = new userProto.UserService(
+    'localhost:50051',
+    grpc.credentials.createInsecure()
+);
+
+// 단일 요청
+client.getUser({ id: 1 }, (err, user) => {
+    console.log(user); // { id: 1, name: '홍길동', email: '...' }
+});
+
+// 스트리밍 수신
+const stream = client.listUsers({});
+stream.on('data', (user) => console.log(user));
+stream.on('end', () => console.log('완료'));</code>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="enhancement-section">
+            <h2>실무 대화 예시</h2>
+            <div class="dialogue-box">
+                <p class="speaker">아키텍트</p>
+                <p>"마이크로서비스 간 통신을 REST에서 gRPC로 전환하는 게 어때요?"</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">개발자</p>
+                <p>"성능은 확실히 좋아지겠죠. 근데 디버깅이 좀 불편해요. JSON처럼 curl로 테스트하기 어렵고요."</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">아키텍트</p>
+                <p>"grpcurl이나 Postman gRPC 기능 쓰면 돼. 그리고 외부 API는 REST 유지하고, 내부 서비스 간 통신만 gRPC로 가자."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="enhancement-section">
+            <h2>주의사항</h2>
+            <div class="warning-box">
+                <p><strong>브라우저 직접 호출 불가</strong></p>
+                <p>일반 브라우저에서 gRPC 호출이 불가능합니다. 웹 클라이언트는 gRPC-Web이나 REST 게이트웨이가 필요합니다.</p>
+            </div>
+            <div class="warning-box">
+                <p><strong>proto 파일 관리</strong></p>
+                <p>.proto 파일 변경 시 모든 서비스의 코드를 재생성해야 합니다. proto 파일 버전 관리와 호환성 유지가 중요합니다.</p>
+            </div>
+            <div class="warning-box">
+                <p><strong>디버깅 복잡성</strong></p>
+                <p>바이너리 프로토콜이라 네트워크 패킷을 직접 읽기 어렵습니다. 전용 도구(grpcurl, Postman)가 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhancement-section">
+            <h2>관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/gRPC-Web/" class="related-term-link">gRPC-Web</a>
+                <a href="/ko/term/REST%20API/" class="related-term-link">REST API</a>
+                <a href="/ko/term/GraphQL/" class="related-term-link">GraphQL</a>
+                <a href="/ko/term/tRPC/" class="related-term-link">tRPC</a>
+                <a href="/ko/term/WebSocket/" class="related-term-link">WebSocket</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhancement-section">
+            <h2>더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://grpc.io/docs/" target="_blank">gRPC 공식 문서</a></li>
+                <li><a href="https://protobuf.dev/" target="_blank">Protocol Buffers 공식 문서</a></li>
+                <li><a href="https://github.com/grpc/grpc-node" target="_blank">GitHub - gRPC Node.js</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +479,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

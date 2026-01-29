@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,116 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p><strong>뷰(View)</strong>는 하나 이상의 테이블에서 데이터를 조회하는 SELECT 쿼리를 저장해두고, 마치 테이블처럼 사용할 수 있게 하는 가상 테이블입니다. 실제 데이터를 저장하지 않고 조회 시점에 기반 테이블에서 데이터를 가져옵니다.</p>
+                <p>뷰의 주요 용도는 <strong>복잡한 쿼리 단순화</strong>(자주 쓰는 조인을 뷰로 만들어 재사용), <strong>보안</strong>(특정 컬럼만 노출), <strong>데이터 추상화</strong>(기반 테이블 구조 변경 시 뷰만 수정), <strong>비즈니스 로직 캡슐화</strong> 등입니다.</p>
+                <p>일반 뷰는 조회 시마다 쿼리를 실행하지만, <strong>머티리얼라이즈드 뷰</strong>는 결과를 물리적으로 저장해 성능을 높입니다. 업데이트 가능 뷰(Updatable View)를 통해 데이터 삽입/수정도 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>-- 기본 뷰 생성: 활성 사용자만 조회
+CREATE VIEW active_users AS
+SELECT id, name, email, created_at
+FROM users
+WHERE status = 'active' AND deleted_at IS NULL;
+
+-- 뷰 사용 (테이블처럼)
+SELECT * FROM active_users WHERE created_at > '2024-01-01';
+
+-- 복잡한 조인을 뷰로 단순화
+CREATE VIEW order_summary AS
+SELECT
+    o.id AS order_id,
+    c.name AS customer_name,
+    SUM(oi.quantity * oi.price) AS total,
+    o.created_at
+FROM orders o
+JOIN customers c ON o.customer_id = c.id
+JOIN order_items oi ON o.id = oi.order_id
+GROUP BY o.id, c.name, o.created_at;
+
+-- 보안용 뷰: 민감 정보 숨김
+CREATE VIEW public_employees AS
+SELECT id, name, department, hire_date
+FROM employees;  -- salary, ssn 등은 제외
+
+-- 업데이트 가능 뷰 (단일 테이블 기반)
+CREATE VIEW pending_orders AS
+SELECT * FROM orders WHERE status = 'pending';
+
+UPDATE pending_orders SET status = 'processing' WHERE id = 123;</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>주니어 개발자:</strong> "이 조인 쿼리가 여러 API에서 중복으로 쓰이는데 어떻게 하면 좋을까요?"</p>
+                <p><strong>시니어 개발자:</strong> "뷰로 만들어두면 되겠네요. 한 번 정의해두면 테이블처럼 쓸 수 있어서 중복도 없애고 수정도 한 곳에서 하면 되니까요."</p>
+                <p><strong>주니어 개발자:</strong> "성능에 문제는 없나요?"</p>
+                <p><strong>시니어 개발자:</strong> "일반 뷰는 매번 쿼리 실행하는 거라 똑같아요. 성능이 중요하면 머티리얼라이즈드 뷰 고려하면 됩니다."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "뷰의 장단점과 사용 사례를 설명해주세요."</p>
+                <p><strong>지원자:</strong> "장점은 복잡한 쿼리 재사용, 보안(컬럼 숨김), 테이블 구조 변경 시 영향 최소화입니다. 단점은 성능 오버헤드와 업데이트 제한입니다. 저는 BI 대시보드용 리포팅 뷰와 API별 권한 분리에 활용했습니다."</p>
+                <p><strong>면접관:</strong> "뷰와 머티리얼라이즈드 뷰의 차이는요?"</p>
+                <p><strong>지원자:</strong> "일반 뷰는 정의만 저장하고 조회 시 실행하지만, 머티리얼라이즈드 뷰는 결과를 물리적으로 저장해 빠르게 조회합니다. 대신 갱신이 필요합니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "이 뷰 조회하고 나서 추가로 WHERE 조건 거는 패턴이 많네요."</p>
+                <p><strong>개발자:</strong> "네, 기본 뷰에 조건 추가해서 쓰고 있어요."</p>
+                <p><strong>리뷰어:</strong> "뷰 안에 조건을 넣을 수 있으면 옵티마이저가 더 효율적으로 실행할 수 있어요. 자주 쓰는 필터는 뷰 정의에 포함하는 게 좋습니다."</p>
+                <p><strong>개발자:</strong> "알겠습니다. 뷰를 좀 더 구체적으로 분리해보겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>성능 오해:</strong> 뷰는 캐시가 아니므로 조회 시 매번 기반 쿼리 실행</li>
+                <li><strong>업데이트 제한:</strong> 집계, 조인, DISTINCT가 포함된 뷰는 UPDATE 불가</li>
+                <li><strong>의존성 관리:</strong> 기반 테이블 삭제/변경 시 뷰가 깨질 수 있음</li>
+                <li><strong>재귀 뷰:</strong> 뷰가 다른 뷰를 참조할 때 성능과 디버깅 복잡성 증가</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%A8%B8%ED%8B%B0%EB%A6%AC%EC%96%BC%EB%9D%BC%EC%9D%B4%EC%A6%88%EB%93%9C%20%EB%B7%B0/" class="related-link">머티리얼라이즈드 뷰</a>
+                <a href="/ko/term/%EC%84%9C%EB%B8%8C%EC%BF%BC%EB%A6%AC/" class="related-link">서브쿼리</a>
+                <a href="/ko/term/%EC%A1%B0%EC%9D%B8/" class="related-link">조인</a>
+                <a href="/ko/term/%EC%BF%BC%EB%A6%AC/" class="related-link">쿼리</a>
+                <a href="/ko/term/%EC%A0%95%EA%B7%9C%ED%99%94/" class="related-link">정규화</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://www.postgresql.org/docs/current/sql-createview.html" target="_blank">PostgreSQL CREATE VIEW 문서</a></li>
+                <li><a href="https://dev.mysql.com/doc/refman/8.0/en/views.html" target="_blank">MySQL Views 문서</a></li>
+                <li><a href="https://docs.microsoft.com/sql/relational-databases/views/views" target="_blank">SQL Server Views 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +324,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

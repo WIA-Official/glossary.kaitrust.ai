@@ -147,20 +147,153 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +335,268 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>CDN(Content Delivery Network)은 전 세계에 분산된 엣지 서버 네트워크를 통해 콘텐츠를 사용자와 가까운 위치에서 제공하는 기술입니다. 원본 서버(Origin)에서 콘텐츠를 가져와 엣지 서버에 캐싱하고, 사용자 요청 시 가장 가까운 엣지에서 응답함으로써 지연 시간(Latency)을 획기적으로 줄입니다.</p>
+                <p>CDN의 핵심 원리는 캐싱(Caching)과 지리적 분산입니다. 이미지, CSS, JavaScript, 비디오 같은 정적 콘텐츠는 TTL(Time To Live) 동안 엣지에 저장되어 반복 요청 시 원본 서버에 부하를 주지 않습니다. 대형 CDN 제공자들은 전 세계 200개 이상의 PoP(Point of Presence)를 운영합니다.</p>
+                <p>현대 CDN은 단순 캐싱을 넘어 DDoS 방어, WAF(Web Application Firewall), 이미지 최적화, 비디오 스트리밍, 엣지 컴퓨팅 기능까지 제공합니다. Cloudflare Workers, AWS Lambda@Edge 같은 서비스로 엣지에서 코드를 실행할 수도 있습니다.</p>
+                <p>주요 CDN 제공자로는 Cloudflare(무료 플랜 제공, 전 세계 310+ PoP), AWS CloudFront(AWS 서비스 연동), Akamai(엔터프라이즈 시장 1위), Fastly(실시간 퍼지, 개발자 친화적) 등이 있습니다. 한국에서는 SK Broadband, KT 등 국내 CDN도 선택지입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="cloudfront">CloudFront</button>
+                <button class="code-tab" data-lang="cloudflare">Cloudflare</button>
+                <button class="code-tab" data-lang="nginx">Nginx Cache</button>
+            </div>
+            <div class="code-block" data-lang="cloudfront">
+                <pre><code class="language-yaml"># AWS CloudFront CDK 설정
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+
+// S3 버킷 생성
+const bucket = new s3.Bucket(this, 'WebsiteBucket', {
+  websiteIndexDocument: 'index.html',
+});
+
+// CloudFront 배포 생성
+const distribution = new cloudfront.Distribution(this, 'CDN', {
+  defaultBehavior: {
+    origin: new origins.S3Origin(bucket),
+    viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+    cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+    compress: true,
+  },
+
+  // 커스텀 캐시 정책
+  additionalBehaviors: {
+    '/api/*': {
+      origin: new origins.HttpOrigin('api.example.com'),
+      cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
+    },
+    '/static/*': {
+      origin: new origins.S3Origin(bucket),
+      cachePolicy: new cloudfront.CachePolicy(this, 'StaticCache', {
+        maxTtl: Duration.days(365),
+        defaultTtl: Duration.days(30),
+        minTtl: Duration.hours(1),
+      }),
+    },
+  },
+
+  // 지역 제한 (한국, 일본, 미국만 허용)
+  geoRestriction: cloudfront.GeoRestriction.allowlist('KR', 'JP', 'US'),
+
+  // 커스텀 도메인
+  domainNames: ['cdn.example.com'],
+  certificate: myCertificate,
+});</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="cloudflare" style="display: none;">
+                <pre><code class="language-javascript">// Cloudflare Workers - 엣지 캐싱 로직
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request));
+});
+
+async function handleRequest(request) {
+  const url = new URL(request.url);
+  const cache = caches.default;
+
+  // 캐시 확인
+  let response = await cache.match(request);
+
+  if (!response) {
+    // 원본 서버에서 가져오기
+    response = await fetch(request);
+
+    // 성공 응답만 캐싱
+    if (response.status === 200) {
+      // 캐시 헤더 추가
+      const headers = new Headers(response.headers);
+      headers.set('Cache-Control', 'public, max-age=86400'); // 24시간
+      headers.set('X-Cache-Status', 'MISS');
+
+      response = new Response(response.body, {
+        status: response.status,
+        headers
+      });
+
+      // 엣지에 캐싱
+      event.waitUntil(cache.put(request, response.clone()));
+    }
+  } else {
+    // 캐시 히트 표시
+    const headers = new Headers(response.headers);
+    headers.set('X-Cache-Status', 'HIT');
+    response = new Response(response.body, {
+      status: response.status,
+      headers
+    });
+  }
+
+  return response;
+}
+
+// 이미지 최적화 예제
+async function handleImageRequest(request) {
+  const url = new URL(request.url);
+  const width = url.searchParams.get('w') || 800;
+
+  return fetch(request, {
+    cf: {
+      image: {
+        width: parseInt(width),
+        quality: 85,
+        format: 'webp'
+      }
+    }
+  });
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="nginx" style="display: none;">
+                <pre><code class="language-nginx"># Nginx를 캐시 서버로 사용하는 설정
+http {
+    # 캐시 저장소 설정
+    proxy_cache_path /var/cache/nginx levels=1:2
+        keys_zone=my_cache:100m
+        max_size=10g
+        inactive=60m
+        use_temp_path=off;
+
+    server {
+        listen 80;
+        server_name cdn.example.com;
+
+        # 정적 파일 캐시 설정
+        location ~* \.(jpg|jpeg|png|gif|ico|css|js|woff2)$ {
+            proxy_cache my_cache;
+            proxy_cache_valid 200 302 7d;
+            proxy_cache_valid 404 1m;
+            proxy_cache_use_stale error timeout updating;
+
+            # 캐시 상태 헤더 추가
+            add_header X-Cache-Status $upstream_cache_status;
+            add_header Cache-Control "public, max-age=604800";
+
+            proxy_pass http://origin_server;
+        }
+
+        # API는 캐시하지 않음
+        location /api/ {
+            proxy_cache_bypass 1;
+            proxy_no_cache 1;
+            add_header Cache-Control "no-store, no-cache, must-revalidate";
+            proxy_pass http://api_server;
+        }
+
+        # 캐시 퍼지 엔드포인트
+        location /purge/ {
+            allow 10.0.0.0/8;
+            deny all;
+            proxy_cache_purge my_cache $uri;
+        }
+    }
+}
+
+# Cache-Control 헤더 이해
+# max-age=3600      : 1시간 동안 캐시
+# s-maxage=86400    : CDN에서 24시간 캐시 (브라우저는 max-age)
+# stale-while-revalidate=60  : 만료 후 60초간 오래된 캐시 제공
+# immutable         : 절대 변경되지 않음 (해시된 파일명)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 최적화 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "TTFB가 2초인데 CDN 붙이면 200ms 이하로 줄일 수 있습니다. 정적 에셋은 CloudFront로 서빙하고, 이미지는 WebP 자동 변환 활성화하면 대역폭도 40% 정도 절감됩니다. 글로벌 서비스면 Cloudflare도 고려해볼 만해요, 무료 플랜도 꽤 괜찮습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "CDN 캐시 전략을 설계한 경험이 있습니다. 정적 파일은 해시된 파일명으로 immutable 캐시를 걸고, HTML은 stale-while-revalidate로 빠른 응답과 최신성을 둘 다 확보했어요. 캐시 무효화는 파일명 변경 방식으로 즉시 반영되게 했고, 긴급 시 CloudFront Invalidation API로 수동 퍼지도 구현했습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응에서</div>
+                    <blockquote class="conv-quote">
+                        "배포 후 CSS가 깨졌다는 리포트가 들어오네요. CDN 캐시 문제 같습니다. 빌드 시 파일명에 해시를 안 붙여서 브라우저가 옛날 CSS를 캐시하고 있어요. 일단 CloudFront에서 /*.css 패턴으로 Invalidation 실행하고, CI/CD에서 해시 파일명 적용하는 게 근본 해결책입니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>민감한 데이터 캐싱</strong>
+                        <p>사용자별 개인정보나 인증 토큰이 포함된 응답을 CDN에 캐싱하면 다른 사용자에게 노출됩니다. API 응답이나 동적 콘텐츠는 Cache-Control: private 또는 no-store를 명시하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>캐시 무효화 전략 미수립</strong>
+                        <p>max-age=31536000(1년)으로 설정했는데 파일명 해시가 없으면, 업데이트 후에도 사용자가 오래된 파일을 계속 받습니다. CloudFront Invalidation은 비용이 발생하고(월 1000건 무료) 전파에 시간이 걸립니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 접근법</strong>
+                        <p>정적 에셋은 content-hash 파일명(main.a1b2c3d4.js)으로 immutable 캐시, HTML은 no-cache 또는 짧은 TTL로 설정하세요. Cache-Control 응답 헤더를 원본 서버에서 정확히 설정하고, CDN 모니터링으로 캐시 적중률(CHR)을 추적하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Cloudflare%20Workers/" class="related-term-link">Cloudflare Workers</a>
+                <a href="/ko/term/CloudFront/" class="related-term-link">CloudFront</a>
+                <a href="/ko/term/Edge%20Computing/" class="related-term-link">Edge Computing</a>
+                <a href="/ko/term/Caching/" class="related-term-link">Caching</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/cdn/what-is-a-cdn/" target="_blank" class="learn-link">
+                    📄 Cloudflare - CDN이란 무엇인가
+                </a>
+                <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" target="_blank" class="learn-link">
+                    📄 AWS CloudFront 개발자 가이드
+                </a>
+                <a href="https://web.dev/articles/http-cache" target="_blank" class="learn-link">
+                    🎓 web.dev - HTTP 캐싱 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +607,31 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

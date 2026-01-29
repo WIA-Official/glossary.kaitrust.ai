@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -202,6 +347,217 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>DNS(Domain Name System)는 사람이 기억하기 쉬운 도메인 이름(예: google.com)을 컴퓨터가 이해하는 IP 주소(예: 142.250.196.110)로 변환하는 분산 데이터베이스 시스템입니다. 인터넷의 전화번호부라고 불리며, DNS가 없다면 우리는 모든 웹사이트에 접속할 때 숫자로 된 IP 주소를 외워야 합니다.</p>
+                <p>DNS는 1983년 Paul Mockapetris에 의해 설계되었습니다. 초기 인터넷(ARPANET)에서는 hosts.txt 파일 하나로 모든 호스트 이름을 관리했지만, 네트워크가 급격히 성장하면서 이 방식은 한계에 부딪혔고, 분산형 계층 구조를 가진 DNS가 탄생했습니다.</p>
+                <p>DNS는 계층적 구조로 작동합니다. Root DNS 서버 → TLD(Top-Level Domain) 서버(.com, .kr 등) → Authoritative DNS 서버 순으로 쿼리가 전달됩니다. 로컬 DNS 리졸버는 이 결과를 캐싱하여 같은 도메인에 대한 반복 쿼리를 빠르게 처리합니다. 일반적인 DNS 조회는 100ms 이내에 완료됩니다.</p>
+                <p>현대 웹 서비스에서 DNS는 단순한 이름 해석을 넘어 로드 밸런싱, CDN 라우팅, 장애 복구(Failover), 지리적 라우팅 등 다양한 역할을 수행합니다. AWS Route 53, Cloudflare DNS 같은 서비스들은 99.99% 이상의 가용성을 보장하며, 전 세계 수십억 개의 쿼리를 매일 처리합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="bash">Bash</button>
+                <button class="code-tab" data-lang="javascript">Node.js</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python">import socket
+import dns.resolver  # pip install dnspython
+
+# 기본 DNS 조회
+hostname = "google.com"
+ip_address = socket.gethostbyname(hostname)
+print(f"{hostname} → {ip_address}")  # google.com → 142.250.196.110
+
+# dnspython으로 상세 DNS 조회
+resolver = dns.resolver.Resolver()
+
+# A 레코드 (IPv4 주소)
+a_records = resolver.resolve("google.com", "A")
+for rdata in a_records:
+    print(f"A Record: {rdata}")
+
+# MX 레코드 (메일 서버)
+mx_records = resolver.resolve("google.com", "MX")
+for rdata in mx_records:
+    print(f"MX Record: {rdata.preference} {rdata.exchange}")
+
+# TXT 레코드 (SPF, DKIM 등)
+txt_records = resolver.resolve("google.com", "TXT")
+for rdata in txt_records:
+    print(f"TXT Record: {rdata}")
+
+# 커스텀 DNS 서버 사용 (Google DNS)
+resolver.nameservers = ["8.8.8.8", "8.8.4.4"]
+result = resolver.resolve("example.com", "A")
+print(f"Google DNS 결과: {list(result)}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># nslookup - 기본 DNS 조회
+nslookup google.com
+nslookup -type=MX google.com  # 메일 서버 조회
+nslookup google.com 8.8.8.8   # 특정 DNS 서버 사용
+
+# dig - 상세 DNS 조회 (추천)
+dig google.com                 # A 레코드
+dig google.com MX             # MX 레코드
+dig google.com +short         # IP만 출력
+dig @8.8.8.8 google.com       # Google DNS 사용
+dig google.com +trace         # DNS 해석 경로 추적
+
+# DNS 캐시 확인 및 삭제 (macOS)
+sudo dscacheutil -flushcache
+sudo killall -HUP mDNSResponder
+
+# DNS 캐시 삭제 (Linux)
+sudo systemctl restart systemd-resolved
+
+# DNS 캐시 삭제 (Windows)
+ipconfig /flushdns
+
+# 역방향 DNS 조회 (IP → 도메인)
+dig -x 8.8.8.8 +short  # dns.google 반환
+
+# DNS 응답 시간 측정
+dig google.com | grep "Query time"</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="javascript">
+                <pre><code class="language-javascript">const dns = require('dns');
+const { Resolver } = require('dns').promises;
+
+// 기본 DNS 조회 (콜백)
+dns.lookup('google.com', (err, address, family) => {
+    console.log(`IP: ${address}, IPv${family}`);
+});
+
+// Promise 기반 DNS 조회 (권장)
+async function dnsLookup() {
+    const resolver = new Resolver();
+
+    // A 레코드 조회
+    const addresses = await resolver.resolve4('google.com');
+    console.log('A Records:', addresses);
+
+    // MX 레코드 조회
+    const mxRecords = await resolver.resolveMx('google.com');
+    mxRecords.forEach(mx => {
+        console.log(`MX: ${mx.exchange} (priority: ${mx.priority})`);
+    });
+
+    // TXT 레코드 조회
+    const txtRecords = await resolver.resolveTxt('google.com');
+    console.log('TXT Records:', txtRecords);
+
+    // 역방향 조회 (IP → 도메인)
+    const hostnames = await resolver.reverse('8.8.8.8');
+    console.log('Reverse DNS:', hostnames);
+}
+
+// 커스텀 DNS 서버 설정
+const customResolver = new Resolver();
+customResolver.setServers(['8.8.8.8', '1.1.1.1']);
+
+dnsLookup().catch(console.error);</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "DNS TTL이 1시간으로 설정되어 있어서, IP 변경 후에도 최대 1시간 동안 이전 서버로 트래픽이 갈 수 있습니다. 긴급 상황을 대비해 TTL을 5분으로 낮추는 게 좋겠습니다. 참고로 Cloudflare는 기본 TTL이 300초입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "DNS는 분산 캐싱 구조로 작동합니다. 클라이언트가 도메인을 요청하면, 먼저 로컬 DNS 캐시를 확인하고, 없으면 Recursive DNS 서버가 Root → TLD → Authoritative 서버 순으로 반복 쿼리를 수행합니다. 실제 프로덕션에서는 Route 53이나 Cloudflare를 사용해서 지역별 라우팅과 헬스체크 기반 페일오버를 구현했습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 설계 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "멀티 리전 서비스라면 GeoDNS를 적용해서 사용자와 가까운 리전으로 라우팅하는 게 좋습니다. 아시아 사용자는 ap-northeast-2로, 미국 사용자는 us-east-1로 보내면 레이턴시를 100ms 이상 줄일 수 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>TTL을 너무 길게 설정</strong>
+                        <p>TTL 24시간 설정 후 서버 마이그레이션하면, 최대 하루 동안 일부 사용자가 이전 서버로 접속합니다. 마이그레이션 전 최소 48시간 전에 TTL을 300초(5분) 이하로 낮추세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>DNS 전파 시간 무시</strong>
+                        <p>DNS 변경은 즉시 반영되지 않습니다. 전 세계 DNS 서버에 전파되는 데 최대 48시간이 걸릴 수 있습니다. 중요한 변경은 트래픽이 적은 시간에 미리 진행하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>단일 DNS 제공자에만 의존</strong>
+                        <p>2016년 Dyn DNS 공격으로 Twitter, Netflix 등이 다운됐습니다. 중요 서비스는 Route 53 + Cloudflare처럼 복수의 DNS 제공자를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 DNS 설정 방법</strong>
+                        <p>평상시 TTL은 1시간(3600초), 변경 예정 시 5분(300초)으로 설정. DNSSEC을 활성화하여 DNS 스푸핑 방지. 모니터링 도구로 DNS 해석 시간을 상시 체크하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/IP/" class="related-term-link">IP</a>
+                <a href="/ko/term/TCP/" class="related-term-link">TCP</a>
+                <a href="/ko/term/HTTP/" class="related-term-link">HTTP</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cloudflare.com/learning/dns/what-is-dns/" target="_blank" class="learn-link">
+                    📄 Cloudflare - DNS 작동 원리 (한글)
+                </a>
+                <a href="https://howdns.works/" target="_blank" class="learn-link">
+                    🎓 How DNS Works - 인터랙티브 만화
+                </a>
+                <a href="https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/Welcome.html" target="_blank" class="learn-link">
+                    📖 AWS Route 53 공식 문서
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +565,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,104 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Backstage는 2020년 Spotify에서 오픈소스로 공개한 개발자 포털(Internal Developer Portal, IDP) 구축 플랫폼입니다. CNCF 인큐베이팅 프로젝트로, 마이크로서비스 아키텍처에서 개발자 경험을 개선하는 핵심 도구로 자리잡았습니다.</p>
+                <p>플랫폼 엔지니어링의 핵심 컴포넌트로, 소프트웨어 카탈로그를 통해 조직 내 모든 서비스, API, 라이브러리, 인프라 리소스를 중앙에서 관리합니다. 개발자가 필요한 정보를 한 곳에서 찾을 수 있어 인지 부하를 줄여줍니다.</p>
+                <p>Software Templates 기능으로 새 프로젝트를 표준화된 방식으로 빠르게 생성할 수 있습니다. TechDocs로 문서를 코드와 함께 관리하고, 다양한 플러그인으로 CI/CD, 모니터링, 비용 관리 등을 통합합니다.</p>
+                <p>실무에서는 각 서비스 저장소에 catalog-info.yaml을 추가하여 Backstage에 자동 등록합니다. 플러그인 생태계가 활발하여 Kubernetes, ArgoCD, PagerDuty, Datadog 등 다양한 도구와 연동됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># catalog-info.yaml - 서비스 등록 파일
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payment-service
+  description: 결제 처리 마이크로서비스
+  annotations:
+    github.com/project-slug: myorg/payment-service
+    backstage.io/techdocs-ref: dir:.
+    argocd/app-name: payment-service-prod
+  tags:
+    - python
+    - grpc
+spec:
+  type: service
+  lifecycle: production
+  owner: team-payments
+  system: e-commerce-platform
+  dependsOn:
+    - component:user-service
+    - resource:postgres-db
+  providesApis:
+    - payment-api</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "마이크로서비스가 200개 넘어가니까 어떤 팀이 뭘 담당하는지 파악이 안 돼요. Backstage 도입해서 서비스 카탈로그부터 정리하죠."</p>
+                <p><strong class="role-junior">주니어:</strong> "각 팀이 직접 catalog-info.yaml 관리해야 하나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "네, 코드와 함께 버전 관리되도록요. 그리고 Software Templates으로 신규 서비스 생성을 표준화할 예정입니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Platform Engineering에서 Internal Developer Portal의 역할은 무엇인가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "IDP는 개발자 셀프서비스를 가능하게 합니다. Backstage 같은 도구로 인프라 프로비저닝, 서비스 생성, 문서 접근을 한 곳에서 제공하면 개발자 생산성이 높아지고 플랫폼팀 티켓 부담도 줄어듭니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "catalog-info.yaml에 owner가 team-backend로 되어있는데, 실제 담당팀은 team-payments 아닌가요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "맞습니다. 팀 재편 후 업데이트를 놓쳤네요. 수정하고 dependsOn도 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>초기 설정과 플러그인 커스터마이징에 상당한 개발 노력 필요 - 전담 팀 구성 권장</li>
+                <li>catalog-info.yaml 관리가 소홀해지면 데이터 품질 저하 - 자동화된 검증 파이프라인 구축</li>
+                <li>플러그인 간 버전 호환성 이슈 발생 가능 - 업그레이드 시 충분한 테스트 필요</li>
+                <li class="info">처음엔 Software Catalog만 시작하고, 팀이 익숙해지면 Templates, TechDocs 순차 확장 권장</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Platform-Engineering/" class="related-link">Platform Engineering</a>
+                <a href="/ko/term/Microservice/" class="related-link">Microservice</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+                <a href="/ko/term/API/" class="related-link">API</a>
+                <a href="/ko/term/Kubernetes/" class="related-link">Kubernetes</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://backstage.io/docs" target="_blank" rel="noopener">Backstage 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://roadie.io/backstage-weekly/" target="_blank" rel="noopener">Roadie Backstage Weekly</a></li>
+                <li><span class="type-book"></span><a href="https://platformengineering.org/" target="_blank" rel="noopener">Platform Engineering 커뮤니티</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +311,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

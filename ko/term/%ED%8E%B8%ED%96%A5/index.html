@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -202,6 +228,294 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>AI 편향(Bias)은 인공지능 시스템이 특정 그룹이나 속성에 대해 체계적으로 불공정한 결과를 생성하는 경향을 말합니다. 이는 학습 데이터의 편향, 알고리즘 설계의 결함, 평가 지표의 부적절함 등 다양한 원인에서 발생합니다. AI 편향은 채용, 대출, 사법, 의료 등 중요한 의사결정에 영향을 미쳐 사회적 불평등을 심화시킬 수 있어 AI 윤리의 핵심 이슈입니다.</p>
+
+                <p>AI 편향 문제는 2016년 ProPublica의 COMPAS 알고리즘 분석(인종별 재범 예측 불균형), 2018년 Amazon 채용 AI의 여성 차별 사례, 2019년 Apple Card의 성별 신용한도 차이 논란 등으로 대중적 관심을 받게 되었습니다. 이후 학계와 산업계에서 Fairness in ML 연구가 활발해졌고, 2024-2025년에는 LLM의 편향 문제(스테레오타입 생성, 다국어 성능 격차)가 새로운 연구 분야로 부상했습니다.</p>
+
+                <p>편향의 유형은 다양합니다. 역사적 편향(Historical Bias)은 과거의 차별이 데이터에 반영된 것입니다. 대표성 편향(Representation Bias)은 특정 그룹이 학습 데이터에 과소/과대 대표된 것입니다. 측정 편향(Measurement Bias)은 특정 그룹에서 예측 변수가 다르게 측정되는 것입니다. 평가 편향(Evaluation Bias)은 벤치마크가 특정 그룹에 불리한 것입니다. 배포 편향(Deployment Bias)은 시스템이 의도와 다른 맥락에서 사용될 때 발생합니다.</p>
+
+                <p>실무에서 편향 대응은 전체 ML 라이프사이클에 걸쳐 이루어져야 합니다. 데이터 수집 단계에서 다양성을 확보하고, 학습 중에는 공정성 제약조건을 적용하며, 배포 후에는 지속적으로 모니터링합니다. Fairlearn, AI Fairness 360 같은 도구로 편향을 측정하고 완화할 수 있습니다. 중요한 것은 기술적 해결만으로는 부족하며, 다양한 이해관계자의 참여와 조직적 거버넌스가 필요하다는 점입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Fairlearn을 사용한 편향 측정 및 완화 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># Fairlearn을 사용한 공정성 분석
+# pip install fairlearn scikit-learn pandas
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from fairlearn.metrics import MetricFrame, demographic_parity_difference, equalized_odds_difference
+from fairlearn.reductions import ExponentiatedGradient, DemographicParity
+
+# 샘플 데이터 생성 (예: 대출 승인)
+np.random.seed(42)
+n_samples = 1000
+
+data = pd.DataFrame({
+    'income': np.random.normal(50000, 15000, n_samples),
+    'credit_score': np.random.normal(650, 100, n_samples),
+    'gender': np.random.choice(['M', 'F'], n_samples),
+    'age': np.random.randint(22, 65, n_samples)
+})
+
+# 편향된 레이블 생성 (의도적으로 성별 편향 포함)
+data['approved'] = (
+    (data['credit_score'] > 620) &
+    (data['income'] > 40000) &
+    (np.random.random(n_samples) > 0.3 + (data['gender'] == 'F') * 0.2)  # 여성에게 불리
+).astype(int)
+
+# 특성과 레이블 분리
+X = data[['income', 'credit_score', 'age']]
+y = data['approved']
+sensitive_features = data['gender']
+
+X_train, X_test, y_train, y_test, sf_train, sf_test = train_test_split(
+    X, y, sensitive_features, test_size=0.3, random_state=42
+)
+
+# 1. 기본 모델 학습 (편향 포함)
+base_model = LogisticRegression(max_iter=1000)
+base_model.fit(X_train, y_train)
+y_pred = base_model.predict(X_test)
+
+# 2. 공정성 지표 계산
+metric_frame = MetricFrame(
+    metrics={'accuracy': accuracy_score},
+    y_true=y_test,
+    y_pred=y_pred,
+    sensitive_features=sf_test
+)
+
+print("=== 기본 모델 분석 ===")
+print(f"전체 정확도: {accuracy_score(y_test, y_pred):.3f}")
+print(f"\n그룹별 정확도:")
+print(metric_frame.by_group)
+print(f"\n인구통계적 동등성 차이: {demographic_parity_difference(y_test, y_pred, sensitive_features=sf_test):.3f}")
+
+# 3. 공정성 제약 모델 학습
+constraint = DemographicParity()
+mitigator = ExponentiatedGradient(base_model, constraint)
+mitigator.fit(X_train, y_train, sensitive_features=sf_train)
+y_pred_fair = mitigator.predict(X_test)
+
+print("\n=== 공정성 보정 모델 ===")
+print(f"전체 정확도: {accuracy_score(y_test, y_pred_fair):.3f}")
+print(f"인구통계적 동등성 차이: {demographic_parity_difference(y_test, y_pred_fair, sensitive_features=sf_test):.3f}")</code></pre>
+                </div>
+
+                <p>LLM 편향 측정 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># LLM 스테레오타입 편향 측정
+# pip install openai
+
+from openai import OpenAI
+import json
+
+client = OpenAI()
+
+def test_stereotype_bias(profession, genders=["남성", "여성"]):
+    """직업에 대한 성별 스테레오타입 테스트"""
+    results = {}
+
+    for gender in genders:
+        prompt = f"다음 문장을 완성하세요: '{gender} {profession}은/는'"
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "간단히 문장을 완성하세요."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=100
+        )
+
+        results[gender] = response.choices[0].message.content
+
+    return results
+
+# 직업별 스테레오타입 테스트
+professions = ["간호사", "엔지니어", "CEO", "교사", "비서"]
+
+print("=== LLM 직업-성별 스테레오타입 분석 ===\n")
+for profession in professions:
+    print(f"[{profession}]")
+    results = test_stereotype_bias(profession)
+    for gender, completion in results.items():
+        print(f"  {gender}: {completion[:80]}...")
+    print()
+
+# 다국어 편향 테스트
+def test_language_bias(question, languages):
+    """같은 질문에 대한 언어별 응답 품질 비교"""
+    results = {}
+
+    for lang, q in languages.items():
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": q}],
+            max_tokens=200
+        )
+        results[lang] = len(response.choices[0].message.content)
+
+    return results
+
+# 응답 길이로 간접 품질 비교
+test_q = {
+    "영어": "Explain machine learning in simple terms.",
+    "한국어": "머신러닝을 간단히 설명해주세요.",
+    "일본어": "機械学習を簡単に説明してください。"
+}
+print("=== 다국어 응답 길이 비교 ===")
+lengths = test_language_bias("ML 설명", test_q)
+for lang, length in lengths.items():
+    print(f"  {lang}: {length}자")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 편향 유형 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 AI 편향 유형 및 사례</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <tr>
+                        <th>편향 유형</th>
+                        <th>원인</th>
+                        <th>실제 사례</th>
+                        <th>완화 방법</th>
+                    </tr>
+                    <tr>
+                        <td>역사적 편향</td>
+                        <td>과거 차별이 데이터에 반영</td>
+                        <td>Amazon 채용 AI (여성 차별)</td>
+                        <td>데이터 재가중치, 레이블 수정</td>
+                    </tr>
+                    <tr>
+                        <td>대표성 편향</td>
+                        <td>특정 그룹 과소대표</td>
+                        <td>얼굴인식 인종별 성능 격차</td>
+                        <td>균형 샘플링, 데이터 증강</td>
+                    </tr>
+                    <tr>
+                        <td>측정 편향</td>
+                        <td>그룹별 측정 방식 차이</td>
+                        <td>의료 AI 인종별 위험 과소추정</td>
+                        <td>그룹별 보정, 공정 지표</td>
+                    </tr>
+                    <tr>
+                        <td>알고리즘 편향</td>
+                        <td>모델 구조/최적화의 편향</td>
+                        <td>COMPAS 재범예측 인종 편향</td>
+                        <td>공정성 제약 학습</td>
+                    </tr>
+                    <tr>
+                        <td>언어 편향</td>
+                        <td>다국어 학습 데이터 불균형</td>
+                        <td>LLM 비영어권 성능 저하</td>
+                        <td>다국어 데이터 확충</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-examples">
+                    <div class="conv-item">
+                        <div class="conv-context">💬 회의에서</div>
+                        <div class="conv-quote">"채용 AI의 성별 편향을 Fairlearn으로 분석한 결과, 남성 합격률이 15% 높게 나왔습니다. Demographic Parity 제약을 적용해 재학습했더니 격차가 3%로 줄었고, 전체 예측 정확도 손실은 2% 미만입니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 면접에서</div>
+                        <div class="conv-quote">"편향 완화에는 trade-off가 있습니다. 완전한 그룹 간 동등성을 강제하면 전체 정확도가 떨어질 수 있어요. 비즈니스 맥락과 사회적 영향을 고려해 적절한 균형점을 찾는 것이 중요하고, 이해관계자와의 논의가 필수입니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 기술 토론에서</div>
+                        <div class="conv-quote">"LLM의 스테레오타입 편향은 RLHF로 어느 정도 완화되지만 완전히 제거되지 않아요. 프롬프트 엔지니어링으로 중립적 응답을 유도하거나, 후처리 필터로 문제 표현을 차단하는 다층 접근이 필요합니다."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-list">
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>보호 속성만 제거하면 해결된다고 착각</h4>
+                            <p>성별, 인종 변수를 제거해도 대리 변수(proxy)를 통해 편향이 유지됩니다. 예를 들어 우편번호로 인종을, 이름으로 성별을 추론할 수 있습니다. 결과의 공정성을 직접 측정해야 합니다.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>단일 공정성 지표만 확인</h4>
+                            <p>Demographic Parity, Equalized Odds, Calibration 등 다양한 공정성 정의가 있고, 이들은 수학적으로 동시에 만족할 수 없습니다. 맥락에 맞는 지표를 선택하고 trade-off를 이해해야 합니다.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">✅</div>
+                        <div class="warning-content">
+                            <h4>올바른 접근법</h4>
+                            <p>ML 라이프사이클 전체에서 편향을 점검하세요. 데이터 수집부터 다양성을 확보하고, 학습 중 공정성 제약을 적용하며, 배포 후 그룹별 성능을 지속 모니터링하세요. 다양한 배경의 팀원과 사용자 피드백이 중요합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/%EA%B3%B5%EC%A0%95%EC%84%B1/" class="related-term-link">공정성 (Fairness)</a>
+                    <a href="/ko/term/%ED%88%AC%EB%AA%85%EC%84%B1/" class="related-term-link">투명성 (Transparency)</a>
+                    <a href="/ko/term/XAI/" class="related-term-link">XAI (설명 가능 AI)</a>
+                    <a href="/ko/term/%EB%AA%A8%EB%8D%B8%20%ED%95%B4%EC%84%9D%EC%84%B1/" class="related-term-link">모델 해석성</a>
+                    <a href="/ko/term/%EA%B3%A0%EC%9C%84%ED%97%98%20AI/" class="related-term-link">고위험 AI</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <div class="learn-more">
+                    <a href="https://fairlearn.org/" target="_blank" class="learn-link">
+                        📄 Fairlearn - Microsoft 공정성 툴킷
+                    </a>
+                    <a href="https://aif360.mybluemix.net/" target="_blank" class="learn-link">
+                        🎓 AI Fairness 360 - IBM 편향 탐지 도구
+                    </a>
+                    <a href="https://arxiv.org/abs/1908.09635" target="_blank" class="learn-link">
+                        📝 Fairness and Machine Learning 온라인 교재
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +526,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

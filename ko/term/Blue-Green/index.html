@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,119 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Blue-Green 배포는 두 개의 동일한 프로덕션 환경(Blue와 Green)을 운영하여 무중단 배포와 즉시 롤백을 가능하게 하는 배포 전략입니다. Martin Fowler가 대중화한 이 방식은 배포 위험을 최소화하는 고전적이면서도 효과적인 방법입니다.</p>
+                <p>현재 프로덕션 트래픽을 받는 환경(예: Blue)이 있고, 새 버전은 대기 환경(Green)에 배포합니다. 테스트 완료 후 로드밸런서나 라우터를 전환하여 트래픽을 Green으로 보냅니다. 문제 발생 시 다시 Blue로 전환하면 즉시 롤백됩니다.</p>
+                <p>Kubernetes에서는 Service의 selector를 변경하거나, Ingress의 backend를 전환하여 구현합니다. AWS에서는 Elastic Beanstalk, ECS의 Blue/Green 배포, Route 53의 가중치 라우팅으로 구현할 수 있습니다.</p>
+                <p>실무에서는 데이터베이스 스키마 변경 시 주의가 필요합니다. Blue와 Green 모두 호환되는 스키마를 유지해야 합니다. Expand-Contract 패턴으로 스키마를 점진적으로 변경하거나, 기능 플래그와 결합하여 사용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="bash">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>#!/bin/bash
+# Kubernetes Blue-Green 배포 스크립트
+
+NAMESPACE="production"
+SERVICE="my-app"
+NEW_VERSION="v2.0.0"
+
+# 현재 활성 배포 확인 (blue 또는 green)
+CURRENT=$(kubectl get svc ${SERVICE} -n ${NAMESPACE} \
+    -o jsonpath='{.spec.selector.version}')
+
+if [ "$CURRENT" == "blue" ]; then
+    TARGET="green"
+else
+    TARGET="blue"
+fi
+
+echo "현재: $CURRENT -> 전환 대상: $TARGET"
+
+# 새 버전을 대기 환경에 배포
+kubectl set image deployment/${SERVICE}-${TARGET} \
+    app=myregistry/${SERVICE}:${NEW_VERSION} -n ${NAMESPACE}
+
+# 배포 완료 대기
+kubectl rollout status deployment/${SERVICE}-${TARGET} \
+    -n ${NAMESPACE} --timeout=300s
+
+# 헬스체크 통과 확인
+echo "헬스체크 수행 중..."
+sleep 10
+
+# 트래픽 전환 (Service selector 변경)
+kubectl patch svc ${SERVICE} -n ${NAMESPACE} -p \
+    "{\"spec\":{\"selector\":{\"version\":\"${TARGET}\"}}}"
+
+echo "트래픽이 ${TARGET}으로 전환되었습니다."
+echo "롤백: kubectl patch svc ${SERVICE} -n ${NAMESPACE} \
+    -p '{\"spec\":{\"selector\":{\"version\":\"${CURRENT}\"}}}'"</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "지난번 배포 롤백에 5분 걸렸는데, Blue-Green으로 바꾸면 10초 만에 롤백할 수 있어요. 트래픽 전환만 하면 되니까."</p>
+                <p><strong class="role-junior">주니어:</strong> "인프라 비용이 두 배가 되지 않나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "맞아요, 그래서 Spot 인스턴스 활용하거나, 배포 시에만 Green을 스케일업하는 방식을 쓰기도 해요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Blue-Green과 Canary 배포의 차이점은 무엇인가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "Blue-Green은 트래픽을 한 번에 100% 전환하고, Canary는 점진적으로 트래픽 비율을 늘립니다. Blue-Green은 롤백이 빠르고 간단하지만, Canary는 소규모 사용자로 먼저 검증할 수 있어 위험을 더 분산시킵니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "트래픽 전환 전에 Green 환경 헬스체크가 있네요. readinessProbe만 믿지 말고 실제 API 호출 테스트도 추가하면 어떨까요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "좋은 생각이에요. /health 엔드포인트뿐만 아니라 주요 API 몇 개 호출하는 smoke test 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>DB 스키마 변경 시 양방향 호환성 필수 - Blue/Green 모두 동작해야 롤백 가능</li>
+                <li>세션 스토리지가 인스턴스에 종속되면 전환 시 세션 유실 - Redis 등 외부 세션 스토어 사용</li>
+                <li>인프라 비용 두 배 - 비용 최적화 위해 Spot, 스케일 조절 전략 검토</li>
+                <li class="info">배포 후 이전 환경(Blue)은 바로 삭제하지 말고 모니터링 후 안정화되면 정리</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Canary/" class="related-link">Canary</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Kubernetes/" class="related-link">Kubernetes</a>
+                <a href="/ko/term/Rolling-Update/" class="related-link">Rolling Update</a>
+                <a href="/ko/term/Load-Balancer/" class="related-link">Load Balancer</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://martinfowler.com/bliki/BlueGreenDeployment.html" target="_blank" rel="noopener">Martin Fowler - Blue Green Deployment</a></li>
+                <li><span class="type-tutorial"></span><a href="https://docs.aws.amazon.com/whitepapers/latest/blue-green-deployments/welcome.html" target="_blank" rel="noopener">AWS Blue/Green Deployments</a></li>
+                <li><span class="type-book"></span><a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy" target="_blank" rel="noopener">Kubernetes 배포 전략</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +326,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

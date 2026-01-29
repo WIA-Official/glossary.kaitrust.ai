@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -161,6 +306,384 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 프록시 타입 비교 */
+        .proxy-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .proxy-type-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        .proxy-type-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
+        }
+        .proxy-type-card.forward { border-top: 3px solid #3b82f6; }
+        .proxy-type-card.reverse { border-top: 3px solid #10b981; }
+        .proxy-type-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .proxy-type-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .forward .proxy-type-icon { background: rgba(59, 130, 246, 0.2); }
+        .reverse .proxy-type-icon { background: rgba(16, 185, 129, 0.2); }
+        .proxy-type-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .proxy-type-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .proxy-type-desc {
+            color: #94a3b8;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        .proxy-use-cases {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .proxy-use-case {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+        .proxy-use-case::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #a855f7;
+        }
+        .proxy-tools {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .proxy-tools-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        .proxy-tools-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .proxy-tool-tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* 아키텍처 다이어그램 */
+        .architecture-diagram {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            overflow-x: auto;
+        }
+        .diagram-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .diagram-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .diagram-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .diagram-content {
+            display: none;
+        }
+        .diagram-content.active {
+            display: block;
+        }
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+        .flow-node {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 100px;
+            transition: all 0.3s;
+        }
+        .flow-node.client {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+        .flow-node.proxy {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: white;
+            position: relative;
+        }
+        .flow-node.server {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .flow-node.cache {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            font-size: 0.85rem;
+        }
+        .flow-node-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .flow-node-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: #64748b;
+            animation: pulse-arrow 2s infinite;
+        }
+        @keyframes pulse-arrow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; color: #a855f7; }
+        }
+        .flow-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        /* 캐싱 메커니즘 */
+        .caching-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .cache-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border-left: 3px solid #f59e0b;
+        }
+        .cache-item-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .cache-item-icon {
+            font-size: 1.25rem;
+        }
+        .cache-item-title {
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .cache-item-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .cache-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .cache-stat {
+            text-align: center;
+        }
+        .cache-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f59e0b;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .cache-stat-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+        }
+
+        /* 보안 기능 */
+        .security-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .security-feature {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        .security-feature:hover {
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-3px);
+        }
+        .security-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .security-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+        .security-desc {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* 도구 비교 테이블 */
+        .tools-comparison {
+            margin-top: 1.5rem;
+            overflow-x: auto;
+        }
+        .tools-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .tools-table th,
+        .tools-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tools-table th {
+            background: rgba(168, 85, 247, 0.2);
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+        .tools-table td {
+            color: #cbd5e1;
+        }
+        .tools-table tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .tool-name {
+            font-weight: 600;
+            color: #a855f7;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tool-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .badge-popular { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .badge-enterprise { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .check-mark { color: #10b981; }
+        .x-mark { color: #ef4444; }
+
+        /* 실시간 트래픽 시뮬레이션 */
+        .traffic-simulation {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .sim-controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .sim-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            color: #a855f7;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .sim-btn:hover {
+            background: rgba(168, 85, 247, 0.3);
+        }
+        .sim-btn.active {
+            background: #a855f7;
+            color: white;
+        }
+        .sim-display {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            min-height: 150px;
+            overflow: hidden;
+        }
+        .sim-log {
+            color: #94a3b8;
+            line-height: 1.8;
+        }
+        .sim-log .request { color: #3b82f6; }
+        .sim-log .cache-hit { color: #10b981; }
+        .sim-log .cache-miss { color: #f59e0b; }
+        .sim-log .blocked { color: #ef4444; }
+        .sim-log .time { color: #64748b; }
     </style>
 </head>
 <body>
@@ -202,6 +725,587 @@
                 </a>
             </div>
         </article>
+
+        <!-- Forward vs Reverse Proxy 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">Forward vs Reverse Proxy</h2>
+            <div class="section-content">
+                <p>프록시는 위치와 역할에 따라 크게 두 가지로 구분됩니다. Forward Proxy는 클라이언트 측에서 외부 인터넷 접근을 대리하고, Reverse Proxy는 서버 측에서 내부 서버를 보호하고 트래픽을 분산합니다.</p>
+            </div>
+            <div class="proxy-comparison">
+                <div class="proxy-type-card forward">
+                    <div class="proxy-type-header">
+                        <div class="proxy-type-icon">&#8594;</div>
+                        <div>
+                            <div class="proxy-type-title">Forward Proxy</div>
+                            <div class="proxy-type-subtitle">클라이언트 측 프록시</div>
+                        </div>
+                    </div>
+                    <p class="proxy-type-desc">클라이언트가 외부 서버에 접근할 때 요청을 대신 전달합니다. 클라이언트의 IP를 숨기고, 접근 제어 및 콘텐츠 필터링을 수행합니다.</p>
+                    <div class="proxy-use-cases">
+                        <div class="proxy-use-case">기업 네트워크 인터넷 접근 제어</div>
+                        <div class="proxy-use-case">사용자 익명성 보장 (IP 숨김)</div>
+                        <div class="proxy-use-case">지역 제한 콘텐츠 우회</div>
+                        <div class="proxy-use-case">악성 사이트 접근 차단</div>
+                    </div>
+                    <div class="proxy-tools">
+                        <div class="proxy-tools-label">대표 도구</div>
+                        <div class="proxy-tools-list">
+                            <span class="proxy-tool-tag">Squid</span>
+                            <span class="proxy-tool-tag">Privoxy</span>
+                            <span class="proxy-tool-tag">CCProxy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="proxy-type-card reverse">
+                    <div class="proxy-type-header">
+                        <div class="proxy-type-icon">&#8592;</div>
+                        <div>
+                            <div class="proxy-type-title">Reverse Proxy</div>
+                            <div class="proxy-type-subtitle">서버 측 프록시</div>
+                        </div>
+                    </div>
+                    <p class="proxy-type-desc">외부 요청을 받아 내부 서버로 전달합니다. 서버의 실제 IP를 숨기고, 로드 밸런싱, SSL 종료, 캐싱 등을 처리합니다.</p>
+                    <div class="proxy-use-cases">
+                        <div class="proxy-use-case">로드 밸런싱 (트래픽 분산)</div>
+                        <div class="proxy-use-case">SSL/TLS 종료 (인증서 관리)</div>
+                        <div class="proxy-use-case">정적 콘텐츠 캐싱</div>
+                        <div class="proxy-use-case">DDoS 공격 방어</div>
+                    </div>
+                    <div class="proxy-tools">
+                        <div class="proxy-tools-label">대표 도구</div>
+                        <div class="proxy-tools-list">
+                            <span class="proxy-tool-tag">Nginx</span>
+                            <span class="proxy-tool-tag">HAProxy</span>
+                            <span class="proxy-tool-tag">Traefik</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 아키텍처 다이어그램 -->
+            <div class="architecture-diagram">
+                <div class="diagram-tabs">
+                    <button class="diagram-tab active" data-diagram="forward">Forward Proxy 구조</button>
+                    <button class="diagram-tab" data-diagram="reverse">Reverse Proxy 구조</button>
+                    <button class="diagram-tab" data-diagram="cdn">CDN + Proxy 구조</button>
+                </div>
+                <div class="diagram-content active" data-diagram="forward">
+                    <div class="flow-diagram">
+                        <div class="flow-node client">
+                            <div class="flow-node-icon">&#128187;</div>
+                            <div class="flow-node-label">Client</div>
+                        </div>
+                        <div class="flow-arrow">&#10230;</div>
+                        <div class="flow-node proxy">
+                            <div class="flow-node-icon">&#128737;</div>
+                            <div class="flow-node-label">Forward Proxy</div>
+                        </div>
+                        <div class="flow-arrow">&#10230;</div>
+                        <div class="flow-node server">
+                            <div class="flow-node-icon">&#127760;</div>
+                            <div class="flow-node-label">Internet</div>
+                        </div>
+                    </div>
+                    <div class="flow-label">클라이언트 IP 숨김 | 접근 제어 | 콘텐츠 필터링</div>
+                </div>
+                <div class="diagram-content" data-diagram="reverse">
+                    <div class="flow-diagram">
+                        <div class="flow-node client">
+                            <div class="flow-node-icon">&#127760;</div>
+                            <div class="flow-node-label">Internet</div>
+                        </div>
+                        <div class="flow-arrow">&#10230;</div>
+                        <div class="flow-node proxy">
+                            <div class="flow-node-icon">&#128737;</div>
+                            <div class="flow-node-label">Reverse Proxy</div>
+                        </div>
+                        <div class="flow-arrow">&#10230;</div>
+                        <div class="flow-node server">
+                            <div class="flow-node-icon">&#128421;</div>
+                            <div class="flow-node-label">Backend Servers</div>
+                        </div>
+                    </div>
+                    <div class="flow-label">SSL 종료 | 로드 밸런싱 | 캐싱 | 보안</div>
+                </div>
+                <div class="diagram-content" data-diagram="cdn">
+                    <div class="flow-diagram">
+                        <div class="flow-node client">
+                            <div class="flow-node-icon">&#128187;</div>
+                            <div class="flow-node-label">User</div>
+                        </div>
+                        <div class="flow-arrow">&#10230;</div>
+                        <div class="flow-node cache">
+                            <div class="flow-node-icon">&#9889;</div>
+                            <div class="flow-node-label">CDN Edge</div>
+                        </div>
+                        <div class="flow-arrow">&#10230;</div>
+                        <div class="flow-node proxy">
+                            <div class="flow-node-icon">&#128737;</div>
+                            <div class="flow-node-label">Nginx</div>
+                        </div>
+                        <div class="flow-arrow">&#10230;</div>
+                        <div class="flow-node server">
+                            <div class="flow-node-icon">&#128421;</div>
+                            <div class="flow-node-label">Origin</div>
+                        </div>
+                    </div>
+                    <div class="flow-label">Cloudflare/Akamai (Edge) + Nginx (Origin) 이중 캐싱 구조</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 캐싱 메커니즘 -->
+        <section class="term-section">
+            <h2 class="section-title">&#128230; 프록시 캐싱 메커니즘</h2>
+            <div class="section-content">
+                <p>프록시 캐싱은 자주 요청되는 콘텐츠를 프록시 서버에 저장하여 원본 서버 부하를 줄이고 응답 속도를 개선합니다. 적절한 캐싱 전략은 서버 비용을 70-90% 절감할 수 있습니다.</p>
+            </div>
+            <div class="caching-grid">
+                <div class="cache-item">
+                    <div class="cache-item-header">
+                        <span class="cache-item-icon">&#128203;</span>
+                        <span class="cache-item-title">Cache-Control 헤더</span>
+                    </div>
+                    <p class="cache-item-desc">max-age, no-cache, no-store, private, public 등의 지시어로 캐싱 동작을 세밀하게 제어합니다.</p>
+                </div>
+                <div class="cache-item">
+                    <div class="cache-item-header">
+                        <span class="cache-item-icon">&#128295;</span>
+                        <span class="cache-item-title">ETag/Last-Modified</span>
+                    </div>
+                    <p class="cache-item-desc">조건부 요청(If-None-Match, If-Modified-Since)으로 변경 여부만 확인하여 304 응답으로 대역폭을 절약합니다.</p>
+                </div>
+                <div class="cache-item">
+                    <div class="cache-item-header">
+                        <span class="cache-item-icon">&#128290;</span>
+                        <span class="cache-item-title">Cache Key</span>
+                    </div>
+                    <p class="cache-item-desc">URL, 쿼리 파라미터, 헤더(Accept-Language, Accept-Encoding)를 조합하여 캐시를 구분합니다.</p>
+                </div>
+                <div class="cache-item">
+                    <div class="cache-item-header">
+                        <span class="cache-item-icon">&#128260;</span>
+                        <span class="cache-item-title">Cache Invalidation</span>
+                    </div>
+                    <p class="cache-item-desc">PURGE 요청, TTL 만료, 태그 기반 무효화로 오래된 캐시를 제거합니다. "컴퓨터 과학에서 가장 어려운 문제 중 하나"입니다.</p>
+                </div>
+            </div>
+            <div class="cache-stats">
+                <div class="cache-stat">
+                    <div class="cache-stat-value">&lt;10ms</div>
+                    <div class="cache-stat-label">Cache Hit 응답 시간</div>
+                </div>
+                <div class="cache-stat">
+                    <div class="cache-stat-value">80-95%</div>
+                    <div class="cache-stat-label">일반적인 Hit Rate</div>
+                </div>
+                <div class="cache-stat">
+                    <div class="cache-stat-value">70-90%</div>
+                    <div class="cache-stat-label">서버 부하 절감</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 보안 기능 -->
+        <section class="term-section">
+            <h2 class="section-title">&#128274; 프록시 보안 기능</h2>
+            <div class="section-content">
+                <p>프록시는 네트워크 보안의 핵심 컴포넌트입니다. 클라이언트와 서버 사이에 위치하여 악성 트래픽을 필터링하고, 민감한 정보를 보호하며, 공격을 탐지/차단합니다.</p>
+            </div>
+            <div class="security-features">
+                <div class="security-feature">
+                    <div class="security-icon">&#128274;</div>
+                    <div class="security-title">SSL/TLS 종료</div>
+                    <div class="security-desc">프록시에서 HTTPS 복호화하여 백엔드 서버 부담 감소. 인증서 관리 일원화.</div>
+                </div>
+                <div class="security-feature">
+                    <div class="security-icon">&#128737;</div>
+                    <div class="security-title">WAF (Web Application Firewall)</div>
+                    <div class="security-desc">SQL Injection, XSS, CSRF 등 OWASP Top 10 공격 탐지 및 차단.</div>
+                </div>
+                <div class="security-feature">
+                    <div class="security-icon">&#127775;</div>
+                    <div class="security-title">Rate Limiting</div>
+                    <div class="security-desc">IP/사용자별 요청 횟수 제한으로 무차별 공격 및 API 남용 방지.</div>
+                </div>
+                <div class="security-feature">
+                    <div class="security-icon">&#128683;</div>
+                    <div class="security-title">DDoS 방어</div>
+                    <div class="security-desc">대규모 트래픽 흡수, 봇 탐지, CAPTCHA 챌린지로 서비스 가용성 보장.</div>
+                </div>
+                <div class="security-feature">
+                    <div class="security-icon">&#128065;</div>
+                    <div class="security-title">IP Masking</div>
+                    <div class="security-desc">실제 서버 IP를 숨겨 직접 공격 방지. Origin Shield 역할.</div>
+                </div>
+                <div class="security-feature">
+                    <div class="security-icon">&#128221;</div>
+                    <div class="security-title">로깅 & 모니터링</div>
+                    <div class="security-desc">모든 트래픽 로그 수집, 이상 징후 탐지, 보안 감사 지원.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nginx vs Squid 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">&#128736; 도구 비교: Nginx vs Squid vs HAProxy</h2>
+            <div class="section-content">
+                <p>프록시 도구는 용도에 따라 선택이 달라집니다. 웹 서버/리버스 프록시는 Nginx, Forward Proxy/캐싱은 Squid, 고성능 로드 밸런싱은 HAProxy가 대표적입니다.</p>
+            </div>
+            <div class="tools-comparison">
+                <table class="tools-table">
+                    <thead>
+                        <tr>
+                            <th>도구</th>
+                            <th>주요 용도</th>
+                            <th>Reverse Proxy</th>
+                            <th>Forward Proxy</th>
+                            <th>캐싱</th>
+                            <th>특징</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="tool-name">Nginx <span class="tool-badge badge-popular">인기</span></span>
+                            </td>
+                            <td>웹 서버, 리버스 프록시</td>
+                            <td><span class="check-mark">&#10004;</span> 탁월</td>
+                            <td><span class="x-mark">&#10008;</span> 제한적</td>
+                            <td><span class="check-mark">&#10004;</span> 우수</td>
+                            <td>경량, 높은 동시성, 설정 간단</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="tool-name">Squid</span>
+                            </td>
+                            <td>Forward Proxy, 캐싱</td>
+                            <td><span class="check-mark">&#10004;</span> 가능</td>
+                            <td><span class="check-mark">&#10004;</span> 탁월</td>
+                            <td><span class="check-mark">&#10004;</span> 탁월</td>
+                            <td>강력한 ACL, 대용량 캐시</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="tool-name">HAProxy <span class="tool-badge badge-enterprise">엔터프라이즈</span></span>
+                            </td>
+                            <td>로드 밸런싱, TCP 프록시</td>
+                            <td><span class="check-mark">&#10004;</span> 탁월</td>
+                            <td><span class="x-mark">&#10008;</span> 미지원</td>
+                            <td><span class="x-mark">&#10008;</span> 미지원</td>
+                            <td>초고성능, L4/L7 지원, 헬스체크</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="tool-name">Traefik</span>
+                            </td>
+                            <td>클라우드 네이티브 프록시</td>
+                            <td><span class="check-mark">&#10004;</span> 탁월</td>
+                            <td><span class="x-mark">&#10008;</span> 미지원</td>
+                            <td><span class="x-mark">&#10008;</span> 제한적</td>
+                            <td>자동 설정, Docker/K8s 통합</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="tool-name">Envoy</span>
+                            </td>
+                            <td>서비스 메시, API Gateway</td>
+                            <td><span class="check-mark">&#10004;</span> 탁월</td>
+                            <td><span class="x-mark">&#10008;</span> 미지원</td>
+                            <td><span class="check-mark">&#10004;</span> 가능</td>
+                            <td>gRPC 지원, Observability</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실시간 트래픽 시뮬레이션 -->
+        <section class="term-section">
+            <h2 class="section-title">&#128200; 프록시 트래픽 시뮬레이션</h2>
+            <div class="section-content">
+                <p>프록시가 요청을 처리하는 과정을 실시간으로 확인해보세요. 캐시 히트, 캐시 미스, 차단된 요청의 흐름을 시각적으로 이해할 수 있습니다.</p>
+            </div>
+            <div class="traffic-simulation">
+                <div class="sim-controls">
+                    <button class="sim-btn active" data-scenario="normal">일반 트래픽</button>
+                    <button class="sim-btn" data-scenario="cache">캐싱 시나리오</button>
+                    <button class="sim-btn" data-scenario="security">보안 필터링</button>
+                </div>
+                <div class="sim-display">
+                    <div class="sim-log" id="simLog">
+                        <div><span class="time">[00:00:00]</span> <span class="request">&#8594; GET /api/users</span> <span class="cache-miss">CACHE MISS</span> - 원본 서버 요청 (245ms)</div>
+                        <div><span class="time">[00:00:01]</span> <span class="request">&#8594; GET /api/users</span> <span class="cache-hit">CACHE HIT</span> - 캐시 응답 (3ms)</div>
+                        <div><span class="time">[00:00:02]</span> <span class="request">&#8594; GET /static/logo.png</span> <span class="cache-hit">CACHE HIT</span> - 캐시 응답 (1ms)</div>
+                        <div><span class="time">[00:00:03]</span> <span class="request">&#8594; POST /api/login</span> - 프록시 통과 (89ms)</div>
+                        <div><span class="time">[00:00:04]</span> <span class="request">&#8594; GET /admin/config</span> <span class="blocked">BLOCKED</span> - 접근 거부 (IP 차단)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>프록시(Proxy)는 '대리인'이라는 뜻으로, 네트워크에서 클라이언트와 서버 사이에 위치하여 요청과 응답을 중계하는 서버입니다. 클라이언트가 직접 서버에 접속하는 대신, 프록시 서버가 대신 요청을 전달하고 응답을 받아 클라이언트에게 전달합니다. 이를 통해 캐싱, 보안, 익명성, 로드 밸런싱 등 다양한 이점을 얻을 수 있습니다.</p>
+                <p>프록시는 크게 Forward Proxy와 Reverse Proxy로 구분됩니다. Forward Proxy는 클라이언트 측에 위치하여 클라이언트의 요청을 대신 전달하며, 기업 네트워크에서 인터넷 접근 제어나 사용자의 IP 주소 숨기기에 사용됩니다. 대표적으로 Squid, Privoxy 등이 있습니다. Reverse Proxy는 서버 측에 위치하여 외부 요청을 내부 서버로 분배하며, Nginx, HAProxy가 대표적입니다.</p>
+                <p>프록시의 캐싱 기능은 네트워크 트래픽을 크게 줄여줍니다. 자주 요청되는 콘텐츠를 프록시 서버에 저장해두면, 원본 서버까지 요청을 보내지 않고도 빠르게 응답할 수 있습니다. CDN(Content Delivery Network)도 일종의 분산된 캐싱 프록시로 볼 수 있으며, 전 세계에 배치된 엣지 서버에서 콘텐츠를 캐싱하여 사용자에게 가장 가까운 위치에서 서비스합니다.</p>
+                <p>보안 측면에서 프록시는 방화벽, SSL/TLS 종료, DDoS 방어, 악성 트래픽 필터링 등 다양한 역할을 수행합니다. 현대 웹 아키텍처에서 Nginx나 Envoy 같은 리버스 프록시는 API Gateway 역할을 하며, 인증, 속도 제한(Rate Limiting), 로깅, 모니터링 등 횡단 관심사(Cross-cutting Concerns)를 처리합니다. Kubernetes 환경에서는 Ingress Controller가 이 역할을 담당합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="nginx">Nginx</button>
+                <button class="code-tab" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="bash">Bash/Squid</button>
+            </div>
+            <div class="code-block active" data-lang="nginx">
+                <pre><code class="language-nginx"># Nginx Reverse Proxy 설정 (/etc/nginx/nginx.conf)
+
+# 기본 리버스 프록시 설정
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass http://backend-server:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+# 로드 밸런싱 설정
+upstream backend {
+    least_conn;  # 최소 연결 알고리즘
+    server backend1:8080 weight=3;
+    server backend2:8080 weight=2;
+    server backend3:8080 backup;  # 백업 서버
+}
+
+server {
+    listen 443 ssl;
+    server_name api.example.com;
+
+    ssl_certificate /etc/ssl/certs/example.crt;
+    ssl_certificate_key /etc/ssl/private/example.key;
+
+    # 캐싱 설정
+    proxy_cache_path /var/cache/nginx levels=1:2
+                     keys_zone=my_cache:10m max_size=1g;
+
+    location /api/ {
+        proxy_pass http://backend;
+        proxy_cache my_cache;
+        proxy_cache_valid 200 10m;
+        proxy_cache_valid 404 1m;
+
+        # 타임아웃 설정
+        proxy_connect_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import requests
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import urllib.request
+
+# 프록시를 통한 HTTP 요청 (requests 라이브러리)
+proxies = {
+    'http': 'http://proxy.example.com:8080',
+    'https': 'http://proxy.example.com:8080',
+}
+
+# 프록시를 통해 요청 보내기
+response = requests.get('https://api.example.com/data',
+                        proxies=proxies,
+                        timeout=30)
+print(response.json())
+
+# SOCKS 프록시 사용 (pip install requests[socks])
+socks_proxies = {
+    'http': 'socks5://localhost:9050',   # Tor
+    'https': 'socks5://localhost:9050',
+}
+response = requests.get('https://check.torproject.org',
+                        proxies=socks_proxies)
+
+
+# 간단한 HTTP 프록시 서버 구현
+class ProxyHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        # 요청 URL로 프록시 요청
+        try:
+            with urllib.request.urlopen(self.path) as response:
+                self.send_response(response.status)
+                for header, value in response.getheaders():
+                    self.send_header(header, value)
+                self.end_headers()
+                self.wfile.write(response.read())
+        except Exception as e:
+            self.send_error(500, str(e))
+
+# 프록시 서버 실행 (포트 8888)
+# server = HTTPServer(('localhost', 8888), ProxyHandler)
+# server.serve_forever()
+
+# 환경 변수로 프록시 설정
+import os
+os.environ['HTTP_PROXY'] = 'http://proxy.example.com:8080'
+os.environ['HTTPS_PROXY'] = 'http://proxy.example.com:8080'
+os.environ['NO_PROXY'] = 'localhost,127.0.0.1,.internal.com'</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="bash">
+                <pre><code class="language-bash"># Squid Forward Proxy 설정 (/etc/squid/squid.conf)
+
+# 기본 포트 설정
+http_port 3128
+
+# 접근 제어 리스트 (ACL)
+acl localnet src 10.0.0.0/8
+acl localnet src 172.16.0.0/12
+acl localnet src 192.168.0.0/16
+
+acl SSL_ports port 443
+acl Safe_ports port 80 443 8080
+
+# 접근 허용/거부 규칙
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localnet
+http_access deny all
+
+# 캐싱 설정 (1GB 캐시)
+cache_dir ufs /var/spool/squid 1000 16 256
+maximum_object_size 100 MB
+cache_mem 256 MB
+
+# 익명성 설정 (클라이언트 IP 숨기기)
+forwarded_for off
+request_header_access Via deny all
+request_header_access X-Forwarded-For deny all
+
+# 차단할 도메인
+acl blocked_sites dstdomain .facebook.com .youtube.com
+http_access deny blocked_sites
+
+# -------------------------------------------
+# curl에서 프록시 사용
+curl -x http://proxy.example.com:8080 https://api.example.com
+curl --proxy socks5://localhost:9050 https://check.torproject.org
+
+# 환경 변수로 프록시 설정 (Linux/macOS)
+export http_proxy="http://proxy.example.com:8080"
+export https_proxy="http://proxy.example.com:8080"
+export no_proxy="localhost,127.0.0.1,.internal.com"
+
+# Git에서 프록시 설정
+git config --global http.proxy http://proxy.example.com:8080
+git config --global https.proxy http://proxy.example.com:8080
+
+# npm에서 프록시 설정
+npm config set proxy http://proxy.example.com:8080
+npm config set https-proxy http://proxy.example.com:8080</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 아키텍처 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "API 서버 앞에 Nginx를 리버스 프록시로 두면 SSL 종료, 로드 밸런싱, 정적 파일 캐싱을 한 번에 처리할 수 있습니다. 백엔드 서버는 HTTP만 처리하면 되니까 성능도 올라가고, 인증서 관리도 Nginx 한 곳에서만 하면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 검토 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "Forward Proxy를 도입해서 아웃바운드 트래픽을 제어하는 게 좋겠습니다. 내부 서버가 외부와 통신할 때 반드시 프록시를 거치게 하면, 악성 도메인 접근 차단과 데이터 유출 모니터링이 가능합니다. Squid로 화이트리스트 방식으로 운영하면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 최적화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "API 응답 시간이 느린 건 프록시 캐싱으로 해결할 수 있습니다. 변경이 적은 GET 요청은 Nginx에서 proxy_cache로 10분 정도 캐싱하면 백엔드 부하를 80% 이상 줄일 수 있어요. Cache-Control 헤더도 같이 설정해서 CDN 캐싱도 활용하면 좋겠습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>X-Forwarded-For 헤더 신뢰</strong>
+                        <p>클라이언트가 X-Forwarded-For 헤더를 조작할 수 있습니다. 프록시 체인에서 마지막 신뢰할 수 있는 프록시가 추가한 값만 사용하세요. Nginx의 realip_module로 신뢰할 IP 대역을 명시적으로 설정해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>WebSocket/SSE 프록시 설정 누락</strong>
+                        <p>일반 HTTP 프록시 설정만으로는 WebSocket이 작동하지 않습니다. Nginx에서 Upgrade, Connection 헤더를 명시적으로 전달해야 하며, 타임아웃 설정도 길게 조정해야 연결이 끊기지 않습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>캐싱으로 인한 민감 데이터 노출</strong>
+                        <p>사용자별 개인 데이터가 포함된 응답을 캐싱하면 다른 사용자에게 노출될 수 있습니다. Cache-Control: private, no-store 헤더를 확인하고, 인증이 필요한 엔드포인트는 캐싱에서 제외하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 프록시 설정 방법</strong>
+                        <p>프록시 헤더(X-Real-IP, X-Forwarded-For, X-Forwarded-Proto) 설정, 적절한 타임아웃 값, 헬스체크 설정, 버퍼 크기 조정을 반드시 확인하세요. proxy_next_upstream으로 장애 시 자동 failover도 설정하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+                <a href="/ko/term/HTTP/" class="related-term-link">HTTP</a>
+                <a href="/ko/term/API%20Gateway/" class="related-term-link">API Gateway</a>
+                <a href="/ko/term/VPN/" class="related-term-link">VPN</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html" target="_blank" class="learn-link">
+                    📄 Nginx Proxy Module 공식 문서
+                </a>
+                <a href="https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/" target="_blank" class="learn-link">
+                    🎓 Cloudflare - Reverse Proxy 설명 (한글)
+                </a>
+                <a href="http://www.squid-cache.org/Doc/config/" target="_blank" class="learn-link">
+                    📖 Squid Proxy 설정 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,9 +1313,138 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+
+    <!-- 프록시 인터랙티브 기능 -->
+    <script>
+    // 다이어그램 탭 전환
+    document.querySelectorAll('.diagram-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const diagram = this.dataset.diagram;
+            const container = this.closest('.architecture-diagram');
+
+            container.querySelectorAll('.diagram-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            container.querySelectorAll('.diagram-content').forEach(content => {
+                content.classList.remove('active');
+                if (content.dataset.diagram === diagram) {
+                    content.classList.add('active');
+                }
+            });
+        });
+    });
+
+    // 트래픽 시뮬레이션
+    const simScenarios = {
+        normal: [
+            { time: '00:00:00', type: 'request', msg: 'GET /api/products', result: 'cache-miss', detail: 'CACHE MISS - 원본 서버 요청 (189ms)' },
+            { time: '00:00:01', type: 'request', msg: 'GET /api/products', result: 'cache-hit', detail: 'CACHE HIT - 캐시 응답 (2ms)' },
+            { time: '00:00:02', type: 'request', msg: 'GET /images/hero.jpg', result: 'cache-hit', detail: 'CACHE HIT - CDN 엣지 (8ms)' },
+            { time: '00:00:03', type: 'request', msg: 'POST /api/orders', result: 'normal', detail: '프록시 통과 → Backend 1 (156ms)' },
+            { time: '00:00:04', type: 'request', msg: 'GET /api/users/123', result: 'cache-miss', detail: 'CACHE MISS - private 데이터 (98ms)' },
+            { time: '00:00:05', type: 'request', msg: 'GET /static/bundle.js', result: 'cache-hit', detail: 'CACHE HIT - gzip 압축 (4ms)' }
+        ],
+        cache: [
+            { time: '00:00:00', type: 'request', msg: 'GET /api/config', result: 'cache-miss', detail: 'CACHE MISS - TTL 만료, 원본 요청 (234ms)' },
+            { time: '00:00:01', type: 'request', msg: 'GET /api/config', result: 'cache-hit', detail: 'CACHE HIT - 캐시 저장됨 (1ms)' },
+            { time: '00:00:02', type: 'request', msg: 'PURGE /api/config', result: 'normal', detail: '캐시 무효화 완료' },
+            { time: '00:00:03', type: 'request', msg: 'GET /api/config', result: 'cache-miss', detail: 'CACHE MISS - PURGE 후 재요청 (198ms)' },
+            { time: '00:00:04', type: 'request', msg: 'GET /api/data?v=2', result: 'cache-miss', detail: 'CACHE MISS - 쿼리 파라미터 변경 (167ms)' },
+            { time: '00:00:05', type: 'request', msg: 'GET /api/data?v=2', result: 'cache-hit', detail: 'CACHE HIT - Cache-Key 일치 (2ms)' }
+        ],
+        security: [
+            { time: '00:00:00', type: 'request', msg: 'GET /api/search?q=<script>', result: 'blocked', detail: 'BLOCKED - XSS 공격 탐지 (WAF)' },
+            { time: '00:00:01', type: 'request', msg: 'POST /api/login (50회/분)', result: 'blocked', detail: 'BLOCKED - Rate Limit 초과 (429)' },
+            { time: '00:00:02', type: 'request', msg: 'GET /admin/users', result: 'blocked', detail: 'BLOCKED - IP Whitelist 미포함' },
+            { time: '00:00:03', type: 'request', msg: 'GET /../../../etc/passwd', result: 'blocked', detail: 'BLOCKED - Path Traversal 탐지' },
+            { time: '00:00:04', type: 'request', msg: 'GET /api/data (정상 요청)', result: 'cache-hit', detail: 'PASSED - 보안 검사 통과 (12ms)' },
+            { time: '00:00:05', type: 'request', msg: 'POST /api/upload (10MB)', result: 'blocked', detail: 'BLOCKED - 파일 크기 제한 초과' }
+        ]
+    };
+
+    let simInterval = null;
+
+    function runSimulation(scenario) {
+        const logEl = document.getElementById('simLog');
+        logEl.innerHTML = '';
+
+        if (simInterval) clearInterval(simInterval);
+
+        const logs = simScenarios[scenario];
+        let index = 0;
+
+        function addLog() {
+            if (index >= logs.length) {
+                index = 0; // 반복
+            }
+
+            const log = logs[index];
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+
+            const resultClass = log.result === 'cache-hit' ? 'cache-hit' :
+                               log.result === 'cache-miss' ? 'cache-miss' :
+                               log.result === 'blocked' ? 'blocked' : '';
+
+            const logLine = document.createElement('div');
+            logLine.innerHTML = `<span class="time">[${timeStr}]</span> <span class="request">&#8594; ${log.msg}</span> <span class="${resultClass}">${log.detail}</span>`;
+
+            logEl.insertBefore(logLine, logEl.firstChild);
+
+            // 최대 8줄 유지
+            while (logEl.children.length > 8) {
+                logEl.removeChild(logEl.lastChild);
+            }
+
+            index++;
+        }
+
+        addLog();
+        simInterval = setInterval(addLog, 1500);
+    }
+
+    document.querySelectorAll('.sim-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            runSimulation(this.dataset.scenario);
+        });
+    });
+
+    // 페이지 로드 시 기본 시뮬레이션 시작
+    runSimulation('normal');
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -161,6 +161,34 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table td { color: #cbd5e1; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
     </style>
 </head>
 <body>
@@ -202,6 +230,154 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>OpenRouter는 다양한 대형 언어 모델(LLM)을 하나의 통합 API로 접근할 수 있게 해주는 AI 모델 라우팅 서비스입니다. OpenAI의 GPT, Anthropic의 Claude, Google의 Gemini, Meta의 Llama 등 400개 이상의 AI 모델을 단일 엔드포인트로 호출할 수 있어, 개발자가 여러 API 키를 관리할 필요 없이 다양한 모델을 실험하고 활용할 수 있습니다.</p>
+                <p>OpenRouter는 2023년에 설립되어 AI 생태계의 파편화 문제를 해결하기 위해 등장했습니다. 각 AI 제공사마다 다른 API 형식과 인증 방식을 통일된 OpenAI 호환 형식으로 표준화하여, 개발자들이 손쉽게 모델을 전환하고 비교할 수 있게 되었습니다.</p>
+                <p>핵심 원리는 API 게이트웨이 패턴입니다. 사용자의 요청을 받아 해당 모델 제공사에 전달하고, 응답을 표준화된 형식으로 반환합니다. 자동 폴백(fallback) 기능으로 한 모델이 응답하지 않으면 대체 모델로 자동 전환되어 서비스 안정성을 보장합니다.</p>
+                <p>실무에서는 프로토타이핑 단계에서 다양한 모델을 빠르게 테스트하거나, 비용 최적화를 위해 작업별로 다른 모델을 사용할 때 유용합니다. Pass-through 가격 정책으로 원가 그대로 이용할 수 있어 비용 효율적입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># OpenRouter API 사용 예제
+import requests
+
+OPENROUTER_API_KEY = "your-api-key"
+
+response = requests.post(
+    url="https://openrouter.ai/api/v1/chat/completions",
+    headers={
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={
+        # 다양한 모델 선택 가능
+        "model": "anthropic/claude-3.5-sonnet",  # 또는 "openai/gpt-4o"
+        "messages": [
+            {"role": "user", "content": "AI의 미래에 대해 설명해주세요"}
+        ]
+    }
+)
+
+result = response.json()
+print(result["choices"][0]["message"]["content"])
+
+# OpenAI SDK 호환 방식 (권장)
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=OPENROUTER_API_KEY,
+)
+
+completion = client.chat.completions.create(
+    model="google/gemini-pro-1.5",  # 모델만 변경하면 됨
+    messages=[
+        {"role": "user", "content": "한국의 수도는?"}
+    ]
+)
+print(completion.choices[0].message.content)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p><strong>2025년 1월 기준</strong> - OpenRouter는 Pass-through 가격 정책으로 원가 그대로 제공합니다.</p>
+                <table class="spec-table">
+                    <tr><th>항목</th><th>가격/사양</th><th>비고</th></tr>
+                    <tr><td>가격 마진</td><td>0% (Pass-through)</td><td>원가 그대로 제공</td></tr>
+                    <tr><td>플랫폼 수수료</td><td>~5%</td><td>크레딧 구매 시</td></tr>
+                    <tr><td>지원 모델 수</td><td>400+</td><td>GPT, Claude, Gemini, Llama 등</td></tr>
+                    <tr><td>무료 사용자 제한</td><td>50 요청/일</td><td>$10 충전 시 1,000 요청/일</td></tr>
+                    <tr><td>Claude 3.5 Sonnet</td><td>$3/$15 (입출력 1M)</td><td>원가 동일</td></tr>
+                    <tr><td>GPT-4o</td><td>$2.50/$10 (입출력 1M)</td><td>원가 동일</td></tr>
+                    <tr><td>Llama 3.1 70B</td><td>$0.52/$0.75 (입출력 1M)</td><td>오픈소스 모델</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"프로토타입 단계에서 OpenRouter로 여러 모델 성능을 비교해봤는데, Claude가 코드 생성에서 가장 좋은 결과를 보였습니다. 프로덕션에서는 해당 모델로 직접 전환하면 됩니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"OpenRouter 같은 API 게이트웨이를 활용하면 단일 코드베이스로 400개 이상의 모델에 접근할 수 있어, 벤더 종속을 피하고 최적의 비용-성능 조합을 찾을 수 있습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"OpenRouter의 폴백 기능을 활용하면 특정 모델이 다운되어도 자동으로 대체 모델로 전환되어 서비스 가용성을 99.9% 이상 유지할 수 있습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>프로덕션에서 무조건 OpenRouter 사용</strong>
+                        <p>대량 트래픽 시에는 각 제공사의 직접 API가 더 안정적일 수 있습니다. 프로토타입과 프로덕션 전략을 분리하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>API 키 하드코딩</strong>
+                        <p>OpenRouter API 키를 코드에 직접 입력하면 보안 위험이 있습니다. 환경 변수나 시크릿 매니저를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>개발/테스트 단계에서 OpenRouter로 다양한 모델을 비교하고, 프로덕션에서는 선택한 모델의 직접 API로 전환하거나 폴백 설정을 구성하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                <a href="/ko/term/API/" class="related-term-link">API</a>
+                <a href="/ko/term/GPT/" class="related-term-link">GPT</a>
+                <a href="/ko/term/Claude/" class="related-term-link">Claude</a>
+                <a href="/ko/term/Prompt/" class="related-term-link">Prompt</a>
+                <a href="/ko/term/Token/" class="related-term-link">Token</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://openrouter.ai/docs" target="_blank" class="learn-link">📄 OpenRouter 공식 문서</a>
+                <a href="https://openrouter.ai/models" target="_blank" class="learn-link">🔧 지원 모델 목록 및 가격</a>
+                <a href="https://openrouter.ai/pricing" target="_blank" class="learn-link">💰 가격 정책 상세</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +388,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sharding (샤딩) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="데이터를 여러 서버에 분산 저장. 수평 분할. 대용량 처리.">
-    <meta name="keywords" content="Sharding, 샤딩, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="Sharding은 대용량 데이터를 여러 서버에 수평 분할하여 저장하는 데이터베이스 확장 기법입니다. 단일 서버의 한계를 극복하고 성능과 확장성을 향상시킵니다.">
+    <meta name="keywords" content="Sharding, 샤딩, 수평 분할, 데이터베이스 확장, Horizontal Partitioning, Shard Key, MongoDB, PostgreSQL, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Sharding/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Sharding/">
     <meta property="og:title" content="Sharding (샤딩) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="데이터를 여러 서버에 분산 저장. 수평 분할. 대용량 처리.">
+    <meta property="og:description" content="Sharding은 대용량 데이터를 여러 서버에 수평 분할하여 저장하는 데이터베이스 확장 기법입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Sharding (샤딩) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="데이터를 여러 서버에 분산 저장. 수평 분할. 대용량 처리.">
+    <meta name="twitter:description" content="Sharding은 대용량 데이터를 여러 서버에 수평 분할하여 저장하는 데이터베이스 확장 기법입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Sharding",
-        "description": "데이터를 여러 서버에 분산 저장. 수평 분할. 대용량 처리.",
+        "alternateName": "샤딩, 수평 분할",
+        "description": "Sharding은 대용량 데이터를 여러 서버에 수평 분할하여 저장하는 데이터베이스 확장 기법입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +276,9 @@
                 <span>데이터베이스</span>
             </div>
             <h1 class="term-title">Sharding</h1>
-            <p class="term-english">샤딩</p>
+            <p class="term-english">샤딩, Horizontal Partitioning</p>
             <div class="term-description">
-                <p>데이터를 여러 서버에 분산 저장. 수평 분할. 대용량 처리.</p>
+                <p>대용량 데이터를 여러 데이터베이스 서버(샤드)에 수평 분할하여 저장하는 확장 기법입니다. 단일 서버의 저장 용량과 처리량 한계를 극복하고, 수평적 확장(Scale-out)을 가능하게 합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,585 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>샤딩(Sharding)</strong>은 하나의 거대한 테이블을 여러 개의 작은 테이블(샤드)로 분할하여 서로 다른 서버에 분산 저장하는 기술입니다. 각 샤드는 동일한 스키마를 가지지만 서로 다른 데이터 행(Row)을 보유합니다. 이는 단일 서버로 처리할 수 없는 대규모 데이터와 트래픽을 효과적으로 관리합니다.</p>
+                <p><strong>샤드 키(Shard Key)</strong>는 데이터가 어떤 샤드에 저장될지 결정하는 핵심 컬럼입니다. 좋은 샤드 키는 데이터를 균등하게 분산시키고, 자주 함께 조회되는 데이터를 같은 샤드에 배치합니다. user_id, tenant_id, region 등이 흔히 사용됩니다.</p>
+                <p><strong>샤딩 전략</strong>에는 여러 방식이 있습니다. Range Sharding은 값의 범위로 분할(예: A-M, N-Z)하고, Hash Sharding은 해시 함수로 균등 분배하며, Directory/Lookup Sharding은 별도 매핑 테이블로 관리합니다. Geographic Sharding은 지역별로 데이터를 분리해 지연 시간을 최소화합니다.</p>
+                <p>샤딩의 <strong>장점</strong>은 무한한 수평 확장, 쿼리 병렬 처리, 장애 격리입니다. 반면 <strong>단점</strong>으로는 크로스 샤드 조인의 어려움, 트랜잭션 복잡성, 운영 부담 증가가 있습니다. 따라서 파티셔닝이나 읽기 복제로 해결되지 않을 때 샤딩을 고려해야 합니다.</p>
+                <p>MongoDB, Vitess(MySQL), Citus(PostgreSQL), CockroachDB 등이 샤딩을 네이티브로 지원합니다. 애플리케이션 레벨에서 직접 구현할 수도 있지만, 라우팅 로직과 리밸런싱 등 고려사항이 많습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (애플리케이션 레벨)</button>
+                <button class="code-tab" data-lang="node">Node.js (MongoDB)</button>
+                <button class="code-tab" data-lang="sql">SQL (Citus/Vitess)</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># 애플리케이션 레벨 샤딩 예제 - Python
+import hashlib
+from typing import Dict, Any
+import psycopg2
+
+class ShardRouter:
+    """샤드 라우터 - 데이터를 적절한 샤드로 분배"""
+
+    def __init__(self, shard_configs: list):
+        """
+        shard_configs: [
+            {"id": 0, "host": "shard0.db.com", "db": "users"},
+            {"id": 1, "host": "shard1.db.com", "db": "users"},
+            {"id": 2, "host": "shard2.db.com", "db": "users"},
+        ]
+        """
+        self.shards = shard_configs
+        self.num_shards = len(shard_configs)
+        self.connections: Dict[int, Any] = {}
+
+    def get_shard_id(self, shard_key: str) -> int:
+        """
+        Hash 기반 샤딩 - 균등 분배
+        Consistent Hashing으로 확장 가능
+        """
+        hash_value = int(hashlib.md5(str(shard_key).encode()).hexdigest(), 16)
+        return hash_value % self.num_shards
+
+    def get_connection(self, shard_id: int):
+        """샤드 연결 가져오기 (커넥션 풀 사용 권장)"""
+        if shard_id not in self.connections:
+            config = self.shards[shard_id]
+            self.connections[shard_id] = psycopg2.connect(
+                host=config["host"],
+                database=config["db"],
+                user="app_user",
+                password="secret"
+            )
+        return self.connections[shard_id]
+
+    def insert_user(self, user_id: str, data: dict):
+        """사용자 데이터 삽입 - 샤드 자동 라우팅"""
+        shard_id = self.get_shard_id(user_id)
+        conn = self.get_connection(shard_id)
+
+        with conn.cursor() as cur:
+            cur.execute(
+                """INSERT INTO users (id, name, email, shard_id)
+                   VALUES (%s, %s, %s, %s)""",
+                (user_id, data["name"], data["email"], shard_id)
+            )
+        conn.commit()
+        print(f"✅ User {user_id} → Shard {shard_id}")
+        return shard_id
+
+    def get_user(self, user_id: str) -> dict:
+        """사용자 조회 - 단일 샤드 쿼리"""
+        shard_id = self.get_shard_id(user_id)
+        conn = self.get_connection(shard_id)
+
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT id, name, email FROM users WHERE id = %s",
+                (user_id,)
+            )
+            row = cur.fetchone()
+            if row:
+                return {"id": row[0], "name": row[1], "email": row[2]}
+        return None
+
+    def scatter_gather_query(self, query: str, params: tuple = None) -> list:
+        """
+        Scatter-Gather: 모든 샤드에 쿼리 후 결과 병합
+        크로스 샤드 검색 시 사용 (성능 주의)
+        """
+        results = []
+        for shard in self.shards:
+            conn = self.get_connection(shard["id"])
+            with conn.cursor() as cur:
+                cur.execute(query, params)
+                results.extend(cur.fetchall())
+        return results
+
+
+# Range 기반 샤딩 예제
+class RangeShardRouter:
+    """범위 기반 샤드 라우터 - 날짜/지역별 분할"""
+
+    def __init__(self):
+        # 날짜 범위별 샤드 매핑
+        self.date_ranges = [
+            {"start": "2023-01-01", "end": "2023-06-30", "shard": 0},
+            {"start": "2023-07-01", "end": "2023-12-31", "shard": 1},
+            {"start": "2024-01-01", "end": "2024-06-30", "shard": 2},
+        ]
+
+    def get_shard_for_date(self, date_str: str) -> int:
+        for range_config in self.date_ranges:
+            if range_config["start"] <= date_str <= range_config["end"]:
+                return range_config["shard"]
+        # 기본값 또는 최신 샤드
+        return len(self.date_ranges) - 1
+
+
+# 사용 예시
+if __name__ == "__main__":
+    router = ShardRouter([
+        {"id": 0, "host": "shard0.example.com", "db": "users"},
+        {"id": 1, "host": "shard1.example.com", "db": "users"},
+        {"id": 2, "host": "shard2.example.com", "db": "users"},
+    ])
+
+    # 사용자 삽입 (자동 샤드 분배)
+    router.insert_user("user_12345", {"name": "김철수", "email": "kim@example.com"})
+    router.insert_user("user_67890", {"name": "이영희", "email": "lee@example.com"})
+
+    # 단일 샤드 조회 (빠름)
+    user = router.get_user("user_12345")
+
+    # 크로스 샤드 검색 (느림 - 최소화 필요)
+    all_active = router.scatter_gather_query(
+        "SELECT * FROM users WHERE status = %s LIMIT 100",
+        ("active",)
+    )
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// MongoDB 샤딩 설정 및 사용 - Node.js
+const { MongoClient } = require('mongodb');
+
+/**
+ * MongoDB 샤딩 클러스터 연결 및 설정
+ * mongos 라우터를 통해 자동으로 샤드 라우팅
+ */
+class MongoShardingExample {
+    constructor(mongosUri) {
+        // mongos 라우터에 연결 (샤딩 클러스터의 진입점)
+        this.uri = mongosUri; // e.g., 'mongodb://mongos1:27017,mongos2:27017'
+        this.client = null;
+        this.db = null;
+    }
+
+    async connect() {
+        this.client = new MongoClient(this.uri);
+        await this.client.connect();
+        this.db = this.client.db('ecommerce');
+        console.log('✅ MongoDB 샤딩 클러스터 연결 완료');
+    }
+
+    /**
+     * 컬렉션 샤딩 활성화
+     * mongos에서 실행 (보통 초기 설정 시 한 번)
+     */
+    async enableSharding() {
+        const admin = this.client.db('admin');
+
+        // 1. 데이터베이스 샤딩 활성화
+        await admin.command({ enableSharding: 'ecommerce' });
+
+        // 2. 컬렉션 샤딩 - Hash 기반
+        await admin.command({
+            shardCollection: 'ecommerce.orders',
+            key: { user_id: 'hashed' }  // Hash 샤딩
+        });
+
+        // 3. 컬렉션 샤딩 - Range 기반
+        await admin.command({
+            shardCollection: 'ecommerce.logs',
+            key: { timestamp: 1 }  // Range 샤딩 (시간순)
+        });
+
+        // 4. 복합 샤드 키
+        await admin.command({
+            shardCollection: 'ecommerce.products',
+            key: { category: 1, product_id: 1 }  // 카테고리 + ID
+        });
+
+        console.log('✅ 샤딩 설정 완료');
+    }
+
+    /**
+     * 주문 생성 - 자동으로 적절한 샤드로 라우팅
+     */
+    async createOrder(userId, items, totalAmount) {
+        const orders = this.db.collection('orders');
+
+        const order = {
+            user_id: userId,  // 샤드 키
+            items: items,
+            total_amount: totalAmount,
+            status: 'pending',
+            created_at: new Date()
+        };
+
+        // MongoDB가 user_id 해시값으로 자동 라우팅
+        const result = await orders.insertOne(order);
+        console.log(`✅ 주문 생성: ${result.insertedId}`);
+        return result.insertedId;
+    }
+
+    /**
+     * 단일 샤드 쿼리 - 샤드 키 포함 (빠름)
+     */
+    async getUserOrders(userId) {
+        const orders = this.db.collection('orders');
+
+        // user_id(샤드 키)가 쿼리에 포함되어 단일 샤드만 조회
+        const cursor = orders.find({ user_id: userId })
+            .sort({ created_at: -1 })
+            .limit(10);
+
+        return await cursor.toArray();
+    }
+
+    /**
+     * Scatter-Gather 쿼리 - 모든 샤드 조회 (느림)
+     */
+    async getRecentOrders(status, limit = 100) {
+        const orders = this.db.collection('orders');
+
+        // 샤드 키 없이 조회 → 모든 샤드에 쿼리 전송
+        // 가능하면 피하거나, 별도 집계 컬렉션 활용
+        const cursor = orders.find({ status: status })
+            .sort({ created_at: -1 })
+            .limit(limit);
+
+        return await cursor.toArray();
+    }
+
+    /**
+     * 샤딩 통계 확인
+     */
+    async getShardingStats() {
+        const admin = this.client.db('admin');
+
+        // 샤드 분포 확인
+        const stats = await admin.command({
+            shardDistribution: 'ecommerce.orders'
+        });
+
+        // 각 샤드별 청크 수 확인
+        const config = this.client.db('config');
+        const chunks = await config.collection('chunks')
+            .aggregate([
+                { $match: { ns: 'ecommerce.orders' } },
+                { $group: { _id: '$shard', count: { $sum: 1 } } }
+            ]).toArray();
+
+        console.log('📊 샤드별 청크 분포:', chunks);
+        return { stats, chunks };
+    }
+
+    /**
+     * 태그 기반 샤딩 (Zone Sharding)
+     * 지역별 데이터 격리에 유용
+     */
+    async setupZoneSharding() {
+        const admin = this.client.db('admin');
+
+        // 샤드에 태그(zone) 할당
+        await admin.command({
+            addShardToZone: 'shard0',
+            zone: 'ASIA'
+        });
+        await admin.command({
+            addShardToZone: 'shard1',
+            zone: 'EUROPE'
+        });
+
+        // zone 범위 설정
+        await admin.command({
+            updateZoneKeyRange: 'ecommerce.users',
+            min: { region: 'asia', _id: MinKey },
+            max: { region: 'asia', _id: MaxKey },
+            zone: 'ASIA'
+        });
+    }
+
+    async close() {
+        await this.client.close();
+    }
+}
+
+// 사용 예시
+async function main() {
+    const mongo = new MongoShardingExample(
+        'mongodb://mongos1:27017,mongos2:27017'
+    );
+
+    await mongo.connect();
+
+    // 주문 생성 (자동 샤드 분배)
+    await mongo.createOrder('user_001', [
+        { product: 'iPhone', qty: 1 }
+    ], 1200000);
+
+    // 단일 사용자 주문 조회 (단일 샤드)
+    const orders = await mongo.getUserOrders('user_001');
+    console.log('사용자 주문:', orders);
+
+    // 샤딩 통계
+    await mongo.getShardingStats();
+
+    await mongo.close();
+}
+
+main().catch(console.error);
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="sql">
+                <pre><code class="language-sql">-- ============================================
+-- Citus (PostgreSQL 분산 확장) 샤딩 설정
+-- ============================================
+
+-- 1. 분산 테이블 생성 (Hash 샤딩)
+CREATE TABLE orders (
+    order_id BIGSERIAL,
+    user_id BIGINT NOT NULL,
+    product_id INT,
+    amount DECIMAL(10,2),
+    status VARCHAR(20),
+    created_at TIMESTAMP DEFAULT NOW(),
+    PRIMARY KEY (user_id, order_id)  -- 샤드 키 포함 필수
+);
+
+-- user_id로 샤딩 (32개 샤드로 분산)
+SELECT create_distributed_table('orders', 'user_id');
+
+-- 2. Reference 테이블 (모든 노드에 복제)
+CREATE TABLE products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(200),
+    price DECIMAL(10,2),
+    category VARCHAR(50)
+);
+
+-- 모든 워커 노드에 복제 (조인 최적화)
+SELECT create_reference_table('products');
+
+
+-- 3. 같은 샤드 키로 Co-location (조인 최적화)
+CREATE TABLE order_items (
+    id BIGSERIAL,
+    order_id BIGINT,
+    user_id BIGINT NOT NULL,  -- 같은 샤드 키
+    product_id INT,
+    quantity INT,
+    PRIMARY KEY (user_id, id)
+);
+
+SELECT create_distributed_table('order_items', 'user_id',
+    colocate_with => 'orders');
+
+-- Co-located 조인 (단일 샤드 내에서 실행, 빠름)
+SELECT o.order_id, o.amount, oi.quantity, p.name
+FROM orders o
+JOIN order_items oi ON o.order_id = oi.order_id
+    AND o.user_id = oi.user_id  -- 샤드 키 조인 조건 필수!
+JOIN products p ON oi.product_id = p.id
+WHERE o.user_id = 12345;
+
+
+-- ============================================
+-- Vitess (MySQL 샤딩) VSchema 예시
+-- ============================================
+/*
+{
+  "sharded": true,
+  "vindexes": {
+    "hash": {
+      "type": "hash"
+    },
+    "user_id_idx": {
+      "type": "hash",
+      "owner": "orders"
+    }
+  },
+  "tables": {
+    "orders": {
+      "column_vindexes": [
+        {
+          "column": "user_id",
+          "name": "hash"
+        }
+      ]
+    },
+    "users": {
+      "column_vindexes": [
+        {
+          "column": "id",
+          "name": "hash"
+        }
+      ]
+    }
+  }
+}
+*/
+
+
+-- ============================================
+-- 샤딩 모니터링 쿼리
+-- ============================================
+
+-- Citus: 샤드 분포 확인
+SELECT
+    nodename,
+    count(*) as shard_count,
+    pg_size_pretty(sum(shard_size)) as total_size
+FROM citus_shards
+JOIN citus_dist_stat ON shard_id = shardid
+GROUP BY nodename;
+
+-- 특정 데이터가 어느 샤드에 있는지 확인
+SELECT get_shard_id_for_distribution_column('orders', 12345);
+
+-- 샤드 리밸런싱 (데이터 재분배)
+SELECT rebalance_table_shards('orders');
+
+
+-- ============================================
+-- 크로스 샤드 쿼리 최적화
+-- ============================================
+
+-- BAD: 모든 샤드 스캔 (느림)
+SELECT COUNT(*) FROM orders WHERE status = 'pending';
+
+-- GOOD: 샤드 키 필터 포함 (빠름)
+SELECT COUNT(*) FROM orders
+WHERE user_id = 12345 AND status = 'pending';
+
+-- 집계가 필요하면 별도 요약 테이블 활용
+CREATE TABLE daily_order_stats (
+    stat_date DATE PRIMARY KEY,
+    total_orders BIGINT,
+    total_revenue DECIMAL(15,2)
+);
+SELECT create_reference_table('daily_order_stats');
+
+
+-- ============================================
+-- PostgreSQL 수동 샤딩 (FDW 활용)
+-- ============================================
+
+-- 원격 서버 정의
+CREATE SERVER shard0 FOREIGN DATA WRAPPER postgres_fdw
+OPTIONS (host 'shard0.db.com', dbname 'users');
+
+CREATE SERVER shard1 FOREIGN DATA WRAPPER postgres_fdw
+OPTIONS (host 'shard1.db.com', dbname 'users');
+
+-- 외부 테이블 정의
+CREATE FOREIGN TABLE users_shard0 (
+    id BIGINT, name TEXT, email TEXT
+) SERVER shard0 OPTIONS (table_name 'users');
+
+-- 파티션 테이블로 통합
+CREATE TABLE users (
+    id BIGINT, name TEXT, email TEXT
+) PARTITION BY HASH (id);
+
+ALTER TABLE users ATTACH PARTITION users_shard0
+FOR VALUES WITH (modulus 2, remainder 0);
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 아키텍처 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "현재 단일 PostgreSQL로 1억 건 이상 처리하려니 한계가 있습니다. user_id를 샤드 키로 해서 Citus로 샤딩하면 노드 추가만으로 확장 가능합니다. 다만 크로스 샤드 조인은 피해야 하니, 사용자별 데이터는 같은 샤드에 co-locate 시켜야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 분석 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "핫스팟 문제입니다. 특정 대형 고객의 데이터가 하나의 샤드에 몰려서 그 노드만 과부하가 걸렸어요. 샤드 키를 user_id에서 tenant_id + timestamp 복합키로 변경하거나, 대형 고객은 전용 샤드로 분리하는 방안을 검토해야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 검토 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "샤딩 전에 먼저 읽기 부하는 레플리카로 분산하고, 파티셔닝으로 단일 테이블 크기를 줄여보세요. 그래도 안 되면 샤딩을 고려하되, 운영 복잡성이 크게 증가하니 꼭 필요한 테이블만 샤딩하는 게 좋습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>크로스 샤드 조인 금지</strong>
+                        <p>서로 다른 샤드 간 JOIN은 매우 느립니다. 같이 조회되는 데이터는 같은 샤드 키로 co-locate하거나, Reference 테이블로 복제하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>샤드 키 변경 불가</strong>
+                        <p>한번 정한 샤드 키는 변경이 매우 어렵습니다. 초기 설계 시 쿼리 패턴을 충분히 분석하고, 균등 분포와 지역성을 고려해 신중히 선택하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>핫스팟 주의</strong>
+                        <p>데이터가 특정 샤드에 몰리면 병목이 됩니다. 시간 기반 키(timestamp)는 최신 샤드에 쓰기가 집중되므로, 해시와 조합하거나 다른 전략을 고려하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>샤딩 베스트 프랙티스</strong>
+                        <p>샤딩 전 파티셔닝/레플리케이션 먼저 시도, 쿼리에 항상 샤드 키 포함, 분산 트랜잭션 최소화, 리밸런싱 자동화, 충분한 모니터링 구축.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Partition/" class="related-term-link">Partition</a>
+                <a href="/ko/term/Replication/" class="related-term-link">Replication</a>
+                <a href="/ko/term/Consistent%20Hashing/" class="related-term-link">Consistent Hashing</a>
+                <a href="/ko/term/CAP%20%EC%A0%95%EB%A6%AC/" class="related-term-link">CAP 정리</a>
+                <a href="/ko/term/NoSQL/" class="related-term-link">NoSQL</a>
+                <a href="/ko/term/%EC%88%98%ED%8F%89%20%ED%99%95%EC%9E%A5/" class="related-term-link">수평 확장</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.mongodb.com/docs/manual/sharding/" target="_blank" class="learn-link">
+                    📄 MongoDB Sharding 공식 문서
+                </a>
+                <a href="https://docs.citusdata.com/en/stable/get_started/concepts.html" target="_blank" class="learn-link">
+                    🎓 Citus - PostgreSQL 분산 확장 가이드
+                </a>
+                <a href="https://vitess.io/docs/concepts/shard/" target="_blank" class="learn-link">
+                    📖 Vitess - MySQL 샤딩 아키텍처
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +875,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -202,6 +228,305 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>토큰 윈도우(Token Window), 또는 컨텍스트 윈도우(Context Window)는 대규모 언어 모델(LLM)이 한 번의 요청에서 처리할 수 있는 최대 토큰 수입니다. 이 윈도우에는 시스템 프롬프트, 사용자 입력, 대화 기록, 모델 응답이 모두 포함됩니다. 윈도우 크기가 클수록 더 긴 문서를 처리하고, 더 긴 대화 맥락을 유지할 수 있습니다.</p>
+
+                <p>초기 GPT-2는 1,024 토큰, GPT-3는 4,096 토큰의 컨텍스트 윈도우를 가졌습니다. 2023-2024년에는 GPT-4 Turbo(128K), Claude 3(200K), Gemini 1.5 Pro(2M) 등 급격하게 확장되었습니다. 이러한 확장은 RoPE(Rotary Position Embedding), ALiBi, Sliding Window Attention 등의 위치 인코딩 기술 발전과 Flash Attention 같은 메모리 효율화 기법 덕분입니다. 2025년에는 100만 토큰 이상의 컨텍스트가 일반화되고 있습니다.</p>
+
+                <p>컨텍스트 윈도우의 크기는 기술적으로 어텐션 메커니즘의 O(n²) 복잡도와 관련됩니다. 토큰 수가 늘어날수록 메모리와 연산량이 제곱으로 증가하므로, 효율적인 처리를 위해 다양한 최적화 기법이 필요합니다. 또한 "Lost in the Middle" 현상처럼 컨텍스트 중간 부분의 정보를 놓치는 문제도 있어, 긴 컨텍스트가 항상 좋은 것은 아닙니다.</p>
+
+                <p>실무에서 컨텍스트 윈도우 관리는 비용과 성능의 균형입니다. 긴 컨텍스트를 사용하면 더 많은 정보를 제공할 수 있지만, 비용이 증가하고 응답 속도가 느려집니다. RAG(Retrieval-Augmented Generation)로 관련 정보만 선별하거나, 슬라이딩 윈도우로 대화 기록을 관리하는 전략이 일반적입니다. 또한 캐싱을 통해 반복되는 시스템 프롬프트의 처리 비용을 줄일 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>컨텍스트 윈도우 관리 및 토큰 계산 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># 컨텍스트 윈도우 관리
+# pip install tiktoken openai
+
+import tiktoken
+
+class ContextWindowManager:
+    def __init__(self, model="gpt-4", max_tokens=128000, reserve_for_response=4096):
+        self.encoder = tiktoken.encoding_for_model(model)
+        self.max_tokens = max_tokens
+        self.reserve_for_response = reserve_for_response
+        self.available_tokens = max_tokens - reserve_for_response
+
+    def count_tokens(self, text):
+        """텍스트의 토큰 수 계산"""
+        return len(self.encoder.encode(text))
+
+    def count_messages_tokens(self, messages):
+        """OpenAI 메시지 형식의 토큰 수 계산"""
+        total = 0
+        for msg in messages:
+            total += 4  # 메시지 오버헤드
+            for key, value in msg.items():
+                total += self.count_tokens(str(value))
+        total += 2  # 응답 시작 오버헤드
+        return total
+
+    def fit_messages(self, system_prompt, messages, max_history=10):
+        """컨텍스트 윈도우에 맞게 메시지 조정"""
+        system_tokens = self.count_tokens(system_prompt)
+        available = self.available_tokens - system_tokens
+
+        # 최신 메시지부터 역순으로 추가
+        fitted_messages = []
+        current_tokens = 0
+
+        for msg in reversed(messages[-max_history:]):
+            msg_tokens = self.count_tokens(msg.get("content", "")) + 4
+            if current_tokens + msg_tokens > available:
+                break
+            fitted_messages.insert(0, msg)
+            current_tokens += msg_tokens
+
+        return fitted_messages, current_tokens + system_tokens
+
+# 사용 예시
+manager = ContextWindowManager(model="gpt-4", max_tokens=128000)
+
+system_prompt = "당신은 친절한 AI 어시스턴트입니다."
+messages = [
+    {"role": "user", "content": "안녕하세요"},
+    {"role": "assistant", "content": "안녕하세요! 무엇을 도와드릴까요?"},
+    {"role": "user", "content": "오늘 날씨가 어때요?"},
+    {"role": "assistant", "content": "죄송합니다, 실시간 날씨 정보는 제공하지 못합니다."},
+]
+
+fitted, total_tokens = manager.fit_messages(system_prompt, messages)
+print(f"포함된 메시지: {len(fitted)}개")
+print(f"총 토큰 수: {total_tokens}")
+print(f"남은 토큰: {manager.available_tokens - total_tokens}")</code></pre>
+                </div>
+
+                <p>슬라이딩 윈도우 대화 관리 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># 슬라이딩 윈도우 대화 관리
+# pip install tiktoken
+
+import tiktoken
+from collections import deque
+
+class SlidingWindowChat:
+    def __init__(self, model="gpt-4", window_size=8000):
+        self.encoder = tiktoken.encoding_for_model(model)
+        self.window_size = window_size
+        self.messages = deque()
+        self.current_tokens = 0
+
+    def add_message(self, role, content):
+        """새 메시지 추가 (윈도우 초과 시 오래된 메시지 제거)"""
+        msg_tokens = len(self.encoder.encode(content)) + 4  # 오버헤드
+
+        # 윈도우 초과 시 오래된 메시지 제거
+        while self.current_tokens + msg_tokens > self.window_size and self.messages:
+            old_msg = self.messages.popleft()
+            old_tokens = len(self.encoder.encode(old_msg["content"])) + 4
+            self.current_tokens -= old_tokens
+
+        # 새 메시지 추가
+        self.messages.append({"role": role, "content": content})
+        self.current_tokens += msg_tokens
+
+    def get_messages(self):
+        """현재 윈도우의 메시지 반환"""
+        return list(self.messages)
+
+    def get_stats(self):
+        """현재 상태 정보"""
+        return {
+            "message_count": len(self.messages),
+            "current_tokens": self.current_tokens,
+            "available_tokens": self.window_size - self.current_tokens
+        }
+
+# 사용 예시
+chat = SlidingWindowChat(window_size=1000)
+
+# 대화 시뮬레이션
+conversations = [
+    ("user", "인공지능에 대해 설명해주세요."),
+    ("assistant", "인공지능(AI)은 인간의 지능을 모방하여 학습, 추론, 문제 해결 등의 작업을 수행하는 컴퓨터 시스템입니다..."),
+    ("user", "머신러닝과의 차이점은요?"),
+    ("assistant", "머신러닝은 AI의 하위 분야로, 명시적 프로그래밍 없이 데이터로부터 학습하는 방식입니다..."),
+]
+
+for role, content in conversations:
+    chat.add_message(role, content)
+    stats = chat.get_stats()
+    print(f"[{role}] 추가 후: {stats['message_count']}개 메시지, {stats['current_tokens']} 토큰")
+
+print("\n최종 메시지:")
+for msg in chat.get_messages():
+    print(f"  {msg['role']}: {msg['content'][:50]}...")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>2025년 1월 기준 주요 LLM 컨텍스트 윈도우 비교입니다.</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>모델</th>
+                        <th>컨텍스트</th>
+                        <th>대략 페이지*</th>
+                        <th>특징</th>
+                    </tr>
+                    <tr>
+                        <td>GPT-4o</td>
+                        <td>128K</td>
+                        <td>~300 페이지</td>
+                        <td>빠른 속도, 멀티모달</td>
+                    </tr>
+                    <tr>
+                        <td>Claude 3.5 Sonnet</td>
+                        <td>200K</td>
+                        <td>~500 페이지</td>
+                        <td>긴 문서 분석 우수</td>
+                    </tr>
+                    <tr>
+                        <td>Gemini 1.5 Pro</td>
+                        <td>2M</td>
+                        <td>~5,000 페이지</td>
+                        <td>최대 컨텍스트</td>
+                    </tr>
+                    <tr>
+                        <td>Llama 3.1 (405B)</td>
+                        <td>128K</td>
+                        <td>~300 페이지</td>
+                        <td>오픈소스 최대</td>
+                    </tr>
+                </table>
+                <p style="font-size: 0.85rem; color: #94a3b8;">* 페이지 수는 영어 기준 대략적 추정 (1페이지 ≈ 400토큰)</p>
+
+                <p>컨텍스트 길이별 비용 및 응답 시간:</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>컨텍스트 사용량</th>
+                        <th>입력 비용 (GPT-4o)</th>
+                        <th>예상 응답 시간</th>
+                        <th>권장 사용</th>
+                    </tr>
+                    <tr>
+                        <td>~4K 토큰</td>
+                        <td>$0.01</td>
+                        <td>1-2초</td>
+                        <td>일반 대화</td>
+                    </tr>
+                    <tr>
+                        <td>~32K 토큰</td>
+                        <td>$0.08</td>
+                        <td>3-5초</td>
+                        <td>문서 요약</td>
+                    </tr>
+                    <tr>
+                        <td>~128K 토큰</td>
+                        <td>$0.32</td>
+                        <td>10-15초</td>
+                        <td>전체 문서 분석</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-examples">
+                    <div class="conv-item">
+                        <div class="conv-context">💬 회의에서</div>
+                        <div class="conv-quote">"128K 컨텍스트로 전체 계약서를 한 번에 분석할 수 있지만, 비용 대비 효율을 고려하면 RAG로 관련 조항만 추출하는 게 낫습니다. 중요 계약서는 전체 컨텍스트, 일반 질의는 RAG로 분류하면 비용을 70% 줄일 수 있습니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 면접에서</div>
+                        <div class="conv-quote">"컨텍스트 윈도우가 커도 'Lost in the Middle' 현상으로 중간 정보를 놓칠 수 있습니다. 이를 해결하기 위해 중요 정보를 시작과 끝에 배치하거나, 청킹 후 관련도 점수로 정렬하는 방식을 사용했습니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 기술 토론에서</div>
+                        <div class="conv-quote">"Gemini 1.5의 2M 컨텍스트는 영상 분석에 특히 유용해요. 1시간 영상을 프레임 단위로 토큰화해서 전체 맥락을 유지하면서 질문에 답할 수 있습니다. 하지만 비용과 레이턴시가 크니 실시간 서비스보다는 배치 분석에 적합합니다."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-list">
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>큰 컨텍스트 = 항상 좋다고 착각</h4>
+                            <p>128K 토큰을 다 채운다고 성능이 좋아지지 않습니다. 관련 없는 정보는 오히려 노이즈가 되어 정확도를 떨어뜨릴 수 있고, 비용과 응답 시간만 증가합니다.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>응답 토큰 공간 미확보</h4>
+                            <p>컨텍스트 윈도우는 입력과 출력을 모두 포함합니다. 128K 전체를 입력으로 채우면 모델이 응답할 공간이 없습니다. 예상 응답 길이만큼 여유를 두세요.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">✅</div>
+                        <div class="warning-content">
+                            <h4>올바른 접근법</h4>
+                            <p>컨텍스트의 70-80%만 사용하고 응답 공간을 확보하세요. 긴 문서는 청킹 + 랭킹으로 관련 부분만 선별하고, 대화 기록은 슬라이딩 윈도우로 최신 N턴만 유지하세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/%ED%86%A0%ED%81%B0/" class="related-term-link">토큰 (Token)</a>
+                    <a href="/ko/term/LLM/" class="related-term-link">LLM (대규모 언어 모델)</a>
+                    <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                    <a href="/ko/term/Prompt%20Engineering/" class="related-term-link">프롬프트 엔지니어링</a>
+                    <a href="/ko/term/%EB%A9%80%ED%8B%B0%ED%97%A4%EB%93%9C%20%EC%96%B4%ED%85%90%EC%85%98/" class="related-term-link">멀티헤드 어텐션</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <div class="learn-more">
+                    <a href="https://platform.openai.com/docs/models" target="_blank" class="learn-link">
+                        📄 OpenAI 모델별 컨텍스트 윈도우 문서
+                    </a>
+                    <a href="https://arxiv.org/abs/2307.03172" target="_blank" class="learn-link">
+                        📝 Lost in the Middle 논문 - 긴 컨텍스트의 한계
+                    </a>
+                    <a href="https://www.anthropic.com/news/claude-3-family" target="_blank" class="learn-link">
+                        🎓 Anthropic Claude 3 - 200K 컨텍스트 활용
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +537,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

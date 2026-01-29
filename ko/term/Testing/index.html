@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,166 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>소프트웨어 테스팅은 코드가 의도한 대로 동작하는지 검증하는 과정입니다. 1979년 Glenford Myers의 "The Art of Software Testing"에서 체계화되었으며, 현대 소프트웨어 개발에서 품질 보증의 핵심입니다.</p>
+                <p>테스트는 범위에 따라 계층을 이룹니다. Unit Test(단위 테스트)는 개별 함수/클래스를, Integration Test(통합 테스트)는 모듈 간 상호작용을, E2E Test(End-to-End)는 전체 시스템을 검증합니다. 테스트 피라미드 원칙에 따라 Unit이 가장 많고, E2E가 가장 적어야 합니다.</p>
+                <p>TDD(Test-Driven Development)는 테스트를 먼저 작성하고 코드를 구현하는 방법론입니다. Red-Green-Refactor 사이클로 진행되며, 설계를 개선하고 회귀 버그를 방지합니다. BDD(Behavior-Driven Development)는 비즈니스 요구사항을 Given-When-Then 형식으로 테스트합니다.</p>
+                <p>실무에서는 테스트 커버리지(보통 80% 이상 목표), 테스트 실행 시간(CI에서 5분 이내 권장), 플레이키 테스트(불안정하게 실패하는 테스트) 관리가 중요합니다. Jest, pytest, JUnit, Cypress 등 언어와 목적에 맞는 프레임워크를 선택합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="javascript">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>// Jest를 사용한 테스트 예제
+
+// src/utils/calculator.js
+export function add(a, b) {
+  return a + b;
+}
+
+export function divide(a, b) {
+  if (b === 0) throw new Error('Division by zero');
+  return a / b;
+}
+
+// src/utils/calculator.test.js - Unit Test
+import { add, divide } from './calculator';
+
+describe('Calculator', () => {
+  describe('add', () => {
+    it('두 양수를 더한다', () => {
+      expect(add(2, 3)).toBe(5);
+    });
+
+    it('음수를 처리한다', () => {
+      expect(add(-1, 1)).toBe(0);
+    });
+  });
+
+  describe('divide', () => {
+    it('두 숫자를 나눈다', () => {
+      expect(divide(10, 2)).toBe(5);
+    });
+
+    it('0으로 나누면 에러를 던진다', () => {
+      expect(() => divide(10, 0)).toThrow('Division by zero');
+    });
+  });
+});
+
+// src/services/userService.test.js - Integration Test
+import { createUser, getUser } from './userService';
+import { db } from '../db';
+
+describe('UserService Integration', () => {
+  beforeEach(async () => {
+    await db.migrate.latest();
+    await db.seed.run();
+  });
+
+  afterEach(async () => {
+    await db('users').truncate();
+  });
+
+  it('사용자를 생성하고 조회할 수 있다', async () => {
+    const userData = { name: 'John', email: 'john@example.com' };
+
+    const created = await createUser(userData);
+    const retrieved = await getUser(created.id);
+
+    expect(retrieved.name).toBe('John');
+    expect(retrieved.email).toBe('john@example.com');
+  });
+});
+
+// cypress/e2e/login.cy.js - E2E Test
+describe('로그인 플로우', () => {
+  beforeEach(() => {
+    cy.visit('/login');
+  });
+
+  it('올바른 자격 증명으로 로그인할 수 있다', () => {
+    cy.get('[data-testid="email"]').type('user@example.com');
+    cy.get('[data-testid="password"]').type('password123');
+    cy.get('[data-testid="login-button"]').click();
+
+    cy.url().should('include', '/dashboard');
+    cy.contains('환영합니다').should('be.visible');
+  });
+
+  it('잘못된 비밀번호로 에러를 표시한다', () => {
+    cy.get('[data-testid="email"]').type('user@example.com');
+    cy.get('[data-testid="password"]').type('wrong');
+    cy.get('[data-testid="login-button"]').click();
+
+    cy.contains('비밀번호가 일치하지 않습니다').should('be.visible');
+  });
+});</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "이번 릴리즈에 E2E 테스트가 자꾸 flaky하게 실패해서 CI 신뢰도가 떨어지고 있어요. 원인 파악해봐야 해요."</p>
+                <p><strong class="role-junior">주니어:</strong> "특정 테스트만 그런가요? 타임아웃 이슈인 것 같은데 cy.wait 대신 assertion 기반 대기로 바꿔볼까요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "좋아요. 그리고 flaky 테스트는 별도 관리하고, 안정화될 때까지 재시도 로직 넣어요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "테스트 커버리지에 대해 어떻게 생각하시나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "커버리지 숫자보다 중요한 비즈니스 로직이 테스트되었는지가 더 중요하다고 생각합니다. 80% 커버리지를 목표로 하되, 핵심 결제나 인증 로직은 100% 가까이 커버합니다. 단순 getter/setter까지 테스트하는 건 비효율적이고, 복잡한 조건 분기와 엣지 케이스에 집중합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 테스트에서 모킹이 너무 많아요. 실제 동작과 달라질 수 있어서 통합 테스트 하나 추가하면 좋겠어요."</p>
+                <p><strong class="role-junior">개발자:</strong> "DB 연결하면 느려질 것 같아서 모킹했는데, 테스트 DB 컨테이너 띄워서 통합 테스트 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>테스트가 구현 세부사항에 의존하면 리팩토링할 때마다 깨짐 - 인터페이스/동작 기반으로 작성</li>
+                <li>E2E 테스트가 많으면 실행 시간이 길어져 개발 속도 저하 - 테스트 피라미드 비율 유지</li>
+                <li>Flaky 테스트를 무시하고 재시도로만 해결하면 실제 버그를 놓침 - 근본 원인 파악 필수</li>
+                <li class="info">테스트 코드도 프로덕션 코드처럼 리팩토링하고 유지보수해야 함. 중복 제거, 헬퍼 함수 분리 권장</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Unit%20Test/" class="related-link">Unit Test</a>
+                <a href="/ko/term/Integration%20Test/" class="related-link">Integration Test</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Linting/" class="related-link">Linting</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://jestjs.io/docs/getting-started" target="_blank" rel="noopener">Jest 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://docs.cypress.io/guides/overview/why-cypress" target="_blank" rel="noopener">Cypress E2E 테스팅 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://martinfowler.com/bliki/TestPyramid.html" target="_blank" rel="noopener">Martin Fowler - Test Pyramid</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +373,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

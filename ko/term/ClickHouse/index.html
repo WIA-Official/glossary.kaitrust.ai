@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,376 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 id="detail-title">상세 설명</h2>
+            <p>ClickHouse는 Yandex에서 개발한 오픈소스 컬럼 지향 OLAP 데이터베이스로, 실시간 분석 쿼리에서 초당 수십억 행을 처리할 수 있는 극한의 성능을 제공합니다. 웹 분석, 로그 분석, 시계열 데이터, 실시간 대시보드 등 대규모 집계가 필요한 워크로드에 최적화되어 있습니다.</p>
+            <p>ClickHouse의 성능 비결은 여러 최적화 기법의 조합입니다. 컬럼 저장으로 필요한 컬럼만 읽어 I/O를 최소화하고, 벡터화 쿼리 실행으로 SIMD 명령어를 활용해 CPU 효율을 극대화합니다. 데이터 압축(LZ4, ZSTD)으로 저장 공간을 줄이면서 디스크 I/O도 감소시키고, sparse index와 granule 기반 스킵 인덱스로 불필요한 데이터 스캔을 방지합니다.</p>
+            <p>MergeTree 엔진 패밀리는 ClickHouse의 핵심으로, 데이터를 정렬된 파트로 저장하고 백그라운드에서 병합합니다. ReplacingMergeTree는 중복 제거, AggregatingMergeTree는 사전 집계, CollapsingMergeTree는 상태 변경 추적에 사용됩니다. 분산 쿼리는 Distributed 테이블로 처리하며, 여러 샤드에 걸친 데이터를 병렬로 읽고 결과를 병합합니다.</p>
+            <p>ClickHouse는 표준 SQL을 지원하면서도 배열 함수, 집계 조합자(Combinators), 윈도우 함수 등 분석에 유용한 확장 기능을 제공합니다. Kafka, S3, PostgreSQL, MySQL 등 외부 시스템과의 통합도 테이블 엔진이나 테이블 함수로 간편하게 구현할 수 있습니다.</p>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2>코드 예제</h2>
+            <div class="code-block" onclick="copyCode(this)">
+                <pre><code>-- ClickHouse 테이블 생성 및 분석 쿼리 예제
+
+-- ============================================
+-- 1. MergeTree 테이블 생성
+-- ============================================
+
+-- 기본 이벤트 테이블
+CREATE TABLE events (
+    event_id UUID DEFAULT generateUUIDv4(),
+    event_date Date,
+    event_timestamp DateTime64(3),
+    user_id UInt64,
+    session_id String,
+    event_type LowCardinality(String),
+    page_url String,
+    referrer String,
+    device_type LowCardinality(String),
+    country LowCardinality(String),
+    city String,
+    revenue Decimal(18, 2) DEFAULT 0,
+    properties String  -- JSON 문자열
+)
+ENGINE = MergeTree()
+PARTITION BY toYYYYMM(event_date)
+ORDER BY (event_type, user_id, event_timestamp)
+TTL event_date + INTERVAL 1 YEAR
+SETTINGS index_granularity = 8192;
+
+-- 인덱스 추가
+ALTER TABLE events ADD INDEX idx_country (country) TYPE set(100) GRANULARITY 3;
+ALTER TABLE events ADD INDEX idx_session (session_id) TYPE bloom_filter GRANULARITY 1;
+
+-- ============================================
+-- 2. 실시간 분석 쿼리
+-- ============================================
+
+-- 시간대별 이벤트 집계 (실시간 대시보드용)
+SELECT
+    toStartOfMinute(event_timestamp) AS minute,
+    event_type,
+    count() AS event_count,
+    uniq(user_id) AS unique_users,
+    sum(revenue) AS total_revenue
+FROM events
+WHERE event_date = today()
+  AND event_timestamp >= now() - INTERVAL 1 HOUR
+GROUP BY minute, event_type
+ORDER BY minute DESC, event_count DESC;
+
+-- 퍼널 분석
+SELECT
+    user_id,
+    anyIf(event_timestamp, event_type = 'page_view') AS step1_time,
+    anyIf(event_timestamp, event_type = 'add_to_cart') AS step2_time,
+    anyIf(event_timestamp, event_type = 'checkout') AS step3_time,
+    anyIf(event_timestamp, event_type = 'purchase') AS step4_time
+FROM events
+WHERE event_date >= today() - 7
+GROUP BY user_id
+HAVING step1_time IS NOT NULL;
+
+-- windowFunnel 함수로 퍼널 분석 (더 정확)
+SELECT
+    level,
+    count() AS users
+FROM (
+    SELECT
+        user_id,
+        windowFunnel(3600)(
+            event_timestamp,
+            event_type = 'page_view',
+            event_type = 'add_to_cart',
+            event_type = 'checkout',
+            event_type = 'purchase'
+        ) AS level
+    FROM events
+    WHERE event_date >= today() - 7
+    GROUP BY user_id
+)
+GROUP BY level
+ORDER BY level;
+
+-- ============================================
+-- 3. 배열 함수 활용
+-- ============================================
+
+-- 세션별 이벤트 시퀀스
+SELECT
+    session_id,
+    groupArray(event_type) AS event_sequence,
+    groupArray(event_timestamp) AS timestamps,
+    length(groupArray(event_type)) AS event_count
+FROM events
+WHERE event_date = today()
+GROUP BY session_id
+HAVING event_count > 3
+LIMIT 100;
+
+-- 배열 요소별 집계
+SELECT
+    arrayJoin(splitByChar(',', tags)) AS tag,
+    count() AS usage_count
+FROM products
+GROUP BY tag
+ORDER BY usage_count DESC
+LIMIT 20;
+
+-- ============================================
+-- 4. 집계 조합자 (Combinators)
+-- ============================================
+
+-- 조건부 집계
+SELECT
+    event_date,
+    countIf(event_type = 'page_view') AS page_views,
+    countIf(event_type = 'purchase') AS purchases,
+    sumIf(revenue, event_type = 'purchase') AS total_revenue,
+    uniqIf(user_id, event_type = 'purchase') AS purchasing_users,
+    avgIf(revenue, revenue > 0) AS avg_purchase_value
+FROM events
+WHERE event_date >= today() - 30
+GROUP BY event_date
+ORDER BY event_date;
+
+-- 상태 저장 집계 (실시간 업데이트용)
+-- AggregatingMergeTree 테이블
+CREATE TABLE events_aggregated (
+    event_date Date,
+    event_type LowCardinality(String),
+    event_count AggregateFunction(count),
+    unique_users AggregateFunction(uniq, UInt64),
+    total_revenue AggregateFunction(sum, Decimal(18, 2))
+)
+ENGINE = AggregatingMergeTree()
+PARTITION BY toYYYYMM(event_date)
+ORDER BY (event_date, event_type);
+
+-- Materialized View로 자동 집계
+CREATE MATERIALIZED VIEW events_aggregated_mv
+TO events_aggregated
+AS SELECT
+    event_date,
+    event_type,
+    countState() AS event_count,
+    uniqState(user_id) AS unique_users,
+    sumState(revenue) AS total_revenue
+FROM events
+GROUP BY event_date, event_type;
+
+-- 집계 결과 조회
+SELECT
+    event_date,
+    event_type,
+    countMerge(event_count) AS events,
+    uniqMerge(unique_users) AS users,
+    sumMerge(total_revenue) AS revenue
+FROM events_aggregated
+GROUP BY event_date, event_type;
+
+-- ============================================
+-- 5. 외부 데이터 소스 연동
+-- ============================================
+
+-- Kafka에서 실시간 수집
+CREATE TABLE events_kafka (
+    event_id String,
+    user_id UInt64,
+    event_type String,
+    event_timestamp DateTime64(3),
+    properties String
+)
+ENGINE = Kafka()
+SETTINGS
+    kafka_broker_list = 'kafka:9092',
+    kafka_topic_list = 'user-events',
+    kafka_group_name = 'clickhouse-consumer',
+    kafka_format = 'JSONEachRow';
+
+-- Kafka -> MergeTree 파이프라인
+CREATE MATERIALIZED VIEW events_kafka_mv
+TO events
+AS SELECT
+    generateUUIDv4() AS event_id,
+    toDate(event_timestamp) AS event_date,
+    event_timestamp,
+    user_id,
+    '' AS session_id,
+    event_type,
+    '' AS page_url,
+    '' AS referrer,
+    '' AS device_type,
+    '' AS country,
+    '' AS city,
+    0 AS revenue,
+    properties
+FROM events_kafka;
+
+-- S3에서 직접 쿼리
+SELECT *
+FROM s3(
+    'https://bucket.s3.amazonaws.com/data/*.parquet',
+    'AWS_ACCESS_KEY',
+    'AWS_SECRET_KEY',
+    'Parquet'
+)
+WHERE event_date = '2024-01-15'
+LIMIT 100;
+
+-- ============================================
+-- 6. 성능 최적화
+-- ============================================
+
+-- 쿼리 실행 계획 확인
+EXPLAIN PLAN
+SELECT event_type, count()
+FROM events
+WHERE event_date = today()
+GROUP BY event_type;
+
+-- 파이프라인 분석
+EXPLAIN PIPELINE
+SELECT event_type, count()
+FROM events
+WHERE event_date = today()
+GROUP BY event_type;
+
+-- 시스템 테이블로 성능 모니터링
+SELECT
+    query_id,
+    query,
+    read_rows,
+    read_bytes,
+    memory_usage,
+    query_duration_ms
+FROM system.query_log
+WHERE type = 'QueryFinish'
+  AND event_date = today()
+ORDER BY query_duration_ms DESC
+LIMIT 10;
+
+-- 파트 정보 확인
+SELECT
+    partition,
+    name,
+    rows,
+    bytes_on_disk,
+    modification_time
+FROM system.parts
+WHERE table = 'events'
+  AND active
+ORDER BY modification_time DESC;
+
+-- ============================================
+-- 7. Python 클라이언트 예제
+-- ============================================
+"""
+from clickhouse_driver import Client
+import pandas as pd
+
+# 클라이언트 연결
+client = Client(
+    host='localhost',
+    port=9000,
+    user='default',
+    password='',
+    database='analytics'
+)
+
+# 쿼리 실행
+result = client.execute('''
+    SELECT
+        event_date,
+        count() as events,
+        uniq(user_id) as users
+    FROM events
+    WHERE event_date >= today() - 7
+    GROUP BY event_date
+    ORDER BY event_date
+''')
+
+# DataFrame으로 변환
+df = pd.DataFrame(result, columns=['event_date', 'events', 'users'])
+print(df)
+
+# 배치 삽입
+data = [
+    {'user_id': 1, 'event_type': 'click', 'event_timestamp': '2024-01-15 10:00:00'},
+    {'user_id': 2, 'event_type': 'view', 'event_timestamp': '2024-01-15 10:01:00'},
+]
+
+client.execute(
+    'INSERT INTO events (user_id, event_type, event_timestamp) VALUES',
+    data
+)
+"""</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section">
+            <h2>실무에서 이렇게 쓰여요</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-type="meeting">팀 미팅</button>
+                <button class="conv-tab" data-type="interview">기술 면접</button>
+                <button class="conv-tab" data-type="review">코드 리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong>백엔드 개발자:</strong> "실시간 분석 대시보드에서 쿼리가 5초 이상 걸리는데, 더 빠르게 할 수 없을까요?"</p>
+                <p><strong>데이터 엔지니어:</strong> "ClickHouse를 도입하면 같은 쿼리가 수백 밀리초로 줄어들 수 있어요. 컬럼 스토리지와 벡터화 실행 덕분에 집계 쿼리가 매우 빨라요."</p>
+                <p><strong>백엔드 개발자:</strong> "실시간 데이터 수집도 가능한가요?"</p>
+                <p><strong>데이터 엔지니어:</strong> "네, Kafka 엔진으로 스트리밍 수집하고 Materialized View로 자동 집계까지 가능해요. 수집 후 즉시 쿼리할 수 있어서 실시간 대시보드에 딱이에요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong>면접관:</strong> "ClickHouse에서 ORDER BY 키 설계가 왜 중요하고, 어떻게 설계해야 하나요?"</p>
+                <p><strong>지원자:</strong> "ORDER BY 키는 데이터 정렬 순서와 primary index를 결정합니다. 쿼리에서 자주 필터링하는 컬럼을 앞에 배치해야 sparse index를 효과적으로 활용할 수 있습니다. 카디널리티가 낮은 컬럼(예: event_type)을 먼저, 높은 컬럼(예: user_id)을 나중에 배치하면 데이터 압축률도 좋아집니다. 다만 ORDER BY 키는 테이블 생성 후 변경이 불가하므로 주요 쿼리 패턴을 충분히 분석한 후 결정해야 합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong>리뷰어:</strong> "user_id를 String으로 정의했는데, 숫자형이면 UInt64가 더 효율적이에요."</p>
+                <p><strong>개발자:</strong> "UUID 형태라서 String으로 했는데요."</p>
+                <p><strong>리뷰어:</strong> "ClickHouse는 UUID 타입을 네이티브로 지원해요. 또한 event_type 같은 카디널리티가 낮은 컬럼은 LowCardinality(String)으로 하면 dictionary encoding이 적용되어 저장 공간과 쿼리 성능 모두 좋아져요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2>주의사항</h2>
+            <ul class="warning-list">
+                <li>ORDER BY 키는 테이블 생성 후 변경할 수 없으므로, 주요 쿼리 패턴을 충분히 분석한 후 설계하세요.</li>
+                <li>빈번한 단일 행 INSERT는 성능 저하를 유발하므로, 배치로 최소 1000행 이상 묶어서 삽입하세요.</li>
+                <li>MergeTree는 백그라운드 머지가 발생하므로, 파트 수가 너무 많아지면 성능이 저하됩니다.</li>
+                <li>JOIN은 분산 환경에서 비효율적일 수 있으므로, 가능하면 데이터를 비정규화하세요.</li>
+                <li>UPDATE/DELETE는 ALTER 명령으로 처리되며, 즉시 반영되지 않고 비동기로 처리됩니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2>관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Apache%20Druid/" class="related-term-card">Apache Druid</a>
+                <a href="/ko/term/Apache%20Pinot/" class="related-term-card">Apache Pinot</a>
+                <a href="/ko/term/OLAP/" class="related-term-card">OLAP</a>
+                <a href="/ko/term/BigQuery/" class="related-term-card">BigQuery</a>
+                <a href="/ko/term/Time%20Series%20Database/" class="related-term-card">Time Series Database</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2>더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://clickhouse.com/docs" target="_blank">ClickHouse 공식 문서</a></li>
+                <li><a href="https://clickhouse.com/blog" target="_blank">ClickHouse 엔지니어링 블로그</a></li>
+                <li><a href="https://www.youtube.com/c/ClickHouseDB" target="_blank">ClickHouse YouTube 채널</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +583,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

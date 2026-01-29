@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,146 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>MMLU(Massive Multitask Language Understanding)는 LLM의 지식과 추론 능력을 평가하는 대표적인 벤치마크입니다. 57개 학문 분야에 걸쳐 약 15,000개의 4지선다 객관식 문제로 구성되어 있으며, 초등학교부터 전문가 수준까지 다양한 난이도를 포함합니다.</p>
+                <p>2020년 UC Berkeley의 Dan Hendrycks 연구팀이 발표했습니다. 당시 GPT-3조차 43.9% 정확도로 인간 전문가(89.8%)에 크게 뒤쳐졌습니다. 이후 LLM 발전의 주요 지표로 활용되어, 2024년 GPT-4o는 87.2%, Claude 3.5 Sonnet은 88.7%를 달성했습니다.</p>
+                <p>MMLU는 STEM(수학, 물리, 컴퓨터과학), 인문학(역사, 철학, 법학), 사회과학(경제, 심리, 정치), 기타(의료, 비즈니스) 4개 대분류로 구성됩니다. few-shot 설정(5-shot이 표준)에서 모델에 예시를 제공한 후 정답을 맞추도록 평가합니다.</p>
+                <p>실무에서 MMLU 점수는 LLM 선택의 핵심 기준입니다. 법률 AI에는 법학 세부 점수를, 의료 AI에는 의학 세부 점수를 참고합니다. 다만 MMLU만으로 모든 능력을 평가할 수 없어, HumanEval(코딩), MT-Bench(대화) 등과 함께 종합적으로 판단해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">from datasets import load_dataset
+from openai import OpenAI
+import re
+
+# MMLU 데이터셋 로드 (HuggingFace)
+dataset = load_dataset("cais/mmlu", "all", split="test")
+
+# 특정 과목 필터링 (예: computer_science)
+cs_questions = [q for q in dataset if q["subject"] == "high_school_computer_science"]
+
+client = OpenAI()
+
+def evaluate_mmlu_question(question, choices, answer_idx):
+    """MMLU 문제 평가 함수"""
+    # 5-shot 프롬프트 구성 (실제로는 few-shot 예시 추가)
+    prompt = f"""Answer the following multiple choice question. Only output A, B, C, or D.
+
+Question: {question}
+A) {choices[0]}
+B) {choices[1]}
+C) {choices[2]}
+D) {choices[3]}
+
+Answer:"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1,
+        temperature=0
+    )
+
+    predicted = response.choices[0].message.content.strip().upper()
+    correct_answer = ["A", "B", "C", "D"][answer_idx]
+
+    return predicted == correct_answer
+
+# 샘플 평가 실행
+correct = 0
+total = min(50, len(cs_questions))  # 샘플 50문제
+
+for i, q in enumerate(cs_questions[:total]):
+    is_correct = evaluate_mmlu_question(
+        q["question"],
+        q["choices"],
+        q["answer"]
+    )
+    correct += int(is_correct)
+    if (i + 1) % 10 == 0:
+        print(f"Progress: {i+1}/{total}, Accuracy: {correct/(i+1)*100:.1f}%")
+
+print(f"\nFinal Accuracy: {correct/total*100:.1f}%")
+print(f"Subject: high_school_computer_science")
+
+# lm-evaluation-harness 사용 (더 정확한 평가)
+# pip install lm-eval
+# lm_eval --model openai --model_args model=gpt-4o-mini --tasks mmlu --batch_size 8</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"우리 파인튜닝 모델의 MMLU 점수가 베이스 모델 대비 법률 분야에서 12% 향상됐습니다. 전체 점수는 72%에서 68%로 약간 떨어졌지만, 타겟 도메인에서 성능이 올랐으니 트레이드오프로 볼 수 있습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"MMLU는 57개 과목의 지식을 테스트하는 벤치마크입니다. GPT-4는 86%, Claude 3 Opus는 86.8%로 인간 전문가 수준에 근접했습니다. 다만 MMLU는 추론보다 지식 위주라서, 코딩은 HumanEval, 수학은 GSM8K로 별도 평가합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"MMLU 점수만 보면 안 됩니다. 최근 모델들이 MMLU에 오버핏되었다는 비판이 있어서, MMLU-Pro나 GPQA 같은 더 어려운 벤치마크가 나왔습니다. 실제 업무 성능은 도메인별 테스트셋으로 따로 평가해야 합니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>MMLU 점수만으로 모델 선택</strong>
+                        <p>MMLU는 지식 테스트일 뿐입니다. 코딩 능력, 긴 문맥 이해, 지시 따르기 등은 별도 벤치마크로 평가해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>종합적인 평가</strong>
+                        <p>MMLU와 함께 HumanEval(코딩), MT-Bench(대화), TruthfulQA(정확성) 등을 함께 확인하세요. 가장 중요한 것은 실제 사용 케이스에 맞는 자체 평가셋입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                <a href="/ko/term/Benchmark/" class="related-term-link">Benchmark</a>
+                <a href="/ko/term/HumanEval/" class="related-term-link">HumanEval</a>
+                <a href="/ko/term/Few-shot%20Learning/" class="related-term-link">Few-shot Learning</a>
+                <a href="/ko/term/GPT-4/" class="related-term-link">GPT-4</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/2009.03300" target="_blank" class="learn-link">📄 MMLU 논문 (arXiv)</a>
+                <a href="https://huggingface.co/datasets/cais/mmlu" target="_blank" class="learn-link">🎓 MMLU 데이터셋 (HuggingFace)</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +376,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

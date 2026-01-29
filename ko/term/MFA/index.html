@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MFA (Multi-Factor Authentication) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="다중 인증. 비밀번호 외 추가 인증 수단(OTP, 생체인식)을 요구하여 보안 강화.">
-    <meta name="keywords" content="MFA, Multi-Factor Authentication, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <title>MFA (다중 인증) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="MFA(Multi-Factor Authentication)는 비밀번호 외에 추가 인증 수단(OTP, 생체인식, 보안키)을 요구하여 계정 보안을 강화하는 인증 방식입니다. FIDO2/Passkey가 피싱 방지 MFA의 표준입니다.">
+    <meta name="keywords" content="MFA, Multi-Factor Authentication, 다중 인증, 2FA, OTP, TOTP, FIDO2, Passkey, 생체인식, 보안키, WebAuthn, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/MFA/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/MFA/">
-    <meta property="og:title" content="MFA (Multi-Factor Authentication) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="다중 인증. 비밀번호 외 추가 인증 수단(OTP, 생체인식)을 요구하여 보안 강화.">
+    <meta property="og:title" content="MFA (다중 인증) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="비밀번호 외에 추가 인증 수단을 요구하여 계정 보안을 강화하는 인증 방식. FIDO2/Passkey가 피싱 방지 MFA의 표준.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="MFA (Multi-Factor Authentication) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="다중 인증. 비밀번호 외 추가 인증 수단(OTP, 생체인식)을 요구하여 보안 강화.">
+    <meta name="twitter:title" content="MFA (다중 인증) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="비밀번호 외에 추가 인증 수단을 요구하여 계정 보안을 강화하는 인증 방식. FIDO2/Passkey가 피싱 방지 MFA의 표준.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "MFA",
-        "description": "다중 인증. 비밀번호 외 추가 인증 수단(OTP, 생체인식)을 요구하여 보안 강화.",
+        "alternateName": "다중 인증",
+        "description": "비밀번호 외에 추가 인증 수단(OTP, 생체인식, 보안키)을 요구하여 계정 보안을 강화하는 인증 방식입니다. FIDO2/Passkey가 피싱 방지 MFA의 표준입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">MFA</h1>
-            <p class="term-english">Multi-Factor Authentication</p>
+            <p class="term-english">Multi-Factor Authentication (다중 인증)</p>
             <div class="term-description">
-                <p>다중 인증. 비밀번호 외 추가 인증 수단(OTP, 생체인식)을 요구하여 보안 강화.</p>
+                <p>비밀번호(지식 요소) 외에 추가 인증 수단(소유 요소, 생체 요소)을 요구하여 계정 보안을 강화하는 인증 방식입니다. OTP, SMS, 인증 앱, 하드웨어 보안키, 생체인식 등 다양한 방법이 있으며, FIDO2/Passkey가 피싱 방지 MFA의 표준으로 부상하고 있습니다. Passkey 사용 시 기존 비밀번호+MFA 조합 대비 14배 빠른 로그인(3초 vs 69초)이 가능합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,555 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>MFA(Multi-Factor Authentication)는 "알고 있는 것(비밀번호)", "가지고 있는 것(스마트폰, 보안키)", "본인인 것(지문, 얼굴)"이라는 세 가지 인증 요소 중 두 가지 이상을 조합하여 신원을 확인하는 보안 방식입니다. 비밀번호만으로는 피싱, 크리덴셜 스터핑, 브루트포스 공격에 취약하기 때문에, 추가 인증 계층을 도입해 보안을 강화합니다.</p>
+                <p>전통적인 MFA 방식으로는 SMS OTP, 이메일 인증 코드, TOTP(Time-based One-Time Password) 앱(Google Authenticator, Microsoft Authenticator)이 있습니다. 그러나 SMS는 SIM 스와핑 공격에 취약하고, TOTP는 피싱 사이트에 코드를 입력하면 공격자에게 탈취될 수 있습니다. 이러한 한계로 인해 "피싱 방지 MFA(Phishing-Resistant MFA)"의 필요성이 대두되었습니다.</p>
+                <p>FIDO2(WebAuthn + CTAP2) 표준은 피싱 방지 MFA의 핵심입니다. 사용자 기기에서 공개키/개인키 쌍을 생성하고, 개인키는 기기의 보안 하드웨어(TPM, Secure Enclave)에 저장됩니다. 인증 시 서버는 챌린지를 보내고, 기기는 등록된 도메인(origin)과 일치할 때만 개인키로 서명합니다. 피싱 사이트는 정당한 도메인이 아니므로 인증이 불가능합니다. YubiKey 같은 하드웨어 보안키나 Windows Hello, Apple Face ID 같은 플랫폼 인증기가 FIDO2를 지원합니다.</p>
+                <p>Passkey는 FIDO2의 사용자 친화적 진화형으로, 비밀번호를 완전히 대체하도록 설계되었습니다. Synced Passkey는 iCloud, Google Password Manager 등을 통해 여러 기기에서 동기화되어 편의성을 높입니다. Device-bound Passkey는 단일 기기에만 저장되어 보안성이 더 높습니다. PCI DSS v4.0.1은 2025년 3월 31일부터 결제 카드 환경의 모든 접근에 MFA를 의무화하며, 규제 준수 측면에서도 피싱 방지 MFA 도입이 필수가 되고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="totp">TOTP (Node.js)</button>
+                <button class="code-tab" data-lang="webauthn">WebAuthn (JavaScript)</button>
+                <button class="code-tab" data-lang="python">TOTP (Python)</button>
+            </div>
+            <div class="code-block active" data-lang="totp">
+                <pre><code class="language-javascript">// TOTP (Time-based OTP) MFA 구현 - Node.js
+const speakeasy = require('speakeasy');
+const QRCode = require('qrcode');
+const express = require('express');
+const app = express();
+
+// 1. MFA 등록 - 시크릿 생성 및 QR 코드 제공
+app.post('/api/mfa/setup', async (req, res) => {
+    const userId = req.user.id;
+
+    // TOTP 시크릿 생성
+    const secret = speakeasy.generateSecret({
+        name: `MyApp:${req.user.email}`,
+        issuer: 'MyApp',
+        length: 32
+    });
+
+    // 시크릿을 DB에 임시 저장 (검증 전까지는 활성화하지 않음)
+    await db.users.update(userId, {
+        mfa_secret_temp: secret.base32,
+        mfa_enabled: false
+    });
+
+    // QR 코드 생성 (사용자가 인증 앱으로 스캔)
+    const qrCodeUrl = await QRCode.toDataURL(secret.otpauth_url);
+
+    res.json({
+        secret: secret.base32,  // 수동 입력용
+        qrCode: qrCodeUrl,      // 앱 스캔용
+        message: 'MFA 앱에서 QR 코드를 스캔한 후 코드를 입력하세요'
+    });
+});
+
+// 2. MFA 등록 확인 - 첫 번째 코드 검증
+app.post('/api/mfa/verify-setup', async (req, res) => {
+    const { token } = req.body;
+    const userId = req.user.id;
+
+    const user = await db.users.findById(userId);
+
+    // TOTP 검증 (30초 윈도우, 전후 1개 허용)
+    const verified = speakeasy.totp.verify({
+        secret: user.mfa_secret_temp,
+        encoding: 'base32',
+        token: token,
+        window: 1  // 시간 드리프트 허용
+    });
+
+    if (!verified) {
+        return res.status(400).json({ error: '잘못된 인증 코드입니다' });
+    }
+
+    // MFA 활성화 및 복구 코드 생성
+    const recoveryCodes = generateRecoveryCodes(10);
+
+    await db.users.update(userId, {
+        mfa_secret: user.mfa_secret_temp,
+        mfa_secret_temp: null,
+        mfa_enabled: true,
+        mfa_recovery_codes: hashRecoveryCodes(recoveryCodes)
+    });
+
+    res.json({
+        success: true,
+        recoveryCodes: recoveryCodes,
+        message: '복구 코드를 안전한 곳에 저장하세요. 다시 표시되지 않습니다.'
+    });
+});
+
+// 3. 로그인 시 MFA 검증
+app.post('/api/auth/verify-mfa', async (req, res) => {
+    const { sessionToken, mfaToken } = req.body;
+
+    // 1단계 인증(비밀번호) 완료된 세션 확인
+    const pendingSession = await getPendingMfaSession(sessionToken);
+    if (!pendingSession) {
+        return res.status(401).json({ error: '세션이 만료되었습니다' });
+    }
+
+    const user = await db.users.findById(pendingSession.userId);
+
+    // TOTP 검증
+    const verified = speakeasy.totp.verify({
+        secret: user.mfa_secret,
+        encoding: 'base32',
+        token: mfaToken,
+        window: 1
+    });
+
+    if (!verified) {
+        // 복구 코드인지 확인
+        const isRecoveryCode = await verifyRecoveryCode(user, mfaToken);
+        if (!isRecoveryCode) {
+            await logFailedMfa(user.id, req.ip);
+            return res.status(401).json({ error: '잘못된 인증 코드입니다' });
+        }
+    }
+
+    // 인증 성공 - 전체 세션 발급
+    const fullSession = await createFullSession(user);
+
+    res.json({
+        success: true,
+        accessToken: fullSession.accessToken,
+        refreshToken: fullSession.refreshToken
+    });
+});
+
+// 복구 코드 생성 함수
+function generateRecoveryCodes(count) {
+    const codes = [];
+    for (let i = 0; i < count; i++) {
+        // 8자리 영숫자 코드 (예: ABCD-1234)
+        const code = require('crypto').randomBytes(4)
+            .toString('hex').toUpperCase();
+        codes.push(`${code.slice(0, 4)}-${code.slice(4)}`);
+    }
+    return codes;
+}
+
+app.listen(3000);</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="webauthn">
+                <pre><code class="language-javascript">// WebAuthn (FIDO2/Passkey) 구현 - 브라우저 + 서버
+// 피싱 방지 MFA의 표준 구현
+
+// ===== 프론트엔드 (브라우저) =====
+
+// 1. Passkey 등록 (Registration)
+async function registerPasskey() {
+    // 서버에서 등록 옵션 가져오기
+    const optionsRes = await fetch('/api/webauthn/register-options', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    });
+    const options = await optionsRes.json();
+
+    // Base64 -> ArrayBuffer 변환
+    options.challenge = base64ToBuffer(options.challenge);
+    options.user.id = base64ToBuffer(options.user.id);
+
+    // 브라우저의 WebAuthn API 호출
+    // 사용자에게 생체인식 또는 보안키 프롬프트 표시
+    const credential = await navigator.credentials.create({
+        publicKey: options
+    });
+
+    // 서버에 등록 완료 전송
+    const response = await fetch('/api/webauthn/register-verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id: credential.id,
+            rawId: bufferToBase64(credential.rawId),
+            response: {
+                clientDataJSON: bufferToBase64(credential.response.clientDataJSON),
+                attestationObject: bufferToBase64(credential.response.attestationObject)
+            },
+            type: credential.type
+        })
+    });
+
+    return response.json();
+}
+
+// 2. Passkey 인증 (Authentication)
+async function authenticateWithPasskey() {
+    // 서버에서 인증 옵션 가져오기
+    const optionsRes = await fetch('/api/webauthn/auth-options', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    });
+    const options = await optionsRes.json();
+
+    options.challenge = base64ToBuffer(options.challenge);
+    options.allowCredentials = options.allowCredentials?.map(cred => ({
+        ...cred,
+        id: base64ToBuffer(cred.id)
+    }));
+
+    // 브라우저의 WebAuthn API 호출
+    // Passkey 선택 프롬프트 또는 생체인식
+    const assertion = await navigator.credentials.get({
+        publicKey: options
+    });
+
+    // 서버에 인증 검증 요청
+    const response = await fetch('/api/webauthn/auth-verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id: assertion.id,
+            rawId: bufferToBase64(assertion.rawId),
+            response: {
+                clientDataJSON: bufferToBase64(assertion.response.clientDataJSON),
+                authenticatorData: bufferToBase64(assertion.response.authenticatorData),
+                signature: bufferToBase64(assertion.response.signature),
+                userHandle: assertion.response.userHandle
+                    ? bufferToBase64(assertion.response.userHandle) : null
+            },
+            type: assertion.type
+        })
+    });
+
+    return response.json();
+}
+
+// ===== 백엔드 (Node.js + @simplewebauthn/server) =====
+
+const {
+    generateRegistrationOptions,
+    verifyRegistrationResponse,
+    generateAuthenticationOptions,
+    verifyAuthenticationResponse
+} = require('@simplewebauthn/server');
+
+const rpName = 'MyApp';
+const rpID = 'myapp.com';
+const origin = 'https://myapp.com';
+
+// 등록 옵션 생성
+app.post('/api/webauthn/register-options', async (req, res) => {
+    const user = req.user;
+    const existingCredentials = await db.credentials.findByUserId(user.id);
+
+    const options = await generateRegistrationOptions({
+        rpName,
+        rpID,
+        userID: user.id,
+        userName: user.email,
+        userDisplayName: user.name,
+        attestationType: 'none',
+        excludeCredentials: existingCredentials.map(cred => ({
+            id: cred.credentialID,
+            type: 'public-key'
+        })),
+        authenticatorSelection: {
+            residentKey: 'preferred',      // Passkey (Discoverable Credential)
+            userVerification: 'preferred'  // 생체인식 선호
+        }
+    });
+
+    // 챌린지를 세션에 저장 (검증 시 사용)
+    req.session.webauthnChallenge = options.challenge;
+
+    res.json(options);
+});
+
+// 인증 검증
+app.post('/api/webauthn/auth-verify', async (req, res) => {
+    const { body } = req;
+    const expectedChallenge = req.session.webauthnChallenge;
+
+    const credential = await db.credentials.findByCredentialId(body.id);
+    if (!credential) {
+        return res.status(400).json({ error: 'Unknown credential' });
+    }
+
+    const verification = await verifyAuthenticationResponse({
+        response: body,
+        expectedChallenge,
+        expectedOrigin: origin,  // 피싱 방지의 핵심!
+        expectedRPID: rpID,
+        authenticator: {
+            credentialID: credential.credentialID,
+            credentialPublicKey: credential.publicKey,
+            counter: credential.counter
+        }
+    });
+
+    if (!verification.verified) {
+        return res.status(401).json({ error: 'Verification failed' });
+    }
+
+    // 카운터 업데이트 (클로닝 공격 방지)
+    await db.credentials.updateCounter(
+        credential.id,
+        verification.authenticationInfo.newCounter
+    );
+
+    // 세션 발급
+    const session = await createSession(credential.userId);
+    res.json({ success: true, ...session });
+});</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># TOTP MFA 구현 - Python/Flask
+import pyotp
+import qrcode
+import io
+import base64
+import secrets
+from flask import Flask, request, jsonify, session
+from functools import wraps
+
+app = Flask(__name__)
+app.secret_key = secrets.token_hex(32)
+
+# 1. MFA 등록 시작
+@app.route('/api/mfa/setup', methods=['POST'])
+def setup_mfa():
+    user_id = session.get('user_id')
+    user = db.get_user(user_id)
+
+    # TOTP 시크릿 생성 (Base32 인코딩)
+    secret = pyotp.random_base32()
+
+    # OTP URI 생성 (인증 앱용)
+    totp = pyotp.TOTP(secret)
+    provisioning_uri = totp.provisioning_uri(
+        name=user['email'],
+        issuer_name='MyApp'
+    )
+
+    # QR 코드 생성
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(provisioning_uri)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffer = io.BytesIO()
+    img.save(buffer, format='PNG')
+    qr_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+    # 임시 저장 (검증 전)
+    db.update_user(user_id, {
+        'mfa_secret_temp': secret,
+        'mfa_pending': True
+    })
+
+    return jsonify({
+        'secret': secret,
+        'qr_code': f'data:image/png;base64,{qr_base64}',
+        'message': 'MFA 앱에서 QR 코드를 스캔하세요'
+    })
+
+# 2. MFA 등록 확인
+@app.route('/api/mfa/verify-setup', methods=['POST'])
+def verify_mfa_setup():
+    user_id = session.get('user_id')
+    token = request.json.get('token')
+
+    user = db.get_user(user_id)
+    secret = user.get('mfa_secret_temp')
+
+    if not secret:
+        return jsonify({'error': 'MFA 설정을 먼저 시작하세요'}), 400
+
+    # TOTP 검증
+    totp = pyotp.TOTP(secret)
+    if not totp.verify(token, valid_window=1):
+        return jsonify({'error': '잘못된 인증 코드입니다'}), 400
+
+    # 복구 코드 생성
+    recovery_codes = [
+        f"{secrets.token_hex(2).upper()}-{secrets.token_hex(2).upper()}"
+        for _ in range(10)
+    ]
+
+    # MFA 활성화
+    db.update_user(user_id, {
+        'mfa_secret': secret,
+        'mfa_secret_temp': None,
+        'mfa_enabled': True,
+        'mfa_pending': False,
+        'mfa_recovery_codes': hash_recovery_codes(recovery_codes)
+    })
+
+    return jsonify({
+        'success': True,
+        'recovery_codes': recovery_codes,
+        'message': '복구 코드를 안전하게 저장하세요'
+    })
+
+# 3. MFA 검증 데코레이터
+def require_mfa(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user_id = session.get('user_id')
+        mfa_verified = session.get('mfa_verified')
+
+        if not user_id:
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        user = db.get_user(user_id)
+
+        if user.get('mfa_enabled') and not mfa_verified:
+            return jsonify({
+                'error': 'MFA required',
+                'mfa_required': True
+            }), 403
+
+        return f(*args, **kwargs)
+    return decorated
+
+# 4. 로그인 시 MFA 검증
+@app.route('/api/auth/verify-mfa', methods=['POST'])
+def verify_mfa():
+    token = request.json.get('token')
+    user_id = session.get('pending_user_id')  # 1단계 인증 완료 상태
+
+    if not user_id:
+        return jsonify({'error': '먼저 로그인하세요'}), 401
+
+    user = db.get_user(user_id)
+    totp = pyotp.TOTP(user['mfa_secret'])
+
+    if totp.verify(token, valid_window=1):
+        # MFA 성공
+        session['user_id'] = user_id
+        session['mfa_verified'] = True
+        session.pop('pending_user_id', None)
+
+        return jsonify({'success': True})
+
+    # 복구 코드 확인
+    if verify_recovery_code(user, token):
+        session['user_id'] = user_id
+        session['mfa_verified'] = True
+        return jsonify({'success': True, 'used_recovery_code': True})
+
+    return jsonify({'error': '잘못된 인증 코드입니다'}), 401
+
+# 보호된 엔드포인트 예시
+@app.route('/api/sensitive-data')
+@require_mfa
+def get_sensitive_data():
+    return jsonify({'data': 'This is protected data'})
+
+if __name__ == '__main__':
+    app.run(debug=True)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 정책 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "SMS OTP는 SIM 스와핑 공격에 취약하니 단계적으로 폐지합시다. 관리자와 개발자는 즉시 FIDO2 보안키로 전환하고, 일반 사용자는 6개월 내에 인증 앱(TOTP) 또는 Passkey로 마이그레이션하는 로드맵을 제안합니다. PCI DSS 4.0 준수 기한도 고려해야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 사용자 경험 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "Passkey를 도입하면 로그인 시간이 69초에서 3초로 단축되고, 성공률도 30%에서 95%로 올라갑니다. 사용자 이탈 문제를 해결하면서 동시에 피싱 방어도 강화할 수 있어요. 초기에는 비밀번호와 Passkey를 병행하다가 점진적으로 전환하면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 인시던트 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "이번 피싱 공격에서 TOTP를 사용하던 계정 3개가 탈취되었습니다. 공격자가 실시간으로 OTP를 중계하는 방식이었어요. 반면 FIDO2 보안키를 사용하던 계정은 안전했습니다. WebAuthn의 origin binding 덕분에 피싱 사이트에서는 인증 자체가 불가능했기 때문입니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>SMS OTP 의존</strong>
+                        <p>SMS는 SIM 스와핑, SS7 취약점으로 인해 가장 약한 MFA 방식입니다. NIST도 SMS OTP를 "제한적(restricted)" 인증기로 분류합니다. 신규 구현 시 SMS OTP는 피하고, 기존 시스템은 TOTP나 Passkey로 전환하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>복구 방법 미비</strong>
+                        <p>MFA 기기 분실 시 계정 접근이 불가능해지는 상황을 대비해야 합니다. 복구 코드(10개 이상)를 발급하고, 백업 MFA 방법을 등록하도록 권장하세요. 복구 절차도 충분히 안전해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>MFA 피로 공격 (MFA Fatigue)</strong>
+                        <p>푸시 알림 기반 MFA는 공격자가 반복적으로 인증 요청을 보내 사용자가 실수로 승인하게 만들 수 있습니다. 번호 매칭(Number Matching)이나 FIDO2처럼 사용자 상호작용이 필요한 방식으로 전환하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>MFA 베스트 프랙티스</strong>
+                        <p>고위험 사용자(관리자, 개발자, 재무)에게 FIDO2 보안키를 먼저 배포하고, 일반 사용자는 Passkey/TOTP로 확대하세요. MFA 등록률을 모니터링하고, 미등록 사용자에게 주기적으로 알림을 보내세요. WebAuthn 구현 시 origin binding이 제대로 작동하는지 테스트하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Authentication/" class="related-term-link">Authentication</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+                <a href="/ko/term/OAuth/" class="related-term-link">OAuth</a>
+                <a href="/ko/term/SSO/" class="related-term-link">SSO</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+                <a href="/ko/term/IAM/" class="related-term-link">IAM</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.microsoft.com/en-us/security/business/security-101/what-is-fido2" target="_blank" class="learn-link">
+                    📘 Microsoft - FIDO2란 무엇인가?
+                </a>
+                <a href="https://fidoalliance.org/passkeys/" target="_blank" class="learn-link">
+                    📄 FIDO Alliance - Passkey 공식 가이드
+                </a>
+                <a href="https://webauthn.guide/" target="_blank" class="learn-link">
+                    🔐 WebAuthn.guide - 개발자 가이드
+                </a>
+                <a href="https://www.citsolutions.net/which-mfa-type-is-most-secure-a-definitive-2025-ranking/" target="_blank" class="learn-link">
+                    📝 MFA 보안 등급 순위 2025
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +895,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

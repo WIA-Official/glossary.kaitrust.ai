@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DynamoDB (Amazon DynamoDB) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="AWS 관리형 NoSQL. 서버리스, 무한 확장. 키-값과 문서 모델 지원.">
-    <meta name="keywords" content="DynamoDB, Amazon DynamoDB, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="Amazon DynamoDB는 AWS의 완전 관리형 NoSQL 데이터베이스 서비스입니다. 서버리스로 무한 확장이 가능하며, 키-값과 문서 모델을 지원합니다. 밀리초 단위의 일관된 응답 시간을 보장합니다.">
+    <meta name="keywords" content="DynamoDB, Amazon DynamoDB, AWS, NoSQL, 서버리스, 키-값 저장소, 문서 DB, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/DynamoDB/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/DynamoDB/">
     <meta property="og:title" content="DynamoDB (Amazon DynamoDB) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="AWS 관리형 NoSQL. 서버리스, 무한 확장. 키-값과 문서 모델 지원.">
+    <meta property="og:description" content="Amazon DynamoDB는 AWS의 완전 관리형 NoSQL 데이터베이스 서비스입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DynamoDB (Amazon DynamoDB) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="AWS 관리형 NoSQL. 서버리스, 무한 확장. 키-값과 문서 모델 지원.">
+    <meta name="twitter:description" content="Amazon DynamoDB는 AWS의 완전 관리형 NoSQL 데이터베이스 서비스입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "DynamoDB",
-        "description": "AWS 관리형 NoSQL. 서버리스, 무한 확장. 키-값과 문서 모델 지원.",
+        "alternateName": "Amazon DynamoDB",
+        "description": "Amazon DynamoDB는 AWS의 완전 관리형 NoSQL 데이터베이스 서비스입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">DynamoDB</h1>
             <p class="term-english">Amazon DynamoDB</p>
             <div class="term-description">
-                <p>AWS 관리형 NoSQL. 서버리스, 무한 확장. 키-값과 문서 모델 지원.</p>
+                <p>Amazon DynamoDB는 AWS의 완전 관리형 서버리스 NoSQL 데이터베이스입니다. 키-값 및 문서 데이터 모델을 지원하며, 자동으로 확장되어 트래픽 변화에 대응합니다. 밀리초 단위의 일관된 응답 시간을 보장합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,660 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>완전 관리형 서버리스</strong>: DynamoDB는 서버 프로비저닝, 패치, 백업, 복제 등을 AWS가 자동으로 처리합니다. 사용량에 따라 자동 확장(Auto Scaling)되며, 온디맨드 모드를 사용하면 용량 계획 없이 요청당 과금됩니다. 인프라 관리 부담 없이 애플리케이션 개발에 집중할 수 있습니다.</p>
+                <p><strong>데이터 모델</strong>: 테이블은 파티션 키(PK)와 선택적 정렬 키(SK)로 구성됩니다. 파티션 키는 데이터 분산의 기준이며, 정렬 키로 파티션 내 정렬과 범위 쿼리가 가능합니다. 속성(Attribute)은 스키마리스로 아이템마다 다를 수 있으며, 중첩된 JSON 문서도 저장할 수 있습니다.</p>
+                <p><strong>일관성 모델</strong>: 기본적으로 최종 일관성(Eventually Consistent) 읽기를 제공하여 처리량을 극대화합니다. 강력한 일관성(Strongly Consistent) 읽기도 옵션으로 선택 가능합니다. 트랜잭션 API를 통해 여러 아이템에 대한 ACID 트랜잭션도 지원합니다.</p>
+                <p><strong>보조 인덱스</strong>: GSI(Global Secondary Index)는 다른 파티션 키로 쿼리할 수 있게 해주며, 테이블과 별도의 처리량을 가집니다. LSI(Local Secondary Index)는 같은 파티션 키에 다른 정렬 키로 쿼리합니다. 인덱스를 통해 다양한 액세스 패턴을 지원할 수 있습니다.</p>
+                <p><strong>주요 사용 사례</strong>: 세션 저장소, 사용자 프로필, 장바구니, 게임 리더보드, IoT 데이터, Lambda와 연동한 서버리스 백엔드 등에 적합합니다. Amazon, Lyft, Airbnb, Samsung 등이 대규모로 사용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (boto3)</button>
+                <button class="code-tab" data-lang="node">Node.js (AWS SDK v3)</button>
+                <button class="code-tab" data-lang="cli">AWS CLI</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># DynamoDB Python 예제 - boto3
+import boto3
+from boto3.dynamodb.conditions import Key, Attr
+from decimal import Decimal
+import json
+
+class DynamoDBService:
+    """DynamoDB 데이터베이스 서비스"""
+
+    def __init__(self, table_name: str, region: str = 'ap-northeast-2'):
+        self.dynamodb = boto3.resource('dynamodb', region_name=region)
+        self.table = self.dynamodb.Table(table_name)
+        self.client = boto3.client('dynamodb', region_name=region)
+
+    def create_table(self):
+        """테이블 생성 (파티션 키 + 정렬 키)"""
+        table = self.dynamodb.create_table(
+            TableName='UserOrders',
+            KeySchema=[
+                {'AttributeName': 'user_id', 'KeyType': 'HASH'},   # 파티션 키
+                {'AttributeName': 'order_id', 'KeyType': 'RANGE'}  # 정렬 키
+            ],
+            AttributeDefinitions=[
+                {'AttributeName': 'user_id', 'AttributeType': 'S'},
+                {'AttributeName': 'order_id', 'AttributeType': 'S'},
+                {'AttributeName': 'status', 'AttributeType': 'S'},
+            ],
+            GlobalSecondaryIndexes=[
+                {
+                    'IndexName': 'StatusIndex',
+                    'KeySchema': [
+                        {'AttributeName': 'status', 'KeyType': 'HASH'},
+                        {'AttributeName': 'order_id', 'KeyType': 'RANGE'}
+                    ],
+                    'Projection': {'ProjectionType': 'ALL'}
+                }
+            ],
+            BillingMode='PAY_PER_REQUEST'  # 온디맨드 모드
+        )
+        table.wait_until_exists()
+        print(f"테이블 생성 완료: {table.table_name}")
+
+    def put_item(self, user_id: str, order_id: str, data: dict):
+        """아이템 저장"""
+        item = {
+            'user_id': user_id,
+            'order_id': order_id,
+            **data
+        }
+        # Decimal 변환 (float 미지원)
+        item = json.loads(json.dumps(item), parse_float=Decimal)
+
+        response = self.table.put_item(
+            Item=item,
+            ConditionExpression='attribute_not_exists(user_id)'  # 중복 방지
+        )
+        print(f"저장 완료: {user_id}/{order_id}")
+        return response
+
+    def get_item(self, user_id: str, order_id: str):
+        """단일 아이템 조회"""
+        response = self.table.get_item(
+            Key={
+                'user_id': user_id,
+                'order_id': order_id
+            },
+            ConsistentRead=True  # 강력한 일관성 읽기
+        )
+        return response.get('Item')
+
+    def query_user_orders(self, user_id: str, limit: int = 10):
+        """사용자의 주문 목록 조회 (정렬 키 기반)"""
+        response = self.table.query(
+            KeyConditionExpression=Key('user_id').eq(user_id),
+            ScanIndexForward=False,  # 최신순 정렬
+            Limit=limit
+        )
+        return response['Items']
+
+    def query_by_status(self, status: str):
+        """상태별 주문 조회 (GSI 사용)"""
+        response = self.table.query(
+            IndexName='StatusIndex',
+            KeyConditionExpression=Key('status').eq(status)
+        )
+        return response['Items']
+
+    def update_item(self, user_id: str, order_id: str, status: str):
+        """아이템 업데이트 (조건부)"""
+        response = self.table.update_item(
+            Key={
+                'user_id': user_id,
+                'order_id': order_id
+            },
+            UpdateExpression='SET #status = :status, updated_at = :now',
+            ExpressionAttributeNames={'#status': 'status'},
+            ExpressionAttributeValues={
+                ':status': status,
+                ':now': '2024-01-15T10:00:00Z',
+                ':old_status': 'pending'
+            },
+            ConditionExpression='#status = :old_status',  # 낙관적 락
+            ReturnValues='ALL_NEW'
+        )
+        return response['Attributes']
+
+    def batch_write(self, items: list):
+        """배치 쓰기 (최대 25개)"""
+        with self.table.batch_writer() as batch:
+            for item in items:
+                batch.put_item(Item=item)
+        print(f"{len(items)}개 아이템 배치 저장 완료")
+
+    def transact_write(self, user_id: str, order_id: str, amount: Decimal):
+        """트랜잭션 쓰기 (ACID 보장)"""
+        self.client.transact_write_items(
+            TransactItems=[
+                {
+                    'Update': {
+                        'TableName': 'UserOrders',
+                        'Key': {
+                            'user_id': {'S': user_id},
+                            'order_id': {'S': order_id}
+                        },
+                        'UpdateExpression': 'SET #status = :status',
+                        'ExpressionAttributeNames': {'#status': 'status'},
+                        'ExpressionAttributeValues': {':status': {'S': 'completed'}}
+                    }
+                },
+                {
+                    'Update': {
+                        'TableName': 'UserBalance',
+                        'Key': {'user_id': {'S': user_id}},
+                        'UpdateExpression': 'SET balance = balance - :amount',
+                        'ExpressionAttributeValues': {':amount': {'N': str(amount)}}
+                    }
+                }
+            ]
+        )
+        print("트랜잭션 완료")
+
+
+# 사용 예시
+if __name__ == "__main__":
+    db = DynamoDBService('UserOrders')
+
+    # 주문 저장
+    db.put_item('user123', 'order456', {
+        'product': 'MacBook Pro',
+        'price': Decimal('2500000'),
+        'status': 'pending'
+    })
+
+    # 조회
+    order = db.get_item('user123', 'order456')
+    print(f"주문: {order}")
+
+    # 사용자 주문 목록
+    orders = db.query_user_orders('user123')
+    for o in orders:
+        print(f"주문 ID: {o['order_id']}, 상품: {o['product']}")
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// DynamoDB Node.js 예제 - AWS SDK v3
+const {
+    DynamoDBClient,
+    CreateTableCommand,
+    PutItemCommand,
+    GetItemCommand,
+    QueryCommand,
+    UpdateItemCommand,
+    TransactWriteItemsCommand
+} = require('@aws-sdk/client-dynamodb');
+
+const {
+    DynamoDBDocumentClient,
+    PutCommand,
+    GetCommand,
+    QueryCommand: DocQueryCommand,
+    UpdateCommand,
+    BatchWriteCommand
+} = require('@aws-sdk/lib-dynamodb');
+
+class DynamoDBService {
+    constructor(tableName, region = 'ap-northeast-2') {
+        const client = new DynamoDBClient({ region });
+        this.docClient = DynamoDBDocumentClient.from(client);
+        this.tableName = tableName;
+    }
+
+    async createTable() {
+        const client = new DynamoDBClient({ region: 'ap-northeast-2' });
+        const command = new CreateTableCommand({
+            TableName: this.tableName,
+            KeySchema: [
+                { AttributeName: 'pk', KeyType: 'HASH' },
+                { AttributeName: 'sk', KeyType: 'RANGE' }
+            ],
+            AttributeDefinitions: [
+                { AttributeName: 'pk', AttributeType: 'S' },
+                { AttributeName: 'sk', AttributeType: 'S' },
+                { AttributeName: 'gsi1pk', AttributeType: 'S' },
+                { AttributeName: 'gsi1sk', AttributeType: 'S' }
+            ],
+            GlobalSecondaryIndexes: [{
+                IndexName: 'GSI1',
+                KeySchema: [
+                    { AttributeName: 'gsi1pk', KeyType: 'HASH' },
+                    { AttributeName: 'gsi1sk', KeyType: 'RANGE' }
+                ],
+                Projection: { ProjectionType: 'ALL' }
+            }],
+            BillingMode: 'PAY_PER_REQUEST'
+        });
+
+        await client.send(command);
+        console.log(`테이블 생성: ${this.tableName}`);
+    }
+
+    async putItem(pk, sk, data) {
+        const command = new PutCommand({
+            TableName: this.tableName,
+            Item: {
+                pk,
+                sk,
+                ...data,
+                createdAt: new Date().toISOString()
+            },
+            ConditionExpression: 'attribute_not_exists(pk)'
+        });
+
+        await this.docClient.send(command);
+        console.log(`저장 완료: ${pk}/${sk}`);
+    }
+
+    async getItem(pk, sk) {
+        const command = new GetCommand({
+            TableName: this.tableName,
+            Key: { pk, sk },
+            ConsistentRead: true
+        });
+
+        const response = await this.docClient.send(command);
+        return response.Item;
+    }
+
+    async queryByPartitionKey(pk, options = {}) {
+        const command = new DocQueryCommand({
+            TableName: this.tableName,
+            KeyConditionExpression: 'pk = :pk',
+            ExpressionAttributeValues: {
+                ':pk': pk
+            },
+            ScanIndexForward: options.ascending ?? false,
+            Limit: options.limit ?? 20
+        });
+
+        const response = await this.docClient.send(command);
+        return response.Items;
+    }
+
+    async queryByGSI(gsi1pk, gsi1sk) {
+        const command = new DocQueryCommand({
+            TableName: this.tableName,
+            IndexName: 'GSI1',
+            KeyConditionExpression: 'gsi1pk = :pk AND begins_with(gsi1sk, :sk)',
+            ExpressionAttributeValues: {
+                ':pk': gsi1pk,
+                ':sk': gsi1sk
+            }
+        });
+
+        const response = await this.docClient.send(command);
+        return response.Items;
+    }
+
+    async updateItem(pk, sk, updates) {
+        const updateExpressions = [];
+        const attributeNames = {};
+        const attributeValues = {};
+
+        Object.entries(updates).forEach(([key, value], index) => {
+            const nameKey = `#attr${index}`;
+            const valueKey = `:val${index}`;
+            updateExpressions.push(`${nameKey} = ${valueKey}`);
+            attributeNames[nameKey] = key;
+            attributeValues[valueKey] = value;
+        });
+
+        const command = new UpdateCommand({
+            TableName: this.tableName,
+            Key: { pk, sk },
+            UpdateExpression: `SET ${updateExpressions.join(', ')}`,
+            ExpressionAttributeNames: attributeNames,
+            ExpressionAttributeValues: attributeValues,
+            ReturnValues: 'ALL_NEW'
+        });
+
+        const response = await this.docClient.send(command);
+        return response.Attributes;
+    }
+
+    async batchWrite(items) {
+        // 25개씩 분할
+        const chunks = [];
+        for (let i = 0; i < items.length; i += 25) {
+            chunks.push(items.slice(i, i + 25));
+        }
+
+        for (const chunk of chunks) {
+            const command = new BatchWriteCommand({
+                RequestItems: {
+                    [this.tableName]: chunk.map(item => ({
+                        PutRequest: { Item: item }
+                    }))
+                }
+            });
+
+            await this.docClient.send(command);
+        }
+
+        console.log(`${items.length}개 배치 저장 완료`);
+    }
+
+    async transactWrite(operations) {
+        const client = new DynamoDBClient({ region: 'ap-northeast-2' });
+        const command = new TransactWriteItemsCommand({
+            TransactItems: operations
+        });
+
+        await client.send(command);
+        console.log('트랜잭션 완료');
+    }
+}
+
+// Single Table Design 패턴 예시
+async function main() {
+    const db = new DynamoDBService('MyApp');
+
+    // 사용자 저장
+    await db.putItem('USER#user123', 'PROFILE', {
+        name: '홍길동',
+        email: 'hong@example.com',
+        gsi1pk: 'USER',
+        gsi1sk: 'EMAIL#hong@example.com'
+    });
+
+    // 주문 저장 (같은 파티션에 다른 정렬 키)
+    await db.putItem('USER#user123', 'ORDER#2024-001', {
+        product: 'MacBook Pro',
+        price: 2500000,
+        status: 'pending',
+        gsi1pk: 'ORDER#pending',
+        gsi1sk: '2024-01-15'
+    });
+
+    // 사용자의 모든 데이터 조회
+    const userData = await db.queryByPartitionKey('USER#user123');
+    console.log('사용자 데이터:', userData);
+
+    // 대기중인 모든 주문 조회 (GSI)
+    const pendingOrders = await db.queryByGSI('ORDER#pending', '2024');
+    console.log('대기 주문:', pendingOrders);
+}
+
+main().catch(console.error);
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="cli">
+                <pre><code class="language-bash"># DynamoDB AWS CLI 예제
+
+# ============================================
+# 1. 테이블 생성
+# ============================================
+aws dynamodb create-table \
+    --table-name UserOrders \
+    --key-schema \
+        AttributeName=user_id,KeyType=HASH \
+        AttributeName=order_id,KeyType=RANGE \
+    --attribute-definitions \
+        AttributeName=user_id,AttributeType=S \
+        AttributeName=order_id,AttributeType=S \
+    --billing-mode PAY_PER_REQUEST \
+    --region ap-northeast-2
+
+# 테이블 상태 확인
+aws dynamodb describe-table --table-name UserOrders
+
+
+# ============================================
+# 2. 아이템 저장
+# ============================================
+aws dynamodb put-item \
+    --table-name UserOrders \
+    --item '{
+        "user_id": {"S": "user123"},
+        "order_id": {"S": "order-2024-001"},
+        "product": {"S": "MacBook Pro"},
+        "price": {"N": "2500000"},
+        "status": {"S": "pending"},
+        "created_at": {"S": "2024-01-15T10:00:00Z"}
+    }'
+
+
+# ============================================
+# 3. 아이템 조회
+# ============================================
+# 단일 아이템 조회
+aws dynamodb get-item \
+    --table-name UserOrders \
+    --key '{
+        "user_id": {"S": "user123"},
+        "order_id": {"S": "order-2024-001"}
+    }' \
+    --consistent-read
+
+# 쿼리 (파티션 키로 조회)
+aws dynamodb query \
+    --table-name UserOrders \
+    --key-condition-expression "user_id = :uid" \
+    --expression-attribute-values '{
+        ":uid": {"S": "user123"}
+    }' \
+    --scan-index-forward false \
+    --limit 10
+
+# 범위 쿼리 (정렬 키 조건 추가)
+aws dynamodb query \
+    --table-name UserOrders \
+    --key-condition-expression "user_id = :uid AND begins_with(order_id, :prefix)" \
+    --expression-attribute-values '{
+        ":uid": {"S": "user123"},
+        ":prefix": {"S": "order-2024"}
+    }'
+
+
+# ============================================
+# 4. 아이템 업데이트
+# ============================================
+aws dynamodb update-item \
+    --table-name UserOrders \
+    --key '{
+        "user_id": {"S": "user123"},
+        "order_id": {"S": "order-2024-001"}
+    }' \
+    --update-expression "SET #status = :status, updated_at = :now" \
+    --expression-attribute-names '{"#status": "status"}' \
+    --expression-attribute-values '{
+        ":status": {"S": "completed"},
+        ":now": {"S": "2024-01-15T12:00:00Z"}
+    }' \
+    --condition-expression "#status = :old_status" \
+    --expression-attribute-values '{
+        ":status": {"S": "completed"},
+        ":now": {"S": "2024-01-15T12:00:00Z"},
+        ":old_status": {"S": "pending"}
+    }' \
+    --return-values ALL_NEW
+
+
+# ============================================
+# 5. GSI 생성
+# ============================================
+aws dynamodb update-table \
+    --table-name UserOrders \
+    --attribute-definitions AttributeName=status,AttributeType=S \
+    --global-secondary-index-updates '[{
+        "Create": {
+            "IndexName": "StatusIndex",
+            "KeySchema": [
+                {"AttributeName": "status", "KeyType": "HASH"},
+                {"AttributeName": "order_id", "KeyType": "RANGE"}
+            ],
+            "Projection": {"ProjectionType": "ALL"}
+        }
+    }]'
+
+
+# ============================================
+# 6. 배치 쓰기
+# ============================================
+aws dynamodb batch-write-item \
+    --request-items '{
+        "UserOrders": [
+            {
+                "PutRequest": {
+                    "Item": {
+                        "user_id": {"S": "user456"},
+                        "order_id": {"S": "order-001"},
+                        "product": {"S": "iPhone"}
+                    }
+                }
+            },
+            {
+                "PutRequest": {
+                    "Item": {
+                        "user_id": {"S": "user456"},
+                        "order_id": {"S": "order-002"},
+                        "product": {"S": "iPad"}
+                    }
+                }
+            }
+        ]
+    }'
+
+
+# ============================================
+# 7. TTL 설정 (자동 삭제)
+# ============================================
+aws dynamodb update-time-to-live \
+    --table-name UserOrders \
+    --time-to-live-specification Enabled=true,AttributeName=expires_at
+
+
+# ============================================
+# 8. 백업 및 복원
+# ============================================
+# 온디맨드 백업
+aws dynamodb create-backup \
+    --table-name UserOrders \
+    --backup-name UserOrders-backup-20240115
+
+# Point-in-Time Recovery 활성화
+aws dynamodb update-continuous-backups \
+    --table-name UserOrders \
+    --point-in-time-recovery-specification PointInTimeRecoveryEnabled=true
+
+
+# ============================================
+# 9. 로컬 개발 (DynamoDB Local)
+# ============================================
+# Docker로 실행
+docker run -p 8000:8000 amazon/dynamodb-local
+
+# 로컬에 연결
+aws dynamodb list-tables --endpoint-url http://localhost:8000
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 서버리스 아키텍처 설계에서</div>
+                    <blockquote class="conv-quote">
+                        "Lambda와 DynamoDB 조합이면 서버리스 백엔드가 완성됩니다. 온디맨드 모드로 설정하면 트래픽에 따라 자동 확장되고, 사용한 만큼만 비용이 청구돼요. 세션 저장소나 사용자 프로필 같은 간단한 키-값 데이터에 완벽합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 데이터 모델링 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "DynamoDB는 쿼리 패턴을 먼저 정의하고 테이블을 설계해야 합니다. Single Table Design을 적용해서 pk는 'USER#user123', sk는 'ORDER#2024-001' 형태로 하면 한 번의 쿼리로 사용자와 주문을 모두 가져올 수 있어요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 비용 최적화 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "스캔 연산이 너무 많이 발생하고 있네요. DynamoDB에서 Scan은 전체 테이블을 읽어서 비용이 급증합니다. GSI를 추가해서 Query로 바꾸거나, 필터링을 애플리케이션 레벨로 옮기는 게 좋겠습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Scan 연산 지양</strong>
+                        <p>Scan은 전체 테이블을 읽어 비용과 지연이 급증합니다. 반드시 파티션 키를 포함한 Query를 사용하고, 필요하면 GSI를 추가하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>핫 파티션 방지</strong>
+                        <p>특정 파티션 키에 트래픽이 몰리면 쓰로틀링이 발생합니다. 고르게 분산되는 파티션 키를 선택하거나, 쓰기 샤딩을 적용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>아이템 크기 제한 (400KB)</strong>
+                        <p>단일 아이템은 400KB를 초과할 수 없습니다. 대용량 데이터는 S3에 저장하고 참조만 DynamoDB에 저장하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>베스트 프랙티스</strong>
+                        <p>Single Table Design 적용, 액세스 패턴 기반 설계, TTL로 자동 정리, DAX 캐시로 읽기 성능 향상, Point-in-Time Recovery 활성화.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/NoSQL/" class="related-term-link">NoSQL</a>
+                <a href="/ko/term/AWS/" class="related-term-link">AWS</a>
+                <a href="/ko/term/Lambda/" class="related-term-link">Lambda</a>
+                <a href="/ko/term/Cassandra/" class="related-term-link">Cassandra</a>
+                <a href="/ko/term/MongoDB/" class="related-term-link">MongoDB</a>
+                <a href="/ko/term/Serverless/" class="related-term-link">Serverless</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/" target="_blank" class="learn-link">
+                    📄 AWS DynamoDB 공식 개발자 가이드
+                </a>
+                <a href="https://www.dynamodbguide.com/" target="_blank" class="learn-link">
+                    🎓 DynamoDB Guide - Alex DeBrie
+                </a>
+                <a href="https://www.youtube.com/watch?v=HaEPXoXVf2k" target="_blank" class="learn-link">
+                    📖 AWS re:Invent - DynamoDB 고급 설계 패턴
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +950,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

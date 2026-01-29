@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORS (Cross-Origin Resource Sharing) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="다른 출처의 리소스 접근을 제어하는 보안 메커니즘. 브라우저가 강제. 서버에서 허용 설정.">
-    <meta name="keywords" content="CORS, Cross-Origin Resource Sharing, AI 용어, KAITRUST, AI 백과사전, 웹개발">
+    <title>CORS | Cross-Origin Resource Sharing 웹 보안 | KAITRUST AI 백과사전</title>
+    <meta name="description" content="CORS(Cross-Origin Resource Sharing)는 다른 출처의 리소스 접근을 제어하는 브라우저 보안 메커니즘입니다. 서버가 Access-Control-Allow-Origin 헤더로 허용 출처를 지정합니다.">
+    <meta name="keywords" content="CORS, Cross-Origin Resource Sharing, 교차 출처 리소스 공유, 동일 출처 정책, SOP, Same-Origin Policy, 프리플라이트, Preflight, OPTIONS, Access-Control-Allow-Origin, 웹 보안, API 보안, 웹개발">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/CORS/">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/CORS/">
     <meta property="og:title" content="CORS (Cross-Origin Resource Sharing) | KAITRUST AI 백과사전">
@@ -17,13 +16,11 @@
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="CORS (Cross-Origin Resource Sharing) | KAITRUST AI 백과사전">
     <meta name="twitter:description" content="다른 출처의 리소스 접근을 제어하는 보안 메커니즘. 브라우저가 강제. 서버에서 허용 설정.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
-    <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -41,137 +38,65 @@
     <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
     <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <!-- Common CSS -->
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
 
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="https://kaitrust.ai">홈</a>
             <span>›</span>
@@ -182,7 +107,6 @@
             <span class="current">CORS</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
             <div class="term-category-badge">
                 <span>🌐</span>
@@ -194,24 +118,154 @@
                 <p>다른 출처의 리소스 접근을 제어하는 보안 메커니즘. 브라우저가 강제. 서버에서 허용 설정.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#web" class="term-action-btn btn-secondary">
-                    🌐 웹개발 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#web" class="term-action-btn btn-secondary">🌐 웹개발 더보기</a>
             </div>
         </article>
+
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>CORS(Cross-Origin Resource Sharing)는 웹 브라우저가 다른 출처(도메인, 프로토콜, 포트)의 리소스에 접근할 때 적용되는 보안 메커니즘입니다. 기본적으로 브라우저는 동일 출처 정책(Same-Origin Policy)을 따라 다른 출처의 리소스 접근을 차단하는데, CORS는 서버가 명시적으로 허용한 출처에서만 접근을 허용합니다.</p>
+                <p>CORS의 배경은 웹 보안입니다. 만약 제한이 없다면 악성 사이트에서 사용자의 은행 사이트 API를 호출해 민감한 정보를 탈취할 수 있습니다. CORS는 서버가 Access-Control-Allow-Origin 헤더로 허용된 출처를 명시하고, 브라우저가 이를 확인해서 불허된 요청을 차단합니다.</p>
+                <p>CORS에는 두 가지 요청 유형이 있습니다. 단순 요청(Simple Request)은 GET, POST(특정 Content-Type)로 바로 보내지고, 프리플라이트 요청(Preflight Request)은 PUT, DELETE나 커스텀 헤더가 있을 때 OPTIONS 메서드로 먼저 허용 여부를 확인합니다.</p>
+                <p>실무에서 CORS 에러는 프론트엔드 개발자가 가장 자주 마주하는 에러 중 하나입니다. 로컬 개발 시 localhost와 API 서버 출처가 달라서 발생하며, 백엔드에서 적절한 CORS 헤더를 설정하거나, 프록시를 통해 우회합니다.</p>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <pre><code class="language-javascript">// Express.js CORS 설정
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+// 모든 출처 허용 (개발용, 프로덕션에서 비권장)
+app.use(cors());
+
+// 특정 출처만 허용 (권장)
+app.use(cors({
+  origin: ['https://myapp.com', 'https://admin.myapp.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,  // 쿠키 허용
+  maxAge: 86400,      // 프리플라이트 캐시 24시간
+}));
+
+// 라우트별 CORS 설정
+app.get('/public', cors(), (req, res) => {
+  res.json({ message: '누구나 접근 가능' });
+});
+
+app.get('/private', cors({ origin: 'https://admin.myapp.com' }), (req, res) => {
+  res.json({ message: '관리자만 접근 가능' });
+});
+
+// Next.js API Route에서 CORS 설정
+// pages/api/data.ts
+export default function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', 'https://myapp.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();  // 프리플라이트 응답
+  }
+
+  res.json({ data: 'Hello' });
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "로컬에서 API 호출할 때 CORS 에러 나요. 백엔드에서 localhost:3000을 허용 목록에 추가해주시거나, Next.js rewrites로 프록시 설정할게요. 프로덕션에서는 실제 도메인만 허용하면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "CORS는 브라우저의 보안 정책입니다. 서버가 Access-Control-Allow-Origin 헤더로 허용 출처를 지정하고, 브라우저가 이를 검증해요. PUT이나 DELETE 같은 요청은 프리플라이트로 OPTIONS 요청을 먼저 보내서 허용 여부를 확인합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "Access-Control-Allow-Origin: * 설정은 프로덕션에서 위험해요. 허용할 도메인을 명시하고, credentials: true일 때는 와일드카드가 아예 안 됩니다. 환경별로 분리하세요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>와일드카드(*) 남용</strong>
+                        <p>모든 출처를 허용하면 CSRF 공격에 취약해집니다. 프로덕션에서는 반드시 허용할 도메인을 명시하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>프리플라이트 캐싱 무시</strong>
+                        <p>매 요청마다 OPTIONS 호출이 발생하면 성능이 저하됩니다. Access-Control-Max-Age 헤더로 캐싱하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 패턴</strong>
+                        <p>허용 출처를 환경변수로 관리하고, credentials 사용 시 와일드카드 대신 명시적 출처를 설정하세요. 필요한 메서드와 헤더만 허용합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Cookie/" class="related-term-link">Cookie</a>
+                <a href="/ko/term/REST%20API/" class="related-term-link">REST API</a>
+                <a href="/ko/term/Fetch%20API/" class="related-term-link">Fetch API</a>
+                <a href="/ko/term/Middleware/" class="related-term-link">Middleware</a>
+                <a href="/ko/term/Express.js/" class="related-term-link">Express.js</a>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://developer.mozilla.org/ko/docs/Web/HTTP/CORS" target="_blank" class="learn-link">📄 MDN - CORS 가이드</a>
+                <a href="https://web.dev/cross-origin-resource-sharing/" target="_blank" class="learn-link">🎓 web.dev - CORS 심화</a>
+                <a href="https://fetch.spec.whatwg.org/#cors-protocol" target="_blank" class="learn-link">📖 WHATWG - CORS 명세</a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

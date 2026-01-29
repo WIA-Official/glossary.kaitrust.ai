@@ -50,168 +50,251 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#data">데이터공학</a>
-            <span>›</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai/#data">데이터공학</a><span>›</span>
             <span class="current">ETL</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>📊</span>
-                <span>데이터공학</span>
-            </div>
+            <div class="term-category-badge"><span>📊</span><span>데이터공학</span></div>
             <h1 class="term-title">ETL</h1>
             <p class="term-english">Extract, Transform, Load</p>
             <div class="term-description">
                 <p>데이터 파이프라인의 3단계. 추출, 변환, 적재. 데이터 웨어하우스 구축의 기초.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#data" class="term-action-btn btn-secondary">
-                    📊 데이터공학 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#data" class="term-action-btn btn-secondary">📊 데이터공학 더보기</a>
             </div>
         </article>
+
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>ETL(Extract, Transform, Load)은 데이터 파이프라인의 기본 패턴으로, 다양한 소스에서 데이터를 추출하고(Extract), 분석에 적합한 형태로 변환한 뒤(Transform), 목적지 시스템에 적재(Load)하는 과정입니다. 데이터 웨어하우스, 데이터 레이크, ML 파이프라인의 기초가 됩니다.</p>
+                <p>Extract 단계에서는 데이터베이스(MySQL, PostgreSQL), SaaS(Salesforce, Stripe), API, 파일(CSV, JSON) 등 다양한 소스에서 데이터를 가져옵니다. 전체 데이터를 가져오는 Full Load와 변경된 데이터만 가져오는 Incremental Load 방식이 있으며, 대용량 데이터는 Incremental이 효율적입니다.</p>
+                <p>Transform 단계에서는 데이터 정제(null 처리, 중복 제거), 형식 변환(날짜 포맷, 타입 캐스팅), 비즈니스 로직 적용(계산 필드, 집계), 조인 및 통합을 수행합니다. 이 단계가 가장 복잡하며 비즈니스 요구사항에 따라 크게 달라집니다.</p>
+                <p>최근에는 ELT(Extract, Load, Transform) 패턴도 많이 사용됩니다. 클라우드 DW의 컴퓨팅 파워를 활용하여 원시 데이터를 먼저 적재한 후 변환하는 방식입니다. Fivetran, Airbyte 같은 도구가 EL(Extract, Load)을 담당하고, dbt가 Transform을 담당하는 구조가 일반적입니다.</p>
+            </div>
+        </section>
+
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Python ETL 파이프라인 예제
+
+import pandas as pd
+from sqlalchemy import create_engine
+from datetime import datetime, timedelta
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+class ETLPipeline:
+    def __init__(self, source_conn, target_conn):
+        self.source_engine = create_engine(source_conn)
+        self.target_engine = create_engine(target_conn)
+
+    # 1. EXTRACT - 소스에서 데이터 추출
+    def extract(self, table_name: str, incremental_col: str = None,
+                last_value = None) -> pd.DataFrame:
+        """증분 또는 전체 데이터 추출"""
+
+        if incremental_col and last_value:
+            # Incremental Load: 변경된 데이터만
+            query = f"""
+                SELECT * FROM {table_name}
+                WHERE {incremental_col} > '{last_value}'
+                ORDER BY {incremental_col}
+            """
+            logger.info(f"Incremental extract from {table_name} after {last_value}")
+        else:
+            # Full Load: 전체 데이터
+            query = f"SELECT * FROM {table_name}"
+            logger.info(f"Full extract from {table_name}")
+
+        df = pd.read_sql(query, self.source_engine)
+        logger.info(f"Extracted {len(df)} rows")
+        return df
+
+    # 2. TRANSFORM - 데이터 변환
+    def transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        """데이터 정제 및 변환"""
+
+        # 2-1. 데이터 정제
+        df = df.drop_duplicates()
+        df = df.dropna(subset=['user_id', 'event_type'])  # 필수 필드 null 제거
+
+        # 2-2. 타입 변환
+        df['created_at'] = pd.to_datetime(df['created_at'])
+        df['amount'] = pd.to_numeric(df['amount'], errors='coerce').fillna(0)
+
+        # 2-3. 파생 컬럼 생성
+        df['event_date'] = df['created_at'].dt.date
+        df['event_hour'] = df['created_at'].dt.hour
+        df['is_weekend'] = df['created_at'].dt.dayofweek >= 5
+
+        # 2-4. 비즈니스 로직 적용
+        df['amount_category'] = pd.cut(
+            df['amount'],
+            bins=[0, 100, 500, float('inf')],
+            labels=['small', 'medium', 'large']
+        )
+
+        # 2-5. 메타데이터 추가
+        df['etl_timestamp'] = datetime.now()
+        df['etl_batch_id'] = datetime.now().strftime('%Y%m%d%H%M%S')
+
+        logger.info(f"Transformed {len(df)} rows")
+        return df
+
+    # 3. LOAD - 목적지에 적재
+    def load(self, df: pd.DataFrame, table_name: str,
+             if_exists: str = 'append') -> None:
+        """데이터 적재 (append 또는 replace)"""
+
+        df.to_sql(
+            table_name,
+            self.target_engine,
+            if_exists=if_exists,
+            index=False,
+            method='multi',  # 배치 insert로 성능 향상
+            chunksize=1000
+        )
+        logger.info(f"Loaded {len(df)} rows to {table_name}")
+
+    # ETL 실행
+    def run(self, source_table: str, target_table: str,
+            incremental_col: str = None, last_value = None):
+        """ETL 파이프라인 실행"""
+
+        logger.info(f"Starting ETL: {source_table} -> {target_table}")
+
+        # Extract
+        raw_data = self.extract(source_table, incremental_col, last_value)
+
+        if raw_data.empty:
+            logger.info("No new data to process")
+            return
+
+        # Transform
+        transformed_data = self.transform(raw_data)
+
+        # Load
+        self.load(transformed_data, target_table)
+
+        logger.info("ETL completed successfully")
+        return transformed_data[incremental_col].max() if incremental_col else None
+
+
+# 사용 예시
+if __name__ == "__main__":
+    pipeline = ETLPipeline(
+        source_conn="postgresql://source_db/production",
+        target_conn="postgresql://target_db/analytics"
+    )
+
+    # 증분 ETL 실행
+    last_processed = pipeline.run(
+        source_table="events",
+        target_table="fact_events",
+        incremental_col="created_at",
+        last_value="2024-01-15 00:00:00"
+    )</code></pre>
+            </div>
+        </section>
+
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">데이터엔지니어:</strong> "어제 ETL 작업이 3시간 걸렸어요. 변환 단계에서 join이 너무 많아서요."</p>
+                <p><strong class="role-junior">주니어:</strong> "ELT로 바꾸면 어떨까요? 먼저 raw로 적재하고 BigQuery에서 변환하면 분산 처리되니까 빨라질 것 같은데요."</p>
+                <p><strong class="role-senior">시니어:</strong> "좋은 아이디어예요. dbt로 변환 로직 관리하면 버전 관리도 되고 테스트도 쉬워집니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "ETL과 ELT의 차이점과 각각 언제 사용하는지 설명해주세요."</p>
+                <p><strong class="role-interviewee">지원자:</strong> "ETL은 적재 전에 변환하므로 정제된 데이터만 저장됩니다. 온프레미스 DW에서 많이 쓰였어요. ELT는 원시 데이터를 먼저 적재하고 변환합니다. 클라우드 DW의 컴퓨팅 파워를 활용하고, 원시 데이터를 보존하여 나중에 다른 변환도 가능합니다. 요즘은 ELT가 더 유연해서 선호됩니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 ETL에 멱등성(idempotency)이 없네요. 같은 데이터를 두 번 실행하면 중복 적재돼요."</p>
+                <p><strong class="role-author">작성자:</strong> "merge/upsert 로직 추가하겠습니다. 또는 적재 전에 해당 날짜 데이터를 삭제하는 delete-insert 패턴으로 변경할게요."</p>
+            </div>
+        </section>
+
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>ETL 실패 시 부분 적재된 데이터를 어떻게 처리할지 고려하세요. 트랜잭션 또는 멱등성 설계가 필요합니다.</li>
+                <li>소스 시스템에 부하를 주지 않도록 피크 타임을 피하고, 필요한 데이터만 추출하세요.</li>
+                <li class="info">모니터링과 알림을 설정하세요. ETL 실패를 빨리 감지하지 못하면 데이터 갭이 발생하여 분석 결과에 영향을 줍니다.</li>
+            </ul>
+        </section>
+
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Data%20Warehouse/" class="related-link">Data Warehouse</a>
+                <a href="/ko/term/Fivetran/" class="related-link">Fivetran</a>
+                <a href="/ko/term/Kafka/" class="related-link">Kafka</a>
+                <a href="/ko/term/Flink/" class="related-link">Apache Flink</a>
+                <a href="/ko/term/Great%20Expectations/" class="related-link">Great Expectations</a>
+            </div>
+        </section>
+
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.getdbt.com/" target="_blank">dbt 공식 문서 (Transform)</a></li>
+                <li><span class="type-official"></span><a href="https://airflow.apache.org/docs/" target="_blank">Apache Airflow (오케스트레이션)</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.fivetran.com/blog/etl-vs-elt" target="_blank">ETL vs ELT 비교</a></li>
+            </ul>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

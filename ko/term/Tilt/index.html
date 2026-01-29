@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,162 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Tilt는 2018년 출시된 로컬 Kubernetes 개발 환경 도구로, 코드 변경 시 자동으로 빌드, 푸시, 배포를 수행하는 "라이브 업데이트" 기능이 핵심입니다. Docker Compose의 편의성을 Kubernetes에 가져온 도구라고 볼 수 있습니다.</p>
+                <p>Tiltfile이라는 Python 기반 스크립트로 개발 환경을 정의합니다. docker_build로 이미지 빌드를, k8s_yaml로 매니페스트를, k8s_resource로 리소스 설정을 정의합니다. 코드 변경 감지 시 변경된 파일만 컨테이너에 동기화(Live Update)하거나 전체 빌드를 수행합니다.</p>
+                <p>Tilt의 웹 UI는 모든 서비스의 빌드 상태, 로그, 에러를 한 화면에서 보여줍니다. 빌드 시간, 배포 시간이 실시간으로 표시되어 병목 지점을 쉽게 파악할 수 있습니다. 문제 발생 시 원클릭으로 해당 서비스의 로그와 상태를 확인합니다.</p>
+                <p>실무에서는 마이크로서비스 환경에서 여러 서비스를 동시에 개발할 때 사용합니다. 개발자가 담당하는 서비스만 로컬 코드로 실행하고, 나머지는 클러스터의 이미지를 사용합니다. 평균적으로 빌드-배포 사이클이 5분에서 10초 이내로 단축됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Tiltfile 예제
+# 마이크로서비스 개발 환경 설정
+
+# 의존성 있는 Helm 차트 설치 (Redis, PostgreSQL)
+load('ext://helm_resource', 'helm_resource')
+helm_resource('redis', 'bitnami/redis', namespace='dev')
+helm_resource('postgresql', 'bitnami/postgresql', namespace='dev')
+
+# API 서비스 - Live Update 활성화
+docker_build(
+    'myapp/api-service',
+    './services/api',
+    dockerfile='./services/api/Dockerfile',
+    live_update=[
+        # 소스 코드만 동기화 (빌드 없이)
+        sync('./services/api/src', '/app/src'),
+        # package.json 변경 시 npm install 실행
+        run('npm install', trigger=['./services/api/package.json']),
+    ]
+)
+
+# Web 프론트엔드 - Hot Reload
+docker_build(
+    'myapp/web',
+    './services/web',
+    dockerfile='./services/web/Dockerfile.dev',
+    live_update=[
+        sync('./services/web/src', '/app/src'),
+        sync('./services/web/public', '/app/public'),
+    ]
+)
+
+# Worker 서비스 - 전체 빌드
+docker_build(
+    'myapp/worker',
+    './services/worker',
+    dockerfile='./services/worker/Dockerfile'
+)
+
+# Kubernetes 매니페스트 적용
+k8s_yaml([
+    './k8s/api-deployment.yaml',
+    './k8s/web-deployment.yaml',
+    './k8s/worker-deployment.yaml',
+])
+
+# 리소스 설정
+k8s_resource(
+    'api-service',
+    port_forwards='8080:8080',  # localhost:8080으로 접근
+    resource_deps=['redis', 'postgresql'],  # 의존성
+    labels=['backend']
+)
+
+k8s_resource(
+    'web',
+    port_forwards='3000:3000',
+    resource_deps=['api-service'],
+    labels=['frontend']
+)
+
+k8s_resource(
+    'worker',
+    resource_deps=['redis'],
+    labels=['backend']
+)
+
+# 개발 편의 설정
+config.define_bool("debug")
+cfg = config.parse()
+if cfg.get("debug"):
+    # 디버그 모드에서 추가 설정
+    local_resource(
+        'db-seed',
+        cmd='npm run db:seed',
+        deps=['./seeds'],
+        labels=['setup']
+    )
+
+# 실행: tilt up
+# UI 접속: http://localhost:10350</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "마이크로서비스 12개 로컬에서 다 띄우기 힘들어요. Tilt로 내가 개발하는 서비스만 live update 걸고 나머지는 클러스터 거 쓰면 어떨까요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "Live Update가 뭔가요? 매번 이미지 빌드 안 해도 되나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "소스 파일만 컨테이너에 동기화해요. Node.js면 nodemon이 자동 재시작하니까 저장하면 바로 반영돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "로컬 Kubernetes 개발 환경은 어떻게 구성하셨나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "Tilt를 사용했습니다. Tiltfile에서 서비스별 빌드와 배포를 정의하고, live_update로 코드 변경 시 컨테이너에 직접 동기화했습니다. 개발 사이클이 이미지 빌드 포함 3분에서 5초로 단축됐고, 웹 UI에서 모든 서비스 상태를 한눈에 볼 수 있어 디버깅도 편했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "Tiltfile에 live_update 없이 docker_build만 있네요. 매번 전체 빌드하면 느려요."</p>
+                <p><strong class="role-junior">개발자:</strong> "Node.js라 sync로 /app/src만 동기화하면 nodemon이 재시작하겠네요. live_update 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>Live Update는 인터프리터 언어(Node.js, Python)에 최적화 - Go, Java는 바이너리 재빌드 필요</li>
+                <li>많은 서비스를 Tilt로 관리하면 리소스 소모가 큼 - 개발 중인 서비스만 선택적으로 활성화</li>
+                <li>프로덕션 Dockerfile과 개발용 Dockerfile이 달라지면 환경 차이 발생 가능</li>
+                <li class="info">Tiltfile Extensions(ext://)를 활용하면 Helm, Namespace, Local Resource 등 다양한 기능을 쉽게 추가 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Telepresence/" class="related-link">Telepresence</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+                <a href="/ko/term/Dockerfile/" class="related-link">Dockerfile</a>
+                <a href="/ko/term/Helm/" class="related-link">Helm</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.tilt.dev/" target="_blank" rel="noopener">Tilt 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://docs.tilt.dev/tutorial/" target="_blank" rel="noopener">Tilt 튜토리얼</a></li>
+                <li><span class="type-book"></span><a href="https://github.com/tilt-dev/tilt-extensions" target="_blank" rel="noopener">Tilt Extensions 저장소</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +369,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

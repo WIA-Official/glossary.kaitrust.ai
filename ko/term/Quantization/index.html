@@ -156,6 +156,140 @@
             margin-bottom: 1.5rem;
             color: #f1f5f9;
         }
+        /* Term Section Styles */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+        /* Code Block */
+        .code-block-wrapper {
+            position: relative;
+            margin: 1rem 0;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            color: #e2e8f0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        /* Conversation Examples */
+        .conversation-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .conversation-item:last-child {
+            margin-bottom: 0;
+        }
+        .conversation-context {
+            color: #a855f7;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .conversation-text {
+            color: #e2e8f0;
+            font-style: italic;
+        }
+        /* Warning Items */
+        .warning-item {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+        .warning-item:last-child {
+            margin-bottom: 0;
+        }
+        .warning-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .warning-content strong {
+            color: #f1f5f9;
+        }
+        /* Related Terms */
+        .related-terms-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+        /* Learn More */
+        .learn-more-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .learn-more-list li {
+            margin-bottom: 0.75rem;
+        }
+        .learn-more-list a {
+            color: #67e8f9;
+            text-decoration: none;
+        }
+        .learn-more-list a:hover {
+            text-decoration: underline;
+        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -202,6 +336,193 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>양자화(Quantization)는 신경망의 가중치와 활성화 값을 높은 정밀도(FP32/FP16)에서 낮은 정밀도(INT8/INT4)로 변환하는 기법입니다. 이를 통해 모델 크기를 2-8배 줄이고, 추론 속도를 1.5-4배 향상시킬 수 있습니다. 특히 LLM 시대에 70B 이상의 대형 모델을 소비자용 GPU에서 실행하기 위한 필수 기술로 자리잡았습니다.</p>
+
+                <p>양자화는 크게 두 가지 방식으로 나뉩니다. PTQ(Post-Training Quantization)는 이미 학습된 모델을 별도 학습 없이 양자화하는 방법으로, GPTQ, AWQ, GGUF 등이 대표적입니다. 빠르고 간편하지만 극단적인 저정밀도(4-bit 이하)에서는 품질 저하가 발생할 수 있습니다. QAT(Quantization-Aware Training)는 학습 과정에서 양자화를 시뮬레이션하여, 모델이 저정밀도 환경에 적응하도록 합니다. 품질은 더 좋지만 추가 학습이 필요합니다.</p>
+
+                <p>현대 양자화 기법의 핵심은 "중요한 가중치를 보존"하는 것입니다. GPTQ는 Hessian 정보를 활용하여 손실 함수에 민감한 가중치를 우선 보존합니다. AWQ(Activation-aware Weight Quantization)는 활성화 값의 크기를 기준으로 중요한 채널을 식별하고 보호합니다. NF4(NormalFloat 4-bit)는 가중치가 정규분포를 따른다는 점을 활용하여 양자화 bins를 최적화합니다. 이런 기법들 덕분에 4-bit 양자화에서도 원본 대비 1-2%의 성능 저하만으로 모델을 압축할 수 있게 되었습니다.</p>
+
+                <p>실무에서 양자화 모델은 다양한 포맷으로 배포됩니다. GGUF(GPT-Generated Unified Format)는 llama.cpp에서 사용하는 포맷으로, CPU 추론에 최적화되어 있고 Q4_K_M, Q5_K_S 같은 다양한 양자화 레벨을 지원합니다. GPTQ는 GPU 추론에 최적화되어 있으며 Hugging Face에서 널리 사용됩니다. AWQ는 GPTQ보다 빠른 속도와 유사한 품질을 제공합니다. 모바일/엣지 배포에는 TensorRT-LLM, ONNX Runtime 등의 최적화 런타임과 함께 사용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>다양한 양자화 기법을 활용하여 LLM을 로드하고 추론하는 예제입니다:</p>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre class="code-block"><code># 1. bitsandbytes 4-bit 양자화 (QLoRA용)
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig
+import torch
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",           # NormalFloat4
+    bnb_4bit_compute_dtype=torch.bfloat16,
+    bnb_4bit_use_double_quant=True       # 추가 압축
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-2-7b-hf",
+    quantization_config=bnb_config,
+    device_map="auto"
+)
+# 원본 28GB -> 양자화 후 ~4GB
+
+# 2. GPTQ 양자화 모델 로드 (GPU 추론)
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained(
+    "TheBloke/Llama-2-7B-GPTQ",
+    device_map="auto",
+    trust_remote_code=True
+)
+
+# 3. AWQ 양자화 모델 (더 빠른 추론)
+from awq import AutoAWQForCausalLM
+
+model = AutoAWQForCausalLM.from_pretrained(
+    "TheBloke/Llama-2-7B-AWQ",
+    device_map="auto"
+)
+
+# 4. llama.cpp GGUF 모델 (CPU/저사양 GPU)
+from llama_cpp import Llama
+
+llm = Llama(
+    model_path="./llama-2-7b.Q4_K_M.gguf",
+    n_ctx=4096,           # 컨텍스트 길이
+    n_threads=8,          # CPU 스레드
+    n_gpu_layers=35       # GPU 오프로드 레이어 수
+)
+
+output = llm(
+    "AI의 미래는",
+    max_tokens=100,
+    temperature=0.7
+)
+print(output["choices"][0]["text"])
+
+# 5. 직접 GPTQ 양자화 수행
+from transformers import AutoModelForCausalLM, AutoTokenizer, GPTQConfig
+
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
+gptq_config = GPTQConfig(
+    bits=4,
+    dataset="c4",          # 캘리브레이션 데이터셋
+    tokenizer=tokenizer,
+    group_size=128
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-2-7b-hf",
+    quantization_config=gptq_config,
+    device_map="auto"
+)
+model.save_pretrained("./llama-2-7b-gptq")</code></pre>
+                </div>
+                <p>PyTorch 네이티브 양자화 (비-LLM 모델용):</p>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre class="code-block"><code>import torch
+from torch.quantization import quantize_dynamic
+
+# 동적 양자화 (추론 시 활성화 양자화)
+model_fp32 = MyModel()
+model_int8 = quantize_dynamic(
+    model_fp32,
+    {torch.nn.Linear, torch.nn.LSTM},  # 양자화 대상 레이어
+    dtype=torch.qint8
+)
+
+# 정적 양자화 (캘리브레이션 필요)
+model.qconfig = torch.quantization.get_default_qconfig('fbgemm')
+torch.quantization.prepare(model, inplace=True)
+# ... 캘리브레이션 데이터로 forward pass ...
+torch.quantization.convert(model, inplace=True)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-item">
+                    <div class="conversation-context">💼 회의에서</div>
+                    <p class="conversation-text">"Llama 70B를 서비스하려면 A100 2장이 필요한데, AWQ 4-bit 양자화하면 단일 A100에서 돌릴 수 있습니다. 성능 저하는 MMLU 기준 1.5% 정도예요. 인프라 비용 50% 절감 효과가 있습니다."</p>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-context">👔 면접에서</div>
+                    <p class="conversation-text">"양자화 방식 선택은 배포 환경에 따라 달라집니다. GPU 서버면 GPTQ나 AWQ가 빠르고, Mac이나 CPU 환경이면 GGUF Q4_K_M이 좋은 품질-속도 트레이드오프를 제공합니다. 극한의 압축이 필요하면 2-bit도 가능하지만 품질 저하가 큽니다."</p>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-context">🔧 기술 토론에서</div>
+                    <p class="conversation-text">"AWQ가 GPTQ보다 빠른 이유는 그룹 단위 양자화 대신 채널별 스케일링을 사용해서 행렬 연산이 더 효율적이기 때문이에요. 다만 GPTQ는 perplexity가 살짝 더 낫고, 생태계가 더 성숙해서 선택은 상황에 따라 다릅니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div class="warning-content">
+                        <strong>무조건 최저 비트 선택:</strong> Q2_K 같은 극단적 양자화는 품질 저하가 심합니다. 일반적으로 Q4_K_M(4-bit)이 품질과 크기의 최적 균형점이며, 중요한 태스크에는 Q5_K나 Q6_K를 권장합니다.
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div class="warning-content">
+                        <strong>양자화 포맷 호환성 무시:</strong> GPTQ 모델은 llama.cpp에서 직접 로드할 수 없고, GGUF는 transformers에서 직접 지원하지 않습니다. 배포 환경에 맞는 포맷을 선택하고 필요시 변환하세요.
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div class="warning-content">
+                        <strong>Best Practice:</strong> 양자화 전후로 반드시 평가(perplexity, 태스크별 정확도)를 수행하세요. 도메인 특화 태스크에서는 범용 벤치마크와 다른 결과가 나올 수 있습니다. 캘리브레이션 데이터셋은 실제 사용 패턴과 유사한 것을 사용하세요.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms-grid">
+                    <a href="/ko/term/QLoRA/" class="related-term-link">QLoRA</a>
+                    <a href="/ko/term/LoRA/" class="related-term-link">LoRA</a>
+                    <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                    <a href="/ko/term/PyTorch/" class="related-term-link">PyTorch</a>
+                    <a href="/ko/term/Inference/" class="related-term-link">Inference</a>
+                    <a href="/ko/term/Model%20Optimization/" class="related-term-link">Model Optimization</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more-list">
+                    <li>📄 GPTQ 논문: <a href="https://arxiv.org/abs/2210.17323" target="_blank" rel="noopener">GPTQ: Accurate Post-Training Quantization</a></li>
+                    <li>📄 AWQ 논문: <a href="https://arxiv.org/abs/2306.00978" target="_blank" rel="noopener">AWQ: Activation-aware Weight Quantization</a></li>
+                    <li>🛠️ llama.cpp: <a href="https://github.com/ggerganov/llama.cpp" target="_blank" rel="noopener">GGUF 형식 및 CPU 추론</a></li>
+                    <li>📘 Hugging Face 가이드: <a href="https://huggingface.co/docs/transformers/quantization" target="_blank" rel="noopener">Quantization Guide</a></li>
+                    <li>🎓 TheBloke 모델 허브: <a href="https://huggingface.co/TheBloke" target="_blank" rel="noopener">다양한 양자화 모델 제공</a></li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +533,16 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(button) {
+        const codeBlock = button.nextElementSibling.querySelector('code');
+        const text = codeBlock.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            button.textContent = '✅ 복사됨!';
+            setTimeout(() => { button.textContent = '📋 복사'; }, 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

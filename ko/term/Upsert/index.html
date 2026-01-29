@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upsert (업서트) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="Insert + Update. 존재하면 업데이트, 없으면 삽입.">
-    <meta name="keywords" content="Upsert, 업서트, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <title>Upsert | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Upsert(Update + Insert)는 데이터가 존재하면 업데이트하고, 없으면 새로 삽입하는 데이터베이스 연산으로, 중복 처리와 데이터 동기화에 널리 사용됩니다.">
+    <meta name="keywords" content="Upsert, 업서트, Insert, Update, ON CONFLICT, MERGE, ON DUPLICATE KEY, 데이터베이스, KAITRUST, AI 백과사전">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Upsert/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Upsert/">
-    <meta property="og:title" content="Upsert (업서트) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="Insert + Update. 존재하면 업데이트, 없으면 삽입.">
+    <meta property="og:title" content="Upsert | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Upsert(Update + Insert)는 데이터가 존재하면 업데이트하고, 없으면 새로 삽입하는 데이터베이스 연산으로, 중복 처리와 데이터 동기화에 널리 사용됩니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Upsert (업서트) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="Insert + Update. 존재하면 업데이트, 없으면 삽입.">
+    <meta name="twitter:title" content="Upsert | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Upsert(Update + Insert)는 데이터가 존재하면 업데이트하고, 없으면 새로 삽입하는 데이터베이스 연산으로, 중복 처리와 데이터 동기화에 널리 사용됩니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Upsert",
-        "description": "Insert + Update. 존재하면 업데이트, 없으면 삽입.",
+        "description": "Upsert(Update + Insert)는 데이터가 존재하면 업데이트하고, 없으면 새로 삽입하는 데이터베이스 연산으로, 중복 처리와 데이터 동기화에 널리 사용됩니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -189,9 +190,10 @@
                 <span>데이터베이스</span>
             </div>
             <h1 class="term-title">Upsert</h1>
-            <p class="term-english">업서트</p>
+            <div class="term-english">Update + Insert</div>
+
             <div class="term-description">
-                <p>Insert + Update. 존재하면 업데이트, 없으면 삽입.</p>
+                <p>존재하면 업데이트, 없으면 삽입 - 데이터 중복 처리와 동기화를 위한 원자적 연산</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +204,407 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Upsert는 "Update"와 "Insert"의 합성어로, 하나의 연산으로 데이터가 존재하면 업데이트하고 존재하지 않으면 새로 삽입하는 데이터베이스 기능입니다. 전통적으로 "SELECT로 확인 → 있으면 UPDATE, 없으면 INSERT" 패턴은 두 쿼리 사이에 경쟁 조건(Race Condition)이 발생할 수 있지만, Upsert는 원자적(Atomic)으로 처리하여 이 문제를 해결합니다.</p>
+
+                <p>각 데이터베이스마다 Upsert를 구현하는 문법이 다릅니다. PostgreSQL은 `INSERT ... ON CONFLICT DO UPDATE`, MySQL은 `INSERT ... ON DUPLICATE KEY UPDATE` 또는 `REPLACE INTO`, SQL Server는 `MERGE` 문을 사용합니다. MongoDB는 `updateOne/updateMany`에 `upsert: true` 옵션을 제공합니다. ORM에서도 대부분 upsert 메서드를 지원합니다.</p>
+
+                <p>Upsert의 핵심은 "충돌 감지 키"입니다. 어떤 컬럼을 기준으로 존재 여부를 판단할지 명시해야 합니다. PostgreSQL의 경우 PRIMARY KEY나 UNIQUE 제약 조건이 있는 컬럼을 `ON CONFLICT (column)` 절에 지정합니다. 복합 키(Composite Key)도 지원되며, 부분 인덱스(Partial Index)와 조합하여 더 세밀한 충돌 감지도 가능합니다.</p>
+
+                <p>Upsert가 특히 유용한 사용 사례로는 외부 API 데이터 동기화, 이벤트 소싱에서 상태 집계, 캐시 업데이트, 사용자 마지막 활동 시간 갱신 등이 있습니다. 대량 데이터 일괄 처리 시에도 개별 존재 여부를 확인하지 않고 한 번에 처리할 수 있어 성능 향상에 크게 기여합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <h3>PostgreSQL: INSERT ON CONFLICT (권장)</h3>
+                <pre><code class="language-sql">-- 테이블 생성 (email이 UNIQUE)
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255),
+    login_count INT DEFAULT 0,
+    last_login TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 기본 Upsert: email 충돌 시 name과 last_login 업데이트
+INSERT INTO users (email, name, last_login)
+VALUES ('user@example.com', 'John Doe', NOW())
+ON CONFLICT (email)
+DO UPDATE SET
+    name = EXCLUDED.name,
+    last_login = EXCLUDED.last_login,
+    updated_at = CURRENT_TIMESTAMP;
+
+-- login_count 증가하는 Upsert
+INSERT INTO users (email, name, login_count, last_login)
+VALUES ('user@example.com', 'John Doe', 1, NOW())
+ON CONFLICT (email)
+DO UPDATE SET
+    login_count = users.login_count + 1,
+    last_login = EXCLUDED.last_login,
+    updated_at = CURRENT_TIMESTAMP;
+
+-- 조건부 업데이트 (WHERE 절)
+INSERT INTO users (email, name)
+VALUES ('user@example.com', 'New Name')
+ON CONFLICT (email)
+DO UPDATE SET
+    name = EXCLUDED.name
+WHERE users.name != EXCLUDED.name;  -- 이름이 다를 때만 업데이트
+
+-- 충돌 시 아무것도 안 함 (삽입만 시도)
+INSERT INTO users (email, name)
+VALUES ('user@example.com', 'John Doe')
+ON CONFLICT (email) DO NOTHING;
+
+-- Upsert 결과 확인 (RETURNING)
+INSERT INTO users (email, name)
+VALUES ('user@example.com', 'John Doe')
+ON CONFLICT (email)
+DO UPDATE SET name = EXCLUDED.name
+RETURNING id, email,
+    (xmax = 0) AS inserted;  -- true면 INSERT, false면 UPDATE</code></pre>
+
+                <h3>MySQL: ON DUPLICATE KEY UPDATE</h3>
+                <pre><code class="language-sql">-- MySQL 테이블
+CREATE TABLE products (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    sku VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(255),
+    price DECIMAL(10,2),
+    stock INT DEFAULT 0,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 기본 Upsert
+INSERT INTO products (sku, name, price, stock)
+VALUES ('SKU-001', 'Product A', 29.99, 100)
+ON DUPLICATE KEY UPDATE
+    name = VALUES(name),
+    price = VALUES(price),
+    stock = VALUES(stock);
+
+-- MySQL 8.0+: 별칭 사용 (VALUES() deprecated)
+INSERT INTO products (sku, name, price, stock)
+VALUES ('SKU-001', 'Product A', 29.99, 100) AS new_values
+ON DUPLICATE KEY UPDATE
+    name = new_values.name,
+    price = new_values.price,
+    stock = new_values.stock;
+
+-- 재고 증가 (기존 값 활용)
+INSERT INTO products (sku, name, price, stock)
+VALUES ('SKU-001', 'Product A', 29.99, 50)
+ON DUPLICATE KEY UPDATE
+    stock = stock + VALUES(stock);
+
+-- REPLACE INTO (주의: 기존 row 삭제 후 INSERT)
+-- AUTO_INCREMENT가 변경되고 연관 CASCADE 삭제 발생 가능
+REPLACE INTO products (sku, name, price, stock)
+VALUES ('SKU-001', 'Product A', 29.99, 100);</code></pre>
+
+                <h3>MongoDB: updateOne with upsert</h3>
+                <pre><code class="language-javascript">// MongoDB upsert 예제
+const { MongoClient } = require('mongodb');
+
+async function upsertExamples() {
+    const client = new MongoClient('mongodb://localhost:27017');
+    await client.connect();
+    const db = client.db('myapp');
+    const users = db.collection('users');
+
+    // 기본 Upsert: email로 찾아서 업데이트, 없으면 삽입
+    const result = await users.updateOne(
+        { email: 'user@example.com' },  // 필터 (찾을 조건)
+        {
+            $set: {
+                name: 'John Doe',
+                lastLogin: new Date()
+            },
+            $setOnInsert: {
+                // INSERT 시에만 설정되는 필드
+                createdAt: new Date(),
+                loginCount: 0
+            },
+            $inc: {
+                loginCount: 1  // 항상 증가
+            }
+        },
+        { upsert: true }  // upsert 활성화
+    );
+
+    console.log(`Matched: ${result.matchedCount}, Modified: ${result.modifiedCount}, Upserted: ${result.upsertedCount}`);
+
+    // 벌크 Upsert (대량 처리)
+    const bulkOps = [
+        { email: 'user1@example.com', name: 'User 1', status: 'active' },
+        { email: 'user2@example.com', name: 'User 2', status: 'active' },
+        { email: 'user3@example.com', name: 'User 3', status: 'inactive' }
+    ].map(user => ({
+        updateOne: {
+            filter: { email: user.email },
+            update: {
+                $set: { name: user.name, status: user.status },
+                $setOnInsert: { createdAt: new Date() }
+            },
+            upsert: true
+        }
+    }));
+
+    const bulkResult = await users.bulkWrite(bulkOps);
+    console.log(`Bulk upsert - Inserted: ${bulkResult.upsertedCount}, Modified: ${bulkResult.modifiedCount}`);
+
+    // findOneAndUpdate with upsert (업데이트된 문서 반환)
+    const updatedUser = await users.findOneAndUpdate(
+        { email: 'user@example.com' },
+        {
+            $set: { lastLogin: new Date() },
+            $inc: { loginCount: 1 }
+        },
+        {
+            upsert: true,
+            returnDocument: 'after'  // 업데이트 후 문서 반환
+        }
+    );
+    console.log(updatedUser);
+
+    await client.close();
+}
+
+upsertExamples();</code></pre>
+
+                <h3>Python SQLAlchemy ORM Upsert</h3>
+                <pre><code class="language-python">from sqlalchemy import create_engine, Column, Integer, String, DateTime, func
+from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.dialects.mysql import insert as mysql_insert
+from datetime import datetime
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    email = Column(String(255), unique=True, nullable=False)
+    name = Column(String(255))
+    login_count = Column(Integer, default=0)
+    last_login = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+# PostgreSQL Upsert
+def upsert_user_postgres(session, email: str, name: str) -> User:
+    """PostgreSQL ON CONFLICT DO UPDATE"""
+    stmt = pg_insert(User).values(
+        email=email,
+        name=name,
+        login_count=1,
+        last_login=datetime.utcnow()
+    )
+
+    # 충돌 시 업데이트할 컬럼 지정
+    stmt = stmt.on_conflict_do_update(
+        index_elements=['email'],  # 충돌 감지 컬럼
+        set_={
+            'name': stmt.excluded.name,
+            'login_count': User.login_count + 1,
+            'last_login': stmt.excluded.last_login,
+            'updated_at': datetime.utcnow()
+        }
+    ).returning(User)
+
+    result = session.execute(stmt)
+    session.commit()
+    return result.scalar_one()
+
+
+# MySQL Upsert
+def upsert_user_mysql(session, email: str, name: str) -> int:
+    """MySQL ON DUPLICATE KEY UPDATE"""
+    stmt = mysql_insert(User).values(
+        email=email,
+        name=name,
+        login_count=1,
+        last_login=datetime.utcnow()
+    )
+
+    stmt = stmt.on_duplicate_key_update(
+        name=stmt.inserted.name,
+        login_count=User.login_count + 1,
+        last_login=stmt.inserted.last_login,
+        updated_at=datetime.utcnow()
+    )
+
+    result = session.execute(stmt)
+    session.commit()
+    return result.lastrowid
+
+
+# 벌크 Upsert (PostgreSQL)
+def bulk_upsert_users(session, users_data: list[dict]) -> int:
+    """여러 사용자를 한 번에 upsert"""
+    stmt = pg_insert(User).values(users_data)
+
+    stmt = stmt.on_conflict_do_update(
+        index_elements=['email'],
+        set_={
+            'name': stmt.excluded.name,
+            'login_count': User.login_count + 1,
+            'last_login': stmt.excluded.last_login,
+            'updated_at': datetime.utcnow()
+        }
+    )
+
+    result = session.execute(stmt)
+    session.commit()
+    return result.rowcount
+
+
+# 사용 예시
+if __name__ == "__main__":
+    engine = create_engine("postgresql://user:pass@localhost/mydb")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # 단일 upsert
+    user = upsert_user_postgres(session, "john@example.com", "John Doe")
+    print(f"Upserted user: {user.email}, login_count: {user.login_count}")
+
+    # 벌크 upsert
+    users_data = [
+        {"email": "user1@example.com", "name": "User 1", "login_count": 1, "last_login": datetime.utcnow()},
+        {"email": "user2@example.com", "name": "User 2", "login_count": 1, "last_login": datetime.utcnow()},
+        {"email": "user3@example.com", "name": "User 3", "login_count": 1, "last_login": datetime.utcnow()},
+    ]
+    count = bulk_upsert_users(session, users_data)
+    print(f"Bulk upserted {count} users")
+
+    session.close()</code></pre>
+
+                <h3>Redis: 키 기반 자연스러운 Upsert</h3>
+                <pre><code class="language-python">import redis
+import json
+from datetime import datetime
+
+r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+
+# Redis는 기본적으로 SET이 upsert 동작
+# 키가 있으면 덮어쓰고, 없으면 생성
+
+def upsert_user_session(user_id: str, session_data: dict):
+    """사용자 세션 upsert"""
+    key = f"session:{user_id}"
+    session_data['updated_at'] = datetime.utcnow().isoformat()
+
+    # 기존 데이터 유지하면서 업데이트 (HSET)
+    r.hset(key, mapping=session_data)
+    r.expire(key, 3600)  # 1시간 TTL
+
+def upsert_with_conditional(user_id: str, field: str, value: str):
+    """조건부 upsert: 필드가 없을 때만 설정 (HSETNX)"""
+    key = f"user:{user_id}"
+    return r.hsetnx(key, field, value)  # 1이면 삽입, 0이면 이미 존재
+
+def upsert_counter(key: str, increment: int = 1):
+    """카운터 upsert: 없으면 생성하고 증가"""
+    return r.incrby(key, increment)  # 키가 없으면 0에서 시작
+
+# 사용 예시
+upsert_user_session("user123", {
+    "ip": "192.168.1.1",
+    "user_agent": "Mozilla/5.0",
+    "last_page": "/dashboard"
+})
+
+# 첫 로그인 시간은 최초 1회만 설정
+upsert_with_conditional("user123", "first_login", datetime.utcnow().isoformat())
+
+# 페이지뷰 카운터
+page_views = upsert_counter("pageviews:homepage:2024-01-15")
+print(f"Today's homepage views: {page_views}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 표현 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="usage-tabs">
+                <button class="usage-tab active" data-tab="meeting">회의</button>
+                <button class="usage-tab" data-tab="interview">면접</button>
+                <button class="usage-tab" data-tab="review">코드리뷰</button>
+            </div>
+            <div class="usage-content active" id="meeting">
+                <ul>
+                    <li>"외부 API 데이터 동기화할 때 SELECT 후 INSERT/UPDATE하지 말고 upsert로 한 번에 처리하면 성능 좋아요."</li>
+                    <li>"사용자 마지막 로그인 시간 갱신은 ON CONFLICT DO UPDATE로 upsert하면 race condition 없이 처리돼요."</li>
+                    <li>"벌크 데이터 적재할 때 개별 존재 여부 체크하면 느려요. upsert 배치로 묶어서 처리하죠."</li>
+                    <li>"PostgreSQL에서 RETURNING 쓰면 upsert 후 삽입인지 업데이트인지 알 수 있어요."</li>
+                </ul>
+            </div>
+            <div class="usage-content" id="interview">
+                <ul>
+                    <li>"Upsert가 필요한 상황과 단순 INSERT/UPDATE와의 차이점을 설명해주세요."</li>
+                    <li>"동시성 환경에서 SELECT 후 INSERT/UPDATE 패턴의 문제점과 upsert가 이를 어떻게 해결하나요?"</li>
+                    <li>"PostgreSQL의 ON CONFLICT와 MySQL의 ON DUPLICATE KEY UPDATE의 차이점은 무엇인가요?"</li>
+                    <li>"대량 데이터를 upsert할 때 성능 최적화 전략은 무엇인가요?"</li>
+                </ul>
+            </div>
+            <div class="usage-content" id="review">
+                <ul>
+                    <li>"여기 SELECT 후 조건 분기해서 INSERT/UPDATE하는데, upsert로 단순화할 수 있어요."</li>
+                    <li>"ON CONFLICT에 unique 컬럼이 아닌 걸 지정했어요. unique 제약조건 확인해주세요."</li>
+                    <li>"EXCLUDED 대신 VALUES() 쓰셨는데, PostgreSQL 15+에서는 EXCLUDED가 권장됩니다."</li>
+                    <li>"MySQL REPLACE INTO는 DELETE 후 INSERT라서 AUTO_INCREMENT가 바뀌어요. ON DUPLICATE KEY 쓰세요."</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-content">
+                <ul>
+                    <li><strong>UNIQUE 제약조건 필수:</strong> Upsert는 충돌을 감지할 UNIQUE 또는 PRIMARY KEY 제약조건이 반드시 필요합니다. 제약조건 없이 실행하면 매번 새 row가 삽입됩니다. 복합 키로 upsert할 경우 해당 컬럼 조합에 UNIQUE 인덱스가 있어야 합니다.</li>
+                    <li><strong>MySQL REPLACE INTO 주의:</strong> REPLACE INTO는 upsert처럼 보이지만 실제로는 DELETE 후 INSERT입니다. AUTO_INCREMENT 값이 변경되고, ON DELETE CASCADE가 있다면 연관 데이터가 삭제됩니다. 대부분의 경우 ON DUPLICATE KEY UPDATE를 사용하세요.</li>
+                    <li><strong>트리거와의 상호작용:</strong> Upsert 시 INSERT/UPDATE 트리거가 상황에 따라 다르게 발동됩니다. PostgreSQL에서는 실제 수행된 연산(INSERT 또는 UPDATE)에 해당하는 트리거만 실행됩니다. 트리거 로직이 있다면 upsert 동작을 꼼꼼히 테스트하세요.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/CRUD/" class="related-term-link">CRUD</a>
+                <a href="/ko/term/Transaction/" class="related-term-link">Transaction</a>
+                <a href="/ko/term/Primary%20Key/" class="related-term-link">Primary Key</a>
+                <a href="/ko/term/Index/" class="related-term-link">Index</a>
+                <a href="/ko/term/ORM/" class="related-term-link">ORM</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <ul>
+                    <li><a href="https://www.postgresql.org/docs/current/sql-insert.html" target="_blank" rel="noopener">PostgreSQL INSERT ON CONFLICT 문서</a></li>
+                    <li><a href="https://dev.mysql.com/doc/refman/8.0/en/insert-on-duplicate.html" target="_blank" rel="noopener">MySQL ON DUPLICATE KEY UPDATE 문서</a></li>
+                    <li><a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/" target="_blank" rel="noopener">MongoDB upsert 옵션 가이드</a></li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +615,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

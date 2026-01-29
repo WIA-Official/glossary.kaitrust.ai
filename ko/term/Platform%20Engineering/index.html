@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -189,7 +190,7 @@
                 <span>DevOps</span>
             </div>
             <h1 class="term-title">Platform Engineering</h1>
-            
+
             <div class="term-description">
                 <p>개발자 생산성을 위한 내부 플랫폼을 구축하는 분야</p>
             </div>
@@ -202,6 +203,210 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>플랫폼 엔지니어링(Platform Engineering)은 개발팀이 셀프 서비스로 인프라를 프로비저닝하고 애플리케이션을 배포할 수 있는 내부 개발자 플랫폼(IDP, Internal Developer Platform)을 구축하고 운영하는 분야입니다. Gartner는 2026년까지 80%의 대기업이 플랫폼 팀을 운영할 것으로 예측합니다.</p>
+                <p>핵심 목표는 "개발자 경험(Developer Experience, DX) 향상"입니다. 개발자가 Kubernetes, Terraform, CI/CD 도구의 복잡한 설정을 직접 다루지 않고, 추상화된 인터페이스를 통해 "새 서비스 생성", "데이터베이스 프로비저닝", "환경 복제" 같은 작업을 몇 번의 클릭으로 수행할 수 있게 합니다.</p>
+                <p>대표적인 도구로 Backstage(Spotify 오픈소스), Port, Humanitec, Kratix 등이 있습니다. 이들은 서비스 카탈로그, 셀프서비스 포털, 개발자 문서 통합, 골든 패스(Golden Path) 템플릿을 제공합니다.</p>
+                <p>실무에서는 "개발자 10명당 플랫폼 엔지니어 1명" 비율이 권장되며, 플랫폼 팀은 개발팀을 고객처럼 대하고 그들의 피드백을 기반으로 플랫폼을 지속적으로 개선합니다. 잘 구축된 플랫폼은 신규 개발자 온보딩 시간을 2주에서 2일로 단축시킵니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Backstage 소프트웨어 템플릿 (catalog-info.yaml)
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: create-node-service
+  title: Node.js 마이크로서비스 생성
+  description: 표준화된 Node.js 서비스를 자동으로 생성합니다
+  tags:
+    - nodejs
+    - microservice
+    - recommended
+spec:
+  owner: platform-team
+  type: service
+
+  parameters:
+    - title: 서비스 정보
+      required:
+        - serviceName
+        - team
+      properties:
+        serviceName:
+          title: 서비스 이름
+          type: string
+          description: 소문자, 하이픈만 허용 (예: user-api)
+          pattern: '^[a-z][a-z0-9-]*$'
+        team:
+          title: 담당 팀
+          type: string
+          enum: ['backend', 'frontend', 'data', 'platform']
+        description:
+          title: 서비스 설명
+          type: string
+
+    - title: 인프라 설정
+      properties:
+        database:
+          title: 데이터베이스
+          type: string
+          enum: ['none', 'postgresql', 'mongodb', 'redis']
+          default: 'none'
+        cpu:
+          title: CPU 요청량
+          type: string
+          enum: ['100m', '250m', '500m', '1000m']
+          default: '250m'
+        memory:
+          title: 메모리 요청량
+          type: string
+          enum: ['128Mi', '256Mi', '512Mi', '1Gi']
+          default: '256Mi'
+
+  steps:
+    # 1. GitHub 저장소 생성
+    - id: fetch-template
+      name: 템플릿 가져오기
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          serviceName: ${{ parameters.serviceName }}
+          team: ${{ parameters.team }}
+          database: ${{ parameters.database }}
+
+    - id: publish-github
+      name: GitHub 저장소 생성
+      action: publish:github
+      input:
+        repoUrl: github.com?owner=my-org&repo=${{ parameters.serviceName }}
+        defaultBranch: main
+        protectDefaultBranch: true
+
+    # 2. Kubernetes 리소스 생성
+    - id: create-kubernetes
+      name: Kubernetes 네임스페이스 및 리소스 생성
+      action: kubernetes:apply
+      input:
+        manifest: |
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: ${{ parameters.serviceName }}
+            labels:
+              team: ${{ parameters.team }}
+          ---
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: ${{ parameters.serviceName }}
+            namespace: ${{ parameters.serviceName }}
+          spec:
+            replicas: 2
+            selector:
+              matchLabels:
+                app: ${{ parameters.serviceName }}
+            template:
+              spec:
+                containers:
+                  - name: app
+                    resources:
+                      requests:
+                        cpu: ${{ parameters.cpu }}
+                        memory: ${{ parameters.memory }}
+
+    # 3. 데이터베이스 프로비저닝 (선택시)
+    - id: provision-database
+      name: 데이터베이스 프로비저닝
+      if: ${{ parameters.database != 'none' }}
+      action: crossplane:create
+      input:
+        apiVersion: database.example.com/v1
+        kind: ${{ parameters.database | capitalize }}Instance
+        metadata:
+          name: ${{ parameters.serviceName }}-db
+
+    # 4. Backstage 카탈로그 등록
+    - id: register-catalog
+      name: 서비스 카탈로그 등록
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish-github'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: 저장소
+        url: ${{ steps['publish-github'].output.remoteUrl }}
+      - title: 서비스 카탈로그
+        icon: catalog
+        entityRef: ${{ steps['register-catalog'].output.entityRef }}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "신규 서비스 생성할 때마다 DevOps팀에 티켓 열고 3일씩 기다리는 게 병목이에요. 플랫폼 팀 구성해서 셀프서비스 포털 만들어볼까요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "좋습니다. Backstage로 템플릿 만들면 개발자들이 직접 서비스 생성하고 DB 프로비저닝까지 할 수 있어요. 초기 구축에 2달 정도 예상합니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Platform Engineering과 DevOps의 차이점이 뭐라고 생각하세요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "DevOps는 개발-운영 협업 문화이고, Platform Engineering은 그 문화를 실현하는 도구와 플랫폼을 만드는 역할입니다. 개발자를 고객으로 보고, DX를 최우선으로 합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 템플릿, 골든 패스에서 벗어나는 옵션이 너무 많아요. 선택지를 줄이고 합리적인 기본값을 제공하는 게 좋을 것 같아요."</p>
+                <p><strong class="role-junior">개발자:</strong> "맞아요. CPU/메모리 옵션 제거하고 서비스 크기(small/medium/large)로 추상화하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>플랫폼이 너무 경직되면 개발자들이 우회 방법을 찾게 되어 오히려 복잡성이 증가합니다</li>
+                <li>개발자 피드백 없이 플랫폼 팀이 독단적으로 결정하면 실제 사용되지 않는 기능이 늘어납니다</li>
+                <li>처음부터 완벽한 플랫폼을 구축하려 하면 출시가 늦어지고 요구사항이 변합니다</li>
+                <li class="info">MVP(최소 기능 제품)로 시작하여 개발자 피드백을 기반으로 점진적으로 기능을 추가하세요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Backstage/" class="related-link">Backstage</a>
+                <a href="/ko/term/Internal%20Developer%20Platform/" class="related-link">Internal Developer Platform</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+                <a href="/ko/term/IaC/" class="related-link">IaC</a>
+                <a href="/ko/term/GitOps/" class="related-link">GitOps</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://platformengineering.org/" target="_blank" rel="noopener">Platform Engineering 커뮤니티</a></li>
+                <li><span class="type-tutorial"></span><a href="https://backstage.io/docs" target="_blank" rel="noopener">Backstage 공식 문서</a></li>
+                <li><span class="type-book"></span><a href="https://teamtopologies.com/" target="_blank" rel="noopener">Team Topologies (조직 설계 가이드)</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +417,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

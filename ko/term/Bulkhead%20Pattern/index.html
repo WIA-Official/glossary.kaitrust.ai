@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulkhead Pattern | KAITRUST AI 백과사전</title>
-    <meta name="description" content="장애 격리를 위한 리소스 분리 패턴">
-    <meta name="keywords" content="Bulkhead Pattern, , AI 용어, KAITRUST, AI 백과사전, 아키텍처">
+    <title>Bulkhead Pattern (격벽 패턴) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Bulkhead Pattern은 선박의 격벽에서 유래한 장애 격리 패턴입니다. 시스템 리소스를 분리하여 하나의 서비스 장애가 전체 시스템으로 확산되는 것을 방지합니다.">
+    <meta name="keywords" content="Bulkhead Pattern, 격벽 패턴, 장애 격리, Circuit Breaker, 마이크로서비스, 회복탄력성, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Bulkhead%20Pattern/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Bulkhead%20Pattern/">
-    <meta property="og:title" content="Bulkhead Pattern | KAITRUST AI 백과사전">
-    <meta property="og:description" content="장애 격리를 위한 리소스 분리 패턴">
+    <meta property="og:title" content="Bulkhead Pattern (격벽 패턴) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Bulkhead Pattern은 선박의 격벽에서 유래한 장애 격리 패턴입니다. 시스템 리소스를 분리하여 장애 확산을 방지합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bulkhead Pattern | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="장애 격리를 위한 리소스 분리 패턴">
+    <meta name="twitter:title" content="Bulkhead Pattern (격벽 패턴) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Bulkhead Pattern은 선박의 격벽에서 유래한 장애 격리 패턴입니다. 시스템 리소스를 분리하여 장애 확산을 방지합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Bulkhead Pattern",
-        "description": "장애 격리를 위한 리소스 분리 패턴",
+        "alternateName": "격벽 패턴",
+        "description": "Bulkhead Pattern은 선박의 격벽에서 유래한 장애 격리 패턴입니다. 시스템 리소스를 분리하여 장애 확산을 방지합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +276,9 @@
                 <span>아키텍처</span>
             </div>
             <h1 class="term-title">Bulkhead Pattern</h1>
-            
+            <p class="term-english">격벽 패턴, Isolation Pattern</p>
             <div class="term-description">
-                <p>장애 격리를 위한 리소스 분리 패턴</p>
+                <p>선박의 격벽(Bulkhead)에서 유래한 장애 격리 패턴입니다. 시스템의 리소스(스레드 풀, 커넥션 풀, 메모리 등)를 분리하여 하나의 서비스 장애가 전체 시스템으로 확산되는 것을 방지합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,479 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>격벽(Bulkhead)의 유래</strong>는 선박 설계에서 왔습니다. 선박은 격벽으로 여러 구획을 나누어 한 구획에 물이 차더라도 전체 선박이 침몰하지 않도록 설계됩니다. 소프트웨어에서도 동일한 원리를 적용하여 장애를 격리합니다.</p>
+                <p><strong>리소스 격리 방식</strong>에는 여러 가지가 있습니다. 스레드 풀 분리(각 서비스마다 전용 스레드 풀 할당), 커넥션 풀 분리(DB나 외부 서비스별 커넥션 풀 분리), 세마포어 기반 제한(동시 요청 수 제한), 컨테이너 기반 격리(Kubernetes Pod별 리소스 제한) 등이 있습니다.</p>
+                <p><strong>사용 시나리오</strong>로는 마이크로서비스 환경에서 서비스 간 의존성 관리, 외부 API 호출 시 장애 확산 방지, 데이터베이스 연결 관리, 멀티테넌트 환경에서 테넌트 간 격리 등이 있습니다.</p>
+                <p><strong>장점</strong>은 장애 격리로 전체 시스템 안정성 향상, 리소스 사용량 예측 가능, 중요 서비스의 리소스 보장, SLA 준수가 용이합니다. <strong>단점</strong>으로는 리소스 효율성 감소(미사용 리소스 발생), 구성 복잡도 증가, 적절한 크기 산정의 어려움이 있습니다.</p>
+                <p>Circuit Breaker 패턴과 함께 사용하면 더욱 효과적입니다. Circuit Breaker가 장애를 빠르게 감지하고 차단하면, Bulkhead가 나머지 리소스를 보호합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="java">Java (Resilience4j)</button>
+                <button class="code-tab" data-lang="python">Python (asyncio)</button>
+                <button class="code-tab" data-lang="kubernetes">Kubernetes</button>
+            </div>
+            <div class="code-block active" data-lang="java">
+                <pre><code class="language-java">// Bulkhead Pattern - Java Resilience4j 구현
+import io.github.resilience4j.bulkhead.*;
+import io.github.resilience4j.bulkhead.ThreadPoolBulkhead;
+
+public class BulkheadExample {
+
+    // 1. 세마포어 기반 Bulkhead (동시 호출 수 제한)
+    public static void semaphoreBulkhead() {
+        BulkheadConfig config = BulkheadConfig.custom()
+            .maxConcurrentCalls(10)           // 최대 동시 호출 10개
+            .maxWaitDuration(Duration.ofMillis(500))  // 대기 시간 500ms
+            .build();
+
+        Bulkhead bulkhead = Bulkhead.of("paymentService", config);
+
+        // Bulkhead로 감싸기
+        Supplier&lt;String&gt; decoratedSupplier = Bulkhead
+            .decorateSupplier(bulkhead, () -> paymentService.processPayment());
+
+        try {
+            String result = decoratedSupplier.get();
+        } catch (BulkheadFullException e) {
+            // Bulkhead가 가득 찬 경우 - fallback 처리
+            return "결제 서비스가 혼잡합니다. 잠시 후 다시 시도하세요.";
+        }
+    }
+
+    // 2. 스레드 풀 기반 Bulkhead (전용 스레드 풀 할당)
+    public static void threadPoolBulkhead() {
+        ThreadPoolBulkheadConfig config = ThreadPoolBulkheadConfig.custom()
+            .maxThreadPoolSize(10)            // 최대 스레드 10개
+            .coreThreadPoolSize(5)            // 코어 스레드 5개
+            .queueCapacity(100)               // 대기 큐 크기 100
+            .keepAliveDuration(Duration.ofMillis(1000))
+            .build();
+
+        ThreadPoolBulkhead bulkhead = ThreadPoolBulkhead.of("orderService", config);
+
+        // CompletableFuture로 비동기 실행
+        CompletableFuture&lt;String&gt; future = bulkhead.executeSupplier(
+            () -> orderService.createOrder(orderRequest)
+        );
+
+        future.thenAccept(result -> System.out.println("주문 완료: " + result))
+              .exceptionally(ex -> {
+                  System.err.println("주문 실패: " + ex.getMessage());
+                  return null;
+              });
+    }
+
+    // 3. 서비스별 Bulkhead 설정 (Spring Boot)
+    @Configuration
+    public class BulkheadConfiguration {
+
+        @Bean
+        public BulkheadRegistry bulkheadRegistry() {
+            // 결제 서비스 - 높은 우선순위, 더 많은 리소스
+            BulkheadConfig paymentConfig = BulkheadConfig.custom()
+                .maxConcurrentCalls(20)
+                .maxWaitDuration(Duration.ofSeconds(1))
+                .build();
+
+            // 알림 서비스 - 낮은 우선순위, 적은 리소스
+            BulkheadConfig notificationConfig = BulkheadConfig.custom()
+                .maxConcurrentCalls(5)
+                .maxWaitDuration(Duration.ofMillis(100))
+                .build();
+
+            return BulkheadRegistry.of(Map.of(
+                "payment", paymentConfig,
+                "notification", notificationConfig
+            ));
+        }
+    }
+
+    // 4. 어노테이션 기반 사용
+    @Service
+    public class PaymentService {
+
+        @Bulkhead(name = "payment", fallbackMethod = "paymentFallback")
+        public PaymentResult processPayment(PaymentRequest request) {
+            return paymentGateway.charge(request);
+        }
+
+        private PaymentResult paymentFallback(PaymentRequest request, Exception e) {
+            // 결제 서비스 혼잡 시 대기열에 추가
+            paymentQueue.enqueue(request);
+            return PaymentResult.queued("결제 요청이 대기열에 추가되었습니다");
+        }
+    }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Bulkhead Pattern - Python asyncio 구현
+import asyncio
+from asyncio import Semaphore, Queue
+from dataclasses import dataclass
+from typing import Callable, Any
+from functools import wraps
+import time
+
+@dataclass
+class BulkheadConfig:
+    """Bulkhead 설정"""
+    max_concurrent_calls: int = 10      # 최대 동시 호출 수
+    max_wait_time: float = 1.0          # 최대 대기 시간 (초)
+    name: str = "default"
+
+class Bulkhead:
+    """세마포어 기반 Bulkhead 구현"""
+
+    def __init__(self, config: BulkheadConfig):
+        self.config = config
+        self.semaphore = Semaphore(config.max_concurrent_calls)
+        self.metrics = {
+            'total_calls': 0,
+            'rejected_calls': 0,
+            'successful_calls': 0
+        }
+
+    async def execute(self, func: Callable, *args, **kwargs) -> Any:
+        """Bulkhead로 보호된 함수 실행"""
+        self.metrics['total_calls'] += 1
+
+        try:
+            # 타임아웃 내에 세마포어 획득 시도
+            acquired = await asyncio.wait_for(
+                self.semaphore.acquire(),
+                timeout=self.config.max_wait_time
+            )
+        except asyncio.TimeoutError:
+            # Bulkhead가 가득 참 - 요청 거부
+            self.metrics['rejected_calls'] += 1
+            raise BulkheadFullException(
+                f"Bulkhead '{self.config.name}' is full. "
+                f"Max concurrent calls: {self.config.max_concurrent_calls}"
+            )
+
+        try:
+            result = await func(*args, **kwargs)
+            self.metrics['successful_calls'] += 1
+            return result
+        finally:
+            self.semaphore.release()
+
+    def get_metrics(self) -> dict:
+        """Bulkhead 메트릭 반환"""
+        return {
+            **self.metrics,
+            'available_permits': self.semaphore._value,
+            'utilization': 1 - (self.semaphore._value / self.config.max_concurrent_calls)
+        }
+
+
+class BulkheadFullException(Exception):
+    """Bulkhead가 가득 찼을 때 발생"""
+    pass
+
+
+# 데코레이터로 사용
+def bulkhead(name: str, max_concurrent: int = 10, max_wait: float = 1.0):
+    """Bulkhead 데코레이터"""
+    config = BulkheadConfig(
+        max_concurrent_calls=max_concurrent,
+        max_wait_time=max_wait,
+        name=name
+    )
+    bh = Bulkhead(config)
+
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            return await bh.execute(func, *args, **kwargs)
+        wrapper.bulkhead = bh  # 메트릭 접근용
+        return wrapper
+    return decorator
+
+
+# 사용 예제
+class PaymentService:
+    """결제 서비스 - Bulkhead로 보호"""
+
+    @bulkhead(name="payment", max_concurrent=5, max_wait=2.0)
+    async def process_payment(self, payment_id: str, amount: float) -> dict:
+        """결제 처리 - 최대 5개 동시 실행"""
+        print(f"결제 처리 중: {payment_id}")
+        await asyncio.sleep(1)  # 외부 API 호출 시뮬레이션
+        return {"payment_id": payment_id, "status": "completed", "amount": amount}
+
+
+class NotificationService:
+    """알림 서비스 - 별도 Bulkhead"""
+
+    @bulkhead(name="notification", max_concurrent=20, max_wait=0.5)
+    async def send_notification(self, user_id: str, message: str) -> bool:
+        """알림 전송 - 최대 20개 동시 실행"""
+        await asyncio.sleep(0.1)
+        return True
+
+
+# 테스트
+async def main():
+    payment_service = PaymentService()
+    notification_service = NotificationService()
+
+    # 10개의 결제 요청 동시 실행 (Bulkhead 제한: 5개)
+    tasks = [
+        payment_service.process_payment(f"PAY-{i}", 100.0 * i)
+        for i in range(10)
+    ]
+
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    for i, result in enumerate(results):
+        if isinstance(result, BulkheadFullException):
+            print(f"요청 {i}: 거부됨 - {result}")
+        else:
+            print(f"요청 {i}: 성공 - {result}")
+
+    # 메트릭 확인
+    print(f"\n결제 Bulkhead 메트릭: {payment_service.process_payment.bulkhead.get_metrics()}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="kubernetes">
+                <pre><code class="language-yaml"># Bulkhead Pattern - Kubernetes 리소스 격리
+
+# 1. Pod 리소스 제한 (컨테이너 레벨 Bulkhead)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: payment-service
+  labels:
+    app: payment
+    tier: critical
+spec:
+  containers:
+  - name: payment-api
+    image: payment-service:latest
+    resources:
+      # Bulkhead: 리소스 보장 및 제한
+      requests:
+        memory: "512Mi"    # 최소 보장 메모리
+        cpu: "500m"        # 최소 보장 CPU (0.5 코어)
+      limits:
+        memory: "1Gi"      # 최대 사용 메모리
+        cpu: "1000m"       # 최대 사용 CPU (1 코어)
+    env:
+    - name: THREAD_POOL_SIZE
+      value: "10"
+    - name: CONNECTION_POOL_SIZE
+      value: "20"
+
+---
+# 2. Namespace 레벨 리소스 쿼터 (서비스 그룹 격리)
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: payment-quota
+  namespace: payment-services
+spec:
+  hard:
+    # 네임스페이스 전체 리소스 제한
+    requests.cpu: "4"
+    requests.memory: "8Gi"
+    limits.cpu: "8"
+    limits.memory: "16Gi"
+    pods: "20"
+    services: "10"
+
+---
+# 3. LimitRange - 기본 리소스 제한
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: default-limits
+  namespace: payment-services
+spec:
+  limits:
+  - default:
+      cpu: "500m"
+      memory: "512Mi"
+    defaultRequest:
+      cpu: "100m"
+      memory: "128Mi"
+    type: Container
+
+---
+# 4. PriorityClass - 중요 서비스 우선순위
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: critical-service
+value: 1000000
+globalDefault: false
+description: "결제, 인증 등 핵심 서비스용"
+
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: non-critical-service
+value: 100000
+description: "알림, 분석 등 비핵심 서비스용"
+
+---
+# 5. Istio를 활용한 서비스 메시 레벨 Bulkhead
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: payment-bulkhead
+spec:
+  host: payment-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100          # TCP 연결 제한
+        connectTimeout: 30s
+      http:
+        h2UpgradePolicy: UPGRADE
+        http1MaxPendingRequests: 50  # 대기 요청 제한
+        http2MaxRequests: 100        # HTTP/2 최대 요청
+        maxRequestsPerConnection: 10
+        maxRetries: 3
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 60s
+
+---
+# 6. HPA (Horizontal Pod Autoscaler) - 동적 Bulkhead 조정
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: payment-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: payment-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 시스템 장애 분석 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "이번 장애는 외부 결제 API가 느려지면서 스레드 풀이 고갈되어 발생했습니다. 결제 서비스용 Bulkhead를 도입해서 스레드 풀을 분리하면, 결제가 느려져도 다른 서비스는 정상 동작할 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 아키텍처 설계 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "마이크로서비스 간 호출에 Bulkhead 패턴을 적용합시다. 서비스별로 커넥션 풀과 스레드 풀을 분리하고, Circuit Breaker와 조합하면 더 견고한 시스템이 됩니다. Resilience4j의 ThreadPoolBulkhead를 쓰면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 Kubernetes 운영 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "네임스페이스별로 ResourceQuota를 설정해서 Bulkhead를 구현했습니다. 결제 네임스페이스는 CPU 4코어, 메모리 8GB를 보장하고, 알림 서비스가 아무리 리소스를 많이 써도 결제 서비스에 영향을 주지 않습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Bulkhead 크기 과소 설정</strong>
+                        <p>너무 작은 Bulkhead는 정상적인 트래픽도 거부합니다. 부하 테스트를 통해 적절한 크기를 산정하고, 피크 트래픽의 1.5~2배 여유를 두세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>리소스 과다 할당</strong>
+                        <p>모든 서비스에 넉넉한 Bulkhead를 할당하면 전체 리소스가 부족해집니다. 서비스 중요도에 따라 차등 할당하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>모니터링 부재</strong>
+                        <p>Bulkhead 사용률, 거부율 등 메트릭을 수집하지 않으면 문제를 조기에 발견할 수 없습니다. 사용률이 80%를 넘으면 알림을 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>Bulkhead 베스트 프랙티스</strong>
+                        <p>중요 서비스에 더 많은 리소스 보장, Circuit Breaker와 함께 사용, fallback 로직 구현, 정기적인 크기 검토, 부하 테스트로 검증.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Circuit%20Breaker/" class="related-term-link">Circuit Breaker</a>
+                <a href="/ko/term/Rate%20Limiting/" class="related-term-link">Rate Limiting</a>
+                <a href="/ko/term/Timeout/" class="related-term-link">Timeout</a>
+                <a href="/ko/term/Retry%20Pattern/" class="related-term-link">Retry Pattern</a>
+                <a href="/ko/term/Microservices/" class="related-term-link">Microservices</a>
+                <a href="/ko/term/Sidecar/" class="related-term-link">Sidecar</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://resilience4j.readme.io/docs/bulkhead" target="_blank" class="learn-link">
+                    📄 Resilience4j - Bulkhead 공식 문서
+                </a>
+                <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/bulkhead" target="_blank" class="learn-link">
+                    🎓 Microsoft Azure - Bulkhead Pattern
+                </a>
+                <a href="https://microservices.io/patterns/reliability/bulkhead.html" target="_blank" class="learn-link">
+                    📖 Microservices.io - Bulkhead Pattern
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +769,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

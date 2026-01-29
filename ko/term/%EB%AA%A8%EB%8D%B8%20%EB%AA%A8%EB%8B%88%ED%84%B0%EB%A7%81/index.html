@@ -161,6 +161,15 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
     </style>
 </head>
 <body>
@@ -202,6 +211,220 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>모델 모니터링(Model Monitoring)은 프로덕션 환경에 배포된 ML 모델의 성능, 데이터 품질, 시스템 상태를 지속적으로 감시하는 프로세스입니다. 모델이 시간이 지남에 따라 성능이 저하되는 "모델 드리프트" 현상을 조기에 감지하고 대응하는 것이 핵심 목표입니다.</p>
+                <p>모니터링은 크게 세 가지 영역으로 구분됩니다: 1) 데이터 드리프트 - 입력 데이터의 분포 변화 감지, 2) 개념 드리프트 - 입력과 출력 간 관계 변화 감지, 3) 모델 성능 - 정확도, 지연시간 등 실시간 메트릭 추적. 각 영역에 맞는 통계적 테스트와 임계값을 설정합니다.</p>
+                <p>효과적인 모니터링 시스템은 알림(Alerting)과 자동 대응을 포함합니다. PSI(Population Stability Index), KS 테스트, 카이제곱 검정 등으로 드리프트를 감지하고, 임계값 초과 시 팀에 알림을 보냅니다. 심각한 경우 자동으로 트래픽을 이전 모델로 전환하는 Circuit Breaker 패턴을 적용하기도 합니다.</p>
+                <p>Ground Truth(실제 라벨) 지연 문제도 중요합니다. 대출 연체 예측처럼 실제 결과가 수개월 후에 확정되는 경우, 프록시 메트릭이나 A/B 테스트를 활용해 간접적으로 성능을 모니터링합니다. 최근에는 LLM 응답의 품질 모니터링 등 새로운 도전과제도 등장하고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>데이터 드리프트 감지 및 모니터링 대시보드 구현 예제입니다:</p>
+                <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 복사</button><pre><code>import numpy as np
+from scipy import stats
+from datetime import datetime
+import json
+
+class ModelMonitor:
+    def __init__(self, reference_data, model_name):
+        self.reference_data = reference_data
+        self.model_name = model_name
+        self.alerts = []
+        self.metrics_history = []
+
+    def compute_psi(self, expected, actual, buckets=10):
+        """Population Stability Index 계산"""
+        breakpoints = np.percentile(expected,
+                                    np.linspace(0, 100, buckets + 1))
+        expected_counts = np.histogram(expected, breakpoints)[0]
+        actual_counts = np.histogram(actual, breakpoints)[0]
+
+        expected_pct = expected_counts / len(expected) + 1e-10
+        actual_pct = actual_counts / len(actual) + 1e-10
+
+        psi = np.sum((actual_pct - expected_pct) *
+                     np.log(actual_pct / expected_pct))
+        return psi
+
+    def detect_drift(self, current_data, threshold_psi=0.1):
+        """데이터 드리프트 감지"""
+        results = {}
+        for feature in self.reference_data.keys():
+            ref = self.reference_data[feature]
+            curr = current_data.get(feature, [])
+
+            # PSI 계산
+            psi = self.compute_psi(ref, curr)
+
+            # KS 테스트
+            ks_stat, p_value = stats.ks_2samp(ref, curr)
+
+            drift_detected = psi > threshold_psi or p_value < 0.05
+
+            results[feature] = {
+                "psi": round(psi, 4),
+                "ks_statistic": round(ks_stat, 4),
+                "p_value": round(p_value, 4),
+                "drift_detected": drift_detected
+            }
+
+            if drift_detected:
+                self.create_alert(feature, psi, "data_drift")
+
+        return results
+
+    def monitor_performance(self, predictions, actuals,
+                           accuracy_threshold=0.85):
+        """모델 성능 모니터링"""
+        accuracy = np.mean(np.array(predictions) == np.array(actuals))
+
+        metrics = {
+            "timestamp": datetime.now().isoformat(),
+            "accuracy": round(accuracy, 4),
+            "sample_size": len(predictions)
+        }
+        self.metrics_history.append(metrics)
+
+        if accuracy < accuracy_threshold:
+            self.create_alert("accuracy", accuracy, "performance_degradation")
+
+        return metrics
+
+    def create_alert(self, feature, value, alert_type):
+        """알림 생성"""
+        alert = {
+            "timestamp": datetime.now().isoformat(),
+            "model": self.model_name,
+            "type": alert_type,
+            "feature": feature,
+            "value": value,
+            "severity": "high" if alert_type == "performance_degradation" else "medium"
+        }
+        self.alerts.append(alert)
+        print(f"🚨 ALERT: {alert_type} detected in {feature}: {value}")
+        return alert
+
+# 사용 예시
+reference = {"age": np.random.normal(35, 10, 1000),
+             "income": np.random.lognormal(10, 0.5, 1000)}
+
+monitor = ModelMonitor(reference, "loan-approval-v2")
+
+# 드리프트가 있는 새 데이터
+current = {"age": np.random.normal(40, 12, 500),  # 분포 변화
+           "income": np.random.lognormal(10, 0.5, 500)}
+
+drift_results = monitor.detect_drift(current)
+print(json.dumps(drift_results, indent=2))</code></pre></div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>모니터링 도구</th>
+                            <th>월 비용</th>
+                            <th>주요 기능</th>
+                            <th>통합 용이성</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Evidently AI (OSS)</td>
+                            <td>무료</td>
+                            <td>드리프트 리포트</td>
+                            <td>높음 (Python)</td>
+                        </tr>
+                        <tr>
+                            <td>WhyLabs</td>
+                            <td>$500~</td>
+                            <td>자동 드리프트 감지</td>
+                            <td>중간</td>
+                        </tr>
+                        <tr>
+                            <td>Arize AI</td>
+                            <td>$1,000~</td>
+                            <td>LLM 지원, 트레이싱</td>
+                            <td>높음</td>
+                        </tr>
+                        <tr>
+                            <td>AWS SageMaker Monitor</td>
+                            <td>추론 기반 과금</td>
+                            <td>SageMaker 통합</td>
+                            <td>AWS만 높음</td>
+                        </tr>
+                        <tr>
+                            <td>Custom (Prometheus+Grafana)</td>
+                            <td>인프라 비용</td>
+                            <td>완전 커스터마이징</td>
+                            <td>낮음 (개발 필요)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <p><strong>"지난주부터 입력 피처에 데이터 드리프트가 감지되고 있어요. 재학습이 필요할 것 같습니다."</strong><br>
+                모니터링 결과를 바탕으로 모델 업데이트 필요성을 보고할 때 사용합니다.</p>
+                <p><strong>"P99 레이턴시가 SLA 기준을 넘어서 알림이 왔습니다. 인프라 확인해주세요."</strong><br>
+                시스템 성능 저하를 감지했을 때 즉각적인 대응을 요청하는 표현입니다.</p>
+                <p><strong>"Ground Truth 수집까지 2주 걸리니까, 그동안은 프록시 메트릭으로 모니터링합시다."</strong><br>
+                라벨 지연 상황에서의 모니터링 전략을 논의할 때 씁니다.</p>
+            </div>
+        </section>
+
+        <!-- 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <p><strong>1. 과도한 알림 설정:</strong> 임계값을 너무 민감하게 설정하면 알림 피로도가 증가합니다. 중요도에 따라 알림을 분류하고, 심각한 것만 즉시 알림으로 설정하세요.</p>
+                <p><strong>2. 계절성 미고려:</strong> 휴일, 시즌 등에 따른 자연스러운 분포 변화를 드리프트로 오탐할 수 있습니다. 기준 데이터를 주기적으로 업데이트하거나 동적 임계값을 사용하세요.</p>
+                <p><strong>3. 모니터링 비용 폭발:</strong> 모든 피처와 샘플을 저장하면 비용이 급증합니다. 샘플링 전략을 수립하고 중요 피처만 상세 모니터링하세요.</p>
+                <p><strong>4. 대응 프로세스 부재:</strong> 알림만 있고 대응 절차가 없으면 무용지물입니다. 런북(Runbook)을 작성하고 자동 롤백 정책을 미리 정의하세요.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <ul>
+                    <li><strong>데이터 드리프트:</strong> 입력 데이터의 통계적 분포가 시간에 따라 변화하는 현상</li>
+                    <li><strong>개념 드리프트:</strong> 입력과 타겟 간의 관계가 변화하는 현상</li>
+                    <li><strong>모델 레지스트리:</strong> 모델 버전을 관리하고 롤백을 지원하는 저장소</li>
+                    <li><strong>A/B 테스팅:</strong> 모델 간 성능을 비교하는 실험 방법론</li>
+                    <li><strong>Shadow Deployment:</strong> 새 모델을 병렬로 실행하며 성능을 비교</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <ul>
+                    <li><a href="https://evidentlyai.com/blog/ml-monitoring-guide" target="_blank" style="color: #a855f7;">Evidently AI - ML Monitoring 완벽 가이드</a></li>
+                    <li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html" target="_blank" style="color: #a855f7;">AWS SageMaker Model Monitor 문서</a></li>
+                    <li><a href="https://arize.com/blog/ml-monitoring-guide/" target="_blank" style="color: #a855f7;">Arize - Production ML Monitoring 가이드</a></li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +435,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

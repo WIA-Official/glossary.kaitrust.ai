@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,223 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>VM(Virtual Machine, 가상 머신)은 물리적 하드웨어 위에서 하이퍼바이저를 통해 생성되는 완전한 컴퓨터 시스템입니다. 각 VM은 자체 운영체제, 커널, 시스템 라이브러리를 가지며, 물리 서버처럼 독립적으로 동작합니다.</p>
+                <p>하이퍼바이저는 Type 1(Bare-metal: VMware ESXi, Microsoft Hyper-V, KVM)과 Type 2(Hosted: VirtualBox, VMware Workstation)로 나뉩니다. 클라우드 환경에서는 Type 1이 사용되며, 하드웨어 자원을 직접 관리합니다.</p>
+                <p>VM은 완전한 하드웨어 격리를 제공하여 멀티테넌트 환경에서 강력한 보안을 보장합니다. 하지만 각 VM마다 OS를 실행하므로 컨테이너 대비 리소스 오버헤드가 크고(수 GB vs 수십 MB), 부팅 시간도 깁니다(수 분 vs 수 초).</p>
+                <p>클라우드 서비스에서는 EC2(AWS), Compute Engine(GCP), Azure VM 등으로 제공됩니다. 레거시 애플리케이션, 라이선스 제약, 완전한 OS 제어가 필요한 경우에 적합합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="terraform">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Terraform: AWS EC2 인스턴스 생성
+resource "aws_instance" "web_server" {
+  ami           = "ami-0c55b159cbfafe1f0"  # Amazon Linux 2
+  instance_type = "t3.medium"
+
+  vpc_security_group_ids = [aws_security_group.web.id]
+  subnet_id              = aws_subnet.public.id
+
+  root_block_device {
+    volume_size = 50
+    volume_type = "gp3"
+    encrypted   = true
+  }
+
+  user_data = <<-EOF
+    #!/bin/bash
+    yum update -y
+    yum install -y docker
+    systemctl start docker
+    systemctl enable docker
+  EOF
+
+  tags = {
+    Name        = "web-server"
+    Environment = "production"
+  }
+}
+
+# Auto Scaling Group
+resource "aws_autoscaling_group" "web" {
+  name                = "web-asg"
+  vpc_zone_identifier = aws_subnet.private[*].id
+  target_group_arns   = [aws_lb_target_group.web.arn]
+
+  min_size         = 2
+  max_size         = 10
+  desired_capacity = 3
+
+  launch_template {
+    id      = aws_launch_template.web.id
+    version = "$Latest"
+  }
+
+  health_check_type         = "ELB"
+  health_check_grace_period = 300
+}
+
+---
+# GCP: gcloud CLI로 VM 생성
+gcloud compute instances create my-vm \
+  --machine-type=e2-medium \
+  --zone=asia-northeast3-a \
+  --image-family=ubuntu-2204-lts \
+  --image-project=ubuntu-os-cloud \
+  --boot-disk-size=50GB \
+  --boot-disk-type=pd-ssd \
+  --tags=http-server,https-server</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">인프라:</strong> "레거시 애플리케이션은 VM으로 유지하고, 새 마이크로서비스는 컨테이너로 가겠습니다."</p>
+                <p><strong class="role-junior">개발:</strong> "VM이랑 컨테이너 같이 쓰면 관리가 복잡하지 않나요?"</p>
+                <p><strong class="role-senior">인프라:</strong> "Kubernetes 노드도 결국 VM 위에서 돌아요. 레거시는 점진적으로 컨테이너화하면 됩니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "VM과 컨테이너의 차이를 설명해주세요."</p>
+                <p><strong class="role-interviewee">지원자:</strong> "VM은 하이퍼바이저 위에서 각각 독립된 OS를 실행하여 완전한 격리를 제공합니다. 컨테이너는 호스트 OS 커널을 공유하고 프로세스 수준 격리를 제공합니다. VM은 보안이 중요한 멀티테넌트에, 컨테이너는 빠른 배포와 효율이 중요한 마이크로서비스에 적합합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "EC2 인스턴스 타입을 t3.micro로 설정했는데, 프로덕션에서는 부족할 수 있어요."</p>
+                <p><strong class="role-author">작성자:</strong> "일단 t3.medium으로 올리고, CPU 크레딧 무제한 모드도 활성화하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li class="">VM 스냅샷만으로 백업을 의존하면 안 됩니다. 애플리케이션 레벨 백업(DB 덤프 등)을 병행하세요.</li>
+                <li class="">Spot/Preemptible 인스턴스는 비용 절감에 좋지만, 언제든 종료될 수 있으므로 stateless 워크로드에만 사용하세요.</li>
+                <li class="info">Right-sizing: CloudWatch, Compute Engine 권장사항으로 인스턴스 타입을 최적화하면 비용을 30-50% 절감할 수 있습니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88/" class="related-link">컨테이너</a>
+                <a href="/ko/term/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4/" class="related-link">쿠버네티스</a>
+                <a href="/ko/term/VPC/" class="related-link">VPC</a>
+                <a href="/ko/term/%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C%20%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C/" class="related-link">하이브리드 클라우드</a>
+                <a href="/ko/term/%EC%98%A4%ED%86%A0%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81/" class="related-link">오토스케일링</a>
+            </div>
+        </section>
+
+        <!-- 실제 장애 사례 -->
+        <section class="term-section" aria-labelledby="incident-title">
+            <h2 class="section-title" id="incident-title">🔥 실제 장애 사례</h2>
+            <div class="incident-list">
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">AWS</span>
+                        <span class="incident-year">2017</span>
+                    </div>
+                    <h4 class="incident-title">S3 장애로 US-EAST-1 리전 전체 다운</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> S3 운영 중 실수로 의도보다 많은 서버가 제거됨, EC2 인스턴스 API 영향</p>
+                        <p><strong>영향:</strong> Slack, Trello, Quora 등 수천 개 서비스 4시간 다운, EC2 콘솔 접근 불가</p>
+                        <p><strong>해결:</strong> S3 서브시스템 전체 재시작, 순차적 복구</p>
+                        <p><strong>교훈:</strong> 단일 AZ/리전 의존 금지, Multi-AZ 또는 Multi-Region 아키텍처 필수</p>
+                    </div>
+                    <a href="https://aws.amazon.com/message/41926/" class="incident-source" target="_blank">📎 상세 보기</a>
+                </div>
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">스타트업 사례</span>
+                        <span class="incident-year">공통</span>
+                    </div>
+                    <h4 class="incident-title">EBS 볼륨 미연결로 데이터 영구 손실</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> EC2 인스턴스 종료 시 "Delete on Termination" 활성화, 중요 데이터가 담긴 EBS도 함께 삭제</p>
+                        <p><strong>영향:</strong> 3개월 치 업로드된 사용자 파일 영구 손실</p>
+                        <p><strong>해결:</strong> 백업에서 일부 복구, 나머지는 손실 인정</p>
+                        <p><strong>교훈:</strong> EBS 볼륨 종료 보호 설정, 정기적 스냅샷 자동화, S3 별도 백업</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 이해도 퀴즈 -->
+        <section class="term-section" aria-labelledby="quiz-title">
+            <h2 class="section-title" id="quiz-title">📝 이해도 퀴즈</h2>
+            <div class="quiz-container" id="term-quiz">
+                <div class="quiz-item" data-correct="b">
+                    <p class="quiz-question"><strong>Q1.</strong> VM과 컨테이너의 핵심 차이점은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> A) VM은 Linux만, 컨테이너는 Windows만 지원</label>
+                        <label><input type="radio" name="q1" value="b"> B) VM은 하이퍼바이저 위에 독립 OS 실행, 컨테이너는 호스트 OS 커널 공유</label>
+                        <label><input type="radio" name="q1" value="c"> C) VM은 무료, 컨테이너는 유료</label>
+                        <label><input type="radio" name="q1" value="d"> D) 차이 없음, 같은 기술</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="c">
+                    <p class="quiz-question"><strong>Q2.</strong> Type 1 하이퍼바이저의 특징은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> A) Windows/Mac 위에서 실행 (예: VirtualBox)</label>
+                        <label><input type="radio" name="q2" value="b"> B) 컨테이너 기반으로 동작</label>
+                        <label><input type="radio" name="q2" value="c"> C) 하드웨어 위에서 직접 실행 (예: VMware ESXi, KVM)</label>
+                        <label><input type="radio" name="q2" value="d"> D) 클라우드에서만 사용 가능</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="a">
+                    <p class="quiz-question"><strong>Q3.</strong> Spot/Preemptible 인스턴스 사용 시 주의점은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> A) 언제든 종료될 수 있으므로 stateless 워크로드에만 사용</label>
+                        <label><input type="radio" name="q3" value="b"> B) 절대로 사용하면 안 됨</label>
+                        <label><input type="radio" name="q3" value="c"> C) 온디맨드보다 비쌈</label>
+                        <label><input type="radio" name="q3" value="d"> D) 영구적으로 할당됨</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-submit" onclick="checkQuiz()">정답 확인</button>
+                <div class="quiz-result"></div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://aws.amazon.com/ec2/" target="_blank" rel="noopener">AWS EC2 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://cloud.google.com/compute" target="_blank" rel="noopener">GCP Compute Engine 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.redhat.com/en/topics/virtualization/what-is-a-virtual-machine" target="_blank" rel="noopener">Red Hat - 가상화 개념</a></li>
+                <li><span class="type-blog"></span><a href="https://techblog.woowahan.com/9478/" target="_blank" rel="noopener">우아한형제들 - 인프라 비용 최적화</a></li>
+                <li><span class="type-video"></span><a href="https://www.youtube.com/watch?v=L1ie8negCjc" target="_blank" rel="noopener">IBM - VM vs Container 비교</a></li>
+                <li><span class="type-tool"></span><a href="https://www.vmware.com/products/vsphere.html" target="_blank" rel="noopener">VMware vSphere 공식 사이트</a></li>
+            </ul>
+        </section>
+
+        <!-- 질문 & 기여 -->
+        <section class="term-section" aria-labelledby="community-title">
+            <h2 class="section-title" id="community-title">💬 질문 & 기여</h2>
+            <div class="community-actions">
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[VM] 질문: " class="community-btn btn-question" target="_blank">❓ 질문하기</a>
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[VM] 수정 제안: " class="community-btn btn-suggest" target="_blank">✏️ 수정 제안</a>
+            </div>
+            <p class="community-note">이 페이지에 오류가 있거나 추가하고 싶은 내용이 있다면 알려주세요!</p>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +430,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

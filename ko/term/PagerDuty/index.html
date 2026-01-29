@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -189,7 +190,7 @@
                 <span>DevOps</span>
             </div>
             <h1 class="term-title">PagerDuty</h1>
-            
+
             <div class="term-description">
                 <p>인시던트 관리 및 대응 플랫폼</p>
             </div>
@@ -202,6 +203,142 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>PagerDuty는 2009년에 설립된 실시간 인시던트 관리 및 온콜(On-Call) 스케줄링 플랫폼입니다. 모니터링 시스템에서 발생한 알림을 수집하고, 적절한 담당자에게 전화, SMS, 푸시 알림, 이메일 등 다양한 채널로 즉시 전달하여 장애 대응 시간(MTTR)을 획기적으로 단축합니다.</p>
+                <p>핵심 기능은 에스컬레이션 정책(Escalation Policy)입니다. 1차 담당자가 15분 내 응답하지 않으면 2차 담당자에게, 그래도 응답이 없으면 팀 리더에게 자동 에스컬레이션됩니다. 이를 통해 중요한 장애가 방치되는 것을 방지합니다.</p>
+                <p>PagerDuty는 400개 이상의 모니터링 도구(Prometheus, Datadog, CloudWatch, Grafana 등)와 통합되며, 중복 알림을 자동으로 그룹화하여 알림 피로도를 줄여줍니다. 평균적으로 알림 노이즈를 70% 이상 감소시킵니다.</p>
+                <p>실무에서는 온콜 로테이션 관리, 인시던트 타임라인 기록, 사후 분석(Post-mortem) 자동화에 활용됩니다. SLA 관리 기능으로 P1(Critical) 장애는 5분 내 대응, P2는 30분 내 대응 같은 정책을 설정하고 준수 여부를 추적할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># PagerDuty API를 통한 인시던트 생성 (curl)
+curl -X POST https://events.pagerduty.com/v2/enqueue \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "routing_key": "YOUR_INTEGRATION_KEY",
+    "event_action": "trigger",
+    "dedup_key": "db-connection-failure-prod",
+    "payload": {
+      "summary": "[CRITICAL] Production DB connection pool exhausted",
+      "severity": "critical",
+      "source": "production-api-server-01",
+      "timestamp": "2024-01-15T09:30:00.000Z",
+      "component": "database",
+      "group": "production",
+      "class": "connection_failure",
+      "custom_details": {
+        "active_connections": 100,
+        "max_connections": 100,
+        "waiting_queries": 250,
+        "error_rate": "45%",
+        "affected_services": ["user-api", "payment-api", "order-api"]
+      }
+    },
+    "links": [
+      {
+        "href": "https://grafana.company.com/d/db-metrics",
+        "text": "Grafana Dashboard"
+      }
+    ],
+    "images": [
+      {
+        "src": "https://grafana.company.com/render/d-solo/db-metrics?panelId=1"
+      }
+    ]
+  }'
+
+# Python SDK로 인시던트 관리
+# pip install pdpyras
+from pdpyras import APISession
+
+session = APISession('YOUR_API_KEY')
+
+# 온콜 담당자 조회
+oncall = session.get('/oncalls', params={
+    'schedule_ids[]': ['PSCHEDULE1'],
+    'since': '2024-01-15T00:00:00Z',
+    'until': '2024-01-15T23:59:59Z'
+})
+
+for entry in oncall.json()['oncalls']:
+    print(f"현재 온콜: {entry['user']['name']}")
+    print(f"연락처: {entry['user']['email']}")
+
+# 인시던트 자동 해결
+session.post('/incidents', json={
+    'incident': {
+        'type': 'incident',
+        'title': 'Auto-resolved: DB connection pool recovered',
+        'service': {'id': 'PSERVICE1', 'type': 'service_reference'},
+        'status': 'resolved'
+    }
+})</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "지난주 새벽 장애 때 에스컬레이션이 안 됐는데, PagerDuty 설정 다시 확인해봤어요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "네, 확인해보니 2차 담당자 연락처가 비어있었어요. 이제 온콜 로테이션에 백업 담당자도 필수로 추가했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "온콜 경험이 있으신가요? 어떤 도구를 사용하셨나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "PagerDuty로 주 1회 온콜을 담당했습니다. 에스컬레이션 정책을 정교하게 설정해서 P1 장애 MTTR을 15분에서 8분으로 줄였고, 중복 알림 그룹화로 알림 피로도도 크게 개선했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 모니터링 알림, PagerDuty로 보내는 건 좋은데 dedup_key 설정 안 하면 같은 장애로 알림이 수십 개씩 울릴 수 있어요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, 맞네요. 서비스명과 에러 타입으로 dedup_key를 구성해서 중복 알림을 방지하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>알림 임계값을 너무 낮게 설정하면 알림 피로(Alert Fatigue)로 정작 중요한 장애를 놓칠 수 있습니다</li>
+                <li>온콜 담당자의 연락처(전화번호, 이메일)가 최신 상태인지 주기적으로 확인해야 합니다</li>
+                <li>에스컬레이션 타임아웃을 너무 짧게 설정하면 불필요한 에스컬레이션이 발생합니다 (최소 15분 권장)</li>
+                <li class="info">중요 서비스는 항상 2명 이상의 백업 담당자를 설정하고, 정기적으로 온콜 훈련을 실시하세요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/OpsGenie/" class="related-link">OpsGenie</a>
+                <a href="/ko/term/Monitoring/" class="related-link">Monitoring</a>
+                <a href="/ko/term/Prometheus/" class="related-link">Prometheus</a>
+                <a href="/ko/term/Grafana/" class="related-link">Grafana</a>
+                <a href="/ko/term/Datadog/" class="related-link">Datadog</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://www.pagerduty.com/docs/" target="_blank" rel="noopener">PagerDuty 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.pagerduty.com/resources/learn/incident-response/" target="_blank" rel="noopener">인시던트 대응 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://response.pagerduty.com/" target="_blank" rel="noopener">PagerDuty Incident Response Handbook</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +349,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

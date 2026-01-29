@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,147 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>NAS(Neural Architecture Search)는 딥러닝 모델의 구조를 자동으로 탐색하고 최적화하는 AutoML 기술입니다. 인간 연구자가 수동으로 설계하던 신경망 아키텍처를 알고리즘이 자동으로 발견하여, 특정 작업에 최적화된 네트워크 구조를 찾아냅니다.</p>
+                <p>2017년 Google Brain 팀이 발표한 논문에서 본격적으로 주목받기 시작했습니다. 초기에는 수천 GPU-일(GPU-days)이 필요한 막대한 연산 비용이 문제였으나, DARTS, ENAS 등 효율적인 탐색 방법이 개발되면서 실용화되었습니다.</p>
+                <p>NAS는 탐색 공간(Search Space), 탐색 전략(Search Strategy), 성능 추정(Performance Estimation) 세 가지 핵심 요소로 구성됩니다. 강화학습, 진화 알고리즘, 경사 기반 방법 등 다양한 탐색 전략이 사용됩니다.</p>
+                <p>실무에서 NAS는 모바일/엣지 디바이스용 경량 모델 설계, 특정 도메인 최적화 모델 개발에 활용됩니다. EfficientNet, MobileNetV3 등 유명 모델들이 NAS로 발견되었으며, 수작업 대비 10-30% 성능 향상을 달성한 사례가 많습니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># NNI (Neural Network Intelligence)를 사용한 NAS 예제
+# pip install nni
+
+import nni
+from nni.nas.evaluator import FunctionalEvaluator
+from nni.nas.strategy import DARTS
+
+# 탐색 공간 정의
+import torch.nn as nn
+from nni.nas.nn.pytorch import ModelSpace, LayerChoice
+
+class NASModel(ModelSpace):
+    def __init__(self):
+        super().__init__()
+        # 레이어 선택지 정의
+        self.conv = LayerChoice([
+            nn.Conv2d(3, 64, 3, padding=1),
+            nn.Conv2d(3, 64, 5, padding=2),
+            nn.Conv2d(3, 64, 7, padding=3),
+        ], label='conv_choice')
+
+        self.activation = LayerChoice([
+            nn.ReLU(),
+            nn.GELU(),
+            nn.SiLU(),
+        ], label='act_choice')
+
+        self.classifier = nn.Linear(64 * 32 * 32, 10)
+
+    def forward(self, x):
+        x = self.conv(x)
+        x = self.activation(x)
+        x = x.view(x.size(0), -1)
+        return self.classifier(x)
+
+# DARTS 전략으로 탐색 실행
+model_space = NASModel()
+strategy = DARTS()
+
+# 평가자 정의
+def evaluate_model(model):
+    # 모델 학습 및 검증 로직
+    accuracy = train_and_validate(model)
+    return accuracy
+
+evaluator = FunctionalEvaluator(evaluate_model)
+
+# 탐색 시작
+# experiment = strategy.run(model_space, evaluator)
+print("NAS 탐색 공간이 정의되었습니다.")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 모델 최적화 회의에서</div>
+                    <blockquote class="conv-quote">"모바일 배포를 위해 경량화가 필요한데, NAS를 적용해서 latency-accuracy 트레이드오프가 최적화된 아키텍처를 탐색해보면 어떨까요? EfficientNet-lite처럼 NAS로 찾은 모델이 수작업 설계보다 20% 이상 효율적인 경우가 많습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"NAS는 탐색 공간, 탐색 전략, 성능 추정 세 요소로 구성됩니다. 초기 NAS는 수천 GPU-일이 필요했지만, DARTS 같은 미분 가능 방식이나 weight sharing으로 비용이 크게 줄었습니다. 실제로 MobileNetV3, EfficientNet 등이 NAS로 발견되었습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 리소스 논의에서</div>
+                    <blockquote class="conv-quote">"Full NAS는 비용이 높으니, Once-for-All이나 ProxylessNAS처럼 효율적인 방법을 쓰거나, 이미 탐색된 아키텍처(EfficientNet family)를 fine-tuning하는 것도 좋은 전략입니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>NAS가 항상 최고의 모델을 찾아준다고 생각</strong>
+                        <p>탐색 공간이 잘못 설계되면 좋은 아키텍처가 애초에 포함되지 않을 수 있습니다. 탐색 공간 설계가 NAS 성능의 80%를 결정합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>연산 비용 과소평가</strong>
+                        <p>효율적인 방법을 쓰더라도 NAS는 여전히 많은 연산이 필요합니다. 작은 데이터셋에서 proxy task로 먼저 테스트하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 접근법</strong>
+                        <p>작은 규모로 탐색 공간을 검증하고, 이미 검증된 NAS 결과물(EfficientNet 등)을 baseline으로 활용한 뒤, 필요시 fine-grained NAS를 적용하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/AutoML/" class="related-term-link">AutoML</a>
+                <a href="/ko/term/Neural%20Network/" class="related-term-link">Neural Network</a>
+                <a href="/ko/term/Hyperparameter/" class="related-term-link">Hyperparameter</a>
+                <a href="/ko/term/Transfer%20Learning/" class="related-term-link">Transfer Learning</a>
+                <a href="/ko/term/CNN/" class="related-term-link">CNN</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://github.com/microsoft/nni" target="_blank" class="learn-link">📄 Microsoft NNI 공식 GitHub</a>
+                <a href="https://arxiv.org/abs/1808.05377" target="_blank" class="learn-link">🎓 DARTS 논문 (Differentiable Architecture Search)</a>
+                <a href="https://www.automl.org/automl/nas/" target="_blank" class="learn-link">📘 AutoML.org NAS 가이드</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +377,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,138 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Notified Body(인증기관)는 EU AI Act에서 고위험 AI 시스템의 제3자 적합성 평가를 수행하도록 지정된 공인 기관입니다. AI 제공자가 자체 적합성 평가만으로 부족한 경우, Notified Body의 독립적 검증을 통해 규정 준수를 증명해야 합니다.</p>
+                <p>Notified Body 제도는 기존 CE 마킹 체계에서 유래했습니다. 의료기기, 기계류 등 EU 제품 안전 규정에서 오랫동안 사용되어 온 시스템을 AI 규제에 적용한 것입니다. EU 회원국이 자국 내 기관을 지정하고, EU 집행위원회에 통보(notify)하면 Notified Body 자격을 얻습니다.</p>
+                <p>AI Act에서 Notified Body 개입이 필요한 경우는 주로 부속서 II에 해당하는 고위험 AI 시스템입니다. 생체인식, 중요 인프라, 교육, 고용, 법 집행 등 민감한 분야에 사용되는 AI가 대상이며, 기술 문서 검토, 품질관리 시스템 평가, 필요시 실제 테스트를 수행합니다.</p>
+                <p>실무 관점에서, EU 시장에 고위험 AI를 출시하려면 적합성 평가 경로를 미리 파악해야 합니다. Notified Body 평가가 필요한 경우 6-12개월 이상 소요될 수 있으므로, 제품 개발 초기부터 규정 요구사항을 반영하고 평가 일정을 계획해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 활용 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 실무 체크리스트</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">적합성 평가 절차</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># EU AI Act 고위험 AI 적합성 평가 절차
+
+## 1단계: AI 시스템 분류 확인
+- 부속서 I: 금지 AI 관행 (사용 불가)
+- 부속서 III: 고위험 AI 시스템 (규제 대상)
+- 범용 AI 모델 (별도 의무)
+
+## 2단계: 적합성 평가 경로 결정
+Case A: 자체 적합성 평가
+  - 대부분의 고위험 AI
+  - 내부 검증 + 기술 문서 작성
+
+Case B: Notified Body 필수
+  - 부속서 II 해당 제품의 AI 안전 구성요소
+  - 원격 생체인식 AI (일부 예외 제외)
+  - 제3자 검증 필요
+
+## 3단계: Notified Body 선정 (필요시)
+- NANDO 데이터베이스에서 검색
+- AI Act 범위 지정된 기관 확인
+- 전문 분야, 언어, 비용, 일정 비교
+
+## 4단계: 제출 문서 준비
+필수 기술 문서:
+  - 시스템 설명 및 의도된 목적
+  - 설계 사양 및 아키텍처
+  - 학습/검증/테스트 데이터셋 정보
+  - 위험 관리 시스템 문서
+  - 성능 메트릭 및 테스트 결과
+  - 사용 지침 및 사후 모니터링 계획
+
+## 5단계: 평가 및 인증
+- 기술 문서 검토: 4-8주
+- 품질관리 시스템 심사: 2-4주
+- 필요시 현장 테스트: 추가 시간
+- 총 예상 기간: 3-12개월
+
+## 비용 참고 (예시)
+- 소규모 AI 시스템: EUR 15,000-30,000
+- 복잡한 시스템: EUR 50,000-100,000+
+- 연간 감시 심사: 초기 비용의 30-50%</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 규제 대응 회의에서</div>
+                    <blockquote class="conv-quote">"우리 AI가 부속서 III 고위험에 해당하는데, 생체인식이 아니라 자체 적합성 평가로 갈 수 있을 것 같습니다. 다만 기술 문서와 품질관리 시스템은 Notified Body 기준에 맞춰 준비해두면 나중에 필요할 때 대응이 빠릅니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"Notified Body는 EU AI Act에서 고위험 AI의 제3자 적합성 평가를 수행하는 공인 기관입니다. CE 마킹 체계에서 유래했고, 회원국이 지정해서 EU에 통보합니다. 생체인식 AI나 부속서 II 안전 구성요소는 반드시 Notified Body 평가가 필요합니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 일정 협의에서</div>
+                    <blockquote class="conv-quote">"EU 출시가 내년 3분기 목표라면, Notified Body 평가에 최소 6개월은 잡아야 합니다. 지금부터 기관 선정하고 기술 문서 준비 시작해야 일정에 맞출 수 있어요."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>출시 직전에 적합성 평가 시작</strong>
+                        <p>Notified Body 평가는 최소 3-6개월 이상 소요됩니다. 제품 개발 초기 단계부터 규제 요구사항을 반영하고 일정을 계획하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>모든 고위험 AI에 Notified Body 필요하다고 오해</strong>
+                        <p>대부분의 고위험 AI는 자체 적합성 평가가 가능합니다. Notified Body 필수 대상을 정확히 파악하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 접근법</strong>
+                        <p>초기에 AI Act 분류를 명확히 하고, 적합성 평가 경로를 결정하세요. 기술 문서는 개발과 병행하여 작성하고, 필요시 Notified Body 사전 상담을 활용하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/EU%20AI%20Act/" class="related-term-link">EU AI Act</a>
+                <a href="/ko/term/%EA%B3%A0%EC%9C%84%ED%97%98%20AI/" class="related-term-link">고위험 AI</a>
+                <a href="/ko/term/CE%20Marking/" class="related-term-link">CE Marking</a>
+                <a href="/ko/term/AI%20Governance/" class="related-term-link">AI Governance</a>
+                <a href="/ko/term/%EA%B8%B0%EC%88%A0%20%EB%AC%B8%EC%84%9C/" class="related-term-link">기술 문서</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://ec.europa.eu/growth/single-market/goods/building-blocks/notified-bodies_en" target="_blank" class="learn-link">📄 EU Notified Bodies 공식 안내</a>
+                <a href="https://ec.europa.eu/growth/tools-databases/nando/" target="_blank" class="learn-link">🎓 NANDO 데이터베이스 (Notified Body 검색)</a>
+                <a href="https://artificialintelligenceact.eu/" target="_blank" class="learn-link">📘 EU AI Act 전문 해설</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +368,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

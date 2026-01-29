@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CockroachDB (CockroachDB) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="분산 SQL 데이터베이스. PostgreSQL 호환, 글로벌 분산.">
-    <meta name="keywords" content="CockroachDB, CockroachDB, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <title>CockroachDB (Distributed SQL Database) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="CockroachDB는 분산 SQL 데이터베이스입니다. PostgreSQL 호환, 자동 샤딩, 글로벌 분산, 강력한 일관성(Serializable)을 제공하여 클라우드 네이티브 환경에 최적화되어 있습니다.">
+    <meta name="keywords" content="CockroachDB, 분산 데이터베이스, Distributed SQL, PostgreSQL, 샤딩, ACID, 클라우드 네이티브, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/CockroachDB/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/CockroachDB/">
-    <meta property="og:title" content="CockroachDB (CockroachDB) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="분산 SQL 데이터베이스. PostgreSQL 호환, 글로벌 분산.">
+    <meta property="og:title" content="CockroachDB (Distributed SQL Database) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="CockroachDB는 PostgreSQL 호환 분산 SQL 데이터베이스로 자동 샤딩과 글로벌 분산을 제공합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="CockroachDB (CockroachDB) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="분산 SQL 데이터베이스. PostgreSQL 호환, 글로벌 분산.">
+    <meta name="twitter:title" content="CockroachDB (Distributed SQL Database) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="CockroachDB는 PostgreSQL 호환 분산 SQL 데이터베이스로 자동 샤딩과 글로벌 분산을 제공합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "CockroachDB",
-        "description": "분산 SQL 데이터베이스. PostgreSQL 호환, 글로벌 분산.",
+        "alternateName": "Distributed SQL Database",
+        "description": "CockroachDB는 PostgreSQL 호환 분산 SQL 데이터베이스로 자동 샤딩과 글로벌 분산을 제공합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +276,9 @@
                 <span>데이터베이스</span>
             </div>
             <h1 class="term-title">CockroachDB</h1>
-            <p class="term-english">CockroachDB</p>
+            <p class="term-english">Distributed SQL Database</p>
             <div class="term-description">
-                <p>분산 SQL 데이터베이스. PostgreSQL 호환, 글로벌 분산.</p>
+                <p>PostgreSQL 호환 분산 SQL 데이터베이스입니다. 자동 샤딩, 글로벌 분산, Serializable 격리 수준을 기본 제공하여 "생존 가능한(Survivable)" 데이터베이스를 구현합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,466 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>CockroachDB</strong>는 Google Spanner에서 영감을 받아 개발된 분산 SQL 데이터베이스입니다. 이름처럼 "바퀴벌레"의 생존력을 목표로, 노드 장애, 데이터센터 장애, 심지어 리전 장애에도 데이터를 보존하고 서비스를 지속합니다.</p>
+                <p><strong>자동 샤딩과 리밸런싱</strong>: 데이터는 Range라는 단위로 자동 분할되어 여러 노드에 분산됩니다. 노드가 추가되거나 제거되면 데이터가 자동으로 리밸런싱됩니다. 개발자는 샤딩을 직접 관리할 필요가 없습니다.</p>
+                <p><strong>강력한 일관성(Strong Consistency)</strong>: CockroachDB는 기본적으로 Serializable 격리 수준을 제공합니다. 분산 환경에서도 단일 노드와 동일한 ACID 보장을 받을 수 있어 금융, 결제 등 정합성이 중요한 서비스에 적합합니다.</p>
+                <p><strong>PostgreSQL 호환</strong>: PostgreSQL 와이어 프로토콜을 지원하여 기존 PostgreSQL 드라이버, ORM(Prisma, Sequelize, TypeORM 등)을 그대로 사용할 수 있습니다. 마이그레이션 비용이 낮습니다.</p>
+                <p><strong>멀티 리전 기능</strong>: 데이터를 특정 리전에 고정(Region Survival), 글로벌 테이블(Global Table)로 전 세계에서 빠른 읽기, 사용자 위치 기반 데이터 배치 등 지오 분산(Geo-distribution) 기능을 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="sql">SQL 쿼리</button>
+                <button class="code-tab" data-lang="node">Node.js (pg)</button>
+                <button class="code-tab" data-lang="cli">CLI / 운영</button>
+            </div>
+            <div class="code-block active" data-lang="sql">
+                <pre><code class="language-sql">-- CockroachDB SQL 예제 (PostgreSQL 호환)
+
+-- ============================================
+-- 데이터베이스 및 테이블 생성
+-- ============================================
+
+CREATE DATABASE ecommerce;
+USE ecommerce;
+
+-- 사용자 테이블 (UUID 기본키 권장)
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email STRING UNIQUE NOT NULL,
+    name STRING NOT NULL,
+    region STRING DEFAULT 'ap-northeast-2',
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 주문 테이블 (해시 샤딩 인덱스)
+CREATE TABLE orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id),
+    total_amount DECIMAL(15,2) NOT NULL,
+    status STRING DEFAULT 'pending',
+    created_at TIMESTAMPTZ DEFAULT now(),
+
+    -- 샤딩 힌트: user_id로 데이터 분산
+    INDEX orders_by_user (user_id) USING HASH
+);
+
+
+-- ============================================
+-- 멀티 리전 설정
+-- ============================================
+
+-- 데이터베이스 리전 설정
+ALTER DATABASE ecommerce PRIMARY REGION "ap-northeast-2";
+ALTER DATABASE ecommerce ADD REGION "us-east-1";
+ALTER DATABASE ecommerce ADD REGION "eu-west-1";
+
+-- 리전별 생존 설정 (리전 장애에도 복구)
+ALTER DATABASE ecommerce SURVIVE REGION FAILURE;
+
+-- 글로벌 테이블 (전 세계에서 빠른 읽기)
+CREATE TABLE config (
+    key STRING PRIMARY KEY,
+    value JSONB
+) LOCALITY GLOBAL;
+
+-- 리전 고정 테이블 (GDPR 준수 - 유럽 데이터는 유럽에)
+CREATE TABLE eu_users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email STRING,
+    data JSONB
+) LOCALITY REGIONAL BY TABLE IN "eu-west-1";
+
+
+-- ============================================
+-- 트랜잭션 (Serializable 기본)
+-- ============================================
+
+BEGIN;
+
+-- 계좌 이체 (분산 트랜잭션도 ACID 보장)
+UPDATE accounts SET balance = balance - 100
+WHERE id = 'acc-001';
+
+UPDATE accounts SET balance = balance + 100
+WHERE id = 'acc-002';
+
+-- 이체 기록
+INSERT INTO transfers (from_account, to_account, amount)
+VALUES ('acc-001', 'acc-002', 100);
+
+COMMIT;
+
+
+-- ============================================
+-- 유용한 시스템 쿼리
+-- ============================================
+
+-- 클러스터 노드 상태 확인
+SELECT node_id, address, is_live, locality
+FROM crdb_internal.gossip_nodes;
+
+-- Range 분포 확인
+SELECT * FROM [SHOW RANGES FROM TABLE orders];
+
+-- 실행 계획 (분산 쿼리 확인)
+EXPLAIN ANALYZE SELECT * FROM orders
+WHERE user_id = 'some-uuid';
+
+-- 느린 쿼리 확인
+SELECT * FROM crdb_internal.node_queries
+ORDER BY elapsed DESC LIMIT 10;</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// CockroachDB + Node.js (pg 드라이버)
+const { Pool } = require('pg');
+
+// CockroachDB 연결 (PostgreSQL 호환)
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    // CockroachDB Serverless 연결 시
+    ssl: {
+        rejectUnauthorized: true,
+    },
+    max: 20,  // 커넥션 풀 크기
+});
+
+// ============================================
+// 기본 CRUD
+// ============================================
+
+class OrderService {
+    // 주문 생성
+    async createOrder(userId, items) {
+        const client = await pool.connect();
+
+        try {
+            await client.query('BEGIN');
+
+            // 총액 계산
+            const total = items.reduce((sum, item) =>
+                sum + item.price * item.quantity, 0);
+
+            // 주문 생성
+            const { rows: [order] } = await client.query(`
+                INSERT INTO orders (user_id, total_amount, status)
+                VALUES ($1, $2, 'pending')
+                RETURNING *
+            `, [userId, total]);
+
+            // 주문 아이템 생성
+            for (const item of items) {
+                await client.query(`
+                    INSERT INTO order_items (order_id, product_id, quantity, price)
+                    VALUES ($1, $2, $3, $4)
+                `, [order.id, item.productId, item.quantity, item.price]);
+            }
+
+            // 재고 차감
+            for (const item of items) {
+                const { rowCount } = await client.query(`
+                    UPDATE products
+                    SET stock = stock - $1
+                    WHERE id = $2 AND stock >= $1
+                `, [item.quantity, item.productId]);
+
+                if (rowCount === 0) {
+                    throw new Error(`재고 부족: ${item.productId}`);
+                }
+            }
+
+            await client.query('COMMIT');
+            return order;
+
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
+    }
+
+    // 사용자별 주문 조회
+    async getOrdersByUser(userId, limit = 10) {
+        const { rows } = await pool.query(`
+            SELECT o.*,
+                   json_agg(json_build_object(
+                       'product_id', oi.product_id,
+                       'quantity', oi.quantity,
+                       'price', oi.price
+                   )) as items
+            FROM orders o
+            JOIN order_items oi ON o.id = oi.order_id
+            WHERE o.user_id = $1
+            GROUP BY o.id
+            ORDER BY o.created_at DESC
+            LIMIT $2
+        `, [userId, limit]);
+
+        return rows;
+    }
+}
+
+// ============================================
+// 재시도 로직 (분산 DB 필수)
+// ============================================
+
+async function executeWithRetry(fn, maxRetries = 3) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            return await fn();
+        } catch (error) {
+            // CockroachDB 직렬화 실패 에러 (40001)
+            if (error.code === '40001' && attempt < maxRetries) {
+                console.log(`재시도 ${attempt}/${maxRetries}: 트랜잭션 충돌`);
+                // 지수 백오프
+                await new Promise(r => setTimeout(r, 100 * Math.pow(2, attempt)));
+                continue;
+            }
+            throw error;
+        }
+    }
+}
+
+// 사용 예시
+const orderService = new OrderService();
+
+await executeWithRetry(async () => {
+    return orderService.createOrder('user-123', [
+        { productId: 'prod-1', quantity: 2, price: 10000 },
+        { productId: 'prod-2', quantity: 1, price: 25000 }
+    ]);
+});
+
+// ============================================
+// Prisma에서 CockroachDB 사용
+// ============================================
+
+// schema.prisma
+/*
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String   @unique
+  orders    Order[]
+}
+*/</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="cli">
+                <pre><code class="language-bash"># CockroachDB CLI 및 운영 명령어
+
+# ============================================
+# 설치 및 로컬 실행
+# ============================================
+
+# macOS 설치
+brew install cockroachdb/tap/cockroach
+
+# 로컬 단일 노드 실행 (개발용)
+cockroach start-single-node --insecure --listen-addr=localhost:26257
+
+# SQL 쉘 접속
+cockroach sql --insecure --host=localhost:26257
+
+
+# ============================================
+# 클러스터 구성 (프로덕션)
+# ============================================
+
+# 노드 1 시작
+cockroach start \
+  --insecure \
+  --store=node1 \
+  --listen-addr=localhost:26257 \
+  --http-addr=localhost:8080 \
+  --join=localhost:26257,localhost:26258,localhost:26259
+
+# 노드 2 시작
+cockroach start \
+  --insecure \
+  --store=node2 \
+  --listen-addr=localhost:26258 \
+  --http-addr=localhost:8081 \
+  --join=localhost:26257,localhost:26258,localhost:26259
+
+# 노드 3 시작
+cockroach start \
+  --insecure \
+  --store=node3 \
+  --listen-addr=localhost:26259 \
+  --http-addr=localhost:8082 \
+  --join=localhost:26257,localhost:26258,localhost:26259
+
+# 클러스터 초기화 (최초 1회)
+cockroach init --insecure --host=localhost:26257
+
+
+# ============================================
+# 클러스터 관리
+# ============================================
+
+# 클러스터 상태 확인
+cockroach node status --insecure --host=localhost:26257
+
+# 노드 decommission (제거)
+cockroach node decommission 3 --insecure --host=localhost:26257
+
+# DB Admin UI 접속 (브라우저)
+# http://localhost:8080
+
+
+# ============================================
+# 백업 및 복구
+# ============================================
+
+# 전체 클러스터 백업 (S3)
+BACKUP INTO 's3://bucket/backup?AUTH=implicit'
+  AS OF SYSTEM TIME '-10s';
+
+# 특정 데이터베이스 백업
+BACKUP DATABASE ecommerce INTO 's3://bucket/backup';
+
+# 복구
+RESTORE DATABASE ecommerce FROM LATEST IN 's3://bucket/backup';
+
+# Point-in-Time 복구
+RESTORE DATABASE ecommerce FROM LATEST IN 's3://bucket/backup'
+  AS OF SYSTEM TIME '2024-01-15 10:00:00';
+
+
+# ============================================
+# CockroachDB Cloud (서버리스)
+# ============================================
+
+# CLI로 클라우드 접속
+cockroach sql --url "postgresql://user:password@host:26257/defaultdb?sslmode=verify-full"
+
+# 연결 문자열 예시 (Node.js)
+# DATABASE_URL="postgresql://user:pass@free-tier.gcp-asia-southeast1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full"
+
+
+# ============================================
+# 성능 진단
+# ============================================
+
+# 실행 중인 쿼리 확인
+cockroach sql --insecure -e "SELECT * FROM [SHOW QUERIES]"
+
+# 세션 확인
+cockroach sql --insecure -e "SELECT * FROM [SHOW SESSIONS]"
+
+# 통계 수집
+cockroach sql --insecure -e "ANALYZE orders"</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 데이터베이스 선정 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "글로벌 서비스라 멀티 리전 필수인데요. CockroachDB 쓰면 PostgreSQL 문법 그대로 쓰면서 자동 샤딩, 리전 생존까지 됩니다. Spanner 쓰기엔 벤더 락인이 걱정되는데, CockroachDB는 오픈소스 코어도 있어요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 마이그레이션 계획 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "PostgreSQL에서 CockroachDB로 옮기는 건 생각보다 쉬워요. pg_dump로 스키마 뽑고 IMPORT로 넣으면 됩니다. 다만 시퀀스 대신 UUID 쓰는 걸 권장하고, 일부 PostgreSQL 전용 기능은 호환 안 될 수 있어서 미리 체크해야 해요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "노드 하나 죽었는데 서비스는 정상이에요. CockroachDB가 자동으로 다른 노드로 리더 선출하고 트래픽 라우팅했거든요. 다만 해당 노드 데이터가 언더 레플리케이션 상태니까 빨리 복구하거나 새 노드 투입해야 합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>순차 ID 사용 금지</strong>
+                        <p>AUTO_INCREMENT나 SERIAL 대신 UUID를 권장합니다. 순차 ID는 핫스팟을 유발하여 특정 노드에 쓰기가 집중됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>트랜잭션 재시도 필수</strong>
+                        <p>Serializable 격리로 인해 트랜잭션 충돌(40001 에러)이 발생할 수 있습니다. 애플리케이션에서 재시도 로직을 반드시 구현하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>크로스 리전 쿼리 지연</strong>
+                        <p>멀티 리전 환경에서 리전 간 쿼리는 네트워크 지연이 발생합니다. REGIONAL BY ROW로 데이터 지역성을 최적화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>CockroachDB 베스트 프랙티스</strong>
+                        <p>UUID 기본키 사용, 해시 인덱스로 핫스팟 방지, 재시도 로직 구현, 리전 근접 데이터 배치, 정기적 ANALYZE 실행.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/PostgreSQL/" class="related-term-link">PostgreSQL</a>
+                <a href="/ko/term/ACID/" class="related-term-link">ACID</a>
+                <a href="/ko/term/%EC%83%A4%EB%94%A9/" class="related-term-link">샤딩</a>
+                <a href="/ko/term/Replication/" class="related-term-link">Replication</a>
+                <a href="/ko/term/TiDB/" class="related-term-link">TiDB</a>
+                <a href="/ko/term/CAP%20%EC%A0%95%EB%A6%AC/" class="related-term-link">CAP 정리</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.cockroachlabs.com/docs/" target="_blank" class="learn-link">
+                    📄 CockroachDB 공식 문서
+                </a>
+                <a href="https://www.cockroachlabs.com/docs/stable/architecture/overview.html" target="_blank" class="learn-link">
+                    🎓 CockroachDB 아키텍처 가이드
+                </a>
+                <a href="https://university.cockroachlabs.com/" target="_blank" class="learn-link">
+                    📖 Cockroach University - 무료 학습 코스
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +756,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

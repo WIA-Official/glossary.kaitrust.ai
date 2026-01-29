@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,144 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>인프라스트럭처(Infrastructure)는 IT 시스템을 운영하기 위한 기반 환경입니다. 물리적/가상 서버, 네트워크, 스토리지, 데이터베이스, 로드밸런서 등 애플리케이션이 실행되는 데 필요한 모든 구성 요소를 포함합니다.</p>
+                <p>전통적 인프라는 물리 서버를 직접 관리했지만, 클라우드 시대에는 가상화된 리소스를 API로 제어합니다. IaaS(AWS, GCP, Azure)는 컴퓨팅, 스토리지, 네트워크를 제공하고, PaaS(Heroku, App Engine)는 플랫폼까지 추상화합니다.</p>
+                <p>Infrastructure as Code(IaC)로 인프라를 코드로 정의합니다. Terraform, Pulumi로 선언적으로 리소스를 생성하고, Ansible로 서버를 구성합니다. Git에서 버전 관리하여 변경 이력을 추적하고, 코드 리뷰를 통해 실수를 방지합니다.</p>
+                <p>실무에서는 개발/스테이징/운영 환경을 코드로 일관되게 관리합니다. 재해 복구(DR) 시 다른 리전에 인프라를 자동 생성하고, 보안 그룹과 IAM 정책도 코드로 관리하여 컴플라이언스를 준수합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="hcl">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Terraform - AWS 인프라 정의
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  backend "s3" {
+    bucket = "myapp-terraform-state"
+    key    = "production/terraform.tfstate"
+    region = "ap-northeast-2"
+  }
+}
+
+# VPC 네트워크
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  tags = { Name = "main-vpc" }
+}
+
+resource "aws_subnet" "public" {
+  count                   = 2
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.${count.index + 1}.0/24"
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  map_public_ip_on_launch = true
+  tags = { Name = "public-subnet-${count.index + 1}" }
+}
+
+# EC2 인스턴스
+resource "aws_instance" "web" {
+  count                  = var.instance_count
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = var.instance_type
+  subnet_id              = aws_subnet.public[count.index % 2].id
+  vpc_security_group_ids = [aws_security_group.web.id]
+  iam_instance_profile   = aws_iam_instance_profile.web.name
+
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+    encrypted   = true
+  }
+
+  tags = {
+    Name        = "web-${count.index + 1}"
+    Environment = var.environment
+  }
+}
+
+# RDS 데이터베이스
+resource "aws_db_instance" "main" {
+  identifier           = "myapp-db"
+  engine               = "postgres"
+  engine_version       = "15.4"
+  instance_class       = "db.t3.medium"
+  allocated_storage    = 50
+  storage_encrypted    = true
+  multi_az             = true
+  db_subnet_group_name = aws_db_subnet_group.main.name
+  skip_final_snapshot  = false
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "새 리전에 DR 환경 구축해야 하는데, Terraform으로 복제하면 얼마나 걸릴까요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "기존 모듈 재사용하면 variables만 변경해서 1-2일이면 가능합니다. VPC 피어링 설정이 추가로 필요하고요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Infrastructure as Code의 장점은 무엇인가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "버전 관리로 변경 이력 추적, 코드 리뷰로 실수 방지, 환경 간 일관성 유지가 가능합니다. 재해 복구 시 인프라를 빠르게 재생성할 수 있고, 테스트 환경을 동일하게 복제할 수 있어 개발 생산성도 높아집니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "보안 그룹에서 0.0.0.0/0 인바운드가 열려있는데, 의도한 건가요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "아, 테스트하면서 열어둔 건데 커밋됐네요. CloudFront/ALB에서만 접근하도록 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>State 파일 보안 관리 - S3 + DynamoDB 잠금으로 동시 수정 방지</li>
+                <li>Secrets는 코드에 포함 금지 - AWS Secrets Manager, HashiCorp Vault 사용</li>
+                <li>프로덕션 변경은 PR 리뷰 필수 - terraform plan 결과 확인 후 apply</li>
+                <li class="info">모듈화로 재사용성 확보 - 환경별 차이는 variables로 관리</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/IaC/" class="related-link">IaC</a>
+                <a href="/ko/term/Ansible/" class="related-link">Ansible</a>
+                <a href="/ko/term/OpenTofu/" class="related-link">OpenTofu</a>
+                <a href="/ko/term/%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81/" class="related-link">스케일링</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://developer.hashicorp.com/terraform/docs" target="_blank" rel="noopener">Terraform 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://learn.hashicorp.com/terraform" target="_blank" rel="noopener">HashiCorp Learn - Terraform 튜토리얼</a></li>
+                <li><span class="type-book"></span><a href="https://www.oreilly.com/library/view/terraform-up/9781098116736/" target="_blank" rel="noopener">Terraform: Up and Running (3rd Edition)</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +351,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,169 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Tekton은 2018년 Google이 Knative Build를 기반으로 시작하고 이후 CD Foundation에 기증한 Kubernetes 네이티브 CI/CD 프레임워크입니다. Custom Resource Definition(CRD)을 사용해 파이프라인을 선언적으로 정의하며, Kubernetes 클러스터 위에서 직접 실행됩니다.</p>
+                <p>핵심 개념으로 Task(개별 작업), TaskRun(Task 실행 인스턴스), Pipeline(Task들의 조합), PipelineRun(Pipeline 실행 인스턴스)이 있습니다. 각 Task는 여러 Step으로 구성되며, Step들은 동일 Pod 내에서 순차 실행됩니다. Workspace를 통해 Task 간 데이터를 공유합니다.</p>
+                <p>Tekton은 컨테이너 이미지 빌드, 테스트, 배포를 모두 Kubernetes Pod로 실행합니다. 각 Step은 별도 컨테이너에서 실행되어 격리성이 보장됩니다. Tekton Triggers를 사용하면 Git webhook, HTTP 요청 등 다양한 이벤트로 파이프라인을 자동 실행할 수 있습니다.</p>
+                <p>실무에서는 Tekton Hub에서 재사용 가능한 Task들을 가져와 빠르게 파이프라인을 구성합니다. Argo CD, Flux와 결합해 GitOps CI/CD를 구현하거나, OpenShift Pipelines로 엔터프라이즈 환경에서 사용합니다. Jenkins X도 Tekton을 기반으로 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Tekton Task 정의
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-and-push
+spec:
+  params:
+    - name: image
+      type: string
+      description: 빌드할 이미지 이름
+  workspaces:
+    - name: source
+      description: 소스 코드 workspace
+  steps:
+    - name: build
+      image: gcr.io/kaniko-project/executor:latest
+      command:
+        - /kaniko/executor
+      args:
+        - --dockerfile=$(workspaces.source.path)/Dockerfile
+        - --context=$(workspaces.source.path)
+        - --destination=$(params.image)
+---
+# Pipeline 정의
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ci-pipeline
+spec:
+  params:
+    - name: repo-url
+      type: string
+    - name: image-name
+      type: string
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    - name: fetch-source
+      taskRef:
+        name: git-clone  # Tekton Hub에서 설치
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      params:
+        - name: url
+          value: $(params.repo-url)
+    - name: run-tests
+      taskRef:
+        name: npm-test
+      runAfter:
+        - fetch-source
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    - name: build-push
+      taskRef:
+        name: build-and-push
+      runAfter:
+        - run-tests
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: image
+          value: $(params.image-name)
+---
+# PipelineRun으로 실행
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: ci-pipeline-run-
+spec:
+  pipelineRef:
+    name: ci-pipeline
+  params:
+    - name: repo-url
+      value: https://github.com/myorg/myapp
+    - name: image-name
+      value: registry.io/myapp:latest
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "Jenkins에서 Tekton으로 마이그레이션 검토해봤는데, Kubernetes 리소스로 파이프라인 관리하니까 GitOps 흐름에 잘 맞아요."</p>
+                <p><strong class="role-junior">주니어:</strong> "Task 재사용이 가능하다고 들었는데, Tekton Hub에서 가져다 쓰면 되나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "네, git-clone, kaniko-build 같은 건 Hub에서 tkn hub install로 바로 설치하면 돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Tekton과 Jenkins의 주요 차이점은 무엇인가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "Tekton은 Kubernetes CRD로 파이프라인을 정의해서 클러스터가 곧 CI 서버입니다. Task가 Pod로 실행되니 스케일링이 자연스럽고, 선언적 YAML로 버전 관리가 쉬워요. 반면 Jenkins는 별도 서버 관리가 필요하고 Groovy 스크립트 기반이라 복잡도가 높습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "PipelineRun에서 workspace로 emptyDir 쓰셨는데, 빌드 실패 시 디버깅이 어려울 수 있어요."</p>
+                <p><strong class="role-junior">개발자:</strong> "volumeClaimTemplate으로 PVC 사용하면 실패한 빌드도 데이터 확인이 가능하겠네요. finally task도 추가해서 정리 로직 넣겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>Kubernetes 리소스 관리 경험이 부족하면 러닝 커브가 가파름 - 먼저 기본 K8s 개념 숙지 필요</li>
+                <li>Task 간 workspace 공유 시 ReadWriteOnce PVC는 동시 실행 불가 - ReadWriteMany 스토리지 또는 순차 실행 설정</li>
+                <li>Step 이미지 pull 시간이 파이프라인 시간에 포함 - 자주 쓰는 이미지는 클러스터 내 캐시 또는 pre-pull</li>
+                <li class="info">Tekton Dashboard나 tkn CLI를 활용하면 파이프라인 모니터링과 디버깅이 훨씬 수월함</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/ArgoCD/" class="related-link">ArgoCD</a>
+                <a href="/ko/term/GitOps/" class="related-link">GitOps</a>
+                <a href="/ko/term/Jenkins/" class="related-link">Jenkins</a>
+                <a href="/ko/term/Workflow/" class="related-link">Workflow</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://tekton.dev/docs/" target="_blank" rel="noopener">Tekton 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://hub.tekton.dev/" target="_blank" rel="noopener">Tekton Hub - 재사용 가능한 Tasks</a></li>
+                <li><span class="type-book"></span><a href="https://cd.foundation/" target="_blank" rel="noopener">CD Foundation - Tekton 프로젝트</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +376,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

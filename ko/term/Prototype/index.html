@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prototype (프로토타입) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="JavaScript 상속 메커니즘. 객체가 다른 객체로부터 상속.">
-    <meta name="keywords" content="Prototype, 프로토타입, AI 용어, KAITRUST, AI 백과사전, 프로그래밍">
+    <meta name="description" content="JavaScript의 핵심 상속 메커니즘. 객체가 다른 객체의 프로퍼티와 메서드를 프로토타입 체인을 통해 상속받는 방식.">
+    <meta name="keywords" content="Prototype, 프로토타입, AI 용어, KAITRUST, AI 백과사전, 프로그래밍, JavaScript, 상속, 프로토타입 체인">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Prototype/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Prototype/">
     <meta property="og:title" content="Prototype (프로토타입) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="JavaScript 상속 메커니즘. 객체가 다른 객체로부터 상속.">
+    <meta property="og:description" content="JavaScript의 핵심 상속 메커니즘. 객체가 다른 객체의 프로퍼티와 메서드를 프로토타입 체인을 통해 상속받는 방식.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Prototype (프로토타입) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="JavaScript 상속 메커니즘. 객체가 다른 객체로부터 상속.">
+    <meta name="twitter:description" content="JavaScript의 핵심 상속 메커니즘. 객체가 다른 객체의 프로퍼티와 메서드를 프로토타입 체인을 통해 상속받는 방식.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Prototype",
-        "description": "JavaScript 상속 메커니즘. 객체가 다른 객체로부터 상속.",
+        "description": "JavaScript의 핵심 상속 메커니즘. 객체가 다른 객체의 프로퍼티와 메서드를 프로토타입 체인을 통해 상속받는 방식.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -147,19 +147,285 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
+
+        /* Detail Section Styles */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.5));
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
         }
-        .related-title {
-            font-size: 1.3rem;
+        .term-section-title {
+            font-size: 1.4rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
             color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
+        .term-section-title .icon {
+            font-size: 1.5rem;
+        }
+        .detail-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        .detail-content p {
+            margin-bottom: 1.25rem;
+        }
+        .detail-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Code Example Styles */
+        .code-example-container {
+            margin-top: 1.5rem;
+        }
+        .code-example {
+            background: #0f172a;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .code-header {
+            background: rgba(168, 85, 247, 0.15);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .code-label {
+            color: #a855f7;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .code-copy-btn {
+            background: rgba(168, 85, 247, 0.2);
+            border: none;
+            color: #a855f7;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-copy-btn:hover {
+            background: rgba(168, 85, 247, 0.4);
+        }
+        .code-copy-btn.copied {
+            background: rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+        .code-block {
+            padding: 1.25rem;
+            overflow-x: auto;
+        }
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #e2e8f0;
+        }
+        .code-block code {
+            font-family: inherit;
+        }
+
+        /* Syntax Highlighting */
+        .keyword { color: #c084fc; }
+        .string { color: #86efac; }
+        .function { color: #67e8f9; }
+        .comment { color: #64748b; font-style: italic; }
+        .number { color: #fcd34d; }
+        .operator { color: #f472b6; }
+        .variable { color: #fbbf24; }
+        .property { color: #7dd3fc; }
+        .method { color: #67e8f9; }
+
+        /* Conversation Styles */
+        .conversation-container {
+            margin-top: 1.5rem;
+        }
+        .conversation {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+        .conversation:last-child {
+            margin-bottom: 0;
+        }
+        .conversation-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+        }
+        .conversation-type {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .conversation-type.interview {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+        .conversation-type.review {
+            background: rgba(251, 146, 60, 0.2);
+            color: #fb923c;
+        }
+        .conversation-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            font-size: 1rem;
+        }
+        .dialogue {
+            margin-bottom: 1rem;
+        }
+        .dialogue:last-child {
+            margin-bottom: 0;
+        }
+        .dialogue-speaker {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+        .dialogue-speaker.person-a { color: #60a5fa; }
+        .dialogue-speaker.person-b { color: #4ade80; }
+        .dialogue-speaker.person-c { color: #f472b6; }
+        .dialogue-text {
+            color: #cbd5e1;
+            line-height: 1.7;
+            padding-left: 0.5rem;
+            border-left: 2px solid rgba(100, 116, 139, 0.3);
+            margin-left: 0.25rem;
+            font-size: 0.95rem;
+        }
+
+        /* Warning Section Styles */
+        .warning-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .warning-item {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .warning-item:last-child {
+            margin-bottom: 0;
+        }
+        .warning-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .warning-content h4 {
+            color: #fbbf24;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .warning-content p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Related Terms Styles */
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.6rem 1.1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: 25px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.25s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.25);
+            border-color: rgba(168, 85, 247, 0.5);
+            color: #e9d5ff;
+            transform: translateY(-2px);
+        }
+
+        /* Resource Links Styles */
+        .resource-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            color: #93c5fd;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+        .resource-link:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateX(5px);
+        }
+        .resource-link .icon {
+            font-size: 1.2rem;
+        }
+        .resource-link .text {
+            flex: 1;
+        }
+        .resource-link .title {
+            font-weight: 500;
+            color: #bfdbfe;
+            display: block;
+        }
+        .resource-link .url {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        .resource-link .arrow {
+            color: #60a5fa;
+        }
+
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
+            .term-section { padding: 1.5rem; }
+            .code-block { padding: 1rem; }
+            .code-block pre { font-size: 0.8rem; }
+            .conversation { padding: 1rem; }
         }
     </style>
 </head>
@@ -191,7 +457,7 @@
             <h1 class="term-title">Prototype</h1>
             <p class="term-english">프로토타입</p>
             <div class="term-description">
-                <p>JavaScript 상속 메커니즘. 객체가 다른 객체로부터 상속.</p>
+                <p>JavaScript의 핵심 상속 메커니즘. 객체가 다른 객체의 프로퍼티와 메서드를 프로토타입 체인을 통해 상속받는 방식.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +468,356 @@
                 </a>
             </div>
         </article>
+
+        <!-- Detailed Description -->
+        <section class="term-section">
+            <h2 class="term-section-title">
+                <span class="icon">📖</span>
+                상세 설명
+            </h2>
+            <div class="detail-content">
+                <p><strong>Prototype(프로토타입)</strong>은 JavaScript에서 객체 지향 프로그래밍을 구현하는 핵심 메커니즘입니다. Java나 C++과 같은 클래스 기반 언어와 달리, JavaScript는 프로토타입 기반 상속을 사용합니다. 모든 JavaScript 객체는 내부적으로 다른 객체를 참조하는 [[Prototype]] 슬롯을 가지며, 이 참조된 객체가 바로 프로토타입입니다. 객체에서 특정 프로퍼티나 메서드를 찾을 때, 해당 객체에 없으면 프로토타입 객체에서 검색합니다.</p>
+
+                <p><strong>프로토타입 체인(Prototype Chain)</strong>은 객체들이 프로토타입으로 연결된 구조를 말합니다. 객체에서 프로퍼티를 조회할 때, JavaScript 엔진은 먼저 해당 객체의 own property를 확인하고, 없으면 [[Prototype]]이 가리키는 객체를 확인합니다. 이 과정은 프로퍼티를 찾거나 체인의 끝(null)에 도달할 때까지 계속됩니다. 예를 들어 배열 객체에서 toString()을 호출하면, Array.prototype을 거쳐 Object.prototype까지 탐색하여 메서드를 찾습니다.</p>
+
+                <p><strong>__proto__와 prototype</strong>은 혼동하기 쉬운 개념입니다. prototype은 함수 객체만 가지는 프로퍼티로, new 키워드로 생성될 인스턴스의 [[Prototype]]이 될 객체를 가리킵니다. 반면 __proto__는 모든 객체가 가지는 접근자 프로퍼티로, 해당 객체의 실제 [[Prototype]]을 가리킵니다. 즉, 생성자함수.prototype === 인스턴스.__proto__가 성립합니다. 단, __proto__는 레거시 기능이므로 Object.getPrototypeOf()와 Object.setPrototypeOf() 사용을 권장합니다.</p>
+
+                <p><strong>ES6 class 문법</strong>은 프로토타입 기반 상속을 더 직관적으로 사용할 수 있게 해주는 문법적 설탕(Syntactic Sugar)입니다. class 키워드로 선언해도 내부적으로는 여전히 프로토타입 체인이 동작합니다. class의 메서드는 자동으로 prototype에 추가되고, extends 키워드는 프로토타입 체인을 설정합니다. 따라서 class 문법을 사용하더라도 프로토타입의 개념을 이해하는 것이 JavaScript를 깊이 있게 다루는 데 필수적입니다.</p>
+            </div>
+        </section>
+
+        <!-- Code Examples -->
+        <section class="term-section">
+            <h2 class="term-section-title">
+                <span class="icon">💻</span>
+                코드 예제
+            </h2>
+            <div class="code-example-container">
+                <!-- Prototype Inheritance Example -->
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-label">prototype-inheritance.js - 프로토타입 상속</span>
+                        <button class="code-copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <div class="code-block">
+<pre><code><span class="comment">// 생성자 함수를 통한 프로토타입 상속</span>
+<span class="keyword">function</span> <span class="function">Animal</span>(<span class="variable">name</span>) {
+    <span class="keyword">this</span>.<span class="property">name</span> <span class="operator">=</span> <span class="variable">name</span>;
+}
+
+<span class="comment">// prototype에 메서드 추가 (모든 인스턴스가 공유)</span>
+<span class="variable">Animal</span>.<span class="property">prototype</span>.<span class="method">speak</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+    console.<span class="method">log</span>(<span class="string">`${<span class="keyword">this</span>.<span class="property">name</span>}가 소리를 냅니다.`</span>);
+};
+
+<span class="variable">Animal</span>.<span class="property">prototype</span>.<span class="method">sleep</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+    console.<span class="method">log</span>(<span class="string">`${<span class="keyword">this</span>.<span class="property">name</span>}가 잠을 잡니다.`</span>);
+};
+
+<span class="comment">// 자식 생성자 함수</span>
+<span class="keyword">function</span> <span class="function">Dog</span>(<span class="variable">name</span>, <span class="variable">breed</span>) {
+    <span class="comment">// 부모 생성자 호출 (super 역할)</span>
+    <span class="variable">Animal</span>.<span class="method">call</span>(<span class="keyword">this</span>, <span class="variable">name</span>);
+    <span class="keyword">this</span>.<span class="property">breed</span> <span class="operator">=</span> <span class="variable">breed</span>;
+}
+
+<span class="comment">// 프로토타입 체인 설정 (상속)</span>
+<span class="variable">Dog</span>.<span class="property">prototype</span> <span class="operator">=</span> Object.<span class="method">create</span>(<span class="variable">Animal</span>.<span class="property">prototype</span>);
+<span class="variable">Dog</span>.<span class="property">prototype</span>.<span class="property">constructor</span> <span class="operator">=</span> <span class="variable">Dog</span>;
+
+<span class="comment">// Dog만의 메서드 추가</span>
+<span class="variable">Dog</span>.<span class="property">prototype</span>.<span class="method">bark</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+    console.<span class="method">log</span>(<span class="string">`${<span class="keyword">this</span>.<span class="property">name</span>}가 멍멍 짖습니다!`</span>);
+};
+
+<span class="comment">// 메서드 오버라이딩</span>
+<span class="variable">Dog</span>.<span class="property">prototype</span>.<span class="method">speak</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+    console.<span class="method">log</span>(<span class="string">`${<span class="keyword">this</span>.<span class="property">name</span>}(${<span class="keyword">this</span>.<span class="property">breed</span>})가 왈왈!`</span>);
+};
+
+<span class="comment">// 인스턴스 생성 및 테스트</span>
+<span class="keyword">const</span> myDog <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Dog</span>(<span class="string">'바둑이'</span>, <span class="string">'진돗개'</span>);
+
+myDog.<span class="method">speak</span>();  <span class="comment">// 바둑이(진돗개)가 왈왈!</span>
+myDog.<span class="method">sleep</span>();  <span class="comment">// 바둑이가 잠을 잡니다. (상속받은 메서드)</span>
+myDog.<span class="method">bark</span>();   <span class="comment">// 바둑이가 멍멍 짖습니다!</span>
+
+<span class="comment">// 프로토타입 체인 확인</span>
+console.<span class="method">log</span>(myDog <span class="keyword">instanceof</span> <span class="variable">Dog</span>);    <span class="comment">// true</span>
+console.<span class="method">log</span>(myDog <span class="keyword">instanceof</span> <span class="variable">Animal</span>); <span class="comment">// true</span>
+console.<span class="method">log</span>(<span class="variable">Dog</span>.<span class="property">prototype</span>.<span class="method">isPrototypeOf</span>(myDog)); <span class="comment">// true</span></code></pre>
+                    </div>
+                </div>
+
+                <!-- Object.create Example -->
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-label">object-create.js - Object.create 활용</span>
+                        <button class="code-copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <div class="code-block">
+<pre><code><span class="comment">// Object.create()를 사용한 프로토타입 상속</span>
+<span class="comment">// 더 명시적이고 유연한 상속 방식</span>
+
+<span class="keyword">const</span> personProto <span class="operator">=</span> {
+    <span class="method">greet</span>() {
+        console.<span class="method">log</span>(<span class="string">`안녕하세요, ${<span class="keyword">this</span>.<span class="property">name</span>}입니다.`</span>);
+    },
+    <span class="method">introduce</span>() {
+        console.<span class="method">log</span>(<span class="string">`저는 ${<span class="keyword">this</span>.<span class="property">age</span>}살이고, ${<span class="keyword">this</span>.<span class="property">job</span>}입니다.`</span>);
+    }
+};
+
+<span class="comment">// Object.create로 프로토타입 설정</span>
+<span class="keyword">const</span> developer <span class="operator">=</span> Object.<span class="method">create</span>(<span class="variable">personProto</span>, {
+    <span class="comment">// 프로퍼티 디스크립터로 세밀한 제어 가능</span>
+    <span class="property">name</span>: {
+        <span class="property">value</span>: <span class="string">'김개발'</span>,
+        <span class="property">writable</span>: <span class="keyword">true</span>,
+        <span class="property">enumerable</span>: <span class="keyword">true</span>
+    },
+    <span class="property">age</span>: {
+        <span class="property">value</span>: <span class="number">28</span>,
+        <span class="property">writable</span>: <span class="keyword">true</span>,
+        <span class="property">enumerable</span>: <span class="keyword">true</span>
+    },
+    <span class="property">job</span>: {
+        <span class="property">value</span>: <span class="string">'프론트엔드 개발자'</span>,
+        <span class="property">writable</span>: <span class="keyword">true</span>,
+        <span class="property">enumerable</span>: <span class="keyword">true</span>
+    }
+});
+
+<span class="comment">// 개발자만의 메서드 추가</span>
+<span class="variable">developer</span>.<span class="method">code</span> <span class="operator">=</span> <span class="keyword">function</span>(<span class="variable">language</span>) {
+    console.<span class="method">log</span>(<span class="string">`${<span class="keyword">this</span>.<span class="property">name</span>}가 ${<span class="variable">language</span>}로 코딩합니다.`</span>);
+};
+
+developer.<span class="method">greet</span>();     <span class="comment">// 안녕하세요, 김개발입니다.</span>
+developer.<span class="method">introduce</span>(); <span class="comment">// 저는 28살이고, 프론트엔드 개발자입니다.</span>
+developer.<span class="method">code</span>(<span class="string">'JavaScript'</span>); <span class="comment">// 김개발가 JavaScript로 코딩합니다.</span>
+
+<span class="comment">// 프로토타입 확인</span>
+console.<span class="method">log</span>(Object.<span class="method">getPrototypeOf</span>(<span class="variable">developer</span>) <span class="operator">===</span> <span class="variable">personProto</span>); <span class="comment">// true</span>
+
+<span class="comment">// null 프로토타입으로 순수 딕셔너리 객체 생성</span>
+<span class="keyword">const</span> pureDict <span class="operator">=</span> Object.<span class="method">create</span>(<span class="keyword">null</span>);
+<span class="variable">pureDict</span>.<span class="property">key</span> <span class="operator">=</span> <span class="string">'value'</span>;
+console.<span class="method">log</span>(<span class="variable">pureDict</span>.<span class="property">hasOwnProperty</span>); <span class="comment">// undefined (상속 없음)</span></code></pre>
+                    </div>
+                </div>
+
+                <!-- __proto__ vs prototype Example -->
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-label">proto-vs-prototype.js - __proto__와 prototype 차이</span>
+                        <button class="code-copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <div class="code-block">
+<pre><code><span class="comment">// __proto__ vs prototype 이해하기</span>
+
+<span class="keyword">function</span> <span class="function">Person</span>(<span class="variable">name</span>) {
+    <span class="keyword">this</span>.<span class="property">name</span> <span class="operator">=</span> <span class="variable">name</span>;
+}
+
+<span class="variable">Person</span>.<span class="property">prototype</span>.<span class="method">sayHello</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+    console.<span class="method">log</span>(<span class="string">`Hello, I'm ${<span class="keyword">this</span>.<span class="property">name</span>}`</span>);
+};
+
+<span class="keyword">const</span> john <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'John'</span>);
+
+<span class="comment">// prototype: 함수 객체의 프로퍼티</span>
+<span class="comment">// 이 함수로 생성될 인스턴스의 [[Prototype]]이 될 객체</span>
+console.<span class="method">log</span>(<span class="variable">Person</span>.<span class="property">prototype</span>);
+<span class="comment">// { sayHello: [Function], constructor: Person }</span>
+
+<span class="comment">// __proto__: 모든 객체의 [[Prototype]] 접근자</span>
+<span class="comment">// 해당 객체가 실제로 상속받는 프로토타입 객체</span>
+console.<span class="method">log</span>(<span class="variable">john</span>.<span class="property">__proto__</span>);
+<span class="comment">// { sayHello: [Function], constructor: Person }</span>
+
+<span class="comment">// 핵심: 둘은 같은 객체를 참조!</span>
+console.<span class="method">log</span>(<span class="variable">john</span>.<span class="property">__proto__</span> <span class="operator">===</span> <span class="variable">Person</span>.<span class="property">prototype</span>); <span class="comment">// true</span>
+
+<span class="comment">// 권장: __proto__ 대신 Object.getPrototypeOf() 사용</span>
+console.<span class="method">log</span>(Object.<span class="method">getPrototypeOf</span>(<span class="variable">john</span>) <span class="operator">===</span> <span class="variable">Person</span>.<span class="property">prototype</span>); <span class="comment">// true</span>
+
+<span class="comment">// 프로토타입 체인 시각화</span>
+console.<span class="method">log</span>(<span class="variable">john</span>.<span class="property">__proto__</span>);                      <span class="comment">// Person.prototype</span>
+console.<span class="method">log</span>(<span class="variable">john</span>.<span class="property">__proto__</span>.<span class="property">__proto__</span>);             <span class="comment">// Object.prototype</span>
+console.<span class="method">log</span>(<span class="variable">john</span>.<span class="property">__proto__</span>.<span class="property">__proto__</span>.<span class="property">__proto__</span>);    <span class="comment">// null (체인의 끝)</span>
+
+<span class="comment">// 프로퍼티 검색 과정</span>
+<span class="comment">// 1. john.name -> john 객체에서 발견 -> "John"</span>
+<span class="comment">// 2. john.sayHello -> john에 없음 -> Person.prototype에서 발견</span>
+<span class="comment">// 3. john.toString -> Person.prototype에 없음 -> Object.prototype에서 발견</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-world Conversations -->
+        <section class="term-section">
+            <h2 class="term-section-title">
+                <span class="icon">🗣️</span>
+                실무 대화 예시
+            </h2>
+            <div class="conversation-container">
+                <!-- Interview Conversation -->
+                <div class="conversation">
+                    <div class="conversation-header">
+                        <span class="conversation-type interview">기술 면접</span>
+                        <span class="conversation-title">프로토타입 체인 설명</span>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-a">면접관:</p>
+                        <p class="dialogue-text">"JavaScript에서 프로토타입 체인이 무엇이고, 어떻게 동작하는지 설명해주세요."</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-b">지원자:</p>
+                        <p class="dialogue-text">"프로토타입 체인은 JavaScript의 상속 메커니즘입니다. 모든 객체는 [[Prototype]]이라는 내부 슬롯을 통해 다른 객체를 참조합니다. 객체에서 프로퍼티를 찾을 때, 먼저 자신의 프로퍼티를 확인하고 없으면 [[Prototype]]이 가리키는 객체를 탐색합니다. 이 과정이 null에 도달할 때까지 연쇄적으로 일어나서 '체인'이라고 부릅니다."</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-a">면접관:</p>
+                        <p class="dialogue-text">"그렇다면 배열에서 forEach 같은 메서드를 호출할 수 있는 이유가 뭔가요?"</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-b">지원자:</p>
+                        <p class="dialogue-text">"배열 인스턴스의 [[Prototype]]이 Array.prototype을 가리키기 때문입니다. forEach, map, filter 같은 배열 메서드들은 Array.prototype에 정의되어 있어서, 모든 배열 인스턴스가 프로토타입 체인을 통해 공유합니다. 마찬가지로 Object.prototype의 toString, hasOwnProperty도 모든 객체에서 사용 가능한 이유입니다."</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-a">면접관:</p>
+                        <p class="dialogue-text">"프로토타입 체인의 성능 측면에서 주의할 점이 있을까요?"</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-b">지원자:</p>
+                        <p class="dialogue-text">"체인이 길어지면 프로퍼티 검색 시간이 증가합니다. 특히 존재하지 않는 프로퍼티를 찾을 때는 전체 체인을 탐색해야 하므로 성능에 영향을 줄 수 있습니다. 또한 런타임에 프로토타입을 변경하면 V8 엔진의 hidden class 최적화가 무효화되어 성능이 저하됩니다. 따라서 프로토타입 변경은 초기화 시점에만 하는 것이 좋습니다."</p>
+                    </div>
+                </div>
+
+                <!-- Code Review Conversation -->
+                <div class="conversation">
+                    <div class="conversation-header">
+                        <span class="conversation-type review">코드 리뷰</span>
+                        <span class="conversation-title">class vs prototype 논의</span>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-a">시니어 개발자:</p>
+                        <p class="dialogue-text">"이 코드에서 생성자 함수와 prototype으로 상속을 구현했는데, ES6 class 문법으로 리팩토링하면 어떨까요?"</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-b">주니어 개발자:</p>
+                        <p class="dialogue-text">"class가 더 읽기 쉽긴 한데, 혹시 내부 동작이 다른 건가요? class를 사용하면 프로토타입이 아닌 다른 방식으로 상속되나요?"</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-a">시니어 개발자:</p>
+                        <p class="dialogue-text">"아니요, class는 문법적 설탕(syntactic sugar)일 뿐이에요. 내부적으로는 동일하게 프로토타입 체인을 사용합니다. class의 메서드는 자동으로 prototype에 추가되고, extends는 Object.setPrototypeOf를 통해 체인을 설정해요. 단, class는 항상 strict mode이고 호이스팅되지 않는다는 차이가 있죠."</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-c">테크리드:</p>
+                        <p class="dialogue-text">"팀 컨벤션상 class 사용을 권장하고 있으니 리팩토링하는 게 좋겠어요. 다만 프로토타입 개념은 확실히 이해하고 있어야 해요. 디버깅할 때 __proto__ 확인하거나, 라이브러리 코드 분석할 때 필수니까요."</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-b">주니어 개발자:</p>
+                        <p class="dialogue-text">"알겠습니다! class로 변환하되, 원리는 프로토타입이라는 걸 기억하겠습니다. 혹시 class에서 private 필드(#)나 static 메서드도 프로토타입과 관련이 있나요?"</p>
+                    </div>
+                    <div class="dialogue">
+                        <p class="dialogue-speaker person-a">시니어 개발자:</p>
+                        <p class="dialogue-text">"static 메서드는 prototype이 아니라 생성자 함수 자체의 프로퍼티로 추가됩니다. 그래서 인스턴스에서는 호출할 수 없어요. private 필드(#)는 완전히 새로운 기능으로, 프로토타입과 무관하게 각 인스턴스에 캡슐화됩니다."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Warnings -->
+        <section class="term-section">
+            <h2 class="term-section-title">
+                <span class="icon">⚠️</span>
+                주의사항
+            </h2>
+            <ul class="warning-list">
+                <li class="warning-item">
+                    <span class="warning-icon">🚫</span>
+                    <div class="warning-content">
+                        <h4>__proto__ 직접 조작 금지</h4>
+                        <p>__proto__는 레거시 기능으로, 직접 수정하면 성능이 심각하게 저하됩니다. JavaScript 엔진의 hidden class 최적화가 무효화되어 프로퍼티 접근 속도가 급격히 느려집니다. 대신 Object.create()로 객체 생성 시 프로토타입을 설정하거나, Object.setPrototypeOf()를 사용하되 초기화 시점에만 제한적으로 사용하세요.</p>
+                    </div>
+                </li>
+                <li class="warning-item">
+                    <span class="warning-icon">☠️</span>
+                    <div class="warning-content">
+                        <h4>프로토타입 오염(Prototype Pollution) 방지</h4>
+                        <p>사용자 입력을 통해 Object.prototype이나 Array.prototype에 프로퍼티가 추가되면 모든 객체에 영향을 미치는 심각한 보안 취약점이 됩니다. 사용자 입력으로 객체를 병합할 때 __proto__, constructor, prototype 키를 필터링하고, Object.create(null)로 프로토타입 없는 객체를 사용하는 것을 권장합니다.</p>
+                    </div>
+                </li>
+                <li class="warning-item">
+                    <span class="warning-icon">⚡</span>
+                    <div class="warning-content">
+                        <h4>성능 최적화 고려</h4>
+                        <p>프로토타입 체인이 길어질수록 프로퍼티 검색 시간이 증가합니다. 자주 사용하는 프로퍼티는 인스턴스에 직접 정의하고, hasOwnProperty()로 own property만 확인할 수 있습니다. 런타임에 프로토타입을 변경하는 것은 피하고, 상속 계층을 3-4단계 이내로 유지하는 것이 좋습니다.</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Related Terms -->
+        <section class="term-section">
+            <h2 class="term-section-title">
+                <span class="icon">🔗</span>
+                관련 용어
+            </h2>
+            <div class="related-terms">
+                <a href="https://glossary.kaitrust.ai/ko/term/JavaScript/" class="related-term-link">
+                    <span>📜</span> JavaScript
+                </a>
+                <a href="https://glossary.kaitrust.ai/ko/term/Class/" class="related-term-link">
+                    <span>🏛️</span> Class
+                </a>
+                <a href="https://glossary.kaitrust.ai/ko/term/Inheritance/" class="related-term-link">
+                    <span>🔗</span> Inheritance
+                </a>
+                <a href="https://glossary.kaitrust.ai/ko/term/Object/" class="related-term-link">
+                    <span>📦</span> Object
+                </a>
+                <a href="https://glossary.kaitrust.ai/ko/term/ES6/" class="related-term-link">
+                    <span>✨</span> ES6
+                </a>
+            </div>
+        </section>
+
+        <!-- Learn More -->
+        <section class="term-section">
+            <h2 class="term-section-title">
+                <span class="icon">📚</span>
+                더 배우기
+            </h2>
+            <div class="resource-links">
+                <a href="https://developer.mozilla.org/ko/docs/Learn/JavaScript/Objects/Object_prototypes" target="_blank" rel="noopener noreferrer" class="resource-link">
+                    <span class="icon">📗</span>
+                    <span class="text">
+                        <span class="title">MDN - Object prototypes (한국어)</span>
+                        <span class="url">developer.mozilla.org/ko/docs/Learn/JavaScript/Objects/Object_prototypes</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener noreferrer" class="resource-link">
+                    <span class="icon">🔗</span>
+                    <span class="text">
+                        <span class="title">MDN - 상속과 프로토타입 체인</span>
+                        <span class="url">developer.mozilla.org/ko/docs/Web/JavaScript/Inheritance_and_the_prototype_chain</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://javascript.info/prototypes" target="_blank" rel="noopener noreferrer" class="resource-link">
+                    <span class="icon">📖</span>
+                    <span class="text">
+                        <span class="title">JavaScript.info - Prototypes</span>
+                        <span class="url">javascript.info/prototypes</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +828,31 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+
+    <!-- Code Copy Functionality -->
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-example').querySelector('pre');
+            const codeText = codeBlock.textContent;
+
+            navigator.clipboard.writeText(codeText).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '복사됨!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('복사 실패:', err);
+                button.textContent = '복사 실패';
+                setTimeout(() => {
+                    button.textContent = '복사';
+                }, 2000);
+            });
+        }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

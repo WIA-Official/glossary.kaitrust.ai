@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,192 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>행동 강령(Code of Conduct)은 EU AI Act 제95조에서 정의된 자발적 윤리 가이드라인으로, 저위험 AI 시스템 제공자가 자발적으로 준수할 수 있는 규범입니다. 고위험 AI에 적용되는 강제 규정과 달리, 행동 강령은 "소프트 로" 형태로 업계의 자율 규제를 유도합니다.</p>
+                <p>EU AI Act는 AI 사무국(AI Office)이 업계 단체, 시민사회와 협력하여 행동 강령을 개발하도록 권장합니다. 여기에는 환경 지속가능성, 접근성, 다양성, 이해관계자 참여 등이 포함됩니다. 특히 생성형 AI(GPAI)에 대한 행동 강령은 2024년 9월까지 초안이 마련되었습니다.</p>
+                <p>실무적으로 행동 강령은 기업의 AI 윤리 정책, 개발자 가이드라인, 내부 감사 체크리스트 형태로 구현됩니다. IEEE, ISO, OECD 등 국제 표준화 기구의 AI 윤리 원칙을 참조하여 작성하는 것이 일반적입니다. 한국에서는 과기정통부의 'AI 윤리기준'이 유사한 역할을 합니다.</p>
+                <p>행동 강령 준수는 법적 의무는 아니지만, 브랜드 신뢰도 향상과 규제 리스크 완화에 도움이 됩니다. EU AI Act 전면 시행(2027년) 전에 자발적 행동 강령을 도입한 기업은 규제 대응에 유리한 위치를 선점할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># AI 행동 강령 준수 체크리스트 자동화
+from dataclasses import dataclass
+from enum import Enum
+from typing import List
+from datetime import datetime
+
+class ComplianceLevel(Enum):
+    FULLY_COMPLIANT = "fully_compliant"
+    PARTIALLY_COMPLIANT = "partially_compliant"
+    NON_COMPLIANT = "non_compliant"
+    NOT_APPLICABLE = "not_applicable"
+
+@dataclass
+class CodeOfConductItem:
+    """행동 강령 항목"""
+    id: str
+    category: str  # transparency, fairness, sustainability, accessibility
+    requirement: str
+    evidence: str = ""
+    status: ComplianceLevel = ComplianceLevel.NON_COMPLIANT
+
+class AICodeOfConductChecker:
+    """EU AI Act 제95조 기반 행동 강령 체커"""
+
+    def __init__(self, system_name: str):
+        self.system_name = system_name
+        self.items: List[CodeOfConductItem] = []
+        self.checked_at = None
+        self._init_checklist()
+
+    def _init_checklist(self):
+        """행동 강령 체크리스트 초기화"""
+        self.items = [
+            # 투명성
+            CodeOfConductItem("T1", "transparency", "AI 시스템 사용 사실 고지"),
+            CodeOfConductItem("T2", "transparency", "의사결정 로직 설명 제공"),
+            CodeOfConductItem("T3", "transparency", "학습 데이터 출처 문서화"),
+
+            # 공정성
+            CodeOfConductItem("F1", "fairness", "편향성 테스트 수행"),
+            CodeOfConductItem("F2", "fairness", "보호 그룹별 성능 평가"),
+            CodeOfConductItem("F3", "fairness", "차별적 결과 모니터링"),
+
+            # 환경 지속가능성
+            CodeOfConductItem("S1", "sustainability", "탄소 배출량 측정"),
+            CodeOfConductItem("S2", "sustainability", "에너지 효율 최적화"),
+
+            # 접근성
+            CodeOfConductItem("A1", "accessibility", "장애인 접근성 지원"),
+            CodeOfConductItem("A2", "accessibility", "다국어 지원"),
+        ]
+
+    def check_item(self, item_id: str, status: ComplianceLevel, evidence: str = ""):
+        """개별 항목 체크"""
+        for item in self.items:
+            if item.id == item_id:
+                item.status = status
+                item.evidence = evidence
+                break
+
+    def generate_report(self) -> dict:
+        """준수 보고서 생성"""
+        self.checked_at = datetime.now()
+
+        total = len(self.items)
+        compliant = sum(1 for i in self.items
+                       if i.status == ComplianceLevel.FULLY_COMPLIANT)
+        partial = sum(1 for i in self.items
+                     if i.status == ComplianceLevel.PARTIALLY_COMPLIANT)
+
+        return {
+            "system_name": self.system_name,
+            "checked_at": self.checked_at.isoformat(),
+            "compliance_rate": f"{(compliant / total) * 100:.1f}%",
+            "summary": {
+                "fully_compliant": compliant,
+                "partially_compliant": partial,
+                "non_compliant": total - compliant - partial
+            },
+            "by_category": self._group_by_category(),
+            "recommendations": self._generate_recommendations()
+        }
+
+    def _group_by_category(self) -> dict:
+        categories = {}
+        for item in self.items:
+            if item.category not in categories:
+                categories[item.category] = []
+            categories[item.category].append({
+                "id": item.id,
+                "requirement": item.requirement,
+                "status": item.status.value
+            })
+        return categories
+
+    def _generate_recommendations(self) -> List[str]:
+        recommendations = []
+        non_compliant = [i for i in self.items
+                        if i.status == ComplianceLevel.NON_COMPLIANT]
+        for item in non_compliant[:3]:  # Top 3 우선순위
+            recommendations.append(f"[{item.id}] {item.requirement} 준수 필요")
+        return recommendations
+
+# 사용 예시
+checker = AICodeOfConductChecker("추천 시스템 v2.0")
+checker.check_item("T1", ComplianceLevel.FULLY_COMPLIANT, "약관에 AI 사용 고지 포함")
+checker.check_item("F1", ComplianceLevel.PARTIALLY_COMPLIANT, "분기별 편향성 테스트 진행 중")
+checker.check_item("S1", ComplianceLevel.NON_COMPLIANT)
+
+report = checker.generate_report()
+print(f"준수율: {report['compliance_rate']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">법무팀장:</strong> "우리 챗봇이 저위험 AI라 EU AI Act 강제 규정은 안 받지만, 행동 강령은 자발적으로 도입하는 게 좋겠어요. 나중에 규제 강화되면 대응이 수월해집니다."</p>
+                <p><strong class="role-junior">개발팀장:</strong> "IEEE나 OECD AI 원칙 기반으로 내부 가이드라인 만들면 될까요?"</p>
+                <p><strong class="role-senior">법무팀장:</strong> "네, 거기에 환경 지속가능성 항목도 추가해요. EU가 탄소발자국 공개도 권장하고 있거든요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "AI 윤리와 관련해서 행동 강령(Code of Conduct)의 역할은 무엇인가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "행동 강령은 법적 의무가 아닌 자발적 규범으로, 기업이 AI 시스템의 투명성, 공정성, 지속가능성을 스스로 관리하는 프레임워크입니다. EU AI Act 제95조에서 저위험 AI에 권장하며, 규제 대응과 브랜드 신뢰 구축에 도움이 됩니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">컴플라이언스팀:</strong> "이 PR에 AI 의사결정 로직 설명 기능이 있는데, 행동 강령의 투명성 요건과 연계해서 문서화해주세요."</p>
+                <p><strong class="role-junior">개발자:</strong> "네, XAI 모듈 README에 투명성 항목 매핑 테이블 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>행동 강령은 "자발적"이지만 준수하지 않으면 브랜드 리스크 - ESG 평가에 영향</li>
+                <li>너무 추상적인 원칙만 나열하면 실효성 없음 - 구체적 체크리스트로 운영해야</li>
+                <li>연 1회 이상 행동 강령 준수 현황 검토 필요 - 기술과 규제 환경 변화 반영</li>
+                <li class="info">EU AI Pact 서명 기업은 행동 강령 조기 적용으로 규제 대응력 확보</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/AI%20%EC%9C%A4%EB%A6%AC%EC%9B%90%EC%B9%99/" class="related-link">AI 윤리원칙</a>
+                <a href="/ko/term/AI%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">AI 거버넌스</a>
+                <a href="/ko/term/EU%20AI%20Act/" class="related-link">EU AI Act</a>
+                <a href="/ko/term/AI%20%EC%B1%85%EC%9E%84%EC%84%B1/" class="related-link">AI 책임성</a>
+                <a href="/ko/term/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%20%ED%88%AC%EB%AA%85%EC%84%B1/" class="related-link">알고리즘 투명성</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://digital-strategy.ec.europa.eu/en/policies/ai-pact" target="_blank" rel="noopener">EU AI Pact - 자발적 행동 강령 선서</a></li>
+                <li><span class="type-official"></span><a href="https://oecd.ai/en/ai-principles" target="_blank" rel="noopener">OECD AI 원칙</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.iso.org/standard/81230.html" target="_blank" rel="noopener">ISO/IEC 42001 AI 관리 시스템</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +399,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

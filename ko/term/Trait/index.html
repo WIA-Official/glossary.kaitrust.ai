@@ -161,6 +161,149 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +345,377 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Trait(트레이트)는 타입이 가져야 할 공유 동작(behavior)을 정의하는 추상화 메커니즘입니다. Interface와 유사하게 메서드 시그니처를 선언하지만, 핵심적인 차이점은 기본 구현(default implementation)을 포함할 수 있다는 점입니다. 즉, Trait는 "무엇을 할 수 있는가"를 정의하면서도 "어떻게 하는가"의 기본 방법까지 제공할 수 있어서, Interface의 계약 역할과 추상 클래스의 코드 재사용을 동시에 달성합니다.</p>
+                <p>Rust에서 Trait는 언어의 핵심 기능입니다. impl Trait for Type 구문으로 타입에 Trait를 구현하고, 제네릭과 결합해 강력한 다형성을 제공합니다. Rust의 유명한 Trait들로는 Clone(복제), Debug(디버그 출력), Iterator(반복), Send/Sync(스레드 안전성)가 있습니다. 특히 Trait Bound(trait + 제약조건)를 통해 컴파일 타임에 타입 안전성을 보장하면서도 제로 코스트 추상화를 달성하는 것이 Rust Trait의 강점입니다.</p>
+                <p>PHP와 Scala에서의 Trait는 약간 다른 의미를 가집니다. PHP의 Trait는 클래스 간에 메서드를 공유하는 코드 재사용 메커니즘으로, use 키워드로 클래스에 포함시킵니다. 단일 상속의 한계를 극복하면서 다중 상속의 다이아몬드 문제를 피하는 실용적인 해결책입니다. Scala의 Trait도 비슷하게 믹스인(mixin) 방식으로 여러 Trait를 조합하여 클래스에 기능을 추가할 수 있습니다.</p>
+                <p>Trait는 객체지향 프로그래밍에서 다중 상속의 대안으로 널리 사용됩니다. 전통적인 다중 상속은 다이아몬드 문제(같은 메서드를 가진 두 부모 클래스)와 복잡한 상속 계층 문제를 야기하는데, Trait는 수평적인 코드 공유를 통해 이를 해결합니다. 현대 언어들(Rust, Scala, PHP, Kotlin의 interface default method)은 Trait 개념을 채택하여 유연하고 안전한 코드 재사용을 지원합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="rust">Rust</button>
+                <button class="code-tab" data-lang="php">PHP</button>
+            </div>
+            <div class="code-block" data-lang="rust">
+                <pre><code>// Rust - Trait 정의와 구현 예제
+
+// Trait 정의: 직렬화 가능한 타입의 동작 정의
+trait Serializable {
+    // 필수 구현 메서드 (시그니처만)
+    fn serialize(&self) -> String;
+
+    // 기본 구현이 있는 메서드
+    fn serialize_pretty(&self) -> String {
+        format!("[\n  {}\n]", self.serialize())
+    }
+}
+
+// Trait 정의: 요약 기능
+trait Summary {
+    fn summarize(&self) -> String;
+
+    // 기본 구현: summarize()를 호출
+    fn summarize_author(&self) -> String {
+        String::from("(작성자 미상)")
+    }
+}
+
+// 구조체 정의
+struct Article {
+    title: String,
+    author: String,
+    content: String,
+}
+
+struct Tweet {
+    username: String,
+    content: String,
+    retweets: u32,
+}
+
+// Article에 Trait 구현
+impl Summary for Article {
+    fn summarize(&self) -> String {
+        format!("{}, by {}", self.title, self.author)
+    }
+
+    fn summarize_author(&self) -> String {
+        format!("@{}", self.author)
+    }
+}
+
+impl Serializable for Article {
+    fn serialize(&self) -> String {
+        format!(
+            r#"{{"title":"{}","author":"{}","content":"{}"}}"#,
+            self.title, self.author, self.content
+        )
+    }
+}
+
+// Tweet에 Trait 구현
+impl Summary for Tweet {
+    fn summarize(&self) -> String {
+        format!("{}: {} (RT: {})", self.username, self.content, self.retweets)
+    }
+    // summarize_author는 기본 구현 사용
+}
+
+// Trait Bound를 사용한 제네릭 함수
+fn notify<T: Summary>(item: &T) {
+    println!("속보! {}", item.summarize());
+}
+
+// 여러 Trait를 요구하는 함수 (+ 문법)
+fn process<T: Summary + Serializable>(item: &T) {
+    println!("요약: {}", item.summarize());
+    println!("JSON: {}", item.serialize());
+}
+
+// where 절을 사용한 더 깔끔한 Trait Bound
+fn complex_process<T, U>(t: &T, u: &U) -> String
+where
+    T: Summary + Serializable,
+    U: Summary,
+{
+    format!("{} & {}", t.summarize(), u.summarize())
+}
+
+fn main() {
+    let article = Article {
+        title: String::from("Rust Trait 완전 정복"),
+        author: String::from("김러스트"),
+        content: String::from("Trait는 Rust의 핵심 기능입니다..."),
+    };
+
+    let tweet = Tweet {
+        username: String::from("rustacean"),
+        content: String::from("Rust 최고!"),
+        retweets: 42,
+    };
+
+    // Trait 메서드 호출
+    println!("{}", article.summarize());        // "Rust Trait 완전 정복, by 김러스트"
+    println!("{}", article.summarize_author()); // "@김러스트"
+    println!("{}", tweet.summarize_author());   // "(작성자 미상)" - 기본 구현
+
+    // 제네릭 함수 호출
+    notify(&article);   // "속보! Rust Trait 완전 정복, by 김러스트"
+    notify(&tweet);     // "속보! rustacean: Rust 최고! (RT: 42)"
+
+    // 여러 Trait 요구하는 함수
+    process(&article);  // Article은 Summary + Serializable 둘 다 구현
+    // process(&tweet); // 컴파일 에러! Tweet은 Serializable 미구현
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="php" style="display: none;">
+                <pre><code>&lt;?php
+// PHP - Trait를 활용한 코드 재사용 예제
+
+// Trait 정의: 로깅 기능
+trait Loggable {
+    protected array $logs = [];
+
+    public function log(string $message): void {
+        $timestamp = date('Y-m-d H:i:s');
+        $this->logs[] = "[$timestamp] $message";
+    }
+
+    public function getLogs(): array {
+        return $this->logs;
+    }
+
+    public function clearLogs(): void {
+        $this->logs = [];
+    }
+}
+
+// Trait 정의: JSON 직렬화 기능
+trait JsonSerializable {
+    public function toJson(): string {
+        return json_encode($this->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    }
+
+    // 추상 메서드: 이 Trait를 사용하는 클래스가 구현해야 함
+    abstract public function toArray(): array;
+}
+
+// Trait 정의: 유효성 검사 기능
+trait Validatable {
+    protected array $errors = [];
+
+    public function validate(): bool {
+        $this->errors = [];
+        $this->performValidation();
+        return empty($this->errors);
+    }
+
+    public function getErrors(): array {
+        return $this->errors;
+    }
+
+    protected function addError(string $field, string $message): void {
+        $this->errors[$field][] = $message;
+    }
+
+    // 하위 클래스에서 구현할 검증 로직
+    abstract protected function performValidation(): void;
+}
+
+// 여러 Trait를 조합한 클래스
+class User {
+    use Loggable, JsonSerializable, Validatable;
+
+    public function __construct(
+        private string $name,
+        private string $email,
+        private int $age
+    ) {
+        $this->log("User created: $name");
+    }
+
+    // JsonSerializable Trait의 추상 메서드 구현
+    public function toArray(): array {
+        return [
+            'name' => $this->name,
+            'email' => $this->email,
+            'age' => $this->age,
+        ];
+    }
+
+    // Validatable Trait의 추상 메서드 구현
+    protected function performValidation(): void {
+        if (empty($this->name)) {
+            $this->addError('name', '이름은 필수입니다');
+        }
+
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            $this->addError('email', '유효한 이메일 주소가 아닙니다');
+        }
+
+        if ($this->age < 0 || $this->age > 150) {
+            $this->addError('age', '나이는 0~150 사이여야 합니다');
+        }
+    }
+
+    public function updateEmail(string $email): void {
+        $oldEmail = $this->email;
+        $this->email = $email;
+        $this->log("Email updated: $oldEmail -> $email");
+    }
+}
+
+// Trait 메서드 충돌 해결 예제
+trait A {
+    public function hello(): string {
+        return "Hello from A";
+    }
+}
+
+trait B {
+    public function hello(): string {
+        return "Hello from B";
+    }
+}
+
+class ConflictResolver {
+    use A, B {
+        A::hello insteadof B;  // A의 hello를 사용
+        B::hello as helloFromB; // B의 hello는 별칭으로 사용
+    }
+}
+
+// 사용 예시
+$user = new User("홍길동", "hong@example.com", 30);
+
+// Loggable Trait 기능
+$user->updateEmail("gildong@example.com");
+print_r($user->getLogs());
+// 출력:
+// [0] => [2024-01-25 10:30:00] User created: 홍길동
+// [1] => [2024-01-25 10:30:01] Email updated: hong@example.com -> gildong@example.com
+
+// JsonSerializable Trait 기능
+echo $user->toJson();
+// 출력:
+// {
+//     "name": "홍길동",
+//     "email": "gildong@example.com",
+//     "age": 30
+// }
+
+// Validatable Trait 기능
+if ($user->validate()) {
+    echo "유효성 검사 통과!\n";
+} else {
+    print_r($user->getErrors());
+}
+
+// 충돌 해결 예제
+$resolver = new ConflictResolver();
+echo $resolver->hello();        // "Hello from A"
+echo $resolver->helloFromB();   // "Hello from B"
+?&gt;</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 면접에서 (Trait vs Interface)</div>
+                    <blockquote class="conv-quote">
+                        "Trait와 Interface의 핵심 차이는 '기본 구현 포함 여부'입니다. Interface는 순수 계약으로 '무엇을 해야 하는가'만 정의하지만, Trait는 '어떻게 하는가'까지 기본 구현을 제공할 수 있습니다. Rust에서는 Iterator trait처럼 next() 하나만 구현하면 map, filter, collect 등 수십 개의 기본 메서드를 공짜로 얻는 강력한 코드 재사용이 가능합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 설계 회의에서 (코드 재사용)</div>
+                    <blockquote class="conv-quote">
+                        "이 프로젝트 모든 모델에 감사 로깅이랑 소프트 딜리트 기능이 필요한데, 상속으로 해결하면 계층이 복잡해집니다. Auditable, SoftDeletable Trait로 분리해서 필요한 모델에만 use로 추가하면 훨씬 유연해요. PHP에서 이 패턴 많이 쓰는데, Laravel Eloquent의 HasFactory, SoftDeletes가 대표적인 예시입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "이 Rust 함수에서 impl Summary 대신 dyn Summary를 쓰셨는데, 동적 디스패치가 필요한 상황인가요? 단일 타입만 반환한다면 impl Trait가 성능상 유리합니다. 여러 타입을 Box로 감싸서 반환해야 할 때만 dyn을 쓰는 게 좋습니다. Trait Object는 vtable 오버헤드가 있거든요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Rust Orphan Rule 위반 시도</strong>
+                        <p>외부 크레이트의 타입에 외부 크레이트의 Trait를 구현할 수 없습니다. 예: Vec에 Display 구현 불가. 해결책은 newtype 패턴(struct MyVec(Vec&lt;T&gt;))으로 래핑하거나, 자체 Trait를 정의하는 것입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>PHP Trait 메서드 충돌 무시</strong>
+                        <p>같은 이름의 메서드를 가진 두 Trait를 use하면 Fatal Error가 발생합니다. 반드시 insteadof로 우선순위를 지정하거나, as로 별칭을 만들어야 합니다. IDE 경고를 무시하지 마세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Trait에 상태(필드) 과도하게 의존</strong>
+                        <p>PHP Trait에서 프로퍼티를 정의할 수 있지만, 이를 남용하면 클래스 내부 상태가 불투명해집니다. Trait는 행동(메서드) 공유에 집중하고, 상태는 최소화하세요. 상태가 많이 필요하면 컴포지션 패턴을 고려하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>작고 단일 책임을 가진 Trait 설계</strong>
+                        <p>하나의 Trait가 너무 많은 메서드를 가지면 구현 부담이 커집니다. Rust 표준 라이브러리처럼 Clone, Copy, Debug를 분리하듯이, 관련 기능끼리 작은 Trait로 나누면 필요한 것만 선택적으로 구현할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Interface/" class="related-term-link">Interface</a>
+                <a href="/ko/term/Rust/" class="related-term-link">Rust</a>
+                <a href="/ko/term/PHP/" class="related-term-link">PHP</a>
+                <a href="/ko/term/Polymorphism/" class="related-term-link">Polymorphism</a>
+                <a href="/ko/term/Mixin/" class="related-term-link">Mixin</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://doc.rust-lang.org/book/ch10-02-traits.html" target="_blank" class="learn-link">
+                    🦀 The Rust Book - Traits: Defining Shared Behavior
+                </a>
+                <a href="https://www.php.net/manual/en/language.oop5.traits.php" target="_blank" class="learn-link">
+                    🐘 PHP 공식 문서 - Traits
+                </a>
+                <a href="https://doc.rust-lang.org/rust-by-example/trait.html" target="_blank" class="learn-link">
+                    📖 Rust by Example - Traits
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +726,31 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

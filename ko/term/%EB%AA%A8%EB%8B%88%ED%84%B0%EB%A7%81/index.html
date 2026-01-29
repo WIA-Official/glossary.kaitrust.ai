@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,134 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>모니터링(Monitoring)은 시스템의 상태, 성능, 가용성을 실시간으로 수집하고 관찰하는 활동입니다. 장애 감지, 성능 최적화, 용량 계획의 기반이 되며, DevOps와 SRE의 핵심 역량입니다.</p>
+                <p>모니터링 유형으로 인프라 모니터링(CPU, 메모리, 디스크), 애플리케이션 모니터링(APM, 응답 시간), 비즈니스 모니터링(전환율, 매출), 합성 모니터링(외부 프로브)이 있습니다. 각 레이어에서 메트릭을 수집하여 전체 시스템 건강 상태를 파악합니다.</p>
+                <p>주요 도구로 Prometheus(메트릭 수집), Grafana(시각화), Datadog(통합 플랫폼), New Relic(APM)이 있습니다. Prometheus는 Pull 방식으로 타겟에서 메트릭을 스크랩하고, PromQL로 쿼리합니다. Grafana 대시보드로 시각화하고 Alertmanager로 알림을 발송합니다.</p>
+                <p>실무에서는 RED(Rate, Errors, Duration)와 USE(Utilization, Saturation, Errors) 방법론으로 핵심 지표를 정의합니다. SLI/SLO 기반으로 서비스 수준을 측정하고, 알림 피로도를 줄이기 위해 임계값을 신중하게 설정합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># prometheus.yml - Prometheus 설정
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alerts.yml"
+
+scrape_configs:
+  - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+---
+# alerts.yml - 알림 규칙
+groups:
+- name: service-alerts
+  rules:
+  - alert: HighErrorRate
+    expr: |
+      sum(rate(http_requests_total{status=~"5.."}[5m])) /
+      sum(rate(http_requests_total[5m])) > 0.05
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High error rate detected ({{ $value | humanizePercentage }})"
+
+  - alert: SlowResponseTime
+    expr: |
+      histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m]))
+        by (le, service)) > 2
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "P95 latency above 2s for {{ $labels.service }}"
+
+  - alert: PodMemoryHigh
+    expr: |
+      container_memory_usage_bytes / container_spec_memory_limit_bytes > 0.9
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Pod memory usage above 90%"</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "야간에 알림이 너무 많이 오는데, 임계값 재검토가 필요해요."</p>
+                <p><strong class="role-junior">주니어:</strong> "분석해보니 90% 임계값이 정상 운영 범위였어요. 95%로 조정하고 for 조건도 10분으로 늘렸습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "RED와 USE 방법론에 대해 설명해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "RED는 서비스 관점으로 Rate(초당 요청), Errors(에러율), Duration(응답시간)을 측정합니다. USE는 리소스 관점으로 Utilization(사용률), Saturation(대기열), Errors(에러)를 봅니다. 서비스에는 RED, 인프라에는 USE를 적용합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "커스텀 메트릭 추가했는데, 카디널리티가 높아질 것 같아요."</p>
+                <p><strong class="role-junior">개발자:</strong> "user_id 레이블을 제거하고 user_type으로 집계하도록 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>알림 피로도 관리 - 의미없는 알림이 많으면 중요한 알림도 무시됨</li>
+                <li>메트릭 카디널리티 제한 - user_id 같은 고유값 레이블은 메모리 폭발</li>
+                <li>Retention 정책 설정 - 무한 보관은 스토리지 비용 급증</li>
+                <li class="info">SLO 기반 알림 설정 - 에러 버짓 소진 속도로 알림 트리거</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Grafana/" class="related-link">Grafana</a>
+                <a href="/ko/term/Datadog/" class="related-link">Datadog</a>
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+                <a href="/ko/term/Logging/" class="related-link">Logging</a>
+                <a href="/ko/term/APM/" class="related-link">APM</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://prometheus.io/docs/introduction/overview/" target="_blank" rel="noopener">Prometheus 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://grafana.com/tutorials/" target="_blank" rel="noopener">Grafana 튜토리얼</a></li>
+                <li><span class="type-book"></span><a href="https://sre.google/sre-book/monitoring-distributed-systems/" target="_blank" rel="noopener">Google SRE Book - 모니터링 챕터</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +341,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

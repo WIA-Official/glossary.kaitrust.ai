@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,207 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Skaffold</strong>는 Google에서 개발한 Kubernetes 애플리케이션의 로컬 개발과 CI/CD를 자동화하는 도구입니다. 코드 변경을 감지하면 자동으로 빌드, 푸시, 배포를 수행하여 개발자의 내부 루프(inner loop)를 크게 단축합니다.</p>
+                <p>Skaffold의 핵심 기능은 <strong>파일 동기화(File Sync)</strong>와 <strong>핫 리로드</strong>입니다. 코드 변경 시 전체 이미지를 다시 빌드하지 않고, 변경된 파일만 실행 중인 컨테이너에 동기화하여 몇 초 만에 변경사항을 확인할 수 있습니다. Docker, Jib, Buildpacks, Kaniko 등 다양한 빌드 도구를 지원하며, Helm, Kustomize, kubectl과 통합되어 다양한 배포 방식을 지원합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>skaffold.yaml 기본 설정</h3>
+                <pre><code class="language-yaml"># skaffold.yaml
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: my-app
+build:
+  local:
+    push: false
+    useBuildkit: true
+  artifacts:
+  - image: my-app
+    context: .
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+      - src: "src/**/*.js"
+        dest: /app
+      - src: "src/**/*.css"
+        dest: /app
+deploy:
+  kubectl:
+    manifests:
+    - k8s/*.yaml
+portForward:
+- resourceType: deployment
+  resourceName: my-app
+  port: 3000
+  localPort: 3000
+profiles:
+- name: dev
+  activation:
+  - command: dev
+  build:
+    local:
+      push: false
+  deploy:
+    kubectl:
+      manifests:
+      - k8s/dev/*.yaml
+- name: prod
+  build:
+    googleCloudBuild:
+      projectId: my-project
+  deploy:
+    helm:
+      releases:
+      - name: my-app
+        chartPath: charts/my-app
+        valuesFiles:
+        - values-prod.yaml</code></pre>
+
+                <h3>멀티 서비스 프로젝트 구성</h3>
+                <pre><code class="language-yaml"># skaffold.yaml - 마이크로서비스 구성
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: microservices-app
+build:
+  artifacts:
+  - image: api-gateway
+    context: services/api-gateway
+    docker:
+      dockerfile: Dockerfile
+  - image: user-service
+    context: services/user
+    docker:
+      dockerfile: Dockerfile
+  - image: order-service
+    context: services/order
+    docker:
+      dockerfile: Dockerfile
+  tagPolicy:
+    gitCommit:
+      ignoreChanges: true
+deploy:
+  kustomize:
+    paths:
+    - k8s/overlays/dev
+test:
+- image: user-service
+  structureTests:
+  - ./test/container-structure-test.yaml
+verify:
+- name: integration-test
+  container:
+    name: integration-test
+    image: curlimages/curl
+    command: ["/bin/sh"]
+    args: ["-c", "curl -f http://api-gateway/health"]</code></pre>
+
+                <h3>개발 워크플로우</h3>
+                <pre><code class="language-bash">#!/bin/bash
+# Skaffold 개발 워크플로우
+
+# 개발 모드 실행 (파일 감시 + 자동 배포)
+skaffold dev --port-forward
+
+# 특정 프로파일로 실행
+skaffold dev -p dev --tail
+
+# 한 번만 빌드하고 배포
+skaffold run
+
+# 디버그 모드 (원격 디버깅 지원)
+skaffold debug --port-forward
+
+# 로컬 클러스터에 렌더링된 매니페스트 확인
+skaffold render
+
+# 특정 모듈만 빌드
+skaffold build -m user-service
+
+# 배포된 리소스 정리
+skaffold delete</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 id="conv-title" class="section-title">실무 대화</h2>
+            <div class="section-content conversation-box">
+                <div class="conversation">
+                    <div class="message">
+                        <span class="speaker">신입 개발자</span>
+                        <p>"로컬에서 Kubernetes로 개발하려니까 매번 docker build, kubectl apply 하는 게 너무 번거로워요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">시니어 개발자</span>
+                        <p>"Skaffold 써봐요. skaffold dev 하나로 파일 변경 감지부터 배포까지 자동이에요. 코드 저장하면 3초 안에 클러스터에 반영돼요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">신입 개발자</span>
+                        <p>"이미지 빌드가 오래 걸리지 않나요?"</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">시니어 개발자</span>
+                        <p>"File Sync 설정하면 이미지 다시 빌드 안 하고 변경 파일만 컨테이너에 동기화해요. Node.js 프로젝트에서 nodemon이랑 같이 쓰면 정말 빨라요."</p>
+                    </div>
+                    <div class="message">
+                        <span class="speaker">DevOps 엔지니어</span>
+                        <p>"CI/CD에서도 같은 skaffold.yaml 쓸 수 있어요. 프로파일로 환경별 설정만 분리하면 로컬과 프로덕션 빌드 설정이 일관성 있게 관리됩니다."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <ul class="warning-list">
+                    <li><strong>로컬 클러스터 필요:</strong> Skaffold를 최대한 활용하려면 minikube, kind, Docker Desktop Kubernetes 등 로컬 클러스터가 필요합니다.</li>
+                    <li><strong>File Sync 한계:</strong> 바이너리 변경이나 의존성 추가 시에는 전체 빌드가 필요합니다. sync 패턴을 적절히 설정하세요.</li>
+                    <li><strong>리소스 사용:</strong> 파일 감시와 지속적인 빌드로 CPU/메모리 사용량이 높을 수 있습니다.</li>
+                    <li><strong>프로덕션 분리:</strong> dev 프로파일과 prod 프로파일을 명확히 분리하여 실수로 프로덕션에 배포하지 않도록 주의하세요.</li>
+                    <li><strong>멀티 서비스 복잡성:</strong> 마이크로서비스가 많아지면 모듈(-m) 옵션을 활용해 필요한 서비스만 개발하세요.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <ul class="related-terms">
+                    <li><a href="/ko/term/Kubernetes/">Kubernetes</a> - Skaffold의 대상 플랫폼</li>
+                    <li><a href="/ko/term/Helm/">Helm</a> - Skaffold와 통합되는 패키지 매니저</li>
+                    <li><a href="/ko/term/Kustomize/">Kustomize</a> - 매니페스트 관리 도구</li>
+                    <li><a href="/ko/term/Dockerfile/">Dockerfile</a> - 컨테이너 이미지 빌드 정의</li>
+                    <li><a href="/ko/term/CI%2FCD/">CI/CD</a> - Skaffold가 자동화하는 파이프라인</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more">
+                    <li><a href="https://skaffold.dev/docs/" target="_blank" rel="noopener">Skaffold Documentation</a> - 공식 문서</li>
+                    <li><a href="https://skaffold.dev/docs/quickstart/" target="_blank" rel="noopener">Skaffold Quickstart</a> - 빠른 시작 가이드</li>
+                    <li><a href="https://github.com/GoogleContainerTools/skaffold/tree/main/examples" target="_blank" rel="noopener">Skaffold Examples</a> - 다양한 사용 예제</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +414,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

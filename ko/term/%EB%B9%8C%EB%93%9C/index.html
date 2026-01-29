@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,116 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>빌드(Build)는 소스 코드를 실행 가능한 프로그램이나 배포 가능한 형태로 변환하는 전체 과정을 말합니다. 단순한 컴파일을 넘어서 의존성 해결, 테스트 실행, 최적화, 패키징까지 포함하는 포괄적인 개념입니다. 현대 소프트웨어 개발에서 빌드 프로세스는 품질 관리의 핵심 단계입니다.</p>
+                <p>빌드 프로세스는 일반적으로 여러 단계로 구성됩니다. 의존성 설치, 전처리, 컴파일, 링킹, 번들링, 압축, 테스트 실행 등이 순차적 또는 병렬로 진행됩니다. 각 단계는 이전 단계의 결과물을 입력으로 받아 처리하며, 어느 한 단계라도 실패하면 전체 빌드가 중단됩니다.</p>
+                <p>빌드 도구는 언어와 플랫폼에 따라 다양합니다. JavaScript는 Webpack, Vite, esbuild, Java는 Maven, Gradle, Rust는 Cargo, Go는 go build를 사용합니다. 이러한 도구들은 설정 파일을 통해 빌드 과정을 정의하고, 캐싱과 증분 빌드로 속도를 최적화합니다.</p>
+                <p>CI/CD 파이프라인에서 빌드는 자동화의 핵심입니다. 코드 변경이 발생하면 자동으로 빌드가 트리거되어 테스트와 배포까지 연결됩니다. 빌드 실패는 즉시 팀에 알림이 가고, 문제가 해결될 때까지 배포가 차단되어 품질을 보장합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># 다양한 빌드 명령어 예시
+
+# Node.js / npm
+npm install        # 의존성 설치
+npm run build      # 프로덕션 빌드
+npm run dev        # 개발 서버 (빌드 포함)
+
+# Rust / Cargo
+cargo build           # 디버그 빌드
+cargo build --release # 릴리즈 빌드 (최적화)
+cargo test            # 테스트 실행
+
+# Go
+go build ./...     # 현재 디렉토리 빌드
+go build -o app    # 출력 파일명 지정
+
+# Java / Maven
+mvn clean install  # 정리 후 빌드
+mvn package        # 패키징
+
+# Docker
+docker build -t myapp:v1 .  # 이미지 빌드
+
+# package.json 빌드 스크립트 예시
+{
+  "scripts": {
+    "build": "vite build",
+    "build:prod": "NODE_ENV=production vite build",
+    "build:analyze": "vite build --mode analyze"
+  }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">💼 회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">👔 면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">💻 코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>DevOps:</strong> "빌드 시간이 15분이나 걸리고 있어서 개발 생산성이 떨어지고 있습니다."</p>
+                <p><strong>기술 리더:</strong> "캐싱 전략을 확인해 봤나요? node_modules나 빌드 캐시를 활용하면 많이 줄일 수 있어요."</p>
+                <p><strong>DevOps:</strong> "네, GitHub Actions 캐시를 적용하고 증분 빌드도 설정해 보겠습니다."</p>
+                <p><strong>기술 리더:</strong> "병렬 빌드도 고려해 보세요. 독립적인 모듈은 동시에 빌드할 수 있습니다."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "프론트엔드 빌드 최적화 경험이 있으신가요?"</p>
+                <p><strong>지원자:</strong> "네, 코드 스플리팅과 트리 쉐이킹을 적용해서 번들 사이즈를 40% 줄였습니다. 또한 이미지 최적화와 lazy loading도 구현했습니다."</p>
+                <p><strong>면접관:</strong> "빌드 시간은 어떻게 개선하셨나요?"</p>
+                <p><strong>지원자:</strong> "esbuild를 도입하고, 개발 환경에서는 SWC를 사용해서 HMR 속도를 대폭 개선했습니다. CI에서는 캐시 레이어를 추가했습니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "build 스크립트에 환경별 분기가 없네요. 프로덕션과 개발 빌드를 구분해야 할 것 같습니다."</p>
+                <p><strong>작성자:</strong> "NODE_ENV로 분기하면 될까요?"</p>
+                <p><strong>리뷰어:</strong> "네, 그리고 소스맵 설정도 환경별로 다르게 해주세요. 프로덕션에서는 hidden-source-map을 쓰는 게 좋습니다."</p>
+                <p><strong>작성자:</strong> "알겠습니다. 빌드 설정 파일을 환경별로 분리해서 관리하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>환경 변수 관리:</strong> 빌드 시 민감한 환경 변수가 번들에 포함되지 않도록 주의하세요. API 키나 시크릿은 런타임에 주입해야 합니다.</li>
+                <li><strong>캐시 무효화:</strong> 빌드 캐시가 오래되면 예상치 못한 버그가 발생할 수 있습니다. 주기적으로 클린 빌드를 실행하고, 문제 발생 시 캐시를 초기화하세요.</li>
+                <li><strong>의존성 버전:</strong> 빌드 환경과 운영 환경의 의존성 버전이 다르면 동작이 달라질 수 있습니다. lock 파일을 반드시 커밋하고 관리하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%BB%B4%ED%8C%8C%EC%9D%BC%EB%9F%AC/" class="related-link">컴파일러</a>
+                <a href="/ko/term/%EB%9F%B0%ED%83%80%EC%9E%84/" class="related-link">런타임</a>
+                <a href="/ko/term/%ED%8C%A8%ED%82%A4%EC%A7%80%20%EB%A7%A4%EB%8B%88%EC%A0%80/" class="related-link">패키지 매니저</a>
+                <a href="/ko/term/%EB%94%94%ED%94%8C%EB%A1%9C%EC%9D%B4%EB%A8%BC%ED%8A%B8/" class="related-link">디플로이먼트</a>
+                <a href="/ko/term/%EB%8F%84%EC%BB%A4/" class="related-link">도커</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li>📖 <a href="https://vitejs.dev/guide/build.html" target="_blank">Vite - Building for Production</a></li>
+                <li>📖 <a href="https://webpack.js.org/concepts/" target="_blank">Webpack Core Concepts</a></li>
+                <li>🎥 <a href="https://www.youtube.com/watch?v=5IG4UmULyoA" target="_blank">Modern Build Tools Compared</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +324,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

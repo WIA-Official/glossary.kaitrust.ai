@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,274 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>모델 평가(Model Evaluation)는 AI 모델의 성능, 안전성, 편향, 견고성 등을 체계적으로 측정하고 검증하는 프로세스입니다. EU AI Act 제9조에서 고위험 AI 시스템에 대해 위험 관리 시스템의 일부로 테스트 및 평가를 요구하며, 제15조에서는 정확성, 견고성, 사이버보안 요건을 명시합니다.</p>
+                <p>전통적인 ML 모델 평가는 정확도(Accuracy), 정밀도(Precision), 재현율(Recall), F1 점수 등 성능 지표에 집중했습니다. 그러나 AI 규제 시대에는 공정성(Fairness) 지표, 설명 가능성(Explainability), 적대적 공격에 대한 견고성(Robustness)이 필수적으로 평가됩니다.</p>
+                <p>EU AI Act 준수를 위한 평가 프레임워크는 다음을 포함합니다: 기술적 성능 테스트, 보호 그룹별 공정성 분석, 레드팀 테스트를 통한 안전성 검증, 다양한 조건에서의 견고성 테스트, 해석 가능성 검증. 이 결과는 기술 문서에 포함되어 적합성 평가의 근거가 됩니다.</p>
+                <p>생성형 AI의 경우 평가가 더 복잡합니다. 출력의 품질을 정량화하기 어렵고, 유해 콘텐츠 생성 가능성, 허위 정보(Hallucination) 빈도, 저작권 침해 위험 등 새로운 평가 차원이 필요합니다. HELM, MMLU, TruthfulQA 등의 벤치마크가 활용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn">복사</button>
+                <pre><code># EU AI Act 준수를 위한 종합 모델 평가 프레임워크
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Dict, List, Callable
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+import numpy as np
+
+@dataclass
+class EvaluationResult:
+    """평가 결과"""
+    metric_name: str
+    value: float
+    threshold: float
+    passed: bool
+    details: Dict = field(default_factory=dict)
+
+class AIActModelEvaluator:
+    """EU AI Act 준수를 위한 모델 평가 프레임워크"""
+
+    def __init__(self, model_name: str, model_version: str):
+        self.model_name = model_name
+        self.model_version = model_version
+        self.results: List[EvaluationResult] = []
+
+    def evaluate_performance(self, y_true: np.ndarray, y_pred: np.ndarray,
+                              accuracy_threshold: float = 0.85) -> EvaluationResult:
+        """제15조: 정확성 평가"""
+        accuracy = accuracy_score(y_true, y_pred)
+        precision, recall, f1, _ = precision_recall_fscore_support(
+            y_true, y_pred, average='weighted'
+        )
+
+        result = EvaluationResult(
+            metric_name="performance",
+            value=accuracy,
+            threshold=accuracy_threshold,
+            passed=accuracy >= accuracy_threshold,
+            details={
+                "accuracy": round(accuracy, 4),
+                "precision": round(precision, 4),
+                "recall": round(recall, 4),
+                "f1_score": round(f1, 4)
+            }
+        )
+        self.results.append(result)
+        return result
+
+    def evaluate_fairness(self, y_true: np.ndarray, y_pred: np.ndarray,
+                          protected_attribute: np.ndarray,
+                          disparity_threshold: float = 0.2) -> EvaluationResult:
+        """공정성 평가 (보호 그룹 간 성능 격차)"""
+        groups = np.unique(protected_attribute)
+        group_metrics = {}
+
+        for group in groups:
+            mask = protected_attribute == group
+            if mask.sum() > 0:
+                group_acc = accuracy_score(y_true[mask], y_pred[mask])
+                group_metrics[str(group)] = round(group_acc, 4)
+
+        # 그룹 간 최대 격차
+        if len(group_metrics) >= 2:
+            max_disparity = max(group_metrics.values()) - min(group_metrics.values())
+        else:
+            max_disparity = 0
+
+        result = EvaluationResult(
+            metric_name="fairness",
+            value=max_disparity,
+            threshold=disparity_threshold,
+            passed=max_disparity <= disparity_threshold,
+            details={
+                "group_accuracy": group_metrics,
+                "max_disparity": round(max_disparity, 4),
+                "disparate_impact_ratio": round(
+                    min(group_metrics.values()) / max(group_metrics.values()), 4
+                ) if max(group_metrics.values()) > 0 else 1.0
+            }
+        )
+        self.results.append(result)
+        return result
+
+    def evaluate_robustness(self, model_fn: Callable,
+                            test_inputs: np.ndarray,
+                            noise_level: float = 0.1,
+                            stability_threshold: float = 0.9) -> EvaluationResult:
+        """제15조: 견고성 평가 (노이즈에 대한 안정성)"""
+        original_outputs = model_fn(test_inputs)
+
+        # 노이즈 추가
+        noise = np.random.normal(0, noise_level, test_inputs.shape)
+        noisy_inputs = test_inputs + noise
+        noisy_outputs = model_fn(noisy_inputs)
+
+        # 출력 일관성 측정
+        if hasattr(original_outputs, 'shape') and len(original_outputs.shape) > 1:
+            # 분류 모델: 예측 클래스 일치율
+            stability = np.mean(
+                np.argmax(original_outputs, axis=1) == np.argmax(noisy_outputs, axis=1)
+            )
+        else:
+            # 회귀 모델: 출력 변화율
+            stability = 1 - np.mean(np.abs(original_outputs - noisy_outputs) /
+                                    (np.abs(original_outputs) + 1e-10))
+
+        result = EvaluationResult(
+            metric_name="robustness",
+            value=stability,
+            threshold=stability_threshold,
+            passed=stability >= stability_threshold,
+            details={
+                "noise_level": noise_level,
+                "prediction_stability": round(stability, 4)
+            }
+        )
+        self.results.append(result)
+        return result
+
+    def evaluate_explainability(self, model_has_explanations: bool,
+                                 explanation_coverage: float) -> EvaluationResult:
+        """설명 가능성 평가"""
+        result = EvaluationResult(
+            metric_name="explainability",
+            value=explanation_coverage if model_has_explanations else 0,
+            threshold=0.8,
+            passed=model_has_explanations and explanation_coverage >= 0.8,
+            details={
+                "has_explanation_capability": model_has_explanations,
+                "explanation_coverage": explanation_coverage,
+                "methods_available": ["SHAP", "LIME", "Feature Importance"]
+            }
+        )
+        self.results.append(result)
+        return result
+
+    def generate_technical_documentation(self) -> Dict:
+        """EU AI Act 기술 문서용 평가 보고서"""
+        passed_all = all(r.passed for r in self.results)
+
+        return {
+            "document_type": "EU_AI_Act_Technical_Documentation_Annex_IV",
+            "model_info": {
+                "name": self.model_name,
+                "version": self.model_version,
+                "evaluation_date": datetime.now().isoformat()
+            },
+            "evaluation_summary": {
+                "total_tests": len(self.results),
+                "passed": sum(1 for r in self.results if r.passed),
+                "failed": sum(1 for r in self.results if not r.passed),
+                "overall_compliance": passed_all
+            },
+            "detailed_results": [
+                {
+                    "metric": r.metric_name,
+                    "value": r.value,
+                    "threshold": r.threshold,
+                    "passed": r.passed,
+                    "details": r.details
+                } for r in self.results
+            ],
+            "recommendations": self._generate_recommendations()
+        }
+
+    def _generate_recommendations(self) -> List[str]:
+        """개선 권고사항"""
+        recommendations = []
+        for r in self.results:
+            if not r.passed:
+                if r.metric_name == "fairness":
+                    recommendations.append(
+                        "공정성 기준 미달: 보호 그룹별 재학습 또는 편향 완화 기법 적용 필요"
+                    )
+                elif r.metric_name == "robustness":
+                    recommendations.append(
+                        "견고성 기준 미달: 적대적 학습 또는 데이터 증강 검토"
+                    )
+        return recommendations
+
+# 사용 예시
+evaluator = AIActModelEvaluator("CreditScoreModel", "v2.1.0")
+
+# 가상 데이터
+y_true = np.array([1, 0, 1, 1, 0, 1, 0, 0, 1, 1])
+y_pred = np.array([1, 0, 1, 0, 0, 1, 1, 0, 1, 1])
+protected = np.array(['M', 'F', 'M', 'F', 'M', 'F', 'M', 'F', 'M', 'F'])
+
+evaluator.evaluate_performance(y_true, y_pred)
+evaluator.evaluate_fairness(y_true, y_pred, protected)
+evaluator.evaluate_explainability(True, 0.85)
+
+report = evaluator.generate_technical_documentation()
+print(f"전체 준수 여부: {report['evaluation_summary']['overall_compliance']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conversation-title">
+            <h2 id="conversation-title" class="section-title">실무 대화</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-target="meeting10">회의</button>
+                <button class="conv-tab" data-target="interview10">면접</button>
+                <button class="conv-tab" data-target="review10">코드리뷰</button>
+            </div>
+            <div class="conv-content active" id="meeting10" data-label="회의">
+                <p><strong class="role-pm">PM:</strong> 모델 평가 체계를 EU AI Act에 맞게 업그레이드해야 합니다. 현재 뭐가 부족한가요?</p>
+                <p><strong class="role-junior">ML엔지니어:</strong> 정확도 위주로만 평가하고 있어요. 공정성이나 견고성 평가는 안 하고 있습니다.</p>
+                <p><strong class="role-senior">시니어:</strong> 제15조에서 정확성, 견고성, 사이버보안을 모두 요구합니다. 공정성 평가도 차별 금지 원칙상 필수예요. 평가 프레임워크 전면 개편이 필요합니다.</p>
+            </div>
+            <div class="conv-content" id="interview10" data-label="면접">
+                <p><strong class="role-interviewer">면접관:</strong> EU AI Act 준수를 위한 모델 평가에서 가장 중요한 요소는 무엇인가요?</p>
+                <p><strong class="role-candidate">지원자:</strong> 성능뿐 아니라 공정성, 견고성, 설명 가능성을 종합적으로 평가해야 합니다. 특히 보호 속성(성별, 인종, 나이 등)별로 모델 성능 격차를 측정하고, 적대적 입력에 대한 안정성을 테스트해야 합니다. 평가 결과는 기술 문서에 포함되어야 하므로 재현 가능하고 감사 가능한 형태로 기록하는 것도 중요합니다.</p>
+            </div>
+            <div class="conv-content" id="review10" data-label="코드리뷰">
+                <p><strong class="role-senior">시니어:</strong> 모델 평가 코드가 accuracy만 측정하고 있네요.</p>
+                <p><strong class="role-junior">주니어:</strong> 다른 지표도 추가해야 하나요?</p>
+                <p><strong class="role-senior">시니어:</strong> 네, fairness_metrics 함수를 추가해서 보호 그룹별 성능 격차를 측정하세요. 그리고 robustness_test도 필요해요. 결과는 JSON으로 저장해서 기술 문서에 포함할 수 있게 하세요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li class="critical">EU AI Act 제15조는 고위험 AI에 대해 정확성, 견고성, 사이버보안 요건을 명시합니다. 성능만 평가하고 출시하면 위반입니다.</li>
+                <li>테스트 데이터셋은 실제 운영 환경을 대표해야 합니다. 편향된 테스트셋으로 평가하면 배포 후 문제가 발생합니다.</li>
+                <li class="info">생성형 AI는 전통적인 지표로 평가하기 어렵습니다. HELM, MMLU 등 LLM 전용 벤치마크와 인간 평가를 병행하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%A0%88%EB%93%9C%ED%8C%80%20%ED%85%8C%EC%8A%A4%ED%8A%B8/" class="related-link">레드팀 테스트</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%92%88%EC%A7%88/" class="related-link">데이터 품질</a>
+                <a href="/ko/term/%EC%82%AC%ED%9B%84%20%EC%8B%9C%EC%9E%A5%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81/" class="related-link">사후 시장 모니터링</a>
+                <a href="/ko/term/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%20%EC%98%81%ED%96%A5%ED%8F%89%EA%B0%80/" class="related-link">알고리즘 영향평가</a>
+                <a href="/ko/term/%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%A0%81%20%EC%9C%84%ED%97%98/" class="related-link">시스템적 위험</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-tool"></span><a href="https://crfm.stanford.edu/helm/" target="_blank" rel="noopener">Stanford HELM - LLM 평가 벤치마크</a><span class="resource-meta">벤치마크</span></li>
+                <li><span class="type-tool"></span><a href="https://fairlearn.org/" target="_blank" rel="noopener">Fairlearn - 공정성 평가 도구</a><span class="resource-meta">도구</span></li>
+                <li><span class="type-official"></span><a href="https://ai.google.dev/responsible" target="_blank" rel="noopener">Google Responsible AI - 평가 가이드</a><span class="resource-meta">가이드</span></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +481,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

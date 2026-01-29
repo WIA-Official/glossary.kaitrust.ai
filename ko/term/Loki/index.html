@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,234 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Loki는 Grafana Labs가 개발한 수평 확장 가능한 로그 집계 시스템입니다. Prometheus에서 영감을 받아 설계되었으며, 로그 본문을 인덱싱하지 않고 레이블만 인덱싱하는 방식으로 운영 비용과 복잡성을 크게 낮췄습니다. "Prometheus, but for logs"라는 슬로건이 특징을 잘 설명합니다.</p>
+                <p>전통적인 로그 시스템(Elasticsearch 등)은 로그의 모든 텍스트를 인덱싱해서 강력한 전문 검색을 제공하지만, 인덱싱에 많은 리소스가 필요합니다. Loki는 레이블(예: app=frontend, env=prod)만 인덱싱하고 로그 본문은 압축 저장합니다. 쿼리 시점에 필요한 로그 청크만 읽어서 검색하는 방식입니다.</p>
+                <p>LogQL은 Loki의 쿼리 언어로, PromQL과 유사한 문법을 사용합니다. 레이블 셀렉터로 로그 스트림을 선택하고, 파이프라인으로 필터링/파싱/집계합니다. 예를 들어 `{app="api"} |= "error" | json | rate(5m)`은 api 앱의 error가 포함된 로그를 JSON 파싱 후 5분 단위 발생률을 계산합니다.</p>
+                <p>Loki 스택은 Promtail(로그 수집 에이전트), Loki(로그 저장/쿼리), Grafana(시각화)로 구성됩니다. Kubernetes 환경에서 Promtail이 각 노드에서 Pod 로그를 수집하고, Loki에 푸시하며, Grafana에서 대시보드와 알림을 구성합니다. Fluentd/Fluent Bit이나 Vector로 Promtail을 대체할 수도 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="promql">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># LogQL 쿼리 예제
+
+# 기본: 레이블로 로그 스트림 선택
+{app="order-service", env="production"}
+
+# 로그 본문 필터링 (포함)
+{app="order-service"} |= "error"
+{app="order-service"} |= "payment" |= "failed"
+
+# 정규식 필터링
+{app="api"} |~ "user_id=(\\d+)"
+
+# 제외 필터
+{app="api"} != "healthcheck" !~ "GET /metrics"
+
+# JSON 로그 파싱
+{app="api"} | json | level="error"
+{app="api"} | json | response_time > 1000
+
+# 라인 포맷 (출력 형식 변경)
+{app="api"} | json | line_format "{{.timestamp}} [{{.level}}] {{.message}}"
+
+# 메트릭 쿼리 - 분당 에러 로그 수
+sum(rate({app="api"} |= "error" [5m])) by (instance)
+
+# 로그 볼륨 계산 (bytes/sec)
+sum(bytes_rate({app="api"}[5m])) by (app)
+
+# 지연시간 히스토그램 (파싱된 값 사용)
+{app="api"} | json | unwrap response_time_ms | histogram_quantile(0.95)</code></pre>
+            </div>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># promtail-config.yaml - Kubernetes Pod 로그 수집
+server:
+  http_listen_port: 9080
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: kubernetes-pods
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      # Pod 네임스페이스를 레이블로
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace
+      # Pod 이름
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: pod
+      # 컨테이너 이름
+      - source_labels: [__meta_kubernetes_pod_container_name]
+        target_label: container
+      # app 레이블
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        target_label: app
+    pipeline_stages:
+      # JSON 로그 파싱
+      - json:
+          expressions:
+            level: level
+            message: msg
+      # 레벨별 레이블 추가
+      - labels:
+          level:</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">SRE:</strong> "ES 클러스터 운영 비용이 너무 높아요. Loki로 전환하면 어떨까요? 우리 쿼리 패턴이 대부분 레이블 필터 + grep 수준이라..."</p>
+                <p><strong class="role-junior">개발자:</strong> "Kibana에서 자유로운 전문 검색이 안 된다는 게 단점 아닌가요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "맞아요, 하지만 우리는 90%가 app, trace_id, level로 필터링해요. Grafana Explore에서 LogQL로 충분히 커버됩니다. 비용은 1/5로 줄 거예요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "로그 시스템 구축 경험이 있으신가요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "Loki 기반 로그 스택을 구축했습니다. Promtail로 Pod 로그를 수집하고, 레이블에 app, namespace, level을 추가했어요. Grafana에서 Loki와 Prometheus 데이터소스를 연결해서 메트릭과 로그를 같은 대시보드에서 보도록 했습니다. 알림은 LogQL 쿼리로 분당 에러 수가 임계치 넘으면 발생하게 설정했어요."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "Promtail 설정에 레이블 cardinality 주의하세요. user_id 같은 high cardinality 값을 레이블로 넣으면 Loki 성능이 급격히 떨어져요."</p>
+                <p><strong class="role-author">작성자:</strong> "아, user_id는 레이블 대신 로그 본문에 남기고 LogQL로 파싱해서 필터하도록 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>레이블 cardinality(고유 값 수)를 낮게 유지하세요. user_id, request_id 같은 값을 레이블로 쓰면 인덱스가 폭발적으로 커지고 성능이 저하됩니다. 이런 값은 로그 본문에 포함하세요.</li>
+                <li>시간 범위가 너무 넓은 쿼리는 느려집니다. Loki는 쿼리 시점에 압축된 청크를 읽으므로, 시간 범위를 좁히거나 레이블로 먼저 필터링하세요.</li>
+                <li class="info">Loki는 로그 순서를 엄격하게 보장하지 않습니다. 같은 나노초에 여러 로그가 들어오면 순서가 섞일 수 있어요. 정확한 순서가 중요하면 타임스탬프를 고해상도로 기록하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Logging/" class="related-link">Logging</a>
+                <a href="/ko/term/Prometheus/" class="related-link">Prometheus</a>
+                <a href="/ko/term/Grafana/" class="related-link">Grafana</a>
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+                <a href="/ko/term/Elasticsearch/" class="related-link">Elasticsearch</a>
+            </div>
+        </section>
+
+        <!-- 실제 장애 사례 -->
+        <section class="term-section" aria-labelledby="incident-title">
+            <h2 class="section-title" id="incident-title">🔥 실제 장애 사례</h2>
+            <div class="incident-list">
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">SaaS 기업</span>
+                        <span class="incident-year">2023</span>
+                    </div>
+                    <h4 class="incident-title">High Cardinality 레이블로 Loki 성능 급락</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> user_id, request_id를 레이블로 추가, 수백만 개의 고유 레이블 조합 생성</p>
+                        <p><strong>영향:</strong> Loki 인덱스 크기 폭발, 쿼리 타임아웃, Ingester OOM 발생</p>
+                        <p><strong>해결:</strong> high cardinality 값을 레이블에서 제거, 로그 본문에만 포함하고 LogQL로 파싱</p>
+                        <p><strong>교훈:</strong> 레이블은 app, env, level 같은 low cardinality 값만, 고유 식별자는 로그 본문에</p>
+                    </div>
+                </div>
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">이커머스 사례</span>
+                        <span class="incident-year">2022</span>
+                    </div>
+                    <h4 class="incident-title">시간 범위 미지정 쿼리로 전체 클러스터 마비</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> Grafana 대시보드에서 시간 필터 없이 `{app="api"}` 쿼리 실행</p>
+                        <p><strong>영향:</strong> 90일 분량 로그 전체 스캔, Querier CPU 100%, 다른 쿼리 전부 타임아웃</p>
+                        <p><strong>해결:</strong> 쿼리 강제 중단, max_query_length 설정으로 시간 범위 제한</p>
+                        <p><strong>교훈:</strong> query_range 제한 설정, 대시보드에 기본 시간 범위 강제 적용</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 이해도 퀴즈 -->
+        <section class="term-section" aria-labelledby="quiz-title">
+            <h2 class="section-title" id="quiz-title">📝 이해도 퀴즈</h2>
+            <div class="quiz-container" id="term-quiz">
+                <div class="quiz-item" data-correct="b">
+                    <p class="quiz-question"><strong>Q1.</strong> Loki가 Elasticsearch 대비 저렴한 이유는?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> A) 로그를 저장하지 않기 때문</label>
+                        <label><input type="radio" name="q1" value="b"> B) 로그 본문을 인덱싱하지 않고 레이블만 인덱싱하기 때문</label>
+                        <label><input type="radio" name="q1" value="c"> C) 클라우드에서만 동작하기 때문</label>
+                        <label><input type="radio" name="q1" value="d"> D) 압축을 사용하지 않기 때문</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="c">
+                    <p class="quiz-question"><strong>Q2.</strong> Loki에서 레이블로 사용하면 안 되는 값은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> A) app (애플리케이션 이름)</label>
+                        <label><input type="radio" name="q2" value="b"> B) env (환경: prod, dev)</label>
+                        <label><input type="radio" name="q2" value="c"> C) request_id (요청별 고유 ID)</label>
+                        <label><input type="radio" name="q2" value="d"> D) level (로그 레벨: info, error)</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="a">
+                    <p class="quiz-question"><strong>Q3.</strong> LogQL에서 `{app="api"} |= "error" | json | rate(5m)`의 의미는?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> A) api 앱에서 error 포함 로그를 JSON 파싱 후 5분 단위 발생률 계산</label>
+                        <label><input type="radio" name="q3" value="b"> B) api 앱 로그를 5분간 저장</label>
+                        <label><input type="radio" name="q3" value="c"> C) api 앱에서 error 제외</label>
+                        <label><input type="radio" name="q3" value="d"> D) JSON 파일 생성</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-submit" onclick="checkQuiz()">정답 확인</button>
+                <div class="quiz-result"></div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://grafana.com/docs/loki/latest/" target="_blank" rel="noopener">Loki 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://grafana.com/docs/loki/latest/query/log_queries/" target="_blank" rel="noopener">LogQL 쿼리 가이드</a></li>
+                <li><span class="type-tutorial"></span><a href="https://grafana.com/blog/2020/05/12/an-only-slightly-opinionated-guide-to-loki/" target="_blank" rel="noopener">Loki 아키텍처 가이드</a></li>
+                <li><span class="type-blog"></span><a href="https://engineering.linecorp.com/ko/blog/how-line-uses-loki" target="_blank" rel="noopener">LINE - Loki 도입 사례</a></li>
+                <li><span class="type-video"></span><a href="https://www.youtube.com/watch?v=CQiawXlgabQ" target="_blank" rel="noopener">Grafana Loki 기초 튜토리얼</a></li>
+                <li><span class="type-tool"></span><a href="https://github.com/grafana/loki" target="_blank" rel="noopener">Loki GitHub 저장소</a></li>
+            </ul>
+        </section>
+
+        <!-- 질문 & 기여 -->
+        <section class="term-section" aria-labelledby="community-title">
+            <h2 class="section-title" id="community-title">💬 질문 & 기여</h2>
+            <div class="community-actions">
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[Loki] 질문: " class="community-btn btn-question" target="_blank">❓ 질문하기</a>
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[Loki] 수정 제안: " class="community-btn btn-suggest" target="_blank">✏️ 수정 제안</a>
+            </div>
+            <p class="community-note">이 페이지에 오류가 있거나 추가하고 싶은 내용이 있다면 알려주세요!</p>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +441,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

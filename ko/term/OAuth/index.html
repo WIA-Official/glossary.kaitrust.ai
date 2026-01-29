@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth (Open Authorization) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="OAuth는 사용자 비밀번호 없이 제3자 애플리케이션에 제한된 접근 권한을 부여하는 개방형 표준 인가 프로토콜입니다. 소셜 로그인, API 접근 위임의 핵심 기술입니다.">
+    <meta name="keywords" content="OAuth, Open Authorization, 인가, 인증, Access Token, Refresh Token, Authorization Code, 소셜 로그인, API 보안, 위임 권한, Bearer Token, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/OAuth/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/OAuth/">
+    <meta property="og:title" content="OAuth (Open Authorization) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="OAuth는 사용자 비밀번호 없이 제3자 애플리케이션에 제한된 접근 권한을 부여하는 개방형 표준 인가 프로토콜입니다.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OAuth (Open Authorization) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="OAuth는 사용자 비밀번호 없이 제3자 애플리케이션에 제한된 접근 권한을 부여하는 개방형 표준 인가 프로토콜입니다.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "OAuth",
+        "alternateName": "Open Authorization",
+        "description": "OAuth는 사용자 비밀번호 없이 제3자 애플리케이션에 제한된 접근 권한을 부여하는 개방형 표준 인가 프로토콜입니다.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <div id="kaitrust-header"></div>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#security">보안</a>
+            <span>›</span>
+            <span class="current">OAuth</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🔒</span>
+                <span>보안</span>
+            </div>
+            <h1 class="term-title">OAuth</h1>
+            <p class="term-english">Open Authorization</p>
+            <div class="term-description">
+                <p>사용자 비밀번호 없이 제3자 애플리케이션에 제한된 접근 권한을 부여하는 개방형 표준 인가 프로토콜입니다. "Google로 로그인", "GitHub으로 로그인" 같은 소셜 로그인의 핵심 기술입니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#security" class="term-action-btn btn-secondary">
+                    🔒 보안 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>OAuth(Open Authorization)는 2007년 Twitter와 Ma.gnolia가 공동 개발한 개방형 인가(Authorization) 표준입니다. 핵심 개념은 "위임 권한(Delegated Authorization)"으로, 사용자가 자신의 비밀번호를 제3자 앱에 알려주지 않고도 특정 리소스 접근 권한을 부여할 수 있습니다. 예를 들어, 캘린더 앱이 Google Calendar를 읽으려면 사용자의 Google 비밀번호가 아닌 OAuth 토큰으로 접근합니다. 이는 비밀번호 공유의 보안 위험을 제거합니다.</p>
+                <p>OAuth 2.0은 4가지 주요 역할로 구성됩니다. Resource Owner(사용자), Client(제3자 앱), Authorization Server(인증/토큰 발급 서버), Resource Server(API 서버)입니다. 가장 많이 사용되는 Authorization Code Grant 플로우에서는 사용자가 Authorization Server에서 로그인하고, 앱은 Authorization Code를 받아 Access Token으로 교환합니다. 이 토큰으로 Resource Server의 API를 호출합니다.</p>
+                <p>OAuth의 핵심 보안 요소는 Scope와 토큰입니다. Scope는 접근 범위를 제한합니다(예: read:user, write:repos). Access Token은 짧은 수명(보통 1시간)을 가지며, Refresh Token으로 갱신합니다. Access Token이 탈취되어도 피해를 최소화하기 위해 짧은 만료 시간을 사용합니다. PKCE(Proof Key for Code Exchange)는 Authorization Code 가로채기 공격을 방지하는 추가 보안 계층입니다.</p>
+                <p>OAuth는 인증(Authentication)이 아닌 인가(Authorization) 프로토콜입니다. "이 앱이 내 데이터에 접근해도 되는가?"를 결정하지만, "이 사용자가 누구인가?"는 OAuth만으로 알 수 없습니다. 사용자 신원 확인이 필요하면 OAuth 위에 구축된 OIDC(OpenID Connect)를 사용합니다. OAuth 2.0의 보안 강화 버전인 OAuth 2.1은 Implicit Grant 폐지, PKCE 필수화 등을 포함합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="node">Node.js (Express)</button>
+                <button class="code-tab" data-lang="python">Python (FastAPI)</button>
+                <button class="code-tab" data-lang="flow">OAuth Flow 다이어그램</button>
+            </div>
+            <div class="code-block active" data-lang="node">
+                <pre><code class="language-javascript">// OAuth 2.0 Authorization Code Flow - Node.js Express
+const express = require('express');
+const axios = require('axios');
+const crypto = require('crypto');
+
+const app = express();
+
+// OAuth 설정
+const OAUTH_CONFIG = {
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    authorizationUrl: 'https://github.com/login/oauth/authorize',
+    tokenUrl: 'https://github.com/login/oauth/access_token',
+    redirectUri: 'http://localhost:3000/callback',
+    scope: 'read:user user:email'
+};
+
+// 1단계: 인증 페이지로 리다이렉트
+app.get('/login', (req, res) => {
+    // PKCE: code_verifier 생성
+    const codeVerifier = crypto.randomBytes(32).toString('base64url');
+    const codeChallenge = crypto
+        .createHash('sha256')
+        .update(codeVerifier)
+        .digest('base64url');
+
+    // 세션에 저장 (실제로는 secure session 사용)
+    req.session = { codeVerifier };
+
+    // state: CSRF 방지
+    const state = crypto.randomBytes(16).toString('hex');
+
+    const authUrl = new URL(OAUTH_CONFIG.authorizationUrl);
+    authUrl.searchParams.set('client_id', OAUTH_CONFIG.clientId);
+    authUrl.searchParams.set('redirect_uri', OAUTH_CONFIG.redirectUri);
+    authUrl.searchParams.set('scope', OAUTH_CONFIG.scope);
+    authUrl.searchParams.set('state', state);
+    authUrl.searchParams.set('code_challenge', codeChallenge);
+    authUrl.searchParams.set('code_challenge_method', 'S256');
+    authUrl.searchParams.set('response_type', 'code');
+
+    res.redirect(authUrl.toString());
+});
+
+// 2단계: 콜백 - Authorization Code를 Access Token으로 교환
+app.get('/callback', async (req, res) => {
+    const { code, state } = req.query;
+
+    // state 검증 (CSRF 방지)
+    // if (state !== req.session.state) return res.status(403).send('Invalid state');
+
+    try {
+        // Authorization Code → Access Token 교환
+        const tokenResponse = await axios.post(OAUTH_CONFIG.tokenUrl, {
+            client_id: OAUTH_CONFIG.clientId,
+            client_secret: OAUTH_CONFIG.clientSecret,
+            code: code,
+            redirect_uri: OAUTH_CONFIG.redirectUri,
+            // code_verifier: req.session.codeVerifier  // PKCE
+        }, {
+            headers: { Accept: 'application/json' }
+        });
+
+        const { access_token, refresh_token, expires_in } = tokenResponse.data;
+
+        // 3단계: Access Token으로 API 호출
+        const userResponse = await axios.get('https://api.github.com/user', {
+            headers: { Authorization: `Bearer ${access_token}` }
+        });
+
+        res.json({
+            user: userResponse.data,
+            tokenInfo: { expires_in }
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// 토큰 갱신
+async function refreshAccessToken(refreshToken) {
+    const response = await axios.post(OAUTH_CONFIG.tokenUrl, {
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+        client_id: OAUTH_CONFIG.clientId,
+        client_secret: OAUTH_CONFIG.clientSecret
+    });
+    return response.data;
+}
+
+app.listen(3000);</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># OAuth 2.0 Authorization Code Flow - FastAPI
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import RedirectResponse
+import httpx
+import secrets
+import hashlib
+import base64
+from pydantic import BaseModel
+
+app = FastAPI()
+
+# OAuth 설정
+OAUTH_CONFIG = {
+    "client_id": "your_client_id",
+    "client_secret": "your_client_secret",
+    "authorization_url": "https://accounts.google.com/o/oauth2/v2/auth",
+    "token_url": "https://oauth2.googleapis.com/token",
+    "redirect_uri": "http://localhost:8000/callback",
+    "scope": "openid email profile"
+}
+
+# 세션 저장소 (실제로는 Redis 사용)
+sessions = {}
+
+def generate_pkce():
+    """PKCE code_verifier와 code_challenge 생성"""
+    code_verifier = secrets.token_urlsafe(32)
+    code_challenge = base64.urlsafe_b64encode(
+        hashlib.sha256(code_verifier.encode()).digest()
+    ).decode().rstrip("=")
+    return code_verifier, code_challenge
+
+@app.get("/login")
+async def login():
+    """1단계: Authorization Server로 리다이렉트"""
+    state = secrets.token_hex(16)
+    code_verifier, code_challenge = generate_pkce()
+
+    # 세션에 저장
+    sessions[state] = {"code_verifier": code_verifier}
+
+    params = {
+        "client_id": OAUTH_CONFIG["client_id"],
+        "redirect_uri": OAUTH_CONFIG["redirect_uri"],
+        "response_type": "code",
+        "scope": OAUTH_CONFIG["scope"],
+        "state": state,
+        "code_challenge": code_challenge,
+        "code_challenge_method": "S256",
+        "access_type": "offline",  # Refresh Token 요청
+        "prompt": "consent"
+    }
+
+    auth_url = f"{OAUTH_CONFIG['authorization_url']}?{'&'.join(f'{k}={v}' for k, v in params.items())}"
+    return RedirectResponse(url=auth_url)
+
+@app.get("/callback")
+async def callback(code: str, state: str):
+    """2단계: Authorization Code를 Access Token으로 교환"""
+    # State 검증
+    if state not in sessions:
+        raise HTTPException(status_code=403, detail="Invalid state")
+
+    session_data = sessions.pop(state)
+
+    async with httpx.AsyncClient() as client:
+        # Token 교환
+        token_response = await client.post(
+            OAUTH_CONFIG["token_url"],
+            data={
+                "client_id": OAUTH_CONFIG["client_id"],
+                "client_secret": OAUTH_CONFIG["client_secret"],
+                "code": code,
+                "redirect_uri": OAUTH_CONFIG["redirect_uri"],
+                "grant_type": "authorization_code",
+                "code_verifier": session_data["code_verifier"]
+            }
+        )
+
+        if token_response.status_code != 200:
+            raise HTTPException(status_code=400, detail="Token exchange failed")
+
+        tokens = token_response.json()
+        access_token = tokens["access_token"]
+
+        # 3단계: Access Token으로 사용자 정보 조회
+        user_response = await client.get(
+            "https://www.googleapis.com/oauth2/v2/userinfo",
+            headers={"Authorization": f"Bearer {access_token}"}
+        )
+
+        return {
+            "user": user_response.json(),
+            "tokens": {
+                "access_token": access_token[:20] + "...",  # 일부만 표시
+                "expires_in": tokens.get("expires_in"),
+                "has_refresh_token": "refresh_token" in tokens
+            }
+        }
+
+# 토큰 갱신 유틸리티
+async def refresh_access_token(refresh_token: str):
+    """Refresh Token으로 Access Token 갱신"""
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            OAUTH_CONFIG["token_url"],
+            data={
+                "client_id": OAUTH_CONFIG["client_id"],
+                "client_secret": OAUTH_CONFIG["client_secret"],
+                "refresh_token": refresh_token,
+                "grant_type": "refresh_token"
+            }
+        )
+        return response.json()</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="flow">
+                <pre><code class="language-text">OAuth 2.0 Authorization Code Flow (PKCE 포함)
+==============================================
+
+     사용자(Browser)          Client(App)          Authorization       Resource
+           |                     |                    Server              Server
+           |                     |                      |                   |
+           |  1. 로그인 클릭      |                      |                   |
+           |-------------------->|                      |                   |
+           |                     |                      |                   |
+           |                     |  2. PKCE 생성        |                   |
+           |                     |  code_verifier       |                   |
+           |                     |  code_challenge      |                   |
+           |                     |                      |                   |
+           |    3. 리다이렉트 (client_id, scope,        |                   |
+           |<----------- code_challenge, state)        |                   |
+           |                     |                      |                   |
+           |  4. Authorization Server 로그인 페이지     |                   |
+           |------------------------------------------>|                   |
+           |                     |                      |                   |
+           |  5. 사용자 로그인 + 권한 동의              |                   |
+           |------------------------------------------>|                   |
+           |                     |                      |                   |
+           |    6. 리다이렉트 (code, state)             |                   |
+           |<------------------------------------------|                   |
+           |                     |                      |                   |
+           |  7. code 전달       |                      |                   |
+           |-------------------->|                      |                   |
+           |                     |                      |                   |
+           |                     |  8. Token 교환 요청  |                   |
+           |                     |  (code, code_verifier, client_secret)   |
+           |                     |--------------------->|                   |
+           |                     |                      |                   |
+           |                     |  9. Access Token +   |                   |
+           |                     |     Refresh Token    |                   |
+           |                     |<---------------------|                   |
+           |                     |                      |                   |
+           |                     |  10. API 요청        |                   |
+           |                     |  (Bearer Token)      |                   |
+           |                     |---------------------------------------->|
+           |                     |                      |                   |
+           |                     |  11. Protected Data  |                   |
+           |                     |<----------------------------------------|
+           |                     |                      |                   |
+           |  12. 결과 표시      |                      |                   |
+           |<--------------------|                      |                   |
+
+
+Token 종류와 수명
+================
+- Access Token: 리소스 접근용, 짧은 수명 (1시간)
+- Refresh Token: Access Token 갱신용, 긴 수명 (30일+)
+- Authorization Code: 1회용, 매우 짧은 수명 (10분)
+
+Scope 예시
+==========
+Google: openid, email, profile, drive.readonly
+GitHub: read:user, user:email, repo, write:repo_hook
+Slack: channels:read, chat:write, users:read</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 소셜 로그인 구현 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "Google 로그인을 OAuth 2.0 Authorization Code Flow로 구현합시다. PKCE는 필수로 적용하고, Refresh Token은 서버 사이드에서만 관리해야 합니다. 프론트엔드에는 Access Token도 메모리에만 저장하세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 API 보안 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "OAuth Scope를 최소 권한 원칙으로 설계해야 합니다. read:profile만 필요한 앱에 write 권한까지 주면 안 됩니다. 우리 API도 Scope 기반 접근 제어를 도입해서 제3자 앱이 필요한 권한만 요청하도록 합시다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 감사 대응에서</div>
+                    <blockquote class="conv-quote">
+                        "Access Token 수명을 1시간으로 줄이고, Refresh Token Rotation을 적용했습니다. 토큰 탈취 시 피해 범위를 최소화하는 방어적 설계입니다. 로그아웃 시 서버 사이드 토큰 무효화도 구현되어 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Implicit Grant 사용 금지</strong>
+                        <p>Implicit Grant(response_type=token)는 URL Fragment에 토큰이 노출되어 위험합니다. SPA도 Authorization Code Flow + PKCE를 사용하세요. OAuth 2.1에서 공식 폐지되었습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Client Secret 프론트엔드 노출</strong>
+                        <p>Client Secret은 서버에서만 사용해야 합니다. 브라우저 JavaScript에 Client Secret이 있으면 누구나 볼 수 있습니다. Public Client는 PKCE만으로 보안을 확보합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>State 파라미터 미사용</strong>
+                        <p>State 없이 OAuth를 구현하면 CSRF 공격에 취약합니다. 공격자가 자신의 Authorization Code로 피해자의 세션을 바인딩할 수 있습니다. 항상 cryptographically random한 state를 생성하고 검증하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>OAuth 베스트 프랙티스</strong>
+                        <p>PKCE 필수, Access Token 짧은 수명, Refresh Token Rotation, Scope 최소화, HTTPS 필수, redirect_uri 화이트리스트 검증을 적용하세요. OAuth 2.1 가이드라인을 따르면 대부분의 취약점을 방지할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/OAuth%202.1/" class="related-term-link">OAuth 2.1</a>
+                <a href="/ko/term/OIDC/" class="related-term-link">OIDC</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+                <a href="/ko/term/SSO/" class="related-term-link">SSO</a>
+                <a href="/ko/term/PKCE/" class="related-term-link">PKCE</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://oauth.net/2/" target="_blank" class="learn-link">
+                    📄 OAuth 2.0 공식 사이트
+                </a>
+                <a href="https://datatracker.ietf.org/doc/html/rfc6749" target="_blank" class="learn-link">
+                    🎓 RFC 6749 - OAuth 2.0 명세
+                </a>
+                <a href="https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow" target="_blank" class="learn-link">
+                    📖 Auth0 - Authorization Code Flow 가이드
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="kaitrust-footer"></div>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
+</body>
+</html>

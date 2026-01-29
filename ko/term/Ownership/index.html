@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ownership (소유권) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="Rust 핵심 개념. 각 값은 하나의 소유자만. 메모리 안전성 보장.">
-    <meta name="keywords" content="Ownership, 소유권, AI 용어, KAITRUST, AI 백과사전, 프로그래밍">
+    <meta name="description" content="Rust의 핵심 메모리 관리 개념. 각 값은 하나의 소유자만 가지며, 스코프를 벗어나면 자동 해제. GC 없이 메모리 안전성 보장.">
+    <meta name="keywords" content="Ownership, 소유권, AI 용어, KAITRUST, AI 백과사전, 프로그래밍, Rust, Borrowing, Lifetime">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Ownership/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Ownership/">
     <meta property="og:title" content="Ownership (소유권) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="Rust 핵심 개념. 각 값은 하나의 소유자만. 메모리 안전성 보장.">
+    <meta property="og:description" content="Rust의 핵심 메모리 관리 개념. 각 값은 하나의 소유자만 가지며, 스코프를 벗어나면 자동 해제. GC 없이 메모리 안전성 보장.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Ownership (소유권) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="Rust 핵심 개념. 각 값은 하나의 소유자만. 메모리 안전성 보장.">
+    <meta name="twitter:description" content="Rust의 핵심 메모리 관리 개념. 각 값은 하나의 소유자만 가지며, 스코프를 벗어나면 자동 해제. GC 없이 메모리 안전성 보장.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Ownership",
-        "description": "Rust 핵심 개념. 각 값은 하나의 소유자만. 메모리 안전성 보장.",
+        "description": "Rust의 핵심 메모리 관리 개념. 각 값은 하나의 소유자만 가지며, 스코프를 벗어나면 자동 해제. GC 없이 메모리 안전성 보장.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -161,6 +161,181 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        /* 규칙 박스 */
+        .rules-box {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .rules-box h4 {
+            color: #a855f7;
+            margin: 0 0 1rem 0;
+            font-size: 1.1rem;
+        }
+        .rules-box ol {
+            margin: 0;
+            padding-left: 1.5rem;
+            color: #cbd5e1;
+        }
+        .rules-box li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        .rules-box li:last-child { margin-bottom: 0; }
+
+        /* 코드 하이라이트 */
+        .code-keyword { color: #c792ea; }
+        .code-type { color: #82aaff; }
+        .code-function { color: #82aaff; }
+        .code-string { color: #c3e88d; }
+        .code-comment { color: #676e95; }
+        .code-number { color: #f78c6c; }
+        .code-macro { color: #89ddff; }
     </style>
 </head>
 <body>
@@ -191,7 +366,7 @@
             <h1 class="term-title">Ownership</h1>
             <p class="term-english">소유권</p>
             <div class="term-description">
-                <p>Rust 핵심 개념. 각 값은 하나의 소유자만. 메모리 안전성 보장.</p>
+                <p>Rust의 핵심 메모리 관리 개념. 각 값은 하나의 소유자만 가지며, 스코프를 벗어나면 자동 해제. GC 없이 메모리 안전성 보장.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +377,182 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Ownership(소유권)은 Rust 프로그래밍 언어의 가장 핵심적이고 독창적인 개념입니다. 메모리 관리를 컴파일 타임에 검증하여 런타임 오버헤드 없이 메모리 안전성을 보장합니다. C/C++의 수동 메모리 관리로 인한 버그(dangling pointer, double free, use-after-free)와 GC 언어의 성능 문제를 동시에 해결하는 혁신적인 접근 방식입니다.</p>
+
+                <div class="rules-box">
+                    <h4>Ownership의 세 가지 규칙</h4>
+                    <ol>
+                        <li><strong>Each value has a single owner</strong> - Rust의 모든 값은 단 하나의 변수(소유자)만 가질 수 있습니다.</li>
+                        <li><strong>Scope determines lifetime</strong> - 소유자가 스코프(scope)를 벗어나면 값은 자동으로 drop(해제)됩니다.</li>
+                        <li><strong>Move semantics by default</strong> - 값을 다른 변수에 할당하면 소유권이 이동(move)하고, 원래 변수는 더 이상 사용할 수 없습니다.</li>
+                    </ol>
+                </div>
+
+                <p>Borrowing(빌림)과 References(참조)는 Ownership을 보완하는 개념입니다. 소유권을 이전하지 않고 값을 임시로 빌려 사용할 수 있습니다. 불변 참조(&T)는 여러 개가 동시에 존재할 수 있지만, 가변 참조(&mut T)는 한 번에 하나만 허용됩니다. 이 규칙은 data race를 컴파일 타임에 방지합니다.</p>
+
+                <p>Ownership 시스템의 가장 큰 장점은 Garbage Collector 없이 메모리 안전성을 보장한다는 것입니다. GC가 없어 예측 가능한 성능과 낮은 메모리 오버헤드를 제공하며, 시스템 프로그래밍, 임베디드, 게임 엔진 등 성능이 중요한 분야에서 각광받고 있습니다. Borrow checker가 컴파일 시점에 모든 메모리 접근을 검증하므로 런타임 크래시가 발생하지 않습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="rust">Rust</button>
+            </div>
+            <div class="code-block" data-lang="rust">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code><span class="code-comment">// === Ownership 기본 예제 ===</span>
+
+<span class="code-keyword">fn</span> <span class="code-function">main</span>() {
+    <span class="code-comment">// 1. 기본 Ownership: String은 힙에 할당됨</span>
+    <span class="code-keyword">let</span> s1 = <span class="code-type">String</span>::from(<span class="code-string">"hello"</span>);
+    <span class="code-keyword">let</span> s2 = s1;  <span class="code-comment">// s1의 소유권이 s2로 이동(move)</span>
+    <span class="code-comment">// println!("{}", s1);  // 컴파일 에러! s1은 더 이상 유효하지 않음</span>
+    <span class="code-macro">println!</span>(<span class="code-string">"{}"</span>, s2);  <span class="code-comment">// OK: "hello"</span>
+
+    <span class="code-comment">// 2. Clone: 깊은 복사로 소유권 유지</span>
+    <span class="code-keyword">let</span> s3 = <span class="code-type">String</span>::from(<span class="code-string">"world"</span>);
+    <span class="code-keyword">let</span> s4 = s3.clone();  <span class="code-comment">// 힙 데이터까지 복사</span>
+    <span class="code-macro">println!</span>(<span class="code-string">"s3: {}, s4: {}"</span>, s3, s4);  <span class="code-comment">// 둘 다 유효</span>
+
+    <span class="code-comment">// 3. Copy trait: 스택 데이터는 자동 복사</span>
+    <span class="code-keyword">let</span> x = <span class="code-number">5</span>;
+    <span class="code-keyword">let</span> y = x;  <span class="code-comment">// i32는 Copy trait 구현, x도 여전히 유효</span>
+    <span class="code-macro">println!</span>(<span class="code-string">"x: {}, y: {}"</span>, x, y);  <span class="code-comment">// 둘 다 유효</span>
+
+    <span class="code-comment">// 4. 함수와 Ownership</span>
+    <span class="code-keyword">let</span> s5 = <span class="code-type">String</span>::from(<span class="code-string">"rust"</span>);
+    takes_ownership(s5);  <span class="code-comment">// s5의 소유권이 함수로 이동</span>
+    <span class="code-comment">// println!("{}", s5);  // 컴파일 에러!</span>
+
+    <span class="code-keyword">let</span> s6 = gives_ownership();  <span class="code-comment">// 함수로부터 소유권 받음</span>
+    <span class="code-macro">println!</span>(<span class="code-string">"받은 값: {}"</span>, s6);
+}
+
+<span class="code-keyword">fn</span> <span class="code-function">takes_ownership</span>(s: <span class="code-type">String</span>) {
+    <span class="code-macro">println!</span>(<span class="code-string">"소유권 받음: {}"</span>, s);
+}  <span class="code-comment">// s가 drop됨</span>
+
+<span class="code-keyword">fn</span> <span class="code-function">gives_ownership</span>() -> <span class="code-type">String</span> {
+    <span class="code-type">String</span>::from(<span class="code-string">"새로운 문자열"</span>)  <span class="code-comment">// 소유권 반환</span>
+}
+
+<span class="code-comment">// === Borrowing과 References ===</span>
+
+<span class="code-keyword">fn</span> <span class="code-function">borrowing_example</span>() {
+    <span class="code-keyword">let</span> s1 = <span class="code-type">String</span>::from(<span class="code-string">"hello"</span>);
+
+    <span class="code-comment">// 불변 참조 (Immutable borrow)</span>
+    <span class="code-keyword">let</span> len = calculate_length(&s1);  <span class="code-comment">// 빌려주기만 함</span>
+    <span class="code-macro">println!</span>(<span class="code-string">"'{}' 길이: {}"</span>, s1, len);  <span class="code-comment">// s1 여전히 유효</span>
+
+    <span class="code-comment">// 가변 참조 (Mutable borrow)</span>
+    <span class="code-keyword">let mut</span> s2 = <span class="code-type">String</span>::from(<span class="code-string">"hello"</span>);
+    change(&<span class="code-keyword">mut</span> s2);
+    <span class="code-macro">println!</span>(<span class="code-string">"변경됨: {}"</span>, s2);  <span class="code-comment">// "hello, world"</span>
+
+    <span class="code-comment">// 참조 규칙: 불변 참조 여러 개 OK</span>
+    <span class="code-keyword">let</span> r1 = &s1;
+    <span class="code-keyword">let</span> r2 = &s1;
+    <span class="code-macro">println!</span>(<span class="code-string">"{} {}"</span>, r1, r2);
+
+    <span class="code-comment">// 가변 참조는 단 하나만!</span>
+    <span class="code-keyword">let mut</span> s3 = <span class="code-type">String</span>::from(<span class="code-string">"test"</span>);
+    <span class="code-keyword">let</span> r3 = &<span class="code-keyword">mut</span> s3;
+    <span class="code-comment">// let r4 = &mut s3;  // 컴파일 에러! 동시에 두 개의 가변 참조 불가</span>
+    <span class="code-macro">println!</span>(<span class="code-string">"{}"</span>, r3);
+}
+
+<span class="code-keyword">fn</span> <span class="code-function">calculate_length</span>(s: &<span class="code-type">String</span>) -> <span class="code-type">usize</span> {
+    s.len()  <span class="code-comment">// 참조로 받았으므로 소유권 이동 없음</span>
+}
+
+<span class="code-keyword">fn</span> <span class="code-function">change</span>(s: &<span class="code-keyword">mut</span> <span class="code-type">String</span>) {
+    s.push_str(<span class="code-string">", world"</span>);  <span class="code-comment">// 가변 참조로 수정 가능</span>
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">Rust 개발자 기술 면접에서</div>
+                    <p class="conv-quote">"Ownership은 Rust가 GC 없이 메모리 안전성을 보장하는 핵심 메커니즘입니다. 각 값은 단 하나의 소유자만 가지고, 소유자가 스코프를 벗어나면 자동으로 drop됩니다. Borrowing을 통해 소유권 이전 없이 값을 참조할 수 있는데, 불변 참조는 여러 개가 가능하지만 가변 참조는 동시에 하나만 허용됩니다. 이 규칙으로 data race를 컴파일 타임에 방지합니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">GC vs Ownership 기술 토론에서</div>
+                    <p class="conv-quote">"GC는 개발 편의성은 높지만 Stop-the-world 이슈로 실시간 시스템에 부적합합니다. Rust의 Ownership은 컴파일 타임에 메모리를 추적하니까 런타임 오버헤드가 없어요. 물론 borrow checker와 싸우느라 초기 러닝 커브가 높지만, 메모리 버그 없이 C++ 수준 성능을 얻을 수 있으니 시스템 프로그래밍에는 최적이죠. 저희 팀은 성능 크리티컬한 마이크로서비스를 Rust로 재작성해서 메모리 사용량을 60% 줄였습니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">팀 코드 리뷰 중</div>
+                    <p class="conv-quote">"여기 String을 함수에 넘길 때 clone() 쓰셨는데, 읽기만 하면 &str 참조로 빌려주세요. 불필요한 힙 할당이 줄어들어요. 그리고 이 루프에서 Vec을 반환할 때 소유권이 이동하니까 다음 이터레이션에서 에러 날 거예요. iter() 대신 into_iter() 쓰거나, 참조로 처리하시는 게 맞습니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">1</span>
+                    <div>
+                        <strong>Move vs Copy 구분</strong>
+                        <p>정수, 부동소수점, bool, char 등 스택에 저장되는 타입은 Copy trait을 구현하여 자동 복사됩니다. 그러나 String, Vec, Box 등 힙 데이터를 가진 타입은 Move됩니다. Copy 가능 여부를 혼동하면 예상치 못한 컴파일 에러가 발생합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">2</span>
+                    <div>
+                        <strong>Lifetime 이해 필수</strong>
+                        <p>참조를 반환하거나 구조체에 저장할 때 Lifetime annotation('a)이 필요합니다. Lifetime은 참조가 유효한 범위를 명시하여 dangling reference를 방지합니다. 처음에는 복잡해 보이지만, 컴파일러 메시지를 따라가면 점차 이해할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">3</span>
+                    <div>
+                        <strong>Borrow Checker 에러 대처법</strong>
+                        <p>borrow checker 에러가 발생하면 당황하지 말고 에러 메시지를 자세히 읽으세요. 대부분 소유권을 clone()으로 복사하거나, 참조 범위를 조정하거나, RefCell/Rc로 런타임 빌림 검사로 전환하면 해결됩니다. 무조건 clone()보다는 설계를 다시 검토하는 것이 좋습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Rust/" class="related-term-link">Rust</a>
+                <a href="/ko/term/Borrowing/" class="related-term-link">Borrowing</a>
+                <a href="/ko/term/Lifetime/" class="related-term-link">Lifetime</a>
+                <a href="/ko/term/Memory%20Safety/" class="related-term-link">Memory Safety</a>
+                <a href="/ko/term/Reference/" class="related-term-link">Reference</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html" target="_blank" rel="noopener" class="learn-link">
+                    <span>The Rust Book - Understanding Ownership (공식 문서)</span>
+                </a>
+                <a href="https://github.com/rust-lang/rustlings" target="_blank" rel="noopener" class="learn-link">
+                    <span>Rustlings - Rust 실습 문제집</span>
+                </a>
+                <a href="https://rust-unofficial.github.io/too-many-lists/" target="_blank" rel="noopener" class="learn-link">
+                    <span>Learn Rust With Entirely Too Many Linked Lists</span>
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +563,31 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -202,6 +228,339 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>하이퍼파라미터 튜닝(Hyperparameter Tuning)은 머신러닝 모델의 최적 하이퍼파라미터 조합을 체계적으로 탐색하는 과정입니다. 학습률, 배치 크기, 레이어 수 같은 하이퍼파라미터는 모델 성능에 큰 영향을 미치지만, 최적값을 사전에 알 수 없습니다. 따라서 다양한 조합을 실험하고 검증 데이터 성능을 비교해 최적 설정을 찾아야 합니다. 이 과정을 자동화하는 것이 하이퍼파라미터 튜닝입니다.</p>
+
+                <p>대표적인 튜닝 방법으로 Grid Search, Random Search, Bayesian Optimization이 있습니다. Grid Search는 모든 조합을 시험하므로 확실하지만 차원이 늘면 기하급수적으로 비용이 증가합니다. Random Search는 무작위 샘플링으로 효율적이며, 실제로 많은 경우 Grid Search보다 좋은 결과를 더 빨리 찾습니다. Bayesian Optimization은 이전 실험 결과를 바탕으로 유망한 영역을 집중 탐색해 가장 효율적입니다.</p>
+
+                <p>2024-2025년 현재 Optuna, Ray Tune, Weights & Biases Sweeps가 주요 튜닝 도구입니다. Optuna는 Python 네이티브로 사용이 간편하고 TPE(Tree-structured Parzen Estimator), CMA-ES 같은 고급 알고리즘을 제공합니다. Ray Tune은 분산 튜닝에 강하고 다양한 스케줄러를 지원합니다. 최근에는 PBT(Population Based Training), ASHA(Asynchronous Successive Halving) 같은 조기 종료 기법이 대규모 튜닝의 비용을 획기적으로 줄이고 있습니다.</p>
+
+                <p>실무에서 효과적인 튜닝 전략은 단계적 접근입니다. 먼저 넓은 범위에서 Random Search로 유망한 영역을 찾고, 그 영역에서 Bayesian Optimization으로 정밀 탐색합니다. 자원이 제한적이면 조기 종료(pruning)를 적극 활용하세요. 또한 모든 실험을 로깅해 나중에 분석할 수 있게 하고, 하이퍼파라미터 간 상호작용(예: learning rate와 batch size)도 고려해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Optuna를 사용한 하이퍼파라미터 튜닝 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code>import optuna
+from optuna.samplers import TPESampler
+from optuna.pruners import MedianPruner
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+# 샘플 데이터 생성
+def create_sample_data(n_samples=1000, n_features=20):
+    X = np.random.randn(n_samples, n_features).astype(np.float32)
+    y = (X[:, 0] + X[:, 1] * 2 > 0).astype(np.int64)
+    return train_test_split(X, y, test_size=0.2)
+
+class TunableModel(nn.Module):
+    """튜닝 가능한 하이퍼파라미터를 가진 모델"""
+    def __init__(self, input_dim, hidden_dim, num_layers, dropout):
+        super().__init__()
+        layers = []
+        in_dim = input_dim
+
+        for i in range(num_layers):
+            layers.append(nn.Linear(in_dim, hidden_dim))
+            layers.append(nn.ReLU())
+            layers.append(nn.Dropout(dropout))
+            in_dim = hidden_dim
+
+        layers.append(nn.Linear(hidden_dim, 2))
+        self.network = nn.Sequential(*layers)
+
+    def forward(self, x):
+        return self.network(x)
+
+def objective(trial: optuna.Trial) -> float:
+    """Optuna 목적 함수 - 최소화할 값 반환"""
+    # 하이퍼파라미터 샘플링
+    hidden_dim = trial.suggest_int("hidden_dim", 32, 256, step=32)
+    num_layers = trial.suggest_int("num_layers", 1, 4)
+    dropout = trial.suggest_float("dropout", 0.1, 0.5)
+    learning_rate = trial.suggest_float("learning_rate", 1e-5, 1e-2, log=True)
+    batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 128])
+    optimizer_name = trial.suggest_categorical("optimizer", ["Adam", "AdamW", "SGD"])
+
+    # 데이터 준비
+    X_train, X_val, y_train, y_val = create_sample_data()
+    train_dataset = TensorDataset(torch.tensor(X_train), torch.tensor(y_train))
+    val_dataset = TensorDataset(torch.tensor(X_val), torch.tensor(y_val))
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size)
+
+    # 모델 생성
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = TunableModel(
+        input_dim=20,
+        hidden_dim=hidden_dim,
+        num_layers=num_layers,
+        dropout=dropout
+    ).to(device)
+
+    # 옵티마이저 설정
+    if optimizer_name == "Adam":
+        optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    elif optimizer_name == "AdamW":
+        optimizer = optim.AdamW(model.parameters(), lr=learning_rate)
+    else:
+        optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
+
+    criterion = nn.CrossEntropyLoss()
+
+    # 학습 루프
+    n_epochs = 30
+    for epoch in range(n_epochs):
+        model.train()
+        for batch_x, batch_y in train_loader:
+            batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+            optimizer.zero_grad()
+            output = model(batch_x)
+            loss = criterion(output, batch_y)
+            loss.backward()
+            optimizer.step()
+
+        # 검증
+        model.eval()
+        val_loss = 0.0
+        correct = 0
+        total = 0
+        with torch.no_grad():
+            for batch_x, batch_y in val_loader:
+                batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                output = model(batch_x)
+                val_loss += criterion(output, batch_y).item()
+                _, predicted = torch.max(output, 1)
+                total += batch_y.size(0)
+                correct += (predicted == batch_y).sum().item()
+
+        accuracy = correct / total
+
+        # 중간 결과 보고 (조기 종료 판단용)
+        trial.report(accuracy, epoch)
+
+        # 성능이 나쁘면 조기 종료 (pruning)
+        if trial.should_prune():
+            raise optuna.TrialPruned()
+
+    return accuracy  # 최대화할 값
+
+def run_hyperparameter_tuning():
+    """하이퍼파라미터 튜닝 실행"""
+    # 스터디 생성 (TPE 샘플러 + Median Pruner)
+    study = optuna.create_study(
+        direction="maximize",  # accuracy 최대화
+        sampler=TPESampler(seed=42),
+        pruner=MedianPruner(n_warmup_steps=5)
+    )
+
+    # 최적화 실행
+    study.optimize(
+        objective,
+        n_trials=50,  # 총 50회 시도
+        timeout=600,  # 최대 10분
+        show_progress_bar=True
+    )
+
+    # 결과 출력
+    print(f"\n{'='*50}")
+    print(f"Best trial:")
+    print(f"  Value (Accuracy): {study.best_trial.value:.4f}")
+    print(f"  Params:")
+    for key, value in study.best_trial.params.items():
+        print(f"    {key}: {value}")
+
+    # 하이퍼파라미터 중요도 분석
+    print(f"\n하이퍼파라미터 중요도:")
+    importances = optuna.importance.get_param_importances(study)
+    for param, importance in importances.items():
+        print(f"  {param}: {importance:.4f}")
+
+    return study
+
+# 분산 튜닝 (Ray Tune 예시)
+def ray_tune_example():
+    """Ray Tune을 사용한 분산 하이퍼파라미터 튜닝"""
+    from ray import tune
+    from ray.tune.schedulers import ASHAScheduler
+
+    # 탐색 공간 정의
+    config = {
+        "hidden_dim": tune.choice([64, 128, 256]),
+        "num_layers": tune.randint(1, 5),
+        "learning_rate": tune.loguniform(1e-5, 1e-2),
+        "batch_size": tune.choice([32, 64, 128]),
+    }
+
+    # ASHA 스케줄러 (조기 종료)
+    scheduler = ASHAScheduler(
+        max_t=100,
+        grace_period=10,
+        reduction_factor=3
+    )
+
+    # 튜닝 실행
+    analysis = tune.run(
+        objective,  # 동일한 목적 함수 사용 가능
+        config=config,
+        num_samples=100,
+        scheduler=scheduler,
+        resources_per_trial={"cpu": 2, "gpu": 0.5}
+    )
+
+    return analysis.best_config
+
+if __name__ == "__main__":
+    study = run_hyperparameter_tuning()
+
+    # 최적 하이퍼파라미터로 최종 모델 학습
+    best_params = study.best_trial.params
+    print(f"\n최적 하이퍼파라미터로 최종 모델 학습...")
+    print(f"Best params: {best_params}")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 튜닝 방법 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 하이퍼파라미터 튜닝 방법 비교</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <tr>
+                        <th>방법</th>
+                        <th>효율성</th>
+                        <th>구현 복잡도</th>
+                        <th>적합한 상황</th>
+                    </tr>
+                    <tr>
+                        <td>Grid Search</td>
+                        <td>낮음</td>
+                        <td>쉬움</td>
+                        <td>하이퍼파라미터 2-3개</td>
+                    </tr>
+                    <tr>
+                        <td>Random Search</td>
+                        <td>중간</td>
+                        <td>쉬움</td>
+                        <td>빠른 탐색, 넓은 범위</td>
+                    </tr>
+                    <tr>
+                        <td>Bayesian (TPE)</td>
+                        <td>높음</td>
+                        <td>중간</td>
+                        <td>비용이 큰 학습, 정밀 탐색</td>
+                    </tr>
+                    <tr>
+                        <td>ASHA/Hyperband</td>
+                        <td>매우 높음</td>
+                        <td>중간</td>
+                        <td>대규모 탐색, 조기 종료</td>
+                    </tr>
+                    <tr>
+                        <td>PBT</td>
+                        <td>높음</td>
+                        <td>높음</td>
+                        <td>분산 학습, 동적 튜닝</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-examples">
+                    <div class="conv-item">
+                        <div class="conv-context">💬 회의에서</div>
+                        <div class="conv-quote">"GPU 시간이 제한적이니 ASHA 스케줄러로 조기 종료를 적용하면 성능 낮은 시도를 빨리 중단해서 자원을 아낄 수 있어요. 100회 시도 예산으로 200회 효과를 낼 수 있습니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 면접에서</div>
+                        <div class="conv-quote">"Random Search가 Grid Search보다 효율적인 이유는 하이퍼파라미터마다 중요도가 다르기 때문입니다. Grid Search는 덜 중요한 파라미터에도 균등하게 자원을 쓰지만, Random Search는 중요한 파라미터 공간을 더 다양하게 탐색합니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 기술 토론에서</div>
+                        <div class="conv-quote">"Optuna의 TPE 샘플러는 좋은 결과가 나온 영역의 확률 분포를 추정해서 다음 시도 위치를 결정해요. Gaussian Process보다 계산이 가볍고 범주형 변수도 잘 처리합니다. n_startup_trials만 적절히 설정하면 됩니다."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-list">
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>검증 세트로 최종 성능 평가</h4>
+                            <p>튜닝에 사용한 검증 세트로 최종 성능을 측정하면 과대평가됩니다. 튜닝용 검증 세트와 별도의 테스트 세트를 유지하거나 중첩 교차 검증을 사용하세요.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>탐색 범위를 너무 좁게 설정</h4>
+                            <p>경험에 기반한 좁은 범위는 최적점을 놓칠 수 있습니다. 처음엔 넓은 범위(log scale)로 시작하고, 결과를 보고 범위를 좁혀가세요.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">✅</div>
+                        <div class="warning-content">
+                            <h4>재현성을 위한 시드 고정과 로깅</h4>
+                            <p>모든 실험에 동일한 random seed를 사용하고, 하이퍼파라미터와 결과를 자동 로깅하세요. Optuna DB 저장이나 W&B 연동으로 나중에 재현하고 분석할 수 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/%ED%95%98%EC%9D%B4%ED%8D%BC%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0/" class="related-term-link">하이퍼파라미터</a>
+                    <a href="/ko/term/%EA%B5%90%EC%B0%A8%20%EA%B2%80%EC%A6%9D/" class="related-term-link">교차 검증</a>
+                    <a href="/ko/term/AutoML/" class="related-term-link">AutoML</a>
+                    <a href="/ko/term/MLOps/" class="related-term-link">MLOps</a>
+                    <a href="/ko/term/%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80/" class="related-term-link">모델 평가</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <div class="learn-more">
+                    <a href="https://optuna.readthedocs.io/" target="_blank" rel="noopener" class="learn-link">
+                        <span>📄</span> Optuna 공식 문서
+                    </a>
+                    <a href="https://docs.ray.io/en/latest/tune/index.html" target="_blank" rel="noopener" class="learn-link">
+                        <span>📄</span> Ray Tune Documentation
+                    </a>
+                    <a href="https://arxiv.org/abs/1206.2944" target="_blank" rel="noopener" class="learn-link">
+                        <span>📄</span> Random Search vs Grid Search 논문
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +571,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

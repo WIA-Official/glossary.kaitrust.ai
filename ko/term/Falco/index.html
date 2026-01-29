@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,121 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Falco는 CNCF 프로젝트로, Kubernetes와 컨테이너 환경에서 런타임 보안 이벤트를 탐지하는 오픈소스 도구입니다. Sysdig에서 개발했으며, 커널 레벨 시스템콜을 모니터링하여 비정상 행위를 실시간으로 탐지합니다.</p>
+                <p>Falco는 eBPF 또는 커널 모듈을 통해 시스템콜을 캡처합니다. 사전 정의된 규칙(YAML)과 매칭하여 쉘 실행, 민감 파일 접근, 네트워크 연결 등 의심스러운 활동을 탐지하고 알림을 보냅니다.</p>
+                <p>기본 규칙 세트로 컨테이너 내 터미널 접속, 권한 상승, 암호화폐 채굴 시도 등 일반적인 공격 패턴을 탐지합니다. 커스텀 규칙을 추가하여 조직 특화 위협에 대응할 수 있습니다.</p>
+                <p>Falco 알림은 stdout, syslog, HTTP webhook, Slack, PagerDuty 등 다양한 채널로 전송됩니다. Falcosidekick과 연동하면 SIEM, 티켓 시스템에 자동으로 인시던트를 생성할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Falco Helm 설치
+helm repo add falcosecurity https://falcosecurity.github.io/charts
+helm install falco falcosecurity/falco -n falco --create-namespace \
+  --set driver.kind=ebpf \
+  --set falcosidekick.enabled=true
+
+# 커스텀 룰 (custom-rules.yaml)
+- rule: Detect Outbound Connections to Crypto Mining Pools
+  desc: 암호화폐 채굴 풀 연결 탐지
+  condition: >
+    evt.type=connect and fd.sip.name in (cryptopool.domains) and container
+  output: >
+    Crypto mining pool connection (container=%container.name connection=%fd.name)
+  priority: CRITICAL
+  tags: [network, mitre_resource_hijacking]
+
+- rule: Shell Spawned in Container
+  desc: 컨테이너 내 쉘 실행 탐지
+  condition: >
+    spawned_process and container and shell_procs and
+    proc.tty != 0 and not allowed_k8s_containers
+  output: >
+    Shell spawned (user=%user.name container=%container.name shell=%proc.name
+    parent=%proc.pname cmdline=%proc.cmdline)
+  priority: WARNING
+
+- macro: allowed_k8s_containers
+  condition: k8s.ns.name in ("kube-system", "monitoring")
+
+# Falcosidekick 설정 (Slack 알림)
+# values.yaml
+falcosidekick:
+  config:
+    slack:
+      webhookurl: "https://hooks.slack.com/services/xxx"
+      channel: "#security-alerts"
+      minimumpriority: "warning"
+
+# 테스트: 컨테이너에서 쉘 실행
+kubectl exec -it nginx -- /bin/bash
+# Falco 로그: Shell spawned in container...</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">보안팀:</strong> "프로덕션에서 kubectl exec 사용 현황 파악하려고요. Falco로 쉘 실행 이벤트 수집하면 누가 언제 접근했는지 알 수 있어요."</p>
+                <p><strong class="role-junior">운영팀:</strong> "모니터링 에이전트도 쉘 사용하는데 오탐 안 나요?"</p>
+                <p><strong class="role-senior">보안팀:</strong> "macro로 예외 처리하면 됩니다. kube-system 네임스페이스는 제외하는 식으로요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "컨테이너 런타임 보안을 어떻게 구현하시겠어요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "Falco를 DaemonSet으로 배포해서 모든 노드의 시스템콜을 모니터링합니다. 쉘 실행, 민감 파일 접근, 권한 상승을 탐지하고, Falcosidekick으로 Slack과 SIEM에 알림을 보냅니다. MITRE ATT&CK 태그로 위협을 분류하고 인시던트 대응에 활용합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 규칙 condition이 너무 광범위해요. 오탐이 많이 발생할 것 같아요."</p>
+                <p><strong class="role-author">작성자:</strong> "macro로 예외 조건 추가하고, priority를 낮춰서 먼저 모니터링하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li class="">Falco는 커널 레벨에서 동작하므로 호스트에 영향을 줄 수 있습니다. eBPF 드라이버가 커널 모듈보다 안전합니다.</li>
+                <li class="">너무 많은 규칙은 성능 오버헤드를 유발합니다. 필요한 규칙만 활성화하세요.</li>
+                <li class="info">Falcosidekick과 연동하여 알림 중복 제거, 집계, 라우팅을 구성하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/CWPP/" class="related-link">CWPP</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+                <a href="/ko/term/Kubernetes/" class="related-link">Kubernetes</a>
+                <a href="/ko/term/SIEM/" class="related-link">SIEM</a>
+                <a href="/ko/term/EDR/" class="related-link">EDR</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://falco.org/docs/" target="_blank">Falco 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://github.com/falcosecurity/rules" target="_blank">Falco 규칙 저장소</a></li>
+                <li><span class="type-tutorial"></span><a href="https://falco.org/blog/intro-to-falco/" target="_blank">Falco 입문 가이드</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +328,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

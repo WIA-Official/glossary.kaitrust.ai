@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WAF (Web Application Firewall) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="웹 공격 방어. SQL 인젝션, XSS 차단. CloudFront WAF.">
-    <meta name="keywords" content="WAF, Web Application Firewall, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <title>WAF (웹 애플리케이션 방화벽) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="WAF(Web Application Firewall)는 SQL 인젝션, XSS, CSRF 등 OWASP Top 10 웹 공격을 탐지하고 차단하는 보안 솔루션입니다. AWS WAF, Cloudflare, ModSecurity 등이 대표적입니다.">
+    <meta name="keywords" content="WAF, Web Application Firewall, 웹 방화벽, OWASP, SQL Injection, XSS, CSRF, ModSecurity, AWS WAF, Cloudflare WAF, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/WAF/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/WAF/">
-    <meta property="og:title" content="WAF (Web Application Firewall) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="웹 공격 방어. SQL 인젝션, XSS 차단. CloudFront WAF.">
+    <meta property="og:title" content="WAF (웹 애플리케이션 방화벽) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="SQL 인젝션, XSS 등 OWASP Top 10 웹 공격을 탐지하고 차단하는 보안 솔루션. AWS WAF, Cloudflare 등 주요 WAF 비교.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="WAF (Web Application Firewall) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="웹 공격 방어. SQL 인젝션, XSS 차단. CloudFront WAF.">
+    <meta name="twitter:title" content="WAF (웹 애플리케이션 방화벽) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="SQL 인젝션, XSS 등 OWASP Top 10 웹 공격을 탐지하고 차단하는 보안 솔루션. AWS WAF, Cloudflare 등 주요 WAF 비교.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "WAF",
-        "description": "웹 공격 방어. SQL 인젝션, XSS 차단. CloudFront WAF.",
+        "alternateName": "웹 애플리케이션 방화벽",
+        "description": "SQL 인젝션, XSS, CSRF 등 OWASP Top 10 웹 공격을 탐지하고 차단하는 보안 솔루션입니다. AWS WAF, Cloudflare, ModSecurity 등이 대표적입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +326,9 @@
                 <span>보안</span>
             </div>
             <h1 class="term-title">WAF</h1>
-            <p class="term-english">Web Application Firewall</p>
+            <p class="term-english">Web Application Firewall (웹 애플리케이션 방화벽)</p>
             <div class="term-description">
-                <p>웹 공격 방어. SQL 인젝션, XSS 차단. CloudFront WAF.</p>
+                <p>웹 애플리케이션과 인터넷 사이에서 HTTP/HTTPS 트래픽을 모니터링하고, SQL 인젝션, XSS(Cross-Site Scripting), CSRF 등 OWASP Top 10 웹 공격을 탐지 및 차단하는 보안 솔루션입니다. 시그니처 기반 탐지와 이상 행위 분석을 결합하여 알려진 공격과 제로데이 공격을 방어합니다. AWS WAF, Cloudflare WAF, Imperva, ModSecurity(오픈소스) 등이 대표적이며, 최근 벤치마크에서 Barracuda는 인젝션 방어 91%, Imperva는 취약 컴포넌트 방어 93%의 높은 탐지율을 기록했습니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,606 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>WAF(Web Application Firewall)는 OSI 모델의 7계층(애플리케이션 계층)에서 동작하는 보안 솔루션입니다. 전통적인 네트워크 방화벽이 IP/포트 기반으로 트래픽을 필터링하는 것과 달리, WAF는 HTTP 요청의 내용(URI, 헤더, 바디, 쿠키)을 분석하여 악의적인 패턴을 탐지합니다. 웹 서버 앞에 리버스 프록시 형태로 배치되어, 모든 인바운드 트래픽을 검사한 후 안전한 요청만 백엔드로 전달합니다.</p>
+                <p>WAF의 탐지 방식은 크게 시그니처 기반(Signature-based)과 이상 행위 기반(Anomaly-based)으로 나뉩니다. 시그니처 기반은 알려진 공격 패턴(예: ' OR 1=1 --, &lt;script&gt;alert)을 데이터베이스에 저장하고 매칭합니다. OWASP Core Rule Set(CRS)은 가장 널리 사용되는 오픈소스 시그니처 세트입니다. 이상 행위 기반은 정상 트래픽의 베이스라인을 학습하고, 이를 벗어나는 요청을 탐지합니다. 최신 WAF는 두 방식을 결합하고 머신러닝을 추가해 오탐(False Positive)을 줄이면서 탐지율을 높입니다.</p>
+                <p>WAF 배포 방식에는 온프레미스 어플라이언스, 클라우드 기반 서비스, 소프트웨어/컨테이너 배포가 있습니다. AWS WAF는 CloudFront, ALB, API Gateway와 통합되어 손쉽게 활성화할 수 있습니다. Cloudflare WAF는 CDN과 통합되어 DDoS 방어와 함께 제공됩니다. ModSecurity는 Apache, Nginx, IIS에서 사용 가능한 오픈소스 WAF 엔진이며, OWASP CRS와 함께 사용됩니다. Coraza는 Go로 작성된 현대적 오픈소스 WAF로, Envoy, Caddy 등과 통합됩니다.</p>
+                <p>WAF는 심층 방어(Defense in Depth)의 한 계층으로, 애플리케이션 자체의 보안 코딩을 대체하지 않습니다. SQL 인젝션에 대한 근본적인 방어는 파라미터화된 쿼리(Prepared Statement)이고, XSS는 출력 인코딩이 근본 대책입니다. WAF는 개발 팀이 취약점을 수정하기 전까지의 가상 패치(Virtual Patching), 알려지지 않은 취약점에 대한 추가 방어 계층, 공격 패턴 분석을 위한 로깅/모니터링 역할을 합니다. 최근에는 API 보호(API Gateway + WAF), 봇 탐지, 레이트 리미팅 기능도 통합되고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="awswaf">AWS WAF (Terraform)</button>
+                <button class="code-tab" data-lang="nginx">NGINX + ModSecurity</button>
+                <button class="code-tab" data-lang="express">Express.js Rate Limit</button>
+            </div>
+            <div class="code-block active" data-lang="awswaf">
+                <pre><code class="language-hcl"># AWS WAF 구성 - Terraform
+# OWASP Top 10 공격 방어를 위한 규칙 세트 구성
+
+# WAF Web ACL 생성
+resource "aws_wafv2_web_acl" "main" {
+  name        = "production-waf"
+  description = "WAF for production environment"
+  scope       = "REGIONAL"  # ALB, API Gateway용. CloudFront는 CLOUDFRONT
+
+  default_action {
+    allow {}  # 기본 허용, 규칙에 매치되면 차단
+  }
+
+  # 규칙 1: AWS 관리형 규칙 - SQL 인젝션 방어
+  rule {
+    name     = "AWS-AWSManagedRulesSQLiRuleSet"
+    priority = 1
+
+    override_action {
+      none {}  # 규칙 그대로 적용
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesSQLiRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name               = "SQLiRuleSet"
+      sampled_requests_enabled  = true
+    }
+  }
+
+  # 규칙 2: AWS 관리형 규칙 - XSS 방어
+  rule {
+    name     = "AWS-AWSManagedRulesCommonRuleSet"
+    priority = 2
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesCommonRuleSet"
+        vendor_name = "AWS"
+
+        # 특정 규칙 오버라이드 (오탐 발생 시)
+        rule_action_override {
+          name = "SizeRestrictions_BODY"
+          action_to_use {
+            count {}  # 차단 대신 카운트만
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name               = "CommonRuleSet"
+      sampled_requests_enabled  = true
+    }
+  }
+
+  # 규칙 3: 알려진 악성 IP 차단
+  rule {
+    name     = "AWS-AWSManagedRulesAmazonIpReputationList"
+    priority = 3
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesAmazonIpReputationList"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name               = "IpReputationList"
+      sampled_requests_enabled  = true
+    }
+  }
+
+  # 규칙 4: Rate Limiting - DDoS/Brute Force 방어
+  rule {
+    name     = "RateLimitRule"
+    priority = 4
+
+    action {
+      block {
+        custom_response {
+          response_code = 429
+          custom_response_body_key = "rate_limit_exceeded"
+        }
+      }
+    }
+
+    statement {
+      rate_based_statement {
+        limit              = 2000  # 5분당 2000 요청
+        aggregate_key_type = "IP"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name               = "RateLimitRule"
+      sampled_requests_enabled  = true
+    }
+  }
+
+  # 규칙 5: 지역 기반 차단 (Geo Blocking)
+  rule {
+    name     = "GeoBlockRule"
+    priority = 5
+
+    action {
+      block {}
+    }
+
+    statement {
+      geo_match_statement {
+        country_codes = ["CN", "RU", "KP"]  # 예시: 특정 국가 차단
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name               = "GeoBlockRule"
+      sampled_requests_enabled  = true
+    }
+  }
+
+  # 커스텀 응답 바디 정의
+  custom_response_body {
+    key          = "rate_limit_exceeded"
+    content      = "{\"error\": \"Too many requests. Please try again later.\"}"
+    content_type = "APPLICATION_JSON"
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name               = "ProductionWAF"
+    sampled_requests_enabled  = true
+  }
+
+  tags = {
+    Environment = "production"
+    ManagedBy   = "terraform"
+  }
+}
+
+# WAF를 ALB에 연결
+resource "aws_wafv2_web_acl_association" "alb" {
+  resource_arn = aws_lb.main.arn
+  web_acl_arn  = aws_wafv2_web_acl.main.arn
+}
+
+# WAF 로그를 CloudWatch Logs로 전송
+resource "aws_wafv2_web_acl_logging_configuration" "main" {
+  log_destination_configs = [aws_cloudwatch_log_group.waf.arn]
+  resource_arn           = aws_wafv2_web_acl.main.arn
+
+  logging_filter {
+    default_behavior = "DROP"  # 기본적으로 로깅 안 함
+
+    filter {
+      behavior = "KEEP"
+      condition {
+        action_condition {
+          action = "BLOCK"  # 차단된 요청만 로깅
+        }
+      }
+      requirement = "MEETS_ANY"
+    }
+  }
+}
+
+# CloudWatch 알람 - 높은 차단률 감지
+resource "aws_cloudwatch_metric_alarm" "waf_high_block_rate" {
+  alarm_name          = "waf-high-block-rate"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "BlockedRequests"
+  namespace           = "AWS/WAFV2"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 1000
+  alarm_description   = "WAF blocked more than 1000 requests in 5 minutes"
+
+  dimensions = {
+    WebACL = aws_wafv2_web_acl.main.name
+    Region = data.aws_region.current.name
+    Rule   = "ALL"
+  }
+
+  alarm_actions = [aws_sns_topic.alerts.arn]
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="nginx">
+                <pre><code class="language-nginx"># NGINX + ModSecurity (OWASP CRS) 설정
+# 오픈소스 WAF 구성
+
+# === modsecurity.conf (메인 설정) ===
+SecRuleEngine On  # WAF 활성화 (DetectionOnly로 테스트 가능)
+
+# 요청 바디 처리
+SecRequestBodyAccess On
+SecRequestBodyLimit 13107200  # 12.5MB
+SecRequestBodyNoFilesLimit 131072  # 128KB (파일 제외)
+
+# 응답 바디 처리 (선택)
+SecResponseBodyAccess Off
+
+# 감사 로그 설정
+SecAuditEngine RelevantOnly
+SecAuditLogRelevantStatus "^(?:5|4(?!04))"  # 4xx, 5xx 응답 로깅 (404 제외)
+SecAuditLogParts ABIJDEFHZ
+SecAuditLogType Serial
+SecAuditLog /var/log/modsec_audit.log
+
+# 디버그 로그
+SecDebugLog /var/log/modsec_debug.log
+SecDebugLogLevel 0  # 프로덕션: 0, 디버깅: 3-9
+
+# 기본 액션 설정
+SecDefaultAction "phase:1,deny,status:403,log"
+
+# === OWASP CRS 규칙 로드 ===
+Include /etc/nginx/modsecurity/crs-setup.conf
+Include /etc/nginx/modsecurity/rules/*.conf
+
+# === 커스텀 규칙 ===
+
+# SQL 인젝션 강화 탐지
+SecRule ARGS|ARGS_NAMES|REQUEST_COOKIES|REQUEST_HEADERS \
+    "@rx (?i)(?:select|insert|update|delete|drop|union|exec)\s+" \
+    "id:100001,\
+     phase:2,\
+     deny,\
+     status:403,\
+     log,\
+     msg:'SQL Injection Attempt',\
+     tag:'OWASP_CRS',\
+     tag:'attack-sqli'"
+
+# XSS 강화 탐지
+SecRule ARGS|ARGS_NAMES|REQUEST_BODY \
+    "@rx (?i)<script[^>]*>|javascript:|on\w+\s*=" \
+    "id:100002,\
+     phase:2,\
+     deny,\
+     status:403,\
+     log,\
+     msg:'XSS Attack Attempt',\
+     tag:'attack-xss'"
+
+# 경로 탐색 공격 방어
+SecRule REQUEST_URI|ARGS \
+    "@rx (?:\.\.[\\/]|\.\.%2f|\.\.%5c)" \
+    "id:100003,\
+     phase:1,\
+     deny,\
+     status:403,\
+     log,\
+     msg:'Path Traversal Attempt'"
+
+# 특정 User-Agent 차단 (스캐너, 봇)
+SecRule REQUEST_HEADERS:User-Agent \
+    "@rx (?i)(sqlmap|nikto|nmap|masscan|havij|acunetix)" \
+    "id:100004,\
+     phase:1,\
+     deny,\
+     status:403,\
+     log,\
+     msg:'Security Scanner Detected'"
+
+# API 엔드포인트별 커스텀 규칙
+SecRule REQUEST_URI "@beginsWith /api/admin" \
+    "id:100005,\
+     phase:1,\
+     chain"
+    SecRule REMOTE_ADDR "!@ipMatch 10.0.0.0/8,192.168.0.0/16" \
+        "deny,\
+         status:403,\
+         log,\
+         msg:'Admin API access from non-internal IP'"
+
+# === nginx.conf 설정 ===
+# http {
+#     modsecurity on;
+#     modsecurity_rules_file /etc/nginx/modsecurity/modsecurity.conf;
+#
+#     server {
+#         listen 443 ssl;
+#         server_name example.com;
+#
+#         # WAF 적용
+#         modsecurity on;
+#
+#         location / {
+#             proxy_pass http://backend;
+#         }
+#
+#         # 특정 경로 WAF 제외 (예: 파일 업로드)
+#         location /api/upload {
+#             modsecurity off;  # 또는 modsecurity_rules 'SecRuleRemoveById 100001';
+#             proxy_pass http://backend;
+#         }
+#     }
+# }
+
+# === 규칙 제외 (오탐 처리) ===
+# 특정 URI에서 특정 규칙 제외
+SecRule REQUEST_URI "@beginsWith /api/webhook" \
+    "id:100010,\
+     phase:1,\
+     pass,\
+     nolog,\
+     ctl:ruleRemoveById=942100"  # 특정 SQLi 규칙 제외</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="express">
+                <pre><code class="language-javascript">// Express.js 애플리케이션 레벨 보안 (WAF 보완)
+// WAF와 함께 사용하는 애플리케이션 계층 방어
+
+const express = require('express');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const slowDown = require('express-slow-down');
+const hpp = require('hpp');
+const xss = require('xss-clean');
+const mongoSanitize = require('express-mongo-sanitize');
+
+const app = express();
+
+// 1. HTTP 헤더 보안 (Helmet)
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'strict-dynamic'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'"],
+            fontSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'none'"],
+        },
+    },
+    crossOriginEmbedderPolicy: true,
+    crossOriginOpenerPolicy: true,
+    crossOriginResourcePolicy: { policy: "same-site" },
+    dnsPrefetchControl: { allow: false },
+    frameguard: { action: "deny" },
+    hidePoweredBy: true,
+    hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
+    ieNoOpen: true,
+    noSniff: true,
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+    xssFilter: true,
+}));
+
+// 2. Rate Limiting (DDoS, Brute Force 방어)
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,  // 15분
+    max: 100,                   // IP당 100 요청
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+        error: 'Too many requests',
+        retryAfter: '15 minutes'
+    },
+    // Redis store 사용 권장 (클러스터 환경)
+    // store: new RedisStore({ client: redisClient }),
+});
+app.use('/api/', limiter);
+
+// 로그인 엔드포인트 강화된 Rate Limit
+const loginLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,  // 1시간
+    max: 5,                     // IP당 5회 시도
+    skipSuccessfulRequests: true,
+    message: { error: 'Too many login attempts. Try again in 1 hour.' }
+});
+app.use('/api/auth/login', loginLimiter);
+
+// 3. Slow Down (점진적 지연)
+const speedLimiter = slowDown({
+    windowMs: 15 * 60 * 1000,
+    delayAfter: 50,    // 50번째 요청 후
+    delayMs: (hits) => hits * 100,  // 점진적 지연 증가
+    maxDelayMs: 2000,
+});
+app.use('/api/', speedLimiter);
+
+// 4. HTTP Parameter Pollution 방어
+app.use(hpp());
+
+// 5. XSS 필터링 (입력 새니타이징)
+app.use(xss());
+
+// 6. NoSQL Injection 방어 (MongoDB)
+app.use(mongoSanitize({
+    replaceWith: '_',
+    onSanitize: ({ req, key }) => {
+        console.warn(`[SECURITY] Sanitized key: ${key} from ${req.ip}`);
+    }
+}));
+
+// 7. 요청 바디 크기 제한
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+// 8. 커스텀 보안 미들웨어
+const securityMiddleware = (req, res, next) => {
+    // SQL Injection 패턴 탐지
+    const sqlPatterns = /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC)\b)/gi;
+    const body = JSON.stringify(req.body);
+    const query = JSON.stringify(req.query);
+
+    if (sqlPatterns.test(body) || sqlPatterns.test(query)) {
+        console.warn(`[WAF-APP] SQL Injection attempt from ${req.ip}`);
+        return res.status(403).json({ error: 'Forbidden request pattern' });
+    }
+
+    // Path Traversal 탐지
+    if (req.url.includes('..') || req.url.includes('%2e%2e')) {
+        console.warn(`[WAF-APP] Path Traversal attempt from ${req.ip}`);
+        return res.status(403).json({ error: 'Forbidden request pattern' });
+    }
+
+    next();
+};
+app.use(securityMiddleware);
+
+// 9. 요청 로깅 (Threat Hunting용)
+const requestLogger = (req, res, next) => {
+    const logData = {
+        timestamp: new Date().toISOString(),
+        method: req.method,
+        url: req.url,
+        ip: req.ip,
+        userAgent: req.headers['user-agent'],
+        contentLength: req.headers['content-length'],
+    };
+
+    // 의심스러운 User-Agent 플래그
+    const suspiciousAgents = ['sqlmap', 'nikto', 'nmap', 'curl', 'python-requests'];
+    if (suspiciousAgents.some(agent =>
+        logData.userAgent?.toLowerCase().includes(agent))) {
+        logData.suspicious = true;
+    }
+
+    console.log('[REQUEST]', JSON.stringify(logData));
+    next();
+};
+app.use(requestLogger);
+
+// 10. 에러 핸들러 (정보 노출 방지)
+app.use((err, req, res, next) => {
+    console.error('[ERROR]', err.stack);
+
+    // 프로덕션에서는 상세 에러 노출 금지
+    const message = process.env.NODE_ENV === 'production'
+        ? 'Internal Server Error'
+        : err.message;
+
+    res.status(err.status || 500).json({
+        error: message,
+        requestId: req.id  // 추적용 ID
+    });
+});
+
+app.listen(3000);</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 아키텍처 검토에서</div>
+                    <blockquote class="conv-quote">
+                        "WAF는 심층 방어의 한 계층이지 만능이 아닙니다. SQL 인젝션 방어의 근본은 Prepared Statement이고, XSS는 출력 인코딩입니다. WAF는 개발팀이 취약점을 패치하기 전 가상 패치(Virtual Patching), 제로데이에 대한 추가 방어, 공격 패턴 분석을 위한 로깅 역할로 봐야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 WAF 도입 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "처음엔 DetectionOnly(탐지만) 모드로 2주 정도 운영하면서 오탐(False Positive)을 파악합시다. OWASP CRS는 기본이 엄격해서 정상 요청도 차단할 수 있어요. 오탐이 발생하는 규칙은 특정 URI에서 예외 처리하거나 점수 임계값을 조정한 후에 차단 모드로 전환하면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 인시던트 분석에서</div>
+                    <blockquote class="conv-quote">
+                        "WAF 로그를 분석해보니 특정 IP에서 SQLMap을 사용한 자동화된 SQL 인젝션 스캔이 있었습니다. WAF가 차단했지만, 이 IP 대역을 영구 차단하고 해당 엔드포인트의 취약점 여부도 코드 레벨에서 확인해야 합니다. WAF는 시간을 벌어주는 역할이지, 근본적인 수정을 대체하지 않습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>WAF만으로 보안 완성이라는 착각</strong>
+                        <p>WAF는 알려진 공격 패턴을 방어하지만, 비즈니스 로직 취약점, 인증/인가 우회, 제로데이 공격에는 한계가 있습니다. 보안 코딩, 코드 리뷰, 침투 테스트와 함께 사용해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>과도한 False Positive 방치</strong>
+                        <p>정상 요청이 차단되면 사용자 경험이 나빠지고, 개발팀이 WAF를 무력화하려 합니다. 정기적으로 차단 로그를 분석하고, 오탐이 발생하는 규칙은 튜닝하세요. 특정 URI에서만 예외 처리하는 것도 방법입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>규칙 업데이트 누락</strong>
+                        <p>새로운 취약점(CVE)이 발견되면 WAF 규칙도 업데이트해야 합니다. OWASP CRS는 정기 업데이트가 있으며, 최근 CVE-2026-21876 같은 CRS 우회 취약점도 발견되었습니다. 4.22.0 이상으로 업데이트하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>WAF 베스트 프랙티스</strong>
+                        <p>DetectionOnly로 시작해 오탐 분석 후 차단 모드로 전환하세요. OWASP CRS를 기본으로 하되, 애플리케이션별 커스텀 규칙을 추가하세요. 차단 로그를 SIEM에 연동하여 위협 헌팅에 활용하고, Rate Limiting과 Geo Blocking을 함께 구성하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/OWASP/" class="related-term-link">OWASP</a>
+                <a href="/ko/term/DDoS/" class="related-term-link">DDoS</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+                <a href="/ko/term/API%20Gateway/" class="related-term-link">API Gateway</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+                <a href="/ko/term/Reverse%20Proxy/" class="related-term-link">Reverse Proxy</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://owasp.org/www-community/Web_Application_Firewall" target="_blank" class="learn-link">
+                    📘 OWASP - Web Application Firewall 가이드
+                </a>
+                <a href="https://coreruleset.org/" target="_blank" class="learn-link">
+                    📄 OWASP Core Rule Set (CRS) 공식 사이트
+                </a>
+                <a href="https://docs.aws.amazon.com/waf/" target="_blank" class="learn-link">
+                    ☁️ AWS WAF 공식 문서
+                </a>
+                <a href="https://www.fastly.com/blog/best-waf-solutions-2025-2026" target="_blank" class="learn-link">
+                    📝 2026년 최고의 WAF 솔루션 비교
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +946,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

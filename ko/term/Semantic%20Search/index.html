@@ -3,211 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semantic Search (Semantic Search) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="의미 기반 검색. 키워드가 아닌 문맥과 의도를 이해하여 검색.">
-    <meta name="keywords" content="Semantic Search, Semantic Search, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <title>Semantic Search (의미 검색) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="의미 기반 검색. 키워드가 아닌 문맥과 의도를 이해하여 검색. 임베딩과 벡터 유사도로 관련 문서 찾기.">
+    <meta name="keywords" content="Semantic Search, 의미 검색, 시맨틱 검색, 벡터 검색, Embedding, RAG, AI 용어, KAITRUST, AI 백과사전, AI/ML">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Semantic%20Search/">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Semantic%20Search/">
-    <meta property="og:title" content="Semantic Search (Semantic Search) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="의미 기반 검색. 키워드가 아닌 문맥과 의도를 이해하여 검색.">
+    <meta property="og:title" content="Semantic Search (의미 검색) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="의미 기반 검색. 키워드가 아닌 문맥과 의도를 이해하여 검색. 임베딩과 벡터 유사도로 관련 문서 찾기.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Semantic Search (Semantic Search) | KAITRUST AI 백과사전">
+    <meta name="twitter:title" content="Semantic Search (의미 검색) | KAITRUST AI 백과사전">
     <meta name="twitter:description" content="의미 기반 검색. 키워드가 아닌 문맥과 의도를 이해하여 검색.">
-    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
-    <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "DefinedTerm",
-        "name": "Semantic Search",
-        "description": "의미 기반 검색. 키워드가 아닌 문맥과 의도를 이해하여 검색.",
-        "inDefinedTermSet": {
-            "@type": "DefinedTermSet",
-            "name": "KAITRUST AI 백과사전",
-            "url": "https://glossary.kaitrust.ai/"
-        }
-    }
+    {"@context": "https://schema.org", "@type": "DefinedTerm", "name": "Semantic Search", "description": "의미 기반 검색. 키워드가 아닌 문맥과 의도를 이해하여 검색.", "inDefinedTermSet": {"@type": "DefinedTermSet", "name": "KAITRUST AI 백과사전", "url": "https://glossary.kaitrust.ai/"}}
     </script>
 
     <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
-    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <!-- Common CSS -->
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .breadcrumb a:hover { color: var(--primary); }
-        .breadcrumb span { color: #64748b; }
-        .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; } .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; } .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
-            <span>›</span>
-            <span class="current">Semantic Search</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span><a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span><a href="https://glossary.kaitrust.ai/#ai">AI/ML</a><span>›</span><span class="current">Semantic Search</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>🤖</span>
-                <span>AI/ML</span>
-            </div>
+            <div class="term-category-badge"><span>🤖</span><span>AI/ML</span></div>
             <h1 class="term-title">Semantic Search</h1>
-            <p class="term-english">Semantic Search</p>
+            <p class="term-english">의미 검색 / 시맨틱 검색</p>
             <div class="term-description">
-                <p>의미 기반 검색. 키워드가 아닌 문맥과 의도를 이해하여 검색.</p>
+                <p>의미 기반 검색. 키워드가 아닌 문맥과 의도를 이해하여 검색. 임베딩과 벡터 유사도로 관련 문서 찾기.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
-                    🤖 AI/ML 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">🤖 AI/ML 더보기</a>
             </div>
         </article>
+
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Semantic Search는 쿼리의 의미와 의도를 이해하여 관련 문서를 찾는 검색 기법입니다. 기존 키워드 검색이 "자동차 수리"를 찾을 때 정확히 그 단어가 포함된 문서만 반환한다면, Semantic Search는 "차량 정비", "카센터", "오토바이 점검" 등 의미적으로 관련된 문서도 찾아줍니다. 이는 사용자가 생각하는 "관련성"에 훨씬 가까운 검색 결과를 제공합니다.</p>
+                <p>핵심 기술은 텍스트를 벡터로 변환하는 임베딩(Embedding)입니다. 쿼리와 문서를 같은 벡터 공간에 매핑하고, 코사인 유사도(Cosine Similarity)나 내적(Dot Product)으로 거리를 측정합니다. "왕"과 "여왕"이 벡터 공간에서 가깝고, "왕"과 "사과"가 멀듯이, 의미적 유사성이 기하학적 거리로 표현됩니다. 일반적으로 768~1536 차원의 고밀도 벡터가 사용됩니다.</p>
+                <p>BERT(2018)와 Sentence-BERT(2019)가 현대 Semantic Search의 시작입니다. 이전의 TF-IDF나 BM25는 단어 빈도 기반이라 동의어, 문맥을 이해하지 못했습니다. "은행 금리"를 검색하면 "강가의 은행"도 나오는 문제가 있었죠. 현재는 OpenAI Embeddings(text-embedding-3-small/large), Cohere Embed, Voyage AI 등 상용 임베딩 API와 Pinecone, Weaviate, Qdrant, Milvus 같은 벡터 DB가 풍부한 생태계를 이룹니다.</p>
+                <p>RAG(Retrieval-Augmented Generation)의 핵심 컴포넌트로, LLM에게 관련 정보를 제공하는 역할을 합니다. 고객 지원 챗봇, 사내 문서 검색, 상품 추천 시스템, 표절/중복 탐지, 법률 판례 검색 등에 널리 사용됩니다. Hybrid Search(BM25 + Semantic)를 조합하면 키워드 정확성과 의미 이해를 모두 잡을 수 있어 프로덕션 환경에서 권장됩니다. Reciprocal Rank Fusion(RRF) 등의 기법으로 두 검색 결과를 효과적으로 결합합니다. 멀티모달 검색(이미지+텍스트)도 같은 원리로 확장됩니다.</p>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Semantic Search 구현 예제
+from openai import OpenAI
+import numpy as np
+from typing import List
+
+client = OpenAI()
+
+def get_embedding(text: str) -> List[float]:
+    """텍스트를 벡터로 변환"""
+    response = client.embeddings.create(
+        input=text,
+        model="text-embedding-3-small"
+    )
+    return response.data[0].embedding
+
+def cosine_similarity(a: List[float], b: List[float]) -> float:
+    """코사인 유사도 계산"""
+    a, b = np.array(a), np.array(b)
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+# 문서 데이터베이스 (실제로는 벡터 DB 사용)
+documents = [
+    "인공지능은 컴퓨터가 인간처럼 학습하고 판단하는 기술입니다.",
+    "머신러닝은 데이터에서 패턴을 학습하는 AI의 한 분야입니다.",
+    "딥러닝은 신경망을 여러 층으로 쌓아 복잡한 패턴을 학습합니다.",
+    "자연어 처리는 컴퓨터가 인간의 언어를 이해하는 기술입니다.",
+    "오늘 서울 날씨는 맑고 기온은 15도입니다."
+]
+
+# 문서 임베딩 (사전 계산)
+doc_embeddings = [get_embedding(doc) for doc in documents]
+
+def semantic_search(query: str, top_k: int = 3) -> List[tuple]:
+    """Semantic Search 실행"""
+    query_embedding = get_embedding(query)
+
+    # 모든 문서와 유사도 계산
+    scores = [
+        (doc, cosine_similarity(query_embedding, emb))
+        for doc, emb in zip(documents, doc_embeddings)
+    ]
+
+    # 유사도 높은 순으로 정렬
+    scores.sort(key=lambda x: x[1], reverse=True)
+    return scores[:top_k]
+
+# 검색 예시
+query = "AI가 스스로 배우는 방법"
+results = semantic_search(query)
+
+print(f"Query: {query}\n")
+for doc, score in results:
+    print(f"[{score:.3f}] {doc}")
+
+# 출력:
+# [0.892] 머신러닝은 데이터에서 패턴을 학습하는 AI의 한 분야입니다.
+# [0.856] 인공지능은 컴퓨터가 인간처럼 학습하고 판단하는 기술입니다.
+# [0.823] 딥러닝은 신경망을 여러 층으로 쌓아 복잡한 패턴을 학습합니다.
+
+# 키워드 검색이었다면 "AI", "스스로", "배우는"이 없어서 결과가 없었을 것!
+
+# === Hybrid Search 구현 (BM25 + Semantic) ===
+from rank_bm25 import BM25Okapi
+import numpy as np
+
+class HybridSearch:
+    def __init__(self, documents: List[str], alpha: float = 0.5):
+        """
+        alpha: semantic weight (1-alpha = BM25 weight)
+        """
+        self.documents = documents
+        self.alpha = alpha
+
+        # BM25 인덱스
+        tokenized_docs = [doc.split() for doc in documents]
+        self.bm25 = BM25Okapi(tokenized_docs)
+
+        # Semantic 임베딩
+        self.doc_embeddings = [get_embedding(doc) for doc in documents]
+
+    def search(self, query: str, top_k: int = 5) -> List[tuple]:
+        # BM25 점수
+        tokenized_query = query.split()
+        bm25_scores = self.bm25.get_scores(tokenized_query)
+        bm25_scores = bm25_scores / (bm25_scores.max() + 1e-8)  # 정규화
+
+        # Semantic 점수
+        query_emb = get_embedding(query)
+        semantic_scores = np.array([
+            cosine_similarity(query_emb, doc_emb)
+            for doc_emb in self.doc_embeddings
+        ])
+
+        # Hybrid 점수 (가중 합)
+        hybrid_scores = self.alpha * semantic_scores + (1 - self.alpha) * bm25_scores
+
+        # 정렬 및 반환
+        indices = np.argsort(hybrid_scores)[::-1][:top_k]
+        return [(self.documents[i], hybrid_scores[i]) for i in indices]
+
+# Pinecone 벡터 DB 사용 예시
+from pinecone import Pinecone
+
+pc = Pinecone(api_key="your-api-key")
+index = pc.Index("my-semantic-index")
+
+# 문서 업로드 (임베딩 + 메타데이터)
+vectors = [
+    {"id": f"doc_{i}", "values": get_embedding(doc), "metadata": {"text": doc}}
+    for i, doc in enumerate(documents)
+]
+index.upsert(vectors=vectors)
+
+# 쿼리
+query_embedding = get_embedding("머신러닝 학습 방법")
+results = index.query(vector=query_embedding, top_k=5, include_metadata=True)
+
+for match in results.matches:
+    print(f"[{match.score:.3f}] {match.metadata['text']}")
+
+# === 문서 청킹 전략 ===
+def chunk_documents(text: str, chunk_size: int = 500, overlap: int = 100) -> List[str]:
+    """문서를 적절한 크기로 청킹 (overlap으로 문맥 유지)"""
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = start + chunk_size
+        chunk = text[start:end]
+        chunks.append(chunk)
+        start += chunk_size - overlap  # 겹침 적용
+    return chunks
+
+# === 임베딩 모델 비교 ===
+# text-embedding-3-small (OpenAI): 1536차원, $0.02/1M 토큰
+# text-embedding-3-large (OpenAI): 3072차원, $0.13/1M 토큰
+# multilingual-e5-large: 오픈소스, 한국어 지원 우수
+# BGE-M3: 다국어 + sparse/dense 하이브리드
+
+# === Reranking (2단계 검색) ===
+# 1단계: 빠른 벡터 검색으로 후보 100개 추출
+# 2단계: Cross-encoder로 정밀 재순위
+
+from sentence_transformers import CrossEncoder
+
+reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
+
+# 후보 문서 재순위
+query = "파이썬 리스트 정렬 방법"
+candidates = ["리스트.sort() 메서드 사용", "sorted() 함수 활용", "배열 병합 정렬"]
+scores = reranker.predict([(query, doc) for doc in candidates])
+# rerank된 결과 반환
+
+# === 평가 메트릭 ===
+def evaluate_search(queries, ground_truth, search_fn, k=10):
+    """검색 품질 평가 (Recall@k, MRR)"""
+    recalls = []
+    mrrs = []
+
+    for query, relevant_ids in zip(queries, ground_truth):
+        results = search_fn(query, top_k=k)
+        result_ids = [r['id'] for r in results]
+
+        # Recall@k
+        found = len(set(result_ids) & set(relevant_ids))
+        recalls.append(found / len(relevant_ids))
+
+        # MRR (Mean Reciprocal Rank)
+        for i, rid in enumerate(result_ids):
+            if rid in relevant_ids:
+                mrrs.append(1 / (i + 1))
+                break
+        else:
+            mrrs.append(0)
+
+    return {
+        "Recall@k": sum(recalls) / len(recalls),
+        "MRR": sum(mrrs) / len(mrrs)
+    }
+
+# === 프로덕션 팁 ===
+# 1. 배치 임베딩: GPU 활용으로 100배 이상 빠름
+# 2. 인덱스 샤딩: 대규모 문서는 여러 인덱스로 분산
+# 3. 캐싱: 자주 쓰는 쿼리 임베딩은 캐시
+# 4. ANN 알고리즘: HNSW, IVF로 근사 검색 (99% 정확도, 10배 빠름)
+# 5. 주기적 재인덱싱: 데이터 변경 시 임베딩 업데이트 필요</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 RAG 시스템 설계 회의에서</div>
+                    <blockquote class="conv-quote">"문서 검색은 Semantic Search로 하고, Pinecone에 임베딩 저장해요. 쿼리당 top-5 청크 가져와서 LLM 컨텍스트에 넣으면 됩니다. Hybrid Search 쓰면 고유명사 같은 키워드 검색도 잘 돼요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"Semantic Search는 쿼리와 문서를 같은 임베딩 공간에 매핑하고 벡터 유사도로 검색합니다. BM25 같은 키워드 검색과 달리 동의어, 문맥을 이해하죠. 실제 프로젝트에서 고객 문의 자동 분류에 적용해 검색 정확도를 40% 향상시켰습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 검색 품질 개선 논의에서</div>
+                    <blockquote class="conv-quote">"사용자가 '환불하고 싶어요'라고 쳐도 'refund policy', '반품 절차' 문서가 나와야 해요. 이건 키워드 매칭으론 불가능하고, Semantic Search가 필요합니다. 다만 'SKU-12345' 같은 정확한 코드는 BM25가 나으니 Hybrid로 가는 게 좋아요."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>쿼리와 문서에 다른 임베딩 모델 사용</strong>
+                        <p>쿼리는 A 모델, 문서는 B 모델로 임베딩하면 벡터 공간이 달라 유사도가 무의미해집니다. 반드시 동일한 모델을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>너무 긴 문서를 통째로 임베딩</strong>
+                        <p>긴 문서를 한 번에 임베딩하면 의미가 희석됩니다. 500-1000자 청크로 분할하고, 겹침(overlap)을 두어 문맥이 끊기지 않게 하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>동일한 임베딩 모델, 적절한 청킹(512 토큰 + 100 토큰 겹침), 그리고 Hybrid Search(BM25 + Semantic) 조합을 권장합니다. 유사도 임계값(예: 0.7) 이하는 필터링하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Embedding/" class="related-term-link">Embedding</a>
+                <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                <a href="/ko/term/Vector%20Database/" class="related-term-link">Vector Database</a>
+                <a href="/ko/term/Cosine%20Similarity/" class="related-term-link">Cosine Similarity</a>
+                <a href="/ko/term/BM25/" class="related-term-link">BM25</a>
+                <a href="/ko/term/FAISS/" class="related-term-link">FAISS</a>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.pinecone.io/learn/semantic-search/" target="_blank" class="learn-link">📄 Pinecone - Semantic Search 가이드</a>
+                <a href="https://www.sbert.net/examples/applications/semantic-search/README.html" target="_blank" class="learn-link">🎓 Sentence-BERT Semantic Search 튜토리얼</a>
+                <a href="https://platform.openai.com/docs/guides/embeddings" target="_blank" class="learn-link">📝 OpenAI Embeddings 문서</a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
+    <script>function copyCode(btn) { const codeBlock = btn.parentElement.querySelector('code'); navigator.clipboard.writeText(codeBlock.textContent).then(() => { btn.textContent = '✅ 복사됨!'; setTimeout(() => btn.textContent = '📋 복사', 2000); }); }</script>
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>

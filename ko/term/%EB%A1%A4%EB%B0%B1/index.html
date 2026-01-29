@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,117 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>롤백(Rollback)은 배포나 변경 작업 실패 시 이전의 안정적인 상태로 되돌리는 작업입니다. 시스템 안정성을 보장하는 마지막 방어선으로, 모든 배포 시스템에서 필수적인 기능입니다.</p>
+                <p>롤백 대상에 따라 애플리케이션 롤백(이전 버전 재배포), 데이터베이스 롤백(마이그레이션 취소), 인프라 롤백(설정 복원)으로 구분됩니다. 각각 복잡도와 리스크가 다르며, DB 롤백이 가장 까다롭습니다.</p>
+                <p>Kubernetes는 Deployment 히스토리를 유지하여 kubectl rollout undo로 즉시 롤백합니다. revisionHistoryLimit으로 보관할 ReplicaSet 수를 설정합니다. GitOps 환경에서는 Git revert로 이전 상태 커밋이 롤백을 트리거합니다.</p>
+                <p>실무에서는 롤백 시간 목표(RTO)를 5분 이내로 설정하고, 롤백 프로세스를 문서화합니다. 자동 롤백 조건(에러율 5% 초과, 응답 시간 2초 초과 등)을 설정하고 PagerDuty 알림을 연동합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="bash">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Kubernetes 롤백
+kubectl rollout history deployment/web-app          # 배포 히스토리 확인
+kubectl rollout undo deployment/web-app             # 직전 버전으로 롤백
+kubectl rollout undo deployment/web-app --to-revision=3  # 특정 버전으로 롤백
+kubectl rollout status deployment/web-app           # 롤백 상태 확인
+
+# Helm 롤백
+helm history my-release                             # 릴리즈 히스토리
+helm rollback my-release 2                          # revision 2로 롤백
+helm rollback my-release 2 --wait --timeout 5m      # 타임아웃 설정
+
+# ArgoCD 롤백 (GitOps)
+argocd app rollback my-app 3                        # 특정 히스토리로 롤백
+argocd app history my-app                           # 배포 히스토리 확인
+
+# 자동 롤백 설정 (Argo Rollouts)
+# analysis-template.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate
+spec:
+  metrics:
+  - name: success-rate
+    interval: 30s
+    successCondition: result[0] >= 0.95   # 성공률 95% 이상
+    failureLimit: 3                       # 3회 실패시 롤백
+    provider:
+      prometheus:
+        address: http://prometheus:9090
+        query: |
+          sum(rate(http_requests_total{status=~"2.."}[5m])) /
+          sum(rate(http_requests_total[5m]))
+
+# DB 마이그레이션 롤백 (Flyway)
+flyway undo                                         # 마지막 마이그레이션 취소
+flyway undo -target=V003                            # 특정 버전까지 롤백</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "배포 후 에러율 급증했어요. 바로 롤백하고 원인 분석합시다."</p>
+                <p><strong class="role-junior">주니어:</strong> "helm rollback 실행했고 에러율 정상화됐습니다. 로그 보니 환경변수 누락이 원인이었네요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "데이터베이스 스키마 변경 후 롤백이 필요하면 어떻게 하나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "하위 호환 마이그레이션을 원칙으로 합니다. 컬럼 추가는 nullable로, 삭제는 2단계로 진행해서 롤백 시에도 이전 버전 앱이 동작하도록 합니다. 데이터 손실이 있는 변경은 백업 후 진행하고, 롤백 스크립트를 미리 준비합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "revisionHistoryLimit이 2인데, 운영에서 충분할까요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "실제로 2단계 이전으로 롤백한 적은 없지만, 안전하게 10으로 늘리겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>롤백 전 데이터 변경 여부 확인 - 새 버전에서 생성된 데이터 처리 계획 필요</li>
+                <li>DB 마이그레이션은 별도 롤백 - 애플리케이션 롤백만으로 불충분</li>
+                <li>롤백 후 즉시 장애 리포트 작성 - 재발 방지 위해 원인 분석 필수</li>
+                <li class="info">롤백 시간 목표 설정 - 5분 이내 완료를 기준으로 프로세스 최적화</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%94%94%ED%94%8C%EB%A1%9C%EC%9D%B4%EB%A8%BC%ED%8A%B8/" class="related-link">디플로이먼트</a>
+                <a href="/ko/term/Blue-Green/" class="related-link">Blue-Green</a>
+                <a href="/ko/term/Canary/" class="related-link">Canary</a>
+                <a href="/ko/term/Helm/" class="related-link">Helm</a>
+                <a href="/ko/term/ArgoCD/" class="related-link">ArgoCD</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment" target="_blank" rel="noopener">Kubernetes Deployment 롤백 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://argoproj.github.io/argo-rollouts/features/analysis/" target="_blank" rel="noopener">Argo Rollouts 자동 롤백 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://martinfowler.com/articles/evodb.html" target="_blank" rel="noopener">Evolutionary Database Design - 롤백 가능한 DB 변경</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +324,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

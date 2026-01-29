@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Replication (레플리케이션) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="데이터를 여러 노드에 복제. 가용성, 내결함성 향상.">
-    <meta name="keywords" content="Replication, 레플리케이션, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="Replication은 데이터베이스의 데이터를 여러 노드에 복제하여 고가용성, 내결함성, 읽기 성능을 향상시키는 기술입니다. Master-Slave, Master-Master 구조로 구현됩니다.">
+    <meta name="keywords" content="Replication, 레플리케이션, 복제, Master-Slave, Primary-Replica, 고가용성, HA, Failover, PostgreSQL, MySQL, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Replication/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Replication/">
     <meta property="og:title" content="Replication (레플리케이션) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="데이터를 여러 노드에 복제. 가용성, 내결함성 향상.">
+    <meta property="og:description" content="Replication은 데이터베이스의 데이터를 여러 노드에 복제하여 고가용성과 읽기 성능을 향상시키는 기술입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Replication (레플리케이션) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="데이터를 여러 노드에 복제. 가용성, 내결함성 향상.">
+    <meta name="twitter:description" content="Replication은 데이터베이스의 데이터를 여러 노드에 복제하여 고가용성과 읽기 성능을 향상시키는 기술입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Replication",
-        "description": "데이터를 여러 노드에 복제. 가용성, 내결함성 향상.",
+        "alternateName": "레플리케이션, 데이터 복제",
+        "description": "Replication은 데이터베이스의 데이터를 여러 노드에 복제하여 고가용성과 읽기 성능을 향상시키는 기술입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -189,9 +276,9 @@
                 <span>데이터베이스</span>
             </div>
             <h1 class="term-title">Replication</h1>
-            <p class="term-english">레플리케이션</p>
+            <p class="term-english">레플리케이션, 데이터 복제</p>
             <div class="term-description">
-                <p>데이터를 여러 노드에 복제. 가용성, 내결함성 향상.</p>
+                <p>데이터베이스의 데이터를 여러 노드(서버)에 복제하여 고가용성(HA), 내결함성, 읽기 성능을 향상시키는 기술입니다. Primary-Replica(Master-Slave) 구조가 가장 일반적이며, 장애 시 자동 Failover를 지원합니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,706 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>레플리케이션(Replication)</strong>은 하나의 데이터베이스 서버(Primary/Master)의 데이터를 하나 이상의 서버(Replica/Slave)에 실시간으로 복제하는 기술입니다. 데이터의 중복 저장을 통해 단일 장애점(SPOF)을 제거하고, 읽기 요청을 분산시켜 성능을 향상시킵니다.</p>
+                <p><strong>동기(Synchronous) 복제</strong>는 Primary가 트랜잭션을 커밋하기 전에 최소 하나의 Replica가 데이터를 받았음을 확인합니다. 데이터 손실이 없지만 지연이 발생합니다. <strong>비동기(Asynchronous) 복제</strong>는 Primary가 즉시 커밋하고 Replica는 나중에 따라잡습니다. 빠르지만 장애 시 최근 데이터가 유실될 수 있습니다.</p>
+                <p><strong>복제 방식</strong>에는 Statement-based(SQL 문 복제), Row-based(변경된 행 복제), Mixed(상황에 따라 선택)가 있습니다. PostgreSQL의 WAL(Write-Ahead Log) 기반 Streaming Replication, MySQL의 Binary Log 기반 복제가 대표적입니다.</p>
+                <p><strong>Failover</strong>는 Primary 장애 시 Replica 중 하나를 새로운 Primary로 승격시키는 과정입니다. 자동 Failover를 위해 PostgreSQL은 Patroni, MySQL은 MySQL InnoDB Cluster나 Orchestrator를 사용합니다. 클라우드 환경에서는 AWS RDS, Cloud SQL 등이 관리형으로 제공합니다.</p>
+                <p>읽기 부하 분산을 위해 애플리케이션에서 쓰기는 Primary로, 읽기는 Replica로 라우팅합니다. 단, Replica는 약간의 지연(Replication Lag)이 있으므로 즉시 일관성이 필요한 읽기는 Primary에서 처리해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (읽기/쓰기 분리)</button>
+                <button class="code-tab" data-lang="node">Node.js (Sequelize)</button>
+                <button class="code-tab" data-lang="sql">SQL (설정/모니터링)</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># Primary-Replica 읽기/쓰기 분리 - Python
+import psycopg2
+from psycopg2 import pool
+from contextlib import contextmanager
+from typing import Optional
+import random
+
+class ReplicaAwareDBPool:
+    """
+    Primary-Replica 구조의 DB 연결 풀
+    쓰기: Primary, 읽기: Replica(s)
+    """
+
+    def __init__(self, primary_config: dict, replica_configs: list):
+        # Primary 연결 풀 (쓰기 전용)
+        self.primary_pool = pool.ThreadedConnectionPool(
+            minconn=2,
+            maxconn=10,
+            host=primary_config['host'],
+            database=primary_config['database'],
+            user=primary_config['user'],
+            password=primary_config['password']
+        )
+
+        # Replica 연결 풀들 (읽기 전용)
+        self.replica_pools = []
+        for config in replica_configs:
+            replica_pool = pool.ThreadedConnectionPool(
+                minconn=2,
+                maxconn=20,  # 읽기는 더 많은 연결
+                host=config['host'],
+                database=config['database'],
+                user=config['user'],
+                password=config['password']
+            )
+            self.replica_pools.append(replica_pool)
+
+    @contextmanager
+    def get_primary_connection(self):
+        """쓰기 작업용 Primary 연결"""
+        conn = self.primary_pool.getconn()
+        try:
+            yield conn
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            raise e
+        finally:
+            self.primary_pool.putconn(conn)
+
+    @contextmanager
+    def get_replica_connection(self):
+        """
+        읽기 작업용 Replica 연결
+        라운드 로빈 또는 랜덤으로 Replica 선택
+        """
+        if not self.replica_pools:
+            # Replica가 없으면 Primary 사용
+            with self.get_primary_connection() as conn:
+                yield conn
+                return
+
+        # 랜덤하게 Replica 선택 (로드 밸런싱)
+        replica_pool = random.choice(self.replica_pools)
+        conn = replica_pool.getconn()
+        try:
+            yield conn
+        finally:
+            replica_pool.putconn(conn)
+
+
+class UserService:
+    """레플리케이션을 활용한 사용자 서비스"""
+
+    def __init__(self, db_pool: ReplicaAwareDBPool):
+        self.db = db_pool
+
+    def create_user(self, name: str, email: str) -> int:
+        """
+        사용자 생성 - Primary에서 실행
+        쓰기 작업은 반드시 Primary로
+        """
+        with self.db.get_primary_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """INSERT INTO users (name, email, created_at)
+                       VALUES (%s, %s, NOW()) RETURNING id""",
+                    (name, email)
+                )
+                user_id = cur.fetchone()[0]
+                print(f"✅ 사용자 생성 (Primary): {user_id}")
+                return user_id
+
+    def get_user(self, user_id: int, require_latest: bool = False) -> Optional[dict]:
+        """
+        사용자 조회
+        require_latest=True: Primary에서 조회 (즉시 일관성)
+        require_latest=False: Replica에서 조회 (최종 일관성)
+        """
+        if require_latest:
+            # 방금 생성한 데이터 조회 등 즉시 일관성 필요
+            conn_manager = self.db.get_primary_connection()
+            source = "Primary"
+        else:
+            # 일반 조회는 Replica에서
+            conn_manager = self.db.get_replica_connection()
+            source = "Replica"
+
+        with conn_manager as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT id, name, email, created_at FROM users WHERE id = %s",
+                    (user_id,)
+                )
+                row = cur.fetchone()
+                if row:
+                    print(f"📖 사용자 조회 ({source}): {user_id}")
+                    return {
+                        'id': row[0],
+                        'name': row[1],
+                        'email': row[2],
+                        'created_at': row[3]
+                    }
+        return None
+
+    def list_users(self, limit: int = 100) -> list:
+        """
+        사용자 목록 조회 - Replica에서 실행
+        대량 읽기는 Replica로 분산
+        """
+        with self.db.get_replica_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT id, name, email FROM users ORDER BY created_at DESC LIMIT %s",
+                    (limit,)
+                )
+                users = [
+                    {'id': row[0], 'name': row[1], 'email': row[2]}
+                    for row in cur.fetchall()
+                ]
+                print(f"📖 사용자 목록 조회 (Replica): {len(users)}건")
+                return users
+
+    def update_user(self, user_id: int, name: str) -> bool:
+        """사용자 수정 - Primary에서 실행"""
+        with self.db.get_primary_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "UPDATE users SET name = %s, updated_at = NOW() WHERE id = %s",
+                    (name, user_id)
+                )
+                success = cur.rowcount > 0
+                if success:
+                    print(f"✏️ 사용자 수정 (Primary): {user_id}")
+                return success
+
+
+# Replication Lag 모니터링
+def check_replication_lag(primary_conn, replica_conn) -> float:
+    """
+    복제 지연 시간 확인 (PostgreSQL)
+    지연이 크면 Replica 읽기에 주의 필요
+    """
+    with replica_conn.cursor() as cur:
+        cur.execute("""
+            SELECT EXTRACT(EPOCH FROM (NOW() - pg_last_xact_replay_timestamp()))
+            AS lag_seconds
+        """)
+        result = cur.fetchone()
+        lag = result[0] if result[0] else 0
+        print(f"⏱️ Replication Lag: {lag:.2f}초")
+        return lag
+
+
+# 사용 예시
+if __name__ == "__main__":
+    db_pool = ReplicaAwareDBPool(
+        primary_config={
+            'host': 'primary.db.example.com',
+            'database': 'myapp',
+            'user': 'app_user',
+            'password': 'secret'
+        },
+        replica_configs=[
+            {'host': 'replica1.db.example.com', 'database': 'myapp',
+             'user': 'app_user', 'password': 'secret'},
+            {'host': 'replica2.db.example.com', 'database': 'myapp',
+             'user': 'app_user', 'password': 'secret'},
+        ]
+    )
+
+    service = UserService(db_pool)
+
+    # 쓰기 → Primary
+    user_id = service.create_user("김철수", "kim@example.com")
+
+    # 방금 생성한 데이터 조회 → Primary (즉시 일관성)
+    user = service.get_user(user_id, require_latest=True)
+
+    # 일반 조회 → Replica (읽기 분산)
+    users = service.list_users()
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// Primary-Replica 읽기/쓰기 분리 - Node.js + Sequelize
+const { Sequelize, DataTypes } = require('sequelize');
+
+/**
+ * Sequelize를 이용한 읽기/쓰기 분리 설정
+ * read: Replica(s), write: Primary
+ */
+const sequelize = new Sequelize('database', null, null, {
+    dialect: 'postgres',
+    replication: {
+        // 쓰기 전용 Primary
+        write: {
+            host: 'primary.db.example.com',
+            username: 'app_user',
+            password: 'secret',
+            database: 'myapp'
+        },
+        // 읽기 전용 Replica(s) - 자동 로드밸런싱
+        read: [
+            {
+                host: 'replica1.db.example.com',
+                username: 'app_user',
+                password: 'secret',
+                database: 'myapp'
+            },
+            {
+                host: 'replica2.db.example.com',
+                username: 'app_user',
+                password: 'secret',
+                database: 'myapp'
+            }
+        ]
+    },
+    pool: {
+        max: 20,
+        min: 5,
+        acquire: 30000,
+        idle: 10000
+    }
+});
+
+// 사용자 모델 정의
+const User = sequelize.define('User', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    name: {
+        type: DataTypes.STRING(100),
+        allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        unique: true
+    }
+}, {
+    tableName: 'users',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+});
+
+
+class UserService {
+    /**
+     * 사용자 생성 - Primary에서 실행
+     */
+    async createUser(name, email) {
+        // create()는 자동으로 write 연결 사용
+        const user = await User.create({ name, email });
+        console.log(`✅ 사용자 생성 (Primary): ${user.id}`);
+        return user;
+    }
+
+    /**
+     * 사용자 조회 - 기본적으로 Replica에서 실행
+     */
+    async getUser(userId, requireLatest = false) {
+        const options = {};
+
+        if (requireLatest) {
+            // 즉시 일관성이 필요하면 Primary에서 조회
+            options.useMaster = true;
+            console.log(`📖 사용자 조회 (Primary - 즉시 일관성): ${userId}`);
+        } else {
+            console.log(`📖 사용자 조회 (Replica): ${userId}`);
+        }
+
+        return await User.findByPk(userId, options);
+    }
+
+    /**
+     * 사용자 목록 - Replica에서 실행
+     */
+    async listUsers(limit = 100) {
+        // findAll()은 자동으로 read 연결 사용
+        const users = await User.findAll({
+            limit,
+            order: [['created_at', 'DESC']]
+        });
+        console.log(`📖 사용자 목록 (Replica): ${users.length}건`);
+        return users;
+    }
+
+    /**
+     * 사용자 수정 - Primary에서 실행
+     */
+    async updateUser(userId, data) {
+        // update()는 자동으로 write 연결 사용
+        const [affectedRows] = await User.update(data, {
+            where: { id: userId }
+        });
+        console.log(`✏️ 사용자 수정 (Primary): ${userId}`);
+        return affectedRows > 0;
+    }
+
+    /**
+     * 트랜잭션 내에서 읽기 후 쓰기
+     * 트랜잭션은 항상 Primary에서 실행
+     */
+    async transferBalance(fromUserId, toUserId, amount) {
+        const transaction = await sequelize.transaction();
+
+        try {
+            // 트랜잭션 내 모든 쿼리는 Primary에서 실행
+            const fromUser = await User.findByPk(fromUserId, { transaction });
+            const toUser = await User.findByPk(toUserId, { transaction });
+
+            if (fromUser.balance < amount) {
+                throw new Error('잔액 부족');
+            }
+
+            await fromUser.update(
+                { balance: fromUser.balance - amount },
+                { transaction }
+            );
+            await toUser.update(
+                { balance: toUser.balance + amount },
+                { transaction }
+            );
+
+            await transaction.commit();
+            console.log(`💰 이체 완료 (Primary): ${fromUserId} → ${toUserId}`);
+            return true;
+
+        } catch (error) {
+            await transaction.rollback();
+            console.error(`❌ 이체 실패: ${error.message}`);
+            throw error;
+        }
+    }
+}
+
+
+/**
+ * Replication Lag 모니터링 (PostgreSQL)
+ */
+async function checkReplicationLag() {
+    const [results] = await sequelize.query(`
+        SELECT
+            client_addr,
+            state,
+            sent_lsn,
+            write_lsn,
+            flush_lsn,
+            replay_lsn,
+            EXTRACT(EPOCH FROM (now() - reply_time)) AS lag_seconds
+        FROM pg_stat_replication
+    `, { type: Sequelize.QueryTypes.SELECT, useMaster: true });
+
+    results.forEach(replica => {
+        console.log(`📊 Replica ${replica.client_addr}: ${replica.lag_seconds}초 지연`);
+    });
+
+    return results;
+}
+
+
+/**
+ * Health Check - Primary와 Replica 상태 확인
+ */
+async function healthCheck() {
+    try {
+        // Primary 확인 (쓰기 테스트)
+        await sequelize.query('SELECT 1', { useMaster: true });
+        console.log('✅ Primary: 정상');
+
+        // Replica 확인 (읽기 테스트)
+        await sequelize.query('SELECT 1');
+        console.log('✅ Replica: 정상');
+
+        return { primary: 'healthy', replica: 'healthy' };
+    } catch (error) {
+        console.error('❌ Health Check 실패:', error.message);
+        return { error: error.message };
+    }
+}
+
+
+// 사용 예시
+async function main() {
+    await sequelize.authenticate();
+    console.log('🔌 데이터베이스 연결 완료');
+
+    const service = new UserService();
+
+    // 쓰기 → Primary
+    const user = await service.createUser('홍길동', 'hong@example.com');
+
+    // 방금 생성한 데이터 → Primary에서 조회
+    const freshUser = await service.getUser(user.id, true);
+
+    // 일반 조회 → Replica
+    const users = await service.listUsers();
+
+    // Replication Lag 확인
+    await checkReplicationLag();
+
+    await sequelize.close();
+}
+
+main().catch(console.error);
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="sql">
+                <pre><code class="language-sql">-- ============================================
+-- PostgreSQL Streaming Replication 설정
+-- ============================================
+
+-- [Primary 서버 설정] postgresql.conf
+-- wal_level = replica
+-- max_wal_senders = 10
+-- wal_keep_size = 1GB
+-- synchronous_commit = on  -- 동기 복제 (off면 비동기)
+-- synchronous_standby_names = 'replica1'  -- 동기 복제 대상
+
+
+-- [Primary] 복제용 사용자 생성
+CREATE USER replicator WITH REPLICATION ENCRYPTED PASSWORD 'repl_password';
+
+-- [Primary] pg_hba.conf에 Replica 허용
+-- host replication replicator 10.0.0.0/24 md5
+
+
+-- [Replica 서버] 기본 백업으로 시작
+-- pg_basebackup -h primary.example.com -D /var/lib/postgresql/data \
+--   -U replicator -P -v -R -X stream -C -S replica1_slot
+
+-- [Replica] postgresql.conf
+-- hot_standby = on
+-- primary_conninfo = 'host=primary.example.com user=replicator password=repl_password'
+-- primary_slot_name = 'replica1_slot'
+
+
+-- ============================================
+-- 복제 상태 모니터링 (Primary에서 실행)
+-- ============================================
+
+-- 연결된 Replica 목록과 지연 상태
+SELECT
+    client_addr AS replica_ip,
+    state,
+    sync_state,
+    pg_wal_lsn_diff(pg_current_wal_lsn(), sent_lsn) AS send_lag_bytes,
+    pg_wal_lsn_diff(pg_current_wal_lsn(), replay_lsn) AS replay_lag_bytes,
+    replay_lag
+FROM pg_stat_replication;
+
+-- 복제 슬롯 상태
+SELECT
+    slot_name,
+    slot_type,
+    active,
+    pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn) AS lag_bytes
+FROM pg_replication_slots;
+
+
+-- ============================================
+-- Replica에서 실행할 쿼리
+-- ============================================
+
+-- 복제 지연 시간 확인
+SELECT
+    CASE
+        WHEN pg_last_wal_receive_lsn() = pg_last_wal_replay_lsn()
+        THEN 0
+        ELSE EXTRACT(EPOCH FROM now() - pg_last_xact_replay_timestamp())
+    END AS replication_lag_seconds;
+
+-- Replica인지 확인
+SELECT pg_is_in_recovery();  -- true면 Replica
+
+
+-- ============================================
+-- MySQL Replication 설정
+-- ============================================
+
+-- [Primary] my.cnf
+-- server-id = 1
+-- log_bin = mysql-bin
+-- binlog_format = ROW
+-- gtid_mode = ON
+-- enforce_gtid_consistency = ON
+
+-- [Primary] 복제용 사용자 생성
+CREATE USER 'replicator'@'%' IDENTIFIED BY 'repl_password';
+GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'%';
+FLUSH PRIVILEGES;
+
+-- [Replica] my.cnf
+-- server-id = 2
+-- relay_log = relay-bin
+-- read_only = ON
+-- gtid_mode = ON
+-- enforce_gtid_consistency = ON
+
+-- [Replica] 복제 시작
+CHANGE REPLICATION SOURCE TO
+    SOURCE_HOST = 'primary.example.com',
+    SOURCE_USER = 'replicator',
+    SOURCE_PASSWORD = 'repl_password',
+    SOURCE_AUTO_POSITION = 1;
+
+START REPLICA;
+
+
+-- MySQL 복제 상태 확인
+SHOW REPLICA STATUS\G
+-- Replica_IO_Running: Yes
+-- Replica_SQL_Running: Yes
+-- Seconds_Behind_Source: 0  -- 지연 시간
+
+
+-- ============================================
+-- Failover 관련 쿼리
+-- ============================================
+
+-- PostgreSQL: Replica를 Primary로 승격
+-- pg_ctl promote -D /var/lib/postgresql/data
+-- 또는 SQL로:
+SELECT pg_promote();
+
+-- 새 Primary에서 타임라인 확인
+SELECT pg_walfile_name(pg_current_wal_lsn());
+
+
+-- ============================================
+-- 읽기 전용 확인 및 설정
+-- ============================================
+
+-- PostgreSQL: 읽기 전용 모드 확인
+SHOW default_transaction_read_only;
+
+-- Replica에서 쓰기 시도 시 에러
+-- ERROR: cannot execute INSERT in a read-only transaction
+
+-- MySQL: 읽기 전용 확인
+SHOW VARIABLES LIKE 'read_only';
+SHOW VARIABLES LIKE 'super_read_only';
+
+
+-- ============================================
+-- 동기/비동기 복제 전환 (PostgreSQL)
+-- ============================================
+
+-- 동기 복제로 전환 (데이터 무손실, 느림)
+ALTER SYSTEM SET synchronous_commit = 'on';
+ALTER SYSTEM SET synchronous_standby_names = 'replica1';
+SELECT pg_reload_conf();
+
+-- 비동기 복제로 전환 (빠름, 장애 시 데이터 유실 가능)
+ALTER SYSTEM SET synchronous_standby_names = '';
+SELECT pg_reload_conf();
+
+-- 복제 모드 확인
+SELECT name, setting FROM pg_settings
+WHERE name IN ('synchronous_commit', 'synchronous_standby_names');
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "읽기 트래픽이 80% 이상이니 Primary-Replica 구성으로 가겠습니다. Primary 1대, Replica 2대로 구성하고, 읽기 요청은 Replica로 분산시키면 Primary 부하를 크게 줄일 수 있어요. 다만 Replication Lag 모니터링은 필수입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "Primary가 다운되어 Patroni가 Replica1을 새 Primary로 자동 승격시켰습니다. Failover에 약 30초 걸렸고, 비동기 복제였기 때문에 마지막 2-3개 트랜잭션이 유실됐을 수 있어요. 중요 데이터는 동기 복제를 고려해야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "회원가입 직후 프로필 조회에서 간헐적으로 404가 발생하는데, Replica 조회라 Replication Lag 때문입니다. 생성 직후 조회는 useMaster 옵션으로 Primary에서 읽어야 해요. Read-after-write 일관성 문제입니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Replication Lag 무시 금지</strong>
+                        <p>Replica는 Primary보다 데이터가 늦습니다. 방금 쓴 데이터를 바로 읽을 때는 Primary에서 조회하거나, 충분한 대기 시간을 두세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>비동기 복제 데이터 유실</strong>
+                        <p>비동기 복제에서 Primary 장애 시 아직 복제되지 않은 트랜잭션이 유실됩니다. 금융 등 중요 데이터는 동기 복제를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Split-brain 주의</strong>
+                        <p>네트워크 분리로 두 노드가 모두 Primary가 되면 데이터 불일치가 발생합니다. Quorum 기반 클러스터(Patroni, etcd)로 방지하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>레플리케이션 베스트 프랙티스</strong>
+                        <p>Replication Lag 모니터링 및 알림, 자동 Failover 구성, 읽기/쓰기 분리 시 일관성 요구사항 명확히, 정기적인 Failover 테스트.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Sharding/" class="related-term-link">Sharding</a>
+                <a href="/ko/term/ACID/" class="related-term-link">ACID</a>
+                <a href="/ko/term/Failover/" class="related-term-link">Failover</a>
+                <a href="/ko/term/CAP%20%EC%A0%95%EB%A6%AC/" class="related-term-link">CAP 정리</a>
+                <a href="/ko/term/Load%20Balancing/" class="related-term-link">Load Balancing</a>
+                <a href="/ko/term/%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1/" class="related-term-link">고가용성(HA)</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.postgresql.org/docs/current/high-availability.html" target="_blank" class="learn-link">
+                    📄 PostgreSQL - High Availability 공식 문서
+                </a>
+                <a href="https://dev.mysql.com/doc/refman/8.0/en/replication.html" target="_blank" class="learn-link">
+                    🎓 MySQL - Replication 공식 문서
+                </a>
+                <a href="https://patroni.readthedocs.io/" target="_blank" class="learn-link">
+                    📖 Patroni - PostgreSQL 자동 Failover 솔루션
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +996,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

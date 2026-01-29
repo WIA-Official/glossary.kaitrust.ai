@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +228,238 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>이상치 탐지(Anomaly Detection)는 데이터셋에서 대다수의 정상 패턴과 현저히 다른 관측치를 자동으로 식별하는 머신러닝 기법입니다. 사기 거래 탐지, 네트워크 침입 감지, 제조 공정 불량 검출, 의료 이상 진단 등 다양한 분야에서 핵심적인 역할을 합니다. 이상치는 전체 데이터의 1% 미만인 경우가 많아 극단적인 클래스 불균형 문제를 다루는 기술이 필요합니다.</p>
+                <p>이상치 탐지 기법은 크게 세 가지로 분류됩니다: (1) 비지도 학습 - 정상 데이터만으로 학습하여 정상 분포에서 벗어난 점을 탐지(Isolation Forest, One-Class SVM, Autoencoder), (2) 지도 학습 - 이상/정상 레이블이 있는 데이터로 분류기 학습, (3) 반지도 학습 - 정상 데이터로 먼저 학습 후 새 데이터의 이상 여부 판단. 실무에서는 레이블 획득이 어려워 비지도/반지도 방식이 주로 사용됩니다.</p>
+                <p>현대 이상치 탐지 시스템의 핵심 알고리즘 중 Isolation Forest는 이상치가 정상 데이터보다 "고립되기 쉽다"는 점을 활용합니다. 랜덤 분할을 반복할 때 이상치는 더 적은 분할로 고립되므로, 평균 경로 길이가 짧은 점을 이상치로 판정합니다. O(n log n) 시간복잡도로 대규모 데이터에도 효율적이며, scikit-learn에서 바로 사용할 수 있습니다.</p>
+                <p>실무에서 이상치 탐지 시스템 구축 시 가장 큰 도전은 평가입니다. 이상치가 극소수라 정확도(Accuracy)는 무의미하고, Precision-Recall AUC나 F1-score를 사용해야 합니다. 2024-2025년 트렌드는 딥러닝 기반 방법(VAE, Transformer Autoencoder)과 시계열 특화 모델(LSTM-AE, Temporal Fusion Transformer)이며, AWS Lookout, Azure Anomaly Detector 같은 관리형 서비스도 인기입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># 이상치 탐지 실전 예제: Isolation Forest + Autoencoder
+# pip install scikit-learn torch numpy pandas
+
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, precision_recall_curve, auc
+
+# 1. Isolation Forest - 가장 널리 사용되는 방법
+def isolation_forest_detection(X_train, X_test, contamination=0.01):
+    """
+    contamination: 예상 이상치 비율 (기본 1%)
+    """
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    # 모델 학습 (정상 데이터로만)
+    iso_forest = IsolationForest(
+        n_estimators=100,
+        contamination=contamination,
+        random_state=42,
+        n_jobs=-1
+    )
+    iso_forest.fit(X_train_scaled)
+
+    # 예측: -1=이상치, 1=정상
+    predictions = iso_forest.predict(X_test_scaled)
+    # 이상치 점수 (낮을수록 이상치)
+    scores = iso_forest.decision_function(X_test_scaled)
+
+    return predictions, scores
+
+# 2. PyTorch Autoencoder 기반 이상치 탐지
+import torch
+import torch.nn as nn
+
+class AnomalyAutoencoder(nn.Module):
+    def __init__(self, input_dim, latent_dim=8):
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(input_dim, 64),
+            nn.ReLU(),
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Linear(32, latent_dim)
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(latent_dim, 32),
+            nn.ReLU(),
+            nn.Linear(32, 64),
+            nn.ReLU(),
+            nn.Linear(64, input_dim)
+        )
+
+    def forward(self, x):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        return decoded
+
+    def detect_anomalies(self, x, threshold):
+        """재구성 오차가 threshold를 넘으면 이상치"""
+        with torch.no_grad():
+            reconstructed = self.forward(x)
+            mse = ((x - reconstructed) ** 2).mean(dim=1)
+            return mse > threshold, mse
+
+# 실행 예시
+if __name__ == "__main__":
+    # 샘플 데이터 생성
+    np.random.seed(42)
+    normal_data = np.random.randn(1000, 10)  # 정상 데이터
+    anomaly_data = np.random.randn(20, 10) + 5  # 이상치
+
+    X_train = normal_data[:800]
+    X_test = np.vstack([normal_data[800:], anomaly_data])
+    y_test = np.array([0]*200 + [1]*20)  # 0=정상, 1=이상
+
+    # Isolation Forest 실행
+    preds, scores = isolation_forest_detection(X_train, X_test)
+    preds_binary = (preds == -1).astype(int)
+
+    print("=== Isolation Forest 결과 ===")
+    print(classification_report(y_test, preds_binary,
+                                target_names=['정상', '이상치']))</code></pre>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <tr>
+                        <th>알고리즘/서비스</th>
+                        <th>장점</th>
+                        <th>단점</th>
+                        <th>추천 상황</th>
+                    </tr>
+                    <tr>
+                        <td>Isolation Forest</td>
+                        <td>빠름, 해석 용이</td>
+                        <td>고차원에서 성능 저하</td>
+                        <td>정형 데이터, 빠른 배포</td>
+                    </tr>
+                    <tr>
+                        <td>Autoencoder</td>
+                        <td>복잡한 패턴 학습</td>
+                        <td>튜닝 필요, 느림</td>
+                        <td>이미지, 시계열</td>
+                    </tr>
+                    <tr>
+                        <td>One-Class SVM</td>
+                        <td>소규모 데이터에 효과적</td>
+                        <td>대규모 데이터에 느림</td>
+                        <td>데이터 적을 때</td>
+                    </tr>
+                    <tr>
+                        <td>AWS Lookout for Metrics</td>
+                        <td>관리형, 자동화</td>
+                        <td>비용 ($0.75/1K 데이터포인트)</td>
+                        <td>AWS 환경, 빠른 구축</td>
+                    </tr>
+                    <tr>
+                        <td>Azure Anomaly Detector</td>
+                        <td>시계열 특화, 간편</td>
+                        <td>$0.157/1K 호출</td>
+                        <td>Azure 환경, 시계열</td>
+                    </tr>
+                </table>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 1rem;">* 2025년 1월 기준 가격 및 특성</p>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "사기 탐지에서 정확도 99%는 의미없습니다. 사기 거래가 0.1%밖에 안 되니까요. Precision-Recall AUC로 평가해야 하고, 비즈니스 임팩트를 고려해서 임계값을 조정해야 합니다. 오탐(False Positive)이 많으면 고객 불만이 늘고, 미탐(False Negative)이 많으면 실제 사기를 놓칩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "Isolation Forest는 이상치가 '고립되기 쉽다'는 가정에 기반합니다. 랜덤 특성과 분할점을 선택해 데이터를 재귀적으로 분할할 때, 이상치는 더 적은 분할로 고립됩니다. 평균 경로 길이(average path length)가 짧으면 이상치로 판정하며, 시간복잡도는 O(n log n)으로 대규모 데이터에도 효율적입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">
+                        "시계열 이상치 탐지는 정적 방법과 다릅니다. 계절성, 트렌드, 주기성을 고려해야 해서 LSTM Autoencoder나 Transformer 기반 모델이 효과적이에요. 최근에는 Temporal Fusion Transformer나 N-BEATS 같은 최신 아키텍처도 많이 사용됩니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>정확도(Accuracy)로 모델 평가</strong>
+                        <p>이상치가 1%면 "모두 정상"으로 예측해도 99% 정확도입니다. Precision, Recall, F1-score, PR-AUC를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>contamination 파라미터를 임의로 설정</strong>
+                        <p>Isolation Forest의 contamination은 예상 이상치 비율인데, 실제 데이터와 맞지 않으면 성능이 급락합니다. 도메인 지식이나 사전 분석으로 추정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법: 도메인 전문가와 협업하고 피드백 루프 구축</strong>
+                        <p>이상치 탐지 모델은 배포 후에도 지속적인 피드백이 필요합니다. 탐지된 이상치를 전문가가 검토하고, 오탐/미탐 케이스를 수집해 모델을 개선하는 MLOps 파이프라인을 구축하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D/" class="related-term-link">머신러닝</a>
+                <a href="/ko/term/%EB%94%A5%EB%9F%AC%EB%8B%9D/" class="related-term-link">딥러닝</a>
+                <a href="/ko/term/%EC%9E%84%EB%B2%A0%EB%94%A9/" class="related-term-link">임베딩</a>
+                <a href="/ko/term/%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80/" class="related-term-link">모델 평가</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%A0%84%EC%B2%98%EB%A6%AC/" class="related-term-link">데이터 전처리</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://scikit-learn.org/stable/modules/outlier_detection.html" target="_blank" class="learn-link">
+                    📄 scikit-learn 이상치 탐지 가이드
+                </a>
+                <a href="https://pytorch.org/tutorials/beginner/introyt/autoencoderyt.html" target="_blank" class="learn-link">
+                    🎓 PyTorch Autoencoder 튜토리얼
+                </a>
+                <a href="https://arxiv.org/abs/2007.02500" target="_blank" class="learn-link">
+                    📖 Deep Learning for Anomaly Detection Survey (논문)
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->

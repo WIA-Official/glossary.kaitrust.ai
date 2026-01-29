@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Container (컨테이너) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="애플리케이션과 의존성을 격리된 환경에 패키징. Docker가 표준. VM보다 경량.">
-    <meta name="keywords" content="Container, 컨테이너, AI 용어, KAITRUST, AI 백과사전, DevOps">
+    <meta name="description" content="애플리케이션과 의존성을 격리된 환경에 패키징하는 기술. Docker가 사실상 표준. VM보다 경량하고 빠른 시작. OCI 표준, 이미지 레이어, 멀티스테이지 빌드 설명.">
+    <meta name="keywords" content="Container, 컨테이너, Docker, Dockerfile, OCI, 이미지, AI 용어, KAITRUST, AI 백과사전, DevOps">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Container/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Container/">
     <meta property="og:title" content="Container (컨테이너) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="애플리케이션과 의존성을 격리된 환경에 패키징. Docker가 표준. VM보다 경량.">
+    <meta property="og:description" content="애플리케이션과 의존성을 격리된 환경에 패키징하는 기술. Docker가 사실상 표준. VM보다 경량하고 빠른 시작.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Container (컨테이너) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="애플리케이션과 의존성을 격리된 환경에 패키징. Docker가 표준. VM보다 경량.">
+    <meta name="twitter:description" content="애플리케이션과 의존성을 격리된 환경에 패키징하는 기술. Docker가 사실상 표준. VM보다 경량하고 빠른 시작.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Container",
-        "description": "애플리케이션과 의존성을 격리된 환경에 패키징. Docker가 표준. VM보다 경량.",
+        "description": "애플리케이션과 의존성을 격리된 환경에 패키징하는 기술. Docker가 사실상 표준. VM보다 경량하고 빠른 시작.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -147,20 +147,178 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+        .section-content strong { color: #a855f7; }
+
+        /* VM vs Container 비교 표 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+        }
+        .comparison-table th {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            color: #cbd5e1;
+        }
+        .comparison-table tr:last-child td { border-bottom: none; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            display: none;
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -177,7 +335,7 @@
             <span>›</span>
             <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
             <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#devops">DevOps</a>
+            <a href="https://glossary.kaitrust.ai/#arch">아키텍처</a>
             <span>›</span>
             <span class="current">Container</span>
         </nav>
@@ -185,23 +343,381 @@
         <!-- Term Header -->
         <article class="term-detail-header">
             <div class="term-category-badge">
-                <span>🔧</span>
-                <span>DevOps</span>
+                <span>🏗️</span>
+                <span>아키텍처</span>
             </div>
             <h1 class="term-title">Container</h1>
             <p class="term-english">컨테이너</p>
             <div class="term-description">
-                <p>애플리케이션과 의존성을 격리된 환경에 패키징. Docker가 표준. VM보다 경량.</p>
+                <p>애플리케이션과 의존성을 격리된 환경에 패키징하는 기술. Docker가 사실상 표준이며 VM보다 경량하고 시작이 빠릅니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
                     📚 전체 용어 보기
                 </a>
-                <a href="https://glossary.kaitrust.ai/#devops" class="term-action-btn btn-secondary">
-                    🔧 DevOps 더보기
+                <a href="https://glossary.kaitrust.ai/#arch" class="term-action-btn btn-secondary">
+                    🏗️ 아키텍처 더보기
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>컨테이너(Container)</strong>는 애플리케이션과 그 의존성(라이브러리, 설정 파일, 런타임 환경)을 하나의 패키지로 묶어 격리된 환경에서 실행하는 기술입니다. 2013년 Docker의 등장으로 대중화되었으며, 현대 클라우드 네이티브 아키텍처의 핵심 기반 기술입니다.</p>
+
+                <p><strong>기술적 원리:</strong> 컨테이너는 Linux 커널의 <strong>namespaces</strong>(프로세스, 네트워크, 파일시스템 격리)와 <strong>cgroups</strong>(CPU, 메모리 리소스 제한)를 활용합니다. 가상머신(VM)이 하이퍼바이저 위에 게스트 OS 전체를 가상화하는 것과 달리, 컨테이너는 호스트 OS 커널을 공유하여 훨씬 가볍습니다. 시작 시간은 초 단위이고, 이미지 크기도 수십~수백 MB로 작습니다.</p>
+
+                <table class="comparison-table">
+                    <tr>
+                        <th>항목</th>
+                        <th>가상머신 (VM)</th>
+                        <th>컨테이너</th>
+                    </tr>
+                    <tr>
+                        <td>시작 시간</td>
+                        <td>분 단위</td>
+                        <td>초 단위 (밀리초도 가능)</td>
+                    </tr>
+                    <tr>
+                        <td>이미지 크기</td>
+                        <td>수 GB ~ 수십 GB</td>
+                        <td>수십 MB ~ 수백 MB</td>
+                    </tr>
+                    <tr>
+                        <td>격리 수준</td>
+                        <td>강함 (하드웨어 수준)</td>
+                        <td>약함 (프로세스 수준)</td>
+                    </tr>
+                    <tr>
+                        <td>리소스 오버헤드</td>
+                        <td>높음 (게스트 OS 전체)</td>
+                        <td>낮음 (애플리케이션만)</td>
+                    </tr>
+                </table>
+
+                <p><strong>이미지 레이어:</strong> 컨테이너 이미지는 읽기 전용 레이어의 스택으로 구성됩니다. Dockerfile의 각 명령어(RUN, COPY 등)가 새 레이어를 생성하며, 동일한 베이스 이미지를 사용하는 컨테이너들은 레이어를 공유하여 디스크 공간을 절약합니다. 컨테이너 실행 시 최상단에 쓰기 가능한 레이어가 추가됩니다.</p>
+
+                <p><strong>OCI 표준:</strong> Docker가 사실상 표준이었지만, 현재는 <strong>OCI(Open Container Initiative)</strong> 표준으로 containerd, CRI-O, Podman 등 다양한 런타임이 있습니다. Kubernetes는 CRI(Container Runtime Interface)를 통해 여러 런타임을 지원합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-tab="dockerfile">Dockerfile</button>
+                <button class="code-tab" data-tab="multistage">멀티스테이지</button>
+                <button class="code-tab" data-tab="compose">docker-compose</button>
+                <button class="code-tab" data-tab="commands">명령어</button>
+            </div>
+
+            <div class="code-block active" data-tab="dockerfile">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># === Dockerfile (Node.js 앱 예제) ===
+# 1. 베이스 이미지 선택 (alpine = 경량 Linux)
+FROM node:20-alpine
+
+# 2. 작업 디렉토리 설정
+WORKDIR /app
+
+# 3. 의존성 파일만 먼저 복사 (캐시 최적화)
+COPY package*.json ./
+
+# 4. 의존성 설치
+RUN npm ci --only=production
+
+# 5. 애플리케이션 코드 복사
+COPY . .
+
+# 6. 비루트 사용자로 전환 (보안)
+RUN addgroup -g 1001 -S nodejs \
+    && adduser -S nodejs -u 1001
+USER nodejs
+
+# 7. 환경 변수 설정
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# 8. 포트 노출 (문서화 목적)
+EXPOSE 3000
+
+# 9. 헬스체크 설정
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
+
+# 10. 컨테이너 시작 명령
+CMD ["node", "server.js"]</code></pre>
+            </div>
+
+            <div class="code-block" data-tab="multistage">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># === 멀티스테이지 빌드 (빌드 도구 제외로 이미지 경량화) ===
+
+# ========== Stage 1: 빌드 ==========
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# 의존성 설치 (devDependencies 포함)
+COPY package*.json ./
+RUN npm ci
+
+# TypeScript 빌드
+COPY tsconfig.json ./
+COPY src/ ./src/
+RUN npm run build
+
+# 프로덕션 의존성만 재설치
+RUN npm ci --only=production && npm cache clean --force
+
+# ========== Stage 2: 런타임 ==========
+FROM node:20-alpine AS runner
+
+# 보안: 비루트 사용자 설정
+RUN addgroup -g 1001 -S nodejs \
+    && adduser -S nodejs -u 1001
+
+WORKDIR /app
+
+# 빌드 결과물과 프로덕션 의존성만 복사
+COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nodejs:nodejs /app/package.json ./
+
+USER nodejs
+
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+CMD ["node", "dist/server.js"]
+
+# 결과: 빌드 스테이지의 TypeScript, 소스코드, devDependencies 제외
+# 이미지 크기: 약 1GB → 약 150MB로 감소</code></pre>
+            </div>
+
+            <div class="code-block" data-tab="compose">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># === docker-compose.yml (로컬 개발 환경) ===
+version: "3.9"
+
+services:
+  # 애플리케이션
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://user:pass@db:5432/myapp
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - .:/app                    # 소스 코드 바인드 마운트
+      - /app/node_modules         # node_modules는 컨테이너 것 사용
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - app-network
+
+  # PostgreSQL 데이터베이스
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: myapp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d myapp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # Redis 캐시
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+  # Nginx 리버스 프록시
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge</code></pre>
+            </div>
+
+            <div class="code-block" data-tab="commands">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># === Docker 기본 명령어 ===
+
+# 이미지 빌드
+docker build -t myapp:v1.0 .
+docker build -f Dockerfile.prod -t myapp:prod .
+
+# 컨테이너 실행
+docker run -d --name myapp -p 3000:3000 myapp:v1.0
+docker run -it --rm myapp:v1.0 /bin/sh    # 대화형 쉘
+
+# 컨테이너 관리
+docker ps                                  # 실행 중인 컨테이너
+docker ps -a                               # 모든 컨테이너
+docker logs -f myapp                       # 로그 실시간 확인
+docker exec -it myapp /bin/sh              # 실행 중 컨테이너 접속
+docker stop myapp && docker rm myapp       # 정지 및 삭제
+
+# 이미지 관리
+docker images                              # 이미지 목록
+docker rmi myapp:v1.0                      # 이미지 삭제
+docker image prune -a                      # 미사용 이미지 정리
+
+# === Docker Compose 명령어 ===
+
+docker compose up -d                       # 백그라운드 실행
+docker compose up --build                  # 이미지 재빌드 후 실행
+docker compose logs -f app                 # 특정 서비스 로그
+docker compose exec app sh                 # 컨테이너 접속
+docker compose down                        # 정지 및 컨테이너 삭제
+docker compose down -v                     # 볼륨까지 삭제
+
+# === 이미지 레지스트리 ===
+
+docker login                               # Docker Hub 로그인
+docker tag myapp:v1.0 username/myapp:v1.0  # 태깅
+docker push username/myapp:v1.0            # 푸시
+docker pull username/myapp:v1.0            # 풀
+
+# === 보안 스캔 ===
+
+docker scout cves myapp:v1.0               # Docker Scout 취약점 스캔
+trivy image myapp:v1.0                     # Trivy로 스캔</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "로컬에서 되는데 서버에서 안 된다는 이슈가 또 나왔어요. 개발 환경도 Docker로 통일합시다. docker-compose up 한 번이면 DB, Redis, 앱까지 전부 올라오게요. 신규 입사자 온보딩도 훨씬 빨라질 거예요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "Dockerfile 이미지 크기가 1.2GB네요. Alpine 베이스로 바꾸고 멀티스테이지 빌드로 빌드 도구 제외하면 150MB 이하로 줄일 수 있어요. 그리고 root로 실행하고 있는데, USER 지시자로 비루트 사용자 설정 추가해 주세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "컨테이너와 가상머신의 차이점은 격리 수준과 리소스 효율성입니다. VM은 하이퍼바이저 위에 게스트 OS 전체를 가상화하지만, 컨테이너는 호스트 커널을 공유하고 namespaces와 cgroups로 프로세스 수준에서 격리합니다. 컨테이너는 시작이 빠르고 가볍지만, 커널을 공유하므로 VM보다 격리가 약합니다. 보안이 중요한 멀티테넌트 환경에서는 VM이나 Firecracker 같은 microVM을 고려합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 트러블슈팅</div>
+                    <blockquote class="conv-quote">
+                        "컨테이너가 OOMKilled로 재시작되고 있어요. docker stats로 확인해보니 메모리 limit에 계속 도달하네요. Node.js라면 --max-old-space-size 옵션으로 힙 크기를 컨테이너 limit의 75% 정도로 설정하고, 메모리 누수가 있는지 확인해봐야 할 것 같아요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>root 사용자로 실행</strong>
+                        <p>컨테이너를 root로 실행하면 컨테이너 탈출(escape) 취약점 발생 시 호스트 시스템 전체가 위험해집니다. 반드시 비루트 사용자(USER 지시자)를 설정하세요. 또한 --privileged 플래그 사용은 절대 피하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>컨테이너 내 데이터 저장</strong>
+                        <p>컨테이너는 휘발성입니다. 컨테이너 삭제 시 내부 데이터도 사라집니다. DB 데이터, 로그, 업로드 파일 등 영구 데이터는 반드시 볼륨(-v 또는 volumes)을 사용하거나 외부 스토리지(S3 등)에 저장하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>신뢰할 수 없는 이미지 사용</strong>
+                        <p>Docker Hub의 임의 이미지에는 악성코드나 취약점이 포함될 수 있습니다. 공식 이미지나 검증된 퍼블리셔의 이미지만 사용하고, Trivy나 Docker Scout으로 취약점을 스캔하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>멀티스테이지 빌드로 이미지 경량화</strong>
+                        <p>빌드 도구(TypeScript, Webpack 등)와 devDependencies는 런타임에 필요 없습니다. 멀티스테이지 빌드로 빌드 스테이지와 런타임 스테이지를 분리하면 이미지 크기를 80% 이상 줄일 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Docker/" class="related-term-link">Docker</a>
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+                <a href="/ko/term/%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EC%84%9C%EB%B9%84%EC%8A%A4/" class="related-term-link">마이크로서비스</a>
+                <a href="/ko/term/CI%2FCD/" class="related-term-link">CI/CD</a>
+                <a href="/ko/term/DevOps/" class="related-term-link">DevOps</a>
+                <a href="/ko/term/%EC%84%9C%EB%B2%84%EB%A6%AC%EC%8A%A4/" class="related-term-link">서버리스</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.docker.com/" target="_blank" class="learn-link">
+                    📄 Docker 공식 문서
+                </a>
+                <a href="https://docs.docker.com/build/building/multi-stage/" target="_blank" class="learn-link">
+                    🔧 멀티스테이지 빌드 가이드
+                </a>
+                <a href="https://opencontainers.org/" target="_blank" class="learn-link">
+                    📋 Open Container Initiative (OCI) 표준
+                </a>
+                <a href="https://docs.docker.com/develop/security-best-practices/" target="_blank" class="learn-link">
+                    🔒 Docker 보안 베스트 프랙티스
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +728,31 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetTab = this.dataset.tab;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.toggle('active', block.dataset.tab === targetTab);
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

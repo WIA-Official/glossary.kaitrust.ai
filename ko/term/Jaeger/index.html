@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,124 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Jaeger는 Uber가 개발한 오픈소스 분산 트레이싱 시스템입니다. 마이크로서비스 환경에서 요청이 여러 서비스를 거쳐 처리될 때, 각 서비스에서의 처리 시간과 호출 관계를 추적합니다. OpenTracing 표준을 구현하며, 현재 CNCF 졸업 프로젝트입니다.</p>
+                <p>분산 트레이싱의 핵심 개념은 Trace와 Span입니다. 하나의 요청 전체가 Trace이고, 각 서비스에서의 처리 단위가 Span입니다. Span은 부모-자식 관계로 연결되어 호출 그래프를 형성합니다. Jaeger UI에서 이를 타임라인으로 시각화하여 병목 구간을 한눈에 파악할 수 있습니다.</p>
+                <p>Jaeger 아키텍처는 Agent, Collector, Query, Storage로 구성됩니다. Agent는 각 호스트에서 UDP로 Span을 수집하고, Collector가 이를 처리하여 Storage(Cassandra, Elasticsearch, Kafka 등)에 저장합니다. Query 서비스는 저장된 트레이스를 검색하고 UI로 제공합니다.</p>
+                <p>실무에서 Jaeger는 "왜 이 API가 느린가?"라는 질문에 정확한 답을 줍니다. P99 레이턴시가 튀는 구간, 특정 서비스의 에러 발생 지점, 불필요한 DB 쿼리 호출 등을 트레이스 데이터로 증명할 수 있어 성능 최적화와 장애 분석에 필수적입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Python Flask + OpenTelemetry로 Jaeger 연동
+from flask import Flask
+from opentelemetry import trace
+from opentelemetry.exporter.jaeger.thrift import JaegerExporter
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+
+# Tracer 설정
+trace.set_tracer_provider(TracerProvider())
+tracer = trace.get_tracer(__name__)
+
+# Jaeger Exporter 설정
+jaeger_exporter = JaegerExporter(
+    agent_host_name="jaeger-agent.observability.svc",
+    agent_port=6831,
+)
+
+# BatchSpanProcessor로 효율적인 전송
+trace.get_tracer_provider().add_span_processor(
+    BatchSpanProcessor(jaeger_exporter)
+)
+
+app = Flask(__name__)
+
+# 자동 계측
+FlaskInstrumentor().instrument_app(app)
+RequestsInstrumentor().instrument()
+
+@app.route("/order/<order_id>")
+def get_order(order_id):
+    # 커스텀 Span 생성
+    with tracer.start_as_current_span("fetch_order_details") as span:
+        span.set_attribute("order.id", order_id)
+
+        # 다른 서비스 호출 (자동으로 trace context 전파)
+        order = fetch_from_order_service(order_id)
+
+        with tracer.start_as_current_span("enrich_with_user_data"):
+            user = fetch_user_info(order["user_id"])
+            order["user"] = user
+
+        return order</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">SRE:</strong> "어제 밤 주문 API P99 레이턴시가 2초까지 튀었어요. Jaeger에서 샘플링된 트레이스 확인해봤나요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "네, 확인했습니다. 재고 서비스에서 DB 커넥션 대기하는 구간이 1.5초나 걸리고 있었어요."</p>
+                <p><strong class="role-senior">SRE:</strong> "커넥션 풀 사이즈 늘려야겠네요. 트레이스 ID 공유해주시면 장애 리포트에 첨부할게요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "분산 트레이싱에서 Trace Context 전파가 왜 중요한가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "여러 서비스를 거치는 요청을 하나의 Trace로 연결하려면 Trace ID가 서비스 간에 전달되어야 합니다. HTTP 헤더(traceparent)나 gRPC metadata로 전파하며, 이게 끊기면 트레이스가 분리되어 전체 흐름을 파악할 수 없습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-senior">리뷰어:</strong> "이 비동기 작업에서 Span이 끊기고 있어요. start_as_current_span 대신 명시적으로 context를 전달해야 해요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, Celery 태스크라서 그렇군요. trace_context를 태스크 파라미터로 넘기고 받는 쪽에서 attach 하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>프로덕션에서 100% 샘플링은 스토리지 비용 폭증. 1-10% 샘플링 또는 Rate Limiting을 적용하세요</li>
+                <li>Span에 민감한 정보(PII, 비밀번호)가 attribute로 기록되지 않도록 주의하세요</li>
+                <li class="info">OpenTelemetry가 표준이 되었으니 새 프로젝트는 OTel SDK로 시작하고 Jaeger는 Backend로만 사용하세요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/OpenTelemetry/" class="related-link">OpenTelemetry</a>
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+                <a href="/ko/term/Istio/" class="related-link">Istio</a>
+                <a href="/ko/term/Logging/" class="related-link">Logging</a>
+                <a href="/ko/term/Monitoring/" class="related-link">Monitoring</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://www.jaegertracing.io/docs/" target="_blank">Jaeger 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.jaegertracing.io/docs/getting-started/" target="_blank">Jaeger Getting Started</a></li>
+                <li><span class="type-community"></span><a href="https://github.com/jaegertracing/jaeger" target="_blank">Jaeger GitHub 레포지토리</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +331,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

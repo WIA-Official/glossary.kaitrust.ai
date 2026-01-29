@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,161 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Kubernetes(쿠버네티스, K8s)는 컨테이너화된 워크로드와 서비스를 관리하기 위한 이식 가능하고 확장 가능한 오픈소스 플랫폼입니다. Google이 15년 이상의 프로덕션 워크로드 운영 경험을 바탕으로 2014년에 오픈소스로 공개했습니다.</p>
+                <p>K8s의 핵심 구성요소는 컨트롤 플레인(API Server, etcd, Scheduler, Controller Manager)과 워커 노드(kubelet, kube-proxy, Container Runtime)입니다. 선언적 구성(Declarative Configuration)을 통해 원하는 상태를 정의하면, K8s가 현재 상태를 원하는 상태로 자동 조정합니다.</p>
+                <p>Pod는 K8s의 최소 배포 단위로, 하나 이상의 컨테이너를 포함합니다. Deployment는 Pod의 복제본 수와 업데이트 전략을 관리하고, Service는 Pod 집합에 대한 안정적인 네트워크 엔드포인트를 제공합니다.</p>
+                <p>자동 스케일링(HPA, VPA, Cluster Autoscaler), 자가 치유(Self-healing), 롤링 업데이트, 서비스 디스커버리, 로드 밸런싱 등의 기능을 제공하여 대규모 분산 시스템 운영을 단순화합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Deployment: 애플리케이션 배포
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    app: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: my-app
+          image: my-app:v1.0.0
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+---
+# Service: 네트워크 엔드포인트
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP
+
+---
+# HPA: 자동 스케일링
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">DevOps:</strong> "이번에 K8s 클러스터 업그레이드 해야 해요. 1.28에서 1.29로요. 노드 드레인하면서 롤링으로 진행할게요."</p>
+                <p><strong class="role-junior">개발팀:</strong> "서비스 다운타임 있나요?"</p>
+                <p><strong class="role-senior">DevOps:</strong> "아뇨, PodDisruptionBudget 설정되어 있어서 최소 레플리카는 유지돼요. 트래픽 전환도 자동이고요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Kubernetes에서 Pod가 죽으면 어떻게 복구되나요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "Deployment의 ReplicaSet이 원하는 Pod 수를 유지합니다. kubelet이 컨테이너 상태를 모니터링하고, livenessProbe 실패 시 컨테이너를 재시작합니다. Pod 레벨 장애는 컨트롤러가 감지하여 새 Pod를 스케줄링합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "resources 섹션에 limits만 있고 requests가 없네요. requests 없으면 limits 값이 requests로 설정돼서 스케줄링에 영향 줄 수 있어요."</p>
+                <p><strong class="role-author">작성자:</strong> "아, requests를 limits의 50% 정도로 설정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li class="">리소스 limits 없이 배포하면 노드 리소스를 고갈시킬 수 있습니다. 반드시 requests와 limits를 설정하세요.</li>
+                <li class="">롤링 업데이트 시 maxUnavailable: 0으로 설정하면 무중단 배포가 가능하지만, 추가 리소스가 필요합니다.</li>
+                <li class="info">PodDisruptionBudget을 설정하여 유지보수 중에도 최소 가용성을 보장하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88/" class="related-link">컨테이너</a>
+                <a href="/ko/term/Docker/" class="related-link">Docker</a>
+                <a href="/ko/term/Helm/" class="related-link">Helm</a>
+                <a href="/ko/term/Service%20Mesh/" class="related-link">Service Mesh</a>
+                <a href="/ko/term/Istio/" class="related-link">Istio</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://kubernetes.io/docs/" target="_blank">Kubernetes 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://kubernetes.io/docs/tutorials/" target="_blank">Kubernetes 튜토리얼</a></li>
+                <li><span class="type-tutorial"></span><a href="https://learnk8s.io/" target="_blank">Learnk8s - K8s 학습 리소스</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +368,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

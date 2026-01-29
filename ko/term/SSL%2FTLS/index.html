@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SSL/TLS (Secure Sockets Layer / Transport Layer Security) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="통신 암호화 프로토콜. HTTPS의 기반. 인증서로 신원 확인. TLS 1.3이 최신 표준.">
-    <meta name="keywords" content="SSL/TLS, Secure Sockets Layer / Transport Layer Security, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="SSL/TLS는 네트워크 통신을 암호화하는 보안 프로토콜입니다. HTTPS의 기반 기술로, 인증서를 통해 서버 신원을 확인하고 데이터를 암호화합니다. TLS 1.3이 현재 최신 표준입니다.">
+    <meta name="keywords" content="SSL/TLS, TLS 1.3, HTTPS, 암호화, 인증서, Certificate, PKI, 공개키 암호화, 핸드셰이크, 보안 통신, mTLS, Let's Encrypt, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/SSL%2FTLS/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/SSL%2FTLS/">
     <meta property="og:title" content="SSL/TLS (Secure Sockets Layer / Transport Layer Security) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="통신 암호화 프로토콜. HTTPS의 기반. 인증서로 신원 확인. TLS 1.3이 최신 표준.">
+    <meta property="og:description" content="SSL/TLS는 네트워크 통신을 암호화하는 보안 프로토콜입니다. HTTPS의 기반 기술로, 인증서를 통해 서버 신원을 확인합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SSL/TLS (Secure Sockets Layer / Transport Layer Security) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="통신 암호화 프로토콜. HTTPS의 기반. 인증서로 신원 확인. TLS 1.3이 최신 표준.">
+    <meta name="twitter:description" content="SSL/TLS는 네트워크 통신을 암호화하는 보안 프로토콜입니다. HTTPS의 기반 기술로, 인증서를 통해 서버 신원을 확인합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "SSL/TLS",
-        "description": "통신 암호화 프로토콜. HTTPS의 기반. 인증서로 신원 확인. TLS 1.3이 최신 표준.",
+        "alternateName": "Secure Sockets Layer / Transport Layer Security",
+        "description": "SSL/TLS는 네트워크 통신을 암호화하는 보안 프로토콜입니다. HTTPS의 기반 기술로, 인증서를 통해 서버 신원을 확인합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +328,7 @@
             <h1 class="term-title">SSL/TLS</h1>
             <p class="term-english">Secure Sockets Layer / Transport Layer Security</p>
             <div class="term-description">
-                <p>통신 암호화 프로토콜. HTTPS의 기반. 인증서로 신원 확인. TLS 1.3이 최신 표준.</p>
+                <p>네트워크 통신을 암호화하는 보안 프로토콜. HTTPS의 기반 기술로, 인증서를 통해 서버 신원을 확인하고 데이터를 암호화합니다. TLS 1.3이 현재 최신 표준입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,298 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>SSL(Secure Sockets Layer)은 1995년 Netscape가 개발한 암호화 프로토콜이며, TLS(Transport Layer Security)는 SSL 3.0을 기반으로 IETF가 표준화한 후속 프로토콜입니다. 현재 SSL은 보안 취약점으로 완전히 폐기되었고, TLS 1.2와 TLS 1.3이 실제로 사용됩니다. 관례적으로 "SSL"이라 부르지만, 실제로는 TLS를 의미합니다. TLS 1.3은 2018년 RFC 8446으로 표준화되어 더 빠르고 안전한 연결을 제공합니다.</p>
+                <p>TLS 핸드셰이크는 클라이언트와 서버가 암호화된 연결을 수립하는 과정입니다. 클라이언트가 지원하는 암호화 스위트를 제안하면 서버가 선택하고, 인증서를 교환하며, 세션 키를 협상합니다. TLS 1.3에서는 핸드셰이크가 1-RTT(Round Trip Time)로 단축되어 연결 지연이 크게 감소했습니다. 또한 0-RTT 재연결 기능으로 이전에 연결했던 서버에 즉시 데이터를 전송할 수 있습니다.</p>
+                <p>인증서는 서버의 신원을 증명하는 디지털 문서입니다. CA(Certificate Authority)가 발급하며, 도메인 소유권 검증(DV), 조직 검증(OV), 확장 검증(EV) 등급이 있습니다. Let's Encrypt 같은 무료 CA 덕분에 HTTPS 보급률이 급증했습니다. mTLS(Mutual TLS)는 서버뿐 아니라 클라이언트도 인증서를 제시하여 양방향 인증을 수행하며, 마이크로서비스 간 통신에서 많이 사용됩니다.</p>
+                <p>AI/ML 시스템에서 TLS는 API 통신, 모델 서빙, 데이터 파이프라인 암호화에 필수입니다. MLflow, TensorFlow Serving, gRPC 등 모든 ML 인프라가 TLS를 지원합니다. 특히 민감한 학습 데이터나 추론 결과를 전송할 때 반드시 TLS를 적용해야 하며, 내부 서비스 간에도 Zero Trust 원칙에 따라 mTLS를 권장합니다. 인증서 자동 갱신(cert-manager, ACME)은 운영 안정성의 핵심입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="nginx">Nginx 설정</button>
+                <button class="code-tab" data-lang="python">Python (requests/ssl)</button>
+                <button class="code-tab" data-lang="openssl">OpenSSL CLI</button>
+            </div>
+            <div class="code-block active" data-lang="nginx">
+                <pre><code class="language-nginx"># Nginx TLS 1.3 최적 설정
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name api.example.com;
+
+    # 인증서 경로
+    ssl_certificate /etc/letsencrypt/live/api.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/api.example.com/privkey.pem;
+
+    # TLS 버전 - 1.2, 1.3만 허용 (1.0, 1.1 비활성화)
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    # 강력한 암호화 스위트만 사용
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;  # TLS 1.3에서는 off 권장
+
+    # OCSP Stapling - 인증서 유효성 검증 가속화
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    ssl_trusted_certificate /etc/letsencrypt/live/api.example.com/chain.pem;
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+
+    # 세션 캐시 - 핸드셰이크 최적화
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+    ssl_session_tickets off;  # Forward Secrecy 보장
+
+    # HSTS - HTTPS 강제
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+
+    # mTLS 설정 (클라이언트 인증서 요구)
+    # ssl_client_certificate /etc/nginx/client-ca.crt;
+    # ssl_verify_client on;
+
+    location / {
+        proxy_pass http://backend:8080;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+# HTTP → HTTPS 리다이렉트
+server {
+    listen 80;
+    listen [::]:80;
+    server_name api.example.com;
+    return 301 https://$server_name$request_uri;
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Python TLS/SSL 설정 예제
+import ssl
+import requests
+from urllib3.util.ssl_ import create_urllib3_context
+
+# === requests 라이브러리 TLS 설정 ===
+
+# 기본 HTTPS 요청 (시스템 CA 인증서 사용)
+response = requests.get("https://api.example.com/v1/models")
+print(f"TLS Version: {response.raw.version}")  # 사용된 TLS 버전
+
+# 커스텀 CA 인증서 지정 (사내 PKI 사용 시)
+response = requests.get(
+    "https://internal-api.company.com",
+    verify="/path/to/company-ca-bundle.crt"
+)
+
+# mTLS - 클라이언트 인증서 사용
+response = requests.get(
+    "https://secure-api.example.com/v1/data",
+    cert=("/path/to/client.crt", "/path/to/client.key"),
+    verify="/path/to/server-ca.crt"
+)
+
+# === ssl 모듈 직접 사용 (저수준 제어) ===
+
+# TLS 1.3 강제, 약한 암호화 비활성화
+context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+context.minimum_version = ssl.TLSVersion.TLSv1_2
+context.maximum_version = ssl.TLSVersion.TLSv1_3
+
+# 인증서 검증 필수
+context.verify_mode = ssl.CERT_REQUIRED
+context.check_hostname = True
+context.load_verify_locations("/etc/ssl/certs/ca-certificates.crt")
+
+# 연결 테스트
+import socket
+with socket.create_connection(("api.example.com", 443)) as sock:
+    with context.wrap_socket(sock, server_hostname="api.example.com") as ssock:
+        print(f"TLS Version: {ssock.version()}")
+        print(f"Cipher: {ssock.cipher()}")
+        cert = ssock.getpeercert()
+        print(f"Server: {cert['subject']}")
+
+# === FastAPI/Uvicorn TLS 서버 설정 ===
+# uvicorn main:app --ssl-keyfile=./key.pem --ssl-certfile=./cert.pem
+
+# === gRPC mTLS 설정 ===
+import grpc
+
+# 서버 측
+server_credentials = grpc.ssl_server_credentials(
+    [(open('server.key', 'rb').read(), open('server.crt', 'rb').read())],
+    root_certificates=open('client-ca.crt', 'rb').read(),
+    require_client_auth=True  # mTLS 활성화
+)
+
+# 클라이언트 측
+channel_credentials = grpc.ssl_channel_credentials(
+    root_certificates=open('server-ca.crt', 'rb').read(),
+    private_key=open('client.key', 'rb').read(),
+    certificate_chain=open('client.crt', 'rb').read()
+)
+channel = grpc.secure_channel('api.example.com:443', channel_credentials)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="openssl">
+                <pre><code class="language-bash"># OpenSSL CLI - TLS 디버깅 및 인증서 관리
+
+# === TLS 연결 테스트 ===
+# 서버 TLS 설정 확인
+openssl s_client -connect api.example.com:443 -tls1_3
+
+# 인증서 체인 전체 출력
+openssl s_client -connect api.example.com:443 -showcerts
+
+# SNI(Server Name Indication) 지정
+openssl s_client -connect api.example.com:443 -servername api.example.com
+
+# 지원 암호화 스위트 확인
+openssl s_client -connect api.example.com:443 -cipher 'ECDHE+AESGCM'
+
+# === 인증서 정보 확인 ===
+# 원격 서버 인증서 만료일 확인
+echo | openssl s_client -connect api.example.com:443 2>/dev/null | \
+  openssl x509 -noout -dates
+
+# 인증서 상세 정보
+openssl x509 -in server.crt -text -noout
+
+# 인증서와 개인키 일치 확인
+openssl x509 -noout -modulus -in server.crt | openssl md5
+openssl rsa -noout -modulus -in server.key | openssl md5
+# 두 해시가 같아야 함
+
+# === 자체 서명 인증서 생성 (개발용) ===
+# 개인키 생성
+openssl genrsa -out server.key 4096
+
+# CSR(Certificate Signing Request) 생성
+openssl req -new -key server.key -out server.csr \
+  -subj "/CN=api.example.com/O=MyOrg/C=KR"
+
+# 자체 서명 인증서 생성 (365일 유효)
+openssl x509 -req -days 365 -in server.csr \
+  -signkey server.key -out server.crt
+
+# 한 줄로 키+인증서 생성
+openssl req -x509 -newkey rsa:4096 -nodes -days 365 \
+  -keyout server.key -out server.crt \
+  -subj "/CN=localhost" \
+  -addext "subjectAltName=DNS:localhost,IP:127.0.0.1"
+
+# === Let's Encrypt 인증서 발급 (certbot) ===
+# 설치
+apt install certbot python3-certbot-nginx
+
+# Nginx 자동 설정으로 발급
+certbot --nginx -d api.example.com
+
+# 인증서만 발급 (수동 설정)
+certbot certonly --webroot -w /var/www/html -d api.example.com
+
+# 갱신 테스트
+certbot renew --dry-run
+
+# 자동 갱신 (cron)
+# 0 0 * * * certbot renew --quiet && systemctl reload nginx</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 점검 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "TLS 1.0, 1.1은 이미 deprecated됐으니까 nginx에서 비활성화해주세요. ssl_protocols에 TLSv1.2 TLSv1.3만 남기고, Qualys SSL Labs에서 A+ 받는지 확인해봅시다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 마이크로서비스 아키텍처 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "내부 서비스 간 통신도 mTLS 적용해야 합니다. Istio 쓰면 자동으로 사이드카가 mTLS 핸드셰이크하니까, PeerAuthentication을 STRICT 모드로 설정하면 돼요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 운영 장애 대응 중</div>
+                    <blockquote class="conv-quote">
+                        "인증서 만료로 API 장애났어요. cert-manager 적용해서 Let's Encrypt 인증서 자동 갱신되게 하고, 만료 30일 전에 Slack 알림 오도록 모니터링 추가합시다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>인증서 검증 비활성화 금지</strong>
+                        <p>verify=False, CERT_NONE 같은 옵션은 MITM 공격에 노출됩니다. 개발 환경에서도 자체 서명 인증서를 만들어 사용하고, 프로덕션에서는 절대 비활성화하지 마세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>구버전 TLS 사용 금지</strong>
+                        <p>TLS 1.0, 1.1은 POODLE, BEAST 등 알려진 취약점이 있습니다. PCI-DSS 등 컴플라이언스에서도 금지합니다. 최소 TLS 1.2, 가능하면 1.3만 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>인증서 만료 모니터링 필수</strong>
+                        <p>인증서 만료는 가장 흔한 장애 원인입니다. cert-manager, ACME 프로토콜로 자동 갱신을 설정하고, 만료 임박 시 알림을 받도록 구성하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>TLS 베스트 프랙티스</strong>
+                        <p>HSTS 헤더로 HTTPS를 강제하고, OCSP Stapling으로 인증서 검증을 가속화하세요. 개인키는 HSM이나 Vault에 안전하게 보관하고, Forward Secrecy를 위해 ECDHE 암호화 스위트를 사용하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/VPN/" class="related-term-link">VPN</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+                <a href="/ko/term/Vault/" class="related-term-link">Vault</a>
+                <a href="/ko/term/Token-based%20Auth/" class="related-term-link">Token-based Auth</a>
+                <a href="/ko/term/WAF/" class="related-term-link">WAF</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.ssllabs.com/ssltest/" target="_blank" class="learn-link">
+                    📄 Qualys SSL Labs - TLS 설정 테스트
+                </a>
+                <a href="https://letsencrypt.org/docs/" target="_blank" class="learn-link">
+                    🎓 Let's Encrypt 공식 문서
+                </a>
+                <a href="https://wiki.mozilla.org/Security/Server_Side_TLS" target="_blank" class="learn-link">
+                    📖 Mozilla SSL Configuration Generator
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +638,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

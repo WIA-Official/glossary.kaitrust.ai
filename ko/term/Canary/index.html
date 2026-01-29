@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,128 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>카나리 배포는 새 버전을 소수의 사용자에게 먼저 배포하여 문제를 조기에 발견하는 점진적 배포 전략입니다. 이름은 광산에서 유독가스를 감지하기 위해 카나리아 새를 사용한 것에서 유래했습니다.</p>
+                <p>전체 트래픽의 일부(예: 1~5%)만 새 버전으로 보내고, 에러율, 지연시간, 비즈니스 메트릭을 모니터링합니다. 문제가 없으면 트래픽 비율을 점진적으로 늘려 최종적으로 100% 전환합니다. 문제 발생 시 즉시 트래픽을 이전 버전으로 돌립니다.</p>
+                <p>Kubernetes 환경에서는 Argo Rollouts, Flagger, Istio 등으로 구현합니다. 트래픽 분배, 메트릭 분석, 자동 롤백까지 자동화할 수 있습니다. 클라우드 서비스에서는 AWS App Mesh, GCP Traffic Director 등을 활용합니다.</p>
+                <p>실무에서는 카나리 배포와 함께 피처 플래그를 사용하여 더 세밀한 제어를 합니다. 특정 사용자 그룹(베타 테스터, 내부 직원)에게만 새 기능을 노출하고, 메트릭 기반 자동 승격(Promotion)으로 운영 부담을 줄입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Argo Rollouts - 카나리 배포 설정
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: my-app
+spec:
+  replicas: 10
+  strategy:
+    canary:
+      # 카나리 단계 정의
+      steps:
+        - setWeight: 5      # 5% 트래픽
+        - pause: {duration: 5m}
+        - setWeight: 20     # 20% 트래픽
+        - pause: {duration: 5m}
+        - setWeight: 50     # 50% 트래픽
+        - pause: {duration: 10m}
+        # 이후 100%로 자동 전환
+
+      # 자동 분석 (Prometheus 메트릭 기반)
+      analysis:
+        templates:
+          - templateName: success-rate
+        startingStep: 1
+        args:
+          - name: service-name
+            value: my-app
+
+      # 트래픽 라우팅 (Istio/Nginx 연동)
+      trafficRouting:
+        istio:
+          virtualService:
+            name: my-app-vsvc
+            routes:
+              - primary
+
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: app
+          image: myregistry/my-app:v2.0.0</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "지난 장애 때 롤백까지 30분 걸렸잖아요. 카나리 배포하면 5% 트래픽에서 문제 발견되니까 영향 범위가 훨씬 작아져요."</p>
+                <p><strong class="role-junior">주니어:</strong> "모니터링 메트릭은 뭘 봐야 하나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "에러율, p99 레이턴시, 그리고 비즈니스 메트릭(전환율, 결제 성공률 등)이요. Argo Rollouts로 자동 분석해서 실패하면 자동 롤백되도록 설정해요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "카나리 배포에서 트래픽 분배는 어떻게 구현하나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "여러 방법이 있습니다. Kubernetes에서는 Replica 비율로 간단히 할 수 있고, Istio VirtualService의 weight로 정밀 제어가 가능합니다. 로드밸런서의 가중치 라우팅이나 CDN의 A/B 테스팅 기능도 활용합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "분석 단계에서 success-rate만 보는데, latency-p99도 추가하면 성능 저하도 감지할 수 있어요."</p>
+                <p><strong class="role-junior">개발자:</strong> "좋은 지적이에요. 복합 메트릭으로 분석하도록 AnalysisTemplate 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>트래픽이 적으면 통계적으로 유의미한 결과 도출 어려움 - 충분한 샘플 사이즈 확보</li>
+                <li>구버전과 신버전 간 데이터 형식 호환성 필수 - 특히 DB 스키마, API 계약</li>
+                <li>사용자별 일관된 버전 경험을 위해 sticky session 고려 필요</li>
+                <li class="info">Observability(메트릭, 로그, 트레이싱) 인프라가 카나리 배포 성공의 핵심 - 문제 감지가 안 되면 무의미</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Blue-Green/" class="related-link">Blue-Green</a>
+                <a href="/ko/term/ArgoCD/" class="related-link">ArgoCD</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Feature-Flag/" class="related-link">Feature Flag</a>
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://argo-rollouts.readthedocs.io/en/stable/" target="_blank" rel="noopener">Argo Rollouts 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://martinfowler.com/bliki/CanaryRelease.html" target="_blank" rel="noopener">Martin Fowler - Canary Release</a></li>
+                <li><span class="type-book"></span><a href="https://fluxcd.io/flagger/" target="_blank" rel="noopener">Flagger - Progressive Delivery</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +335,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,317 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detailed-explanation">
+            <h2 id="detailed-explanation" class="section-title">상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Grafana</strong>는 메트릭, 로그, 트레이스 데이터를 시각화하는 오픈소스 플랫폼입니다. 2014년 Torkel Odegaard가 시작한 프로젝트로, 현재 전 세계적으로 가장 인기 있는 모니터링 시각화 도구입니다. 다양한 데이터 소스를 지원하며, 특히 Prometheus와 함께 클라우드 네이티브 모니터링 스택의 핵심을 이룹니다.</p>
+
+                <h3>핵심 기능</h3>
+                <ul>
+                    <li><strong>대시보드</strong>: 드래그앤드롭으로 패널 구성, JSON으로 내보내기/가져오기</li>
+                    <li><strong>다중 데이터 소스</strong>: Prometheus, Loki, InfluxDB, Elasticsearch, CloudWatch 등 지원</li>
+                    <li><strong>알림(Alerting)</strong>: 임계값 기반 알림, Slack/PagerDuty/이메일 연동</li>
+                    <li><strong>Explore</strong>: 즉석 쿼리로 데이터 탐색</li>
+                    <li><strong>플러그인</strong>: 패널, 데이터 소스, 앱 확장</li>
+                    <li><strong>팀/권한</strong>: 조직, 팀, 폴더 기반 접근 제어</li>
+                </ul>
+
+                <h3>Grafana 스택</h3>
+                <ul>
+                    <li><strong>Grafana</strong>: 시각화 및 대시보드</li>
+                    <li><strong>Prometheus</strong>: 메트릭 수집 및 저장</li>
+                    <li><strong>Loki</strong>: 로그 집계 시스템</li>
+                    <li><strong>Tempo</strong>: 분산 트레이싱 백엔드</li>
+                    <li><strong>Mimir</strong>: 장기 메트릭 저장소</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-example">
+            <h2 id="code-example" class="section-title">코드 예제</h2>
+            <div class="section-content">
+                <h3>Dashboard JSON 예제</h3>
+                <pre><code class="language-json">{
+  "dashboard": {
+    "id": null,
+    "uid": "api-dashboard",
+    "title": "API Service Dashboard",
+    "tags": ["api", "production"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Rate",
+        "type": "timeseries",
+        "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{job=\"api\"}[5m])) by (status_code)",
+            "legendFormat": "{{status_code}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps",
+            "custom": {
+              "drawStyle": "line",
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Response Time (p95)",
+        "type": "stat",
+        "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=\"api\"}[5m])) by (le))",
+            "legendFormat": "p95"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "green" },
+                { "value": 0.5, "color": "yellow" },
+                { "value": 1, "color": "red" }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Error Rate",
+        "type": "gauge",
+        "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{job=\"api\",status_code=~\"5..\"}[5m])) / sum(rate(http_requests_total{job=\"api\"}[5m])) * 100",
+            "legendFormat": "Error %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "steps": [
+                { "value": 0, "color": "green" },
+                { "value": 1, "color": "yellow" },
+                { "value": 5, "color": "red" }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}</code></pre>
+
+                <h3>Grafana Provisioning 설정</h3>
+                <pre><code class="language-yaml"># /etc/grafana/provisioning/datasources/prometheus.yaml
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      timeInterval: "15s"
+
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: false
+    jsonData:
+      derivedFields:
+        - datasourceUid: tempo
+          matcherRegex: "traceID=(\\w+)"
+          name: TraceID
+          url: "$${__value.raw}"
+
+  - name: Tempo
+    type: tempo
+    access: proxy
+    url: http://tempo:3200
+    editable: false
+---
+# /etc/grafana/provisioning/dashboards/dashboards.yaml
+apiVersion: 1
+
+providers:
+  - name: 'default'
+    orgId: 1
+    folder: 'Production'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards</code></pre>
+
+                <h3>Kubernetes에서 Grafana 배포</h3>
+                <pre><code class="language-yaml"># grafana-values.yaml (Helm)
+replicas: 1
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+adminUser: admin
+adminPassword: ${GRAFANA_ADMIN_PASSWORD}
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.monitoring.svc:9090
+        isDefault: true
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        options:
+          path: /var/lib/grafana/dashboards
+
+dashboards:
+  default:
+    kubernetes-cluster:
+      gnetId: 6417
+      revision: 1
+      datasource: Prometheus
+    node-exporter:
+      gnetId: 1860
+      revision: 31
+      datasource: Prometheus
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
+  hosts:
+    - grafana.example.com
+  tls:
+    - secretName: grafana-tls
+      hosts:
+        - grafana.example.com</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section" aria-labelledby="practical-dialogue">
+            <h2 id="practical-dialogue" class="section-title">실무 대화 예제</h2>
+            <div class="section-content">
+                <div class="dialogue-container">
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">SRE 엔지니어</div>
+                        <div class="dialogue-content">"Prometheus에서 메트릭은 수집되는데, 시각화가 힘들어요. 쿼리 결과를 그래프로 보고 싶은데..."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">시니어 SRE</div>
+                        <div class="dialogue-content">"Grafana를 연동하면 돼요. Prometheus를 데이터 소스로 추가하고, 대시보드를 만들어서 PromQL 쿼리 결과를 시각화할 수 있어요. 커뮤니티에 공유된 대시보드도 수천 개가 있으니 import해서 바로 쓸 수도 있고요."</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">SRE 엔지니어</div>
+                        <div class="dialogue-content">"알림도 Grafana에서 설정할 수 있나요?"</div>
+                    </div>
+                    <div class="dialogue">
+                        <div class="dialogue-speaker">시니어 SRE</div>
+                        <div class="dialogue-content">"네, Grafana Alerting으로 가능해요. 패널에 알림 조건을 설정하고, Slack이나 PagerDuty로 알림을 보낼 수 있죠. 다만 복잡한 알림은 Prometheus Alertmanager를 쓰는 게 더 유연해요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="cautions">
+            <h2 id="cautions" class="section-title">주의사항</h2>
+            <div class="section-content">
+                <div class="caution-box">
+                    <h3>대시보드 버전 관리</h3>
+                    <p>대시보드를 UI에서만 수정하면 변경 이력이 남지 않습니다. JSON을 Git에 저장하고 provisioning으로 배포하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>쿼리 성능</h3>
+                    <p>무거운 PromQL 쿼리가 많은 대시보드는 로딩이 느립니다. Recording Rules로 자주 쓰는 쿼리를 미리 계산해두세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>인증/권한</h3>
+                    <p>기본 설정에서는 익명 접근이 가능합니다. 프로덕션에서는 LDAP, OAuth, SAML 등 인증을 필수로 설정하세요.</p>
+                </div>
+                <div class="caution-box">
+                    <h3>Persistence</h3>
+                    <p>Grafana 데이터베이스(SQLite 또는 외부 DB)를 영구 볼륨에 저장하지 않으면 재시작 시 대시보드가 사라집니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-terms">
+            <h2 id="related-terms" class="section-title">관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms-grid">
+                    <a href="/ko/term/Prometheus/" class="related-term-card">
+                        <h3>Prometheus</h3>
+                        <p>Grafana와 함께 사용하는 메트릭 시스템</p>
+                    </a>
+                    <a href="/ko/term/Datadog/" class="related-term-card">
+                        <h3>Datadog</h3>
+                        <p>상용 모니터링 플랫폼. Grafana의 대안</p>
+                    </a>
+                    <a href="/ko/term/Kubernetes/" class="related-term-card">
+                        <h3>Kubernetes</h3>
+                        <p>Grafana로 모니터링하는 컨테이너 플랫폼</p>
+                    </a>
+                    <a href="/ko/term/OpenTelemetry/" class="related-term-card">
+                        <h3>OpenTelemetry</h3>
+                        <p>Grafana가 지원하는 관측 표준</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-more">
+            <h2 id="learn-more" class="section-title">더 배우기</h2>
+            <div class="section-content">
+                <ul class="resource-list">
+                    <li><a href="https://grafana.com/docs/" target="_blank" rel="noopener noreferrer">Grafana 공식 문서</a> - 전체 기능 가이드</li>
+                    <li><a href="https://grafana.com/grafana/dashboards/" target="_blank" rel="noopener noreferrer">Grafana Dashboard 라이브러리</a> - 커뮤니티 대시보드</li>
+                    <li><a href="https://play.grafana.org/" target="_blank" rel="noopener noreferrer">Grafana Play</a> - 브라우저에서 체험</li>
+                    <li><a href="https://github.com/grafana/grafana" target="_blank" rel="noopener noreferrer">Grafana GitHub</a> - 소스 코드</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +524,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

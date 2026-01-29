@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,142 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>주-복제본 복제(Primary-Replica Replication)는 하나의 Primary(마스터) 서버가 모든 쓰기 작업을 처리하고, 여러 Replica(슬레이브) 서버가 읽기 작업을 분담하는 데이터베이스 복제 방식입니다. 읽기와 쓰기 비율이 높은 대부분의 웹 애플리케이션에서 널리 사용됩니다.</p>
+                <p>Primary에서 발생한 변경사항은 복제 로그(binlog, WAL 등)를 통해 Replica로 전파됩니다. 동기식 복제는 데이터 일관성을 보장하지만 지연이 발생하고, 비동기식 복제는 빠르지만 일시적 데이터 불일치(Replica Lag)가 발생할 수 있습니다.</p>
+                <p>읽기 부하를 여러 Replica로 분산하여 처리량을 늘릴 수 있고, Primary 장애 시 Replica 중 하나를 승격시켜 서비스 연속성을 유지할 수 있습니다. 다만 애플리케이션 레벨에서 읽기/쓰기 라우팅 로직이 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Python - SQLAlchemy 읽기/쓰기 분리
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+# Primary (쓰기용)
+primary_engine = create_engine('postgresql://primary-host:5432/mydb')
+
+# Replica (읽기용)
+replica_engine = create_engine('postgresql://replica-host:5432/mydb')
+
+PrimarySession = sessionmaker(bind=primary_engine)
+ReplicaSession = sessionmaker(bind=replica_engine)
+
+class DatabaseRouter:
+    def get_session(self, readonly=False):
+        if readonly:
+            return ReplicaSession()
+        return PrimarySession()
+
+# 사용 예시
+router = DatabaseRouter()
+
+# 쓰기 작업 - Primary로
+with router.get_session(readonly=False) as session:
+    new_user = User(name="홍길동", email="hong@example.com")
+    session.add(new_user)
+    session.commit()
+
+# 읽기 작업 - Replica로
+with router.get_session(readonly=True) as session:
+    users = session.query(User).filter(User.active == True).all()
+
+# Django - 데이터베이스 라우터 설정
+# settings.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'primary-host',
+        'NAME': 'mydb',
+    },
+    'replica': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'replica-host',
+        'NAME': 'mydb',
+    }
+}
+
+# routers.py
+class PrimaryReplicaRouter:
+    def db_for_read(self, model, **hints):
+        return 'replica'
+
+    def db_for_write(self, model, **hints):
+        return 'default'
+
+    def allow_relation(self, obj1, obj2, **hints):
+        return True
+
+    def allow_migrate(self, db, app_label, model_name=None, **hints):
+        return db == 'default'</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>DevOps:</strong> DB 서버 CPU가 80% 넘게 올라가요. 대부분 읽기 쿼리인데요.</p>
+                <p><strong>DBA:</strong> Primary-Replica 구성으로 읽기 분산하면 되겠네요. 현재 읽기/쓰기 비율이 어떻게 되나요?</p>
+                <p><strong>DevOps:</strong> 읽기가 90% 정도예요.</p>
+                <p><strong>DBA:</strong> Replica 2대 추가하고 읽기 쿼리를 분산시키면 Primary 부하가 크게 줄 거예요. 다만 Replica Lag 모니터링도 설정해야 합니다.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> Primary-Replica 구성에서 Replica Lag가 발생하면 어떤 문제가 생기나요?</p>
+                <p><strong>지원자:</strong> 사용자가 방금 작성한 글을 바로 조회하면 안 보일 수 있습니다. 이를 해결하려면 쓰기 직후 읽기는 Primary에서 하거나, 쿠키/세션으로 최근 쓰기 시간을 추적해서 Lag보다 이전 데이터만 Replica에서 읽는 방법이 있습니다.</p>
+                <p><strong>면접관:</strong> Primary 장애 시 Failover는 어떻게 하나요?</p>
+                <p><strong>지원자:</strong> Replica 중 하나를 Primary로 승격시킵니다. 자동화 도구로는 MySQL의 MHA, PostgreSQL의 Patroni 등이 있습니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>시니어:</strong> 여기서 데이터 저장 직후 바로 같은 데이터를 조회하네요. Replica Lag 고려했어요?</p>
+                <p><strong>주니어:</strong> 아, Replica에서 읽으면 방금 쓴 데이터가 안 보일 수 있겠네요.</p>
+                <p><strong>시니어:</strong> 네, 쓰기 직후 읽기는 Primary에서 하도록 수정하거나, 최소한 1초 정도 지연 후 조회하도록 바꾸세요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>Replica Lag로 인한 읽기 일관성 문제에 대한 애플리케이션 레벨 대응 필요</li>
+                <li>쓰기 직후 읽기는 Primary에서 하도록 설계</li>
+                <li>Failover 시 데이터 손실 가능성 (비동기 복제의 경우)</li>
+                <li>복제 지연 모니터링과 임계치 알림 설정 필수</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%A0%88%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98/" class="related-link">레플리케이션</a>
+                <a href="/ko/term/%EB%8B%A4%EC%A4%91%20%EB%A7%88%EC%8A%A4%ED%84%B0%20%EB%B3%B5%EC%A0%9C/" class="related-link">다중 마스터 복제</a>
+                <a href="/ko/term/%EC%83%A4%EB%94%A9/" class="related-link">샤딩</a>
+                <a href="/ko/term/%EC%BB%A4%EB%84%A5%EC%85%98%20%ED%92%80/" class="related-link">커넥션 풀</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://dev.mysql.com/doc/refman/8.0/en/replication.html" target="_blank">MySQL Replication 공식 문서</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/high-availability.html" target="_blank">PostgreSQL High Availability</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +350,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,215 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>AI 시스템 등록(AI System Registration)은 고위험 AI 시스템을 EU 데이터베이스에 등록해야 하는 의무입니다. EU AI Act 제71조에 따라 고위험 AI 시스템의 공급자는 시장 출시 또는 서비스 개시 전에 EU 데이터베이스에 시스템을 등록해야 합니다.</p>
+                <p>등록 대상은 부속서 III에 명시된 고위험 AI 시스템으로, 의료기기 AI, 채용/인사 AI, 신용평가 AI, 사법/법집행 AI, 이민/국경관리 AI, 교육 AI 등이 포함됩니다. 등록 없이는 EU 시장 출시가 불가능합니다.</p>
+                <p>등록 정보에는 공급자 정보, AI 시스템 명칭 및 설명, 의도된 용도, 적합성 평가 결과, CE 마킹 정보, EU 대리인 정보(해당 시)가 포함됩니다. 등록 정보는 공개되어 시민들이 어떤 AI 시스템이 사용되고 있는지 확인할 수 있습니다.</p>
+                <p>배포자(Deployer)도 특정 상황에서 등록 의무가 있습니다. 공공기관이 고위험 AI를 사용하거나, 감정 인식 또는 생체 분류 AI를 사용하는 경우 등록이 필요합니다. 등록 정보는 변경 시 즉시 업데이트해야 하며, 시스템 폐기 시에도 기록은 유지됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># EU AI 시스템 등록 데이터 모델
+from dataclasses import dataclass, field
+from typing import List, Optional
+from datetime import datetime
+from enum import Enum
+
+class HighRiskCategory(Enum):
+    """EU AI Act 부속서 III 고위험 분류"""
+    BIOMETRIC = "biometric_identification"
+    CRITICAL_INFRASTRUCTURE = "critical_infrastructure"
+    EDUCATION = "education_training"
+    EMPLOYMENT = "employment_hr"
+    ESSENTIAL_SERVICES = "essential_services"
+    LAW_ENFORCEMENT = "law_enforcement"
+    MIGRATION = "migration_border"
+    JUSTICE = "justice_democracy"
+
+@dataclass
+class AISystemRegistration:
+    """EU 데이터베이스 등록 정보 (Article 71)"""
+
+    # 공급자 정보
+    provider_name: str
+    provider_address: str
+    provider_contact: str
+    eu_representative: Optional[str] = None  # EU 외 기업 필수
+
+    # AI 시스템 정보
+    system_name: str
+    system_description: str
+    high_risk_category: HighRiskCategory
+    intended_purpose: str
+    technical_specifications: str
+
+    # 적합성 평가 정보
+    conformity_assessment_body: Optional[str] = None
+    conformity_certificate_number: Optional[str] = None
+    ce_marking_date: Optional[datetime] = None
+
+    # 등록 상태
+    registration_id: Optional[str] = None
+    registration_date: Optional[datetime] = None
+    last_updated: Optional[datetime] = None
+    status: str = "draft"  # draft, submitted, registered, withdrawn
+
+    # Member States 배포 정보
+    member_states_deployed: List[str] = field(default_factory=list)
+
+    def validate_for_submission(self) -> dict:
+        """등록 제출 전 유효성 검사"""
+        errors = []
+        warnings = []
+
+        # 필수 필드 확인
+        if not self.provider_name:
+            errors.append("공급자 이름 필수")
+        if not self.system_name:
+            errors.append("시스템 이름 필수")
+        if not self.intended_purpose:
+            errors.append("의도된 용도 설명 필수")
+
+        # EU 외 기업 대리인 확인
+        if not self._is_eu_provider() and not self.eu_representative:
+            errors.append("EU 외 공급자는 EU 대리인 지정 필수")
+
+        # CE 마킹 확인
+        if not self.ce_marking_date:
+            errors.append("CE 마킹 완료 후 등록 가능")
+
+        # 권장 사항
+        if len(self.system_description) < 200:
+            warnings.append("시스템 설명이 너무 짧음 - 상세 기술 권장")
+
+        return {
+            "valid": len(errors) == 0,
+            "errors": errors,
+            "warnings": warnings
+        }
+
+    def _is_eu_provider(self) -> bool:
+        """EU 소재 공급자 여부 확인"""
+        eu_countries = ["Germany", "France", "Italy", "Spain", "Netherlands",
+                       "Belgium", "Austria", "Poland", "Sweden", "Ireland"]
+        return any(country in self.provider_address for country in eu_countries)
+
+    def generate_registration_payload(self) -> dict:
+        """EU 데이터베이스 제출용 페이로드 생성"""
+        validation = self.validate_for_submission()
+        if not validation["valid"]:
+            raise ValueError(f"등록 유효성 오류: {validation['errors']}")
+
+        return {
+            "provider": {
+                "name": self.provider_name,
+                "address": self.provider_address,
+                "contact": self.provider_contact,
+                "eu_representative": self.eu_representative
+            },
+            "ai_system": {
+                "name": self.system_name,
+                "description": self.system_description,
+                "high_risk_category": self.high_risk_category.value,
+                "intended_purpose": self.intended_purpose,
+                "technical_specifications": self.technical_specifications
+            },
+            "conformity": {
+                "assessment_body": self.conformity_assessment_body,
+                "certificate_number": self.conformity_certificate_number,
+                "ce_marking_date": self.ce_marking_date.isoformat() if self.ce_marking_date else None
+            },
+            "deployment": {
+                "member_states": self.member_states_deployed
+            },
+            "submitted_at": datetime.now().isoformat()
+        }
+
+# 사용 예시
+registration = AISystemRegistration(
+    provider_name="KAITRUST Corp",
+    provider_address="Seoul, Korea",
+    provider_contact="compliance@kaitrust.ai",
+    eu_representative="KAITRUST EU GmbH, Berlin, Germany",
+    system_name="AI Credit Scoring System v2.0",
+    system_description="머신러닝 기반 개인 신용 평가 시스템...",
+    high_risk_category=HighRiskCategory.ESSENTIAL_SERVICES,
+    intended_purpose="금융기관의 개인 대출 심사 보조",
+    technical_specifications="XGBoost + SHAP 설명가능성",
+    conformity_certificate_number="EU-AI-2025-001234",
+    ce_marking_date=datetime(2025, 1, 15),
+    member_states_deployed=["Germany", "France", "Netherlands"]
+)
+
+# 유효성 검사 및 페이로드 생성
+print(registration.validate_for_submission())
+print(registration.generate_registration_payload())</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">법무팀:</strong> "CE 마킹 받으면 바로 EU 데이터베이스에 등록해야 해요. 등록 없이 시장 출시하면 불법입니다."</p>
+                <p><strong class="role-junior">개발팀:</strong> "등록 정보에 기술 사양과 의도된 용도를 상세히 작성했습니다. 배포 국가별로 각 회원국 시장감시당국에도 통보될 거에요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "EU AI 시스템 등록 절차를 설명해 주실 수 있나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "고위험 AI는 적합성 평가 후 CE 마킹을 받고, EU 데이터베이스에 공급자 정보, 시스템 설명, 의도된 용도, 인증 정보를 등록합니다. 등록 정보는 공개되어 투명성을 확보하고, 변경 시 즉시 업데이트해야 합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">컴플라이언스:</strong> "시스템 버전 업데이트 시 EU 데이터베이스 등록 정보도 갱신되나요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "배포 파이프라인에 등록 정보 자동 업데이트 스크립트 추가했습니다. 주요 버전 변경 시 법무팀 승인 후 API로 갱신됩니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>미등록 고위험 AI 출시 시 최대 1,500만 유로 또는 매출 3% 과징금</li>
+                <li>허위 또는 불완전한 등록 정보 제출 시 가중 처벌 가능</li>
+                <li>등록 정보 변경 시 지체 없이 업데이트 의무 (시스템 폐기 포함)</li>
+                <li class="info">등록 데이터베이스는 공개 - 경쟁사 및 시민단체의 모니터링 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/EU%20AI%20Act/" class="related-link">EU AI Act</a>
+                <a href="/ko/term/CE%20%EB%A7%88%ED%82%B9/" class="related-link">CE 마킹</a>
+                <a href="/ko/term/%EA%B8%B0%EC%88%A0%EC%A0%81%20%EB%AC%B8%EC%84%9C%ED%99%94/" class="related-link">기술적 문서화</a>
+                <a href="/ko/term/AI%20%EA%B0%90%EC%82%AC/" class="related-link">AI 감사</a>
+                <a href="/ko/term/AISP/" class="related-link">AISP</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act Article 71 - EU Database</a></li>
+                <li><span class="type-tutorial"></span><a href="https://digital-strategy.ec.europa.eu/en/policies/european-approach-artificial-intelligence" target="_blank" rel="noopener">EU AI 규제 접근법 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://artificialintelligenceact.eu/annex/3/" target="_blank" rel="noopener">부속서 III - 고위험 AI 시스템 목록</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +422,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

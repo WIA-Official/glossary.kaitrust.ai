@@ -161,6 +161,122 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +318,168 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>GELU(Gaussian Error Linear Unit)는 2016년 Dan Hendrycks와 Kevin Gimpel이 제안한 활성화 함수로, 입력값에 표준 정규분포의 누적분포함수(CDF)를 곱한 형태입니다. 수식은 GELU(x) = x * Phi(x)이며, 여기서 Phi는 표준 정규분포의 CDF입니다.</p>
+                <p>GELU의 핵심 아이디어는 확률적 정규화입니다. 입력값이 클수록 통과할 확률이 높고, 작을수록 0에 가까워집니다. 이는 ReLU의 하드한 0 처리와 달리 부드러운 비선형성을 제공하며, 음수 영역에서도 작은 그래디언트를 허용합니다.</p>
+                <p>GELU는 BERT, GPT, ViT 등 대부분의 Transformer 기반 모델에서 표준 활성화 함수로 사용됩니다. 연구에 따르면 GELU는 NLP 태스크에서 ReLU 대비 평균 0.3-0.5% 성능 향상을 보이며, 특히 사전학습 모델에서 효과적입니다.</p>
+                <p>실무에서는 정확한 GELU 대신 근사 버전이 자주 사용됩니다. PyTorch의 tanh 근사(x * 0.5 * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3))))는 계산 효율이 높으면서 원본과 거의 동일한 성능을 보입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
+import matplotlib.pyplot as plt
+
+# PyTorch 내장 GELU
+gelu_layer = nn.GELU()
+
+# 정확한 GELU 구현
+def gelu_exact(x):
+    """GELU(x) = x * Phi(x) where Phi is CDF of standard normal"""
+    return x * 0.5 * (1.0 + torch.erf(x / np.sqrt(2.0)))
+
+# 빠른 근사 GELU (tanh approximation)
+def gelu_tanh_approx(x):
+    """Fast GELU approximation using tanh"""
+    return 0.5 * x * (1.0 + torch.tanh(
+        np.sqrt(2.0 / np.pi) * (x + 0.044715 * torch.pow(x, 3))
+    ))
+
+# Transformer 블록에서 GELU 사용 예시
+class TransformerFFN(nn.Module):
+    def __init__(self, d_model=768, d_ff=3072, dropout=0.1):
+        super().__init__()
+        self.linear1 = nn.Linear(d_model, d_ff)
+        self.linear2 = nn.Linear(d_ff, d_model)
+        self.dropout = nn.Dropout(dropout)
+        self.gelu = nn.GELU()
+
+    def forward(self, x):
+        # FFN: Linear -> GELU -> Dropout -> Linear -> Dropout
+        x = self.linear1(x)
+        x = self.gelu(x)
+        x = self.dropout(x)
+        x = self.linear2(x)
+        x = self.dropout(x)
+        return x
+
+# 활성화 함수 비교 시각화
+x = torch.linspace(-4, 4, 1000)
+
+plt.figure(figsize=(10, 6))
+plt.plot(x.numpy(), F.relu(x).numpy(), label='ReLU', linewidth=2)
+plt.plot(x.numpy(), gelu_exact(x).numpy(), label='GELU (exact)', linewidth=2)
+plt.plot(x.numpy(), gelu_tanh_approx(x).numpy(), label='GELU (approx)',
+         linewidth=2, linestyle='--')
+plt.axhline(y=0, color='gray', linestyle='-', alpha=0.3)
+plt.axvline(x=0, color='gray', linestyle='-', alpha=0.3)
+plt.xlabel('Input')
+plt.ylabel('Output')
+plt.title('Activation Function Comparison')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# BERT/GPT 스타일 모델에서 사용
+class BertConfig:
+    hidden_size = 768
+    intermediate_size = 3072
+    hidden_act = "gelu"  # GPT-2는 "gelu_new" 사용
+
+print(f"GELU(-1.0) = {gelu_exact(torch.tensor(-1.0)).item():.4f}")  # ~-0.1587
+print(f"GELU(0.0) = {gelu_exact(torch.tensor(0.0)).item():.4f}")    # 0.0
+print(f"GELU(1.0) = {gelu_exact(torch.tensor(1.0)).item():.4f}")    # ~0.8413</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">기술 면접 상황</div>
+                    <p class="conv-quote">"GELU가 ReLU보다 Transformer에서 더 좋은 성능을 보이는 이유가 뭔가요?" - "GELU는 음수 입력에서도 작은 그래디언트를 허용해서 dying neuron 문제가 적고, 부드러운 비선형성이 attention 메커니즘과 잘 맞습니다. 특히 사전학습 과정에서 더 안정적인 학습이 가능합니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">프로젝트 회의</div>
+                    <p class="conv-quote">"Hugging Face 모델에서 gelu와 gelu_new의 차이점이 뭔가요?" - "gelu_new는 GPT-2에서 사용하는 tanh 근사 버전입니다. 정확한 GELU와 거의 동일한 성능을 보이면서 계산이 더 빠르죠. 대부분의 경우 어떤 것을 써도 무방하지만, 사전학습된 모델과 동일한 버전을 사용하는 것이 중요합니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">코드 리뷰</div>
+                    <p class="conv-quote">"FFN 레이어에서 ReLU 대신 GELU를 쓴 이유가 있나요?" - "BERT 논문을 따라서 GELU를 사용했습니다. 저희 실험에서도 GELU가 validation loss 기준 약 2% 더 낮았고, 특히 마스크드 언어 모델링 태스크에서 차이가 컸습니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">1</span>
+                    <div>
+                        <strong>근사 버전 선택 주의</strong>
+                        <p>PyTorch에서 nn.GELU(approximate='tanh')와 기본 버전은 미세하게 다릅니다. 사전학습 모델을 파인튜닝할 때는 원본과 동일한 버전을 사용해야 재현성이 보장됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">2</span>
+                    <div>
+                        <strong>연산 비용</strong>
+                        <p>정확한 GELU는 erf 함수를 사용해 ReLU보다 약 3-4배 느립니다. 추론 속도가 중요한 경우 tanh 근사나 SiLU(Swish) 사용을 고려하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">3</span>
+                    <div>
+                        <strong>수치 안정성</strong>
+                        <p>매우 큰 음수 입력에서 GELU 그래디언트가 거의 0이 됩니다. mixed precision 학습 시 underflow 문제가 발생할 수 있으니 그래디언트 클리핑을 권장합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/ReLU/" class="related-term-link">ReLU</a>
+                <a href="/ko/term/Transformer/" class="related-term-link">Transformer</a>
+                <a href="/ko/term/Activation%20Function/" class="related-term-link">Activation Function</a>
+                <a href="/ko/term/BERT/" class="related-term-link">BERT</a>
+                <a href="/ko/term/SiLU/" class="related-term-link">SiLU</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/1606.08415" target="_blank" class="learn-link">
+                    <span>원본 논문 - Gaussian Error Linear Units (Hendrycks & Gimpel, 2016)</span>
+                </a>
+                <a href="https://pytorch.org/docs/stable/generated/torch.nn.GELU.html" target="_blank" class="learn-link">
+                    <span>PyTorch nn.GELU 공식 문서</span>
+                </a>
+                <a href="https://huggingface.co/docs/transformers/main_classes/activations" target="_blank" class="learn-link">
+                    <span>Hugging Face Transformers 활성화 함수 가이드</span>
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +490,26 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

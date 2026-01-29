@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lambda (AWS Lambda) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="AWS 서버리스 컴퓨팅. 코드 실행만으로 과금. 이벤트 기반.">
-    <meta name="keywords" content="Lambda, AWS Lambda, AI 용어, KAITRUST, AI 백과사전, 클라우드">
+    <meta name="description" content="AWS 서버리스 컴퓨팅. 코드 실행만으로 과금. 이벤트 기반. S3, API Gateway, DynamoDB 연동. Cold Start 최적화, 비용 관리 가이드.">
+    <meta name="keywords" content="Lambda, AWS Lambda, 서버리스, Serverless, AI 용어, KAITRUST, AI 백과사전, 클라우드, FaaS">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Lambda/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Lambda/">
     <meta property="og:title" content="Lambda (AWS Lambda) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="AWS 서버리스 컴퓨팅. 코드 실행만으로 과금. 이벤트 기반.">
+    <meta property="og:description" content="AWS 서버리스 컴퓨팅. 코드 실행만으로 과금. 이벤트 기반. S3, API Gateway, DynamoDB 연동. Cold Start 최적화, 비용 관리 가이드.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Lambda (AWS Lambda) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="AWS 서버리스 컴퓨팅. 코드 실행만으로 과금. 이벤트 기반.">
+    <meta name="twitter:description" content="AWS 서버리스 컴퓨팅. 코드 실행만으로 과금. 이벤트 기반. S3, API Gateway, DynamoDB 연동. Cold Start 최적화, 비용 관리 가이드.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Lambda",
-        "description": "AWS 서버리스 컴퓨팅. 코드 실행만으로 과금. 이벤트 기반.",
+        "description": "AWS 서버리스 컴퓨팅. 코드 실행만으로 과금. 이벤트 기반. S3, API Gateway, DynamoDB 연동. Cold Start 최적화, 비용 관리 가이드.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -161,6 +161,224 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhanced Term Sections */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .section-content strong {
+            color: #a855f7;
+            font-weight: 600;
+        }
+
+        /* Code Tabs */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.6rem 1.2rem;
+            background: rgba(100, 116, 139, 0.3);
+            border: 1px solid rgba(100, 116, 139, 0.4);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .code-tab:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.3);
+            border-color: #a855f7;
+            color: #e2e8f0;
+        }
+        .code-block {
+            display: none;
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            position: relative;
+        }
+        .code-block.active {
+            display: block;
+        }
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+
+        /* Conversation Examples */
+        .conversation-examples {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .conversation-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #a855f7;
+        }
+        .conversation-item h4 {
+            color: #a855f7;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .conversation-item p {
+            margin: 0.75rem 0;
+            padding-left: 1rem;
+            border-left: 2px solid rgba(148, 163, 184, 0.3);
+        }
+        .conversation-item .speaker {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+        .conversation-item .response {
+            color: #4ade80;
+            font-weight: 600;
+        }
+
+        /* Warning List */
+        .warning-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+        .warning-item.danger {
+            border-left: 4px solid #ef4444;
+        }
+        .warning-item.success {
+            border-left: 4px solid #22c55e;
+        }
+        .warning-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .warning-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .warning-item.danger .warning-content h4 {
+            color: #fca5a5;
+        }
+        .warning-item.success .warning-content h4 {
+            color: #86efac;
+        }
+        .warning-content p {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        /* Related Terms */
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            padding: 0.6rem 1.2rem;
+            background: rgba(100, 116, 139, 0.2);
+            border: 1px solid rgba(100, 116, 139, 0.4);
+            border-radius: 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.5);
+            color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        /* Learn More */
+        .learn-more-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .learn-more-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 10px;
+            color: #60a5fa;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-more-link:hover {
+            background: rgba(96, 165, 250, 0.1);
+            border-color: rgba(96, 165, 250, 0.4);
+            transform: translateX(5px);
+        }
+        .learn-more-link span {
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -189,7 +407,7 @@
                 <span>클라우드</span>
             </div>
             <h1 class="term-title">Lambda</h1>
-            <p class="term-english">AWS Lambda</p>
+            <p class="term-english">AWS Lambda / 서버리스 함수</p>
             <div class="term-description">
                 <p>AWS 서버리스 컴퓨팅. 코드 실행만으로 과금. 이벤트 기반.</p>
             </div>
@@ -202,6 +420,516 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>AWS Lambda</strong>는 서버를 프로비저닝하거나 관리하지 않고 코드를 실행할 수 있는 서버리스 컴퓨팅 서비스입니다. 코드가 실행된 시간만큼만 과금되며(100ms 단위), 초당 수천 개의 요청까지 자동으로 스케일링됩니다. FaaS(Function as a Service)의 대표적인 서비스입니다.</p>
+
+                <p><strong>트리거 방식</strong>으로 다양한 AWS 서비스와 연동됩니다. <strong>동기 호출</strong>: API Gateway, ALB에서 HTTP 요청을 받아 즉시 응답. <strong>비동기 호출</strong>: S3 이벤트, SNS, EventBridge로 트리거되어 백그라운드 처리. <strong>스트림 기반</strong>: Kinesis, DynamoDB Streams에서 배치로 레코드 처리. <strong>폴링 기반</strong>: SQS에서 메시지를 가져와 처리.</p>
+
+                <p><strong>실행 환경</strong>은 다양한 런타임을 지원합니다. Node.js, Python, Java, Go, .NET, Ruby와 커스텀 런타임(Rust, C++ 등)까지 가능합니다. 메모리는 128MB~10GB, 타임아웃은 최대 15분, 패키지 크기는 250MB(압축 시 50MB)입니다. <strong>Lambda Layers</strong>로 공통 라이브러리를 분리하고, <strong>Container Image</strong>로 10GB까지의 컨테이너를 실행할 수 있습니다.</p>
+
+                <p><strong>Cold Start</strong>는 Lambda의 중요한 특성입니다. 일정 시간 호출이 없으면 실행 환경이 종료되고, 다음 호출 시 새로 초기화됩니다. 이 지연 시간이 Cold Start입니다. <strong>Provisioned Concurrency</strong>를 사용하면 미리 실행 환경을 준비해두어 Cold Start를 제거할 수 있지만, 추가 비용이 발생합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-tab="python">Python 핸들러</button>
+                <button class="code-tab" data-tab="nodejs">Node.js 핸들러</button>
+                <button class="code-tab" data-tab="terraform">Terraform/SAM</button>
+            </div>
+            <div class="code-block active" id="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># handler.py - API Gateway + DynamoDB 연동
+import json
+import boto3
+import os
+from datetime import datetime
+from decimal import Decimal
+
+# 함수 밖에서 초기화 (Cold Start 최적화)
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table(os.environ['TABLE_NAME'])
+
+def lambda_handler(event, context):
+    """
+    API Gateway에서 호출되는 Lambda 핸들러
+    """
+    try:
+        # HTTP 메서드별 처리
+        http_method = event['httpMethod']
+
+        if http_method == 'GET':
+            return get_items(event)
+        elif http_method == 'POST':
+            return create_item(event)
+        elif http_method == 'PUT':
+            return update_item(event)
+        elif http_method == 'DELETE':
+            return delete_item(event)
+        else:
+            return response(405, {'error': 'Method not allowed'})
+
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return response(500, {'error': 'Internal server error'})
+
+def get_items(event):
+    """전체 조회 또는 단일 조회"""
+    path_params = event.get('pathParameters') or {}
+    item_id = path_params.get('id')
+
+    if item_id:
+        # 단일 조회
+        result = table.get_item(Key={'id': item_id})
+        if 'Item' not in result:
+            return response(404, {'error': 'Item not found'})
+        return response(200, decimal_to_float(result['Item']))
+    else:
+        # 전체 조회 (페이지네이션)
+        query_params = event.get('queryStringParameters') or {}
+        limit = int(query_params.get('limit', 20))
+
+        scan_kwargs = {'Limit': limit}
+        if 'cursor' in query_params:
+            scan_kwargs['ExclusiveStartKey'] = {'id': query_params['cursor']}
+
+        result = table.scan(**scan_kwargs)
+        return response(200, {
+            'items': [decimal_to_float(item) for item in result['Items']],
+            'cursor': result.get('LastEvaluatedKey', {}).get('id')
+        })
+
+def create_item(event):
+    """새 아이템 생성"""
+    body = json.loads(event['body'])
+
+    item = {
+        'id': body['id'],
+        'name': body['name'],
+        'created_at': datetime.utcnow().isoformat(),
+        'updated_at': datetime.utcnow().isoformat()
+    }
+
+    table.put_item(
+        Item=item,
+        ConditionExpression='attribute_not_exists(id)'
+    )
+
+    return response(201, decimal_to_float(item))
+
+def response(status_code, body):
+    """API Gateway 응답 포맷"""
+    return {
+        'statusCode': status_code,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+            'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
+        },
+        'body': json.dumps(body, ensure_ascii=False)
+    }
+
+def decimal_to_float(obj):
+    """DynamoDB Decimal을 JSON 직렬화 가능한 타입으로 변환"""
+    if isinstance(obj, Decimal):
+        return float(obj)
+    elif isinstance(obj, dict):
+        return {k: decimal_to_float(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [decimal_to_float(i) for i in obj]
+    return obj
+
+# --- S3 이벤트 핸들러 예제 ---
+def s3_handler(event, context):
+    """
+    S3 버킷에 파일 업로드 시 트리거
+    이미지 리사이징, 메타데이터 추출 등에 사용
+    """
+    s3_client = boto3.client('s3')
+
+    for record in event['Records']:
+        bucket = record['s3']['bucket']['name']
+        key = record['s3']['object']['key']
+
+        print(f"Processing: s3://{bucket}/{key}")
+
+        # 파일 처리 로직
+        # ...
+
+    return {'statusCode': 200}</code></pre>
+            </div>
+            <div class="code-block" id="nodejs">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>// handler.js - SQS 메시지 처리 핸들러
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, GetCommand } = require('@aws-sdk/lib-dynamodb');
+
+// Cold Start 최적화: 클라이언트 재사용
+const client = new DynamoDBClient({});
+const docClient = DynamoDBDocumentClient.from(client);
+
+/**
+ * SQS 메시지 배치 처리 핸들러
+ * 부분 실패 시 실패한 메시지만 재처리되도록 설정
+ */
+exports.sqsHandler = async (event) => {
+    console.log(`Processing ${event.Records.length} messages`);
+
+    const failedMessageIds = [];
+
+    for (const record of event.Records) {
+        try {
+            const body = JSON.parse(record.body);
+            await processMessage(body);
+            console.log(`Successfully processed: ${record.messageId}`);
+        } catch (error) {
+            console.error(`Failed to process: ${record.messageId}`, error);
+            failedMessageIds.push(record.messageId);
+        }
+    }
+
+    // 부분 배치 실패 응답 (ReportBatchItemFailures 활성화 필요)
+    return {
+        batchItemFailures: failedMessageIds.map(id => ({
+            itemIdentifier: id
+        }))
+    };
+};
+
+async function processMessage(message) {
+    // 비즈니스 로직
+    await docClient.send(new PutCommand({
+        TableName: process.env.TABLE_NAME,
+        Item: {
+            id: message.id,
+            data: message.data,
+            processedAt: new Date().toISOString()
+        }
+    }));
+}
+
+/**
+ * API Gateway 핸들러 (ES Module 스타일)
+ */
+export const apiHandler = async (event, context) => {
+    // 컨텍스트 재사용 설정
+    context.callbackWaitsForEmptyEventLoop = false;
+
+    const { httpMethod, path, body, queryStringParameters } = event;
+
+    try {
+        switch (httpMethod) {
+            case 'GET':
+                const id = event.pathParameters?.id;
+                if (id) {
+                    const result = await docClient.send(new GetCommand({
+                        TableName: process.env.TABLE_NAME,
+                        Key: { id }
+                    }));
+
+                    if (!result.Item) {
+                        return formatResponse(404, { error: 'Not found' });
+                    }
+                    return formatResponse(200, result.Item);
+                }
+                // 목록 조회
+                // ...
+                break;
+
+            case 'POST':
+                const data = JSON.parse(body);
+                // 생성 로직
+                return formatResponse(201, { message: 'Created', id: data.id });
+
+            default:
+                return formatResponse(405, { error: 'Method not allowed' });
+        }
+    } catch (error) {
+        console.error('Handler error:', error);
+        return formatResponse(500, { error: 'Internal server error' });
+    }
+};
+
+function formatResponse(statusCode, body) {
+    return {
+        statusCode,
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify(body)
+    };
+}
+
+/**
+ * EventBridge 스케줄 핸들러 (Cron Job)
+ */
+exports.scheduledHandler = async (event) => {
+    console.log('Scheduled event:', JSON.stringify(event));
+
+    // 정기 작업 실행
+    // 예: 만료된 데이터 정리, 리포트 생성 등
+
+    return { status: 'completed' };
+};</code></pre>
+            </div>
+            <div class="code-block" id="terraform">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Terraform으로 Lambda 함수 배포
+# main.tf
+
+# Lambda 실행 역할
+resource "aws_iam_role" "lambda_role" {
+  name = "api-lambda-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "lambda.amazonaws.com"
+      }
+    }]
+  })
+}
+
+# DynamoDB 접근 정책
+resource "aws_iam_role_policy" "lambda_policy" {
+  name = "api-lambda-policy"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:Scan",
+          "dynamodb:Query"
+        ]
+        Resource = aws_dynamodb_table.main.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "arn:aws:logs:*:*:*"
+      }
+    ]
+  })
+}
+
+# Lambda 함수
+resource "aws_lambda_function" "api" {
+  function_name = "api-handler"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "handler.lambda_handler"
+  runtime       = "python3.11"
+
+  filename         = "lambda.zip"
+  source_code_hash = filebase64sha256("lambda.zip")
+
+  memory_size = 256
+  timeout     = 30
+
+  environment {
+    variables = {
+      TABLE_NAME  = aws_dynamodb_table.main.name
+      ENVIRONMENT = "production"
+    }
+  }
+
+  # VPC 설정 (필요시)
+  vpc_config {
+    subnet_ids         = var.private_subnet_ids
+    security_group_ids = [aws_security_group.lambda.id]
+  }
+
+  # X-Ray 추적 활성화
+  tracing_config {
+    mode = "Active"
+  }
+
+  # Provisioned Concurrency (Cold Start 제거)
+  # aws_lambda_provisioned_concurrency_config 리소스로 별도 설정
+}
+
+# Lambda 함수 URL (API Gateway 대안)
+resource "aws_lambda_function_url" "api" {
+  function_name      = aws_lambda_function.api.function_name
+  authorization_type = "NONE"  # 또는 "AWS_IAM"
+
+  cors {
+    allow_origins = ["https://example.com"]
+    allow_methods = ["GET", "POST", "PUT", "DELETE"]
+    allow_headers = ["Content-Type", "Authorization"]
+    max_age       = 86400
+  }
+}
+
+# API Gateway 연동
+resource "aws_apigatewayv2_api" "api" {
+  name          = "api"
+  protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allow_headers = ["Content-Type", "Authorization"]
+  }
+}
+
+resource "aws_apigatewayv2_integration" "lambda" {
+  api_id             = aws_apigatewayv2_api.api.id
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+  integration_uri    = aws_lambda_function.api.invoke_arn
+}
+
+resource "aws_apigatewayv2_route" "api" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "ANY /{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+}
+
+# Lambda 권한 (API Gateway에서 호출 허용)
+resource "aws_lambda_permission" "api_gw" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.api.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
+}
+
+# CloudWatch 로그 그룹 (보존 기간 설정)
+resource "aws_cloudwatch_log_group" "lambda" {
+  name              = "/aws/lambda/${aws_lambda_function.api.function_name}"
+  retention_in_days = 14
+}
+
+# --- SAM template.yaml 예시 ---
+# AWSTemplateFormatVersion: '2010-09-09'
+# Transform: AWS::Serverless-2016-10-31
+#
+# Globals:
+#   Function:
+#     Timeout: 30
+#     MemorySize: 256
+#     Runtime: python3.11
+#
+# Resources:
+#   ApiFunction:
+#     Type: AWS::Serverless::Function
+#     Properties:
+#       Handler: handler.lambda_handler
+#       CodeUri: src/
+#       Events:
+#         Api:
+#           Type: HttpApi
+#           Properties:
+#             Path: /{proxy+}
+#             Method: ANY</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💬 실무에서 이렇게 씁니다</h2>
+            <div class="conversation-examples">
+                <div class="conversation-item">
+                    <h4>아키텍처 결정 회의</h4>
+                    <p><span class="speaker">PM:</span> "새 API 서비스를 Lambda로 할지 ECS로 할지 고민입니다. 트래픽은 평균 100 RPS, 피크 시 1000 RPS 정도예요."</p>
+                    <p><span class="response">DevOps:</span> "그 정도 트래픽이면 Lambda가 비용 효율적입니다. 하지만 API 응답 시간이 중요하다면 Cold Start를 고려해야 해요. Provisioned Concurrency로 50개 정도 설정하면 피크 시에도 지연 없이 처리할 수 있습니다. 다만 함수당 15분 타임아웃 제한이 있어서, 처리 시간이 긴 작업은 Step Functions로 분리하거나 ECS를 검토하세요. 월 비용은 Lambda가 약 $50, ECS Fargate가 $200 정도로 Lambda가 유리합니다."</p>
+                </div>
+                <div class="conversation-item">
+                    <h4>면접 질문</h4>
+                    <p><span class="speaker">면접관:</span> "Lambda의 Cold Start를 최적화하는 방법을 설명해주세요."</p>
+                    <p><span class="response">지원자:</span> "여러 전략이 있습니다. 첫째, 핸들러 함수 밖에서 SDK 클라이언트와 DB 커넥션을 초기화해 재사용합니다. 둘째, 패키지 크기를 최소화하고 Lambda Layers로 의존성을 분리합니다. 셋째, 메모리를 늘리면 CPU도 비례 증가해서 초기화가 빨라집니다. 넷째, Provisioned Concurrency로 항상 워밍된 인스턴스를 유지할 수 있어요. Python보다 Node.js가, Java보다 Go가 Cold Start가 짧습니다. 실제로 Provisioned Concurrency 적용 후 P99 지연시간이 2초에서 200ms로 개선된 경험이 있습니다."</p>
+                </div>
+                <div class="conversation-item">
+                    <h4>비용 최적화 논의</h4>
+                    <p><span class="speaker">개발자:</span> "Lambda 비용이 예상보다 많이 나와요. 어떻게 줄일 수 있을까요?"</p>
+                    <p><span class="response">SRE:</span> "먼저 CloudWatch Insights로 실행 시간과 메모리 사용량을 분석하세요. 메모리가 과도하게 설정됐으면 줄이고, 반대로 메모리를 늘려서 실행 시간을 단축하는 게 비용 효율적일 때도 있어요. AWS Lambda Power Tuning 도구로 최적의 메모리 설정을 찾을 수 있습니다. 그리고 ARM64(Graviton2) 아키텍처로 전환하면 동일 성능에 20% 저렴해요. 배치 처리 가능한 작업은 SQS와 함께 배치 크기를 늘려 호출 횟수를 줄이세요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item danger">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>핸들러 내부에서 매번 클라이언트 초기화</h4>
+                        <p>AWS SDK 클라이언트나 DB 커넥션을 핸들러 함수 안에서 생성하면 매 호출마다 초기화 비용이 발생합니다. 함수 밖(전역 스코프)에서 초기화하면 실행 환경이 재사용될 때 이점을 얻을 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item danger">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>동기 호출에서 타임아웃 미설정</h4>
+                        <p>API Gateway-Lambda 연동 시 Lambda 타임아웃(최대 15분)과 API Gateway 타임아웃(최대 29초)이 다릅니다. Lambda가 더 오래 실행되면 API Gateway는 504를 반환하지만 Lambda는 계속 실행됩니다. API Gateway 타임아웃보다 Lambda 타임아웃을 짧게 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item success">
+                    <div class="warning-icon">✅</div>
+                    <div class="warning-content">
+                        <h4>SQS 부분 배치 실패 처리 활성화</h4>
+                        <p>SQS 트리거에서 ReportBatchItemFailures를 활성화하면 실패한 메시지만 재처리됩니다. 기본값은 배치 전체가 재시도되어 중복 처리될 수 있습니다. 핸들러에서 batchItemFailures를 반환하도록 구현하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/API%20Gateway/" class="related-term-link">API Gateway</a>
+                <a href="/ko/term/DynamoDB/" class="related-term-link">DynamoDB</a>
+                <a href="/ko/term/S3/" class="related-term-link">S3</a>
+                <a href="/ko/term/SQS/" class="related-term-link">SQS</a>
+                <a href="/ko/term/EventBridge/" class="related-term-link">EventBridge</a>
+                <a href="/ko/term/Step%20Functions/" class="related-term-link">Step Functions</a>
+                <a href="/ko/term/Serverless/" class="related-term-link">Serverless</a>
+                <a href="/ko/term/Cloud%20Functions/" class="related-term-link">Cloud Functions</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more-list">
+                <a href="https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">
+                    <span>📄</span> AWS Lambda 공식 문서 - 개발자 가이드
+                </a>
+                <a href="https://aws.amazon.com/blogs/compute/operating-lambda-performance-optimization-part-1/" target="_blank" rel="noopener noreferrer" class="learn-more-link">
+                    <span>🚀</span> Lambda 성능 최적화 가이드 - AWS 공식 블로그
+                </a>
+                <a href="https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">
+                    <span>✅</span> Lambda 모범 사례 - 아키텍처 및 보안
+                </a>
+                <a href="https://github.com/alexcasalboni/aws-lambda-power-tuning" target="_blank" rel="noopener noreferrer" class="learn-more-link">
+                    <span>💰</span> Lambda Power Tuning - 최적 메모리 설정 도구
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +940,26 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '복사됨!';
+            setTimeout(() => btn.textContent = '복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.dataset.tab;
+            document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.code-block').forEach(b => b.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

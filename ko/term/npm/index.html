@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,118 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>npm(Node Package Manager)은 Node.js의 기본 패키지 관리자이자 세계 최대의 소프트웨어 레지스트리입니다. 2010년 출시 이후 200만 개 이상의 패키지가 등록되어 있으며, 주간 다운로드가 수십억 건에 달합니다.</p>
+                <p>핵심 기능으로 패키지 설치/삭제, 의존성 관리, 스크립트 실행, 패키지 배포가 있습니다. package.json에 프로젝트 메타데이터와 의존성을 정의하고, package-lock.json으로 정확한 버전을 고정합니다. Semantic Versioning(major.minor.patch)을 따릅니다.</p>
+                <p>node_modules 폴더에 패키지가 설치되며, 의존성 트리가 플랫하게 호이스팅됩니다. npm 7부터 workspaces로 모노레포를 지원하고, npm audit로 보안 취약점을 검사합니다. npx로 패키지를 설치 없이 실행할 수 있습니다.</p>
+                <p>실무에서는 CI에서 npm ci(clean install)로 lock 파일 기반 설치, --save-exact로 버전 고정, .npmrc로 프라이빗 레지스트리 설정을 합니다. npm run으로 빌드/테스트 스크립트를 표준화합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="bash">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># 프로젝트 초기화
+npm init -y
+
+# 패키지 설치
+npm install express           # dependencies
+npm install -D jest           # devDependencies
+npm install -g typescript     # 글로벌 설치
+npm install react@18.2.0      # 특정 버전
+npm install --save-exact lodash  # 정확한 버전 고정 (^ 없이)
+
+# CI 환경 설치 (package-lock.json 기반)
+npm ci
+
+# 패키지 정보 및 검색
+npm view express versions     # 사용 가능한 버전 확인
+npm outdated                  # 업데이트 가능한 패키지
+npm ls --depth=0              # 설치된 패키지 목록
+
+# 보안 검사
+npm audit                     # 취약점 검사
+npm audit fix                 # 자동 수정
+npm audit fix --force         # 메이저 업데이트 포함 수정
+
+# 스크립트 실행 (package.json scripts)
+npm run build
+npm run test
+npm start                     # npm run start 단축형
+npm run dev -- --port 3001    # 인자 전달
+
+# 패키지 배포
+npm login
+npm version patch             # 버전 증가 (1.0.0 -> 1.0.1)
+npm publish
+npm deprecate my-pkg "Use new-pkg instead"
+
+# 캐시 관리
+npm cache clean --force
+npm cache verify</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "npm audit에서 critical 취약점 3개 나왔는데, 확인해보셨어요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "확인했는데 개발 의존성이라 운영 영향은 없어요. 그래도 다음 스프린트에 업데이트 포함시키겠습니다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "npm install과 npm ci의 차이점은 무엇인가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "npm install은 package.json 기준으로 설치하고 lock 파일을 업데이트할 수 있지만, npm ci는 package-lock.json을 그대로 사용하고 node_modules를 완전히 삭제 후 재설치합니다. CI 환경에서는 재현성을 위해 npm ci를 사용합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "package-lock.json 변경이 큰데, npm install 다시 하신 건가요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "네, 로컬에서 node_modules 삭제 후 재설치했더니 변경됐어요. 버전 범위 내 업데이트입니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>package-lock.json은 반드시 커밋 - 환경별 다른 버전 설치 방지</li>
+                <li>npm audit 정기 실행 - 보안 취약점 조기 발견 필수</li>
+                <li>글로벌 설치(-g) 최소화 - 프로젝트별 버전 충돌 가능</li>
+                <li class="info">CI에서는 npm ci 사용 - npm install보다 빠르고 재현성 보장</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Yarn/" class="related-link">Yarn</a>
+                <a href="/ko/term/Node.js/" class="related-link">Node.js</a>
+                <a href="/ko/term/Build/" class="related-link">Build</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Nx/" class="related-link">Nx</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.npmjs.com/" target="_blank" rel="noopener">npm 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://docs.npmjs.com/cli/v10/using-npm/workspaces" target="_blank" rel="noopener">npm Workspaces 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://semver.org/" target="_blank" rel="noopener">Semantic Versioning 스펙</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +325,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

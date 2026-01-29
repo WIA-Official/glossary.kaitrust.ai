@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRUD (Create, Read, Update, Delete) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="데이터 기본 연산 4가지. 대부분의 애플리케이션이 CRUD 기반.">
-    <meta name="keywords" content="CRUD, Create, Read, Update, Delete, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="CRUD는 데이터의 기본 연산 4가지(생성, 읽기, 수정, 삭제)를 의미합니다. 대부분의 애플리케이션과 REST API가 CRUD 패턴을 기반으로 설계됩니다.">
+    <meta name="keywords" content="CRUD, Create, Read, Update, Delete, INSERT, SELECT, UPDATE, DELETE, REST API, HTTP Method, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/CRUD/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/CRUD/">
     <meta property="og:title" content="CRUD (Create, Read, Update, Delete) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="데이터 기본 연산 4가지. 대부분의 애플리케이션이 CRUD 기반.">
+    <meta property="og:description" content="CRUD는 데이터의 기본 연산 4가지로 대부분의 애플리케이션이 CRUD 패턴을 기반으로 설계됩니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="CRUD (Create, Read, Update, Delete) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="데이터 기본 연산 4가지. 대부분의 애플리케이션이 CRUD 기반.">
+    <meta name="twitter:description" content="CRUD는 데이터의 기본 연산 4가지로 대부분의 애플리케이션이 CRUD 패턴을 기반으로 설계됩니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "CRUD",
-        "description": "데이터 기본 연산 4가지. 대부분의 애플리케이션이 CRUD 기반.",
+        "alternateName": "Create, Read, Update, Delete",
+        "description": "CRUD는 데이터의 기본 연산 4가지로 대부분의 애플리케이션이 CRUD 패턴을 기반으로 설계됩니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">CRUD</h1>
             <p class="term-english">Create, Read, Update, Delete</p>
             <div class="term-description">
-                <p>데이터 기본 연산 4가지. 대부분의 애플리케이션이 CRUD 기반.</p>
+                <p>데이터의 기본 연산 4가지(생성, 읽기, 수정, 삭제)를 의미합니다. 대부분의 애플리케이션과 REST API가 CRUD 패턴을 기반으로 설계되며, 데이터베이스의 INSERT, SELECT, UPDATE, DELETE와 직접 매핑됩니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,694 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Create (생성)</strong>: 새로운 데이터를 생성합니다. SQL에서는 INSERT, HTTP에서는 POST 메서드에 해당합니다. 회원가입, 글 작성, 주문 생성 등이 대표적인 예입니다.</p>
+                <p><strong>Read (읽기)</strong>: 기존 데이터를 조회합니다. SQL에서는 SELECT, HTTP에서는 GET 메서드에 해당합니다. 단일 조회(getById)와 목록 조회(getAll, 검색, 필터링)로 구분됩니다.</p>
+                <p><strong>Update (수정)</strong>: 기존 데이터를 변경합니다. SQL에서는 UPDATE, HTTP에서는 PUT(전체 교체) 또는 PATCH(부분 수정)에 해당합니다. 프로필 수정, 상품 정보 변경 등이 있습니다.</p>
+                <p><strong>Delete (삭제)</strong>: 데이터를 제거합니다. SQL에서는 DELETE, HTTP에서는 DELETE 메서드에 해당합니다. 실제 삭제(Hard Delete)와 논리적 삭제(Soft Delete: is_deleted 플래그)로 구분됩니다.</p>
+                <p><strong>CRUD와 REST API 매핑</strong>: RESTful API 설계의 기본입니다. 리소스 URL(예: /users)에 HTTP 메서드를 조합하여 CRUD를 표현합니다. GET /users(목록), GET /users/:id(상세), POST /users(생성), PUT /users/:id(수정), DELETE /users/:id(삭제).</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (FastAPI)</button>
+                <button class="code-tab" data-lang="node">Node.js (Express)</button>
+                <button class="code-tab" data-lang="sql">SQL (직접 쿼리)</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># CRUD API 예제 - Python FastAPI + SQLAlchemy
+from fastapi import FastAPI, HTTPException, Depends
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, Session
+from pydantic import BaseModel, EmailStr
+from datetime import datetime
+from typing import List, Optional
+
+# 데이터베이스 설정
+DATABASE_URL = "postgresql://user:pass@localhost/mydb"
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(bind=engine)
+Base = declarative_base()
+
+
+# 모델 정의
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), unique=True, nullable=False)
+    username = Column(String(100), nullable=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, onupdate=datetime.utcnow)
+
+
+# Pydantic 스키마
+class UserCreate(BaseModel):
+    email: EmailStr
+    username: str
+
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    username: Optional[str] = None
+    is_active: Optional[bool] = None
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    username: str
+    is_active: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# FastAPI 앱
+app = FastAPI()
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+# ==============================================
+# CREATE - 새 사용자 생성
+# ==============================================
+@app.post("/users", response_model=UserResponse, status_code=201)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    """
+    Create: 새로운 리소스 생성
+    - HTTP Method: POST
+    - SQL: INSERT INTO users (email, username) VALUES (...)
+    """
+    # 중복 체크
+    existing = db.query(User).filter(User.email == user.email).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    db_user = User(email=user.email, username=user.username)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+# ==============================================
+# READ - 사용자 조회
+# ==============================================
+@app.get("/users", response_model=List[UserResponse])
+def get_users(
+    skip: int = 0,
+    limit: int = 100,
+    is_active: Optional[bool] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Read (List): 목록 조회 + 페이지네이션 + 필터링
+    - HTTP Method: GET
+    - SQL: SELECT * FROM users WHERE ... LIMIT ... OFFSET ...
+    """
+    query = db.query(User)
+
+    if is_active is not None:
+        query = query.filter(User.is_active == is_active)
+
+    return query.offset(skip).limit(limit).all()
+
+
+@app.get("/users/{user_id}", response_model=UserResponse)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    """
+    Read (Detail): 단일 리소스 조회
+    - HTTP Method: GET
+    - SQL: SELECT * FROM users WHERE id = ?
+    """
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
+# ==============================================
+# UPDATE - 사용자 정보 수정
+# ==============================================
+@app.put("/users/{user_id}", response_model=UserResponse)
+def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db)):
+    """
+    Update: 리소스 수정
+    - HTTP Method: PUT (전체 교체) / PATCH (부분 수정)
+    - SQL: UPDATE users SET ... WHERE id = ?
+    """
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # None이 아닌 필드만 업데이트
+    update_data = user_update.dict(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(db_user, field, value)
+
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+# ==============================================
+# DELETE - 사용자 삭제
+# ==============================================
+@app.delete("/users/{user_id}", status_code=204)
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    """
+    Delete: 리소스 삭제 (Hard Delete)
+    - HTTP Method: DELETE
+    - SQL: DELETE FROM users WHERE id = ?
+    """
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db.delete(db_user)
+    db.commit()
+    return None  # 204 No Content
+
+
+# Soft Delete (논리적 삭제) 버전
+@app.delete("/users/{user_id}/soft")
+def soft_delete_user(user_id: int, db: Session = Depends(get_db)):
+    """
+    Soft Delete: 실제 삭제하지 않고 비활성화
+    - is_active = False 또는 deleted_at 타임스탬프 설정
+    - 데이터 복구 가능, 감사 추적 용이
+    """
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db_user.is_active = False
+    db.commit()
+    return {"message": "User deactivated"}
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// CRUD API 예제 - Node.js Express + Prisma
+const express = require('express');
+const { PrismaClient } = require('@prisma/client');
+
+const app = express();
+const prisma = new PrismaClient();
+
+app.use(express.json());
+
+// ==============================================
+// CREATE - 새 사용자 생성
+// ==============================================
+app.post('/users', async (req, res) => {
+    /**
+     * Create: POST /users
+     * SQL: INSERT INTO users (email, username) VALUES ($1, $2)
+     */
+    try {
+        const { email, username } = req.body;
+
+        // 유효성 검사
+        if (!email || !username) {
+            return res.status(400).json({
+                error: 'email and username are required'
+            });
+        }
+
+        const user = await prisma.user.create({
+            data: { email, username }
+        });
+
+        res.status(201).json(user);
+
+    } catch (error) {
+        if (error.code === 'P2002') {  // Unique constraint violation
+            return res.status(400).json({ error: 'Email already exists' });
+        }
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+// ==============================================
+// READ - 사용자 목록 조회
+// ==============================================
+app.get('/users', async (req, res) => {
+    /**
+     * Read (List): GET /users?page=1&limit=10&search=john
+     * SQL: SELECT * FROM users WHERE ... LIMIT ... OFFSET ...
+     */
+    try {
+        const {
+            page = 1,
+            limit = 10,
+            search,
+            isActive
+        } = req.query;
+
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+        const take = parseInt(limit);
+
+        // 필터 조건 구성
+        const where = {};
+        if (search) {
+            where.OR = [
+                { email: { contains: search, mode: 'insensitive' } },
+                { username: { contains: search, mode: 'insensitive' } }
+            ];
+        }
+        if (isActive !== undefined) {
+            where.isActive = isActive === 'true';
+        }
+
+        // 병렬로 데이터와 총 개수 조회
+        const [users, total] = await Promise.all([
+            prisma.user.findMany({
+                where,
+                skip,
+                take,
+                orderBy: { createdAt: 'desc' }
+            }),
+            prisma.user.count({ where })
+        ]);
+
+        res.json({
+            data: users,
+            pagination: {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                total,
+                totalPages: Math.ceil(total / take)
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+// ==============================================
+// READ - 단일 사용자 조회
+// ==============================================
+app.get('/users/:id', async (req, res) => {
+    /**
+     * Read (Detail): GET /users/:id
+     * SQL: SELECT * FROM users WHERE id = $1
+     */
+    try {
+        const { id } = req.params;
+
+        const user = await prisma.user.findUnique({
+            where: { id: parseInt(id) },
+            include: {
+                posts: true,     // 관계 데이터 포함
+                profile: true
+            }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json(user);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+// ==============================================
+// UPDATE - 사용자 정보 수정
+// ==============================================
+app.put('/users/:id', async (req, res) => {
+    /**
+     * Update (Full): PUT /users/:id
+     * SQL: UPDATE users SET email=$1, username=$2 WHERE id=$3
+     */
+    try {
+        const { id } = req.params;
+        const { email, username, isActive } = req.body;
+
+        const user = await prisma.user.update({
+            where: { id: parseInt(id) },
+            data: { email, username, isActive }
+        });
+
+        res.json(user);
+
+    } catch (error) {
+        if (error.code === 'P2025') {  // Record not found
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// PATCH - 부분 수정
+app.patch('/users/:id', async (req, res) => {
+    /**
+     * Update (Partial): PATCH /users/:id
+     * 전달된 필드만 업데이트
+     */
+    try {
+        const { id } = req.params;
+
+        // undefined 필드 제외
+        const data = Object.fromEntries(
+            Object.entries(req.body).filter(([_, v]) => v !== undefined)
+        );
+
+        const user = await prisma.user.update({
+            where: { id: parseInt(id) },
+            data
+        });
+
+        res.json(user);
+
+    } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+// ==============================================
+// DELETE - 사용자 삭제
+// ==============================================
+app.delete('/users/:id', async (req, res) => {
+    /**
+     * Delete (Hard): DELETE /users/:id
+     * SQL: DELETE FROM users WHERE id = $1
+     */
+    try {
+        const { id } = req.params;
+
+        await prisma.user.delete({
+            where: { id: parseInt(id) }
+        });
+
+        res.status(204).send();  // No Content
+
+    } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Soft Delete
+app.delete('/users/:id/soft', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const user = await prisma.user.update({
+            where: { id: parseInt(id) },
+            data: {
+                isActive: false,
+                deletedAt: new Date()
+            }
+        });
+
+        res.json({ message: 'User soft deleted', user });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="sql">
+                <pre><code class="language-sql">-- ============================================
+-- CRUD SQL 예제 (PostgreSQL)
+-- ============================================
+
+-- 테이블 생성
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(100) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP  -- Soft Delete용
+);
+
+
+-- ============================================
+-- CREATE (INSERT)
+-- ============================================
+
+-- 단일 레코드 삽입
+INSERT INTO users (email, username)
+VALUES ('john@example.com', 'john_doe')
+RETURNING *;  -- 삽입된 레코드 반환 (PostgreSQL)
+
+-- 다중 레코드 삽입
+INSERT INTO users (email, username) VALUES
+    ('alice@example.com', 'alice'),
+    ('bob@example.com', 'bob'),
+    ('charlie@example.com', 'charlie');
+
+-- UPSERT (있으면 업데이트, 없으면 삽입)
+INSERT INTO users (email, username)
+VALUES ('john@example.com', 'john_updated')
+ON CONFLICT (email) DO UPDATE SET
+    username = EXCLUDED.username,
+    updated_at = CURRENT_TIMESTAMP;
+
+
+-- ============================================
+-- READ (SELECT)
+-- ============================================
+
+-- 전체 조회
+SELECT * FROM users;
+
+-- 조건 조회
+SELECT * FROM users WHERE is_active = TRUE;
+
+-- 단일 레코드 조회
+SELECT * FROM users WHERE id = 1;
+SELECT * FROM users WHERE email = 'john@example.com';
+
+-- 검색 (부분 일치)
+SELECT * FROM users
+WHERE username ILIKE '%john%'  -- 대소문자 무시 (PostgreSQL)
+   OR email ILIKE '%john%';
+
+-- 페이지네이션
+SELECT * FROM users
+ORDER BY created_at DESC
+LIMIT 10 OFFSET 0;  -- 1페이지 (0~9)
+
+SELECT * FROM users
+ORDER BY created_at DESC
+LIMIT 10 OFFSET 10;  -- 2페이지 (10~19)
+
+-- 커서 기반 페이지네이션 (대용량에 효율적)
+SELECT * FROM users
+WHERE id > 100  -- 마지막 조회 ID
+ORDER BY id ASC
+LIMIT 10;
+
+-- 집계와 함께 조회
+SELECT
+    COUNT(*) as total,
+    COUNT(*) FILTER (WHERE is_active) as active_count
+FROM users;
+
+
+-- ============================================
+-- UPDATE
+-- ============================================
+
+-- 단일 필드 업데이트
+UPDATE users
+SET username = 'john_updated'
+WHERE id = 1
+RETURNING *;
+
+-- 다중 필드 업데이트
+UPDATE users SET
+    username = 'john_updated',
+    is_active = FALSE,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = 1;
+
+-- 조건부 업데이트
+UPDATE users SET
+    is_active = FALSE
+WHERE created_at < NOW() - INTERVAL '1 year'
+  AND is_active = TRUE;
+
+-- CASE를 이용한 조건부 값 설정
+UPDATE users SET
+    is_active = CASE
+        WHEN last_login_at < NOW() - INTERVAL '6 months' THEN FALSE
+        ELSE is_active
+    END;
+
+
+-- ============================================
+-- DELETE
+-- ============================================
+
+-- Hard Delete (물리적 삭제)
+DELETE FROM users WHERE id = 1;
+
+-- 조건부 삭제
+DELETE FROM users
+WHERE is_active = FALSE
+  AND created_at < NOW() - INTERVAL '1 year';
+
+-- 관련 데이터도 함께 삭제 (CASCADE 설정 필요)
+DELETE FROM users WHERE id = 1;  -- posts, profiles도 삭제됨
+
+-- Soft Delete (논리적 삭제)
+UPDATE users SET
+    is_active = FALSE,
+    deleted_at = CURRENT_TIMESTAMP
+WHERE id = 1;
+
+-- Soft Delete된 데이터 제외하고 조회
+SELECT * FROM users
+WHERE deleted_at IS NULL;
+
+-- Soft Delete 복구
+UPDATE users SET
+    is_active = TRUE,
+    deleted_at = NULL
+WHERE id = 1;
+
+
+-- ============================================
+-- CRUD 매핑 요약
+-- ============================================
+-- | CRUD   | SQL      | HTTP   | 설명           |
+-- |--------|----------|--------|----------------|
+-- | Create | INSERT   | POST   | 새 리소스 생성   |
+-- | Read   | SELECT   | GET    | 리소스 조회      |
+-- | Update | UPDATE   | PUT    | 전체 리소스 교체  |
+-- | Update | UPDATE   | PATCH  | 부분 리소스 수정  |
+-- | Delete | DELETE   | DELETE | 리소스 삭제      |
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 API 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "이 리소스의 CRUD API부터 정의합시다. POST /products로 생성, GET /products/:id로 조회, PUT으로 전체 수정, PATCH로 부분 수정, DELETE로 삭제. RESTful 컨벤션 따라가면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 데이터 삭제 정책 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "사용자 삭제는 Soft Delete로 가죠. is_deleted 플래그 쓰면 나중에 복구도 가능하고, 감사 로그 추적도 쉽습니다. 실제 물리 삭제는 90일 후 배치로 처리하는 게 좋겠어요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 최적화 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "Read 비율이 90%가 넘으니까 읽기 최적화에 집중해야 해요. SELECT 쿼리에 적절한 인덱스 추가하고, 자주 조회되는 데이터는 캐싱 레이어 추가합시다. Write는 비동기로 처리하면 되고요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>GET 요청으로 데이터 변경</strong>
+                        <p>GET은 조회 전용입니다. GET /users/1/delete처럼 GET으로 삭제하면 안 됩니다. 크롤러나 프리페치가 의도치 않은 삭제를 유발할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>WHERE 없는 UPDATE/DELETE</strong>
+                        <p>WHERE 절 없이 UPDATE나 DELETE 실행 시 전체 데이터가 변경/삭제됩니다. 항상 조건절을 확인하고, 프로덕션에서는 트랜잭션으로 감싸세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>N+1 문제</strong>
+                        <p>목록 조회 시 각 항목의 관계 데이터를 개별 쿼리로 조회하면 성능이 급격히 저하됩니다. JOIN이나 Eager Loading을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>CRUD 베스트 프랙티스</strong>
+                        <p>멱등성 보장(PUT, DELETE는 여러 번 호출해도 같은 결과), 적절한 HTTP 상태코드 반환, 페이지네이션 필수, Soft Delete 고려, 입력 유효성 검사.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/REST-API/" class="related-term-link">REST API</a>
+                <a href="/ko/term/HTTP-Method/" class="related-term-link">HTTP Method</a>
+                <a href="/ko/term/SQL/" class="related-term-link">SQL</a>
+                <a href="/ko/term/ORM/" class="related-term-link">ORM</a>
+                <a href="/ko/term/Transaction/" class="related-term-link">Transaction</a>
+                <a href="/ko/term/Soft-Delete/" class="related-term-link">Soft Delete</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" class="learn-link">
+                    📄 MDN - HTTP 요청 메서드
+                </a>
+                <a href="https://restfulapi.net/http-methods/" target="_blank" class="learn-link">
+                    🎓 RESTful API - HTTP Methods
+                </a>
+                <a href="https://www.postgresql.org/docs/current/dml.html" target="_blank" class="learn-link">
+                    📖 PostgreSQL - Data Manipulation (DML)
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +984,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

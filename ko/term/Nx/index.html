@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,160 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Nx는 모노레포(Monorepo) 환경에서 빌드, 테스트, 린트를 효율적으로 수행하는 빌드 시스템이자 개발 도구입니다. Google, Facebook 같은 대형 기업에서 사용하는 모노레포 방식을 일반 팀도 쉽게 도입할 수 있게 해줍니다. Nrwl에서 개발했으며, 현재 매우 활발히 발전 중입니다.</p>
+                <p>Nx의 핵심 기능은 영향받은 프로젝트만 빌드/테스트하는 Affected Commands, 이전 빌드 결과를 재사용하는 Computation Caching, 로컬과 원격의 Task를 병렬 실행하는 Distributed Task Execution입니다. 100개 패키지가 있어도 변경된 3개 패키지만 빌드하니 CI 시간이 획기적으로 단축됩니다.</p>
+                <p>프로젝트 간 의존성 그래프를 자동으로 분석하여 올바른 빌드 순서를 결정합니다. `nx graph` 명령으로 의존성을 시각화할 수 있어 아키텍처 파악에도 유용합니다. 순환 의존성이 생기면 경고해주어 코드베이스 건강을 유지합니다.</p>
+                <p>Nx는 React, Angular, Next.js, Node.js, NestJS 등 다양한 프레임워크를 지원하며, 플러그인 시스템으로 커스텀 generator와 executor를 만들 수 있습니다. Turborepo, Lerna 같은 다른 모노레포 도구와 비교해 더 강력한 캐싱과 분산 실행 기능을 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="json">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// nx.json - Nx 워크스페이스 설정
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json"
+    ],
+    "sharedGlobals": ["{workspaceRoot}/babel.config.json"]
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],  // 의존 프로젝트 먼저 빌드
+      "inputs": ["production", "^production"],
+      "cache": true
+    },
+    "test": {
+      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
+      "cache": true
+    },
+    "lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "cache": true
+    }
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test"],
+        "parallel": 3
+      }
+    }
+  },
+  // Nx Cloud로 원격 캐시 활성화
+  "nxCloudAccessToken": "your-access-token"
+}</code></pre>
+            </div>
+            <div class="code-block" data-lang="json">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// apps/web/project.json - 프로젝트 설정
+{
+  "name": "web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/web/src",
+  "projectType": "application",
+  "tags": ["scope:web", "type:app"],
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/web"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "sourceMap": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "options": {
+        "buildTarget": "web:build",
+        "dev": true
+      }
+    }
+  },
+  "implicitDependencies": ["shared-ui", "api-client"]
+}
+
+// 자주 사용하는 Nx CLI 명령어
+// nx run web:build              - 특정 프로젝트 빌드
+// nx affected:build --base=main  - 변경된 프로젝트만 빌드
+// nx run-many -t build -p web,api  - 여러 프로젝트 빌드
+// nx graph                       - 의존성 그래프 시각화
+// nx reset                       - 캐시 초기화</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">리드:</strong> "프론트엔드랑 백엔드 레포 분리돼있으니까 공통 타입 정의 공유가 힘들어요. Nx로 모노레포 전환하면 어떨까요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "모노레포면 CI가 오래 걸리지 않나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "Nx affected 쓰면 변경된 프로젝트만 빌드돼요. 그리고 Nx Cloud 연결하면 캐시 공유돼서 로컬에서도 CI에서도 빨라져요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "대규모 프로젝트에서 빌드 시간 최적화 경험이 있나요?"</p>
+                <p><strong class="role-interviewee">지원자:</strong> "12개 패키지의 모노레포에서 Nx를 도입했습니다. affected 명령으로 변경 영향받는 패키지만 빌드해서 PR 빌드 시간이 평균 15분에서 4분으로 줄었고, Nx Cloud로 원격 캐시를 공유해서 팀원 모두 캐시 히트율이 80% 이상 나왔습니다. 의존성 그래프로 순환 참조도 발견해서 정리했어요."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 패키지 tags에 scope:shared 붙여주세요. 그래야 module-boundary 규칙으로 잘못된 import 막을 수 있어요."</p>
+                <p><strong class="role-author">작성자:</strong> "project.json에 tags 추가하고, .eslintrc에 @nx/enforce-module-boundaries 규칙도 설정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>캐시 무효화 조건을 정확히 이해하세요. inputs 설정이 잘못되면 코드가 바뀌어도 캐시된 결과를 사용해서 버그가 발생합니다. 의심되면 nx reset으로 캐시를 초기화하세요.</li>
+                <li>implicitDependencies는 자동 감지되지 않는 의존성에만 사용하세요. 코드 import는 자동 감지되니 중복 설정하면 유지보수가 어려워집니다.</li>
+                <li class="info">모노레포 마이그레이션은 점진적으로 하세요. 기존 레포를 한번에 합치면 충돌과 혼란이 많습니다. 새 패키지부터 모노레포에 추가하고 점차 이전하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Monorepo/" class="related-link">Monorepo</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Turborepo/" class="related-link">Turborepo</a>
+                <a href="/ko/term/Lerna/" class="related-link">Lerna</a>
+                <a href="/ko/term/pnpm/" class="related-link">pnpm</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://nx.dev/getting-started/intro" target="_blank">Nx 공식 문서</a></li>
+                <li><span class="type-official"></span><a href="https://nx.dev/ci/features/remote-cache" target="_blank">Nx Cloud 원격 캐시</a></li>
+                <li><span class="type-tutorial"></span><a href="https://www.youtube.com/c/Nrwl_io" target="_blank">Nx 공식 YouTube 채널</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +367,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

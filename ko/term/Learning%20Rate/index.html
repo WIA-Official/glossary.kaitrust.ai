@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,156 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Learning Rate(학습률)는 모델 가중치를 업데이트할 때 gradient에 곱해지는 스케일러입니다. w_new = w_old - lr * gradient 수식에서 lr이 학습률입니다. 딥러닝에서 가장 중요한 하이퍼파라미터로, 너무 크면 발산하고 너무 작으면 수렴이 느립니다.</p>
+                <p>일반적인 범위: CNN은 1e-3~1e-2, Transformer/LLM은 1e-5~1e-4, Fine-tuning은 1e-5~5e-5. Adam 옵티마이저는 SGD보다 낮은 학습률에서 잘 작동합니다.</p>
+                <p>Learning Rate Schedule: 고정 lr보다 동적 조절이 효과적. Warmup(처음에 서서히 증가), Step Decay(일정 epoch마다 감소), Cosine Annealing(코사인 곡선으로 감소), OneCycleLR(한 사이클 내 증가 후 감소)이 대표적입니다.</p>
+                <p>LLM 시대의 학습률: 대규모 모델은 Warmup이 필수(보통 전체의 1~3%)이고, Cosine Decay로 끝까지 학습합니다. 배치 크기가 커지면 학습률도 선형적으로 키울 수 있습니다(Linear Scaling Rule).</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import torch
+from torch.optim import Adam, AdamW, SGD
+from torch.optim.lr_scheduler import (
+    StepLR, CosineAnnealingLR, OneCycleLR,
+    LinearLR, CosineAnnealingWarmRestarts
+)
+
+model = MyModel()
+
+# 1. 기본 옵티마이저 설정
+optimizer = AdamW(model.parameters(), lr=1e-4, weight_decay=0.01)
+
+# 2. Step Decay (30 epoch마다 0.1배)
+scheduler = StepLR(optimizer, step_size=30, gamma=0.1)
+
+# 3. Cosine Annealing (최소 lr까지 코사인 감소)
+scheduler = CosineAnnealingLR(
+    optimizer,
+    T_max=100,        # 총 epoch
+    eta_min=1e-6      # 최소 lr
+)
+
+# 4. Warmup + Cosine Decay (LLM 표준)
+from transformers import get_cosine_schedule_with_warmup
+
+total_steps = len(dataloader) * num_epochs
+warmup_steps = int(total_steps * 0.03)  # 3% warmup
+
+scheduler = get_cosine_schedule_with_warmup(
+    optimizer,
+    num_warmup_steps=warmup_steps,
+    num_training_steps=total_steps
+)
+
+# 5. OneCycleLR (빠른 수렴)
+scheduler = OneCycleLR(
+    optimizer,
+    max_lr=1e-3,      # 피크 lr
+    total_steps=total_steps,
+    pct_start=0.3,    # 30%까지 상승
+    anneal_strategy='cos'
+)
+
+# 6. Learning Rate Finder (최적 lr 찾기)
+from torch_lr_finder import LRFinder
+
+finder = LRFinder(model, optimizer, criterion)
+finder.range_test(train_loader, end_lr=1, num_iter=100)
+finder.plot()  # 기울기가 가장 가파른 지점의 lr 선택
+# 보통 loss가 감소하기 시작하는 lr의 1/10을 선택
+
+# 학습 루프
+for epoch in range(num_epochs):
+    for batch in dataloader:
+        loss = model(batch)
+        loss.backward()
+        optimizer.step()
+        scheduler.step()  # 배치마다 호출 (OneCycleLR, Warmup)
+        optimizer.zero_grad()
+    # scheduler.step()  # epoch마다 호출 (StepLR, CosineAnnealing)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"학습 초반에 loss가 튀는 현상이 있어서 warmup을 3%에서 5%로 늘렸더니 안정화됐습니다. 최종 성능은 동일하고, 학습 실패 확률이 줄었어요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"LR Finder로 1e-3이 최적인 걸 확인하고, OneCycleLR로 3e-3까지 올렸다가 1e-5까지 내렸습니다. 고정 lr 대비 수렴이 30% 빨랐고, 최종 정확도도 0.5% 높았어요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"배치 크기를 256에서 1024로 키웠으면 lr도 4배로 키워야 해요. Linear Scaling Rule이요. 근데 너무 큰 lr은 일반화 성능이 떨어져서, LARS나 LAMB 옵티마이저로 레이어별 lr을 조절하는 게 좋습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Fine-tuning에서 높은 lr 사용</strong>
+                        <p>사전학습 가중치가 파괴됩니다. Fine-tuning은 1e-5~5e-5, 사전학습의 1/10~1/100 수준으로 시작하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Warmup 없이 대규모 모델 학습</strong>
+                        <p>초기 gradient가 불안정해 발산합니다. LLM/Transformer는 warmup 필수(1~5% steps).</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법</strong>
+                        <p>LR Finder로 적정 범위 탐색 후, Warmup + Cosine Decay 조합. 배치 크기 변경 시 lr도 비례 조정하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Optimizer/" class="related-term-link">Optimizer</a>
+                <a href="/ko/term/Adam/" class="related-term-link">Adam</a>
+                <a href="/ko/term/Gradient%20Descent/" class="related-term-link">Gradient Descent</a>
+                <a href="/ko/term/Batch%20Size/" class="related-term-link">Batch Size</a>
+                <a href="/ko/term/Hyperparameter/" class="related-term-link">Hyperparameter</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate" target="_blank" class="learn-link">📄 PyTorch LR Scheduler 공식 문서</a>
+                <a href="https://github.com/davidtvs/pytorch-lr-finder" target="_blank" class="learn-link">🎓 PyTorch LR Finder 라이브러리</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +386,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

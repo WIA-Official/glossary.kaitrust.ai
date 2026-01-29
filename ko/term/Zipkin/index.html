@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,118 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Zipkin은 Twitter에서 개발한 오픈소스 분산 추적 시스템입니다. Google의 Dapper 논문에서 영감을 받아 2012년에 시작되었으며, 마이크로서비스 환경에서 요청이 여러 서비스를 거치는 경로를 시각화하고 지연 시간을 분석합니다.</p>
+                <p>핵심 개념으로 Trace(전체 요청 흐름), Span(개별 작업 단위), Annotation(타임스탬프 이벤트)이 있습니다. 각 Span은 traceId로 연결되어 하나의 요청이 10개 서비스를 거쳐도 전체 흐름을 추적할 수 있습니다.</p>
+                <p>아키텍처는 Collector(데이터 수집), Storage(Cassandra, Elasticsearch, MySQL 지원), Query Service(검색 API), Web UI(시각화)로 구성됩니다. 각 서비스에서 instrumentation 라이브러리가 자동으로 Span을 생성하고 Collector로 전송합니다.</p>
+                <p>실무에서는 Spring Cloud Sleuth, OpenTelemetry와 연동하여 자동 계측합니다. P99 지연 시간 분석, 서비스 간 의존성 맵 생성, 특정 요청의 병목 지점 찾기에 필수적이며, 장애 발생 시 어느 서비스에서 문제가 생겼는지 5분 내 파악 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># docker-compose.yml - Zipkin 서버 실행
+version: '3'
+services:
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+    environment:
+      - STORAGE_TYPE=elasticsearch
+      - ES_HOSTS=elasticsearch:9200
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+---
+# Spring Boot application.yml 설정
+spring:
+  application:
+    name: order-service
+  zipkin:
+    base-url: http://zipkin:9411
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1.0  # 개발: 100%, 운영: 0.1(10%)
+---
+# OpenTelemetry Java Agent 사용 시
+# java -javaagent:opentelemetry-javaagent.jar \
+#   -Dotel.exporter.zipkin.endpoint=http://zipkin:9411/api/v2/spans \
+#   -Dotel.service.name=payment-service \
+#   -jar app.jar</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "결제 API 응답이 느리다는 CS가 있는데, Zipkin에서 traceId 찾아볼 수 있어요?"</p>
+                <p><strong class="role-junior">주니어:</strong> "네, 해당 시간대 검색해보니 inventory-service에서 3초 지연이 있었네요. DB 쿼리 튜닝이 필요해 보여요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Zipkin과 Jaeger의 차이점을 알고 계신가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "둘 다 분산 추적 도구지만, Jaeger는 CNCF 프로젝트로 Kubernetes 친화적이고 적응형 샘플링을 지원합니다. Zipkin은 더 가볍고 다양한 언어 지원이 풍부해서 레거시 시스템과 통합에 유리합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "sampler.probability가 1.0인데, 운영에서는 오버헤드 문제 없을까요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "운영 환경용 설정 파일에서는 0.1로 낮춰놨습니다. 프로파일별로 분리되어 있어요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>운영 환경에서 100% 샘플링은 성능 저하 유발 - 5-10% 샘플링 권장</li>
+                <li>Trace 데이터 저장소 용량 계획 필수 - 일주일 보관에 수백GB 필요</li>
+                <li>비동기 메시지 큐 추적 시 traceId 전파 명시적으로 구현 필요</li>
+                <li class="info">에러 발생 요청은 100% 샘플링 - 정상 요청만 낮은 비율 적용</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Jaeger/" class="related-link">Jaeger</a>
+                <a href="/ko/term/OpenTelemetry/" class="related-link">OpenTelemetry</a>
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+                <a href="/ko/term/Grafana/" class="related-link">Grafana</a>
+                <a href="/ko/term/%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81/" class="related-link">모니터링</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://zipkin.io/pages/quickstart.html" target="_blank" rel="noopener">Zipkin 공식 빠른 시작 가이드</a></li>
+                <li><span class="type-tutorial"></span><a href="https://spring.io/guides/gs/tanzu-observability/" target="_blank" rel="noopener">Spring Cloud Sleuth + Zipkin 튜토리얼</a></li>
+                <li><span class="type-book"></span><a href="https://research.google/pubs/pub36356/" target="_blank" rel="noopener">Google Dapper 논문 (분산 추적 원론)</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +325,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

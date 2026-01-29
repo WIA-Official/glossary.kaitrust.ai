@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,157 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Redpanda는 2019년 설립된 동명의 회사가 C++로 개발한 Kafka 호환 스트리밍 플랫폼입니다. Kafka API를 100% 호환하면서 JVM 없이 동작해 10배 낮은 P99 레이턴시와 6배 빠른 처리량을 제공합니다. ZooKeeper 의존성도 제거해 운영이 단순합니다.</p>
+                <p>스레드당 코어(Thread-per-Core) 아키텍처와 Raft 합의 알고리즘을 사용합니다. 각 CPU 코어가 독립적인 샤드를 처리해 락 경합을 최소화하고, 내장 Raft로 ZooKeeper 없이 리더 선출과 복제를 수행합니다. 단일 바이너리로 설치와 업그레이드가 간편합니다.</p>
+                <p>Kafka 클라이언트, Kafka Connect, Schema Registry를 그대로 사용할 수 있어 기존 Kafka 생태계와 완벽 호환됩니다. 설정 변경 없이 Kafka 클러스터를 Redpanda로 마이그레이션할 수 있으며, Tiered Storage로 S3에 오래된 데이터를 자동 저장해 스토리지 비용을 절감합니다.</p>
+                <p>Kubernetes Operator로 클라우드 네이티브 배포를 지원하고, Redpanda Console로 토픽 관리, 컨슈머 그룹 모니터링, 스키마 레지스트리 UI를 제공합니다. 금융, 게임, IoT 등 저지연이 중요한 실시간 데이터 파이프라인에 적합합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Kafka 클라이언트로 Redpanda 연결 (100% 호환)
+from kafka import KafkaProducer, KafkaConsumer
+from kafka.admin import KafkaAdminClient, NewTopic
+import json
+
+REDPANDA_BROKERS = ['localhost:9092']
+
+# Admin: 토픽 생성
+admin_client = KafkaAdminClient(
+    bootstrap_servers=REDPANDA_BROKERS,
+    client_id='admin-client'
+)
+
+topic = NewTopic(
+    name='user-events',
+    num_partitions=6,
+    replication_factor=3
+)
+
+try:
+    admin_client.create_topics([topic])
+    print("Topic created")
+except Exception as e:
+    print(f"Topic exists or error: {e}")
+
+# Producer: 메시지 발행
+producer = KafkaProducer(
+    bootstrap_servers=REDPANDA_BROKERS,
+    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+    acks='all',  # 모든 복제본 확인
+    retries=3,
+    linger_ms=5  # 배치 대기 시간
+)
+
+# 이벤트 발행
+for i in range(100):
+    event = {
+        'user_id': f'user_{i % 10}',
+        'action': 'click',
+        'timestamp': '2024-01-15T10:30:00Z',
+        'page': f'/product/{i}'
+    }
+    future = producer.send('user-events', value=event, key=event['user_id'].encode())
+    # 동기 전송: future.get(timeout=10)
+
+producer.flush()
+producer.close()
+
+# Consumer: 메시지 소비
+consumer = KafkaConsumer(
+    'user-events',
+    bootstrap_servers=REDPANDA_BROKERS,
+    group_id='analytics-consumer',
+    auto_offset_reset='earliest',
+    enable_auto_commit=True,
+    value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+)
+
+for message in consumer:
+    print(f"Partition: {message.partition}, Offset: {message.offset}")
+    print(f"Key: {message.key}, Value: {message.value}")
+
+    # 처리 후 수동 커밋 (enable_auto_commit=False 시)
+    # consumer.commit()
+
+# rpk CLI 사용 예시 (Redpanda 전용 도구)
+# rpk topic create user-events --partitions 6 --replicas 3
+# rpk topic produce user-events
+# rpk topic consume user-events --group my-group
+# rpk cluster info
+# rpk topic describe user-events
+
+# Docker로 Redpanda 실행
+# docker run -d --name redpanda \
+#   -p 9092:9092 -p 8081:8081 -p 8082:8082 \
+#   docker.redpanda.com/redpandadata/redpanda:latest \
+#   redpanda start --smp 1 --memory 1G --overprovisioned</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "Kafka 운영 부담이 큰데, Redpanda로 바꾸면 ZooKeeper도 없고 JVM 튜닝도 필요 없어요. 레이턴시도 낮아지고요."</p>
+                <p><strong class="role-junior">주니어:</strong> "기존 Kafka 코드 바꿔야 해요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "브로커 주소만 바꾸면 돼요. kafka-python, Confluent 클라이언트 그대로 쓸 수 있어요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "실시간 데이터 파이프라인 경험을 말씀해주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "Redpanda로 초당 10만 이벤트를 처리하는 실시간 로그 파이프라인을 구축했습니다. Kafka 대비 P99 레이턴시가 50ms에서 5ms로 줄었고, Tiered Storage로 S3에 1주일 이상 된 데이터를 자동 저장해 로컬 디스크 비용을 50% 절감했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "acks='all' 설정 좋아요. 근데 retries도 설정해서 일시적 네트워크 실패에 대응하세요."</p>
+                <p><strong class="role-junior">개발자:</strong> "네, retries=3에 retry_backoff_ms=100 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>Kafka 일부 고급 기능 미지원 - Transaction, Exactly-Once Semantics 지원 여부 확인 필요</li>
+                <li>에코시스템 성숙도 - Kafka 대비 서드파티 도구, 모니터링 연동이 제한적일 수 있음</li>
+                <li>메모리 사용량 - JVM 없어 힙 튜닝은 불필요하나, 캐시 설정에 따른 메모리 계획 필요</li>
+                <li class="info">rpk CLI 도구가 kafka-topics.sh보다 직관적 - rpk topic, rpk cluster 명령어로 관리 효율화</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/RisingWave/" class="related-link">RisingWave</a>
+                <a href="/ko/term/Spark/" class="related-link">Spark</a>
+                <a href="/ko/term/Prefect/" class="related-link">Prefect</a>
+                <a href="/ko/term/Snowflake/" class="related-link">Snowflake</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://docs.redpanda.com/" target="_blank" rel="noopener">Redpanda 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://docs.redpanda.com/docs/get-started/quick-start/" target="_blank" rel="noopener">Redpanda Quick Start</a></li>
+                <li><span class="type-article"></span><a href="https://redpanda.com/blog" target="_blank" rel="noopener">Redpanda 블로그 - 성능 벤치마크</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +364,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

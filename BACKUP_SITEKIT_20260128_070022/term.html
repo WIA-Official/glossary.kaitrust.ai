@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">AI 용어 상세 | KAITRUST AI 백과사전</title>
+    <meta name="description" id="pageMeta" content="KAITRUST AI 백과사전 - AI 시대 필수 용어 상세 설명">
+
+    <!-- Open Graph / SNS 공유 미리보기 -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" id="ogUrl" content="https://glossary.kaitrust.ai/term.html">
+    <meta property="og:title" id="ogTitle" content="AI 용어 상세 | KAITRUST AI 백과사전">
+    <meta property="og:description" id="ogDesc" content="KAITRUST AI 백과사전 - AI 시대 필수 용어 상세 설명">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="twTitle" content="AI 용어 상세 | KAITRUST AI 백과사전">
+    <meta name="twitter:description" id="twDesc" content="KAITRUST AI 백과사전 - AI 시대 필수 용어 상세 설명">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); }
+
+        /* Term Header */
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .term-detail-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+        }
+
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .term-category-badge.ai { background: rgba(168, 85, 247, 0.2); color: #c4b5fd; }
+        .term-category-badge.regulation { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .term-category-badge.prog { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+        .term-category-badge.web { background: rgba(236, 72, 153, 0.2); color: #f9a8d4; }
+        .term-category-badge.cloud { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+        .term-category-badge.db { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+        .term-category-badge.devops { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+        .term-category-badge.security { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .term-category-badge.arch { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+        .term-category-badge.data { background: rgba(249, 115, 22, 0.2); color: #fdba74; }
+        .term-category-badge.net { background: rgba(20, 184, 166, 0.2); color: #5eead4; }
+
+        /* Special Badges */
+        .term-badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+        }
+
+        .term-badge.new {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            color: white;
+            animation: badgePulse 2s infinite;
+        }
+
+        .term-badge.kaitrust-def {
+            background: linear-gradient(135deg, var(--primary), #00d4e0);
+            color: var(--dark);
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .term-meta-info {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .term-meta-info h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .term-meta-info p {
+            color: #94a3b8;
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .term-meta-info strong {
+            color: #cbd5e1;
+        }
+
+        .term-detail-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .term-detail-english {
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        .term-detail-definition {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            line-height: 1.9;
+        }
+
+        .term-detail-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .term-detail-tag {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            border-radius: 20px;
+            color: var(--primary);
+        }
+
+        /* Actions */
+        .term-actions-bar {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .term-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+        }
+
+        .term-action.primary {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: var(--dark);
+        }
+
+        .term-action.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .term-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Related Terms */
+        .related-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .related-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .related-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: block;
+        }
+
+        .related-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .related-card-term {
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .related-card-cat {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        /* Not Found */
+        .not-found {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .not-found span { font-size: 5rem; display: block; margin-bottom: 1rem; }
+        .not-found h2 { color: #fff; margin-bottom: 1rem; }
+        .not-found p { color: #64748b; margin-bottom: 2rem; }
+
+        /* Share Buttons */
+        .share-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .share-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .share-btn.twitter { background: #1da1f2; color: white; }
+        .share-btn.linkedin { background: #0077b5; color: white; }
+        .share-btn.copy { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .share-btn:hover { transform: scale(1.1); }
+
+        /* Utility Buttons (Print, Fullscreen) */
+        .utility-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .utility-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            background: rgba(15, 23, 42, 0.8);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .utility-btn:hover {
+            background: rgba(168, 85, 247, 0.3);
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Watermark */
+        .watermark {
+            position: fixed;
+            bottom: 50%;
+            right: 50%;
+            transform: translate(50%, 50%) rotate(-30deg);
+            font-family: var(--font-display);
+            font-size: 15vw;
+            font-weight: 900;
+            color: rgba(168, 85, 247, 0.03);
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        /* Fullscreen Mode */
+        .fullscreen-mode {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 2rem !important;
+            background: var(--dark) !important;
+            z-index: 9999 !important;
+            overflow-y: auto !important;
+        }
+
+        .fullscreen-mode .term-detail-header {
+            max-width: 1000px;
+            margin: 0 auto 2rem;
+        }
+
+        .fullscreen-mode .term-detail-title {
+            font-size: 4rem;
+        }
+
+        .fullscreen-mode .term-detail-definition {
+            font-size: 1.5rem;
+            line-height: 2;
+        }
+
+        .fullscreen-mode .term-detail-english {
+            font-size: 1.3rem;
+        }
+
+        .fullscreen-exit-hint {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(168, 85, 247, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            z-index: 10000;
+            display: none;
+        }
+
+        .fullscreen-mode .fullscreen-exit-hint {
+            display: block;
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: white !important; }
+            .bg-animation, .grid-overlay, header, footer,
+            .term-actions-bar, .share-buttons, .utility-buttons,
+            .related-section, .fullscreen-exit-hint { display: none !important; }
+
+            .term-detail-container {
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+
+            .term-detail-header {
+                background: white !important;
+                border: 2px solid #333 !important;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .term-detail-header::before { display: none; }
+            .term-detail-title { color: #000 !important; -webkit-text-fill-color: #000 !important; }
+            .term-detail-english { color: #666 !important; }
+            .term-detail-definition { color: #333 !important; }
+            .term-category-badge { border: 1px solid #333 !important; }
+
+            .watermark {
+                color: rgba(0, 0, 0, 0.05) !important;
+                font-size: 20vw;
+            }
+
+            .print-footer {
+                display: block !important;
+                text-align: center;
+                margin-top: 2rem;
+                padding-top: 1rem;
+                border-top: 1px solid #ccc;
+                font-size: 0.9rem;
+                color: #666;
+            }
+        }
+
+        .print-footer { display: none; }
+
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 3rem; }
+            .term-detail-header { padding: 2rem; }
+            .term-detail-title { font-size: 1.8rem; }
+            .term-actions-bar { flex-direction: column; }
+            .term-action { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+    <div class="watermark">KAITRUST</div>
+    <div class="fullscreen-exit-hint">ESC 또는 버튼 클릭으로 종료</div>
+
+    <!-- Header -->
+        <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">KOREA AI TRUST ASSOCIATION</div>
+                </div>
+            </a>
+            <nav>
+                <!-- 협회소개 드롭다운 -->
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" target="_blank" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/" target="_blank">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/" target="_blank">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/" target="_blank">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/" target="_blank">정관</a>
+                        <a href="https://kaitrust.ai/about/location/" target="_blank">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/" target="_blank">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" target="_blank" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" target="_blank" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" target="_blank" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" target="_blank" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" target="_blank" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="term-detail-container" id="mainContent">
+        <!-- Content injected by JS -->
+    </main>
+
+    <!-- Footer -->
+        <footer id="about" style="background: #1e293b !important; color: #e2e8f0 !important;">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <h3>KAITRUST</h3>
+                    <p style="color: #94a3b8 !important;">한국인공지능진흥협회는 민법 제32조에 따라 설립된 비영리단체로, 대한민국 AI 산업의 건전한 발전과 신뢰 기반 조성을 위해 노력합니다.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 style="color: #ffffff !important;">바로가기</h4>
+                    <ul>
+                        <li><a href="https://kaitrust.ai/#services">서비스</a></li>
+                        <li><a href="https://kaitrust.ai/#mission">설립목적</a></li>
+                        <li><a href="https://consulting.kaitrust.ai" target="_blank" style="color: #10b981;">🎯 컨설팅 신청</a></li>
+                        <li><a href="https://expert.kaitrust.ai" style="color: var(--warning);">🔥 전문위원 모집</a></li>
+                        <li><a href="https://glossary.kaitrust.ai" style="color: var(--primary, #00f5ff);">📖 AI 백과사전</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 style="color: #ffffff !important;">협회 정보</h4>
+                    <div class="footer-info">
+                        <p style="color: #e2e8f0 !important;"><strong style="color: #ffffff !important;">한국인공지능진흥협회</strong></p>
+                        <p style="color: #cbd5e1 !important;">사업자등록번호: 129-82-89277</p>
+                        <p style="color: #cbd5e1 !important;">회장: 연삼흠, Ph.D.</p>
+                        <p style="color: #cbd5e1 !important;">서울 강서구 마곡중앙6로 21, 507호 D14 (마곡동, 이너매스마곡1차)</p>
+                    </div>
+                </div>
+                
+                <div class="footer-section" id="contact">
+                    <h4 style="color: #ffffff !important;">문의</h4>
+                    <div class="footer-info">
+                        <p style="color: #cbd5e1 !important;">Tel: +82-70-7101-7878</p>
+                        <p>📩 <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff !important;">contact@kaitrust.ai</a></p>
+                        <p><a href="https://consulting.kaitrust.ai" style="color: #a5f3fc !important;">💼 컨설팅 신청</a> <span style="color: #94a3b8;">|</span> <a href="https://kaitrust.ai/signup" style="color: #c4b5fd !important;">🤝 협회 가입</a></p>
+                        <p style="margin-top: 0.5rem;"><a href="https://kaitrust.ai/privacy/" style="color: #64748b; font-size: 0.8rem;">개인정보처리방침</a> | <a href="https://kaitrust.ai/terms/" style="color: #64748b; font-size: 0.8rem;">이용약관</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p style="margin-bottom: 0.75rem; padding: 0.6rem 1.2rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 8px; display: inline-block; color: #f1f5f9 !important;">
+                    🔥 <a href="https://expert.kaitrust.ai" style="color: #fef08a !important; text-decoration: none; font-weight: 600;">AI 컴플라이언스 전문위원 상시 모집</a> <span style="color: #e2e8f0 !important;">- 협회와 함께 대한민국 AI 신뢰 기반을 만들어가세요</span>
+                </p>
+                <p style="color: #cbd5e1 !important;">© 2024 ~ <span id="currentYear" style="color: #e2e8f0 !important;"></span> <span class="highlight" style="color: #00f5ff !important;">한국인공지능진흥협회</span> - BENEFIT ALL HUMANITY</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/data/glossary-terms.js"></script>
+    <script src="/components/site-kit/kaitrust-site-kit.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+
+    <script>
+    (function() {
+        'use strict';
+
+        const mainContent = document.getElementById('mainContent');
+        let favorites = JSON.parse(localStorage.getItem('glossary_favorites') || '[]');
+
+        function init() {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // Get term from URL
+            const params = new URLSearchParams(window.location.search);
+            const termName = params.get('term');
+
+            if (!termName) {
+                showNotFound();
+                return;
+            }
+
+            // Find term
+            const term = GLOSSARY_TERMS.find(t =>
+                t.term.toLowerCase() === decodeURIComponent(termName).toLowerCase() ||
+                (t.english && t.english.toLowerCase() === decodeURIComponent(termName).toLowerCase())
+            );
+
+            if (!term) {
+                showNotFound(termName);
+                return;
+            }
+
+            renderTerm(term);
+        }
+
+        function renderTerm(term) {
+            const cat = CATEGORIES[term.category];
+            const isFav = favorites.includes(term.term);
+            const pageUrl = window.location.href;
+
+            // Update page title and meta
+            const englishPart = term.english ? ` (${term.english})` : '';
+            const pageTitle = `${term.term}${englishPart} | KAITRUST AI 백과사전`;
+            const pageDesc = term.desc;
+
+            // Update page meta
+            document.getElementById('pageTitle').textContent = pageTitle;
+            document.getElementById('pageMeta').content = pageDesc;
+
+            // Update OG tags (for dynamic sharing)
+            document.getElementById('ogUrl').content = pageUrl;
+            document.getElementById('ogTitle').content = pageTitle;
+            document.getElementById('ogDesc').content = pageDesc;
+            document.getElementById('twTitle').content = pageTitle;
+            document.getElementById('twDesc').content = pageDesc;
+
+            // Find related terms (same category, different term)
+            const relatedTerms = GLOSSARY_TERMS
+                .filter(t => t.category === term.category && t.term !== term.term)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 6);
+
+            const tagsHTML = term.tags ? term.tags.map(t => `<span class="term-detail-tag">${t}</span>`).join('') : '';
+            const relatedHTML = relatedTerms.map(t => `
+                <a href="/term.html?term=${encodeURIComponent(t.term)}" class="related-card">
+                    <div class="related-card-term">${t.term}</div>
+                    <div class="related-card-cat">${t.english || ''}</div>
+                </a>
+            `).join('');
+
+            mainContent.innerHTML = `
+                <!-- Breadcrumb -->
+                <nav class="breadcrumb">
+                    <a href="https://kaitrust.ai">홈</a>
+                    <span>›</span>
+                    <a href="/">AI 백과사전</a>
+                    <span>›</span>
+                    <span class="current">${term.term}</span>
+                </nav>
+
+                <!-- Term Header -->
+                <div class="term-detail-header">
+                    <span class="term-category-badge ${term.category}">${cat.icon} ${cat.name}</span>
+                    <h1 class="term-detail-title">
+                        ${term.term}
+                        ${term.isNew ? '<span class="term-badge new">NEW</span>' : ''}
+                        ${term.isKaitrustDef ? '<span class="term-badge kaitrust-def">KAITRUST 정의</span>' : ''}
+                    </h1>
+                    <div class="term-detail-english">${term.english || ''}${term.korean ? ` (${term.korean})` : ''}</div>
+                    <p class="term-detail-definition">${term.desc}</p>
+                    ${tagsHTML ? `<div class="term-detail-tags">${tagsHTML}</div>` : ''}
+                    ${term.isKaitrustDef ? `
+                    <div class="term-meta-info">
+                        <h4>📜 KAITRUST 정의 정보</h4>
+                        <p><strong>정의 기관:</strong> ${term.definedBy || 'KAITRUST'}</p>
+                        <p><strong>정의일:</strong> ${term.definedAt || '2026-01-23'}</p>
+                        <p><strong>비고:</strong> KAITRUST가 새롭게 정의한 국제 표준 약어</p>
+                    </div>
+                    ` : ''}
+                </div>
+
+                <!-- Actions -->
+                <div class="term-actions-bar">
+                    <button class="term-action ${isFav ? 'primary' : 'secondary'}" id="favBtn">
+                        <span>${isFav ? '⭐' : '☆'}</span> ${isFav ? '저장됨' : '즐겨찾기 추가'}
+                    </button>
+                    <button class="term-action secondary" id="copyBtn">
+                        <span>📋</span> 복사
+                    </button>
+                    <a href="/" class="term-action secondary">
+                        <span>←</span> 목록으로
+                    </a>
+                    <div class="utility-buttons">
+                        <button class="utility-btn" onclick="printTerm()" title="인쇄하기">🖨️</button>
+                        <button class="utility-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="전체화면 (공부 모드)">⛶</button>
+                    </div>
+                    <div class="share-buttons" style="margin-left: auto;">
+                        <button class="share-btn twitter" onclick="shareTwitter()" title="Twitter 공유">𝕏</button>
+                        <button class="share-btn linkedin" onclick="shareLinkedIn()" title="LinkedIn 공유">in</button>
+                        <button class="share-btn copy" onclick="copyLink()" title="링크 복사">🔗</button>
+                    </div>
+                </div>
+
+                <!-- Related Terms -->
+                ${relatedTerms.length > 0 ? `
+                <div class="related-section">
+                    <h3 class="related-title">🔗 관련 용어</h3>
+                    <div class="related-grid">${relatedHTML}</div>
+                </div>
+                ` : ''}
+
+                <!-- Back to All -->
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="/" class="term-action primary" style="display: inline-flex;">
+                        <span>📚</span> 전체 용어 보기
+                    </a>
+                </div>
+
+                <!-- Print Footer -->
+                <div class="print-footer">
+                    📚 KAITRUST AI 백과사전 | glossary.kaitrust.ai<br>
+                    © ${new Date().getFullYear()} Korea AI Trust Association
+                </div>
+            `;
+
+            // Event listeners
+            document.getElementById('favBtn').addEventListener('click', () => {
+                toggleFavorite(term.term);
+                const btn = document.getElementById('favBtn');
+                const isFavNow = favorites.includes(term.term);
+                btn.className = `term-action ${isFavNow ? 'primary' : 'secondary'}`;
+                btn.innerHTML = `<span>${isFavNow ? '⭐' : '☆'}</span> ${isFavNow ? '저장됨' : '즐겨찾기 추가'}`;
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', () => {
+                navigator.clipboard.writeText(`${term.term}${term.english ? ' (' + term.english + ')' : ''}: ${term.desc}`);
+                const btn = document.getElementById('copyBtn');
+                btn.innerHTML = '<span>✓</span> 복사됨';
+                setTimeout(() => btn.innerHTML = '<span>📋</span> 복사', 1500);
+            });
+
+            // Share functions
+            window.shareTwitter = () => {
+                const text = `📚 ${term.term}${term.english ? ' (' + term.english + ')' : ''}\n\n${term.desc}\n\n#AI백과사전 #KAITRUST`;
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(pageUrl)}`, '_blank');
+            };
+
+            window.shareLinkedIn = () => {
+                window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`, '_blank');
+            };
+
+            window.copyLink = () => {
+                navigator.clipboard.writeText(pageUrl);
+                alert('링크가 복사되었습니다!');
+            };
+
+            // Print function
+            window.printTerm = () => {
+                window.print();
+            };
+
+            // Fullscreen toggle
+            window.toggleFullscreen = () => {
+                const container = document.getElementById('mainContent');
+                const btn = document.getElementById('fullscreenBtn');
+
+                if (container.classList.contains('fullscreen-mode')) {
+                    container.classList.remove('fullscreen-mode');
+                    document.body.style.overflow = '';
+                    btn.innerHTML = '⛶';
+                    btn.title = '전체화면 (공부 모드)';
+                } else {
+                    container.classList.add('fullscreen-mode');
+                    document.body.style.overflow = 'hidden';
+                    btn.innerHTML = '✕';
+                    btn.title = '전체화면 종료';
+                    container.scrollTop = 0;
+                }
+            };
+
+            // ESC key to exit fullscreen
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const container = document.getElementById('mainContent');
+                    if (container && container.classList.contains('fullscreen-mode')) {
+                        toggleFullscreen();
+                    }
+                }
+            });
+        }
+
+        function showNotFound(searchTerm) {
+            mainContent.innerHTML = `
+                <div class="not-found">
+                    <span>🔍</span>
+                    <h2>용어를 찾을 수 없습니다</h2>
+                    <p>${searchTerm ? `"${searchTerm}"에 대한 결과가 없습니다.` : '용어를 지정해주세요.'}</p>
+                    <a href="/" class="term-action primary">
+                        <span>📚</span> AI 백과사전으로 이동
+                    </a>
+                </div>
+            `;
+        }
+
+        function toggleFavorite(term) {
+            const idx = favorites.indexOf(term);
+            if (idx > -1) favorites.splice(idx, 1);
+            else favorites.push(term);
+            localStorage.setItem('glossary_favorites', JSON.stringify(favorites));
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+
+        // Language Modal
+        document.getElementById('langBtn').addEventListener('click', () => {
+            if (window.wiaLangModal) window.wiaLangModal.open();
+        });
+
+        if (typeof WIALanguageModal !== 'undefined') {
+            window.wiaLangModal = new WIALanguageModal();
+            window.wiaLangModal.init();
+        }
+    })();
+    </script>
+
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+</body>
+</html>

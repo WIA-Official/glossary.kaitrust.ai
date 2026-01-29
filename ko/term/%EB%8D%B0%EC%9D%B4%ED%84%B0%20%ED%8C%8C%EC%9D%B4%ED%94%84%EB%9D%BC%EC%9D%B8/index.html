@@ -50,168 +50,294 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#data">데이터공학</a>
-            <span>›</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai/#data">데이터공학</a><span>›</span>
             <span class="current">데이터 파이프라인</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>📊</span>
-                <span>데이터공학</span>
-            </div>
+            <div class="term-category-badge"><span>📊</span><span>데이터공학</span></div>
             <h1 class="term-title">데이터 파이프라인</h1>
             <p class="term-english">Data Pipeline</p>
             <div class="term-description">
                 <p>데이터를 수집, 변환, 저장하는 자동화된 워크플로우. ETL/ELT 프로세스를 구성.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#data" class="term-action-btn btn-secondary">
-                    📊 데이터공학 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#data" class="term-action-btn btn-secondary">📊 데이터공학 더보기</a>
             </div>
         </article>
+
+        <div class="term-sections">
+            <!-- 섹션 1: 상세 설명 -->
+            <section class="term-section" aria-labelledby="detail-title">
+                <h2 class="section-title" id="detail-title">상세 설명</h2>
+                <div class="detail-content">
+                    <p>데이터 파이프라인(Data Pipeline)은 데이터를 소스에서 추출하여 변환하고 목적지에 저장하는 자동화된 워크플로우입니다. ETL(Extract-Transform-Load) 또는 ELT(Extract-Load-Transform) 패턴으로 구현되며, 배치 처리와 실시간 스트리밍을 모두 지원합니다. 데이터 엔지니어링의 핵심 인프라로, 데이터 웨어하우스, 데이터 레이크, ML 학습 데이터 생성에 필수적입니다.</p>
+                    <p>파이프라인의 핵심 개념은 DAG(Directed Acyclic Graph)입니다. 작업(Task)들과 의존성을 방향성 비순환 그래프로 정의하여, 어떤 작업이 완료되어야 다음 작업이 실행될 수 있는지 명시합니다. 이를 통해 병렬 처리, 재시도, 백필(Backfill)이 가능해집니다. Apache Airflow가 사실상 표준이며, Prefect, Dagster 같은 현대적 대안도 있습니다.</p>
+                    <p>ETL은 전통적 방식으로 변환 후 적재하고, ELT는 클라우드 데이터 웨어하우스(Snowflake, BigQuery)의 강력한 컴퓨팅을 활용해 적재 후 변환합니다. 최근에는 dbt를 활용한 Transform 레이어 분리, Great Expectations를 통한 데이터 품질 검증 통합이 일반화되고 있습니다. 스트리밍 파이프라인은 Kafka, Flink, Spark Streaming으로 구현합니다.</p>
+                    <p>좋은 파이프라인은 멱등성(Idempotent), 원자성(Atomic), 모니터링 가능성을 갖춥니다. 멱등성은 동일한 입력에 대해 여러 번 실행해도 같은 결과를 보장합니다. 실패 시 재시도가 안전하려면 필수입니다. 데이터 엔지니어링 팀은 파이프라인의 신뢰성, 효율성, 유지보수성을 지속적으로 개선해야 합니다.</p>
+                </div>
+            </section>
+
+            <!-- 섹션 2: 코드 예제 -->
+            <section class="term-section" aria-labelledby="code-title">
+                <h2 class="section-title" id="code-title">코드 예제</h2>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Apache Airflow DAG</span>
+                        <button class="copy-btn" data-code="code-block-1">복사</button>
+                    </div>
+                    <pre><code id="code-block-1"># Apache Airflow DAG 예시 - 일별 데이터 파이프라인
+from datetime import datetime, timedelta
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
+from airflow.providers.slack.operators.slack_webhook import SlackWebhookOperator
+from airflow.utils.task_group import TaskGroup
+
+# DAG 기본 설정
+default_args = {
+    'owner': 'data-engineering',
+    'depends_on_past': False,
+    'email_on_failure': True,
+    'email': ['alerts@company.com'],
+    'retries': 3,
+    'retry_delay': timedelta(minutes=5),
+    'execution_timeout': timedelta(hours=2),
+}
+
+dag = DAG(
+    dag_id='daily_sales_pipeline',
+    default_args=default_args,
+    description='일별 매출 데이터 ETL 파이프라인',
+    schedule_interval='0 2 * * *',  # 매일 02:00 UTC
+    start_date=datetime(2024, 1, 1),
+    catchup=False,
+    tags=['sales', 'etl', 'daily'],
+    max_active_runs=1,
+)
+
+# 1. 데이터 추출 (Extract)
+def extract_from_api(**context):
+    """API에서 매출 데이터 추출"""
+    import requests
+    execution_date = context['ds']
+    response = requests.get(
+        f"https://api.internal/sales/{execution_date}",
+        headers={"Authorization": "Bearer {{ var.value.api_token }}"}
+    )
+    data = response.json()
+    # XCom으로 다음 태스크에 전달
+    context['ti'].xcom_push(key='record_count', value=len(data['records']))
+    return len(data['records'])
+
+extract_task = PythonOperator(
+    task_id='extract_sales_data',
+    python_callable=extract_from_api,
+    provide_context=True,
+    dag=dag,
+)
+
+# 2. 데이터 품질 검증 (Validation)
+validate_task = BashOperator(
+    task_id='validate_data_quality',
+    bash_command='''
+    cd /opt/data-quality && \
+    great_expectations checkpoint run sales_checkpoint \
+    --data-asset-name raw_sales_{{ ds_nodash }} \
+    || exit 1
+    ''',
+    dag=dag,
+)
+
+# 3. Transform + Load (dbt 활용)
+with TaskGroup(group_id='transform_load', dag=dag) as transform_group:
+    # Staging 모델
+    dbt_staging = BashOperator(
+        task_id='dbt_staging',
+        bash_command='''
+        cd /opt/dbt/sales_project && \
+        dbt run --select staging.stg_sales \
+        --vars '{"run_date": "{{ ds }}"}'
+        ''',
+    )
+
+    # Mart 모델
+    dbt_marts = BashOperator(
+        task_id='dbt_marts',
+        bash_command='''
+        cd /opt/dbt/sales_project && \
+        dbt run --select marts.fct_daily_sales marts.dim_products \
+        --vars '{"run_date": "{{ ds }}"}'
+        ''',
+    )
+
+    # dbt 테스트
+    dbt_test = BashOperator(
+        task_id='dbt_test',
+        bash_command='''
+        cd /opt/dbt/sales_project && \
+        dbt test --select staging marts
+        ''',
+    )
+
+    dbt_staging >> dbt_marts >> dbt_test
+
+# 4. 집계 테이블 업데이트 (Snowflake MERGE)
+aggregate_task = SnowflakeOperator(
+    task_id='update_aggregates',
+    snowflake_conn_id='snowflake_prod',
+    sql='''
+    MERGE INTO gold.daily_sales_summary target
+    USING (
+        SELECT
+            sale_date,
+            SUM(amount) as total_sales,
+            COUNT(*) as transaction_count,
+            COUNT(DISTINCT customer_id) as unique_customers
+        FROM gold.fct_daily_sales
+        WHERE sale_date = '{{ ds }}'
+        GROUP BY sale_date
+    ) source
+    ON target.sale_date = source.sale_date
+    WHEN MATCHED THEN UPDATE SET
+        total_sales = source.total_sales,
+        transaction_count = source.transaction_count,
+        unique_customers = source.unique_customers,
+        updated_at = CURRENT_TIMESTAMP()
+    WHEN NOT MATCHED THEN INSERT (
+        sale_date, total_sales, transaction_count, unique_customers, updated_at
+    ) VALUES (
+        source.sale_date, source.total_sales,
+        source.transaction_count, source.unique_customers, CURRENT_TIMESTAMP()
+    );
+    ''',
+    dag=dag,
+)
+
+# 5. 완료 알림
+success_alert = SlackWebhookOperator(
+    task_id='slack_success_alert',
+    slack_webhook_conn_id='slack_webhook',
+    message='''
+:white_check_mark: *일별 매출 파이프라인 완료*
+- 실행일: {{ ds }}
+- 처리 건수: {{ ti.xcom_pull(task_ids='extract_sales_data', key='record_count') }}
+- 소요 시간: {{ task_instance.duration }}초
+    ''',
+    dag=dag,
+)
+
+# DAG 의존성 정의 (ETL 흐름)
+extract_task >> validate_task >> transform_group >> aggregate_task >> success_alert</code></pre>
+                </div>
+            </section>
+
+            <!-- 섹션 3: 실무 대화 -->
+            <section class="term-section" aria-labelledby="conv-title">
+                <h2 class="section-title" id="conv-title">실무 대화</h2>
+                <div class="conversation-tabs">
+                    <button class="conv-tab active" data-tab="meeting">팀 회의</button>
+                    <button class="conv-tab" data-tab="interview">기술 면접</button>
+                    <button class="conv-tab" data-tab="review">코드 리뷰</button>
+                </div>
+                <div class="conversation-content">
+                    <div class="conv-panel active" id="meeting">
+                        <div class="chat-bubble user">PM: 어제 데일리 파이프라인이 실패했는데, 원인이 뭔가요?</div>
+                        <div class="chat-bubble expert">데이터 엔지니어: API 서버 점검으로 extract 단계에서 timeout이 발생했어요. retry 3회 후 실패했고, 오늘 아침에 백필로 복구했습니다. SLA는 맞췄어요.</div>
+                        <div class="chat-bubble user">PM: 이런 상황을 어떻게 예방할 수 있을까요?</div>
+                        <div class="chat-bubble expert">데이터 엔지니어: API 팀과 점검 일정 공유 채널을 만들고, 파이프라인에 graceful degradation 로직을 추가할게요. 빈 데이터로 진행하고 다음 실행에서 catch-up하는 방식이요.</div>
+                    </div>
+                    <div class="conv-panel" id="interview">
+                        <div class="chat-bubble user">면접관: ETL과 ELT의 차이점과 언제 각각 사용하나요?</div>
+                        <div class="chat-bubble expert">지원자: ETL은 변환 후 적재로, 데이터 웨어하우스 용량/비용이 제한적일 때 적합합니다. ELT는 적재 후 변환으로, Snowflake/BigQuery 같은 클라우드 DW의 강력한 컴퓨팅을 활용합니다. 현대적 스택에서는 ELT + dbt 조합이 일반적입니다.</div>
+                        <div class="chat-bubble user">면접관: 멱등성(Idempotency)이 왜 중요한가요?</div>
+                        <div class="chat-bubble expert">지원자: 같은 입력에 여러 번 실행해도 동일한 결과를 보장합니다. 실패 후 재시도, 백필, 중복 실행 시에도 데이터 일관성을 유지할 수 있습니다. MERGE/UPSERT, 파티션 덮어쓰기 패턴으로 구현합니다.</div>
+                    </div>
+                    <div class="conv-panel" id="review">
+                        <div class="chat-bubble user">개발자: catchup=True로 하면 과거 데이터도 자동으로 처리되나요?</div>
+                        <div class="chat-bubble expert">시니어: 맞아, 하지만 주의해야 해. start_date부터 현재까지 모든 날짜에 대해 실행되니까, 잘못 설정하면 수천 개 태스크가 큐에 쌓여. max_active_runs=1로 제한하고, 필요한 경우에만 True로 설정해.</div>
+                        <div class="chat-bubble user">개발자: depends_on_past는 언제 사용하나요?</div>
+                        <div class="chat-bubble expert">시니어: 이전 날짜 실행이 성공해야 다음 날짜가 실행되게 할 때 써. 누적 집계나 순차적 의존성이 있을 때 유용해. 하지만 한 번 실패하면 이후 모든 실행이 막히니까 신중하게 사용해야 해.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 섹션 4: 주의사항 -->
+            <section class="term-section" aria-labelledby="warning-title">
+                <h2 class="section-title" id="warning-title">주의사항</h2>
+                <ul class="warning-list">
+                    <li class="warning">멱등성(Idempotency)을 보장하세요. 재시도, 백필 시 데이터 중복이나 불일치가 발생하지 않아야 합니다.</li>
+                    <li class="warning">catchup=True 사용 시 start_date를 신중히 설정하세요. 과거 전체 기간이 실행될 수 있습니다.</li>
+                    <li class="warning">XCom으로 대용량 데이터를 전달하지 마세요. 메타데이터 DB에 저장되므로 경로나 키만 전달하세요.</li>
+                    <li class="info">데이터 품질 검증을 파이프라인에 통합하세요. Great Expectations, dbt tests 활용을 권장합니다.</li>
+                    <li class="info">실패 알림과 SLA 모니터링을 설정하세요. 데이터 지연이 비즈니스에 미치는 영향을 최소화합니다.</li>
+                </ul>
+            </section>
+
+            <!-- 섹션 5: 관련 용어 -->
+            <section class="term-section" aria-labelledby="related-title">
+                <h2 class="section-title" id="related-title">관련 용어</h2>
+                <div class="related-links">
+                    <a href="/ko/term/dbt/" class="related-link">dbt</a>
+                    <a href="/ko/term/Kafka/" class="related-link">Kafka</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A6%AC%EB%8B%88%EC%A7%80/" class="related-link">데이터 리니지</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A0%88%EC%9D%B4%ED%81%AC%ED%95%98%EC%9A%B0%EC%8A%A4/" class="related-link">데이터 레이크하우스</a>
+                    <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%A0%84%EC%B2%98%EB%A6%AC/" class="related-link">데이터 전처리</a>
+                </div>
+            </section>
+
+            <!-- 섹션 6: 더 배우기 -->
+            <section class="term-section" aria-labelledby="learn-title">
+                <h2 class="section-title" id="learn-title">더 배우기</h2>
+                <ul class="learn-links">
+                    <li><a href="https://airflow.apache.org/docs/" target="_blank" rel="noopener">Apache Airflow 공식 문서</a></li>
+                    <li><a href="https://docs.prefect.io/" target="_blank" rel="noopener">Prefect 문서</a></li>
+                    <li><a href="https://docs.dagster.io/" target="_blank" rel="noopener">Dagster 문서</a></li>
+                </ul>
+            </section>
+        </div>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

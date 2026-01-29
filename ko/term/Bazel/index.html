@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,120 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Bazel은 Google이 내부 빌드 시스템 Blaze를 기반으로 2015년 오픈소스로 공개한 빌드 및 테스트 도구입니다. 수백만 줄의 코드와 수천 명의 개발자가 있는 Google 규모의 모노레포를 효율적으로 빌드하기 위해 설계되었습니다.</p>
+                <p>핵심 특징은 재현 가능한(Reproducible) 빌드와 증분(Incremental) 빌드입니다. 모든 빌드 입력을 명시적으로 선언하므로 동일한 입력에서 항상 동일한 결과가 나옵니다. 변경된 부분만 다시 빌드하여 대규모 코드베이스에서도 빠른 빌드 시간을 유지합니다.</p>
+                <p>Starlark(Python 유사 언어)로 BUILD 파일을 작성하며, 다양한 언어(Java, C++, Go, Python, TypeScript 등)를 단일 빌드 시스템으로 통합합니다. 원격 캐싱과 원격 실행으로 팀 전체가 빌드 결과를 공유하고 분산 빌드가 가능합니다.</p>
+                <p>실무에서는 대규모 모노레포, 복잡한 의존성 그래프, 멀티 언어 프로젝트에서 빛을 발합니다. 단, 학습 곡선이 있고 작은 프로젝트에서는 오버헤드가 될 수 있습니다. Gradle, Maven에서 마이그레이션 시 전략적 접근 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># BUILD.bazel - Python 서비스 빌드 정의
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+load("@rules_docker//python:image.bzl", "py_image")
+
+# 공유 라이브러리
+py_library(
+    name = "payment_lib",
+    srcs = glob(["src/**/*.py"]),
+    deps = [
+        "//common:utils",
+        "@pip//grpcio",
+        "@pip//protobuf",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# 메인 애플리케이션
+py_binary(
+    name = "payment_service",
+    srcs = ["main.py"],
+    deps = [":payment_lib"],
+)
+
+# Docker 이미지 빌드
+py_image(
+    name = "payment_image",
+    base = "@python3_base//image",
+    binary = ":payment_service",
+)
+
+# 테스트
+py_test(
+    name = "payment_test",
+    srcs = ["tests/test_payment.py"],
+    deps = [
+        ":payment_lib",
+        "@pip//pytest",
+    ],
+)</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "모노레포 전체 빌드가 20분 넘게 걸려요. Bazel 도입해서 증분 빌드하고, 원격 캐시로 CI 빌드 시간도 줄이려고 합니다."</p>
+                <p><strong class="role-junior">주니어:</strong> "기존 Maven 프로젝트 마이그레이션이 쉬운가요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "rules_jvm_external로 Maven 의존성은 그대로 쓸 수 있지만, BUILD 파일 작성은 별도 작업이에요. 점진적으로 전환합시다."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Bazel의 Hermetic 빌드가 왜 중요한가요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "Hermetic 빌드는 모든 의존성을 명시적으로 선언하여 호스트 환경에 영향받지 않습니다. 같은 코드는 어디서 빌드해도 동일한 바이너리가 나오므로, 재현 가능성이 보장되고 원격 캐싱의 정확성도 확보됩니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 타겟의 visibility가 //visibility:public인데, 실제로 이 패키지 외부에서 사용하나요?"</p>
+                <p><strong class="role-junior">개발자:</strong> "아, 필요한 곳만 명시하는 게 낫겠네요. visibility = [\"//services/payment:__subpackages__\"]로 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>학습 곡선이 가파름 - 팀 전체 교육과 가이드라인 수립에 시간 투자 필요</li>
+                <li>IDE 통합이 완벽하지 않음 - IntelliJ, VS Code 플러그인은 있지만 네이티브 빌드만큼 매끄럽지 않을 수 있음</li>
+                <li>외부 의존성 버전 관리 복잡 - bzlmod(Bazel 6+)나 rules_jvm_external 등 적절한 도구 선택 필요</li>
+                <li class="info">원격 캐시(Remote Cache)와 원격 실행(Remote Execution) 인프라 구축하면 ROI가 크게 증가</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Build/" class="related-link">Build</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Monorepo/" class="related-link">Monorepo</a>
+                <a href="/ko/term/Container/" class="related-link">Container</a>
+                <a href="/ko/term/DevOps/" class="related-link">DevOps</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://bazel.build/docs" target="_blank" rel="noopener">Bazel 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://bazel.build/start" target="_blank" rel="noopener">Bazel 시작 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://github.com/aspect-build/rules_ts" target="_blank" rel="noopener">Aspect Build Rules 컬렉션</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +327,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

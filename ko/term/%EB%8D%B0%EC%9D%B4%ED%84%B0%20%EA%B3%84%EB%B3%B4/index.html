@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>데이터 계보 | KAITRUST AI 백과사전</title>
     <meta name="description" content="데이터의 출처와 변환 이력을 추적하는 것">
-    <meta name="keywords" content="데이터 계보, , AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
+    <meta name="keywords" content="데이터 계보, Data Lineage, AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B3%84%EB%B3%B4/">
 
     <!-- Open Graph -->
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,256 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>데이터 계보(Data Lineage)는 데이터가 어디서 생성되어 어떤 변환 과정을 거쳐 최종 목적지에 도달했는지를 추적하는 기술입니다. EU AI Act 제10조와 제11조에서 고위험 AI의 학습 데이터 출처 및 처리 이력 문서화를 요구하면서, AI 컴플라이언스의 핵심 요소로 부상했습니다.</p>
+                <p>데이터 계보는 크게 세 가지 수준으로 구분됩니다. 컬럼 수준 계보(column-level lineage)는 개별 필드의 변환을 추적하고, 테이블 수준 계보(table-level lineage)는 데이터셋 간의 관계를 보여주며, 비즈니스 수준 계보(business-level lineage)는 데이터의 비즈니스적 의미와 활용 맥락을 기록합니다.</p>
+                <p>AI 개발에서 데이터 계보는 특히 중요합니다. 모델이 잘못된 예측을 했을 때 원인 분석(root cause analysis)이 가능하고, 편향이 발견되면 그 출처를 역추적할 수 있습니다. 또한 GDPR의 삭제권 행사 시 해당 개인정보가 포함된 학습 데이터를 식별하는 데도 필수적입니다.</p>
+                <p>실무에서는 Apache Atlas, DataHub, Amundsen 같은 메타데이터 관리 도구나, dbt의 lineage 기능, MLflow의 데이터 버전 추적 등을 활용합니다. 자동화된 계보 추적은 수동 문서화의 오류를 줄이고 실시간 가시성을 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn">복사</button>
+                <pre><code># 데이터 계보 추적 시스템 구현 예제
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import List, Dict, Optional
+from enum import Enum
+import json
+import hashlib
+
+class TransformationType(Enum):
+    EXTRACTION = "extraction"      # 원본 추출
+    CLEANING = "cleaning"          # 정제
+    TRANSFORMATION = "transformation"  # 변환
+    AGGREGATION = "aggregation"    # 집계
+    ANONYMIZATION = "anonymization"  # 익명화/가명화
+    AUGMENTATION = "augmentation"  # 데이터 증강
+    SPLIT = "split"               # 학습/검증 분할
+
+@dataclass
+class LineageNode:
+    """계보 그래프의 노드 (데이터셋 또는 변환)"""
+    node_id: str
+    node_type: str  # "dataset" or "transform"
+    name: str
+    metadata: Dict = field(default_factory=dict)
+
+@dataclass
+class LineageEdge:
+    """계보 그래프의 엣지 (데이터 흐름)"""
+    source_id: str
+    target_id: str
+    transform_type: TransformationType
+    transform_params: Dict
+    timestamp: datetime
+    executor: str  # 실행자 또는 시스템
+
+class DataLineageTracker:
+    """AI 학습 데이터 계보 추적기"""
+
+    def __init__(self, project_name: str):
+        self.project_name = project_name
+        self.nodes: Dict[str, LineageNode] = {}
+        self.edges: List[LineageEdge] = []
+
+    def register_dataset(self, dataset_id: str, name: str,
+                         source: str, record_count: int,
+                         schema: Dict = None) -> LineageNode:
+        """데이터셋 등록"""
+        node = LineageNode(
+            node_id=dataset_id,
+            node_type="dataset",
+            name=name,
+            metadata={
+                "source": source,
+                "record_count": record_count,
+                "schema": schema or {},
+                "registered_at": datetime.now().isoformat()
+            }
+        )
+        self.nodes[dataset_id] = node
+        return node
+
+    def record_transformation(self,
+                              source_ids: List[str],
+                              target_id: str,
+                              transform_type: TransformationType,
+                              transform_params: Dict,
+                              executor: str = "system") -> str:
+        """변환 이력 기록"""
+        transform_id = f"transform_{hashlib.md5(f'{source_ids}{target_id}{datetime.now()}'.encode()).hexdigest()[:8]}"
+
+        # 변환 노드 생성
+        transform_node = LineageNode(
+            node_id=transform_id,
+            node_type="transform",
+            name=f"{transform_type.value}",
+            metadata={"params": transform_params}
+        )
+        self.nodes[transform_id] = transform_node
+
+        # 엣지 생성 (source -> transform -> target)
+        for source_id in source_ids:
+            self.edges.append(LineageEdge(
+                source_id=source_id,
+                target_id=transform_id,
+                transform_type=transform_type,
+                transform_params=transform_params,
+                timestamp=datetime.now(),
+                executor=executor
+            ))
+
+        self.edges.append(LineageEdge(
+            source_id=transform_id,
+            target_id=target_id,
+            transform_type=transform_type,
+            transform_params=transform_params,
+            timestamp=datetime.now(),
+            executor=executor
+        ))
+
+        return transform_id
+
+    def trace_upstream(self, dataset_id: str) -> List[str]:
+        """특정 데이터셋의 상위 계보 추적 (출처 찾기)"""
+        upstream = []
+        visited = set()
+
+        def dfs(node_id):
+            if node_id in visited:
+                return
+            visited.add(node_id)
+
+            for edge in self.edges:
+                if edge.target_id == node_id:
+                    upstream.append(edge.source_id)
+                    dfs(edge.source_id)
+
+        dfs(dataset_id)
+        return upstream
+
+    def get_gdpr_impact(self, source_dataset_id: str) -> List[str]:
+        """GDPR 삭제권 영향 분석: 특정 원본에서 파생된 모든 데이터셋"""
+        downstream = []
+        visited = set()
+
+        def dfs(node_id):
+            if node_id in visited:
+                return
+            visited.add(node_id)
+
+            for edge in self.edges:
+                if edge.source_id == node_id:
+                    if self.nodes[edge.target_id].node_type == "dataset":
+                        downstream.append(edge.target_id)
+                    dfs(edge.target_id)
+
+        dfs(source_dataset_id)
+        return downstream
+
+    def export_for_audit(self) -> str:
+        """EU AI Act 감사용 계보 문서 생성"""
+        return json.dumps({
+            "project": self.project_name,
+            "export_timestamp": datetime.now().isoformat(),
+            "datasets": {k: {"name": v.name, **v.metadata}
+                         for k, v in self.nodes.items()
+                         if v.node_type == "dataset"},
+            "transformations": [
+                {
+                    "source": e.source_id,
+                    "target": e.target_id,
+                    "type": e.transform_type.value,
+                    "params": e.transform_params,
+                    "timestamp": e.timestamp.isoformat(),
+                    "executor": e.executor
+                } for e in self.edges
+            ]
+        }, indent=2, ensure_ascii=False)
+
+# 사용 예시
+tracker = DataLineageTracker("고객이탈예측모델")
+
+# 원본 데이터 등록
+tracker.register_dataset("raw_customer", "원본 고객 데이터",
+                         source="CRM 시스템", record_count=100000)
+
+# 변환 이력 기록
+tracker.record_transformation(
+    source_ids=["raw_customer"],
+    target_id="anonymized_customer",
+    transform_type=TransformationType.ANONYMIZATION,
+    transform_params={"method": "k-anonymity", "k": 5}
+)
+
+# 상위 계보 추적
+print(f"학습데이터 출처: {tracker.trace_upstream('anonymized_customer')}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conversation-title">
+            <h2 id="conversation-title" class="section-title">실무 대화</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-target="meeting3">회의</button>
+                <button class="conv-tab" data-target="interview3">면접</button>
+                <button class="conv-tab" data-target="review3">코드리뷰</button>
+            </div>
+            <div class="conv-content active" id="meeting3" data-label="회의">
+                <p><strong class="role-pm">PM:</strong> 모델이 특정 고객군에서 예측 정확도가 낮은데 원인을 파악할 수 있나요?</p>
+                <p><strong class="role-junior">ML엔지니어:</strong> 데이터 계보를 추적해보니, 해당 고객군 데이터가 외부 구매 데이터셋에서 왔는데 품질 이슈가 있었습니다.</p>
+                <p><strong class="role-senior">시니어:</strong> 좋아요. 이런 추적이 가능하려면 모든 전처리 단계에서 계보 로깅이 필수입니다. EU AI Act 감사 때도 이 자료가 필요해요.</p>
+            </div>
+            <div class="conv-content" id="interview3" data-label="면접">
+                <p><strong class="role-interviewer">면접관:</strong> GDPR 삭제권 요청이 들어왔을 때 AI 모델에 미치는 영향을 어떻게 파악하나요?</p>
+                <p><strong class="role-candidate">지원자:</strong> 데이터 계보 시스템을 통해 해당 개인정보가 포함된 원본 데이터셋을 식별하고, 그로부터 파생된 모든 학습 데이터셋과 모델을 추적합니다. 영향받는 모델은 재학습 또는 machine unlearning 기법을 적용해야 하며, 이 과정도 계보에 기록해서 컴플라이언스 증빙으로 활용합니다.</p>
+            </div>
+            <div class="conv-content" id="review3" data-label="코드리뷰">
+                <p><strong class="role-senior">시니어:</strong> 데이터 파이프라인에 계보 추적 로직이 없네요.</p>
+                <p><strong class="role-junior">주니어:</strong> MLflow로 모델 버전만 관리하고 있는데 부족한가요?</p>
+                <p><strong class="role-senior">시니어:</strong> 모델 버전은 모델 계보고, 데이터 계보는 별도예요. 각 전처리 step에서 입력/출력 데이터셋 ID와 변환 파라미터를 기록해야 합니다. dbt나 DataHub 연동을 검토해보세요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li class="critical">데이터 계보가 단절되면 편향 원인 분석, GDPR 영향 평가, EU AI Act 감사 대응이 모두 불가능해집니다. 모든 데이터 처리 단계에서 계보 기록을 자동화하세요.</li>
+                <li>계보 추적의 세분화 수준(granularity)을 적절히 설정해야 합니다. 너무 상세하면 저장 비용이 증가하고, 너무 거칠면 실제 분석에 활용이 어렵습니다.</li>
+                <li class="info">자동화된 계보 추적 도구를 사용하면 수동 문서화 대비 정확도와 완전성이 크게 향상됩니다.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">데이터 거버넌스</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%92%88%EC%A7%88%20%EA%B4%80%EB%A6%AC/" class="related-link">데이터 품질 관리</a>
+                <a href="/ko/term/%EC%82%AD%EC%A0%9C%EA%B6%8C/" class="related-link">삭제권</a>
+                <a href="/ko/term/%EC%82%AC%ED%9B%84%20%EC%8B%9C%EC%9E%A5%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81/" class="related-link">사후 시장 모니터링</a>
+                <a href="/ko/term/%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80/" class="related-link">모델 평가</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-tool"></span><a href="https://atlas.apache.org/" target="_blank" rel="noopener">Apache Atlas - 데이터 거버넌스 및 계보 프레임워크</a><span class="resource-meta">도구</span></li>
+                <li><span class="type-tool"></span><a href="https://www.getdbt.com/product/data-lineage" target="_blank" rel="noopener">dbt Lineage - SQL 기반 자동 계보 추적</a><span class="resource-meta">도구</span></li>
+                <li><span class="type-official"></span><a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener">MLflow Tracking - ML 실험 및 데이터 버전 관리</a><span class="resource-meta">도구</span></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +463,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

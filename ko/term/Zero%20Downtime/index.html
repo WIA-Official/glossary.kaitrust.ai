@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,126 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Zero Downtime(무중단 배포)은 서비스를 중단하지 않고 새로운 버전을 배포하는 기술입니다. 전통적인 배포 방식에서는 점검 시간을 공지하고 서비스를 내렸지만, 현대의 24/7 서비스에서는 99.99% 가용성이 요구됩니다.</p>
+                <p>대표적인 전략으로 Blue-Green(두 환경 전환), Rolling(순차 교체), Canary(일부 트래픽 테스트)가 있습니다. Blue-Green은 동일한 환경 두 개를 운영하여 순간 전환하고, Rolling은 인스턴스를 하나씩 교체하며, Canary는 5-10% 트래픽으로 먼저 검증합니다.</p>
+                <p>기술적으로는 로드 밸런서가 트래픽을 분산하고, 헬스 체크로 새 인스턴스 준비 상태를 확인합니다. 세션은 Redis 등 외부 저장소에서 관리하고, Graceful Shutdown으로 진행 중인 요청이 완료될 때까지 대기합니다.</p>
+                <p>실무에서는 Kubernetes의 Deployment가 Rolling Update를 기본 지원하고, ArgoCD나 Spinnaker로 Blue-Green과 Canary를 구현합니다. 데이터베이스 스키마 변경 시에는 무중단 마이그레이션 패턴(expand-contract)을 적용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Kubernetes Rolling Update 설정
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1        # 추가 생성 가능한 Pod 수
+      maxUnavailable: 0  # 항상 최소 replicas 유지
+  template:
+    spec:
+      containers:
+      - name: app
+        image: myapp:v2
+        readinessProbe:        # 트래픽 받을 준비 확인
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:         # 컨테이너 생존 확인
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        lifecycle:
+          preStop:             # Graceful Shutdown
+            exec:
+              command: ["sh", "-c", "sleep 10"]
+---
+# Blue-Green with Argo Rollouts
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: my-app-rollout
+spec:
+  replicas: 4
+  strategy:
+    blueGreen:
+      activeService: my-app-active
+      previewService: my-app-preview
+      autoPromotionEnabled: false  # 수동 승인 필요</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "이번 배포는 DB 스키마 변경이 있어서 무중단이 어려울 수 있어요. 마이그레이션 계획 공유해주세요."</p>
+                <p><strong class="role-junior">주니어:</strong> "컬럼 추가 후 애플리케이션 배포하고, 다음 릴리즈에서 nullable 제거하는 2단계로 진행하려고요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Blue-Green과 Canary 배포의 차이점과 각각 언제 사용하나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "Blue-Green은 전체 전환으로 빠르지만 리소스가 2배 필요합니다. Canary는 점진적으로 검증해서 리스크는 낮지만 시간이 더 걸려요. 신규 기능 검증은 Canary, 인프라 변경은 Blue-Green을 선호합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "readinessProbe 타임아웃이 5초인데, 앱 시작이 그보다 오래 걸리면 어떻게 되죠?"</p>
+                <p><strong class="role-junior">개발자:</strong> "initialDelaySeconds를 30초로 늘리고, 실제 부팅 시간 측정해서 조정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>세션은 반드시 외부 저장소(Redis)에서 관리 - 인메모리 세션은 배포 시 손실</li>
+                <li>DB 스키마 변경은 하위 호환성 유지 - 컬럼 삭제는 2단계 배포 필수</li>
+                <li>readinessProbe 미설정 시 준비 안 된 Pod에 트래픽 유입</li>
+                <li class="info">배포 후 최소 10-15분 모니터링 - 메모리 누수 등 지연 문제 감지 필요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Blue-Green/" class="related-link">Blue-Green</a>
+                <a href="/ko/term/Canary/" class="related-link">Canary</a>
+                <a href="/ko/term/Deployment/" class="related-link">Deployment</a>
+                <a href="/ko/term/%EB%A1%A4%EB%B0%B1/" class="related-link">롤백</a>
+                <a href="/ko/term/ArgoCD/" class="related-link">ArgoCD</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment" target="_blank" rel="noopener">Kubernetes Rolling Update 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://argoproj.github.io/argo-rollouts/" target="_blank" rel="noopener">Argo Rollouts - 고급 배포 전략</a></li>
+                <li><span class="type-book"></span><a href="https://martinfowler.com/bliki/BlueGreenDeployment.html" target="_blank" rel="noopener">Martin Fowler - Blue Green Deployment</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +333,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

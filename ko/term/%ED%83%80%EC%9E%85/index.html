@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,129 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>타입(Type)은 데이터의 종류를 정의하는 분류 체계입니다. 숫자, 문자열, 불리언, 배열, 객체 등 다양한 타입이 있으며, 각 타입은 해당 데이터에 적용할 수 있는 연산과 저장 방식을 결정합니다. 타입 시스템은 프로그램의 안전성과 정확성을 보장하는 핵심 메커니즘입니다.</p>
+                <p>정적 타이핑(Static Typing)은 컴파일 시점에 타입을 검사합니다. Java, C++, TypeScript, Rust 등이 이에 해당하며, 타입 오류를 실행 전에 발견할 수 있습니다. 동적 타이핑(Dynamic Typing)은 런타임에 타입을 결정하며, Python, JavaScript, Ruby 등이 대표적입니다. 유연하지만 런타임 오류 가능성이 있습니다.</p>
+                <p>강한 타이핑(Strong Typing)은 암묵적 타입 변환을 제한합니다(Python, Java). 약한 타이핑(Weak Typing)은 자동 타입 변환이 허용됩니다(JavaScript, PHP). "1" + 2가 JavaScript에서는 "12"가 되지만, Python에서는 에러가 발생합니다.</p>
+                <p>현대 언어들은 타입 추론(Type Inference)을 지원하여 명시적 타입 선언 없이도 컴파일러가 타입을 유추합니다. TypeScript의 let x = 5는 자동으로 number 타입이 됩니다. 제네릭을 통해 타입 안전성을 유지하면서 재사용 가능한 코드를 작성할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// TypeScript 타입 시스템 예제
+
+// 1. 기본 타입
+let count: number = 42;
+let name: string = "Alice";
+let isActive: boolean = true;
+let items: number[] = [1, 2, 3];
+
+// 2. 타입 추론
+let inferred = "Hello";  // string으로 추론
+// inferred = 123;  // Error: Type 'number' is not assignable to type 'string'
+
+// 3. 유니온 타입
+type StringOrNumber = string | number;
+function display(value: StringOrNumber) {
+    if (typeof value === "string") {
+        console.log(value.toUpperCase());
+    } else {
+        console.log(value.toFixed(2));
+    }
+}
+
+// 4. 인터페이스와 타입 별칭
+interface User {
+    id: number;
+    name: string;
+    email?: string;  // optional
+}
+
+type Point = {
+    x: number;
+    y: number;
+};
+
+// 5. 제네릭
+function first<T>(arr: T[]): T | undefined {
+    return arr[0];
+}
+
+const firstNum = first([1, 2, 3]);     // number | undefined
+const firstStr = first(["a", "b"]);    // string | undefined
+
+// 6. 타입 가드
+function isString(value: unknown): value is string {
+    return typeof value === "string";
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>시니어:</strong> API 응답 타입 정의가 없어서 런타임 에러가 자주 나요. 타입을 추가합시다.</p>
+                <p><strong>주니어:</strong> any로 하면 빠르게 해결되지 않나요?</p>
+                <p><strong>시니어:</strong> any는 타입 안전성을 포기하는 거예요. 최소한 unknown을 쓰고 타입 가드로 좁히거나, API 스키마에서 타입을 자동 생성하세요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 정적 타이핑과 동적 타이핑의 장단점은 무엇인가요?</p>
+                <p><strong>지원자:</strong> 정적 타이핑은 컴파일 시점에 오류를 잡아 안전하고, IDE 자동완성이 강력합니다. 하지만 초기 개발 속도가 느릴 수 있어요. 동적 타이핑은 빠른 프로토타이핑이 가능하지만 런타임 오류와 리팩토링 어려움이 있습니다.</p>
+                <p><strong>면접관:</strong> TypeScript에서 any와 unknown의 차이는요?</p>
+                <p><strong>지원자:</strong> any는 모든 타입 검사를 무시하고, unknown은 사용 전에 타입을 좁혀야 합니다. unknown이 더 안전해서 외부 데이터 처리에 권장됩니다.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> 이 함수 반환 타입이 any로 되어 있는데, 명시적으로 지정해주세요.</p>
+                <p><strong>작성자:</strong> 복잡해서 추론에 맡겼는데요.</p>
+                <p><strong>리뷰어:</strong> 공개 API의 반환 타입은 명시하는 게 좋아요. 리팩토링할 때 의도치 않은 타입 변경을 방지할 수 있거든요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>any 남용 금지:</strong> any는 타입 시스템을 무력화합니다. 정말 필요한 경우가 아니면 unknown이나 제네릭을 사용하세요.</li>
+                <li><strong>타입 단언 주의:</strong> as 키워드로 타입을 강제하면 런타임 오류가 발생할 수 있습니다. 가능하면 타입 가드를 사용하세요.</li>
+                <li><strong>과도한 타입:</strong> 너무 복잡한 타입은 가독성을 해칩니다. 적절한 추상화 수준을 유지하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%A0%9C%EB%84%A4%EB%A6%AD/" class="related-link">제네릭</a>
+                <a href="/ko/term/%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4/" class="related-link">인터페이스</a>
+                <a href="/ko/term/%ED%83%80%EC%9E%85-%EC%B6%94%EB%A1%A0/" class="related-link">타입 추론</a>
+                <a href="/ko/term/%EC%BB%B4%ED%8C%8C%EC%9D%BC%EB%9F%AC/" class="related-link">컴파일러</a>
+                <a href="/ko/term/%ED%8A%B8%EB%A0%88%EC%9D%B4%ED%8A%B8/" class="related-link">트레이트</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html" target="_blank">TypeScript Handbook - Everyday Types</a></li>
+                <li><a href="https://mypy.readthedocs.io/en/stable/" target="_blank">Python mypy Documentation</a></li>
+                <li><a href="https://www.youtube.com/watch?v=BwuLxPH8IDs" target="_blank">Fireship - TypeScript in 100 Seconds</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +337,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

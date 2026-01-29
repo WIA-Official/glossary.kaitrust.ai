@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +228,197 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>임베딩(Embedding)은 텍스트, 이미지, 오디오 등의 데이터를 수치형 벡터로 변환하는 기술입니다. 이 벡터 공간에서는 의미적으로 유사한 항목들이 서로 가까이 위치하게 됩니다. 예를 들어 "왕"과 "여왕"의 임베딩 벡터는 "사과"와 "바나나"보다 더 가깝게 배치됩니다. 이를 통해 컴퓨터가 의미와 관계를 수학적으로 처리할 수 있게 됩니다.</p>
+
+                <p>임베딩의 차원은 표현력과 직결됩니다. OpenAI의 text-embedding-3-large는 3,072차원, Cohere의 embed-english-v3.0은 1,024차원을 사용합니다. 높은 차원은 더 풍부한 의미를 담을 수 있지만 저장 공간과 연산 비용이 증가합니다. 실무에서는 용도에 맞는 적절한 차원의 모델을 선택하는 것이 중요합니다.</p>
+
+                <p>임베딩은 RAG(Retrieval-Augmented Generation)의 핵심 구성요소입니다. 문서를 청크로 나누어 임베딩으로 변환하고 벡터 데이터베이스에 저장한 뒤, 사용자 질문도 임베딩으로 변환하여 유사한 문서를 검색합니다. 이렇게 검색된 관련 문서를 LLM에 제공하면 할루시네이션을 줄이고 최신 정보를 반영한 답변을 생성할 수 있습니다.</p>
+
+                <p>단어 수준 임베딩(Word2Vec, GloVe)에서 시작하여 문장 임베딩(Sentence-BERT), 멀티모달 임베딩(CLIP)으로 발전해왔습니다. 최근에는 한 모델로 텍스트, 이미지, 코드 등 다양한 형식을 동일한 벡터 공간에 임베딩하는 통합 임베딩 모델도 등장했습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>OpenAI와 오픈소스 모델을 사용한 임베딩 생성 및 유사도 계산 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code>import numpy as np
+from openai import OpenAI
+from sentence_transformers import SentenceTransformer
+
+# OpenAI 임베딩 생성
+client = OpenAI()
+
+def get_openai_embedding(text, model="text-embedding-3-small"):
+    response = client.embeddings.create(input=text, model=model)
+    return response.data[0].embedding
+
+# 텍스트 임베딩
+texts = [
+    "인공지능은 미래 기술입니다",
+    "AI가 세상을 바꾸고 있습니다",
+    "오늘 날씨가 좋습니다"
+]
+embeddings = [get_openai_embedding(t) for t in texts]
+
+# 코사인 유사도 계산
+def cosine_similarity(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+print(f"문장 1-2 유사도: {cosine_similarity(embeddings[0], embeddings[1]):.4f}")  # 높음
+print(f"문장 1-3 유사도: {cosine_similarity(embeddings[0], embeddings[2]):.4f}")  # 낮음
+
+# 오픈소스 모델 (Sentence-Transformers)
+model = SentenceTransformer('all-MiniLM-L6-v2')  # 384차원, 빠름
+embeddings_local = model.encode(texts)
+print(f"로컬 모델 차원: {embeddings_local.shape}")
+
+# 한국어 특화 모델
+ko_model = SentenceTransformer('jhgan/ko-sroberta-multitask')
+ko_embeddings = ko_model.encode(["안녕하세요", "반갑습니다"])
+print(f"한국어 유사도: {cosine_similarity(ko_embeddings[0], ko_embeddings[1]):.4f}")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 임베딩 모델 비교</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>모델</th>
+                            <th>차원</th>
+                            <th>가격 (1M 토큰)</th>
+                            <th>특징</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text-embedding-3-large</td>
+                            <td>3,072</td>
+                            <td>$0.13</td>
+                            <td>최고 성능, 차원 조절 가능</td>
+                        </tr>
+                        <tr>
+                            <td>text-embedding-3-small</td>
+                            <td>1,536</td>
+                            <td>$0.02</td>
+                            <td>비용 효율, 범용</td>
+                        </tr>
+                        <tr>
+                            <td>Cohere embed-v3</td>
+                            <td>1,024</td>
+                            <td>$0.10</td>
+                            <td>다국어, 검색 최적화</td>
+                        </tr>
+                        <tr>
+                            <td>all-MiniLM-L6-v2</td>
+                            <td>384</td>
+                            <td>무료 (로컬)</td>
+                            <td>오픈소스, 빠름</td>
+                        </tr>
+                        <tr>
+                            <td>bge-large-en-v1.5</td>
+                            <td>1,024</td>
+                            <td>무료 (로컬)</td>
+                            <td>오픈소스 최고 성능</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">RAG 시스템 구축 논의에서</div>
+                    <p class="conv-quote">"문서 10만 건을 임베딩해서 Pinecone에 저장하면, 질문과 유사한 문서를 실시간으로 검색해서 LLM에 컨텍스트로 제공할 수 있습니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">비용 최적화 회의에서</div>
+                    <p class="conv-quote">"text-embedding-3-small로 바꾸면 비용이 85% 절감되고, MTEB 벤치마크 기준 성능 차이는 3% 정도입니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">검색 품질 개선 논의 시</div>
+                    <p class="conv-quote">"임베딩만으로 검색하면 키워드 매칭이 약합니다. BM25와 임베딩 점수를 조합하는 하이브리드 검색을 적용해봅시다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">📏</span>
+                    <div>
+                        <strong>청크 크기 부적절</strong>
+                        <p>너무 작으면 컨텍스트 손실, 너무 크면 노이즈가 증가합니다. 보통 200-500 토큰이 적정합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">🔄</span>
+                    <div>
+                        <strong>모델 불일치</strong>
+                        <p>저장과 검색에 다른 임베딩 모델을 사용하면 유사도 계산이 무의미해집니다. 항상 동일 모델을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">🌐</span>
+                    <div>
+                        <strong>다국어 모델 미사용</strong>
+                        <p>영어 전용 모델로 한국어를 임베딩하면 품질이 급락합니다. 다국어 또는 한국어 특화 모델을 선택하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">💰</span>
+                    <div>
+                        <strong>벡터 DB 비용 과소평가</strong>
+                        <p>임베딩 생성보다 벡터 저장/검색 비용이 더 클 수 있습니다. 차원 축소나 양자화를 고려하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EB%B2%A1%ED%84%B0%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4/" class="related-term-link">벡터 데이터베이스</a>
+                <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                <a href="/ko/term/%EC%BD%94%EC%82%AC%EC%9D%B8%20%EC%9C%A0%EC%82%AC%EB%8F%84/" class="related-term-link">코사인 유사도</a>
+                <a href="/ko/term/%ED%86%A0%ED%81%B0/" class="related-term-link">토큰</a>
+                <a href="/ko/term/%EC%8B%9C%EB%A7%A8%ED%8B%B1%20%EA%B2%80%EC%83%89/" class="related-term-link">시맨틱 검색</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://platform.openai.com/docs/guides/embeddings" target="_blank" class="learn-link">
+                    📘 OpenAI Embeddings 가이드
+                </a>
+                <a href="https://huggingface.co/spaces/mteb/leaderboard" target="_blank" class="learn-link">
+                    📊 MTEB 임베딩 벤치마크 리더보드
+                </a>
+                <a href="https://www.sbert.net/" target="_blank" class="learn-link">
+                    🔧 Sentence-Transformers 공식 문서
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +429,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

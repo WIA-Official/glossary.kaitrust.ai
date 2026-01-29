@@ -161,6 +161,32 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -202,6 +228,265 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>프롬프트(Prompt)는 대규모 언어 모델(LLM)에게 특정 작업을 수행하도록 지시하는 입력 텍스트입니다. ChatGPT, Claude, Gemini 등 현대 AI 시스템의 성능은 프롬프트 품질에 크게 좌우되며, 동일한 모델이라도 프롬프트에 따라 출력 품질이 극적으로 달라질 수 있습니다. 프롬프트는 단순한 질문부터 복잡한 시스템 지시, 예시 포함 요청까지 다양한 형태를 취합니다.</p>
+
+                <p>프롬프트 엔지니어링(Prompt Engineering)은 최적의 결과를 얻기 위해 프롬프트를 체계적으로 설계하는 기술입니다. 주요 기법으로 Zero-shot(예시 없이 직접 요청), Few-shot(몇 가지 예시 제공), Chain-of-Thought(단계별 추론 유도), Self-Consistency(다수결 투표) 등이 있습니다. 2024년에는 Tree-of-Thought, Graph-of-Thought 같은 고급 추론 기법과, 자동 프롬프트 최적화(OPRO, DSPy) 기술이 발전했습니다.</p>
+
+                <p>현대 LLM API에서 프롬프트는 크게 세 부분으로 구성됩니다. System Prompt는 모델의 역할과 행동 규칙을 정의하고, User Prompt는 실제 사용자 요청을 담으며, Assistant Prompt는 이전 응답이나 원하는 응답 형식을 지정합니다. Claude의 경우 200K 토큰, GPT-4 Turbo는 128K 토큰까지 지원해 긴 문서와 함께 복잡한 지시를 한 번에 전달할 수 있습니다.</p>
+
+                <p>실무에서 효과적인 프롬프트 작성은 AI 애플리케이션 성공의 핵심입니다. 명확한 역할 부여, 구체적인 출력 형식 지정, 경계 조건 명시, 예시 제공이 중요합니다. 2025년 현재 프롬프트 엔지니어 직군이 등장했고, LangChain, LlamaIndex 같은 프레임워크는 프롬프트 템플릿 관리와 버전 관리 기능을 기본 제공합니다. DSPy 같은 도구는 프롬프트를 프로그래밍 방식으로 최적화할 수 있게 해줍니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>OpenAI API와 Anthropic Claude API를 사용한 다양한 프롬프트 기법 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code>from openai import OpenAI
+from anthropic import Anthropic
+import json
+
+# OpenAI 클라이언트 초기화
+openai_client = OpenAI()
+anthropic_client = Anthropic()
+
+# 1. 시스템 프롬프트 + Few-shot 예제
+def classify_sentiment_openai(text: str) -> str:
+    """Few-shot 프롬프트로 감정 분석"""
+    response = openai_client.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=[
+            {
+                "role": "system",
+                "content": """당신은 감정 분석 전문가입니다.
+텍스트의 감정을 positive, negative, neutral 중 하나로 분류하세요.
+JSON 형식으로만 응답하세요: {"sentiment": "...", "confidence": 0.0-1.0}"""
+            },
+            {"role": "user", "content": "이 영화 정말 재미있어요!"},
+            {"role": "assistant", "content": '{"sentiment": "positive", "confidence": 0.95}'},
+            {"role": "user", "content": "배송이 너무 늦어서 실망했습니다."},
+            {"role": "assistant", "content": '{"sentiment": "negative", "confidence": 0.9}'},
+            {"role": "user", "content": text}
+        ],
+        temperature=0.1  # 일관된 분류를 위해 낮은 temperature
+    )
+    return response.choices[0].message.content
+
+# 2. Chain-of-Thought (Claude)
+def solve_math_problem(problem: str) -> str:
+    """단계별 추론으로 수학 문제 풀기"""
+    message = anthropic_client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=2000,
+        system="""당신은 수학 문제를 푸는 튜터입니다.
+문제를 단계별로 풀어 학생이 이해할 수 있도록 설명하세요.
+
+각 단계는 다음 형식을 따르세요:
+[단계 N] 무엇을 할 것인지
+- 계산 과정
+- 중간 결과
+
+마지막에 [최종 답] 형식으로 답을 제시하세요.""",
+        messages=[
+            {"role": "user", "content": problem}
+        ]
+    )
+    return message.content[0].text
+
+# 3. 구조화된 출력을 위한 프롬프트
+def extract_entities(text: str) -> dict:
+    """텍스트에서 엔티티 추출"""
+    response = openai_client.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=[
+            {
+                "role": "system",
+                "content": """텍스트에서 다음 엔티티를 추출하세요:
+- 인물 (people): 이름 목록
+- 조직 (organizations): 회사, 기관 등
+- 장소 (locations): 도시, 국가, 장소
+- 날짜 (dates): 언급된 날짜들
+
+반드시 JSON 형식으로만 응답하세요."""
+            },
+            {"role": "user", "content": text}
+        ],
+        response_format={"type": "json_object"}  # JSON 강제
+    )
+    return json.loads(response.choices[0].message.content)
+
+# 4. 역할 기반 전문가 프롬프트
+def code_review(code: str, language: str = "python") -> str:
+    """시니어 개발자 역할로 코드 리뷰"""
+    return anthropic_client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=3000,
+        system=f"""당신은 10년 경력의 {language} 시니어 개발자입니다.
+
+코드 리뷰 시 다음을 확인하세요:
+1. 버그 및 잠재적 오류
+2. 성능 최적화 포인트
+3. 가독성 및 코드 스타일
+4. 보안 취약점
+5. 테스트 용이성
+
+각 항목에 대해 구체적인 개선 제안을 코드와 함께 제시하세요.""",
+        messages=[
+            {"role": "user", "content": f"다음 코드를 리뷰해주세요:\n\n```{language}\n{code}\n```"}
+        ]
+    ).content[0].text
+
+# 사용 예시
+if __name__ == "__main__":
+    # 감정 분석
+    sentiment = classify_sentiment_openai("제품은 괜찮은데 가격이 좀 비싸네요")
+    print(f"감정 분석 결과: {sentiment}")
+
+    # 수학 문제
+    answer = solve_math_problem(
+        "철수는 사과 15개를 가지고 있습니다. 영희에게 40%를 주고, "
+        "남은 것의 1/3을 민수에게 주었습니다. 철수에게 남은 사과는 몇 개인가요?"
+    )
+    print(f"\n수학 풀이:\n{answer}")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 프롬프트 기법 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 프롬프트 기법 비교</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <tr>
+                        <th>기법</th>
+                        <th>설명</th>
+                        <th>적합한 작업</th>
+                        <th>토큰 비용</th>
+                    </tr>
+                    <tr>
+                        <td>Zero-shot</td>
+                        <td>예시 없이 직접 요청</td>
+                        <td>간단한 분류, 일반 질문</td>
+                        <td>낮음</td>
+                    </tr>
+                    <tr>
+                        <td>Few-shot</td>
+                        <td>2-5개 예시 제공</td>
+                        <td>포맷 지정, 스타일 모방</td>
+                        <td>중간</td>
+                    </tr>
+                    <tr>
+                        <td>Chain-of-Thought</td>
+                        <td>단계별 추론 유도</td>
+                        <td>수학, 논리 문제</td>
+                        <td>높음</td>
+                    </tr>
+                    <tr>
+                        <td>Self-Consistency</td>
+                        <td>여러 번 생성 후 다수결</td>
+                        <td>정확도 중요한 분류</td>
+                        <td>매우 높음</td>
+                    </tr>
+                    <tr>
+                        <td>ReAct</td>
+                        <td>추론+행동 반복</td>
+                        <td>도구 사용, 에이전트</td>
+                        <td>가변</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-examples">
+                    <div class="conv-item">
+                        <div class="conv-context">💬 회의에서</div>
+                        <div class="conv-quote">"현재 챗봇의 답변 품질 문제는 시스템 프롬프트 개선으로 해결할 수 있습니다. 역할 정의를 더 구체화하고, 응답 포맷을 JSON으로 강제하면 파싱 오류도 줄일 수 있어요."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 면접에서</div>
+                        <div class="conv-quote">"Few-shot 프롬프팅은 모델에게 원하는 출력 형식을 예시로 보여주는 기법입니다. 특히 도메인 특화 용어나 특정 문체가 필요할 때 효과적이며, Chain-of-Thought와 결합하면 복잡한 추론 작업도 가능합니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 기술 토론에서</div>
+                        <div class="conv-quote">"프롬프트 인젝션 공격을 방어하려면 사용자 입력을 시스템 프롬프트와 명확히 분리하고, 입력 검증 레이어를 추가해야 합니다. Claude의 경우 XML 태그로 경계를 명시하면 효과적이에요."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-list">
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>프롬프트 인젝션 취약점 무시</h4>
+                            <p>사용자 입력을 그대로 프롬프트에 삽입하면 악의적 명령이 실행될 수 있습니다. "이전 지시를 무시하고..."와 같은 공격에 취약해집니다. 반드시 입력 검증과 경계 분리를 적용하세요.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>모호하고 긴 프롬프트 작성</h4>
+                            <p>명확한 지시 없이 장황한 설명만 나열하면 모델이 혼란스러워 합니다. 역할, 작업, 출력 형식, 제약조건을 구조화해서 명확히 전달하세요.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">✅</div>
+                        <div class="warning-content">
+                            <h4>프롬프트 버전 관리 및 A/B 테스트</h4>
+                            <p>프롬프트도 코드처럼 버전 관리하고, 변경 시 A/B 테스트로 성능을 비교하세요. LangSmith, Weights & Biases 같은 도구로 프롬프트 성능을 추적할 수 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/LLM/" class="related-term-link">LLM</a>
+                    <a href="/ko/term/%ED%86%A0%ED%81%AC%EB%82%98%EC%9D%B4%EC%A0%80/" class="related-term-link">토크나이저</a>
+                    <a href="/ko/term/%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8%20%EC%9C%88%EB%8F%84%EC%9A%B0/" class="related-term-link">컨텍스트 윈도우</a>
+                    <a href="/ko/term/%ED%95%A0%EB%A3%A8%EC%8B%9C%EB%84%A4%EC%9D%B4%EC%85%98/" class="related-term-link">할루시네이션</a>
+                    <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <div class="learn-more">
+                    <a href="https://www.promptingguide.ai/kr" target="_blank" rel="noopener" class="learn-link">
+                        <span>📄</span> Prompt Engineering Guide (한국어)
+                    </a>
+                    <a href="https://docs.anthropic.com/claude/docs/prompt-engineering" target="_blank" rel="noopener" class="learn-link">
+                        <span>📄</span> Anthropic Claude Prompt Engineering Guide
+                    </a>
+                    <a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" rel="noopener" class="learn-link">
+                        <span>📄</span> OpenAI Prompt Engineering Best Practices
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +497,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

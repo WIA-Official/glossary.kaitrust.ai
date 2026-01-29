@@ -161,6 +161,30 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -202,6 +226,139 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Flash Attention은 Transformer의 self-attention 연산을 메모리 효율적으로 수행하는 알고리즘입니다. 기존 attention은 시퀀스 길이의 제곱(O(n^2))에 비례하는 메모리를 사용하지만, Flash Attention은 tiling과 recomputation 기법으로 이를 선형(O(n))으로 줄입니다.</p>
+                <p>2022년 Stanford의 Tri Dao 등이 발표한 Flash Attention은 GPU 메모리 계층(HBM vs SRAM)을 고려한 IO-aware 알고리즘입니다. GPU의 고속 SRAM에서 계산을 수행하고, 느린 HBM 접근을 최소화하여 속도와 메모리 효율을 동시에 개선했습니다.</p>
+                <p>핵심 아이디어는 attention matrix 전체를 메모리에 저장하지 않고, 작은 블록(tile) 단위로 나누어 계산하는 것입니다. softmax의 분자와 분모를 온라인으로 누적 계산하고, 역전파 시 필요한 값은 재계산(recomputation)합니다. 수학적으로 정확한 결과를 보장하면서도 2~4배 빠릅니다.</p>
+                <p>현재 GPT-4, Llama, Claude 등 거의 모든 대형 LLM이 Flash Attention을 사용합니다. 시퀀스 길이 2K에서 10배, 4K에서 20배의 메모리 절약 효과가 있어, 128K 이상의 긴 context를 처리하는 핵심 기술이 되었습니다. Flash Attention 3은 H100 GPU에서 1.5~2배 추가 속도 향상을 달성했습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python">import torch
+from torch.nn.functional import scaled_dot_product_attention
+
+# PyTorch 2.0+에서 Flash Attention 자동 사용
+# CUDA 11.6+, Ampere GPU (A100, RTX 30xx) 이상 필요
+
+# 입력 텐서 준비 (batch, heads, seq_len, head_dim)
+batch_size = 2
+num_heads = 8
+seq_len = 4096  # 긴 시퀀스
+head_dim = 64
+
+query = torch.randn(batch_size, num_heads, seq_len, head_dim,
+                    device='cuda', dtype=torch.float16)
+key = torch.randn(batch_size, num_heads, seq_len, head_dim,
+                  device='cuda', dtype=torch.float16)
+value = torch.randn(batch_size, num_heads, seq_len, head_dim,
+                    device='cuda', dtype=torch.float16)
+
+# scaled_dot_product_attention은 자동으로 Flash Attention 사용
+# (조건 충족 시: CUDA, fp16/bf16, 적절한 텐서 shape)
+with torch.backends.cuda.sdp_kernel(
+    enable_flash=True,      # Flash Attention 활성화
+    enable_math=False,      # 기본 수학 연산 비활성화
+    enable_mem_efficient=False  # Memory Efficient Attention 비활성화
+):
+    output = scaled_dot_product_attention(query, key, value)
+
+print(f"Input shape: {query.shape}")
+print(f"Output shape: {output.shape}")
+
+# HuggingFace Transformers에서 Flash Attention 2 사용
+from transformers import AutoModelForCausalLM
+
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-2-7b-hf",
+    torch_dtype=torch.float16,
+    attn_implementation="flash_attention_2",  # Flash Attention 2 명시
+    device_map="auto"
+)
+
+# 메모리 사용량 비교
+print(f"GPU Memory: {torch.cuda.max_memory_allocated() / 1e9:.2f} GB")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"32K context를 처리하려면 Flash Attention이 필수입니다. 일반 attention으로는 A100 80GB에서도 OOM이 나는데, Flash Attention 2를 쓰면 배치 사이즈도 늘릴 수 있어요."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"Flash Attention은 attention matrix를 tile 단위로 나눠서 SRAM에서 계산하고, HBM 접근을 최소화하는 IO-aware 알고리즘입니다. softmax를 online으로 계산해서 메모리를 O(n)으로 줄입니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"HuggingFace에서 attn_implementation='flash_attention_2' 옵션 하나로 적용 가능해요. 다만 causal mask가 기본이라 encoder-decoder 모델에선 주의가 필요하고, attention weight 시각화가 안 되는 단점이 있습니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>구형 GPU에서 Flash Attention 시도</strong>
+                        <p>Flash Attention은 NVIDIA Ampere(A100, RTX 30xx) 이상에서만 지원됩니다. V100이나 RTX 20xx에서는 에러가 발생하거나 fallback됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>FP32로 Flash Attention 사용</strong>
+                        <p>Flash Attention은 FP16 또는 BF16에서만 동작합니다. FP32 텐서를 넣으면 자동으로 느린 기본 attention으로 fallback됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 설정</strong>
+                        <p>PyTorch 2.0+ 사용, torch.float16 또는 torch.bfloat16으로 캐스팅, Ampere+ GPU 확인. HuggingFace에서는 attn_implementation="flash_attention_2" 명시적 설정을 권장합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Transformer/" class="related-term-link">Transformer</a>
+                <a href="/ko/term/Self-Attention/" class="related-term-link">Self-Attention</a>
+                <a href="/ko/term/Multi-Head%20Attention/" class="related-term-link">Multi-Head Attention</a>
+                <a href="/ko/term/KV%20Cache/" class="related-term-link">KV Cache</a>
+                <a href="/ko/term/Mixed%20Precision/" class="related-term-link">Mixed Precision</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/2205.14135" target="_blank" class="learn-link">📄 Flash Attention 원논문 (arXiv)</a>
+                <a href="https://github.com/Dao-AILab/flash-attention" target="_blank" class="learn-link">🎓 Flash Attention GitHub Repository</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +369,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

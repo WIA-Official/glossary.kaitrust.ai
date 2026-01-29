@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSRF (Cross-Site Request Forgery) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="사용자 권한으로 악의적 요청을 전송하는 공격. CSRF 토큰으로 방어. XSS와 함께 주요 웹 취약점.">
-    <meta name="keywords" content="CSRF, Cross-Site Request Forgery, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <meta name="description" content="CSRF는 사용자의 인증된 세션을 악용하여 악의적 요청을 전송하는 웹 보안 공격입니다. CSRF 토큰, SameSite 쿠키, Origin 검증으로 방어합니다. OWASP Top 10 취약점입니다.">
+    <meta name="keywords" content="CSRF, Cross-Site Request Forgery, 사이트간 요청 위조, 웹 보안, CSRF 토큰, SameSite Cookie, OWASP, XSS, 웹 취약점, 세션 하이재킹, 쿠키 보안, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/CSRF/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/CSRF/">
     <meta property="og:title" content="CSRF (Cross-Site Request Forgery) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="사용자 권한으로 악의적 요청을 전송하는 공격. CSRF 토큰으로 방어. XSS와 함께 주요 웹 취약점.">
+    <meta property="og:description" content="CSRF는 사용자의 인증된 세션을 악용하여 악의적 요청을 전송하는 웹 보안 공격입니다. CSRF 토큰, SameSite 쿠키로 방어합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="CSRF (Cross-Site Request Forgery) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="사용자 권한으로 악의적 요청을 전송하는 공격. CSRF 토큰으로 방어. XSS와 함께 주요 웹 취약점.">
+    <meta name="twitter:description" content="CSRF는 사용자의 인증된 세션을 악용하여 악의적 요청을 전송하는 웹 보안 공격입니다. CSRF 토큰, SameSite 쿠키로 방어합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "CSRF",
-        "description": "사용자 권한으로 악의적 요청을 전송하는 공격. CSRF 토큰으로 방어. XSS와 함께 주요 웹 취약점.",
+        "alternateName": "Cross-Site Request Forgery",
+        "description": "CSRF는 사용자의 인증된 세션을 악용하여 악의적 요청을 전송하는 웹 보안 공격입니다. CSRF 토큰, SameSite 쿠키, Origin 검증으로 방어합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -147,15 +293,6 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +328,7 @@
             <h1 class="term-title">CSRF</h1>
             <p class="term-english">Cross-Site Request Forgery</p>
             <div class="term-description">
-                <p>사용자 권한으로 악의적 요청을 전송하는 공격. CSRF 토큰으로 방어. XSS와 함께 주요 웹 취약점.</p>
+                <p>사이트 간 요청 위조 공격. 사용자의 인증된 세션을 악용하여 의도하지 않은 요청을 서버에 전송하는 웹 보안 취약점입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +339,401 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>CSRF(Cross-Site Request Forgery)는 사용자가 인증된 상태에서 악의적 요청을 의도치 않게 실행하게 만드는 웹 공격입니다. 공격자는 피해자가 로그인한 사이트에 대한 요청을 악성 페이지에 숨겨놓고, 피해자가 해당 페이지를 방문하면 브라우저가 자동으로 쿠키를 포함해 요청을 전송합니다. 은행 송금, 비밀번호 변경, 이메일 주소 수정 같은 중요한 작업이 피해자 모르게 실행될 수 있습니다.</p>
+                <p>CSRF 공격이 성공하려면 세 가지 조건이 필요합니다. 첫째, 피해자가 대상 사이트에 로그인되어 있어야 합니다. 둘째, 세션 쿠키가 요청에 자동으로 포함되어야 합니다. 셋째, 대상 액션의 파라미터가 예측 가능해야 합니다. 예를 들어 비밀번호 변경 시 현재 비밀번호를 확인하지 않으면 CSRF에 취약합니다. XSS가 "신뢰된 사이트에서 악성 코드 실행"이라면, CSRF는 "악성 사이트에서 신뢰된 요청 전송"입니다.</p>
+                <p>CSRF 방어의 핵심은 CSRF 토큰(Anti-CSRF Token)입니다. 서버가 세션별로 고유한 토큰을 생성하고, 모든 상태 변경 요청에 이 토큰을 포함하도록 요구합니다. 공격자는 피해자의 토큰 값을 알 수 없으므로 유효한 요청을 만들 수 없습니다. Django, Rails, Spring Security 같은 주요 프레임워크는 CSRF 토큰을 내장 지원합니다. SPA(Single Page Application)에서는 토큰을 HTTP 헤더로 전송하는 방식을 사용합니다.</p>
+                <p>현대 브라우저의 SameSite 쿠키 속성은 CSRF 방어의 새로운 표준입니다. SameSite=Strict은 크로스 사이트 요청에 쿠키를 전혀 보내지 않고, SameSite=Lax는 안전한 메서드(GET)의 탑레벨 네비게이션에만 쿠키를 전송합니다. Chrome 80부터 SameSite=Lax가 기본값이 되면서 많은 CSRF 공격이 자동 차단됩니다. 하지만 SameSite만으로는 완전하지 않으므로 CSRF 토큰과 함께 사용해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="node">Node.js/Express</button>
+                <button class="code-tab" data-lang="django">Django</button>
+                <button class="code-tab" data-lang="react">React SPA</button>
+            </div>
+            <div class="code-block active" data-lang="node">
+                <pre><code class="language-javascript">// CSRF 방어 - Node.js Express 예제
+const express = require('express');
+const csrf = require('csurf');
+const cookieParser = require('cookie-parser');
+
+const app = express();
+
+// 쿠키 파서 설정
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+
+// CSRF 미들웨어 설정
+const csrfProtection = csrf({
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'  // SameSite 쿠키 설정
+    }
+});
+
+// CSRF 토큰을 쿠키로 전달 (SPA용)
+app.get('/api/csrf-token', csrfProtection, (req, res) => {
+    res.json({ csrfToken: req.csrfToken() });
+});
+
+// 로그인 폼 (서버 사이드 렌더링)
+app.get('/login', csrfProtection, (req, res) => {
+    res.send(`
+        <form method="POST" action="/login">
+            <input type="hidden" name="_csrf" value="${req.csrfToken()}">
+            <input type="email" name="email" placeholder="이메일">
+            <input type="password" name="password" placeholder="비밀번호">
+            <button type="submit">로그인</button>
+        </form>
+    `);
+});
+
+// 로그인 처리 - CSRF 토큰 검증 자동 수행
+app.post('/login', csrfProtection, (req, res) => {
+    // CSRF 토큰이 유효하지 않으면 403 에러 발생
+    const { email, password } = req.body;
+    // 인증 로직...
+    res.send('로그인 성공');
+});
+
+// 비밀번호 변경 - 민감한 작업에 CSRF 필수
+app.post('/api/change-password', csrfProtection, (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+
+    // 현재 비밀번호 확인 (CSRF와 별개로 추가 보안)
+    if (!verifyCurrentPassword(req.user, currentPassword)) {
+        return res.status(401).json({ error: '현재 비밀번호가 일치하지 않습니다' });
+    }
+
+    // 비밀번호 변경 처리...
+    res.json({ message: '비밀번호가 변경되었습니다' });
+});
+
+// CSRF 에러 핸들러
+app.use((err, req, res, next) => {
+    if (err.code === 'EBADCSRFTOKEN') {
+        res.status(403).json({
+            error: 'CSRF 토큰이 유효하지 않습니다',
+            message: '세션이 만료되었거나 요청이 위조되었습니다'
+        });
+    } else {
+        next(err);
+    }
+});
+
+// 쿠키 설정 예시 - SameSite 포함
+app.post('/api/session', (req, res) => {
+    res.cookie('sessionId', 'abc123', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',  // 크로스 사이트 요청 제한
+        maxAge: 24 * 60 * 60 * 1000  // 24시간
+    });
+    res.json({ success: true });
+});</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="django">
+                <pre><code class="language-python"># CSRF 방어 - Django 예제
+# Django는 CSRF 보호가 기본 활성화
+
+# settings.py
+CSRF_COOKIE_SECURE = True  # HTTPS에서만 쿠키 전송
+CSRF_COOKIE_HTTPONLY = True  # JavaScript에서 쿠키 접근 불가
+CSRF_COOKIE_SAMESITE = 'Lax'  # SameSite 설정
+CSRF_TRUSTED_ORIGINS = ['https://example.com']  # 신뢰 도메인
+
+# views.py
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
+
+# 템플릿에서 CSRF 토큰 사용
+# {% csrf_token %} - 폼에 hidden 필드로 토큰 삽입
+
+@ensure_csrf_cookie  # 쿠키에 CSRF 토큰 설정
+def get_csrf_token(request):
+    """SPA를 위한 CSRF 토큰 엔드포인트"""
+    return JsonResponse({'csrfToken': get_token(request)})
+
+@csrf_protect  # CSRF 검증 강제
+def change_password(request):
+    """비밀번호 변경 - CSRF 보호 필수"""
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+
+        # 현재 비밀번호 확인 (추가 보안)
+        if not request.user.check_password(current_password):
+            return JsonResponse({'error': '현재 비밀번호 불일치'}, status=401)
+
+        request.user.set_password(new_password)
+        request.user.save()
+        return JsonResponse({'message': '비밀번호 변경됨'})
+
+# AJAX 요청에서 CSRF 토큰 전송 (JavaScript)
+"""
+// 쿠키에서 CSRF 토큰 읽기
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// fetch 요청에 CSRF 토큰 포함
+fetch('/api/change-password', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')  // 헤더로 전송
+    },
+    credentials: 'include',  // 쿠키 포함
+    body: JSON.stringify({ new_password: 'newPass123' })
+});
+"""
+
+# REST Framework에서 CSRF
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view(['POST'])
+def api_transfer_money(request):
+    """
+    DRF는 SessionAuthentication 사용 시 CSRF 검증 수행
+    TokenAuthentication 사용 시 CSRF 불필요 (토큰 자체가 인증)
+    """
+    amount = request.data.get('amount')
+    to_account = request.data.get('to_account')
+    # 송금 처리...
+    return Response({'success': True})</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="react">
+                <pre><code class="language-javascript">// CSRF 방어 - React SPA 예제
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
+// Axios 인스턴스 설정 - CSRF 토큰 자동 포함
+const api = axios.create({
+    baseURL: '/api',
+    withCredentials: true,  // 쿠키 포함
+});
+
+// 응답에서 CSRF 토큰 쿠키 추출
+function getCsrfToken() {
+    const name = 'csrftoken';
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.trim().split('=');
+        if (cookieName === name) {
+            return decodeURIComponent(cookieValue);
+        }
+    }
+    return null;
+}
+
+// 요청 인터셉터 - 모든 요청에 CSRF 토큰 추가
+api.interceptors.request.use(config => {
+    const csrfToken = getCsrfToken();
+    if (csrfToken) {
+        config.headers['X-CSRFToken'] = csrfToken;
+    }
+    return config;
+});
+
+// CSRF 토큰 초기화 훅
+function useCsrfToken() {
+    const [isReady, setIsReady] = useState(false);
+
+    useEffect(() => {
+        // 앱 시작 시 CSRF 토큰 쿠키 획득
+        api.get('/csrf-token')
+            .then(() => setIsReady(true))
+            .catch(err => console.error('CSRF 토큰 초기화 실패:', err));
+    }, []);
+
+    return isReady;
+}
+
+// 비밀번호 변경 폼 컴포넌트
+function ChangePasswordForm() {
+    const csrfReady = useCsrfToken();
+    const [formData, setFormData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        if (formData.newPassword !== formData.confirmPassword) {
+            setError('새 비밀번호가 일치하지 않습니다');
+            return;
+        }
+
+        try {
+            // CSRF 토큰이 헤더에 자동 포함됨
+            await api.post('/change-password', {
+                current_password: formData.currentPassword,
+                new_password: formData.newPassword
+            });
+            setSuccess(true);
+        } catch (err) {
+            if (err.response?.status === 403) {
+                setError('세션이 만료되었습니다. 다시 로그인해주세요.');
+            } else {
+                setError(err.response?.data?.error || '오류가 발생했습니다');
+            }
+        }
+    };
+
+    if (!csrfReady) {
+        return <div>로딩 중...</div>;
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            {error && <div className="error">{error}</div>}
+            {success && <div className="success">비밀번호가 변경되었습니다</div>}
+
+            <input
+                type="password"
+                placeholder="현재 비밀번호"
+                value={formData.currentPassword}
+                onChange={e => setFormData({...formData, currentPassword: e.target.value})}
+                required
+            />
+            <input
+                type="password"
+                placeholder="새 비밀번호"
+                value={formData.newPassword}
+                onChange={e => setFormData({...formData, newPassword: e.target.value})}
+                required
+            />
+            <input
+                type="password"
+                placeholder="새 비밀번호 확인"
+                value={formData.confirmPassword}
+                onChange={e => setFormData({...formData, confirmPassword: e.target.value})}
+                required
+            />
+            <button type="submit">비밀번호 변경</button>
+        </form>
+    );
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 감사 피드백에서</div>
+                    <blockquote class="conv-quote">
+                        "비밀번호 변경 API에 CSRF 보호가 없네요. 공격자가 악성 페이지에서 피해자의 비밀번호를 변경할 수 있습니다. Django라면 @csrf_protect 데코레이터 추가하고, 프론트에서 X-CSRFToken 헤더 전송하도록 수정해주세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 SPA 아키텍처 설계 시</div>
+                    <blockquote class="conv-quote">
+                        "React 앱에서 세션 쿠키 인증 쓰면 CSRF 토큰 필수입니다. 앱 초기화 시점에 /api/csrf-token 호출해서 쿠키 받고, 모든 POST/PUT/DELETE 요청에 X-CSRFToken 헤더 넣으세요. JWT 토큰 인증이면 CSRF는 불필요합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 쿠키 설정 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "세션 쿠키에 SameSite=Lax 설정하세요. Chrome 80 이후 기본값이긴 한데 명시적으로 설정하는 게 좋습니다. 결제처럼 민감한 작업은 SameSite=Strict와 CSRF 토큰을 함께 사용하세요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>GET 요청으로 상태 변경</strong>
+                        <p>GET 요청은 CSRF 토큰 검증을 건너뛰는 경우가 많습니다. 계정 삭제, 송금, 설정 변경 같은 상태 변경은 반드시 POST/PUT/DELETE를 사용하고 CSRF 토큰을 검증하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>CSRF 토큰을 URL에 노출</strong>
+                        <p>CSRF 토큰을 쿼리 파라미터로 전송하면 Referer 헤더나 브라우저 히스토리에 노출됩니다. 항상 POST 바디나 커스텀 헤더(X-CSRFToken)로 전송하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>SameSite만 믿고 CSRF 토큰 생략</strong>
+                        <p>SameSite 쿠키는 구형 브라우저에서 지원되지 않고, 서브도메인 공격에 취약할 수 있습니다. 방어 심층화를 위해 CSRF 토큰과 함께 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>CSRF 방어 베스트 프랙티스</strong>
+                        <p>프레임워크의 내장 CSRF 보호를 활용하고, 민감한 작업에는 재인증(현재 비밀번호 확인)을 요구하세요. Origin/Referer 헤더 검증을 추가하고, 세션 쿠키에 SameSite=Lax 이상을 설정하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/XSS/" class="related-term-link">XSS</a>
+                <a href="/ko/term/Cookie/" class="related-term-link">Cookie</a>
+                <a href="/ko/term/Session/" class="related-term-link">Session</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+                <a href="/ko/term/OWASP/" class="related-term-link">OWASP</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://owasp.org/www-community/attacks/csrf" target="_blank" class="learn-link">
+                    📄 OWASP CSRF 공격 가이드
+                </a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite" target="_blank" class="learn-link">
+                    🎓 MDN SameSite Cookie 문서
+                </a>
+                <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html" target="_blank" class="learn-link">
+                    📖 OWASP CSRF 방어 치트시트
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +741,33 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>알고리즘 영향평가 | KAITRUST AI 백과사전</title>
     <meta name="description" content="알고리즘이 사회에 미치는 영향을 평가하는 절차">
-    <meta name="keywords" content="알고리즘 영향평가, , AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
+    <meta name="keywords" content="알고리즘 영향평가, Algorithmic Impact Assessment, AIA, AI 용어, KAITRUST, AI 백과사전, AI 규제/윤리">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%20%EC%98%81%ED%96%A5%ED%8F%89%EA%B0%80/">
 
     <!-- Open Graph -->
@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,186 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 id="detail-title" class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>알고리즘 영향평가(Algorithmic Impact Assessment, AIA)는 알고리즘 시스템이 개인, 집단, 사회에 미치는 잠재적 영향을 배포 전후에 체계적으로 평가하는 절차입니다. EU AI Act 제9조의 위험 관리 시스템과 제27조의 기본권 영향평가(FRIA)가 이 개념의 법적 구현에 해당합니다.</p>
+                <p>알고리즘 영향평가의 주요 평가 영역으로는 공정성(차별 및 편향), 투명성(설명 가능성), 프라이버시(개인정보 보호), 안전성(물리적/디지털 안전), 책임성(거버넌스 체계) 등이 있습니다. EU AI Act 제27조는 특히 고위험 AI 시스템 배치자에게 기본권에 미치는 영향을 사전 평가하도록 요구합니다.</p>
+                <p>국제적으로는 캐나다의 AIA(Algorithmic Impact Assessment Tool), 미국 NIST AI RMF, IEEE 7010 표준 등이 알고리즘 영향평가의 참조 프레임워크로 활용됩니다. 캐나다는 2019년부터 연방 정부 AI 시스템에 AIA를 의무화했으며, 이는 글로벌 선례로 인용됩니다.</p>
+                <p>한국에서는 지능정보화기본법과 개인정보보호법에 따른 영향평가 요구사항이 있으며, 2024년 발의된 AI기본법안에서도 고위험 AI에 대한 영향평가를 규정하고 있습니다. 효과적인 AIA는 사전 예방적 거버넌스의 핵심 도구로, 법적 준수뿐 아니라 사회적 신뢰 확보에도 필수적입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 id="code-title" class="section-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn">복사</button>
+                <pre><code># 알고리즘 영향평가(AIA) 프레임워크 예제
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import List, Dict, Optional
+from enum import Enum
+
+class ImpactCategory(Enum):
+    FAIRNESS = "fairness"
+    TRANSPARENCY = "transparency"
+    PRIVACY = "privacy"
+    SAFETY = "safety"
+    ACCOUNTABILITY = "accountability"
+    HUMAN_RIGHTS = "fundamental_rights"
+
+class RiskLevel(Enum):
+    MINIMAL = 1
+    LIMITED = 2
+    HIGH = 3
+    UNACCEPTABLE = 4
+
+@dataclass
+class ImpactDimension:
+    """개별 영향 차원 평가"""
+    category: ImpactCategory
+    description: str
+    severity: int  # 1-10
+    likelihood: int  # 1-10
+    affected_groups: List[str]
+    mitigation_measures: List[str]
+
+    @property
+    def risk_score(self) -> float:
+        return self.severity * self.likelihood / 10
+
+@dataclass
+class AlgorithmicImpactAssessment:
+    """EU AI Act 제27조 기반 알고리즘 영향평가"""
+    assessment_id: str
+    ai_system_name: str
+    ai_system_version: str
+    assessor: str
+    assessment_date: datetime
+    use_case_description: str
+    affected_population: str
+    impact_dimensions: List[ImpactDimension] = field(default_factory=list)
+
+    def calculate_overall_risk(self) -> RiskLevel:
+        """종합 위험 수준 산정"""
+        if not self.impact_dimensions:
+            return RiskLevel.MINIMAL
+
+        max_score = max(dim.risk_score for dim in self.impact_dimensions)
+        if max_score >= 8:
+            return RiskLevel.UNACCEPTABLE
+        elif max_score >= 5:
+            return RiskLevel.HIGH
+        elif max_score >= 3:
+            return RiskLevel.LIMITED
+        return RiskLevel.MINIMAL
+
+    def generate_fria_report(self) -> Dict:
+        """기본권 영향평가(FRIA) 보고서 생성 - 제27조"""
+        return {
+            "assessment_reference": self.assessment_id,
+            "ai_system": f"{self.ai_system_name} v{self.ai_system_version}",
+            "assessor": self.assessor,
+            "date": self.assessment_date.isoformat(),
+            "use_case": self.use_case_description,
+            "overall_risk_level": self.calculate_overall_risk().name,
+            "impact_summary": [
+                {
+                    "category": dim.category.value,
+                    "risk_score": dim.risk_score,
+                    "affected_groups": dim.affected_groups,
+                    "mitigations": len(dim.mitigation_measures)
+                }
+                for dim in self.impact_dimensions
+            ],
+            "legal_basis": "EU AI Act Article 9 (Risk Management), Article 27 (FRIA)"
+        }
+
+# 사용 예시
+aia = AlgorithmicImpactAssessment(
+    assessment_id="AIA-2025-0089",
+    ai_system_name="HR-Screening-AI",
+    ai_system_version="2.1",
+    assessor="AI Ethics Team",
+    assessment_date=datetime.now(),
+    use_case_description="채용 서류 심사 자동화",
+    affected_population="연간 5만명 지원자"
+)
+
+# 영향 차원 추가
+aia.impact_dimensions.append(ImpactDimension(
+    category=ImpactCategory.FAIRNESS,
+    description="성별, 연령, 출신 학교에 따른 차별 가능성",
+    severity=7,
+    likelihood=4,
+    affected_groups=["여성 지원자", "40대 이상", "비수도권 대학 출신"],
+    mitigation_measures=["편향 테스트 월간 실시", "보호 속성 블라인드 처리", "인간 검토 필수화"]
+))
+
+report = aia.generate_fria_report()
+print(f"종합 위험 수준: {report['overall_risk_level']}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 섹션 -->
+        <section class="term-section" aria-labelledby="conversation-title">
+            <h2 id="conversation-title" class="section-title">실무 대화</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" data-target="meeting17">회의</button>
+                <button class="conv-tab" data-target="interview17">면접</button>
+                <button class="conv-tab" data-target="review17">코드리뷰</button>
+            </div>
+            <div class="conv-content active" id="meeting17" data-label="회의">
+                <p><strong class="role-pm">PM:</strong> 새로운 신용평가 AI 출시 전에 알고리즘 영향평가가 필요하다고 들었는데요.</p>
+                <p><strong class="role-senior">컴플라이언스:</strong> 맞습니다. EU AI Act 제27조에 따라 고위험 AI 배치 전 기본권 영향평가(FRIA)가 필요해요. 신용평가는 부속서 III 고위험에 해당합니다.</p>
+                <p><strong class="role-pm">PM:</strong> 어떤 항목을 평가해야 하나요?</p>
+                <p><strong class="role-senior">컴플라이언스:</strong> 공정성, 투명성, 프라이버시, 영향받는 집단 식별, 완화 조치 등이요. 특히 취약 계층에 대한 차별적 영향을 중점 평가해야 합니다.</p>
+            </div>
+            <div class="conv-content" id="interview17" data-label="면접">
+                <p><strong class="role-interviewer">면접관:</strong> 알고리즘 영향평가의 목적과 주요 평가 항목을 설명해주세요.</p>
+                <p><strong class="role-candidate">지원자:</strong> AIA는 AI 시스템이 개인과 사회에 미치는 잠재적 영향을 사전에 식별하고 완화하기 위한 체계적 절차입니다. EU AI Act 제27조의 FRIA가 법적 구현 예시입니다. 주요 평가 항목은 공정성(차별 위험), 투명성(설명 가능성), 프라이버시, 안전성, 책임성이며, 특히 취약 집단에 대한 불균형적 영향을 중점적으로 분석합니다.</p>
+            </div>
+            <div class="conv-content" id="review17" data-label="코드리뷰">
+                <p><strong class="role-senior">시니어:</strong> AIA 보고서 생성 시 영향받는 집단이 하드코딩되어 있네요.</p>
+                <p><strong class="role-junior">주니어:</strong> 표준 목록을 쓰면 안 되나요?</p>
+                <p><strong class="role-senior">시니어:</strong> 사용 맥락에 따라 영향받는 집단이 달라요. 채용 AI와 의료 AI의 취약 집단은 다르잖아요. 동적으로 정의하고, EU AI Act 부속서 III의 고위험 분야별 특성을 반영하도록 수정하세요.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 id="warning-title" class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li class="critical">고위험 AI 시스템 배치자가 제27조 기본권 영향평가(FRIA)를 미실시하면 최대 1,500만 유로 또는 연간 매출 3%의 과징금 대상입니다.</li>
+                <li>알고리즘 영향평가는 일회성이 아닌 지속적 프로세스입니다. 시스템 변경, 데이터 업데이트, 새로운 사용 사례 발생 시 재평가가 필요합니다.</li>
+                <li class="info">캐나다 AIA Tool, NIST AI RMF, IEEE 7010 등 국제 표준을 참조하여 체계적인 평가 프레임워크를 구축하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 id="related-title" class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80/" class="related-link">모델 평가</a>
+                <a href="/ko/term/%EB%A0%88%EB%93%9C%ED%8C%80%20%ED%85%8C%EC%8A%A4%ED%8A%B8/" class="related-link">레드팀 테스트</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">데이터 거버넌스</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%92%88%EC%A7%88/" class="related-link">데이터 품질</a>
+                <a href="/ko/term/%EC%88%98%EC%9D%B8%EB%B6%88%EA%B0%80%20%EC%9C%84%ED%97%98%20AI/" class="related-link">수인불가 위험 AI</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 id="learn-title" class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act 제9조, 제27조 원문</a><span class="resource-meta">법령</span></li>
+                <li><span class="type-official"></span><a href="https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html" target="_blank" rel="noopener">캐나다 정부 AIA Tool</a><span class="resource-meta">정책 도구</span></li>
+                <li><span class="type-blog"></span><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST AI Risk Management Framework</a><span class="resource-meta">표준</span></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +393,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

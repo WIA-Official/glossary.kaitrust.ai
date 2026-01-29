@@ -161,6 +161,151 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -202,6 +347,301 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>WebSocket은 클라이언트와 서버 간 양방향 실시간 통신을 위한 프로토콜입니다. HTTP와 달리 한 번 연결을 맺으면 연결이 유지되어, 서버가 클라이언트에게 언제든 데이터를 푸시할 수 있습니다. 채팅, 실시간 알림, 게임, 주식 시세 등에 필수적입니다.</p>
+                <p>WebSocket은 HTTP 핸드셰이크로 시작합니다. 클라이언트가 Upgrade: websocket 헤더를 보내면, 서버가 101 Switching Protocols로 응답하고 프로토콜이 전환됩니다. 이후 ws:// 또는 wss://(보안) 프로토콜로 양방향 메시지를 주고받습니다.</p>
+                <p>HTTP 폴링 대비 WebSocket의 장점은 지연 시간과 네트워크 효율입니다. 매번 연결을 맺고 끊는 HTTP와 달리 연결이 유지되어 헤더 오버헤드가 없고, 서버가 즉시 메시지를 전송할 수 있습니다. 단, 상태를 유지해야 해서 수평 확장이 복잡합니다.</p>
+                <p>실무에서는 Socket.IO(Node.js), ws(Node.js 순수 구현), Spring WebSocket(Java) 등을 사용합니다. Socket.IO는 자동 재연결, 룸/네임스페이스, 폴링 폴백 등 편의 기능을 제공합니다. AWS API Gateway, Cloudflare 등에서 관리형 WebSocket도 지원합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="javascript">JavaScript</button>
+                <button class="code-tab" data-lang="nodejs">Node.js</button>
+                <button class="code-tab" data-lang="python">Python</button>
+            </div>
+            <div class="code-block active" data-lang="javascript">
+                <pre><code class="language-javascript">// 브라우저 WebSocket API - 기본 사용법
+const ws = new WebSocket('wss://example.com/chat');
+
+// 연결 성공
+ws.onopen = () => {
+    console.log('WebSocket 연결됨');
+    ws.send(JSON.stringify({ type: 'join', room: 'general' }));
+};
+
+// 메시지 수신
+ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log('메시지 수신:', data);
+};
+
+// 연결 종료
+ws.onclose = (event) => {
+    console.log(`연결 종료: ${event.code} ${event.reason}`);
+};
+
+// 에러 처리
+ws.onerror = (error) => {
+    console.error('WebSocket 에러:', error);
+};
+
+// 메시지 전송
+ws.send(JSON.stringify({ type: 'message', text: '안녕하세요!' }));
+
+// 재연결 로직 (지수 백오프)
+function connectWithRetry(url, maxRetries = 5) {
+    let retries = 0;
+
+    function connect() {
+        const ws = new WebSocket(url);
+
+        ws.onclose = () => {
+            if (retries < maxRetries) {
+                const delay = Math.pow(2, retries) * 1000; // 1s, 2s, 4s, 8s...
+                console.log(`${delay/1000}초 후 재연결 시도...`);
+                setTimeout(connect, delay);
+                retries++;
+            }
+        };
+
+        ws.onopen = () => { retries = 0; }; // 성공시 리셋
+        return ws;
+    }
+
+    return connect();
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="nodejs">
+                <pre><code class="language-javascript">// Node.js 서버 (ws 라이브러리)
+import { WebSocketServer, WebSocket } from 'ws';
+import http from 'http';
+
+// HTTP 서버와 함께 WebSocket 서버 생성
+const server = http.createServer();
+const wss = new WebSocketServer({ server });
+
+// 연결된 클라이언트 관리
+const clients = new Map();
+
+wss.on('connection', (ws, req) => {
+    const clientId = req.headers['sec-websocket-key'];
+    clients.set(clientId, ws);
+    console.log(`클라이언트 연결: ${clientId}`);
+
+    // ping/pong으로 연결 상태 확인
+    ws.isAlive = true;
+    ws.on('pong', () => { ws.isAlive = true; });
+
+    // 메시지 수신
+    ws.on('message', (data) => {
+        const message = JSON.parse(data);
+        console.log('수신:', message);
+
+        // 모든 클라이언트에게 브로드캐스트
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify({
+                    ...message,
+                    timestamp: Date.now()
+                }));
+            }
+        });
+    });
+
+    ws.on('close', () => {
+        clients.delete(clientId);
+        console.log(`클라이언트 종료: ${clientId}`);
+    });
+});
+
+// Heartbeat - 30초마다 연결 상태 확인
+const heartbeat = setInterval(() => {
+    wss.clients.forEach((ws) => {
+        if (!ws.isAlive) return ws.terminate();
+        ws.isAlive = false;
+        ws.ping();
+    });
+}, 30000);
+
+wss.on('close', () => clearInterval(heartbeat));
+
+server.listen(8080, () => console.log('WebSocket 서버: ws://localhost:8080'));
+
+// Socket.IO (룸, 네임스페이스, 자동 재연결)
+import { Server } from 'socket.io';
+const io = new Server(server, { cors: { origin: '*' } });
+
+io.on('connection', (socket) => {
+    socket.join('room-1');  // 룸 참가
+    socket.to('room-1').emit('user-joined', socket.id);  // 룸에 브로드캐스트
+});</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Python 클라이언트 (websockets 라이브러리)
+import asyncio
+import websockets
+import json
+
+# 기본 WebSocket 클라이언트
+async def websocket_client():
+    uri = "wss://example.com/chat"
+
+    async with websockets.connect(uri) as ws:
+        # 메시지 전송
+        await ws.send(json.dumps({
+            "type": "join",
+            "room": "general"
+        }))
+
+        # 메시지 수신 (무한 루프)
+        async for message in ws:
+            data = json.loads(message)
+            print(f"수신: {data}")
+
+asyncio.run(websocket_client())
+
+# Python 서버 (websockets 라이브러리)
+import asyncio
+import websockets
+import json
+
+connected_clients = set()
+
+async def handler(websocket, path):
+    connected_clients.add(websocket)
+    try:
+        async for message in websocket:
+            data = json.loads(message)
+            print(f"수신: {data}")
+
+            # 모든 클라이언트에게 브로드캐스트
+            broadcast = json.dumps({**data, "timestamp": asyncio.get_event_loop().time()})
+            await asyncio.gather(
+                *[client.send(broadcast) for client in connected_clients]
+            )
+    finally:
+        connected_clients.remove(websocket)
+
+async def main():
+    async with websockets.serve(handler, "localhost", 8080):
+        print("WebSocket 서버: ws://localhost:8080")
+        await asyncio.Future()  # 무한 대기
+
+asyncio.run(main())
+
+# FastAPI + WebSocket (프로덕션 권장)
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from typing import List
+
+app = FastAPI()
+connections: List[WebSocket] = []
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    connections.append(websocket)
+    try:
+        while True:
+            data = await websocket.receive_json()
+            for conn in connections:
+                await conn.send_json(data)
+    except WebSocketDisconnect:
+        connections.remove(websocket)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 선택에서</div>
+                    <blockquote class="conv-quote">
+                        "실시간 채팅이면 WebSocket이 맞아요. 폴링은 지연도 있고 서버 부하도 크죠. Socket.IO 쓰면 자동 재연결, 룸 기능도 있어서 편합니다. 서버가 여러 대면 Redis Adapter로 메시지 브로드캐스팅하면 돼요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "WebSocket은 HTTP 핸드셰이크 후 양방향 전이중 통신을 합니다. HTTP/2의 Server Push와 달리 클라이언트도 서버에 언제든 메시지를 보낼 수 있습니다. 연결 유지 비용이 있어서 대규모 서비스에서는 연결 수 관리와 수평 확장 전략이 중요합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 트러블슈팅에서</div>
+                    <blockquote class="conv-quote">
+                        "WebSocket 연결이 자주 끊어지면 프록시나 로드밸런서의 타임아웃 설정을 확인하세요. ping/pong 프레임으로 연결 유지하고, 클라이언트에서 재연결 로직을 구현해야 합니다. Socket.IO는 이게 기본 내장이에요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>재연결 로직 누락</strong>
+                        <p>네트워크 불안정, 서버 재시작, 프록시 타임아웃 등으로 연결이 끊어질 수 있습니다. 지수 백오프(1초, 2초, 4초...)로 자동 재연결을 구현하거나 Socket.IO처럼 내장된 라이브러리를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Heartbeat(ping/pong) 미구현</strong>
+                        <p>프록시, 로드밸런서, 방화벽은 유휴 연결을 끊습니다. 30초마다 ping/pong 프레임을 교환하여 연결 유지와 상태 확인을 해야 합니다. Nginx의 경우 proxy_read_timeout 설정도 확인하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>수평 확장 고려 안 함</strong>
+                        <p>여러 서버에서 WebSocket을 운영하면 연결이 특정 서버에 종속됩니다. Redis Pub/Sub(Socket.IO Adapter), Kafka, AWS API Gateway + Lambda 등으로 서버 간 메시지를 공유해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 WebSocket 설계</strong>
+                        <p>연결 시 JWT 토큰 인증, 30초 heartbeat, 메시지 ID로 중복 방지, 연결 수/메모리 모니터링을 구현하세요. 단방향 알림만 필요하면 Server-Sent Events(SSE)가 더 간단합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/REST%20API/" class="related-term-link">REST API</a>
+                <a href="/ko/term/gRPC/" class="related-term-link">gRPC</a>
+                <a href="/ko/term/URL/" class="related-term-link">URL</a>
+                <a href="/ko/term/JavaScript/" class="related-term-link">JavaScript</a>
+                <a href="/ko/term/%EB%A1%9C%EB%93%9C%20%EB%B0%B8%EB%9F%B0%EC%84%9C/" class="related-term-link">로드 밸런서</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://developer.mozilla.org/ko/docs/Web/API/WebSocket" target="_blank" class="learn-link">📄 MDN WebSocket API</a>
+                <a href="https://socket.io/docs/v4/" target="_blank" class="learn-link">🎓 Socket.IO 문서</a>
+                <a href="https://javascript.info/websocket" target="_blank" class="learn-link">📖 JavaScript.info WebSocket</a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +649,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

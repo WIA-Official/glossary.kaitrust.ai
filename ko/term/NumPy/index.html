@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,226 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>NumPy(Numerical Python)는 2005년 Travis Oliphant가 Numeric과 Numarray를 통합해 만든 Python 수치 컴퓨팅 라이브러리입니다. C로 구현된 ndarray(N-dimensional array)는 Python 리스트보다 50-100배 빠른 벡터 연산을 제공하며, 데이터 과학 생태계 전체의 기반입니다.</p>
+                <p>브로드캐스팅(Broadcasting)은 NumPy의 핵심 기능으로, 서로 다른 형상의 배열 간 연산을 자동으로 처리합니다. (3, 4) 배열과 (4,) 배열을 더하면 자동으로 행 방향으로 확장해 연산합니다. 명시적 반복문 없이 벡터화된 코드를 작성할 수 있어 성능과 가독성 모두 향상됩니다.</p>
+                <p>주요 기능으로 선형대수(np.linalg), 푸리에 변환(np.fft), 난수 생성(np.random), 통계 함수(mean, std, percentile)를 제공합니다. dtype으로 float32, float64, int64 등 메모리 효율적인 데이터 타입을 지정하고, reshape, transpose, concatenate로 배열 형상을 조작합니다.</p>
+                <p>Pandas DataFrame, TensorFlow/PyTorch 텐서, scikit-learn 입력은 모두 NumPy 배열과 호환됩니다. GPU 가속이 필요하면 CuPy(NVIDIA CUDA), JAX(Google TPU)가 NumPy API를 그대로 사용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>import numpy as np
+
+# 배열 생성
+arr = np.array([1, 2, 3, 4, 5])
+matrix = np.arange(12).reshape(3, 4)  # 0~11을 3x4 행렬로
+zeros = np.zeros((2, 3), dtype=np.float32)
+ones = np.ones((3, 3))
+identity = np.eye(4)  # 4x4 단위행렬
+
+print(f"Shape: {matrix.shape}, Dtype: {matrix.dtype}")
+# Shape: (3, 4), Dtype: int64
+
+# 브로드캐스팅 예제
+a = np.array([[1], [2], [3]])  # (3, 1)
+b = np.array([10, 20, 30, 40])  # (4,)
+result = a + b  # (3, 4) - 자동 확장
+print(result)
+# [[11 21 31 41]
+#  [12 22 32 42]
+#  [13 23 33 43]]
+
+# 벡터화 연산 (반복문 대신)
+data = np.random.randn(1000000)
+# 느림: [x**2 for x in data]
+squared = data ** 2  # 빠름: 벡터화 연산
+
+# 인덱싱과 슬라이싱
+arr = np.arange(10)
+print(arr[2:7:2])      # [2 4 6] - start:stop:step
+print(arr[arr > 5])    # [6 7 8 9] - 불리언 인덱싱
+
+# 고급 인덱싱 (Fancy Indexing)
+indices = np.array([1, 3, 5])
+print(arr[indices])    # [1 3 5]
+
+# 선형대수
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+
+print(A @ B)              # 행렬 곱셈
+print(np.linalg.det(A))   # 행렬식: -2.0
+print(np.linalg.inv(A))   # 역행렬
+eigenvalues, eigenvectors = np.linalg.eig(A)
+
+# 통계 함수
+data = np.random.normal(100, 15, size=1000)
+print(f"평균: {np.mean(data):.2f}")
+print(f"표준편차: {np.std(data):.2f}")
+print(f"중앙값: {np.median(data):.2f}")
+print(f"95 퍼센타일: {np.percentile(data, 95):.2f}")
+
+# 축(axis) 기반 연산
+matrix = np.random.randint(0, 10, size=(3, 4))
+print(f"열별 합계: {matrix.sum(axis=0)}")  # (4,)
+print(f"행별 합계: {matrix.sum(axis=1)}")  # (3,)
+
+# 배열 결합
+arr1 = np.array([[1, 2], [3, 4]])
+arr2 = np.array([[5, 6]])
+vertical = np.vstack([arr1, arr2])    # (3, 2)
+horizontal = np.hstack([arr1, arr1])  # (2, 4)</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "피처 전처리 로직인데, for문으로 100만 행 돌리니까 5분 걸려요. NumPy 벡터화하면 1초 이내로 줄일 수 있어요."</p>
+                <p><strong class="role-junior">주니어:</strong> "브로드캐스팅이 뭔가요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "shape이 다른 배열 연산 시 자동으로 차원을 맞춰주는 거예요. (1000, 10) 배열에서 각 열의 평균을 빼려면 그냥 data - data.mean(axis=0) 하면 돼요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "NumPy 성능 최적화 경험이 있나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "반복문을 벡터화 연산으로 대체하고, dtype을 float64에서 float32로 줄여 메모리를 절반으로 줄였습니다. 큰 배열은 np.memmap으로 디스크 매핑해서 메모리 부족 문제를 해결했고, 연산 집약적인 부분은 Numba의 @jit 데코레이터로 JIT 컴파일했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "arr.copy() 빼먹으면 view 반환되어 원본 수정될 수 있어요. 슬라이싱 결과를 수정할 거면 명시적으로 copy() 호출하세요."</p>
+                <p><strong class="role-junior">개발자:</strong> "아, 그래서 원본 데이터가 바뀌었군요. 바로 수정하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>슬라이싱은 view를 반환 - 원본이 수정될 수 있으니 독립적인 복사본이 필요하면 .copy() 사용</li>
+                <li>브로드캐스팅 shape 불일치 시 에러 - shape을 미리 확인하고 reshape 또는 np.newaxis 활용</li>
+                <li>정수 나눗셈 결과가 float - Python 3에서 5/2=2.5이지만, 정수가 필요하면 // 연산자 사용</li>
+                <li class="info">np.nan은 float 타입에서만 사용 가능 - 정수 배열에서 결측치 처리 시 np.ma.masked_array 또는 Pandas 활용</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Pandas/" class="related-link">Pandas</a>
+                <a href="/ko/term/Matplotlib/" class="related-link">Matplotlib</a>
+                <a href="/ko/term/Polars/" class="related-link">Polars</a>
+                <a href="/ko/term/Spark/" class="related-link">Spark</a>
+            </div>
+        </section>
+
+        <!-- 실제 장애 사례 -->
+        <section class="term-section" aria-labelledby="incident-title">
+            <h2 class="section-title" id="incident-title">🔥 실제 장애 사례</h2>
+            <div class="incident-list">
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">ML 스타트업</span>
+                        <span class="incident-year">2022</span>
+                    </div>
+                    <h4 class="incident-title">float64→float32 변환 시 정밀도 손실로 모델 성능 급락</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> 메모리 최적화 위해 무분별하게 dtype을 float32로 변경, 금융 모델에서 정밀도 손실 발생</p>
+                        <p><strong>영향:</strong> 거래 예측 모델 정확도 15% 하락, 실제 손실 발생</p>
+                        <p><strong>해결:</strong> 중요 컬럼은 float64 유지, 덜 중요한 피처만 float32 사용</p>
+                        <p><strong>교훈:</strong> dtype 변경 전 도메인별 정밀도 요구사항 검토, 검증 데이터셋으로 영향 테스트</p>
+                    </div>
+                </div>
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">일반 사례</span>
+                        <span class="incident-year">공통</span>
+                    </div>
+                    <h4 class="incident-title">슬라이싱 view 반환으로 원본 데이터 오염</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> arr[::2] 슬라이싱이 view를 반환하는 것을 몰라 수정 시 원본도 변경됨</p>
+                        <p><strong>영향:</strong> 훈련 데이터가 변형되어 모델 재학습 필요, 디버깅에 이틀 소요</p>
+                        <p><strong>해결:</strong> .copy()로 명시적 복사 후 수정</p>
+                        <p><strong>교훈:</strong> NumPy 슬라이싱은 view 반환, 수정 전 항상 .copy() 고려</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 이해도 퀴즈 -->
+        <section class="term-section" aria-labelledby="quiz-title">
+            <h2 class="section-title" id="quiz-title">📝 이해도 퀴즈</h2>
+            <div class="quiz-container" id="term-quiz">
+                <div class="quiz-item" data-correct="b">
+                    <p class="quiz-question"><strong>Q1.</strong> NumPy의 브로드캐스팅(Broadcasting)이란?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> A) 배열을 네트워크로 전송하는 기능</label>
+                        <label><input type="radio" name="q1" value="b"> B) 서로 다른 shape의 배열 간 연산 시 자동으로 차원을 맞춰주는 기능</label>
+                        <label><input type="radio" name="q1" value="c"> C) 배열을 여러 프로세스에 분산하는 기능</label>
+                        <label><input type="radio" name="q1" value="d"> D) 배열을 GPU로 복사하는 기능</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="c">
+                    <p class="quiz-question"><strong>Q2.</strong> arr = np.arange(10); b = arr[2:5] 후 b[0] = 99를 하면?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> A) b만 변경됨 (b = [99, 3, 4])</label>
+                        <label><input type="radio" name="q2" value="b"> B) 에러 발생</label>
+                        <label><input type="radio" name="q2" value="c"> C) arr[2]도 99로 변경됨 (view 반환이므로)</label>
+                        <label><input type="radio" name="q2" value="d"> D) arr 전체가 99로 채워짐</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="d">
+                    <p class="quiz-question"><strong>Q3.</strong> NumPy 성능 최적화 방법으로 올바른 것은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> A) 반복문(for loop)을 최대한 사용</label>
+                        <label><input type="radio" name="q3" value="b"> B) Python list를 사용</label>
+                        <label><input type="radio" name="q3" value="c"> C) 항상 float64 dtype 사용</label>
+                        <label><input type="radio" name="q3" value="d"> D) 벡터화 연산 사용, 적절한 dtype 선택</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-submit" onclick="checkQuiz()">정답 확인</button>
+                <div class="quiz-result"></div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://numpy.org/doc/stable/user/quickstart.html" target="_blank" rel="noopener">NumPy 공식 퀵스타트</a></li>
+                <li><span class="type-official"></span><a href="https://numpy.org/doc/stable/reference/arrays.indexing.html" target="_blank" rel="noopener">NumPy 인덱싱 가이드</a></li>
+                <li><span class="type-blog"></span><a href="https://realpython.com/numpy-tutorial/" target="_blank" rel="noopener">Real Python - NumPy 튜토리얼</a></li>
+                <li><span class="type-video"></span><a href="https://www.youtube.com/watch?v=QUT1VHiLmmI" target="_blank" rel="noopener">NumPy 완전 정복 (한글)</a></li>
+                <li><span class="type-book"></span><a href="https://jakevdp.github.io/PythonDataScienceHandbook/" target="_blank" rel="noopener">Python Data Science Handbook</a></li>
+                <li><span class="type-tutorial"></span><a href="https://cs231n.github.io/python-numpy-tutorial/" target="_blank" rel="noopener">Stanford CS231n NumPy 튜토리얼</a></li>
+            </ul>
+        </section>
+
+        <!-- 질문 & 기여 -->
+        <section class="term-section" aria-labelledby="community-title">
+            <h2 class="section-title" id="community-title">💬 질문 & 기여</h2>
+            <div class="community-actions">
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[NumPy] 질문: " class="community-btn btn-question" target="_blank">❓ 질문하기</a>
+                <a href="https://github.com/user/kaitrust.ai/issues/new?title=[NumPy] 수정 제안: " class="community-btn btn-suggest" target="_blank">✏️ 수정 제안</a>
+            </div>
+            <p class="community-note">이 페이지에 오류가 있거나 추가하고 싶은 내용이 있다면 알려주세요!</p>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +433,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

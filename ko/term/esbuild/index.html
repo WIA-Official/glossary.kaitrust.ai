@@ -161,6 +161,122 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhancement Section Styles */
+        .enhancement-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.8));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhancement-section h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .enhancement-section p, .enhancement-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+        }
+        .enhancement-section ul, .enhancement-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .enhancement-section strong {
+            color: #a855f7;
+        }
+        .code-block {
+            background: #0f172a;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .code-block .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-block .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .dialogue-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .dialogue-box .speaker {
+            font-weight: 600;
+            color: #818cf8;
+            margin-bottom: 0.25rem;
+        }
+        .dialogue-box p {
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-link {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #fff;
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #00f5ff;
+            text-decoration: none;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -202,6 +318,139 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="enhancement-section">
+            <h2>상세 설명</h2>
+            <p><strong>esbuild</strong>는 Go 언어로 작성된 초고속 JavaScript/TypeScript 번들러입니다. Evan Wallace(Figma CTO)가 개발했으며, 기존 번들러 대비 <strong>10~100배 빠른</strong> 속도를 자랑합니다.</p>
+            <p>JavaScript로 작성된 기존 번들러(Webpack, Rollup)와 달리, Go의 병렬 처리와 효율적인 메모리 사용으로 대규모 프로젝트도 순식간에 빌드합니다. Vite가 개발 모드에서 esbuild를 사용하는 것으로도 유명합니다.</p>
+            <ul>
+                <li><strong>초고속 빌드</strong>: Webpack 대비 100배 이상 빠름</li>
+                <li><strong>번들링 + 트랜스파일링</strong>: TypeScript, JSX를 별도 도구 없이 처리</li>
+                <li><strong>Tree Shaking</strong>: 사용하지 않는 코드 자동 제거</li>
+                <li><strong>코드 분할</strong>: 동적 import로 청크 분리</li>
+                <li><strong>Source Map</strong>: 디버깅용 소스맵 생성 지원</li>
+            </ul>
+            <p>다만 플러그인 생태계가 Webpack만큼 풍부하지 않아, Vite처럼 개발 모드용으로 사용하거나 단순 번들링에 주로 활용됩니다.</p>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="enhancement-section">
+            <h2>코드 예제</h2>
+            <p><strong>CLI 사용</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code># 설치
+npm install esbuild
+
+# 단일 파일 번들링
+npx esbuild app.js --bundle --outfile=out.js
+
+# 프로덕션 빌드 (minify + sourcemap)
+npx esbuild src/index.ts --bundle --minify --sourcemap --outfile=dist/bundle.js
+
+# TypeScript + React JSX
+npx esbuild app.tsx --bundle --loader:.tsx=tsx --outfile=out.js</code>
+            </div>
+            <p><strong>JavaScript API 사용</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>import * as esbuild from 'esbuild';
+
+// 기본 번들링
+await esbuild.build({
+    entryPoints: ['src/index.ts'],
+    bundle: true,
+    minify: true,
+    sourcemap: true,
+    target: ['es2020'],
+    outfile: 'dist/bundle.js',
+});
+
+// 코드 분할 (여러 청크)
+await esbuild.build({
+    entryPoints: ['src/index.ts'],
+    bundle: true,
+    splitting: true,
+    format: 'esm',
+    outdir: 'dist',
+});</code>
+            </div>
+            <p><strong>Watch 모드 (개발용)</strong></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <code>const ctx = await esbuild.context({
+    entryPoints: ['src/index.ts'],
+    bundle: true,
+    outfile: 'dist/bundle.js',
+});
+
+// 파일 변경 감지 및 자동 리빌드
+await ctx.watch();
+
+// 개발 서버 (선택사항)
+await ctx.serve({
+    servedir: 'public',
+    port: 3000,
+});</code>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="enhancement-section">
+            <h2>실무 대화 예시</h2>
+            <div class="dialogue-box">
+                <p class="speaker">개발자</p>
+                <p>"빌드가 30초나 걸리는데 esbuild 적용하면 어떨까요?"</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">시니어</p>
+                <p>"esbuild 자체는 빠르긴 한데, Webpack의 복잡한 설정 다 대체할 수 있어? CSS 모듈이나 환경 변수 처리 같은 거."</p>
+            </div>
+            <div class="dialogue-box">
+                <p class="speaker">개발자</p>
+                <p>"그건 좀 제한적이에요. 그래서 Vite를 쓰는 게 나을 것 같아요. 개발 모드는 esbuild로 빠르게, 프로덕션은 Rollup으로 안정적으로 빌드하니까요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="enhancement-section">
+            <h2>주의사항</h2>
+            <div class="warning-box">
+                <p><strong>플러그인 생태계 제한</strong></p>
+                <p>Webpack만큼 풍부한 플러그인 생태계가 없습니다. 복잡한 로더나 플러그인이 필요하면 다른 도구 고려가 필요합니다.</p>
+            </div>
+            <div class="warning-box">
+                <p><strong>ES5 타겟 미지원</strong></p>
+                <p>ES6+ 이상만 타겟팅 가능합니다. IE11 등 구형 브라우저 지원이 필요하면 추가 트랜스파일링이 필요합니다.</p>
+            </div>
+            <div class="warning-box">
+                <p><strong>TypeScript 타입 체크 미지원</strong></p>
+                <p>트랜스파일링만 하고 타입 체크는 하지 않습니다. 타입 검사는 tsc나 IDE에서 별도로 수행해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhancement-section">
+            <h2>관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Vite/" class="related-term-link">Vite</a>
+                <a href="/ko/term/Webpack/" class="related-term-link">Webpack</a>
+                <a href="/ko/term/Rollup/" class="related-term-link">Rollup</a>
+                <a href="/ko/term/Turbopack/" class="related-term-link">Turbopack</a>
+                <a href="/ko/term/%EB%B2%88%EB%93%A4%EB%9F%AC/" class="related-term-link">번들러</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhancement-section">
+            <h2>더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://esbuild.github.io/" target="_blank">esbuild 공식 문서</a></li>
+                <li><a href="https://esbuild.github.io/api/" target="_blank">esbuild API 레퍼런스</a></li>
+                <li><a href="https://github.com/evanw/esbuild" target="_blank">GitHub - esbuild</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +461,15 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

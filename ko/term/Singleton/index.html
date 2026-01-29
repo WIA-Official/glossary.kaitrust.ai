@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Singleton (싱글톤) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="클래스 인스턴스를 하나만 생성하는 디자인 패턴.">
-    <meta name="keywords" content="Singleton, 싱글톤, AI 용어, KAITRUST, AI 백과사전, 프로그래밍">
+    <meta name="description" content="클래스의 인스턴스가 하나만 존재하도록 보장하는 GoF 디자인 패턴. Lazy, Eager, Double-checked locking 등 다양한 구현 방식 제공.">
+    <meta name="keywords" content="Singleton, 싱글톤, 디자인 패턴, AI 용어, KAITRUST, AI 백과사전, 프로그래밍, GoF, 생성 패턴">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Singleton/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Singleton/">
     <meta property="og:title" content="Singleton (싱글톤) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="클래스 인스턴스를 하나만 생성하는 디자인 패턴.">
+    <meta property="og:description" content="클래스의 인스턴스가 하나만 존재하도록 보장하는 GoF 디자인 패턴. Lazy, Eager, Double-checked locking 등 다양한 구현 방식 제공.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Singleton (싱글톤) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="클래스 인스턴스를 하나만 생성하는 디자인 패턴.">
+    <meta name="twitter:description" content="클래스의 인스턴스가 하나만 존재하도록 보장하는 GoF 디자인 패턴. Lazy, Eager, Double-checked locking 등 다양한 구현 방식 제공.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Singleton",
-        "description": "클래스 인스턴스를 하나만 생성하는 디자인 패턴.",
+        "description": "클래스의 인스턴스가 하나만 존재하도록 보장하는 GoF 디자인 패턴. Lazy, Eager, Double-checked locking 등 다양한 구현 방식 제공.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -161,6 +161,176 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        /* 구현 방식 그리드 */
+        .impl-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .impl-type-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid rgba(168, 85, 247, 0.1);
+        }
+        .impl-type-card h4 {
+            color: #a855f7;
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+        }
+        .impl-type-card p {
+            color: #94a3b8;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .impl-type-card .pros { color: #22c55e; font-size: 0.85rem; margin-top: 0.5rem; }
+        .impl-type-card .cons { color: #f97316; font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -191,7 +361,7 @@
             <h1 class="term-title">Singleton</h1>
             <p class="term-english">싱글톤</p>
             <div class="term-description">
-                <p>클래스 인스턴스를 하나만 생성하는 디자인 패턴.</p>
+                <p>클래스의 인스턴스가 하나만 존재하도록 보장하는 GoF 디자인 패턴. Lazy, Eager, Double-checked locking 등 다양한 구현 방식 제공.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +372,585 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>싱글톤(Singleton)은 클래스의 인스턴스가 애플리케이션 전체에서 오직 하나만 존재하도록 보장하는 생성 디자인 패턴입니다. 이 패턴은 전역적으로 접근 가능한 단일 객체가 필요할 때 사용됩니다. 예를 들어 데이터베이스 연결 풀, 로깅 시스템, 설정 관리자 등 여러 곳에서 동일한 인스턴스를 공유해야 하는 경우에 적합합니다. 싱글톤은 생성자를 private으로 선언하고, 정적 메서드를 통해 유일한 인스턴스에 접근하는 방식으로 구현됩니다.</p>
+                <p>싱글톤은 1994년 "Gang of Four(GoF)"가 발표한 23가지 디자인 패턴 중 하나로, 생성 패턴(Creational Pattern)에 속합니다. GoF 패턴 중에서도 가장 널리 알려지고 많이 사용되는 패턴이지만, 동시에 가장 논쟁이 많은 패턴이기도 합니다. 객체지향 설계의 기본 원칙인 SOLID 중 단일 책임 원칙(SRP)과 개방-폐쇄 원칙(OCP)을 위반할 수 있으며, 전역 상태를 만들어 코드의 결합도를 높인다는 비판을 받습니다.</p>
+                <p>싱글톤 구현 방식은 크게 세 가지로 나뉩니다. Eager Initialization(즉시 초기화)은 클래스 로딩 시점에 인스턴스를 생성하여 스레드 안전하지만, 사용하지 않아도 메모리를 점유합니다. Lazy Initialization(지연 초기화)은 처음 요청할 때 인스턴스를 생성하여 자원을 절약하지만, 멀티스레드 환경에서 동기화 문제가 발생할 수 있습니다. Double-Checked Locking은 성능과 스레드 안전성을 모두 확보하지만, 구현이 복잡하고 언어별로 volatile 키워드 등 추가 처리가 필요합니다.</p>
+                <p>실무에서 싱글톤은 로깅, 캐시, 설정 관리, 스레드 풀 등에서 여전히 활용되지만, 많은 개발자들이 "안티패턴"으로 간주합니다. 싱글톤은 단위 테스트를 어렵게 만들고, 의존성을 숨기며, 전역 상태로 인한 예측 불가능한 동작을 유발할 수 있습니다. 현대적인 소프트웨어 개발에서는 싱글톤 대신 의존성 주입(Dependency Injection) 컨테이너를 통해 객체의 생명주기를 관리하는 방식이 권장됩니다. Spring, Guice 같은 DI 프레임워크에서는 싱글톤 스코프를 지원하면서도 테스트 용이성을 유지합니다.</p>
+            </div>
+        </section>
+
+        <!-- 구현 방식 -->
+        <section class="term-section">
+            <h2 class="section-title">🔧 구현 방식</h2>
+            <div class="impl-types">
+                <div class="impl-type-card">
+                    <h4>Eager Initialization (즉시 초기화)</h4>
+                    <p>클래스 로딩 시점에 인스턴스 생성. 간단하고 스레드 안전.</p>
+                    <div class="pros">장점: 구현 간단, 스레드 안전</div>
+                    <div class="cons">단점: 사용 안 해도 메모리 점유</div>
+                </div>
+                <div class="impl-type-card">
+                    <h4>Lazy Initialization (지연 초기화)</h4>
+                    <p>첫 요청 시 인스턴스 생성. 자원 효율적이나 동기화 필요.</p>
+                    <div class="pros">장점: 자원 효율적, 필요시 생성</div>
+                    <div class="cons">단점: 멀티스레드 동기화 필요</div>
+                </div>
+                <div class="impl-type-card">
+                    <h4>Double-Checked Locking</h4>
+                    <p>성능과 스레드 안전성 모두 확보. volatile 키워드 필수.</p>
+                    <div class="pros">장점: 성능 최적화, 스레드 안전</div>
+                    <div class="cons">단점: 구현 복잡, 언어별 차이</div>
+                </div>
+                <div class="impl-type-card">
+                    <h4>Bill Pugh (Holder)</h4>
+                    <p>내부 정적 클래스로 지연 로딩. Java에서 가장 권장.</p>
+                    <div class="pros">장점: 지연 로딩 + 스레드 안전</div>
+                    <div class="cons">단점: Java 전용 패턴</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="java">Java</button>
+                <button class="code-tab" data-lang="typescript">TypeScript</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Python 싱글톤 구현 예제
+from threading import Lock
+from typing import Optional
+
+
+# 1. 데코레이터를 활용한 싱글톤 (가장 Pythonic)
+def singleton(cls):
+    """싱글톤 데코레이터"""
+    instances = {}
+    lock = Lock()
+
+    def get_instance(*args, **kwargs):
+        if cls not in instances:
+            with lock:  # 스레드 안전
+                if cls not in instances:
+                    instances[cls] = cls(*args, **kwargs)
+        return instances[cls]
+
+    return get_instance
+
+
+@singleton
+class DatabaseConnection:
+    """데코레이터 방식 싱글톤"""
+    def __init__(self, host: str = "localhost"):
+        self.host = host
+        self.connected = False
+        print(f"DB 연결 생성: {host}")
+
+    def connect(self):
+        self.connected = True
+        print("DB 연결됨")
+
+
+# 2. 메타클래스를 활용한 싱글톤 (고급)
+class SingletonMeta(type):
+    """싱글톤 메타클래스"""
+    _instances = {}
+    _lock = Lock()
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            with cls._lock:
+                if cls not in cls._instances:
+                    instance = super().__call__(*args, **kwargs)
+                    cls._instances[cls] = instance
+        return cls._instances[cls]
+
+
+class Logger(metaclass=SingletonMeta):
+    """메타클래스 방식 싱글톤"""
+    def __init__(self):
+        self.logs = []
+        print("Logger 인스턴스 생성")
+
+    def log(self, message: str):
+        self.logs.append(message)
+        print(f"[LOG] {message}")
+
+
+# 3. __new__를 활용한 싱글톤 (클래식)
+class ConfigManager:
+    """__new__ 오버라이드 방식"""
+    _instance: Optional['ConfigManager'] = None
+    _lock = Lock()
+
+    def __new__(cls):
+        if cls._instance is None:
+            with cls._lock:
+                if cls._instance is None:
+                    cls._instance = super().__new__(cls)
+                    cls._instance._initialized = False
+        return cls._instance
+
+    def __init__(self):
+        if self._initialized:
+            return
+        self._initialized = True
+        self.config = {}
+        print("ConfigManager 초기화")
+
+    def set(self, key: str, value):
+        self.config[key] = value
+
+    def get(self, key: str, default=None):
+        return self.config.get(key, default)
+
+
+# 4. 모듈 레벨 싱글톤 (가장 간단, Python 권장)
+# config.py 파일로 분리하면 자동으로 싱글톤
+class _AppConfig:
+    def __init__(self):
+        self.debug = False
+        self.version = "1.0.0"
+
+app_config = _AppConfig()  # 모듈 로드 시 한 번만 생성
+
+
+# 사용 예제
+if __name__ == "__main__":
+    # 데코레이터 싱글톤 테스트
+    db1 = DatabaseConnection("mysql://prod")
+    db2 = DatabaseConnection("mysql://dev")  # 무시됨
+    print(f"같은 인스턴스? {db1 is db2}")  # True
+    print(f"호스트: {db1.host}")  # mysql://prod
+
+    # 메타클래스 싱글톤 테스트
+    logger1 = Logger()
+    logger2 = Logger()  # 기존 인스턴스 반환
+    logger1.log("첫 번째 로그")
+    print(f"같은 인스턴스? {logger1 is logger2}")  # True
+
+    # __new__ 싱글톤 테스트
+    config1 = ConfigManager()
+    config1.set("api_key", "secret123")
+    config2 = ConfigManager()
+    print(f"API Key: {config2.get('api_key')}")  # secret123</code></pre>
+            </div>
+            <div class="code-block" data-lang="java" style="display: none;">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// Java 싱글톤 구현 예제
+
+// 1. Eager Initialization (즉시 초기화)
+public class EagerSingleton {
+    // 클래스 로딩 시점에 인스턴스 생성
+    private static final EagerSingleton INSTANCE = new EagerSingleton();
+
+    private EagerSingleton() {
+        System.out.println("EagerSingleton 생성");
+    }
+
+    public static EagerSingleton getInstance() {
+        return INSTANCE;
+    }
+
+    public void doSomething() {
+        System.out.println("작업 수행");
+    }
+}
+
+
+// 2. Lazy Initialization with Double-Checked Locking
+public class ThreadSafeSingleton {
+    // volatile: 멀티스레드 환경에서 가시성 보장
+    private static volatile ThreadSafeSingleton instance;
+
+    private ThreadSafeSingleton() {
+        System.out.println("ThreadSafeSingleton 생성");
+    }
+
+    public static ThreadSafeSingleton getInstance() {
+        if (instance == null) {  // 첫 번째 체크 (성능)
+            synchronized (ThreadSafeSingleton.class) {
+                if (instance == null) {  // 두 번째 체크 (안전)
+                    instance = new ThreadSafeSingleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+
+
+// 3. Bill Pugh Singleton (권장 방식)
+public class BillPughSingleton {
+    private BillPughSingleton() {
+        System.out.println("BillPughSingleton 생성");
+    }
+
+    // 내부 정적 클래스 - 외부 클래스 로딩 시 로딩되지 않음
+    private static class SingletonHolder {
+        // getInstance() 호출 시점에 로딩 및 초기화
+        private static final BillPughSingleton INSTANCE = new BillPughSingleton();
+    }
+
+    public static BillPughSingleton getInstance() {
+        return SingletonHolder.INSTANCE;  // 지연 로딩 + 스레드 안전
+    }
+}
+
+
+// 4. Enum Singleton (Joshua Bloch 권장)
+public enum EnumSingleton {
+    INSTANCE;
+
+    private String config;
+
+    public void setConfig(String config) {
+        this.config = config;
+    }
+
+    public String getConfig() {
+        return config;
+    }
+
+    public void doSomething() {
+        System.out.println("Enum 싱글톤 작업: " + config);
+    }
+}
+
+
+// 5. 실무 예제: Logger 싱글톤
+public class Logger {
+    private static volatile Logger instance;
+    private final java.util.List<String> logs;
+    private final java.io.PrintWriter writer;
+
+    private Logger() {
+        this.logs = new java.util.ArrayList<>();
+        this.writer = new java.io.PrintWriter(System.out);
+    }
+
+    public static Logger getInstance() {
+        if (instance == null) {
+            synchronized (Logger.class) {
+                if (instance == null) {
+                    instance = new Logger();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public synchronized void log(String level, String message) {
+        String logEntry = String.format("[%s] %s: %s",
+            java.time.LocalDateTime.now(), level, message);
+        logs.add(logEntry);
+        writer.println(logEntry);
+        writer.flush();
+    }
+
+    public void info(String message) { log("INFO", message); }
+    public void error(String message) { log("ERROR", message); }
+    public void debug(String message) { log("DEBUG", message); }
+}
+
+
+// 사용 예제
+public class Main {
+    public static void main(String[] args) {
+        // Bill Pugh 싱글톤 테스트
+        BillPughSingleton s1 = BillPughSingleton.getInstance();
+        BillPughSingleton s2 = BillPughSingleton.getInstance();
+        System.out.println("같은 인스턴스: " + (s1 == s2));  // true
+
+        // Enum 싱글톤 테스트 (직렬화 안전, 리플렉션 방어)
+        EnumSingleton.INSTANCE.setConfig("production");
+        EnumSingleton.INSTANCE.doSomething();
+
+        // Logger 싱글톤 테스트
+        Logger logger = Logger.getInstance();
+        logger.info("애플리케이션 시작");
+        logger.debug("디버그 메시지");
+        logger.error("에러 발생!");
+    }
+}</code></pre>
+            </div>
+            <div class="code-block" data-lang="typescript" style="display: none;">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// TypeScript 싱글톤 구현 예제
+
+// 1. 기본 싱글톤 패턴
+class BasicSingleton {
+    private static instance: BasicSingleton;
+
+    // private 생성자로 외부 인스턴스화 방지
+    private constructor() {
+        console.log('BasicSingleton 생성');
+    }
+
+    public static getInstance(): BasicSingleton {
+        if (!BasicSingleton.instance) {
+            BasicSingleton.instance = new BasicSingleton();
+        }
+        return BasicSingleton.instance;
+    }
+
+    public doSomething(): void {
+        console.log('작업 수행');
+    }
+}
+
+
+// 2. 제네릭 싱글톤 데코레이터
+function Singleton<T extends new (...args: any[]) => any>(constructor: T) {
+    let instance: InstanceType<T> | null = null;
+
+    return class extends constructor {
+        constructor(...args: any[]) {
+            if (instance) {
+                return instance;
+            }
+            super(...args);
+            instance = this as InstanceType<T>;
+        }
+    } as T;
+}
+
+@Singleton
+class ConfigService {
+    private config: Map<string, any> = new Map();
+
+    public set(key: string, value: any): void {
+        this.config.set(key, value);
+    }
+
+    public get<T>(key: string): T | undefined {
+        return this.config.get(key) as T;
+    }
+}
+
+
+// 3. 모듈 싱글톤 (ES6 모듈 활용 - 권장)
+// logger.ts 파일로 분리
+class Logger {
+    private logs: string[] = [];
+
+    log(level: 'INFO' | 'WARN' | 'ERROR', message: string): void {
+        const timestamp = new Date().toISOString();
+        const entry = `[${timestamp}] ${level}: ${message}`;
+        this.logs.push(entry);
+        console.log(entry);
+    }
+
+    info(message: string): void { this.log('INFO', message); }
+    warn(message: string): void { this.log('WARN', message); }
+    error(message: string): void { this.log('ERROR', message); }
+
+    getLogs(): readonly string[] {
+        return this.logs;
+    }
+}
+
+// 모듈 레벨에서 단일 인스턴스 export
+export const logger = new Logger();
+
+
+// 4. 실무 예제: API 클라이언트 싱글톤
+interface RequestConfig {
+    baseURL: string;
+    timeout: number;
+    headers: Record<string, string>;
+}
+
+class ApiClient {
+    private static instance: ApiClient;
+    private config: RequestConfig;
+
+    private constructor(config: Partial<RequestConfig> = {}) {
+        this.config = {
+            baseURL: config.baseURL || 'https://api.example.com',
+            timeout: config.timeout || 10000,
+            headers: {
+                'Content-Type': 'application/json',
+                ...config.headers
+            }
+        };
+        console.log('ApiClient 초기화:', this.config.baseURL);
+    }
+
+    public static getInstance(config?: Partial<RequestConfig>): ApiClient {
+        if (!ApiClient.instance) {
+            ApiClient.instance = new ApiClient(config);
+        }
+        return ApiClient.instance;
+    }
+
+    public setAuthToken(token: string): void {
+        this.config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    public async get<T>(endpoint: string): Promise<T> {
+        const url = `${this.config.baseURL}${endpoint}`;
+        console.log(`GET ${url}`);
+        // 실제 구현에서는 fetch 또는 axios 사용
+        const response = await fetch(url, {
+            headers: this.config.headers
+        });
+        return response.json();
+    }
+
+    public async post<T>(endpoint: string, data: any): Promise<T> {
+        const url = `${this.config.baseURL}${endpoint}`;
+        console.log(`POST ${url}`, data);
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: this.config.headers,
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    }
+}
+
+
+// 5. 의존성 주입을 고려한 싱글톤 (테스트 용이)
+interface ILogger {
+    log(message: string): void;
+}
+
+class ProductionLogger implements ILogger {
+    private static instance: ProductionLogger;
+
+    private constructor() {}
+
+    static getInstance(): ProductionLogger {
+        if (!ProductionLogger.instance) {
+            ProductionLogger.instance = new ProductionLogger();
+        }
+        return ProductionLogger.instance;
+    }
+
+    log(message: string): void {
+        console.log(`[PROD] ${message}`);
+    }
+}
+
+// 테스트용 Mock
+class MockLogger implements ILogger {
+    public logs: string[] = [];
+
+    log(message: string): void {
+        this.logs.push(message);
+    }
+}
+
+// 서비스에서 인터페이스로 주입받음
+class UserService {
+    constructor(private logger: ILogger) {}
+
+    createUser(name: string): void {
+        this.logger.log(`사용자 생성: ${name}`);
+    }
+}
+
+
+// 사용 예제
+const singleton1 = BasicSingleton.getInstance();
+const singleton2 = BasicSingleton.getInstance();
+console.log('같은 인스턴스:', singleton1 === singleton2);  // true
+
+// API 클라이언트 사용
+const api = ApiClient.getInstance({ baseURL: 'https://api.myapp.com' });
+api.setAuthToken('my-jwt-token');
+
+// 테스트에서 Mock 주입
+const mockLogger = new MockLogger();
+const userService = new UserService(mockLogger);
+userService.createUser('홍길동');
+console.log('로그 기록:', mockLogger.logs);  // ['사용자 생성: 홍길동']</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">기술 면접에서 - 싱글톤 구현 방식</div>
+                    <p class="conv-quote">"싱글톤 구현 시 멀티스레드 환경을 고려해야 합니다. 가장 간단한 Eager 방식은 클래스 로딩 시 인스턴스를 만들어 스레드 안전하지만, 사용하지 않아도 메모리를 점유해요. Lazy 방식은 필요할 때 생성하지만 동기화 없이는 두 개 이상 인스턴스가 생길 수 있습니다. 그래서 Double-Checked Locking을 쓰는데, Java에서는 volatile 키워드가 필수입니다. 개인적으로 Java라면 Bill Pugh 방식이나 Enum을 추천드려요. 내부 정적 클래스를 활용하면 지연 로딩과 스레드 안전성을 모두 얻을 수 있고, Enum은 직렬화와 리플렉션 공격까지 방어됩니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">코드 리뷰 중 - 싱글톤 남용 지적</div>
+                    <p class="conv-quote">"이 UserService가 싱글톤일 필요가 있을까요? 지금 구조로는 단위 테스트가 거의 불가능해요. getInstance()로 직접 호출하니 Mock 주입이 안 되고, 전역 상태가 테스트 간에 공유되어 테스트 순서에 따라 결과가 달라질 수 있습니다. 또 DatabaseConnection 싱글톤에 직접 의존하니 숨겨진 의존성이 생겼어요. 차라리 의존성 주입을 도입해서 생성자로 주입받고, 객체 생명주기는 DI 컨테이너가 관리하게 하면 어떨까요? Spring의 @Scope('singleton')처럼요. 그러면 프로덕션에서는 싱글톤으로 동작하면서도 테스트에서는 Mock을 주입할 수 있습니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">아키텍처 설계 회의에서 - 싱글톤 적용 시점</div>
+                    <p class="conv-quote">"로깅이나 설정 관리처럼 진짜 전역적으로 하나만 있어야 하는 경우에만 싱글톤을 쓰고, 그 외에는 DI 컨테이너의 싱글톤 스코프를 활용합시다. 직접 싱글톤을 구현하면 테스트 격리가 어렵고, 순환 의존성 발생 시 디버깅이 힘들어요. 특히 우리 프로젝트처럼 마이크로서비스 환경에서는 인스턴스가 여러 개 떠도 문제가 없어야 하는데, 싱글톤 가정이 깨질 수 있습니다. 데이터베이스 커넥션 풀은 HikariCP처럼 검증된 라이브러리를 쓰고, 캐시는 Redis로 외부화하는 게 확장성 면에서 낫습니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">1</span>
+                    <div>
+                        <strong>테스트 어려움</strong>
+                        <p>싱글톤은 단위 테스트를 매우 어렵게 만듭니다. getInstance()를 직접 호출하면 Mock 객체로 대체할 수 없고, 테스트 간에 상태가 공유되어 테스트 격리가 깨집니다. 테스트 순서에 따라 결과가 달라지는 "Flaky Test"가 발생할 수 있습니다. 의존성 주입과 인터페이스를 활용하여 테스트 시 Mock을 주입할 수 있도록 설계하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">2</span>
+                    <div>
+                        <strong>숨겨진 의존성</strong>
+                        <p>싱글톤을 사용하면 클래스의 의존성이 생성자나 메서드 시그니처에 드러나지 않습니다. 코드 내부에서 getInstance()를 호출하므로 외부에서는 어떤 의존성이 있는지 파악하기 어렵습니다. 이는 코드의 결합도를 높이고, 리팩토링과 유지보수를 어렵게 만듭니다. 의존 관계가 명시적으로 드러나도록 생성자 주입을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">3</span>
+                    <div>
+                        <strong>전역 상태 문제</strong>
+                        <p>싱글톤은 본질적으로 전역 상태를 만듭니다. 애플리케이션 어디서든 접근하고 수정할 수 있어 예측 불가능한 동작과 버그를 유발합니다. 멀티스레드 환경에서는 경쟁 조건이 발생할 수 있고, 마이크로서비스나 클러스터 환경에서는 인스턴스가 여러 개 존재할 수 있어 싱글톤 가정이 깨질 수 있습니다. 상태를 최소화하거나 외부 저장소(Redis 등)로 분리하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Design%20Pattern/" class="related-term-link">Design Pattern</a>
+                <a href="/ko/term/Dependency%20Injection/" class="related-term-link">Dependency Injection</a>
+                <a href="/ko/term/Factory/" class="related-term-link">Factory</a>
+                <a href="/ko/term/%EA%B0%9D%EC%B2%B4%EC%A7%80%ED%96%A5%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D/" class="related-term-link">OOP</a>
+                <a href="/ko/term/Global%20State/" class="related-term-link">Global State</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://refactoring.guru/design-patterns/singleton" target="_blank" rel="noopener" class="learn-link">
+                    <span>Refactoring Guru - Singleton Pattern 상세 설명</span>
+                </a>
+                <a href="https://www.baeldung.com/java-singleton" target="_blank" rel="noopener" class="learn-link">
+                    <span>Baeldung - Java Singleton 구현 방법 비교</span>
+                </a>
+                <a href="https://stackoverflow.com/questions/137975/what-is-so-bad-about-singletons" target="_blank" rel="noopener" class="learn-link">
+                    <span>Stack Overflow - 싱글톤이 왜 안티패턴인가?</span>
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +961,31 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

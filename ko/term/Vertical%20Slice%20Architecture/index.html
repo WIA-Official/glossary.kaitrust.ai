@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vertical Slice Architecture | KAITRUST AI 백과사전</title>
-    <meta name="description" content="기능별로 코드를 수직 분할하는 아키텍처">
-    <meta name="keywords" content="Vertical Slice Architecture, , AI 용어, KAITRUST, AI 백과사전, 아키텍처">
+    <title>Vertical Slice Architecture (수직 슬라이스 아키텍처) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Vertical Slice Architecture는 기능(Feature) 단위로 코드를 수직으로 분할하는 소프트웨어 아키텍처 패턴입니다. UI부터 데이터베이스까지 한 기능에 필요한 모든 계층을 하나의 슬라이스로 구성합니다.">
+    <meta name="keywords" content="Vertical Slice Architecture, 수직 슬라이스 아키텍처, Feature 기반, CQRS, MediatR, Clean Architecture, Onion Architecture, 도메인 주도 설계, 기능 단위 구조, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Vertical%20Slice%20Architecture/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Vertical%20Slice%20Architecture/">
-    <meta property="og:title" content="Vertical Slice Architecture | KAITRUST AI 백과사전">
-    <meta property="og:description" content="기능별로 코드를 수직 분할하는 아키텍처">
+    <meta property="og:title" content="Vertical Slice Architecture (수직 슬라이스 아키텍처) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Vertical Slice Architecture는 기능 단위로 코드를 수직으로 분할하는 소프트웨어 아키텍처 패턴입니다. UI부터 데이터베이스까지 한 기능의 모든 계층을 하나의 슬라이스로 구성합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Vertical Slice Architecture | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="기능별로 코드를 수직 분할하는 아키텍처">
+    <meta name="twitter:title" content="Vertical Slice Architecture (수직 슬라이스 아키텍처) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Vertical Slice Architecture는 기능 단위로 코드를 수직으로 분할하는 소프트웨어 아키텍처 패턴입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Vertical Slice Architecture",
-        "description": "기능별로 코드를 수직 분할하는 아키텍처",
+        "description": "Vertical Slice Architecture는 기능 단위로 코드를 수직으로 분할하는 소프트웨어 아키텍처 패턴입니다. UI부터 데이터베이스까지 한 기능에 필요한 모든 계층을 하나의 슬라이스로 구성합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -49,6 +49,7 @@
     <!-- Common CSS -->
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
@@ -189,7 +190,7 @@
                 <span>아키텍처</span>
             </div>
             <h1 class="term-title">Vertical Slice Architecture</h1>
-            
+            <p class="term-english">수직 슬라이스 아키텍처</p>
             <div class="term-description">
                 <p>기능별로 코드를 수직 분할하는 아키텍처</p>
             </div>
@@ -202,6 +203,457 @@
                 </a>
             </div>
         </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Vertical Slice Architecture(수직 슬라이스 아키텍처)는 Jimmy Bogard가 제안한 소프트웨어 아키텍처 패턴으로, 전통적인 계층형 아키텍처(Layered Architecture)의 대안입니다. 계층형 아키텍처가 Controller, Service, Repository 등 기술적 관심사별로 코드를 수평 분할하는 반면, Vertical Slice는 "상품 목록 조회", "주문 생성", "결제 처리" 등 비즈니스 기능(Feature) 단위로 수직 분할합니다. 각 슬라이스는 해당 기능에 필요한 모든 계층(UI, 비즈니스 로직, 데이터 접근)을 포함합니다.</p>
+
+                <p>이 아키텍처의 핵심 원칙은 "결합도는 낮추고 응집도는 높인다"입니다. 전통적인 계층형에서는 하나의 기능을 수정하려면 Controller, Service, Repository, DTO 등 여러 계층에 걸쳐 파일을 수정해야 합니다. 반면 Vertical Slice에서는 관련된 모든 코드가 하나의 폴더(또는 파일) 안에 있어 변경 범위가 명확하고 다른 기능에 영향을 주지 않습니다. 이는 마이크로서비스에서 서비스 간 독립성을 추구하는 것과 비슷한 맥락입니다.</p>
+
+                <p>Vertical Slice는 CQRS(Command Query Responsibility Segregation) 패턴과 자연스럽게 결합됩니다. 각 슬라이스를 Command(쓰기 작업)와 Query(읽기 작업)로 분리하면 각각을 최적화할 수 있습니다. 예를 들어 Query는 Entity Framework로 직접 DB를 조회하여 DTO를 반환하고, Command는 도메인 모델을 거쳐 비즈니스 규칙을 검증할 수 있습니다. .NET 생태계에서는 MediatR 라이브러리가 Request/Handler 패턴을 통해 이러한 구조를 쉽게 구현하도록 돕습니다.</p>
+
+                <p>Vertical Slice Architecture는 Clean Architecture나 Onion Architecture를 대체하는 것이 아니라 보완하는 관점으로 볼 수 있습니다. 도메인 핵심 로직은 여전히 순수하게 유지하면서, 애플리케이션 계층의 Use Case 구성을 Feature 중심으로 재조직하는 것입니다. 특히 스타트업이나 MVP 개발에서는 과도한 추상화 없이 빠르게 기능을 구현하고, 필요에 따라 점진적으로 공통 로직을 추출하는 방식이 효과적입니다. 단, 슬라이스 간 공통 로직이 많아지면 중복 코드가 발생할 수 있어 적절한 리팩토링이 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <h3>프로젝트 폴더 구조 (Feature 기반)</h3>
+                <pre><code class="language-plaintext"># 전통적인 계층형 구조 (Horizontal Layers)
+src/
+├── Controllers/
+│   ├── ProductsController.cs
+│   ├── OrdersController.cs
+│   └── UsersController.cs
+├── Services/
+│   ├── ProductService.cs
+│   ├── OrderService.cs
+│   └── UserService.cs
+├── Repositories/
+│   ├── ProductRepository.cs
+│   ├── OrderRepository.cs
+│   └── UserRepository.cs
+└── Models/
+    ├── Product.cs
+    ├── Order.cs
+    └── User.cs
+
+# Vertical Slice 구조 (Feature 기반)
+src/
+├── Features/
+│   ├── Products/
+│   │   ├── GetProductList/
+│   │   │   ├── GetProductListQuery.cs
+│   │   │   ├── GetProductListHandler.cs
+│   │   │   └── ProductListDto.cs
+│   │   ├── GetProductDetail/
+│   │   │   ├── GetProductDetailQuery.cs
+│   │   │   └── GetProductDetailHandler.cs
+│   │   └── CreateProduct/
+│   │       ├── CreateProductCommand.cs
+│   │       ├── CreateProductHandler.cs
+│   │       └── CreateProductValidator.cs
+│   ├── Orders/
+│   │   ├── CreateOrder/
+│   │   │   ├── CreateOrderCommand.cs
+│   │   │   ├── CreateOrderHandler.cs
+│   │   │   └── OrderCreatedEvent.cs
+│   │   └── GetOrderHistory/
+│   │       ├── GetOrderHistoryQuery.cs
+│   │       └── GetOrderHistoryHandler.cs
+│   └── Users/
+│       ├── RegisterUser/
+│       └── GetUserProfile/
+├── Domain/
+│   ├── Product.cs
+│   ├── Order.cs
+│   └── User.cs
+└── Infrastructure/
+    ├── AppDbContext.cs
+    └── DependencyInjection.cs</code></pre>
+
+                <h3>C# + MediatR를 이용한 Vertical Slice 구현</h3>
+                <pre><code class="language-csharp">// Features/Products/GetProductList/GetProductListQuery.cs
+using MediatR;
+
+namespace MyApp.Features.Products.GetProductList;
+
+// Query: 요청 정의
+public record GetProductListQuery(
+    string? Category,
+    int Page = 1,
+    int PageSize = 20
+) : IRequest&lt;GetProductListResult&gt;;
+
+// Result: 응답 정의
+public record GetProductListResult(
+    List&lt;ProductListItem&gt; Products,
+    int TotalCount,
+    int TotalPages
+);
+
+public record ProductListItem(
+    int Id,
+    string Name,
+    decimal Price,
+    string Category,
+    int StockCount
+);
+
+// Features/Products/GetProductList/GetProductListHandler.cs
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace MyApp.Features.Products.GetProductList;
+
+public class GetProductListHandler
+    : IRequestHandler&lt;GetProductListQuery, GetProductListResult&gt;
+{
+    private readonly AppDbContext _db;
+
+    public GetProductListHandler(AppDbContext db)
+    {
+        _db = db;
+    }
+
+    public async Task&lt;GetProductListResult&gt; Handle(
+        GetProductListQuery request,
+        CancellationToken cancellationToken)
+    {
+        var query = _db.Products.AsQueryable();
+
+        // 필터링
+        if (!string.IsNullOrEmpty(request.Category))
+        {
+            query = query.Where(p => p.Category == request.Category);
+        }
+
+        // 총 개수
+        var totalCount = await query.CountAsync(cancellationToken);
+        var totalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize);
+
+        // 페이징 및 매핑 (Entity → DTO 직접 변환)
+        var products = await query
+            .OrderBy(p => p.Name)
+            .Skip((request.Page - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .Select(p => new ProductListItem(
+                p.Id,
+                p.Name,
+                p.Price,
+                p.Category,
+                p.Stock
+            ))
+            .ToListAsync(cancellationToken);
+
+        return new GetProductListResult(products, totalCount, totalPages);
+    }
+}
+
+// Features/Products/CreateProduct/CreateProductCommand.cs
+using FluentValidation;
+using MediatR;
+
+namespace MyApp.Features.Products.CreateProduct;
+
+public record CreateProductCommand(
+    string Name,
+    string Description,
+    decimal Price,
+    string Category,
+    int InitialStock
+) : IRequest&lt;CreateProductResult&gt;;
+
+public record CreateProductResult(int ProductId, bool Success, string? Error);
+
+// Validator (FluentValidation)
+public class CreateProductValidator : AbstractValidator&lt;CreateProductCommand&gt;
+{
+    public CreateProductValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("상품명은 필수입니다")
+            .MaximumLength(100);
+
+        RuleFor(x => x.Price)
+            .GreaterThan(0).WithMessage("가격은 0보다 커야 합니다");
+
+        RuleFor(x => x.InitialStock)
+            .GreaterThanOrEqualTo(0);
+    }
+}
+
+// Features/Products/CreateProduct/CreateProductHandler.cs
+using MediatR;
+
+namespace MyApp.Features.Products.CreateProduct;
+
+public class CreateProductHandler
+    : IRequestHandler&lt;CreateProductCommand, CreateProductResult&gt;
+{
+    private readonly AppDbContext _db;
+    private readonly IPublisher _publisher;
+
+    public CreateProductHandler(AppDbContext db, IPublisher publisher)
+    {
+        _db = db;
+        _publisher = publisher;
+    }
+
+    public async Task&lt;CreateProductResult&gt; Handle(
+        CreateProductCommand request,
+        CancellationToken cancellationToken)
+    {
+        // 도메인 엔티티 생성 (비즈니스 규칙 적용)
+        var product = new Product(
+            request.Name,
+            request.Description,
+            request.Price,
+            request.Category
+        );
+
+        product.AddStock(request.InitialStock);
+
+        _db.Products.Add(product);
+        await _db.SaveChangesAsync(cancellationToken);
+
+        // 이벤트 발행 (필요시)
+        await _publisher.Publish(
+            new ProductCreatedEvent(product.Id, product.Name),
+            cancellationToken
+        );
+
+        return new CreateProductResult(product.Id, true, null);
+    }
+}
+
+// API Endpoint (Minimal API 스타일)
+// Program.cs 또는 Features/Products/ProductEndpoints.cs
+app.MapGet("/api/products", async (
+    [AsParameters] GetProductListQuery query,
+    IMediator mediator) =>
+{
+    var result = await mediator.Send(query);
+    return Results.Ok(result);
+});
+
+app.MapPost("/api/products", async (
+    CreateProductCommand command,
+    IMediator mediator) =>
+{
+    var result = await mediator.Send(command);
+    return result.Success
+        ? Results.Created($"/api/products/{result.ProductId}", result)
+        : Results.BadRequest(result.Error);
+});</code></pre>
+
+                <h3>TypeScript (Node.js/NestJS 스타일) Vertical Slice</h3>
+                <pre><code class="language-typescript">// src/features/orders/create-order/index.ts
+// 하나의 파일에 모든 관련 코드를 포함
+
+import { z } from 'zod';
+import { prisma } from '@/infrastructure/database';
+import { EventBus } from '@/infrastructure/events';
+
+// 1. 입력 스키마 (Validation)
+export const CreateOrderSchema = z.object({
+  customerId: z.string().uuid(),
+  items: z.array(z.object({
+    productId: z.string().uuid(),
+    quantity: z.number().int().positive(),
+  })).min(1, '최소 1개 상품이 필요합니다'),
+  shippingAddress: z.object({
+    street: z.string(),
+    city: z.string(),
+    zipCode: z.string(),
+  }),
+});
+
+export type CreateOrderInput = z.infer&lt;typeof CreateOrderSchema&gt;;
+
+// 2. 출력 타입
+export interface CreateOrderResult {
+  orderId: string;
+  totalAmount: number;
+  status: string;
+  createdAt: Date;
+}
+
+// 3. 비즈니스 로직 (Handler)
+export async function createOrder(input: CreateOrderInput): Promise&lt;CreateOrderResult&gt; {
+  // 상품 조회 및 재고 확인
+  const productIds = input.items.map(item => item.productId);
+  const products = await prisma.product.findMany({
+    where: { id: { in: productIds } },
+  });
+
+  // 가격 계산
+  let totalAmount = 0;
+  const orderItems = input.items.map(item => {
+    const product = products.find(p => p.id === item.productId);
+    if (!product) {
+      throw new Error(`상품을 찾을 수 없습니다: ${item.productId}`);
+    }
+    if (product.stock < item.quantity) {
+      throw new Error(`재고 부족: ${product.name}`);
+    }
+
+    const subtotal = product.price * item.quantity;
+    totalAmount += subtotal;
+
+    return {
+      productId: product.id,
+      productName: product.name,
+      unitPrice: product.price,
+      quantity: item.quantity,
+      subtotal,
+    };
+  });
+
+  // 트랜잭션으로 주문 생성 + 재고 차감
+  const order = await prisma.$transaction(async (tx) => {
+    // 주문 생성
+    const createdOrder = await tx.order.create({
+      data: {
+        customerId: input.customerId,
+        totalAmount,
+        status: 'PENDING',
+        shippingAddress: input.shippingAddress,
+        items: {
+          create: orderItems,
+        },
+      },
+    });
+
+    // 재고 차감
+    for (const item of input.items) {
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { stock: { decrement: item.quantity } },
+      });
+    }
+
+    return createdOrder;
+  });
+
+  // 이벤트 발행
+  await EventBus.publish('order.created', {
+    orderId: order.id,
+    customerId: order.customerId,
+    totalAmount: order.totalAmount,
+  });
+
+  return {
+    orderId: order.id,
+    totalAmount: order.totalAmount,
+    status: order.status,
+    createdAt: order.createdAt,
+  };
+}
+
+// 4. HTTP Handler (Express/Fastify 라우트)
+import { Router } from 'express';
+
+const router = Router();
+
+router.post('/orders', async (req, res, next) => {
+  try {
+    const input = CreateOrderSchema.parse(req.body);
+    const result = await createOrder(input);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export { router as createOrderRoute };</code></pre>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무에서 이렇게 말해요 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="usage-tabs">
+                <button class="usage-tab active" data-tab="meeting">회의</button>
+                <button class="usage-tab" data-tab="interview">면접</button>
+                <button class="usage-tab" data-tab="review">코드리뷰</button>
+            </div>
+            <div class="usage-content active" id="meeting">
+                <ul>
+                    <li>"주문 기능 수정할 때 <strong>Vertical Slice</strong>로 해놓으니까 Orders 폴더만 보면 되네요. 다른 도메인 건드릴 걱정 없어요"</li>
+                    <li>"신규 기능 추가할 때 <strong>Feature 폴더</strong> 하나 만들고 Query/Command/Handler 넣으면 끝이에요. 기존 코드 안 건드려도 돼요"</li>
+                    <li>"<strong>MediatR</strong>로 Request/Handler 패턴 쓰니까 각 슬라이스가 완전히 독립적이에요. 테스트도 슬라이스 단위로 가능하고요"</li>
+                    <li>"CQRS랑 <strong>Vertical Slice</strong> 같이 쓰면 읽기는 Dapper로 빠르게, 쓰기는 EF Core로 도메인 모델 태워서 처리할 수 있어요"</li>
+                </ul>
+            </div>
+            <div class="usage-content" id="interview">
+                <ul>
+                    <li>"Vertical Slice Architecture는 기술적 계층(Controller, Service, Repository)이 아닌 <strong>비즈니스 기능(Feature) 단위</strong>로 코드를 구성하는 패턴입니다."</li>
+                    <li>"전통적인 계층형에서 하나의 기능 수정 시 여러 레이어를 수정해야 하는 <strong>산탄총 수술(Shotgun Surgery)</strong> 문제를 해결합니다."</li>
+                    <li>"각 슬라이스는 독립적이므로 팀 간 <strong>코드 충돌</strong>이 줄고, 마이크로서비스로의 전환도 슬라이스 단위로 할 수 있습니다."</li>
+                    <li>"CQRS와 결합하면 Query 슬라이스는 성능 최적화된 직접 쿼리를, Command 슬라이스는 풍부한 도메인 모델을 사용할 수 있어 <strong>유연성</strong>이 높아집니다."</li>
+                </ul>
+            </div>
+            <div class="usage-content" id="review">
+                <ul>
+                    <li>"이 기능은 다른 슬라이스랑 공유할 게 없으니 <strong>슬라이스 내부에 DTO 직접 정의</strong>해도 될 것 같아요. 공통 Models 폴더에 안 넣어도 돼요"</li>
+                    <li>"Handler에서 다른 슬라이스의 Handler 직접 호출하지 말고 <strong>MediatR로 Send</strong>해주세요. 의존성 역전 유지해야 해요"</li>
+                    <li>"비슷한 Validation 로직이 3개 슬라이스에 중복되네요. 이 정도면 <strong>공통 Validator</strong>로 추출할 타이밍인 것 같아요"</li>
+                    <li>"Query Handler에서 Entity 반환하지 말고 <strong>DTO로 Select</strong>해주세요. 읽기 최적화 원칙이에요"</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>코드 중복 위험:</strong> 슬라이스 간 독립성을 강조하다 보면 비슷한 코드가 여러 슬라이스에 중복될 수 있습니다. 3회 이상 반복되는 로직은 공통 모듈로 추출하는 리팩토링을 적극 고려해야 합니다.</li>
+                <li><strong>슬라이스 간 의존성 관리:</strong> 한 슬라이스에서 다른 슬라이스의 Handler를 직접 호출하면 결합도가 높아집니다. 크로스 슬라이스 통신은 이벤트 발행/구독 또는 Mediator 패턴을 통해 간접적으로 처리해야 합니다.</li>
+                <li><strong>진입 장벽과 학습 곡선:</strong> 팀원들이 계층형 아키텍처에 익숙한 경우 Vertical Slice 방식이 낯설 수 있습니다. 명확한 폴더 구조 가이드라인과 예제 코드를 미리 준비하고 팀 교육을 병행해야 합니다.</li>
+            </ul>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/CQRS/" class="related-term-card">
+                    <span class="related-term-name">CQRS</span>
+                    <span class="related-term-desc">읽기와 쓰기를 분리하는 아키텍처 패턴</span>
+                </a>
+                <a href="/ko/term/Clean%20Architecture/" class="related-term-card">
+                    <span class="related-term-name">Clean Architecture</span>
+                    <span class="related-term-desc">의존성 역전을 통해 비즈니스 로직을 보호하는 아키텍처</span>
+                </a>
+                <a href="/ko/term/Domain-Driven%20Design/" class="related-term-card">
+                    <span class="related-term-name">Domain-Driven Design</span>
+                    <span class="related-term-desc">비즈니스 도메인 중심의 소프트웨어 설계 방법론</span>
+                </a>
+                <a href="/ko/term/Microservices/" class="related-term-card">
+                    <span class="related-term-name">Microservices</span>
+                    <span class="related-term-desc">독립적인 서비스 단위로 시스템을 구성하는 아키텍처</span>
+                </a>
+                <a href="/ko/term/Mediator%20Pattern/" class="related-term-card">
+                    <span class="related-term-name">Mediator Pattern</span>
+                    <span class="related-term-desc">객체 간 통신을 중재자를 통해 처리하는 디자인 패턴</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-detail-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://www.jimmybogard.com/vertical-slice-architecture/" target="_blank" rel="noopener">Jimmy Bogard - Vertical Slice Architecture</a> - Vertical Slice Architecture 창시자의 원문 블로그</li>
+                <li><a href="https://github.com/jbogard/MediatR" target="_blank" rel="noopener">MediatR GitHub</a> - .NET에서 Request/Handler 패턴을 구현하는 인기 라이브러리</li>
+                <li><a href="https://www.youtube.com/watch?v=SUiWfhAhgQw" target="_blank" rel="noopener">NDC Conf: Vertical Slice Architecture</a> - Jimmy Bogard의 컨퍼런스 발표 영상</li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +664,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

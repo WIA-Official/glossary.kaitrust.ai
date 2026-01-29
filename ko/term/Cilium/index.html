@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cilium (Cilium) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="eBPF 기반 컨테이너 네트워킹. 고성능, 관찰성.">
-    <meta name="keywords" content="Cilium, Cilium, AI 용어, KAITRUST, AI 백과사전, 네트워크">
+    <title>Cilium (eBPF 기반 CNI) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="eBPF 기반 Kubernetes CNI 플러그인으로 고성능 네트워킹, Service Mesh, Hubble 관찰성, NetworkPolicy를 제공하는 클라우드 네이티브 솔루션.">
+    <meta name="keywords" content="Cilium, eBPF, CNI, Kubernetes 네트워킹, Service Mesh, Hubble, NetworkPolicy, Tetragon, 컨테이너 네트워킹, CNCF, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Cilium/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Cilium/">
-    <meta property="og:title" content="Cilium (Cilium) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="eBPF 기반 컨테이너 네트워킹. 고성능, 관찰성.">
+    <meta property="og:title" content="Cilium (eBPF 기반 CNI) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="eBPF 기반 Kubernetes CNI 플러그인으로 고성능 네트워킹, Service Mesh, Hubble 관찰성, NetworkPolicy를 제공하는 클라우드 네이티브 솔루션.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Cilium (Cilium) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="eBPF 기반 컨테이너 네트워킹. 고성능, 관찰성.">
+    <meta name="twitter:title" content="Cilium (eBPF 기반 CNI) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="eBPF 기반 Kubernetes CNI 플러그인으로 고성능 네트워킹, Service Mesh, Hubble 관찰성, NetworkPolicy를 제공하는 클라우드 네이티브 솔루션.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Cilium",
-        "description": "eBPF 기반 컨테이너 네트워킹. 고성능, 관찰성.",
+        "description": "eBPF 기반 Kubernetes CNI 플러그인으로 고성능 네트워킹, Service Mesh, Hubble 관찰성, NetworkPolicy를 제공하는 클라우드 네이티브 솔루션.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +52,151 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -189,9 +334,9 @@
                 <span>네트워크</span>
             </div>
             <h1 class="term-title">Cilium</h1>
-            <p class="term-english">Cilium</p>
+            <p class="term-english">eBPF-based CNI</p>
             <div class="term-description">
-                <p>eBPF 기반 컨테이너 네트워킹. 고성능, 관찰성.</p>
+                <p>eBPF 기반 Kubernetes CNI 플러그인으로 고성능 네트워킹, Service Mesh, Hubble 관찰성, NetworkPolicy를 제공하는 클라우드 네이티브 솔루션.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +347,245 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Cilium은 Linux 커널의 eBPF(extended Berkeley Packet Filter) 기술을 활용한 Kubernetes CNI(Container Network Interface) 플러그인입니다. 기존 iptables 기반 네트워킹의 성능 한계를 극복하고, 커널 레벨에서 네트워크 패킷을 처리하여 초당 수백만 개의 패킷을 처리할 수 있습니다. Google, AWS, Microsoft 등 주요 클라우드 벤더가 채택하며 CNCF Graduated 프로젝트로 성숙도를 인정받았습니다.</p>
+                <p>Cilium의 핵심 기술인 eBPF는 커널 소스코드 수정 없이 커널 내에서 샌드박스된 프로그램을 실행할 수 있게 합니다. 이를 통해 네트워크 패킷 필터링, 로드 밸런싱, 트래픽 모니터링을 kube-proxy 없이 수행합니다. eBPF 맵을 사용한 커널 내 라우팅으로 Calico, Flannel 대비 40% 이상 낮은 레이턴시를 달성합니다.</p>
+                <p>Hubble은 Cilium의 관찰성(Observability) 컴포넌트로, 실시간 네트워크 트래픽 흐름을 시각화합니다. 서비스 간 통신을 Service Map으로 표시하고, L3/L4/L7 레벨의 네트워크 메트릭을 Prometheus로 수집합니다. DNS 쿼리, HTTP 요청, gRPC 호출까지 애플리케이션 레벨 가시성을 제공하여 마이크로서비스 디버깅을 획기적으로 단순화합니다.</p>
+                <p>Cilium은 Kubernetes NetworkPolicy를 완벽히 지원하며, CiliumNetworkPolicy로 L7(HTTP, gRPC, Kafka) 수준의 세밀한 트래픽 제어가 가능합니다. Tetragon은 Cilium의 보안 관찰성 확장으로, 프로세스 실행, 파일 접근, 네트워크 연결을 실시간 모니터링하여 런타임 보안 위협을 탐지합니다. Service Mesh 기능도 사이드카 없이 제공하여 Istio 대비 리소스 사용량을 50% 이상 절감합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="bash">Helm 설치</button>
+                <button class="code-tab" data-lang="yaml">NetworkPolicy</button>
+                <button class="code-tab" data-lang="hubble">Hubble CLI</button>
+            </div>
+            <div class="code-block active" data-lang="bash">
+                <pre><code class="language-bash"># Cilium CLI 설치 (Linux/macOS)
+CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+curl -L --fail --remote-name-all \
+  https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-amd64.tar.gz
+sudo tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
+
+# Helm으로 Cilium 설치
+helm repo add cilium https://helm.cilium.io/
+helm repo update
+
+# 기본 설치 (kube-proxy 대체)
+helm install cilium cilium/cilium --version 1.15.0 \
+  --namespace kube-system \
+  --set kubeProxyReplacement=true \
+  --set k8sServiceHost=API_SERVER_IP \
+  --set k8sServicePort=6443
+
+# Hubble 활성화하여 설치
+helm upgrade cilium cilium/cilium --version 1.15.0 \
+  --namespace kube-system \
+  --reuse-values \
+  --set hubble.enabled=true \
+  --set hubble.relay.enabled=true \
+  --set hubble.ui.enabled=true
+
+# 설치 상태 확인
+cilium status --wait
+cilium connectivity test  # 네트워크 연결성 테스트
+
+# Cilium 에이전트 상태 확인
+kubectl -n kube-system exec -it ds/cilium -- cilium status
+kubectl -n kube-system exec -it ds/cilium -- cilium endpoint list</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="yaml">
+                <pre><code class="language-yaml"># CiliumNetworkPolicy - L7 HTTP 트래픽 제어
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "api-allow-get-only"
+  namespace: production
+spec:
+  endpointSelector:
+    matchLabels:
+      app: api-server
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: frontend
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+          rules:
+            http:
+              - method: "GET"
+                path: "/api/v1/users.*"
+              - method: "POST"
+                path: "/api/v1/auth/login"
+                headers:
+                  - 'Content-Type: application/json'
+---
+# CiliumNetworkPolicy - DNS 기반 외부 접근 제어
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "allow-external-apis"
+spec:
+  endpointSelector:
+    matchLabels:
+      app: payment-service
+  egress:
+    - toFQDNs:
+        - matchName: "api.stripe.com"
+        - matchPattern: "*.amazonaws.com"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+---
+# CiliumClusterwideNetworkPolicy - 클러스터 전체 정책
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "deny-external-egress-default"
+spec:
+  endpointSelector: {}  # 모든 Pod에 적용
+  egressDeny:
+    - toEntities:
+        - "world"  # 외부 인터넷 차단
+  egress:
+    - toEntities:
+        - "cluster"  # 클러스터 내부만 허용</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="hubble">
+                <pre><code class="language-bash"># Hubble CLI 설치
+export HUBBLE_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/hubble/master/stable.txt)
+curl -L --fail --remote-name-all \
+  https://github.com/cilium/hubble/releases/download/$HUBBLE_VERSION/hubble-linux-amd64.tar.gz
+sudo tar xzvfC hubble-linux-amd64.tar.gz /usr/local/bin
+
+# Hubble Relay 포트 포워딩
+cilium hubble port-forward &
+
+# 실시간 네트워크 플로우 모니터링
+hubble observe --follow
+hubble observe --namespace production --follow  # 특정 네임스페이스
+hubble observe --pod production/api-server      # 특정 Pod
+
+# HTTP 트래픽만 필터링
+hubble observe --protocol http --follow
+hubble observe --http-status 500 --follow       # 500 에러만
+hubble observe --http-method POST --follow      # POST 요청만
+
+# DNS 쿼리 모니터링
+hubble observe --protocol dns --follow
+hubble observe --verdict DROPPED --follow       # 차단된 트래픽
+
+# 네트워크 플로우를 JSON으로 출력 (분석용)
+hubble observe --output json | jq '.flow.source.labels'
+
+# Hubble UI 접속 (localhost:12000)
+cilium hubble ui
+
+# 서비스 맵 조회
+hubble observe --service-map --namespace default</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 인프라 아키텍처 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "새 클러스터는 Cilium으로 CNI 구성하겠습니다. eBPF 기반이라 kube-proxy 없이 서비스 로드밸런싱이 가능하고, Hubble로 서비스 간 트래픽 가시성을 확보할 수 있습니다. 기존 Calico 대비 Pod 간 레이턴시도 30% 정도 개선될 겁니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 팀과의 협업 미팅에서</div>
+                    <blockquote class="conv-quote">
+                        "CiliumNetworkPolicy로 L7 레벨 제어가 가능합니다. 예를 들어 payment-service는 /api/v1/payment 경로의 POST 요청만 허용하고, 나머지는 모두 차단하는 식으로요. 추가로 Tetragon으로 런타임 보안 이벤트도 모니터링하면 컨테이너 내 의심스러운 프로세스 실행을 실시간 탐지할 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 상황에서</div>
+                    <blockquote class="conv-quote">
+                        "Hubble에서 checkout-service → inventory-service 간 트래픽이 DROPPED 상태입니다. CiliumNetworkPolicy에서 해당 라벨 셀렉터가 누락된 것 같은데, cilium endpoint list로 엔드포인트 상태 확인하고 policy trace 돌려보겠습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>커널 버전 미확인</strong>
+                        <p>Cilium은 Linux 커널 4.19 이상이 필요하며, 최신 기능(Bandwidth Manager, Host Routing)은 5.10 이상을 요구합니다. 설치 전 `uname -r`로 커널 버전을 확인하고, 클라우드 환경에서는 최신 커널 이미지를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>기존 CNI와 충돌</strong>
+                        <p>Cilium 설치 시 기존 CNI(Flannel, Calico)를 완전히 제거해야 합니다. 특히 /etc/cni/net.d/ 디렉토리의 기존 설정 파일이 남아있으면 네트워크 오류가 발생합니다. 마이그레이션 시 노드를 순차적으로 드레인하며 교체하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>NetworkPolicy 미적용 착각</strong>
+                        <p>Cilium의 기본 모드는 'allow all'입니다. 명시적으로 CiliumNetworkPolicy를 적용하지 않으면 모든 트래픽이 허용됩니다. 프로덕션에서는 default-deny 정책을 먼저 적용한 후 필요한 트래픽만 허용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 Cilium 운영 방법</strong>
+                        <p>`cilium connectivity test`로 정기적인 연결성 테스트를 수행하고, Hubble 메트릭을 Prometheus/Grafana로 수집하세요. eBPF 맵 크기(--bpf-map-max)는 클러스터 규모에 맞게 조정하고, cilium-agent 메모리 사용량을 모니터링하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Kubernetes/" class="related-term-link">Kubernetes</a>
+                <a href="/ko/term/eBPF/" class="related-term-link">eBPF</a>
+                <a href="/ko/term/Service%20Mesh/" class="related-term-link">Service Mesh</a>
+                <a href="/ko/term/CNI/" class="related-term-link">CNI</a>
+                <a href="/ko/term/Istio/" class="related-term-link">Istio</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.cilium.io/en/stable/" target="_blank" class="learn-link">
+                    📄 Cilium 공식 문서
+                </a>
+                <a href="https://cilium.io/labs/" target="_blank" class="learn-link">
+                    🎓 Cilium Labs - 인터랙티브 튜토리얼
+                </a>
+                <a href="https://isovalent.com/blog/" target="_blank" class="learn-link">
+                    📖 Isovalent 블로그 (Cilium 창시자)
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +593,35 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

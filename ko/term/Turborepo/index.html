@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,169 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Turborepo는 2021년 Jared Palmer가 개발하고 이후 Vercel에 인수된 JavaScript/TypeScript 모노레포(monorepo) 빌드 시스템입니다. 대규모 코드베이스에서 빌드 속도를 획기적으로 개선하는 것이 핵심 목표입니다.</p>
+                <p>핵심 기능은 스마트 캐싱과 병렬 실행입니다. 코드 변경이 없는 패키지는 이전 빌드 결과를 캐시에서 가져오고, 의존성이 없는 작업은 동시에 실행합니다. 로컬 캐시와 원격 캐시(Vercel Remote Cache, 자체 서버)를 모두 지원합니다.</p>
+                <p>turbo.json에서 파이프라인을 정의합니다. 각 task의 의존성(dependsOn), 출력물(outputs), 캐시 설정(cache)을 선언하면 Turborepo가 최적의 실행 순서와 병렬화를 자동으로 계산합니다. 예를 들어 build는 ^build(의존 패키지 빌드)에 의존하고, test는 build에 의존하도록 설정합니다.</p>
+                <p>실무에서는 프론트엔드(Next.js, React), 백엔드(Node.js API), 공통 라이브러리를 하나의 저장소에서 관리할 때 사용합니다. CI에서 원격 캐시를 활용하면 팀원 간 빌드 결과가 공유되어, 전체 빌드 시간이 80% 이상 단축되는 경우가 많습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="json">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>// turbo.json - 파이프라인 설정
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [".env"],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "build/**"],
+      "env": ["NODE_ENV"]
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"],
+      "inputs": ["src/**", "test/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "type-check": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    }
+  }
+}
+
+// package.json (루트)
+{
+  "name": "my-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "dev": "turbo run dev",
+    "build:filter": "turbo run build --filter=@my/web...",
+    "test:changed": "turbo run test --filter=[origin/main]"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.0"
+  }
+}
+
+// 프로젝트 구조
+// apps/
+//   web/          # Next.js 앱
+//   api/          # Node.js API
+// packages/
+//   ui/           # 공유 UI 컴포넌트
+//   utils/        # 유틸리티 함수
+//   config/       # 공유 설정 (ESLint, TypeScript)
+
+// packages/ui/package.json
+{
+  "name": "@my/ui",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "lint": "eslint src/",
+    "test": "vitest run"
+  }
+}
+
+// apps/web/package.json
+{
+  "name": "@my/web",
+  "dependencies": {
+    "@my/ui": "workspace:*",
+    "@my/utils": "workspace:*"
+  }
+}
+
+// 명령어 예시
+// turbo run build                    # 전체 빌드
+// turbo run build --filter=@my/web   # web 앱만 빌드
+// turbo run build --filter=...@my/ui # ui에 의존하는 모든 패키지 빌드
+// turbo run test --concurrency=4     # 동시 실행 수 제한
+// TURBO_TEAM=my-team TURBO_TOKEN=xxx turbo run build  # 원격 캐시</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">시니어:</strong> "CI 빌드가 15분 걸려서 PR 머지가 너무 느려요. Turborepo 원격 캐시 붙이면 바뀐 패키지만 빌드되니까 빨라질 거예요."</p>
+                <p><strong class="role-junior">주니어:</strong> "Vercel Remote Cache 무료인가요? 아니면 직접 구축해야 하나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "Vercel에 연결하면 무료로 쓸 수 있어요. 아니면 ducktors/turborepo-remote-cache로 자체 서버 구축도 가능해요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "모노레포 경험이 있으시다면 어떤 도구를 사용하셨나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "pnpm workspace와 Turborepo를 함께 사용했습니다. Turborepo의 스마트 캐싱으로 CI 시간이 15분에서 3분으로 줄었고, --filter 옵션으로 변경된 패키지만 빌드/테스트해서 효율성을 높였습니다. 원격 캐시로 팀원 간 빌드 결과를 공유하니 로컬 개발도 빨라졌습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "turbo.json에 outputs 지정 안 하면 캐시가 제대로 안 돼요. 빌드 결과물 경로 추가해주세요."</p>
+                <p><strong class="role-junior">개발자:</strong> "dist 폴더랑 .next 폴더 추가하면 되나요? 환경 변수도 캐시 키에 포함해야 할 것 같은데요."</p>
+                <p><strong class="role-reviewer">리뷰어:</strong> "맞아요, env 배열에 NODE_ENV 넣으면 환경별로 캐시가 분리돼요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>outputs 미지정 시 캐시가 제대로 동작하지 않음 - 빌드 결과물 경로 정확히 명시</li>
+                <li>환경 변수에 따라 빌드 결과가 달라지면 env에 명시해야 캐시 오염 방지</li>
+                <li>workspace 프로토콜(workspace:*) 사용 시 패키지 매니저에 따라 설정 다름 - pnpm, yarn, npm 확인</li>
+                <li class="info">--dry-run 플래그로 실제 실행 없이 어떤 task가 캐시 히트/미스인지 미리 확인 가능</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Nx/" class="related-link">Nx</a>
+                <a href="/ko/term/Build/" class="related-link">Build</a>
+                <a href="/ko/term/CI%2FCD/" class="related-link">CI/CD</a>
+                <a href="/ko/term/Bazel/" class="related-link">Bazel</a>
+                <a href="/ko/term/GitHub/" class="related-link">GitHub</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://turbo.build/repo/docs" target="_blank" rel="noopener">Turborepo 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://turbo.build/repo/docs/getting-started/create-new" target="_blank" rel="noopener">Turborepo 시작하기</a></li>
+                <li><span class="type-book"></span><a href="https://vercel.com/blog/vercel-acquires-turborepo" target="_blank" rel="noopener">Vercel Turborepo 인수 발표</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +376,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

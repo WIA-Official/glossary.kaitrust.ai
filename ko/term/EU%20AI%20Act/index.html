@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,228 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>EU AI Act(Regulation 2024/1689)는 2024년 8월 1일 발효된 세계 최초의 포괄적 AI 규제 법률입니다. AI 시스템을 위험 수준에 따라 분류하고, 각 수준에 맞는 의무를 부과하는 '위험 기반 접근법(Risk-Based Approach)'을 채택했습니다.</p>
+                <p>위험 등급은 4단계로 구분됩니다: 1) 금지된 AI(Prohibited) - 사회적 신용점수, 취약계층 착취 등, 2) 고위험 AI(High-Risk) - 채용, 신용평가, 의료기기 등 부속서 III 분야, 3) 제한적 위험(Limited Risk) - 챗봇, 딥페이크 등 투명성 의무, 4) 최소 위험(Minimal Risk) - 대부분의 AI, 자율 규제.</p>
+                <p>고위험 AI 제공자(Provider)는 위험관리시스템(Article 9), 데이터 거버넌스(Article 10), 기술문서(Article 11), 로깅(Article 12), 투명성(Article 13), 인간감독(Article 14), 정확성/견고성/사이버보안(Article 15), 품질관리시스템(Article 17) 요구사항을 준수해야 합니다.</p>
+                <p>적용 일정은 단계적으로 시행됩니다: 2025년 2월 - 금지 AI 조항 적용, 2025년 8월 - GPAI 및 거버넌스 조항, 2026년 8월 - 고위험 AI 전면 적용, 2027년 8월 - 특정 제품 관련 AI 시스템.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># EU AI Act 위험 분류 및 컴플라이언스 체커
+from dataclasses import dataclass, field
+from typing import List, Dict, Optional
+from enum import Enum
+from datetime import datetime
+
+class RiskLevel(Enum):
+    """EU AI Act 위험 등급"""
+    PROHIBITED = "prohibited"        # 금지 - Article 5
+    HIGH_RISK = "high_risk"          # 고위험 - Article 6, Annex III
+    LIMITED_RISK = "limited_risk"    # 제한적 위험 - Article 50
+    MINIMAL_RISK = "minimal_risk"    # 최소 위험
+
+class ActorRole(Enum):
+    """EU AI Act 역할 구분"""
+    PROVIDER = "provider"            # 제공자 - Article 3(3)
+    DEPLOYER = "deployer"            # 배포자 - Article 3(4)
+    IMPORTER = "importer"            # 수입자 - Article 3(6)
+    DISTRIBUTOR = "distributor"      # 유통자 - Article 3(7)
+    AUTHORIZED_REP = "authorized_representative"  # 위임대리인
+
+@dataclass
+class EUAIActClassifier:
+    """EU AI Act 위험 분류기"""
+
+    # 금지 AI 유형 (Article 5)
+    PROHIBITED_PRACTICES = [
+        "subliminal_manipulation",      # 잠재의식 조작
+        "exploitation_of_vulnerabilities",  # 취약성 악용
+        "social_scoring_by_public",     # 공공기관 사회점수
+        "predictive_policing_individual",  # 개인 대상 예측 치안
+        "emotion_recognition_workplace",   # 직장/학교 감정인식
+        "untargeted_facial_scraping",   # 무차별 얼굴 수집
+        "biometric_categorization_sensitive",  # 민감정보 생체분류
+        "real_time_rbi_public_spaces",  # 실시간 원격 생체인식(예외 제외)
+    ]
+
+    # 고위험 분야 (Annex III)
+    HIGH_RISK_AREAS = {
+        "biometrics": "생체인식 및 분류",
+        "critical_infrastructure": "핵심 인프라 관리",
+        "education": "교육 및 직업훈련",
+        "employment": "고용, 근로자 관리, 자영업 접근",
+        "essential_services": "필수 서비스(신용, 보험 등) 접근",
+        "law_enforcement": "법 집행",
+        "migration": "이민, 망명, 국경 통제",
+        "justice": "사법 및 민주적 절차",
+    }
+
+    def classify_risk(self, ai_system: Dict) -> Dict:
+        """AI 시스템 위험 분류"""
+        # 금지 여부 확인
+        if self._check_prohibited(ai_system):
+            return {
+                "risk_level": RiskLevel.PROHIBITED,
+                "legal_basis": "Article 5",
+                "consequence": "시스템 출시/사용 금지",
+                "penalty": "최대 3,500만 유로 또는 전 세계 매출 7%"
+            }
+
+        # 고위험 여부 확인
+        if self._check_high_risk(ai_system):
+            return {
+                "risk_level": RiskLevel.HIGH_RISK,
+                "legal_basis": "Article 6, Annex III",
+                "obligations": self._get_high_risk_obligations(),
+                "penalty": "최대 1,500만 유로 또는 전 세계 매출 3%"
+            }
+
+        # 제한적 위험 확인 (투명성 의무)
+        if self._check_limited_risk(ai_system):
+            return {
+                "risk_level": RiskLevel.LIMITED_RISK,
+                "legal_basis": "Article 50",
+                "obligations": ["AI 사용 고지", "딥페이크 라벨링", "감정인식 고지"],
+                "penalty": "최대 750만 유로 또는 전 세계 매출 1.5%"
+            }
+
+        return {
+            "risk_level": RiskLevel.MINIMAL_RISK,
+            "obligations": ["자발적 행동강령 권장"],
+            "penalty": "없음 (자율 규제)"
+        }
+
+    def _check_prohibited(self, system: Dict) -> bool:
+        """금지 AI 해당 여부"""
+        return system.get("practice_type") in self.PROHIBITED_PRACTICES
+
+    def _check_high_risk(self, system: Dict) -> bool:
+        """고위험 AI 해당 여부"""
+        # Annex III 분야 확인
+        if system.get("application_area") in self.HIGH_RISK_AREAS:
+            return True
+        # Annex I 제품 안전 규정 해당 여부
+        if system.get("safety_component") and system.get("product_regulation"):
+            return True
+        return False
+
+    def _check_limited_risk(self, system: Dict) -> bool:
+        """제한적 위험 해당 여부"""
+        limited_types = ["chatbot", "deepfake", "emotion_recognition", "biometric_categorization"]
+        return system.get("system_type") in limited_types
+
+    def _get_high_risk_obligations(self) -> List[Dict]:
+        """고위험 AI 의무사항"""
+        return [
+            {"article": 9, "title": "위험관리시스템", "description": "전체 수명주기 위험 식별/완화"},
+            {"article": 10, "title": "데이터 거버넌스", "description": "학습/검증/테스트 데이터 품질"},
+            {"article": 11, "title": "기술 문서", "description": "부속서 IV 준수 문서화"},
+            {"article": 12, "title": "기록 보관", "description": "자동 로깅, 추적성 확보"},
+            {"article": 13, "title": "투명성", "description": "사용자 대상 정보 제공"},
+            {"article": 14, "title": "인간 감독", "description": "인간 개입/중지 메커니즘"},
+            {"article": 15, "title": "정확성/견고성/보안", "description": "성능 수준 유지"},
+            {"article": 17, "title": "품질관리시스템", "description": "QMS 구축 및 운영"},
+        ]
+
+@dataclass
+class ComplianceTimeline:
+    """EU AI Act 시행 일정"""
+
+    MILESTONES = {
+        "2024-08-01": "EU AI Act 발효",
+        "2025-02-02": "금지 AI 조항 적용 (Article 5)",
+        "2025-08-02": "GPAI 모델 조항 적용, AI 사무국/위원회 설립",
+        "2026-08-02": "고위험 AI 전면 적용 (Chapter III Section 2)",
+        "2027-08-02": "Annex I 제품 관련 고위험 AI 적용",
+    }
+
+    def get_applicable_date(self, risk_level: RiskLevel) -> str:
+        if risk_level == RiskLevel.PROHIBITED:
+            return "2025-02-02"
+        elif risk_level == RiskLevel.HIGH_RISK:
+            return "2026-08-02"
+        return "2024-08-01"
+
+# 사용 예시
+classifier = EUAIActClassifier()
+
+# AI 채용 시스템 분류
+hr_ai = {
+    "name": "AI 채용 스크리닝 시스템",
+    "application_area": "employment",
+    "system_type": "decision_support"
+}
+result = classifier.classify_risk(hr_ai)
+print(f"위험 등급: {result['risk_level'].value}")
+print(f"법적 근거: {result.get('legal_basis')}")
+print(f"의무사항 수: {len(result.get('obligations', []))}")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">법무팀:</strong> "우리 AI 채용 시스템은 EU AI Act 부속서 III의 고용 분야에 해당해서 고위험으로 분류됩니다. 2026년 8월 전까지 Article 9-17 요구사항 전부 충족해야 해요."</p>
+                <p><strong class="role-junior">개발팀:</strong> "기술 문서는 부속서 IV 양식대로 준비 중입니다. 위험관리시스템하고 QMS가 관건인데, 외부 컨설팅 받는 게 좋을 것 같아요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "EU AI Act의 위험 기반 접근법에 대해 설명해 주세요."</p>
+                <p><strong class="role-junior">지원자:</strong> "AI 시스템을 위험도에 따라 금지, 고위험, 제한적 위험, 최소 위험 4단계로 분류합니다. 고위험 AI는 채용, 신용평가, 의료기기 등 부속서 III에 나열된 분야에 해당하며, 적합성 평가와 CE 마킹이 필요합니다. 위반 시 최대 3,500만 유로 또는 매출 7%의 과징금이 부과됩니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">컴플라이언스:</strong> "이 AI 모델 로깅이 Article 12 요구사항 충족하나요? 추적성 확보가 핵심이에요."</p>
+                <p><strong class="role-junior">개발자:</strong> "입력-출력 쌍, 타임스탬프, 모델 버전 전부 기록하고 있습니다. 보관 기간은 10년으로 설정했고, 위험관리시스템이랑 연동해서 이상 탐지도 합니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>금지 AI 위반 시 최대 3,500만 유로 또는 전 세계 연간 매출 7% 과징금</li>
+                <li>고위험 AI 의무 미준수 시 최대 1,500만 유로 또는 매출 3% 과징금</li>
+                <li>역외 적용 - EU 시장에 AI 서비스 제공하면 본사 위치 무관하게 적용</li>
+                <li class="info">시행 일정 단계별 확인 필수 - 금지 AI는 2025년 2월부터 이미 적용 중</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/AI%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4/" class="related-link">AI 거버넌스</a>
+                <a href="/ko/term/CE%20%EB%A7%88%ED%82%B9/" class="related-link">CE 마킹</a>
+                <a href="/ko/term/AI%20%EC%82%AC%EB%AC%B4%EA%B5%AD/" class="related-link">AI 사무국</a>
+                <a href="/ko/term/AI%20%EC%9C%84%EC%9B%90%ED%9A%8C/" class="related-link">AI 위원회</a>
+                <a href="/ko/term/%EA%B8%B0%EC%88%A0%EC%A0%81%20%EB%AC%B8%EC%84%9C%ED%99%94/" class="related-link">기술적 문서화</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">EU AI Act 원문 (Regulation 2024/1689)</a></li>
+                <li><span class="type-tutorial"></span><a href="https://artificialintelligenceact.eu/" target="_blank" rel="noopener">AI Act Explorer - 조항별 가이드</a></li>
+                <li><span class="type-book"></span><a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">EU 집행위원회 AI 규제 프레임워크</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +435,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

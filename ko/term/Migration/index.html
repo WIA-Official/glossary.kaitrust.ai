@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Migration (마이그레이션) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="DB 스키마 변경을 버전 관리. 업/다운 마이그레이션.">
-    <meta name="keywords" content="Migration, 마이그레이션, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="Migration은 데이터베이스 스키마 변경을 버전 관리하는 기술입니다. 업/다운 마이그레이션으로 스키마 변경을 추적하고, 롤백을 지원합니다.">
+    <meta name="keywords" content="Migration, 마이그레이션, Database Migration, Schema Migration, Flyway, Alembic, Prisma, Knex, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Migration/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Migration/">
     <meta property="og:title" content="Migration (마이그레이션) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="DB 스키마 변경을 버전 관리. 업/다운 마이그레이션.">
+    <meta property="og:description" content="Migration은 데이터베이스 스키마 변경을 버전 관리하는 기술로 안전한 배포를 지원합니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Migration (마이그레이션) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="DB 스키마 변경을 버전 관리. 업/다운 마이그레이션.">
+    <meta name="twitter:description" content="Migration은 데이터베이스 스키마 변경을 버전 관리하는 기술로 안전한 배포를 지원합니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Migration",
-        "description": "DB 스키마 변경을 버전 관리. 업/다운 마이그레이션.",
+        "alternateName": "마이그레이션",
+        "description": "Migration은 데이터베이스 스키마 변경을 버전 관리하는 기술로 안전한 배포를 지원합니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,6 +53,130 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
         .term-detail-container {
             max-width: 900px;
             margin: 0 auto;
@@ -67,11 +192,7 @@
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
@@ -105,22 +226,9 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
         .term-action-btn {
             display: inline-flex;
             align-items: center;
@@ -131,31 +239,10 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
         @media (max-width: 768px) {
             .term-detail-container { padding: 100px 1rem 2rem; }
             .term-detail-header { padding: 2rem 1.5rem; }
@@ -191,7 +278,7 @@
             <h1 class="term-title">Migration</h1>
             <p class="term-english">마이그레이션</p>
             <div class="term-description">
-                <p>DB 스키마 변경을 버전 관리. 업/다운 마이그레이션.</p>
+                <p>데이터베이스 스키마 변경을 버전 관리하는 기술입니다. 업(Up) 마이그레이션으로 스키마를 변경하고, 다운(Down) 마이그레이션으로 롤백합니다. 팀 협업과 안전한 배포의 핵심입니다.</p>
             </div>
             <div class="term-actions">
                 <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
@@ -202,6 +289,545 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>스키마 마이그레이션</strong>은 데이터베이스 구조(테이블, 컬럼, 인덱스 등)의 변경 이력을 코드로 관리하는 방법입니다. Git이 소스코드 버전을 관리하듯, 마이그레이션 도구는 DB 스키마 버전을 관리합니다.</p>
+                <p><strong>Up 마이그레이션</strong>은 스키마를 새 버전으로 변경하는 작업입니다. 테이블 생성, 컬럼 추가, 인덱스 생성 등이 포함됩니다. <strong>Down 마이그레이션</strong>은 변경을 되돌리는 롤백 작업으로, 문제 발생 시 이전 상태로 복구할 수 있습니다.</p>
+                <p><strong>마이그레이션 파일 명명 규칙</strong>: 일반적으로 타임스탬프 + 설명 형식을 사용합니다. 예: <code>20240115_143022_create_users_table.sql</code>. 타임스탬프로 실행 순서를 보장하고, 설명으로 변경 내용을 파악합니다.</p>
+                <p><strong>마이그레이션 테이블</strong>: 대부분의 도구는 적용된 마이그레이션을 추적하는 테이블(예: schema_migrations, flyway_schema_history)을 자동 생성합니다. 이를 통해 어떤 마이그레이션이 적용되었는지 확인하고, 중복 실행을 방지합니다.</p>
+                <p><strong>주요 마이그레이션 도구</strong>: Flyway(Java), Alembic(Python), Prisma Migrate(Node.js), Knex.js, Django Migrations, Rails Active Record Migrations 등이 있습니다. 각 프레임워크와 언어에 맞는 도구를 선택하세요.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (Alembic)</button>
+                <button class="code-tab" data-lang="node">Node.js (Prisma)</button>
+                <button class="code-tab" data-lang="sql">SQL (Flyway/Raw)</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># Alembic 마이그레이션 예제 - Python + SQLAlchemy
+
+# ==============================================
+# 1. alembic.ini 설정 및 초기화
+# ==============================================
+# pip install alembic sqlalchemy
+# alembic init migrations
+
+# migrations/env.py - 데이터베이스 연결 설정
+from alembic import context
+from sqlalchemy import engine_from_config, pool
+from myapp.models import Base  # SQLAlchemy 모델
+
+config = context.config
+target_metadata = Base.metadata
+
+def run_migrations_online():
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section),
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
+    with connectable.connect() as connection:
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata
+        )
+        with context.begin_transaction():
+            context.run_migrations()
+
+
+# ==============================================
+# 2. 마이그레이션 파일 생성
+# ==============================================
+# alembic revision -m "create users table"
+
+# migrations/versions/20240115_create_users_table.py
+"""create users table
+
+Revision ID: a1b2c3d4e5f6
+Revises:
+Create Date: 2024-01-15 14:30:22.123456
+"""
+from alembic import op
+import sqlalchemy as sa
+
+# revision identifiers
+revision = 'a1b2c3d4e5f6'
+down_revision = None  # 첫 번째 마이그레이션
+branch_labels = None
+depends_on = None
+
+
+def upgrade():
+    """Up 마이그레이션 - 스키마 변경 적용"""
+    op.create_table(
+        'users',
+        sa.Column('id', sa.Integer(), primary_key=True),
+        sa.Column('email', sa.String(255), nullable=False, unique=True),
+        sa.Column('username', sa.String(100), nullable=False),
+        sa.Column('password_hash', sa.String(255), nullable=False),
+        sa.Column('is_active', sa.Boolean(), default=True),
+        sa.Column('created_at', sa.DateTime(), server_default=sa.func.now()),
+        sa.Column('updated_at', sa.DateTime(), onupdate=sa.func.now()),
+    )
+
+    # 인덱스 추가
+    op.create_index('ix_users_email', 'users', ['email'])
+    op.create_index('ix_users_username', 'users', ['username'])
+
+
+def downgrade():
+    """Down 마이그레이션 - 롤백"""
+    op.drop_index('ix_users_username', table_name='users')
+    op.drop_index('ix_users_email', table_name='users')
+    op.drop_table('users')
+
+
+# ==============================================
+# 3. 두 번째 마이그레이션 - 컬럼 추가
+# ==============================================
+# alembic revision -m "add profile columns to users"
+
+"""add profile columns to users
+
+Revision ID: b2c3d4e5f6g7
+Revises: a1b2c3d4e5f6
+"""
+revision = 'b2c3d4e5f6g7'
+down_revision = 'a1b2c3d4e5f6'
+
+
+def upgrade():
+    # 컬럼 추가 (nullable=True로 시작)
+    op.add_column('users', sa.Column('avatar_url', sa.String(500), nullable=True))
+    op.add_column('users', sa.Column('bio', sa.Text(), nullable=True))
+
+    # 새 테이블 추가
+    op.create_table(
+        'user_profiles',
+        sa.Column('id', sa.Integer(), primary_key=True),
+        sa.Column('user_id', sa.Integer(), sa.ForeignKey('users.id'), unique=True),
+        sa.Column('phone', sa.String(20)),
+        sa.Column('address', sa.Text()),
+    )
+
+
+def downgrade():
+    op.drop_table('user_profiles')
+    op.drop_column('users', 'bio')
+    op.drop_column('users', 'avatar_url')
+
+
+# ==============================================
+# 4. 마이그레이션 실행 명령어
+# ==============================================
+# 최신 버전으로 업그레이드
+# alembic upgrade head
+
+# 특정 버전으로 업그레이드
+# alembic upgrade a1b2c3d4e5f6
+
+# 한 단계 롤백
+# alembic downgrade -1
+
+# 특정 버전으로 롤백
+# alembic downgrade a1b2c3d4e5f6
+
+# 현재 버전 확인
+# alembic current
+
+# 마이그레이션 히스토리 확인
+# alembic history
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                <pre><code class="language-javascript">// Prisma 마이그레이션 예제 - Node.js / TypeScript
+
+// ==============================================
+// 1. Prisma 스키마 정의 (prisma/schema.prisma)
+// ==============================================
+
+/*
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  username    String
+  passwordHash String   @map("password_hash")
+  isActive    Boolean   @default(true) @map("is_active")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // 관계
+  posts       Post[]
+  profile     Profile?
+
+  @@map("users")
+  @@index([email])
+  @@index([username])
+}
+
+model Profile {
+  id        Int     @id @default(autoincrement())
+  userId    Int     @unique @map("user_id")
+  phone     String?
+  address   String?
+  avatarUrl String? @map("avatar_url")
+  bio       String?
+
+  user      User    @relation(fields: [userId], references: [id])
+
+  @@map("user_profiles")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  authorId  Int      @map("author_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  author    User     @relation(fields: [authorId], references: [id])
+
+  @@map("posts")
+  @@index([authorId])
+}
+*/
+
+
+// ==============================================
+// 2. 마이그레이션 명령어
+// ==============================================
+
+// 마이그레이션 생성 및 적용
+// npx prisma migrate dev --name init
+
+// 프로덕션에 마이그레이션 적용
+// npx prisma migrate deploy
+
+// 마이그레이션 상태 확인
+// npx prisma migrate status
+
+// 스키마 리셋 (개발 환경만!)
+// npx prisma migrate reset
+
+
+// ==============================================
+// 3. 생성된 마이그레이션 파일 예시
+// ==============================================
+
+// prisma/migrations/20240115143022_init/migration.sql
+/*
+-- CreateTable
+CREATE TABLE "users" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "password_hash" TEXT NOT NULL,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "user_profiles" (
+    "id" SERIAL NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "phone" TEXT,
+    "address" TEXT,
+    "avatar_url" TEXT,
+    "bio" TEXT,
+
+    CONSTRAINT "user_profiles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+CREATE INDEX "users_email_idx" ON "users"("email");
+CREATE INDEX "users_username_idx" ON "users"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_profiles_user_id_key" ON "user_profiles"("user_id");
+
+-- AddForeignKey
+ALTER TABLE "user_profiles" ADD CONSTRAINT "user_profiles_user_id_fkey"
+    FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+*/
+
+
+// ==============================================
+// 4. 프로그래밍 방식 마이그레이션 (Knex.js)
+// ==============================================
+
+// knexfile.js
+module.exports = {
+    development: {
+        client: 'postgresql',
+        connection: process.env.DATABASE_URL,
+        migrations: {
+            directory: './migrations',
+            tableName: 'knex_migrations'
+        }
+    }
+};
+
+// migrations/20240115143022_create_users.js
+exports.up = function(knex) {
+    return knex.schema
+        .createTable('users', (table) => {
+            table.increments('id').primary();
+            table.string('email', 255).notNullable().unique();
+            table.string('username', 100).notNullable();
+            table.string('password_hash', 255).notNullable();
+            table.boolean('is_active').defaultTo(true);
+            table.timestamps(true, true);  // created_at, updated_at
+
+            table.index('email');
+            table.index('username');
+        })
+        .createTable('user_profiles', (table) => {
+            table.increments('id').primary();
+            table.integer('user_id').unsigned().unique()
+                .references('id').inTable('users');
+            table.string('phone', 20);
+            table.text('address');
+        });
+};
+
+exports.down = function(knex) {
+    return knex.schema
+        .dropTableIfExists('user_profiles')
+        .dropTableIfExists('users');
+};
+
+// 실행: npx knex migrate:latest
+// 롤백: npx knex migrate:rollback
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="sql">
+                <pre><code class="language-sql">-- ============================================
+-- Flyway 마이그레이션 예제 (Raw SQL)
+-- ============================================
+
+-- 파일명: V1__create_users_table.sql
+-- V{버전}__{설명}.sql 형식 (언더스코어 2개)
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX ix_users_email ON users(email);
+CREATE INDEX ix_users_username ON users(username);
+
+-- 트리거: updated_at 자동 갱신
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_users_updated_at
+    BEFORE UPDATE ON users
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================
+-- 파일명: V2__add_user_profiles.sql
+-- ============================================
+
+CREATE TABLE user_profiles (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    phone VARCHAR(20),
+    address TEXT,
+    avatar_url VARCHAR(500),
+    bio TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- users 테이블에 컬럼 추가
+ALTER TABLE users ADD COLUMN last_login_at TIMESTAMP;
+ALTER TABLE users ADD COLUMN login_count INTEGER DEFAULT 0;
+
+
+-- ============================================
+-- 파일명: V3__create_posts_table.sql
+-- ============================================
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    slug VARCHAR(255) UNIQUE,
+    published BOOLEAN DEFAULT FALSE,
+    author_id INTEGER NOT NULL REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    published_at TIMESTAMP
+);
+
+CREATE INDEX ix_posts_author ON posts(author_id);
+CREATE INDEX ix_posts_published ON posts(published) WHERE published = TRUE;
+CREATE INDEX ix_posts_slug ON posts(slug);
+
+
+-- ============================================
+-- 무중단 마이그레이션 패턴 (대용량 테이블)
+-- ============================================
+
+-- V4__add_status_column_safe.sql
+-- 1단계: nullable 컬럼 추가 (락 최소화)
+ALTER TABLE posts ADD COLUMN status VARCHAR(20);
+
+-- V5__backfill_status_column.sql
+-- 2단계: 기존 데이터 백필 (배치로 처리)
+UPDATE posts SET status = 'published' WHERE published = TRUE AND status IS NULL;
+UPDATE posts SET status = 'draft' WHERE published = FALSE AND status IS NULL;
+
+-- V6__add_status_constraints.sql
+-- 3단계: NOT NULL 및 제약 조건 추가
+ALTER TABLE posts ALTER COLUMN status SET DEFAULT 'draft';
+ALTER TABLE posts ALTER COLUMN status SET NOT NULL;
+ALTER TABLE posts ADD CONSTRAINT chk_posts_status
+    CHECK (status IN ('draft', 'published', 'archived'));
+
+
+-- ============================================
+-- Flyway 명령어
+-- ============================================
+
+-- 마이그레이션 적용
+-- flyway -url=jdbc:postgresql://localhost/mydb -user=postgres migrate
+
+-- 현재 상태 확인
+-- flyway info
+
+-- 마이그레이션 검증
+-- flyway validate
+
+-- 히스토리 정리 (주의!)
+-- flyway repair
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 배포 전 코드 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "이번 PR에 마이그레이션 파일 포함되어 있는데, down 마이그레이션도 테스트해봤나요? 프로덕션 배포 후 문제 생기면 롤백해야 하니까 down이 제대로 동작하는지 스테이징에서 검증하고 갑시다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 대용량 테이블 스키마 변경 시</div>
+                    <blockquote class="conv-quote">
+                        "users 테이블이 1억 건이라 ALTER TABLE로 NOT NULL 추가하면 락 걸려요. 3단계로 나눠서 가죠. 먼저 nullable로 컬럼 추가하고, 백그라운드로 백필하고, 마지막에 제약조건 추가하는 식으로요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 신규 팀원 온보딩 시</div>
+                    <blockquote class="conv-quote">
+                        "로컬 DB 세팅은 간단해요. .env에 DATABASE_URL 설정하고 'prisma migrate dev' 한 번이면 끝이에요. 마이그레이션 히스토리가 Git에 있어서 팀 전체가 동일한 스키마를 유지할 수 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>적용된 마이그레이션 수정 금지</strong>
+                        <p>이미 다른 환경에 적용된 마이그레이션을 수정하면 체크섬 불일치로 오류가 발생합니다. 수정이 필요하면 새 마이그레이션을 만드세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Down 마이그레이션 누락</strong>
+                        <p>롤백 불가능한 마이그레이션은 장애 대응을 어렵게 합니다. 항상 down 마이그레이션을 작성하고 테스트하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>대용량 테이블 직접 ALTER</strong>
+                        <p>수억 건 테이블에 직접 ALTER TABLE 실행 시 장시간 락 발생합니다. pt-online-schema-change나 gh-ost 같은 무중단 도구를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>마이그레이션 베스트 프랙티스</strong>
+                        <p>마이그레이션을 작게 분리, Git과 함께 버전 관리, CI/CD에서 자동 실행, 스테이징 먼저 적용 후 프로덕션, 데이터 마이그레이션은 별도 스크립트로.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/ORM/" class="related-term-link">ORM</a>
+                <a href="/ko/term/Schema/" class="related-term-link">Schema</a>
+                <a href="/ko/term/DDL/" class="related-term-link">DDL</a>
+                <a href="/ko/term/Version-Control/" class="related-term-link">Version Control</a>
+                <a href="/ko/term/CI-CD/" class="related-term-link">CI/CD</a>
+                <a href="/ko/term/Rollback/" class="related-term-link">Rollback</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://flywaydb.org/documentation/" target="_blank" class="learn-link">
+                    📄 Flyway - Database Migrations Made Easy
+                </a>
+                <a href="https://www.prisma.io/docs/concepts/components/prisma-migrate" target="_blank" class="learn-link">
+                    🎓 Prisma Migrate - Schema Migrations
+                </a>
+                <a href="https://alembic.sqlalchemy.org/en/latest/" target="_blank" class="learn-link">
+                    📖 Alembic - SQLAlchemy Migration Tool
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -209,7 +835,29 @@
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

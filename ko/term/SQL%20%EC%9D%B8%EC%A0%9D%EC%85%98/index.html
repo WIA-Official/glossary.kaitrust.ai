@@ -202,6 +202,171 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">SQL 인젝션은 사용자 입력을 통해 악의적인 SQL 코드를 삽입하는 웹 보안 공격입니다. OWASP Top 10에서 오랫동안 상위를 차지하는 치명적인 취약점으로, 데이터 유출, 변조, 삭제, 심지어 서버 장악까지 가능합니다. 2023년에도 여전히 많은 피해 사례가 보고되고 있습니다.</p>
+                <p style="margin-bottom: 1rem;">공격 원리는 간단합니다. 쿼리 문자열에 사용자 입력을 직접 연결하면, 공격자가 입력에 SQL 구문을 포함시켜 원래 쿼리의 의미를 바꿀 수 있습니다. 예: WHERE id = '1' OR '1'='1' 는 항상 참이 되어 모든 데이터가 노출됩니다. ' DROP TABLE users; -- 같은 입력으로 테이블을 삭제할 수도 있습니다.</p>
+                <p style="margin-bottom: 1rem;">SQL 인젝션 유형: 1) In-band SQLi - 결과가 직접 화면에 표시 (Error-based, UNION-based), 2) Blind SQLi - 결과가 보이지 않고 참/거짓 반응으로 추론 (Boolean-based, Time-based), 3) Out-of-band SQLi - DNS, HTTP 요청 등 외부 채널로 데이터 유출.</p>
+                <p>핵심 방어는 Prepared Statement(Parameterized Query)입니다. SQL 구조와 데이터를 분리하여 데이터베이스 드라이버가 값을 안전하게 이스케이프합니다. 추가로 입력 검증, 최소 권한 DB 계정 사용, WAF(Web Application Firewall), 에러 메시지 숨김 등 다층 방어가 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>// SQL 인젝션 취약 코드 vs 안전한 코드
+
+// ❌ 취약한 코드 - 문자열 연결
+async function getUser_VULNERABLE(username: string) {
+  // 공격 예: username = "admin' OR '1'='1' --"
+  // 결과 쿼리: SELECT * FROM users WHERE username = 'admin' OR '1'='1' --'
+  const query = `SELECT * FROM users WHERE username = '${username}'`;
+  return await db.query(query);  // 모든 사용자 정보 유출!
+}
+
+// ❌ 더 위험한 예 - DROP TABLE
+// username = "'; DROP TABLE users; --"
+// 결과: SELECT * FROM users WHERE username = ''; DROP TABLE users; --'
+
+// ✅ 안전한 코드 - Prepared Statement (Node.js + PostgreSQL)
+async function getUser_SAFE(username: string) {
+  const query = 'SELECT * FROM users WHERE username = $1';
+  // $1은 플레이스홀더, username은 별도 전달되어 이스케이프됨
+  return await db.query(query, [username]);
+}
+
+// ✅ TypeORM - Query Builder
+async function getUser_TypeORM(username: string) {
+  return await userRepository
+    .createQueryBuilder('user')
+    .where('user.username = :username', { username })  // 파라미터 바인딩
+    .getOne();
+}
+
+// ✅ Prisma - 기본적으로 안전
+const user = await prisma.user.findUnique({
+  where: { username }  // Prisma가 자동으로 이스케이프
+});
+
+// ⚠️ 주의: Raw Query 사용 시
+// Prisma raw query - 안전한 방법
+const result = await prisma.$queryRaw`
+  SELECT * FROM users WHERE username = ${username}
+`;  // Tagged template literal은 자동 이스케이프
+
+// ❌ Prisma raw query - 위험한 방법
+const dangerous = await prisma.$queryRawUnsafe(
+  `SELECT * FROM users WHERE username = '${username}'`
+);  // 절대 사용 금지!
+
+// ✅ 동적 컬럼명/테이블명이 필요한 경우 - 화이트리스트
+const ALLOWED_COLUMNS = ['id', 'name', 'email', 'created_at'];
+
+function buildQuery(sortColumn: string, sortOrder: string) {
+  // 입력값 검증 - 화이트리스트에 있는지 확인
+  if (!ALLOWED_COLUMNS.includes(sortColumn)) {
+    throw new Error('Invalid column name');
+  }
+  if (!['ASC', 'DESC'].includes(sortOrder.toUpperCase())) {
+    throw new Error('Invalid sort order');
+  }
+
+  // 검증된 값만 쿼리에 포함
+  return `SELECT * FROM users ORDER BY ${sortColumn} ${sortOrder}`;
+}
+
+// ✅ Python + psycopg2
+import psycopg2
+
+# 안전한 방법
+cursor.execute(
+    "SELECT * FROM users WHERE username = %s AND password = %s",
+    (username, password)  # 튜플로 파라미터 전달
+)
+
+# ✅ Java + JDBC
+String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+PreparedStatement stmt = conn.prepareStatement(query);
+stmt.setString(1, username);  // 인덱스 기반 바인딩
+stmt.setString(2, password);
+ResultSet rs = stmt.executeQuery();</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">보안 감사에서:</p>
+                    <p>"검색 기능에서 SQL 인젝션 취약점이 발견되었습니다. 사용자 입력을 직접 쿼리에 연결하고 있어요. ORM 사용하더라도 raw query 쓰는 부분은 반드시 파라미터 바인딩으로 수정해야 합니다."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"SQL 인젝션 방어 방법은?" - "가장 중요한 건 Prepared Statement로 쿼리와 데이터를 분리하는 거예요. 추가로 입력 검증, 최소 권한 원칙, 에러 메시지 숨기기, WAF 적용 등 다층 방어를 해야 합니다."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">코드 리뷰에서:</p>
+                    <p>"이 부분에 template literal로 쿼리 만들고 있는데, 파라미터 바인딩으로 바꿔주세요. ORM 쓰면 대부분 안전하지만, ORDER BY나 테이블명 동적으로 넣는 건 화이트리스트 검증이 필요해요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">입력 이스케이프만으로는 불충분합니다. 문자셋 인코딩 문제로 우회될 수 있습니다. 반드시 Prepared Statement를 사용하세요. 이스케이프는 보조 수단입니다.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">ORM을 사용해도 raw query, 동적 컬럼명/테이블명 처리 시 취약할 수 있습니다. ORM의 안전한 API만 사용하고, raw query는 꼭 필요한 경우에만 파라미터 바인딩과 함께 사용하세요.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">프로덕션에서 상세 SQL 에러 메시지를 노출하지 마세요. 공격자에게 DB 구조 정보를 제공합니다. 에러 로깅은 서버에서만 하고, 사용자에게는 일반적인 메시지만 보여주세요.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/XSS/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">XSS</a>
+                <a href="/ko/term/CSRF/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">CSRF</a>
+                <a href="/ko/term/ORM/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">ORM</a>
+                <a href="/ko/term/WAF/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">WAF</a>
+                <a href="/ko/term/Input%20Validation/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Input Validation</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> OWASP - SQL Injection
+                </a>
+                <a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> OWASP SQL Injection Prevention Cheat Sheet
+                </a>
+                <a href="https://portswigger.net/web-security/sql-injection" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> PortSwigger - SQL Injection 실습
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
     </main>
 
     <!-- Footer -->

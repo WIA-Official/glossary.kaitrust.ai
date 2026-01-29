@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,130 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>Linkerd는 Buoyant에서 개발한 초경량 서비스 메시로, "서비스 메시"라는 용어를 처음 만든 프로젝트입니다. Rust로 작성된 데이터 플레인(linkerd2-proxy)은 메모리 사용량이 10MB 미만으로, Istio의 Envoy(약 50MB) 대비 훨씬 가볍습니다. CNCF 졸업 프로젝트입니다.</p>
+                <p>Linkerd의 설계 철학은 "단순함"입니다. 설치는 CLI 두 줄(`linkerd install | kubectl apply`, `linkerd inject`)로 끝나고, 기본 설정만으로 mTLS, 메트릭, 재시도, 타임아웃이 자동 적용됩니다. Istio처럼 복잡한 CRD를 배우지 않아도 바로 효과를 볼 수 있습니다.</p>
+                <p>핵심 기능으로 automatic mTLS(서비스 간 암호화 통신), golden metrics(성공률, 레이턴시, 요청량) 자동 수집, 재시도 및 타임아웃 자동 적용이 있습니다. Linkerd Dashboard와 Viz 확장으로 서비스 토폴로지와 실시간 메트릭을 시각화할 수 있습니다.</p>
+                <p>Istio vs Linkerd 선택에서, 복잡한 트래픽 라우팅(A/B 테스트, 트래픽 미러링)이 필요하면 Istio가 적합하고, 빠른 도입과 낮은 운영 부담을 원하면 Linkerd를 추천합니다. 실제로 많은 팀이 Linkerd로 서비스 메시를 시작하고, 요구사항이 복잡해지면 Istio로 마이그레이션합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">코드 예제</h2>
+            <div class="code-block" data-lang="bash">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># Linkerd CLI 설치 (macOS)
+brew install linkerd
+
+# 클러스터 사전 검사
+linkerd check --pre
+
+# Linkerd Control Plane 설치
+linkerd install --crds | kubectl apply -f -
+linkerd install | kubectl apply -f -
+
+# 설치 확인
+linkerd check
+
+# Viz 확장 (대시보드, 메트릭) 설치
+linkerd viz install | kubectl apply -f -
+
+# 기존 Deployment에 사이드카 주입
+kubectl get deploy -n my-app -o yaml | linkerd inject - | kubectl apply -f -
+
+# 또는 namespace에 annotation으로 자동 주입 설정
+kubectl annotate namespace my-app linkerd.io/inject=enabled
+
+# 대시보드 접속
+linkerd viz dashboard &
+
+# 서비스 메트릭 확인
+linkerd viz stat deploy -n my-app
+
+# 실시간 요청 확인
+linkerd viz tap deploy/api-server -n my-app
+
+# ServiceProfile로 재시도 정책 설정
+cat <<EOF | kubectl apply -f -
+apiVersion: linkerd.io/v1alpha2
+kind: ServiceProfile
+metadata:
+  name: api-server.my-app.svc.cluster.local
+  namespace: my-app
+spec:
+  routes:
+    - name: GET /api/users
+      condition:
+        method: GET
+        pathRegex: /api/users
+      isRetryable: true
+  retryBudget:
+    retryRatio: 0.2
+    minRetriesPerSecond: 10
+    ttl: 10s
+EOF</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">면접</button>
+                <button class="conv-tab" data-type="review" role="tab">코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">인프라 리드:</strong> "서비스 메시 도입하자는 얘기 나왔는데, Istio는 팀 규모 대비 학습 곡선이 가파를 것 같아요."</p>
+                <p><strong class="role-junior">DevOps:</strong> "Linkerd는 어떨까요? 설치도 쉽고 기본 기능만으로 mTLS랑 메트릭 바로 쓸 수 있어요."</p>
+                <p><strong class="role-senior">인프라 리드:</strong> "좋아요. 일단 개발 환경에 적용해보고, 운영 복잡도 확인 후 확대하죠."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Linkerd가 Istio보다 가볍다고 하셨는데, 구체적으로 어떤 부분에서 차이가 나나요?"</p>
+                <p><strong class="role-junior">지원자:</strong> "가장 큰 차이는 프록시입니다. Linkerd는 Rust로 작성된 전용 프록시를 사용해서 Pod당 10MB 정도인 반면, Istio의 Envoy는 50MB 이상입니다. 기능은 Istio가 더 풍부하지만, 저희처럼 20개 미만 서비스에서는 Linkerd가 적합했습니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-senior">리뷰어:</strong> "linkerd inject로 주입하면 Pod 재시작되니까 롤링 배포 주의하세요."</p>
+                <p><strong class="role-junior">개발자:</strong> "네, namespace annotation으로 설정해서 다음 배포 때 자동 주입되게 할게요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>Linkerd는 gRPC, HTTP/1.1, HTTP/2만 지원합니다. TCP 프록시나 고급 트래픽 라우팅이 필요하면 Istio를 검토하세요</li>
+                <li>linkerd-proxy가 주입되면 initContainer가 네트워크를 설정하므로 Pod 시작 시간이 약간 늘어납니다</li>
+                <li class="info">프로덕션 도입 전 `linkerd check` 명령으로 클러스터 호환성을 반드시 검증하세요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/Istio/" class="related-link">Istio</a>
+                <a href="/ko/term/Kubernetes/" class="related-link">Kubernetes</a>
+                <a href="/ko/term/mTLS/" class="related-link">mTLS</a>
+                <a href="/ko/term/Observability/" class="related-link">Observability</a>
+                <a href="/ko/term/Envoy/" class="related-link">Envoy</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-official"></span><a href="https://linkerd.io/2/overview/" target="_blank">Linkerd 공식 문서</a></li>
+                <li><span class="type-tutorial"></span><a href="https://linkerd.io/2/getting-started/" target="_blank">Linkerd Getting Started</a></li>
+                <li><span class="type-community"></span><a href="https://github.com/linkerd/linkerd2" target="_blank">Linkerd GitHub 레포지토리</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +337,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

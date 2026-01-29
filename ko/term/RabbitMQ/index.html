@@ -202,7 +202,384 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;"><strong>RabbitMQ</strong>는 Erlang/OTP로 작성된 오픈소스 메시지 브로커입니다. AMQP(Advanced Message Queuing Protocol)를 기본 프로토콜로 사용하며, MQTT, STOMP, HTTP 등 다양한 프로토콜도 지원합니다. 2007년 Rabbit Technologies에서 처음 개발되었고, 현재는 VMware(Broadcom)에서 관리합니다.</p>
+
+                <p style="margin-bottom: 1rem;"><strong>핵심 구성요소:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>Producer:</strong> 메시지를 생성하여 Exchange에 전송</li>
+                    <li><strong>Exchange:</strong> 라우팅 규칙에 따라 Queue로 메시지 분배 (Direct, Topic, Fanout, Headers)</li>
+                    <li><strong>Queue:</strong> 메시지가 실제로 저장되는 버퍼</li>
+                    <li><strong>Binding:</strong> Exchange와 Queue를 연결하는 규칙</li>
+                    <li><strong>Consumer:</strong> Queue에서 메시지를 소비</li>
+                </ul>
+
+                <p style="margin-bottom: 1rem;"><strong>Exchange 타입:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>Direct:</strong> 정확한 routing key 매칭 (point-to-point)</li>
+                    <li><strong>Topic:</strong> 패턴 매칭 (*.logs, error.#)</li>
+                    <li><strong>Fanout:</strong> 연결된 모든 큐에 브로드캐스트</li>
+                    <li><strong>Headers:</strong> 메시지 헤더 기반 라우팅</li>
+                </ul>
+
+                <p style="margin-bottom: 1rem;"><strong>주요 특징:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>신뢰성:</strong> 메시지 영속성, Publisher Confirms, Consumer Acknowledgments</li>
+                    <li><strong>클러스터링:</strong> 여러 노드를 클러스터로 구성하여 고가용성 확보</li>
+                    <li><strong>미러링:</strong> Queue Mirroring으로 데이터 복제 (Classic) 또는 Quorum Queues (권장)</li>
+                    <li><strong>Management UI:</strong> 웹 기반 관리 콘솔 제공 (포트 15672)</li>
+                    <li><strong>플러그인 시스템:</strong> Federation, Shovel, Delayed Message 등 확장 가능</li>
+                </ul>
+
+                <p><strong>Kafka vs RabbitMQ:</strong> RabbitMQ는 복잡한 라우팅, 요청-응답 패턴, 작업 큐에 적합합니다. Kafka는 대용량 스트리밍, 로그 수집, 이벤트 소싱에 더 적합합니다. RabbitMQ는 메시지를 "푸시"하고, Kafka는 Consumer가 "풀"하는 방식입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">Python - pika 라이브러리</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code>import pika
+import json
+
+# 연결 설정
+credentials = pika.PlainCredentials('guest', 'guest')
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters(
+        host='localhost',
+        port=5672,
+        credentials=credentials,
+        heartbeat=600,
+        blocked_connection_timeout=300
+    )
+)
+channel = connection.channel()
+
+# Exchange 및 Queue 선언
+channel.exchange_declare(
+    exchange='orders',
+    exchange_type='topic',
+    durable=True  # 브로커 재시작 시에도 유지
+)
+
+channel.queue_declare(
+    queue='order_processing',
+    durable=True,
+    arguments={
+        'x-message-ttl': 86400000,  # 24시간 후 만료
+        'x-dead-letter-exchange': 'orders_dlx',  # 실패 메시지 처리
+        'x-max-priority': 10  # 우선순위 지원
+    }
+)
+
+# Binding 설정 (Topic Exchange)
+channel.queue_bind(
+    exchange='orders',
+    queue='order_processing',
+    routing_key='order.*.created'  # order.pizza.created, order.book.created 등
+)
+
+# Producer: 메시지 발행
+def publish_order(order_data, order_type):
+    channel.basic_publish(
+        exchange='orders',
+        routing_key=f'order.{order_type}.created',
+        body=json.dumps(order_data),
+        properties=pika.BasicProperties(
+            delivery_mode=2,  # 메시지 영속성
+            content_type='application/json',
+            priority=order_data.get('priority', 0),
+            headers={'source': 'web-app'}
+        )
+    )
+    print(f"Published order: {order_data['id']}")
+
+# Consumer: 메시지 소비
+def on_message(ch, method, properties, body):
+    try:
+        order = json.loads(body)
+        print(f"Processing order: {order['id']}")
+
+        # 비즈니스 로직 처리
+        process_order(order)
+
+        # 성공 시 ACK
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+    except Exception as e:
+        print(f"Error: {e}")
+        # 실패 시 NACK (재시도 또는 DLQ로 이동)
+        ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
+
+# QoS 설정: 동시에 처리할 메시지 수 제한
+channel.basic_qos(prefetch_count=10)
+
+# 소비 시작
+channel.basic_consume(
+    queue='order_processing',
+    on_message_callback=on_message,
+    auto_ack=False  # 수동 ACK 모드
+)
+
+print("Waiting for messages...")
+channel.start_consuming()</code></pre>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">Node.js - amqplib</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code>const amqp = require('amqplib');
+
+class RabbitMQService {
+  constructor() {
+    this.connection = null;
+    this.channel = null;
+  }
+
+  async connect() {
+    this.connection = await amqp.connect({
+      protocol: 'amqp',
+      hostname: 'localhost',
+      port: 5672,
+      username: 'guest',
+      password: 'guest',
+      vhost: '/',
+    });
+
+    // 연결 에러 핸들링
+    this.connection.on('error', (err) => {
+      console.error('Connection error:', err);
+      setTimeout(() => this.connect(), 5000);
+    });
+
+    this.channel = await this.connection.createChannel();
+
+    // Prefetch 설정
+    await this.channel.prefetch(10);
+
+    return this;
+  }
+
+  async setupQueues() {
+    // Dead Letter Exchange 설정
+    await this.channel.assertExchange('dlx', 'direct', { durable: true });
+    await this.channel.assertQueue('dead_letters', { durable: true });
+    await this.channel.bindQueue('dead_letters', 'dlx', 'dead');
+
+    // 메인 큐 설정
+    await this.channel.assertExchange('tasks', 'direct', { durable: true });
+    await this.channel.assertQueue('task_queue', {
+      durable: true,
+      arguments: {
+        'x-dead-letter-exchange': 'dlx',
+        'x-dead-letter-routing-key': 'dead',
+      },
+    });
+    await this.channel.bindQueue('task_queue', 'tasks', 'process');
+  }
+
+  async publish(exchange, routingKey, message, options = {}) {
+    const content = Buffer.from(JSON.stringify(message));
+
+    // Publisher Confirms 활성화
+    await this.channel.confirmSelect();
+
+    return new Promise((resolve, reject) => {
+      this.channel.publish(exchange, routingKey, content, {
+        persistent: true,
+        contentType: 'application/json',
+        timestamp: Date.now(),
+        ...options,
+      }, (err) => {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+  }
+
+  async consume(queue, handler) {
+    await this.channel.consume(queue, async (msg) => {
+      if (!msg) return;
+
+      try {
+        const content = JSON.parse(msg.content.toString());
+        await handler(content, msg.properties);
+        this.channel.ack(msg);
+      } catch (error) {
+        console.error('Processing error:', error);
+        // 3번까지 재시도 후 DLQ로
+        const retryCount = (msg.properties.headers?.['x-retry-count'] || 0) + 1;
+        if (retryCount < 3) {
+          await this.publish(msg.fields.exchange, msg.fields.routingKey,
+            JSON.parse(msg.content.toString()), {
+              headers: { 'x-retry-count': retryCount }
+            });
+        }
+        this.channel.nack(msg, false, false);
+      }
+    });
+  }
+}
+
+// 사용 예시
+(async () => {
+  const rabbit = await new RabbitMQService().connect();
+  await rabbit.setupQueues();
+
+  // Producer
+  await rabbit.publish('tasks', 'process', { taskId: 123, type: 'email' });
+
+  // Consumer
+  await rabbit.consume('task_queue', async (task) => {
+    console.log('Processing:', task);
+  });
+})();</code></pre>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">Docker Compose - RabbitMQ 클러스터</h3>
+                <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                    <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                    <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"><code># docker-compose.yml
+version: '3.8'
+
+services:
+  rabbitmq1:
+    image: rabbitmq:3.12-management
+    hostname: rabbitmq1
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=secret_cookie
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=secure_password
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq1_data:/var/lib/rabbitmq
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  rabbitmq2:
+    image: rabbitmq:3.12-management
+    hostname: rabbitmq2
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=secret_cookie
+    depends_on:
+      - rabbitmq1
+    volumes:
+      - rabbitmq2_data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq1_data:
+  rabbitmq2_data:
+
+# rabbitmq.conf
+# cluster_formation.peer_discovery_backend = rabbit_peer_discovery_classic_config
+# cluster_formation.classic_config.nodes.1 = rabbit@rabbitmq1
+# cluster_formation.classic_config.nodes.2 = rabbit@rabbitmq2
+
+# Quorum Queue (권장)
+# quorum_queue.default_replication_factor = 3</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">기술 미팅</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">시니어:</strong> "메시지 브로커로 Kafka 대신 RabbitMQ 선택한 이유가 뭐야?"</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">개발자:</strong> "저희 서비스는 복잡한 라우팅이 필요해요. 주문 유형별로 다른 큐로 분배하고, 일부는 브로드캐스트해야 하는데 RabbitMQ의 Exchange 타입들이 딱 맞아요. 또 메시지당 처리 보장이 중요한데, RabbitMQ ACK/NACK가 직관적이고요."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">시니어:</strong> "트래픽 피크 시 처리량은 괜찮아?"</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">개발자:</strong> "초당 2-3만 메시지 정도면 3노드 클러스터로 충분해요. Kafka처럼 초당 수십만은 안 되지만, 저희 워크로드엔 과분하죠. 오히려 메시지 라우팅 유연성이랑 관리 편의성이 더 중요했어요."</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">기술 면접</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">면접관:</strong> "RabbitMQ에서 메시지 손실을 방지하려면 어떻게 해야 하나요?"</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">지원자:</strong> "세 가지 레벨에서 보장해야 합니다. 첫째, Producer 측에서 Publisher Confirms로 메시지가 브로커에 도착했는지 확인합니다. 둘째, 메시지 자체를 persistent로 설정하고 Queue도 durable로 선언해서 브로커 재시작에도 유지되게 합니다. 셋째, Consumer는 auto_ack=False로 설정하고 처리 완료 후 수동 ACK를 보냅니다."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">면접관:</strong> "Consumer가 처리 중 죽으면요?"</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">지원자:</strong> "ACK 전에 연결이 끊기면 메시지는 unacked 상태가 되고 다른 Consumer에게 requeue됩니다. 무한 재시도를 막으려면 DLX(Dead Letter Exchange)를 설정해서 일정 횟수 실패 시 별도 큐로 이동시키고 나중에 분석하거나 수동 처리합니다."</p>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #a855f7;">장애 대응</h3>
+                <div style="background: #1e293b; border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">운영팀:</strong> "RabbitMQ 메모리 알람 떴는데 Consumer가 계속 죽어요!"</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #a855f7;">개발자:</strong> "Management UI에서 큐별 메시지 수량 확인해볼게요. unacked 메시지가 쌓이고 있으면 Consumer가 처리를 못 따라가는 거예요. prefetch_count가 너무 높거나 Consumer 로직이 느릴 수 있어요."</p>
+                    <p style="color: #94a3b8; margin-bottom: 0.75rem;"><strong style="color: #f1f5f9;">운영팀:</strong> "ready 메시지가 50만 개나 쌓여있어요."</p>
+                    <p style="color: #94a3b8;"><strong style="color: #a855f7;">개발자:</strong> "일단 Consumer 인스턴스를 스케일아웃 하고, 급한 메시지부터 처리하게 priority 설정 확인해요. 근본적으론 Producer 속도를 늦추거나 lazy queue로 전환해서 메모리 대신 디스크에 저장하게 설정해야 해요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #e2e8f0; line-height: 1.8; margin-left: 1.5rem;">
+                <li style="margin-bottom: 0.75rem;"><strong>메모리 관리:</strong> RabbitMQ는 기본적으로 메모리에 메시지를 저장합니다. 대량 메시지 적체 시 memory alarm이 발생하면 Publisher가 블로킹됩니다. Lazy Queue나 Quorum Queue 사용을 고려하세요.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>연결 관리:</strong> 연결당 Erlang 프로세스가 생성되므로 연결 수를 최소화하고 Channel을 재사용하세요. Connection pooling이 중요합니다.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>Prefetch 설정:</strong> prefetch_count가 너무 높으면 한 Consumer에 메시지가 편중되고, 너무 낮으면 처리량이 떨어집니다. 워크로드에 맞게 튜닝 필요합니다.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>Classic vs Quorum:</strong> 새 프로젝트에서는 Quorum Queue를 권장합니다. Classic Mirrored Queue는 deprecated 예정이며 네트워크 파티션 시 데이터 불일치 위험이 있습니다.</li>
+                <li style="margin-bottom: 0.75rem;"><strong>ACK 누락:</strong> auto_ack=True 또는 수동 ACK 누락 시 메시지 손실이 발생합니다. 항상 처리 완료 후 명시적으로 ACK하세요.</li>
+                <li><strong>클러스터 네트워크:</strong> 클러스터 노드 간 낮은 지연시간(같은 데이터센터)이 필수입니다. WAN 환경에서는 Federation이나 Shovel 플러그인을 사용하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                <a href="/ko/term/Message%20Queue/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Message Queue</a>
+                <a href="/ko/term/AMQP/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">AMQP</a>
+                <a href="/ko/term/Apache%20Kafka/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Apache Kafka</a>
+                <a href="/ko/term/Pub-Sub%20Pattern/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Pub-Sub Pattern</a>
+                <a href="/ko/term/Event-Driven%20Architecture/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Event-Driven Architecture</a>
+                <a href="/ko/term/Dead%20Letter%20Queue/" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">Dead Letter Queue</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <ul style="color: #e2e8f0; line-height: 2; margin-left: 1.5rem;">
+                <li><a href="https://www.rabbitmq.com/documentation.html" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">RabbitMQ 공식 문서</a> - 튜토리얼부터 운영 가이드까지</li>
+                <li><a href="https://www.rabbitmq.com/tutorials" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">RabbitMQ Tutorials</a> - 6가지 메시징 패턴 실습</li>
+                <li><a href="https://www.cloudamqp.com/blog/part1-rabbitmq-for-beginners-what-is-rabbitmq.html" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">CloudAMQP RabbitMQ Guide</a> - 실무 가이드 시리즈</li>
+                <li><a href="https://www.rabbitmq.com/quorum-queues.html" target="_blank" rel="noopener" style="color: #a855f7; text-decoration: none;">Quorum Queues</a> - 고가용성 큐 설정</li>
+            </ul>
+        </section>
     </main>
+
+    <script>
+    function copyCode(button) {
+        const code = button.parentElement.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            button.textContent = '복사됨!';
+            setTimeout(() => button.textContent = '복사', 2000);
+        });
+    }
+    </script>
 
     <!-- Footer -->
     <div id="kaitrust-footer"></div>

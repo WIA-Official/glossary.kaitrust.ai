@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -202,6 +203,179 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section" aria-labelledby="detail-title">
+            <h2 class="section-title" id="detail-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p>Observability(관측 가능성)는 시스템이 생성하는 외부 출력을 통해 내부 상태를 파악할 수 있는 능력입니다. 제어 이론에서 유래한 개념으로, 분산 시스템과 마이크로서비스 환경에서 시스템 동작을 이해하고 문제를 진단하는 핵심 역량이 되었습니다.</p>
+                <p>Observability의 세 가지 핵심 기둥(Three Pillars)은 Metrics(메트릭), Logs(로그), Traces(트레이스)입니다. 메트릭은 시간에 따른 수치 데이터(CPU 사용률, 요청 수), 로그는 이벤트별 텍스트 기록, 트레이스는 분산 시스템에서 요청의 전파 경로를 추적합니다. 세 가지를 통합 분석해야 전체 그림을 볼 수 있습니다.</p>
+                <p>Monitoring과 Observability는 다릅니다. Monitoring은 "알려진 문제"를 감지합니다(CPU 90% 초과 시 알림). Observability는 "알려지지 않은 문제"를 탐구할 수 있게 합니다(왜 특정 사용자만 느린가? 어떤 조합의 요청이 오류를 일으키나?). 복잡한 시스템에서는 예상치 못한 문제가 발생하므로 Observability가 필수입니다.</p>
+                <p>현대 Observability 스택은 OpenTelemetry로 데이터를 수집하고, Grafana/Jaeger/Kibana 같은 도구로 시각화합니다. 상용 서비스로는 Datadog, New Relic, Honeycomb, Dynatrace가 있습니다. 세 기둥을 상호 연결하여 메트릭 이상 → 관련 트레이스 → 해당 로그로 드릴다운하는 워크플로우가 이상적입니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section" aria-labelledby="code-title">
+            <h2 class="section-title" id="code-title">💻 코드 예제</h2>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># OpenTelemetry 통합 설정 - 메트릭, 로그, 트레이스 통합
+from opentelemetry import trace, metrics
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+import structlog
+
+# 공통 리소스 정의
+resource = Resource.create({
+    "service.name": "order-service",
+    "service.version": "1.2.3",
+    "deployment.environment": "production"
+})
+
+# Tracer 설정
+trace.set_tracer_provider(TracerProvider(resource=resource))
+tracer = trace.get_tracer(__name__)
+
+# Meter 설정
+metrics.set_meter_provider(MeterProvider(resource=resource))
+meter = metrics.get_meter(__name__)
+
+# 커스텀 메트릭
+order_counter = meter.create_counter(
+    "orders_total",
+    description="Total number of orders"
+)
+order_latency = meter.create_histogram(
+    "order_processing_seconds",
+    description="Order processing latency"
+)
+
+# 구조화된 로거 (trace_id 자동 포함)
+logger = structlog.get_logger()
+
+def process_order(order_id: str):
+    # 트레이스 시작
+    with tracer.start_as_current_span("process_order") as span:
+        span.set_attribute("order.id", order_id)
+
+        # 로그에 trace_id 자동 연결
+        ctx = trace.get_current_span().get_span_context()
+        log = logger.bind(
+            trace_id=format(ctx.trace_id, '032x'),
+            span_id=format(ctx.span_id, '016x'),
+            order_id=order_id
+        )
+
+        log.info("order_processing_started")
+
+        with tracer.start_as_current_span("validate_payment"):
+            # 결제 검증 로직...
+            pass
+
+        # 메트릭 기록
+        order_counter.add(1, {"status": "success", "type": "online"})
+        order_latency.record(0.235, {"step": "total"})
+
+        log.info("order_processing_completed")</code></pre>
+            </div>
+            <div class="code-block" data-lang="yaml">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Grafana 대시보드에서 세 기둥 통합 쿼리
+
+# 1. 메트릭: 분당 주문 성공률 (Prometheus/PromQL)
+sum(rate(orders_total{status="success"}[5m]))
+/
+sum(rate(orders_total[5m])) * 100
+
+# 2. 로그: 에러 로그 검색 (Loki/LogQL)
+{app="order-service"}
+|= "error"
+| json
+| trace_id != ""  # trace_id가 있는 로그만
+
+# 3. 트레이스: 느린 요청 분석 (Tempo/TraceQL)
+{resource.service.name="order-service" && duration > 1s}
+
+# Grafana에서 Exemplar 연결 설정
+# 메트릭 패널에서 이상점 클릭 -> 해당 trace로 이동 -> 관련 로그 확인
+
+# OpenTelemetry Collector 설정
+receivers:
+  otlp:
+    protocols:
+      grpc: { endpoint: "0.0.0.0:4317" }
+processors:
+  batch: {}
+exporters:
+  prometheus: { endpoint: "0.0.0.0:8889" }
+  loki: { endpoint: "http://loki:3100/loki/api/v1/push" }
+  otlp: { endpoint: "tempo:4317" }
+service:
+  pipelines:
+    metrics: { receivers: [otlp], processors: [batch], exporters: [prometheus] }
+    logs: { receivers: [otlp], processors: [batch], exporters: [loki] }
+    traces: { receivers: [otlp], processors: [batch], exporters: [otlp] }</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section" aria-labelledby="conv-title">
+            <h2 class="section-title" id="conv-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conv-tabs" role="tablist">
+                <button class="conv-tab active" data-type="meeting" role="tab">🏢 회의</button>
+                <button class="conv-tab" data-type="interview" role="tab">🎯 면접</button>
+                <button class="conv-tab" data-type="review" role="tab">💻 코드리뷰</button>
+            </div>
+            <div class="conv-content active" data-type="meeting">
+                <p><strong class="role-senior">SRE:</strong> "지난 장애 때 원인 찾는데 2시간 걸렸어요. 로그랑 메트릭이 연결이 안 돼서 일일이 시간대 맞춰가며 비교했거든요."</p>
+                <p><strong class="role-junior">개발자:</strong> "trace_id를 로그에 심으면 바로 연결되지 않나요?"</p>
+                <p><strong class="role-senior">시니어:</strong> "맞아요. OpenTelemetry 도입해서 trace → log → metrics 전부 trace_id로 연결합시다. Grafana에서 메트릭 이상점 클릭하면 바로 해당 트레이스로 점프할 수 있어요."</p>
+            </div>
+            <div class="conv-content" data-type="interview">
+                <p><strong class="role-interviewer">면접관:</strong> "Observability와 Monitoring의 차이를 설명해주세요."</p>
+                <p><strong class="role-interviewee">지원자:</strong> "Monitoring은 미리 정의한 지표를 감시합니다. 'CPU 90% 초과 시 알림' 같은 known-unknowns를 다룹니다. Observability는 시스템이 생성하는 데이터를 탐색해서 unknown-unknowns를 찾아냅니다. 예를 들어 '왜 특정 region의 특정 브라우저 사용자만 에러가 나는지'를 데이터를 쪼개가며 분석할 수 있어요. 세 기둥을 상호 연결하면 메트릭 이상에서 트레이스, 로그까지 드릴다운이 가능합니다."</p>
+            </div>
+            <div class="conv-content" data-type="review">
+                <p><strong class="role-reviewer">리뷰어:</strong> "이 함수에서 외부 API 호출하는데 span 추가해주세요. 나중에 느릴 때 어디가 병목인지 알 수 있어요."</p>
+                <p><strong class="role-author">작성자:</strong> "with tracer.start_as_current_span('external_api_call')로 감싸고, API 응답 코드도 span attribute에 기록하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section" aria-labelledby="warning-title">
+            <h2 class="section-title" id="warning-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>세 기둥을 별개로 관리하면 상관관계 분석이 어렵습니다. trace_id로 연결하고, Grafana 같은 통합 플랫폼에서 한눈에 볼 수 있게 구성하세요.</li>
+                <li>너무 많은 데이터는 비용과 노이즈를 증가시킵니다. 샘플링(예: 트레이스 10%만 수집)과 로그 레벨 관리로 적정 수준을 유지하세요.</li>
+                <li class="info">Observability는 도구만으로 달성되지 않습니다. 개발팀이 로그와 메트릭을 의미있게 기록하는 문화가 중요합니다. "이 데이터로 무엇을 알 수 있는가?"를 늘 생각하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section" aria-labelledby="related-title">
+            <h2 class="section-title" id="related-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/OpenTelemetry/" class="related-link">OpenTelemetry</a>
+                <a href="/ko/term/Monitoring/" class="related-link">Monitoring</a>
+                <a href="/ko/term/Logging/" class="related-link">Logging</a>
+                <a href="/ko/term/Tracing/" class="related-link">Distributed Tracing</a>
+                <a href="/ko/term/SRE/" class="related-link">SRE</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section" aria-labelledby="learn-title">
+            <h2 class="section-title" id="learn-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><span class="type-book"></span><a href="https://www.oreilly.com/library/view/observability-engineering/9781492076438/" target="_blank">Observability Engineering (O'Reilly)</a></li>
+                <li><span class="type-official"></span><a href="https://grafana.com/blog/2021/08/09/the-three-pillars-of-observability/" target="_blank">Grafana - Three Pillars of Observability</a></li>
+                <li><span class="type-tutorial"></span><a href="https://opentelemetry.io/docs/concepts/observability-primer/" target="_blank">OpenTelemetry Observability Primer</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +386,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

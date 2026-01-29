@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kubernetes (K8s) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="컨테이너 오케스트레이션 표준. Google 개발. 자동 배포, 스케일링, 복구.">
-    <meta name="keywords" content="Kubernetes, K8s, AI 용어, KAITRUST, AI 백과사전, 클라우드">
+    <meta name="description" content="컨테이너 오케스트레이션 표준. Google 개발, CNCF 관리. 자동 배포, 스케일링, 복구. Pod, Service, Deployment 핵심 개념 설명.">
+    <meta name="keywords" content="Kubernetes, K8s, 쿠버네티스, AI 용어, KAITRUST, AI 백과사전, 클라우드, 컨테이너, Docker, Pod, Deployment">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Kubernetes/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Kubernetes/">
     <meta property="og:title" content="Kubernetes (K8s) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="컨테이너 오케스트레이션 표준. Google 개발. 자동 배포, 스케일링, 복구.">
+    <meta property="og:description" content="컨테이너 오케스트레이션 표준. Google 개발, CNCF 관리. 자동 배포, 스케일링, 복구. Pod, Service, Deployment 핵심 개념 설명.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Kubernetes (K8s) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="컨테이너 오케스트레이션 표준. Google 개발. 자동 배포, 스케일링, 복구.">
+    <meta name="twitter:description" content="컨테이너 오케스트레이션 표준. Google 개발, CNCF 관리. 자동 배포, 스케일링, 복구. Pod, Service, Deployment 핵심 개념 설명.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "Kubernetes",
-        "description": "컨테이너 오케스트레이션 표준. Google 개발. 자동 배포, 스케일링, 복구.",
+        "description": "컨테이너 오케스트레이션 표준. Google 개발, CNCF 관리. 자동 배포, 스케일링, 복구. Pod, Service, Deployment 핵심 개념 설명.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -161,6 +161,224 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+
+        /* Enhanced Term Sections */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .section-content strong {
+            color: #a855f7;
+            font-weight: 600;
+        }
+
+        /* Code Tabs */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.6rem 1.2rem;
+            background: rgba(100, 116, 139, 0.3);
+            border: 1px solid rgba(100, 116, 139, 0.4);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .code-tab:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.3);
+            border-color: #a855f7;
+            color: #e2e8f0;
+        }
+        .code-block {
+            display: none;
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            position: relative;
+        }
+        .code-block.active {
+            display: block;
+        }
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+
+        /* Conversation Examples */
+        .conversation-examples {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .conversation-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #a855f7;
+        }
+        .conversation-item h4 {
+            color: #a855f7;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .conversation-item p {
+            margin: 0.75rem 0;
+            padding-left: 1rem;
+            border-left: 2px solid rgba(148, 163, 184, 0.3);
+        }
+        .conversation-item .speaker {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+        .conversation-item .response {
+            color: #4ade80;
+            font-weight: 600;
+        }
+
+        /* Warning List */
+        .warning-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+        .warning-item.danger {
+            border-left: 4px solid #ef4444;
+        }
+        .warning-item.success {
+            border-left: 4px solid #22c55e;
+        }
+        .warning-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .warning-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .warning-item.danger .warning-content h4 {
+            color: #fca5a5;
+        }
+        .warning-item.success .warning-content h4 {
+            color: #86efac;
+        }
+        .warning-content p {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        /* Related Terms */
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            padding: 0.6rem 1.2rem;
+            background: rgba(100, 116, 139, 0.2);
+            border: 1px solid rgba(100, 116, 139, 0.4);
+            border-radius: 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.5);
+            color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        /* Learn More */
+        .learn-more-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .learn-more-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 10px;
+            color: #60a5fa;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-more-link:hover {
+            background: rgba(96, 165, 250, 0.1);
+            border-color: rgba(96, 165, 250, 0.4);
+            transform: translateX(5px);
+        }
+        .learn-more-link span {
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -189,7 +407,7 @@
                 <span>클라우드</span>
             </div>
             <h1 class="term-title">Kubernetes</h1>
-            <p class="term-english">K8s</p>
+            <p class="term-english">K8s / 쿠버네티스</p>
             <div class="term-description">
                 <p>컨테이너 오케스트레이션 표준. Google 개발. 자동 배포, 스케일링, 복구.</p>
             </div>
@@ -202,6 +420,457 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Kubernetes(쿠버네티스, K8s)</strong>는 컨테이너화된 애플리케이션의 배포, 스케일링, 관리를 자동화하는 오픈소스 플랫폼입니다. Google이 내부에서 사용하던 Borg 시스템을 기반으로 개발했으며, 현재는 CNCF(Cloud Native Computing Foundation)에서 관리합니다. 이름은 그리스어로 '조타수'를 의미합니다.</p>
+
+                <p><strong>핵심 개념</strong>으로 <strong>Pod</strong>는 가장 작은 배포 단위로, 하나 이상의 컨테이너를 포함합니다. <strong>Deployment</strong>는 Pod의 선언적 업데이트를 관리하며, 롤링 업데이트와 롤백을 지원합니다. <strong>Service</strong>는 Pod 집합에 대한 네트워크 접근을 제공하고, <strong>Ingress</strong>는 외부에서 클러스터 내 서비스로의 HTTP/HTTPS 라우팅을 정의합니다.</p>
+
+                <p><strong>아키텍처</strong>는 Control Plane과 Worker Node로 구성됩니다. <strong>Control Plane</strong>에는 API Server(모든 요청의 진입점), etcd(클러스터 상태 저장), Scheduler(Pod 배치 결정), Controller Manager(상태 감시 및 조정)가 있습니다. <strong>Worker Node</strong>에는 kubelet(Pod 라이프사이클 관리), kube-proxy(네트워크 규칙 관리), Container Runtime(Docker, containerd 등)이 실행됩니다.</p>
+
+                <p><strong>주요 클라우드 관리형 서비스</strong>로 AWS EKS, GCP GKE, Azure AKS가 있습니다. 관리형 서비스는 Control Plane을 자동 관리해주어 운영 부담을 줄여주고, 클라우드 서비스와의 통합(IAM, 로드밸런서, 스토리지)이 용이합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-tab="kubectl">kubectl 기본</button>
+                <button class="code-tab" data-tab="deployment">Deployment</button>
+                <button class="code-tab" data-tab="service">Service/Ingress</button>
+            </div>
+            <div class="code-block active" id="kubectl">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># 클러스터 정보 확인
+kubectl cluster-info
+kubectl get nodes -o wide
+
+# 네임스페이스 생성 및 기본 설정
+kubectl create namespace production
+kubectl config set-context --current --namespace=production
+
+# Pod 생성 및 관리
+kubectl run nginx --image=nginx:1.25 --port=80
+kubectl get pods -o wide
+kubectl describe pod nginx
+kubectl logs nginx -f
+kubectl exec -it nginx -- /bin/bash
+
+# Deployment 생성 (명령형)
+kubectl create deployment web --image=nginx:1.25 --replicas=3
+
+# 스케일링
+kubectl scale deployment web --replicas=5
+
+# 롤링 업데이트
+kubectl set image deployment/web nginx=nginx:1.26
+kubectl rollout status deployment/web
+kubectl rollout history deployment/web
+
+# 롤백
+kubectl rollout undo deployment/web
+kubectl rollout undo deployment/web --to-revision=2
+
+# 서비스 노출
+kubectl expose deployment web --port=80 --type=LoadBalancer
+
+# 리소스 모니터링
+kubectl top nodes
+kubectl top pods
+kubectl get events --sort-by='.lastTimestamp'
+
+# 디버깅
+kubectl describe pod <pod-name>
+kubectl logs <pod-name> --previous   # 이전 컨테이너 로그
+kubectl debug <pod-name> -it --image=busybox
+
+# 리소스 삭제
+kubectl delete deployment web
+kubectl delete pod nginx --grace-period=0 --force</code></pre>
+            </div>
+            <div class="code-block" id="deployment">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># deployment.yaml - 프로덕션 웹 애플리케이션
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  namespace: production
+  labels:
+    app: web-app
+    version: v1.0.0
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5          # 롤백용 히스토리 보관
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1                   # 업데이트 중 추가 Pod
+      maxUnavailable: 0             # 항상 최소 replicas 유지
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      terminationGracePeriodSeconds: 30
+      serviceAccountName: web-app-sa
+
+      # 토폴로지 분산 (가용영역 분산)
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: web-app
+
+      containers:
+        - name: web
+          image: myregistry/web-app:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+
+          # 환경 변수
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: host
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+          # 리소스 제한
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "512Mi"
+
+          # Liveness Probe - 컨테이너 재시작 결정
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          # Readiness Probe - 트래픽 수신 결정
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+
+          # Startup Probe - 시작 시간이 긴 앱용
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+
+          # 볼륨 마운트
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+
+      volumes:
+        - name: config
+          configMap:
+            name: web-app-config
+        - name: tmp
+          emptyDir: {}
+
+      # 이미지 Pull Secret
+      imagePullSecrets:
+        - name: regcred
+
+---
+# HorizontalPodAutoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-app-hpa
+  namespace: production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app
+  minReplicas: 3
+  maxReplicas: 50
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Pods
+          value: 4
+          periodSeconds: 15</code></pre>
+            </div>
+            <div class="code-block" id="service">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code># ClusterIP Service (내부 통신용)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+  namespace: production
+spec:
+  type: ClusterIP
+  selector:
+    app: web-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+
+---
+# LoadBalancer Service (외부 노출)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-lb
+  namespace: production
+  annotations:
+    # AWS NLB 설정
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+spec:
+  type: LoadBalancer
+  selector:
+    app: web-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: https
+      port: 443
+      targetPort: 8080
+
+---
+# Ingress (HTTP 라우팅)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-app-ingress
+  namespace: production
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - api.example.com
+        - www.example.com
+      secretName: example-tls
+  rules:
+    - host: api.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-app
+                port:
+                  number: 80
+    - host: www.example.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-backend
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+
+---
+# NetworkPolicy (네트워크 보안)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: web-app-policy
+  namespace: production
+spec:
+  podSelector:
+    matchLabels:
+      app: web-app
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app: frontend
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: database
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💬 실무에서 이렇게 씁니다</h2>
+            <div class="conversation-examples">
+                <div class="conversation-item">
+                    <h4>아키텍처 설계 회의</h4>
+                    <p><span class="speaker">PM:</span> "신규 프로젝트를 Kubernetes에서 운영하려고 하는데, 직접 클러스터를 구축할지 관리형 서비스를 쓸지 고민입니다."</p>
+                    <p><span class="response">DevOps:</span> "프로덕션 환경이라면 관리형 서비스를 추천드립니다. AWS EKS나 GKE를 쓰면 Control Plane 고가용성, etcd 백업, 버전 업그레이드를 자동으로 처리해줍니다. 직접 구축하면 초기 비용은 절감되지만, 운영 인력과 장애 대응 부담이 큽니다. 저희 팀 규모에서는 관리형으로 시작하고, 트래픽 10만 DAU 넘어가면 멀티 클러스터 전략을 검토하는 게 좋을 것 같습니다."</p>
+                </div>
+                <div class="conversation-item">
+                    <h4>면접 질문</h4>
+                    <p><span class="speaker">면접관:</span> "Kubernetes에서 무중단 배포를 어떻게 구현하시나요?"</p>
+                    <p><span class="response">지원자:</span> "Deployment의 RollingUpdate 전략을 사용합니다. maxSurge를 1, maxUnavailable을 0으로 설정하면 항상 기존 replica 수가 유지됩니다. 핵심은 readinessProbe 설정인데요, 새 Pod가 실제로 트래픽을 처리할 준비가 됐을 때만 Service에 추가되도록 합니다. 또한 preStop hook에 sleep을 넣어 기존 연결이 정리될 시간을 주고, terminationGracePeriodSeconds를 충분히 설정합니다. Blue-Green이 필요하면 Argo Rollouts를 사용하기도 합니다."</p>
+                </div>
+                <div class="conversation-item">
+                    <h4>장애 대응</h4>
+                    <p><span class="speaker">개발자:</span> "Pod가 계속 CrashLoopBackOff 상태로 재시작돼요. 무슨 문제일까요?"</p>
+                    <p><span class="response">SRE:</span> "먼저 kubectl describe pod로 Events를 확인하세요. OOMKilled면 메모리 limit 부족이고, livenessProbe 실패면 앱 상태 확인이 필요해요. kubectl logs --previous로 이전 컨테이너 로그 보시고, 시작 시간이 오래 걸리는 앱이면 startupProbe를 추가하거나 initialDelaySeconds를 늘려보세요. 최근 배포 후 발생했다면 kubectl rollout undo로 롤백하고 원인 분석하는 게 빠릅니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item danger">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>리소스 요청/제한 미설정</h4>
+                        <p>resources.requests와 limits를 설정하지 않으면 노드 리소스를 과다 사용하거나, 스케줄링 실패가 발생합니다. 특히 메모리 limit 없이 운영하면 OOM으로 다른 Pod까지 영향받을 수 있습니다. LimitRange와 ResourceQuota로 네임스페이스별 기본값을 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item danger">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>latest 태그 이미지 사용</h4>
+                        <p>이미지 태그에 :latest를 사용하면 어떤 버전이 배포됐는지 추적이 불가능합니다. 롤백도 어렵고, imagePullPolicy: Always와 함께 사용하면 동일 Deployment에서 다른 버전의 Pod가 실행될 수 있습니다. 반드시 고정 버전 태그(v1.2.3 또는 git commit SHA)를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item success">
+                    <div class="warning-icon">✅</div>
+                    <div class="warning-content">
+                        <h4>Pod Disruption Budget으로 가용성 보장</h4>
+                        <p>노드 업그레이드나 스케일 다운 시 PDB(PodDisruptionBudget)를 설정하면 최소 가용 Pod 수를 보장합니다. minAvailable이나 maxUnavailable을 설정해 클러스터 유지보수 중에도 서비스가 중단되지 않도록 하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Docker/" class="related-term-link">Docker</a>
+                <a href="/ko/term/EKS/" class="related-term-link">EKS</a>
+                <a href="/ko/term/GKE/" class="related-term-link">GKE</a>
+                <a href="/ko/term/AKS/" class="related-term-link">AKS</a>
+                <a href="/ko/term/HPA/" class="related-term-link">HPA</a>
+                <a href="/ko/term/KEDA/" class="related-term-link">KEDA</a>
+                <a href="/ko/term/Helm/" class="related-term-link">Helm</a>
+                <a href="/ko/term/Istio/" class="related-term-link">Istio</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more-list">
+                <a href="https://kubernetes.io/docs/home/" target="_blank" rel="noopener noreferrer" class="learn-more-link">
+                    <span>📄</span> Kubernetes 공식 문서 - 개념, 튜토리얼, 레퍼런스
+                </a>
+                <a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener noreferrer" class="learn-more-link">
+                    <span>🎓</span> Kubernetes Basics 튜토리얼 - 대화형 학습
+                </a>
+                <a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener noreferrer" class="learn-more-link">
+                    <span>💻</span> Kubernetes GitHub 저장소
+                </a>
+                <a href="https://www.cncf.io/certification/cka/" target="_blank" rel="noopener noreferrer" class="learn-more-link">
+                    <span>🏆</span> CKA(Certified Kubernetes Administrator) 자격증
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +881,26 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '복사됨!';
+            setTimeout(() => btn.textContent = '복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.dataset.tab;
+            document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.code-block').forEach(b => b.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+    </script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>

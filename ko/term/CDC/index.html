@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDC (Change Data Capture) | KAITRUST AI 백과사전</title>
-    <meta name="description" content="데이터 변경 추적 기술. 실시간 동기화, 감사.">
-    <meta name="keywords" content="CDC, Change Data Capture, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <meta name="description" content="CDC는 데이터베이스의 변경 사항을 실시간으로 감지하고 캡처하는 기술입니다. Debezium, Kafka Connect 등을 통해 시스템 간 데이터 동기화, 이벤트 소싱, 데이터 웨어하우스 ETL에 핵심적으로 사용됩니다.">
+    <meta name="keywords" content="CDC, Change Data Capture, Debezium, Kafka, 데이터 동기화, 이벤트 소싱, ETL, 실시간, AI 용어, KAITRUST">
     <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/CDC/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/CDC/">
     <meta property="og:title" content="CDC (Change Data Capture) | KAITRUST AI 백과사전">
-    <meta property="og:description" content="데이터 변경 추적 기술. 실시간 동기화, 감사.">
+    <meta property="og:description" content="CDC는 데이터베이스의 변경 사항을 실시간으로 감지하고 캡처하는 기술입니다.">
     <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="KAITRUST AI 백과사전">
@@ -20,7 +20,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="CDC (Change Data Capture) | KAITRUST AI 백과사전">
-    <meta name="twitter:description" content="데이터 변경 추적 기술. 실시간 동기화, 감사.">
+    <meta name="twitter:description" content="CDC는 데이터베이스의 변경 사항을 실시간으로 감지하고 캡처하는 기술입니다.">
     <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
 
     <!-- Structured Data (JSON-LD) -->
@@ -29,7 +29,8 @@
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         "name": "CDC",
-        "description": "데이터 변경 추적 기술. 실시간 동기화, 감사.",
+        "alternateName": "Change Data Capture",
+        "description": "CDC는 데이터베이스의 변경 사항을 실시간으로 감지하고 캡처하는 기술입니다.",
         "inDefinedTermSet": {
             "@type": "DefinedTermSet",
             "name": "KAITRUST AI 백과사전",
@@ -52,164 +53,453 @@
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
 
     <style>
-        .term-detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 2rem 4rem;
-            position: relative;
-            z-index: 1;
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
         }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
         }
-        .breadcrumb a {
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; display: none; }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.85rem; }
+        .copy-btn:hover { background: rgba(168,85,247,0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168,85,247,0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0,0,0,0.3); transform: translateX(5px); }
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary); }
         .breadcrumb span { color: #64748b; }
         .breadcrumb .current { color: var(--accent); font-weight: 500; }
-        .term-detail-header {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-category-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        .term-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .term-english {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-        .term-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-        }
-        .term-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .term-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .related-section {
-            margin-top: 3rem;
-        }
-        .related-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #f1f5f9;
-        }
-        @media (max-width: 768px) {
-            .term-detail-container { padding: 100px 1rem 2rem; }
-            .term-detail-header { padding: 2rem 1.5rem; }
-            .term-title { font-size: 1.8rem; }
-        }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15,23,42,0.9), rgba(30,41,59,0.6)); border: 1px solid rgba(168,85,247,0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168,85,247,0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
-
-    <!-- Header -->
     <div id="kaitrust-header"></div>
 
     <main class="term-detail-container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="https://kaitrust.ai">홈</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
-            <span>›</span>
-            <a href="https://glossary.kaitrust.ai/#db">데이터베이스</a>
-            <span>›</span>
+            <a href="https://kaitrust.ai">홈</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai/#db">데이터베이스</a><span>›</span>
             <span class="current">CDC</span>
         </nav>
 
-        <!-- Term Header -->
         <article class="term-detail-header">
-            <div class="term-category-badge">
-                <span>🗄️</span>
-                <span>데이터베이스</span>
-            </div>
+            <div class="term-category-badge"><span>🗄️</span><span>데이터베이스</span></div>
             <h1 class="term-title">CDC</h1>
-            <p class="term-english">Change Data Capture</p>
+            <p class="term-english">Change Data Capture - Real-time Data Synchronization</p>
             <div class="term-description">
-                <p>데이터 변경 추적 기술. 실시간 동기화, 감사.</p>
+                <p>CDC(Change Data Capture)는 데이터베이스의 변경 사항(INSERT, UPDATE, DELETE)을 실시간으로 감지하고 캡처하는 기술입니다. Debezium, Kafka Connect 등을 통해 시스템 간 데이터 동기화, 이벤트 소싱, 실시간 ETL에 핵심적으로 사용됩니다.</p>
             </div>
             <div class="term-actions">
-                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
-                    📚 전체 용어 보기
-                </a>
-                <a href="https://glossary.kaitrust.ai/#db" class="term-action-btn btn-secondary">
-                    🗄️ 데이터베이스 더보기
-                </a>
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#db" class="term-action-btn btn-secondary">🗄️ 데이터베이스 더보기</a>
             </div>
         </article>
+
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>CDC의 핵심 원리</strong> - CDC는 데이터베이스의 트랜잭션 로그(WAL, Binlog)를 읽어 변경 사항을 추출합니다. 폴링 방식과 달리 원본 DB에 부하를 주지 않으며, 삭제된 데이터도 캡처할 수 있습니다. 변경 순서가 보장되어 데이터 일관성을 유지합니다.</p>
+                <p><strong>Debezium의 역할</strong> - Red Hat이 개발한 오픈소스 CDC 플랫폼 Debezium은 MySQL, PostgreSQL, MongoDB, SQL Server 등 다양한 DB를 지원합니다. Kafka Connect 기반으로 동작하며, 변경 이벤트를 Kafka 토픽으로 스트리밍합니다. 스키마 레지스트리와 통합해 스키마 진화를 관리합니다.</p>
+                <p><strong>CDC 활용 사례</strong> - 마이크로서비스 간 데이터 동기화, CQRS 패턴의 읽기 모델 업데이트, 데이터 웨어하우스 실시간 적재, 캐시 무효화, 감사 로그 생성, 검색 인덱스 동기화(Elasticsearch) 등에 활용됩니다. 이벤트 드리븐 아키텍처의 핵심 구성 요소입니다.</p>
+                <p><strong>로그 기반 vs 쿼리 기반</strong> - 로그 기반 CDC(Debezium)는 트랜잭션 로그를 읽어 실시간성이 높고 부하가 적습니다. 쿼리 기반 CDC(타임스탬프 폴링)는 구현이 간단하지만 삭제 감지가 어렵고 지연이 있습니다. 대부분의 프로덕션 환경에서는 로그 기반을 권장합니다.</p>
+                <p><strong>Outbox 패턴과의 결합</strong> - 트랜잭션과 이벤트 발행의 원자성을 보장하기 위해 Outbox 패턴과 CDC를 함께 사용합니다. 비즈니스 테이블 변경과 Outbox 테이블 삽입을 하나의 트랜잭션으로 묶고, CDC가 Outbox 테이블을 감시하여 이벤트를 발행합니다.</p>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="debezium">Debezium 설정</button>
+                <button class="code-tab" data-lang="kafka">Kafka Consumer</button>
+                <button class="code-tab" data-lang="python">Python CDC 처리</button>
+            </div>
+            <div class="code-block active" data-lang="debezium">
+                <pre><code class="language-json">// Debezium MySQL Connector 설정 (Kafka Connect REST API)
+// POST /connectors
+
+{
+  "name": "mysql-orders-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "database.hostname": "mysql-primary",
+    "database.port": "3306",
+    "database.user": "debezium",
+    "database.password": "${secrets:mysql-password}",
+    "database.server.id": "184054",
+    "topic.prefix": "dbserver1",
+    "database.include.list": "ecommerce",
+    "table.include.list": "ecommerce.orders,ecommerce.order_items",
+
+    // 스키마 히스토리 (DDL 변경 추적)
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:9092",
+    "schema.history.internal.kafka.topic": "schema-changes.ecommerce",
+
+    // 변환 설정
+    "transforms": "route,unwrap",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
+    "transforms.route.replacement": "cdc.$3",
+
+    // Outbox 패턴 지원
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+
+    // 스냅샷 설정
+    "snapshot.mode": "initial",
+    "snapshot.locking.mode": "minimal",
+
+    // 오프셋 저장
+    "offset.storage.topic": "connect-offsets",
+    "offset.flush.interval.ms": "10000"
+  }
+}
+
+// 토픽 메시지 예시 (orders 테이블 UPDATE)
+/*
+{
+  "before": {
+    "id": 1001,
+    "status": "pending",
+    "total": 50000
+  },
+  "after": {
+    "id": 1001,
+    "status": "shipped",
+    "total": 50000
+  },
+  "source": {
+    "version": "2.4.0.Final",
+    "connector": "mysql",
+    "name": "dbserver1",
+    "ts_ms": 1706277600000,
+    "db": "ecommerce",
+    "table": "orders",
+    "server_id": 184054,
+    "gtid": null,
+    "file": "mysql-bin.000003",
+    "pos": 12345
+  },
+  "op": "u",  // c=create, u=update, d=delete, r=read(snapshot)
+  "ts_ms": 1706277600100
+}
+*/</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="kafka">
+                <pre><code class="language-java">// Kafka Consumer로 CDC 이벤트 처리 (Java)
+import org.apache.kafka.clients.consumer.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class CDCEventConsumer {
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public void consumeCDCEvents() {
+        Properties props = new Properties();
+        props.put("bootstrap.servers", "kafka:9092");
+        props.put("group.id", "order-sync-service");
+        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("auto.offset.reset", "earliest");
+        props.put("enable.auto.commit", "false");
+
+        try (KafkaConsumer&lt;String, String&gt; consumer = new KafkaConsumer&lt;&gt;(props)) {
+            consumer.subscribe(List.of("cdc.orders"));
+
+            while (true) {
+                ConsumerRecords&lt;String, String&gt; records = consumer.poll(Duration.ofMillis(100));
+
+                for (ConsumerRecord&lt;String, String&gt; record : records) {
+                    processCDCEvent(record.value());
+                }
+
+                consumer.commitSync();  // 처리 완료 후 커밋
+            }
+        }
+    }
+
+    private void processCDCEvent(String eventJson) throws Exception {
+        JsonNode event = mapper.readTree(eventJson);
+        String operation = event.get("op").asText();
+
+        switch (operation) {
+            case "c" -> handleCreate(event.get("after"));
+            case "u" -> handleUpdate(event.get("before"), event.get("after"));
+            case "d" -> handleDelete(event.get("before"));
+            case "r" -> handleSnapshot(event.get("after"));
+        }
+    }
+
+    private void handleUpdate(JsonNode before, JsonNode after) {
+        Long orderId = after.get("id").asLong();
+        String oldStatus = before.get("status").asText();
+        String newStatus = after.get("status").asText();
+
+        if (!oldStatus.equals(newStatus)) {
+            System.out.println("Order " + orderId + ": " + oldStatus + " → " + newStatus);
+            // 읽기 모델 업데이트, 알림 발송 등
+            updateReadModel(orderId, after);
+            sendNotification(orderId, newStatus);
+        }
+    }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <pre><code class="language-python"># Python으로 CDC 이벤트 처리
+from kafka import KafkaConsumer
+from dataclasses import dataclass
+from typing import Optional, Dict, Any
+import json
+
+@dataclass
+class CDCEvent:
+    operation: str  # c, u, d, r
+    before: Optional[Dict[str, Any]]
+    after: Optional[Dict[str, Any]]
+    source: Dict[str, Any]
+    timestamp: int
+
+    @classmethod
+    def from_json(cls, data: dict) -> "CDCEvent":
+        return cls(
+            operation=data.get("op"),
+            before=data.get("before"),
+            after=data.get("after"),
+            source=data.get("source", {}),
+            timestamp=data.get("ts_ms", 0)
+        )
+
+
+class OrderCDCProcessor:
+    def __init__(self, kafka_servers: str):
+        self.consumer = KafkaConsumer(
+            "cdc.orders",
+            bootstrap_servers=kafka_servers,
+            group_id="order-analytics",
+            value_deserializer=lambda m: json.loads(m.decode("utf-8")),
+            auto_offset_reset="earliest",
+            enable_auto_commit=False
+        )
+
+    def process_events(self):
+        """CDC 이벤트 처리 루프"""
+        for message in self.consumer:
+            try:
+                event = CDCEvent.from_json(message.value)
+                self.handle_event(event)
+                self.consumer.commit()
+            except Exception as e:
+                print(f"Error processing event: {e}")
+                # Dead Letter Queue로 전송
+
+    def handle_event(self, event: CDCEvent):
+        """이벤트 타입별 처리"""
+        handlers = {
+            "c": self.on_create,
+            "u": self.on_update,
+            "d": self.on_delete,
+            "r": self.on_snapshot
+        }
+
+        handler = handlers.get(event.operation)
+        if handler:
+            handler(event)
+
+    def on_create(self, event: CDCEvent):
+        """새 주문 생성"""
+        order = event.after
+        print(f"✅ New order: #{order['id']} - {order['total']}원")
+        # 분석 시스템에 전송
+        self.send_to_analytics("order_created", order)
+
+    def on_update(self, event: CDCEvent):
+        """주문 상태 변경"""
+        before, after = event.before, event.after
+
+        # 변경된 필드 감지
+        changes = {
+            k: (before.get(k), after.get(k))
+            for k in after.keys()
+            if before.get(k) != after.get(k)
+        }
+
+        if "status" in changes:
+            old, new = changes["status"]
+            print(f"📦 Order #{after['id']}: {old} → {new}")
+
+            if new == "shipped":
+                self.notify_shipping(after)
+            elif new == "delivered":
+                self.update_inventory(after)
+
+    def on_delete(self, event: CDCEvent):
+        """주문 삭제 (Soft delete 권장)"""
+        order = event.before
+        print(f"🗑️ Order deleted: #{order['id']}")
+        # 인덱스에서 제거
+        self.remove_from_search_index(order['id'])
+
+    def send_to_analytics(self, event_type: str, data: dict):
+        """분석 시스템으로 전송"""
+        # ClickHouse, BigQuery 등으로 적재
+        pass
+
+
+if __name__ == "__main__":
+    processor = OrderCDCProcessor("kafka:9092")
+    processor.process_events()</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">💬 현업 대화 예시</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">데이터 엔지니어가 아키텍처 회의에서</div>
+                    <p class="conv-quote">"Elasticsearch 동기화를 폴링으로 하고 있는데, 삭제 이벤트를 놓치고 있어요. Debezium으로 CDC 파이프라인을 구축하면 binlog에서 DELETE까지 캡처할 수 있습니다. 지연도 수십 밀리초로 줄어들어요."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">백엔드 개발자가 마이크로서비스 설계에서</div>
+                    <p class="conv-quote">"주문 서비스에서 배송 서비스로 이벤트를 보내야 하는데, 분산 트랜잭션은 피하고 싶어요. Outbox 패턴이랑 CDC를 조합해서 최종 일관성을 보장하는 게 어떨까요? 비즈니스 로직과 메시징이 깔끔하게 분리됩니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">DBA가 성능 검토에서</div>
+                    <p class="conv-quote">"Debezium이 MySQL의 binlog를 읽는 건 슬레이브 복제와 같은 방식이라 메인 DB 부하가 거의 없어요. 단, binlog_format은 ROW로 설정해야 하고, 보관 기간도 충분히 잡아야 장애 복구가 수월합니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <div class="warning-icon">📋</div>
+                    <div>
+                        <strong>스키마 변경 관리 필수</strong>
+                        <p>테이블 DDL 변경 시 CDC 커넥터가 중단될 수 있습니다. 스키마 레지스트리로 버전 관리하고, 호환 가능한 변경만 적용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">⏰</div>
+                    <div>
+                        <strong>초기 스냅샷 시간 고려</strong>
+                        <p>대용량 테이블의 초기 스냅샷은 수 시간이 걸릴 수 있습니다. 점진적 스냅샷이나 병렬 처리 옵션을 활용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">🔄</div>
+                    <div>
+                        <strong>중복 처리 대비</strong>
+                        <p>장애 복구 시 이벤트가 재전송될 수 있습니다. 컨슈머에서 멱등성을 보장하거나 중복 체크 로직을 구현하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">💾</div>
+                    <div>
+                        <strong>로그 보관 기간 확인</strong>
+                        <p>binlog/WAL 보관 기간이 짧으면 커넥터 재시작 시 누락이 발생합니다. 최소 7일 이상 보관을 권장합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Debezium/" class="related-term-link">Debezium</a>
+                <a href="/ko/term/Kafka/" class="related-term-link">Kafka</a>
+                <a href="/ko/term/Outbox%20Pattern/" class="related-term-link">Outbox Pattern</a>
+                <a href="/ko/term/CQRS/" class="related-term-link">CQRS</a>
+                <a href="/ko/term/이벤트%20드리븐/" class="related-term-link">이벤트 드리븐</a>
+                <a href="/ko/term/ETL/" class="related-term-link">ETL</a>
+            </div>
+        </section>
+
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://debezium.io/documentation/" target="_blank" rel="noopener" class="learn-link">
+                    <span>📖</span> Debezium 공식 문서
+                </a>
+                <a href="https://www.confluent.io/blog/tag/change-data-capture/" target="_blank" rel="noopener" class="learn-link">
+                    <span>📖</span> Confluent CDC 블로그
+                </a>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <div id="kaitrust-footer"></div>
 
-    <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
-    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script>
+        document.querySelectorAll('.code-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const lang = tab.dataset.lang;
+                const section = tab.closest('.term-section');
+                section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+                section.querySelectorAll('.code-block').forEach(b => b.classList.remove('active'));
+                tab.classList.add('active');
+                section.querySelector(`.code-block[data-lang="${lang}"]`).classList.add('active');
+            });
+        });
+        function copyCode(btn) {
+            const code = btn.previousElementSibling.querySelector('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = '✅ 복사됨!';
+                setTimeout(() => btn.textContent = originalText, 2000);
+            });
+        }
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>

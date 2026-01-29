@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/css/kaitrust-common.css">
     <link rel="stylesheet" href="/css/light-mode.css">
     <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
 
     <style>
         .term-detail-container {
@@ -161,6 +162,7 @@
             .term-detail-header { padding: 2rem 1.5rem; }
             .term-title { font-size: 1.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -202,6 +204,122 @@
                 </a>
             </div>
         </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p><strong>데드락(Deadlock)</strong>은 두 개 이상의 트랜잭션이 서로가 점유한 리소스를 기다리며 영원히 진행되지 못하는 교착 상태입니다. 예를 들어, 트랜잭션 A가 테이블 X를 락한 후 테이블 Y를 요청하고, 트랜잭션 B가 테이블 Y를 락한 후 테이블 X를 요청하면 데드락이 발생합니다.</p>
+                <p>데드락의 4가지 필수 조건은 <strong>상호 배제</strong>(한 번에 하나만 사용), <strong>점유 대기</strong>(점유하면서 다른 것 요청), <strong>비선점</strong>(강제 회수 불가), <strong>순환 대기</strong>(원형으로 대기)입니다. 이 중 하나라도 깨면 데드락을 예방할 수 있습니다.</p>
+                <p>대부분의 DBMS는 데드락을 자동 감지하고, 비용이 낮은 트랜잭션을 롤백시켜 해결합니다. 애플리케이션에서는 재시도 로직을 구현해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>-- 데드락 발생 시나리오
+-- 트랜잭션 A
+BEGIN;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1; -- A가 row 1 락
+UPDATE accounts SET balance = balance + 100 WHERE id = 2; -- B의 락 대기
+
+-- 트랜잭션 B (동시 실행)
+BEGIN;
+UPDATE accounts SET balance = balance - 50 WHERE id = 2;  -- B가 row 2 락
+UPDATE accounts SET balance = balance + 50 WHERE id = 1;  -- A의 락 대기 → DEADLOCK!
+
+-- 해결책: 일관된 순서로 락 획득
+-- 항상 id가 작은 것부터 처리
+BEGIN;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT;
+
+-- Python에서 재시도 로직
+import time
+from sqlalchemy.exc import OperationalError
+
+def transfer_with_retry(from_id, to_id, amount, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            with db.begin():
+                # 일관된 순서로 락 획득
+                ids = sorted([from_id, to_id])
+                db.execute(f"SELECT * FROM accounts WHERE id IN ({ids}) FOR UPDATE")
+                db.execute(f"UPDATE accounts SET balance = balance - {amount} WHERE id = {from_id}")
+                db.execute(f"UPDATE accounts SET balance = balance + {amount} WHERE id = {to_id}")
+            return True
+        except OperationalError as e:
+            if "deadlock" in str(e).lower() and attempt < max_retries - 1:
+                time.sleep(0.1 * (2 ** attempt))  # 지수 백오프
+                continue
+            raise</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>운영팀:</strong> "결제 시스템에서 간헐적으로 deadlock 에러가 발생해요."</p>
+                <p><strong>DBA:</strong> "SHOW ENGINE INNODB STATUS 로 확인해보니 포인트 차감이랑 잔액 업데이트가 서로 순서가 다르네요."</p>
+                <p><strong>백엔드 개발자:</strong> "동시 결제 시 락 순서가 꼬이는 거군요. 항상 user_id 순으로 락 잡도록 수정할게요."</p>
+                <p><strong>DBA:</strong> "그리고 트랜잭션 범위도 줄여보세요. 외부 API 호출은 트랜잭션 밖으로 빼시고요."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "데드락이 발생하는 조건과 예방 방법을 설명해주세요."</p>
+                <p><strong>지원자:</strong> "상호 배제, 점유 대기, 비선점, 순환 대기 네 가지 조건이 동시에 만족될 때 발생합니다. 예방을 위해 리소스 획득 순서를 일관되게 하고, 트랜잭션 범위를 최소화하고, 타임아웃을 설정합니다."</p>
+                <p><strong>면접관:</strong> "감지 후 해결은요?"</p>
+                <p><strong>지원자:</strong> "DBMS가 자동 감지하고 하나를 롤백하면 애플리케이션에서 지수 백오프로 재시도합니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "이 코드 보면 먼저 주문 테이블 업데이트하고 재고 테이블 업데이트하는데..."</p>
+                <p><strong>개발자:</strong> "네, 주문 생성 로직이에요."</p>
+                <p><strong>리뷰어:</strong> "근데 취소 로직에서는 재고 먼저 복구하고 주문 상태 바꾸네요. 동시 실행되면 데드락 가능성 있어요."</p>
+                <p><strong>개발자:</strong> "아, 락 순서를 맞춰야겠네요. 취소도 주문→재고 순으로 수정할게요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>락 순서 불일치:</strong> 서로 다른 코드에서 테이블/로우 락 순서가 다르면 데드락 유발</li>
+                <li><strong>긴 트랜잭션:</strong> 트랜잭션 범위가 길수록 락 유지 시간 증가로 데드락 확률 상승</li>
+                <li><strong>인덱스 부재:</strong> 인덱스 없이 UPDATE하면 테이블 전체 락으로 데드락 가능성 증가</li>
+                <li><strong>재시도 미구현:</strong> 데드락 발생 시 적절한 재시도 로직 없으면 사용자 경험 저하</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98/" class="related-link">트랜잭션</a>
+                <a href="/ko/term/%EC%9D%B8%EB%8D%B1%EC%8A%A4/" class="related-link">인덱스</a>
+                <a href="/ko/term/%EC%BB%A4%EB%84%A5%EC%85%98%20%ED%92%80/" class="related-link">커넥션 풀</a>
+                <a href="/ko/term/%EC%8B%A4%ED%96%89%20%EA%B3%84%ED%9A%8D/" class="related-link">실행 계획</a>
+                <a href="/ko/term/%EC%BF%BC%EB%A6%AC%20%EC%98%B5%ED%8B%B0%EB%A7%88%EC%9D%B4%EC%A0%80/" class="related-link">쿼리 옵티마이저</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-deadlocks.html" target="_blank">MySQL InnoDB Deadlocks 공식 문서</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/explicit-locking.html" target="_blank">PostgreSQL Locking & Deadlock</a></li>
+                <li><a href="https://docs.microsoft.com/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide" target="_blank">SQL Server Locking Guide</a></li>
+            </ul>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -212,6 +330,7 @@
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/js/term-sections.js"></script>
     <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
 </body>
 </html>
