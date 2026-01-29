@@ -752,7 +752,7 @@
             const currentYear = new Date().getFullYear();
             const categoryCount = Object.keys(CATEGORIES).length;
 
-            document.getElementById('currentYear').textContent = currentYear;
+            const yearEl = document.getElementById('currentYear'); if (yearEl) yearEl.textContent = currentYear;
             document.getElementById('totalTerms').textContent = GLOSSARY_TERMS.length;
             document.getElementById('totalCategories').textContent = categoryCount;
             document.getElementById('latestYear').textContent = currentYear;
@@ -917,6 +917,7 @@
                 });
             });
 
+            document.getElementById('langBtn').addEventListener('click', () => { if (window.wiaLangModal) window.wiaLangModal.open(); });
         }
 
         function toggleFavorite(term) {
@@ -952,6 +953,11 @@
 
         if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
         else init();
+
+        if (typeof WIALanguageModal !== 'undefined') {
+            window.wiaLangModal = new WIALanguageModal();
+            window.wiaLangModal.init();
+        }
     })();
     </script>
 
