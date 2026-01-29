@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>멀티스레딩 (Multithreading) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="하나의 프로세스에서 여러 스레드를 실행하는 기법. CPU 활용률 향상. 동기화 이슈 주의 필요.">
+    <meta name="keywords" content="멀티스레딩, Multithreading, AI 용어, KAITRUST, AI 백과사전, 프로그래밍">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%A9%80%ED%8B%B0%EC%8A%A4%EB%A0%88%EB%94%A9/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EB%A9%80%ED%8B%B0%EC%8A%A4%EB%A0%88%EB%94%A9/">
+    <meta property="og:title" content="멀티스레딩 (Multithreading) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="하나의 프로세스에서 여러 스레드를 실행하는 기법. CPU 활용률 향상. 동기화 이슈 주의 필요.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="멀티스레딩 (Multithreading) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="하나의 프로세스에서 여러 스레드를 실행하는 기법. CPU 활용률 향상. 동기화 이슈 주의 필요.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "멀티스레딩",
+        "description": "하나의 프로세스에서 여러 스레드를 실행하는 기법. CPU 활용률 향상. 동기화 이슈 주의 필요.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 CSS */
+        .term-section { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; display: flex; align-items: center; gap: 0.5rem; }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; margin: 1rem 0; overflow: hidden; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(168, 85, 247, 0.2); border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .code-lang { color: #a855f7; font-size: 0.85rem; font-weight: 500; }
+        .copy-btn { background: rgba(255,255,255,0.1); border: none; padding: 0.4rem 0.8rem; border-radius: 6px; color: #94a3b8; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .code-block pre { padding: 1rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .conv-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .conv-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .conv-tab.active, .conv-tab:hover { background: rgba(168, 85, 247, 0.2); border-color: rgba(168, 85, 247, 0.4); color: #a855f7; }
+        .conv-content { display: none; }
+        .conv-content.active { display: block; }
+        .conv-item { padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 0.75rem; }
+        .conv-speaker { color: #a855f7; font-weight: 500; margin-bottom: 0.5rem; }
+        .conv-quote { color: #cbd5e1; font-style: italic; line-height: 1.6; }
+        .warning-list, .resource-list { list-style: none; padding: 0; margin: 0; }
+        .warning-list li, .resource-list li { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; }
+        .warning-list li:last-child, .resource-list li:last-child { border-bottom: none; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .resource-list a { color: #a855f7; text-decoration: none; }
+        .resource-list a:hover { text-decoration: underline; }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#prog">프로그래밍</a>
+            <span>›</span>
+            <span class="current">멀티스레딩</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>💻</span>
+                <span>프로그래밍</span>
+            </div>
+            <h1 class="term-title">멀티스레딩</h1>
+            <p class="term-english">Multithreading</p>
+            <div class="term-description">
+                <p>하나의 프로세스에서 여러 스레드를 실행하는 기법. CPU 활용률 향상. 동기화 이슈 주의 필요.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#prog" class="term-action-btn btn-secondary">
+                    💻 프로그래밍 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>멀티스레딩(Multithreading)은 하나의 프로세스 내에서 여러 스레드를 동시에 실행하는 프로그래밍 기법입니다. 각 스레드는 독립적인 실행 흐름을 가지면서 프로세스의 메모리와 자원을 공유합니다.</p>
+                <p>멀티스레딩의 장점은 CPU 활용률 향상, 응답성 개선, 자원 공유 효율성입니다. UI 스레드와 백그라운드 스레드를 분리하면 시간이 오래 걸리는 작업 중에도 UI가 멈추지 않습니다.</p>
+                <p>하지만 멀티스레딩은 동기화 문제를 수반합니다. 여러 스레드가 같은 데이터에 접근할 때 레이스 컨디션, 데드락, 라이브락 같은 문제가 발생할 수 있습니다. 뮤텍스, 세마포어, 모니터 같은 동기화 기법으로 이를 해결합니다.</p>
+                <p>Python은 GIL(Global Interpreter Lock) 때문에 CPU 바운드 작업에서 진정한 병렬 실행이 어렵습니다. Java, C++, Rust 등은 네이티브 멀티스레딩을 지원하며, Go는 고루틴으로 더 가벼운 동시성 모델을 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Java</span>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+                <pre><code>import java.util.concurrent.*;
+
+public class MultithreadingExample {
+    public static void main(String[] args) throws Exception {
+        // 1. Thread 클래스 상속
+        Thread thread1 = new Thread(() -> {
+            System.out.println("스레드 1: " + Thread.currentThread().getName());
+        });
+        thread1.start();
+
+        // 2. ExecutorService 사용 (권장)
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+
+        for (int i = 0; i < 10; i++) {
+            final int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " 실행: " +
+                    Thread.currentThread().getName());
+            });
+        }
+
+        executor.shutdown();
+        executor.awaitTermination(1, TimeUnit.MINUTES);
+
+        // 3. 동기화가 필요한 경우
+        Counter counter = new Counter();
+        Thread t1 = new Thread(() -> { for(int i=0; i<1000; i++) counter.increment(); });
+        Thread t2 = new Thread(() -> { for(int i=0; i<1000; i++) counter.increment(); });
+        t1.start(); t2.start();
+        t1.join(); t2.join();
+        System.out.println("카운터: " + counter.getCount()); // 2000
+    }
+}
+
+class Counter {
+    private int count = 0;
+    public synchronized void increment() { count++; }
+    public int getCount() { return count; }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'meeting')">💼 회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'interview')">👔 면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'review')">🔍 코드 리뷰</button>
+            </div>
+            <div id="meeting" class="conv-content active">
+                <div class="conv-item"><div class="conv-speaker">백엔드 개발자</div><div class="conv-quote">"이미지 처리 작업이 메인 스레드를 블록해서 API 응답이 느려져요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">시니어 개발자</div><div class="conv-quote">"스레드 풀을 사용해서 이미지 처리를 백그라운드로 옮기세요. 작업 완료 후 콜백이나 이벤트로 알림을 보내면 됩니다."</div></div>
+                <div class="conv-item"><div class="conv-speaker">백엔드 개발자</div><div class="conv-quote">"풀 사이즈는 어떻게 정하죠? CPU 코어 수 기준으로요?"</div></div>
+            </div>
+            <div id="interview" class="conv-content">
+                <div class="conv-item"><div class="conv-speaker">면접관</div><div class="conv-quote">"데드락이 발생하는 조건과 해결 방법을 설명해주세요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">지원자</div><div class="conv-quote">"상호 배제, 점유 대기, 비선점, 순환 대기 네 조건이 모두 충족되면 데드락이 발생합니다. 락 획득 순서를 일관되게 하거나, 타임아웃을 설정하거나, tryLock으로 해결합니다."</div></div>
+                <div class="conv-item"><div class="conv-speaker">면접관</div><div class="conv-quote">"스레드 풀의 적절한 크기는 어떻게 결정하나요?"</div></div>
+                <div class="conv-item"><div class="conv-speaker">지원자</div><div class="conv-quote">"CPU 바운드 작업은 코어 수 정도, I/O 바운드 작업은 코어 수의 2배 이상이 일반적입니다. 실제로는 부하 테스트로 최적값을 찾아야 합니다."</div></div>
+            </div>
+            <div id="review" class="conv-content">
+                <div class="conv-item"><div class="conv-speaker">리뷰어</div><div class="conv-quote">"이 HashMap을 여러 스레드에서 접근하고 있는데, ConcurrentHashMap을 사용하거나 동기화를 추가해야 해요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">작성자</div><div class="conv-quote">"ConcurrentHashMap으로 교체하겠습니다. 성능도 더 좋을 거예요."</div></div>
+                <div class="conv-item"><div class="conv-speaker">리뷰어</div><div class="conv-quote">"그리고 check-then-act 패턴도 있네요. 체크와 액션 사이에 다른 스레드가 끼어들 수 있어요."</div></div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>⚠️ <strong>공유 자원 동기화:</strong> 여러 스레드가 접근하는 데이터는 반드시 동기화하세요. 동기화 없이는 데이터 불일치가 발생합니다.</li>
+                <li>⚠️ <strong>스레드 풀 사용:</strong> 매 작업마다 새 스레드를 생성하지 마세요. 스레드 생성 비용이 높으므로 풀을 재사용하세요.</li>
+                <li>⚠️ <strong>데드락 방지:</strong> 여러 락을 사용할 때는 항상 같은 순서로 획득하고, 가능하면 타임아웃을 설정하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EC%8A%A4%EB%A0%88%EB%93%9C/" class="related-term">스레드</a>
+                <a href="/ko/term/%EB%8F%99%EC%8B%9C%EC%84%B1/" class="related-term">동시성</a>
+                <a href="/ko/term/%EA%B3%A0%EB%A3%A8%ED%8B%B4/" class="related-term">고루틴</a>
+                <a href="/ko/term/async%2Fawait/" class="related-term">async/await</a>
+                <a href="/ko/term/%EB%9F%B0%ED%83%80%EC%9E%84/" class="related-term">런타임</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li>📄 <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/" target="_blank" rel="noopener">Oracle Java - 동시성 튜토리얼</a></li>
+                <li>📘 <a href="https://en.cppreference.com/w/cpp/thread" target="_blank" rel="noopener">C++ 스레드 레퍼런스</a></li>
+                <li>🎬 <a href="https://www.youtube.com/results?search_query=multithreading+tutorial" target="_blank" rel="noopener">YouTube - 멀티스레딩 튜토리얼</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+        function copyCode(btn) { const code = btn.closest('.code-block').querySelector('code').textContent; navigator.clipboard.writeText(code).then(() => { const originalText = btn.textContent; btn.textContent = '✅ 복사됨'; setTimeout(() => btn.textContent = originalText, 2000); }); }
+        function showConv(btn, id) { document.querySelectorAll('.conv-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.conv-content').forEach(c => c.classList.remove('active')); btn.classList.add('active'); document.getElementById(id).classList.add('active'); }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

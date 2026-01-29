@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API (페치 API) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Fetch API는 브라우저 내장 HTTP 클라이언트로, Promise 기반의 현대적 네트워크 요청을 지원합니다. XMLHttpRequest를 대체하며 async/await와 함께 사용하면 깔끔한 비동기 코드를 작성할 수 있습니다.">
+    <meta name="keywords" content="Fetch API, 페치 API, HTTP 클라이언트, Promise, async await, XMLHttpRequest, 네트워크 요청, REST API, JSON, Request, Response, CORS, 비동기 통신, 웹개발">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Fetch%20API/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Fetch%20API/">
+    <meta property="og:title" content="Fetch API (페치 API) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Fetch API는 브라우저 내장 HTTP 클라이언트로, Promise 기반의 현대적 네트워크 요청을 지원합니다. XMLHttpRequest를 대체하며 async/await와 함께 사용하면 깔끔한 비동기 코드를 작성할 수 있습니다.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fetch API (페치 API) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Fetch API는 브라우저 내장 HTTP 클라이언트로, Promise 기반의 현대적 네트워크 요청을 지원합니다. XMLHttpRequest를 대체하며 async/await와 함께 사용하면 깔끔한 비동기 코드를 작성할 수 있습니다.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Fetch API",
+        "description": "Fetch API는 브라우저 내장 HTTP 클라이언트로, Promise 기반의 현대적 네트워크 요청을 지원합니다. XMLHttpRequest를 대체하며 async/await와 함께 사용하면 깔끔한 비동기 코드를 작성할 수 있습니다.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .term-section h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .term-section p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .term-section p:last-child {
+            margin-bottom: 0;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .conversation-example {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+        }
+        .conversation-example .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .conversation-example .message {
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+        .warning-list {
+            list-style: none;
+            padding: 0;
+        }
+        .warning-list li {
+            padding: 1rem;
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            margin-bottom: 0.75rem;
+            border-radius: 0 8px 8px 0;
+            color: #fcd34d;
+        }
+        .related-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .related-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 12px;
+            text-decoration: none;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .related-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateX(5px);
+        }
+        .resource-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 12px;
+            text-decoration: none;
+            color: #4ade80;
+            transition: all 0.3s;
+        }
+        .resource-link:hover {
+            background: rgba(34, 197, 94, 0.2);
+            transform: translateX(5px);
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+            .term-section { padding: 1.5rem; }
+            .related-links { grid-template-columns: 1fr; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#web">웹개발</a>
+            <span>›</span>
+            <span class="current">Fetch API</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🌐</span>
+                <span>웹개발</span>
+            </div>
+            <h1 class="term-title">Fetch API</h1>
+            <p class="term-english">페치 API</p>
+            <div class="term-description">
+                <p>Fetch API는 브라우저 내장 HTTP 클라이언트로, Promise 기반의 현대적 네트워크 요청을 지원합니다. XMLHttpRequest를 대체하며 async/await와 함께 사용하면 깔끔한 비동기 코드를 작성할 수 있습니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#web" class="term-action-btn btn-secondary">
+                    🌐 웹개발 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- Detailed Explanation Section -->
+        <section class="term-section">
+            <h2>📖 상세 설명</h2>
+            <p>Fetch API는 2015년 모던 브라우저에 도입된 네트워크 요청 인터페이스입니다. 기존 XMLHttpRequest(XHR)의 복잡한 콜백 패턴을 Promise 기반으로 개선하여, 비동기 HTTP 통신을 더 직관적으로 처리할 수 있게 해줍니다. 현재 모든 모던 브라우저와 Node.js 18+ 버전에서 네이티브로 지원됩니다.</p>
+            <p>fetch() 함수는 Request 객체 또는 URL을 인자로 받아 Response 객체를 반환하는 Promise를 생성합니다. Response 객체는 응답 본문을 다양한 형태(JSON, text, blob, arrayBuffer)로 파싱하는 메서드를 제공합니다. 스트림 기반 처리도 지원하여 대용량 파일 다운로드나 실시간 데이터 처리에도 활용됩니다.</p>
+            <p>Fetch API의 핵심 특징은 기본적으로 HTTP 오류(4xx, 5xx)를 예외로 던지지 않는다는 점입니다. 네트워크 장애만 reject되며, HTTP 상태 코드는 response.ok나 response.status로 직접 확인해야 합니다. 이러한 설계는 응답 본문에 포함된 에러 메시지를 읽을 수 있게 해주지만, 명시적인 상태 체크가 필수입니다.</p>
+            <p>AbortController와 함께 사용하면 진행 중인 요청을 취소할 수 있어, 사용자가 페이지를 떠나거나 검색어가 변경될 때 불필요한 요청을 중단할 수 있습니다. 또한 credentials, mode, cache 등의 옵션으로 쿠키 전송, CORS 동작, 캐시 정책을 세밀하게 제어할 수 있습니다.</p>
+        </section>
+
+        <!-- Code Example Section -->
+        <section class="term-section">
+            <h2>💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>// 기본 GET 요청
+const response = await fetch('/api/users');
+if (!response.ok) {
+  throw new Error(`HTTP error! status: ${response.status}`);
+}
+const users = await response.json();
+
+// POST 요청 with JSON body
+const newUser = await fetch('/api/users', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ name: '김철수', email: 'kim@example.com' }),
+});
+
+// 인증 토큰과 함께 요청
+const authResponse = await fetch('/api/profile', {
+  headers: {
+    'Authorization': `Bearer ${accessToken}`,
+  },
+  credentials: 'include', // 쿠키 포함
+});
+
+// AbortController로 요청 취소
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+try {
+  const data = await fetch('/api/slow-endpoint', {
+    signal: controller.signal,
+  });
+  clearTimeout(timeoutId);
+} catch (error) {
+  if (error.name === 'AbortError') {
+    console.log('요청이 타임아웃되었습니다');
+  }
+}
+
+// 파일 업로드 with FormData
+const formData = new FormData();
+formData.append('file', fileInput.files[0]);
+formData.append('description', '프로필 이미지');
+
+await fetch('/api/upload', {
+  method: 'POST',
+  body: formData, // Content-Type 자동 설정
+});
+
+// 재사용 가능한 fetch wrapper
+async function api(endpoint, options = {}) {
+  const response = await fetch(`/api${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.message || `HTTP ${response.status}`);
+  }
+
+  return response.json();
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Practical Conversation Section -->
+        <section class="term-section">
+            <h2>🗣️ 실무 대화 예시</h2>
+            <div class="conversation-example">
+                <div class="speaker">👨‍💻 주니어 개발자</div>
+                <div class="message">"fetch로 API 호출했는데 에러 처리가 제대로 안 되는 것 같아요. try-catch로 감쌌는데 404 에러가 catch로 안 가요."</div>
+            </div>
+            <div class="conversation-example">
+                <div class="speaker">👩‍💻 시니어 개발자</div>
+                <div class="message">"fetch는 네트워크 에러만 reject해요. HTTP 에러는 response.ok로 체크해야 해요. 패턴은 'if (!response.ok) throw new Error(...)' 로 명시적으로 던져주세요. 아예 axios처럼 자동으로 에러 던지는 wrapper 함수를 만들어두면 편해요."</div>
+            </div>
+            <div class="conversation-example">
+                <div class="speaker">👨‍💼 기술 면접관</div>
+                <div class="message">"fetch와 axios의 차이점과 각각 어떤 상황에서 선택하시겠어요?"</div>
+            </div>
+            <div class="conversation-example">
+                <div class="speaker">👨‍💻 지원자</div>
+                <div class="message">"fetch는 브라우저 네이티브라 번들 사이즈가 0이고, 대부분의 경우 충분합니다. 다만 axios는 인터셉터, 자동 에러 처리, 요청 취소가 더 편리하고, IE 지원도 됩니다. 저는 작은 프로젝트는 fetch wrapper를 만들어 쓰고, 복잡한 API 레이어가 필요하면 axios를 선택합니다."</div>
+            </div>
+        </section>
+
+        <!-- Warning Section -->
+        <section class="term-section">
+            <h2>⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>response.json() 중복 호출 불가:</strong> Response body는 스트림이라 한 번만 읽을 수 있습니다. json()이나 text()를 두 번 호출하면 "body stream already read" 에러가 발생합니다. 여러 번 사용하려면 response.clone()을 먼저 호출하세요.</li>
+                <li><strong>CORS 설정 확인:</strong> 다른 도메인 API 호출 시 서버의 Access-Control-Allow-Origin 헤더가 필요합니다. credentials: 'include' 사용 시에는 서버에서 명시적 origin을 설정해야 하며, '*'는 허용되지 않습니다.</li>
+                <li><strong>메모리 누수 방지:</strong> 컴포넌트 언마운트 후에도 fetch 응답이 도착하면 상태 업데이트 시도로 경고가 발생합니다. AbortController로 cleanup하거나, 언마운트 플래그를 체크하세요.</li>
+            </ul>
+        </section>
+
+        <!-- Related Terms Section -->
+        <section class="term-section">
+            <h2>🔗 관련 용어</h2>
+            <div class="related-links">
+                <a href="/ko/term/REST%20API/" class="related-link">
+                    <span>📡</span>
+                    <span>REST API</span>
+                </a>
+                <a href="/ko/term/GraphQL/" class="related-link">
+                    <span>📊</span>
+                    <span>GraphQL</span>
+                </a>
+                <a href="/ko/term/CORS/" class="related-link">
+                    <span>🔒</span>
+                    <span>CORS</span>
+                </a>
+                <a href="/ko/term/SWR/" class="related-link">
+                    <span>🔄</span>
+                    <span>SWR</span>
+                </a>
+                <a href="/ko/term/TanStack%20Query/" class="related-link">
+                    <span>⚡</span>
+                    <span>TanStack Query</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Learning Resources Section -->
+        <section class="term-section">
+            <h2>📚 더 배우기</h2>
+            <div class="resource-links">
+                <a href="https://developer.mozilla.org/ko/docs/Web/API/Fetch_API" target="_blank" rel="noopener noreferrer" class="resource-link">
+                    <span>📖</span>
+                    <span>MDN - Fetch API 가이드</span>
+                </a>
+                <a href="https://javascript.info/fetch" target="_blank" rel="noopener noreferrer" class="resource-link">
+                    <span>📘</span>
+                    <span>JavaScript.info - Fetch 튜토리얼</span>
+                </a>
+                <a href="https://web.dev/introduction-to-fetch/" target="_blank" rel="noopener noreferrer" class="resource-link">
+                    <span>🌐</span>
+                    <span>web.dev - Introduction to fetch()</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

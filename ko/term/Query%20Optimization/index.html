@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Optimization (쿼리 최적화) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="데이터베이스 쿼리의 실행 계획을 분석하고 최적화하여 성능을 향상시키는 기법입니다. 인덱스 활용, 조인 순서 조정, 실행 계획 분석을 포함합니다.">
+    <meta name="keywords" content="Query Optimization, 쿼리 최적화, SQL 최적화, 실행 계획, 인덱스, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Query%20Optimization/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Query%20Optimization/">
+    <meta property="og:title" content="Query Optimization (쿼리 최적화) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="데이터베이스 쿼리의 실행 계획을 분석하고 최적화하여 성능을 향상시키는 기법입니다.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Query Optimization (쿼리 최적화) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="데이터베이스 쿼리의 실행 계획을 분석하고 최적화하여 성능을 향상시키는 기법입니다.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Query Optimization",
+        "description": "데이터베이스 쿼리의 실행 계획을 분석하고 최적화하여 성능을 향상시키는 기법입니다. 인덱스 활용, 조인 순서 조정, 실행 계획 분석을 포함합니다.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-title::before {
+            font-size: 1.4rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+        .code-block {
+            background: #1e293b;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            color: #e2e8f0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .usage-example {
+            background: rgba(168, 85, 247, 0.1);
+            border-left: 3px solid #a855f7;
+            padding: 1rem 1.5rem;
+            margin: 0.75rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .usage-example .label {
+            font-weight: 600;
+            color: #a855f7;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .mistake-item {
+            padding: 1rem;
+            margin: 0.75rem 0;
+            border-radius: 8px;
+        }
+        .mistake-item.wrong {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+        }
+        .mistake-item.correct {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 3px solid #22c55e;
+        }
+        .related-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-1px);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .resource-list li:last-child {
+            border-bottom: none;
+        }
+        .resource-list a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+            .term-section { padding: 1.5rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">Query Optimization</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">Query Optimization</h1>
+            <p class="term-english">쿼리 최적화</p>
+            <div class="term-description">
+                <p>데이터베이스 쿼리의 실행 계획을 분석하고 최적화하여 성능을 향상시키는 기법입니다. 인덱스 활용, 조인 순서 조정, 실행 계획 분석을 통해 쿼리 응답 시간을 단축하고 시스템 리소스 사용을 최소화합니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Query Optimization(쿼리 최적화)</strong>은 SQL 쿼리가 데이터베이스에서 실행될 때 최적의 실행 계획을 찾아 성능을 극대화하는 과정입니다. 데이터베이스 옵티마이저가 자동으로 실행 계획을 결정하지만, 개발자가 쿼리 구조, 인덱스 설계, 통계 정보를 적절히 관리해야 최적의 성능을 얻을 수 있습니다.</p>
+
+                <p>쿼리 최적화는 크게 두 가지 접근법으로 나뉩니다: (1) <strong>Rule-based Optimization(RBO)</strong> - 미리 정의된 규칙에 따라 실행 계획 결정, (2) <strong>Cost-based Optimization(CBO)</strong> - 테이블 통계와 인덱스 정보를 기반으로 각 실행 계획의 비용을 계산하여 최소 비용 계획 선택. 현대 RDBMS(PostgreSQL, MySQL, Oracle 등)는 대부분 CBO를 사용합니다.</p>
+
+                <p>최적화의 핵심 요소는 <strong>인덱스 설계</strong>, <strong>조인 최적화</strong>, <strong>서브쿼리 처리</strong>입니다. 적절한 인덱스는 Full Table Scan을 Index Seek으로 변환하여 성능을 극적으로 향상시킵니다. 조인 순서와 방식(Nested Loop, Hash Join, Merge Join)에 따라 성능이 수십 배 차이날 수 있으며, 서브쿼리는 종종 JOIN으로 재작성하여 최적화합니다.</p>
+
+                <p>AI/ML 맥락에서 쿼리 최적화는 특히 중요합니다. 대규모 데이터셋에서 학습 데이터를 추출하거나, Feature Store에서 실시간 피처를 조회하거나, 벡터 데이터베이스에서 유사도 검색을 수행할 때 쿼리 성능이 전체 파이프라인 지연에 직접적으로 영향을 미칩니다. 최근에는 AI 기반 쿼리 최적화(Learned Query Optimizer)도 연구되고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>PostgreSQL을 기준으로 쿼리 최적화의 핵심 기법들을 보여드립니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code>-- ============================================
+-- Query Optimization 실전 예제 (PostgreSQL)
+-- ============================================
+
+-- 1. EXPLAIN ANALYZE로 실행 계획 분석
+-- -----------------------------------------
+-- 최적화 전: Full Table Scan
+EXPLAIN ANALYZE
+SELECT * FROM users WHERE email = 'test@example.com';
+-- 결과 예시: Seq Scan on users  (cost=0.00..25461.00 rows=1 width=123)
+--           actual time=142.532..142.532 rows=1 loops=1
+
+-- 인덱스 생성
+CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
+
+-- 최적화 후: Index Scan
+EXPLAIN ANALYZE
+SELECT * FROM users WHERE email = 'test@example.com';
+-- 결과 예시: Index Scan using idx_users_email on users  (cost=0.42..8.44 rows=1 width=123)
+--           actual time=0.028..0.029 rows=1 loops=1
+
+
+-- 2. 복합 인덱스 설계
+-- -----------------------------------------
+-- 자주 함께 사용되는 조건에 복합 인덱스 생성
+-- 순서 중요: 선택도(Selectivity)가 높은 컬럼을 앞에
+
+-- WHERE status = 'active' AND created_at > '2024-01-01'
+CREATE INDEX idx_orders_status_created
+ON orders(status, created_at DESC);
+
+-- Covering Index: 인덱스만으로 쿼리 처리 (Index Only Scan)
+CREATE INDEX idx_orders_covering
+ON orders(status, created_at)
+INCLUDE (total_amount, user_id);
+
+-- 이제 인덱스만 읽고 테이블 접근 불필요
+EXPLAIN ANALYZE
+SELECT user_id, total_amount
+FROM orders
+WHERE status = 'completed' AND created_at > '2024-01-01';
+
+
+-- 3. JOIN 최적화
+-- -----------------------------------------
+-- 작은 테이블을 먼저 필터링하여 조인
+
+-- 비효율적인 쿼리
+SELECT o.*, u.name
+FROM orders o
+JOIN users u ON o.user_id = u.id
+WHERE o.created_at > '2024-01-01'
+  AND u.country = 'KR';
+
+-- 최적화: 필터링을 서브쿼리로 먼저 수행
+SELECT o.*, u.name
+FROM orders o
+JOIN (
+    SELECT id, name FROM users WHERE country = 'KR'
+) u ON o.user_id = u.id
+WHERE o.created_at > '2024-01-01';
+
+-- 또는 CTE 활용 (가독성 향상)
+WITH korean_users AS (
+    SELECT id, name FROM users WHERE country = 'KR'
+)
+SELECT o.*, ku.name
+FROM orders o
+JOIN korean_users ku ON o.user_id = ku.id
+WHERE o.created_at > '2024-01-01';
+
+
+-- 4. 서브쿼리를 JOIN으로 변환
+-- -----------------------------------------
+-- 비효율적: 상관 서브쿼리 (각 행마다 서브쿼리 실행)
+SELECT *
+FROM products p
+WHERE p.price > (
+    SELECT AVG(price) FROM products WHERE category_id = p.category_id
+);
+
+-- 최적화: JOIN으로 변환
+SELECT p.*
+FROM products p
+JOIN (
+    SELECT category_id, AVG(price) as avg_price
+    FROM products
+    GROUP BY category_id
+) cat_avg ON p.category_id = cat_avg.category_id
+WHERE p.price > cat_avg.avg_price;
+
+
+-- 5. 페이지네이션 최적화 (Keyset Pagination)
+-- -----------------------------------------
+-- 비효율적: OFFSET은 큰 값에서 느림
+SELECT * FROM posts ORDER BY created_at DESC LIMIT 20 OFFSET 10000;
+
+-- 최적화: Keyset 방식 (커서 기반)
+-- 이전 페이지의 마지막 created_at 값을 사용
+SELECT * FROM posts
+WHERE created_at < '2024-06-15 10:30:00'  -- 마지막 항목의 timestamp
+ORDER BY created_at DESC
+LIMIT 20;
+
+
+-- 6. 통계 업데이트
+-- -----------------------------------------
+-- 대량 데이터 변경 후 통계 갱신 (옵티마이저 정확도 향상)
+ANALYZE orders;
+ANALYZE users;
+
+-- 특정 컬럼만 분석
+ANALYZE orders(status, created_at);
+
+
+-- 7. 파티셔닝 활용
+-- -----------------------------------------
+-- 대용량 테이블을 날짜별로 파티셔닝
+CREATE TABLE events (
+    id BIGSERIAL,
+    event_type VARCHAR(50),
+    payload JSONB,
+    created_at TIMESTAMP NOT NULL
+) PARTITION BY RANGE (created_at);
+
+-- 월별 파티션 생성
+CREATE TABLE events_2024_01 PARTITION OF events
+    FOR VALUES FROM ('2024-01-01') TO ('2024-02-01');
+CREATE TABLE events_2024_02 PARTITION OF events
+    FOR VALUES FROM ('2024-02-01') TO ('2024-03-01');
+
+-- 특정 기간 조회 시 해당 파티션만 스캔 (Partition Pruning)
+SELECT * FROM events
+WHERE created_at >= '2024-01-15' AND created_at < '2024-01-20';
+
+
+-- 8. 벡터 검색 최적화 (pgvector)
+-- -----------------------------------------
+-- AI/ML에서 자주 사용하는 벡터 유사도 검색
+CREATE EXTENSION IF NOT EXISTS vector;
+
+-- 벡터 컬럼에 인덱스 생성 (IVFFlat 방식)
+CREATE INDEX idx_embeddings_ivfflat
+ON documents USING ivfflat (embedding vector_cosine_ops)
+WITH (lists = 100);  -- 클러스터 수 (데이터 크기에 따라 조정)
+
+-- HNSW 인덱스 (더 빠르지만 메모리 많이 사용)
+CREATE INDEX idx_embeddings_hnsw
+ON documents USING hnsw (embedding vector_cosine_ops)
+WITH (m = 16, ef_construction = 64);
+
+-- 유사도 검색
+SELECT id, content, embedding <=> '[0.1, 0.2, ...]'::vector AS distance
+FROM documents
+ORDER BY embedding <=> '[0.1, 0.2, ...]'::vector
+LIMIT 10;</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="usage-example">
+                    <div class="label">미팅에서</div>
+                    <p>"이 API 응답 시간이 느린 원인을 보니 <strong>Full Table Scan</strong>이 발생하고 있네요. <strong>복합 인덱스</strong> 추가하고 <strong>EXPLAIN ANALYZE</strong>로 검증하면 해결될 것 같습니다."</p>
+                </div>
+                <div class="usage-example">
+                    <div class="label">기술 면접에서</div>
+                    <p>"<strong>쿼리 최적화</strong>는 EXPLAIN 분석부터 시작합니다. Seq Scan 대신 Index Scan을 유도하고, 조인 순서와 방식을 최적화하며, 필요시 <strong>Covering Index</strong>로 테이블 접근 자체를 제거합니다."</p>
+                </div>
+                <div class="usage-example">
+                    <div class="label">기술 토론에서</div>
+                    <p>"대량 데이터 처리에서는 <strong>Keyset Pagination</strong>이 OFFSET보다 효율적이에요. <strong>파티셔닝</strong>으로 Partition Pruning을 활용하면 스캔 범위를 더 줄일 수 있고요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="mistake-item wrong">
+                    <strong>❌ "인덱스를 많이 만들수록 좋다"</strong>
+                    <p>인덱스는 SELECT 성능을 향상시키지만 INSERT, UPDATE, DELETE 성능은 저하시킵니다. 또한 저장 공간도 차지합니다. 실제 쿼리 패턴을 분석하여 필요한 인덱스만 생성하고, 사용되지 않는 인덱스는 주기적으로 정리해야 합니다.</p>
+                </div>
+                <div class="mistake-item wrong">
+                    <strong>❌ "SELECT * 로 모든 컬럼을 가져와도 괜찮다"</strong>
+                    <p>필요한 컬럼만 명시적으로 SELECT 하면 I/O와 네트워크 전송량을 줄일 수 있습니다. 특히 Covering Index를 활용하면 테이블 접근 없이 인덱스만으로 쿼리를 처리하여 성능을 크게 향상시킬 수 있습니다.</p>
+                </div>
+                <div class="mistake-item correct">
+                    <strong>✅ 올바른 접근</strong>
+                    <p>항상 EXPLAIN ANALYZE로 실행 계획을 먼저 확인하세요. 예상 비용(cost)과 실제 실행 시간(actual time)을 비교하고, Seq Scan, Nested Loop 등 비효율적인 패턴을 식별합니다. 대량 데이터 변경 후에는 ANALYZE로 통계를 갱신하여 옵티마이저의 판단 정확도를 유지합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-links">
+                <a href="/ko/term/Index/" class="related-link">Index</a>
+                <a href="/ko/term/Vector%20Database/" class="related-link">Vector Database</a>
+                <a href="/ko/term/Feature%20Store/" class="related-link">Feature Store</a>
+                <a href="/ko/term/Data%20Pipeline/" class="related-link">Data Pipeline</a>
+                <a href="/ko/term/ETL/" class="related-link">ETL</a>
+                <a href="/ko/term/Caching/" class="related-link">Caching</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li>📘 <a href="https://www.postgresql.org/docs/current/performance-tips.html" target="_blank" rel="noopener">PostgreSQL Performance Tips 공식 문서</a></li>
+                <li>📗 <a href="https://use-the-index-luke.com/" target="_blank" rel="noopener">Use The Index, Luke! - SQL 인덱싱과 튜닝 가이드</a></li>
+                <li>📕 <a href="https://dev.mysql.com/doc/refman/8.0/en/optimization.html" target="_blank" rel="noopener">MySQL Optimization 공식 문서</a></li>
+                <li>🎓 <a href="https://www.pgmustard.com/blog" target="_blank" rel="noopener">pgMustard Blog - PostgreSQL EXPLAIN 분석 팁</a></li>
+                <li>📄 <a href="https://arxiv.org/abs/2004.03814" target="_blank" rel="noopener">Neo: A Learned Query Optimizer (AI 기반 쿼리 최적화 논문)</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.querySelector('code');
+        const text = codeBlock.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            button.textContent = '✅ 복사됨!';
+            setTimeout(() => button.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

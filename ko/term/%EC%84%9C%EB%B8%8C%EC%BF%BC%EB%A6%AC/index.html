@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서브쿼리 (Subquery) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="쿼리 안의 쿼리. 복잡한 조건 표현.">
+    <meta name="keywords" content="서브쿼리, Subquery, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EC%84%9C%EB%B8%8C%EC%BF%BC%EB%A6%AC/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EC%84%9C%EB%B8%8C%EC%BF%BC%EB%A6%AC/">
+    <meta property="og:title" content="서브쿼리 (Subquery) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="쿼리 안의 쿼리. 복잡한 조건 표현.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="서브쿼리 (Subquery) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="쿼리 안의 쿼리. 복잡한 조건 표현.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "서브쿼리",
+        "description": "쿼리 안의 쿼리. 복잡한 조건 표현.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#db">데이터베이스</a>
+            <span>›</span>
+            <span class="current">서브쿼리</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🗄️</span>
+                <span>데이터베이스</span>
+            </div>
+            <h1 class="term-title">서브쿼리</h1>
+            <p class="term-english">Subquery</p>
+            <div class="term-description">
+                <p>쿼리 안의 쿼리. 복잡한 조건 표현.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#db" class="term-action-btn btn-secondary">
+                    🗄️ 데이터베이스 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">상세 설명</h2>
+            <div class="detail-content">
+                <p>서브쿼리(Subquery)는 SQL 문 안에 포함된 또 다른 SELECT 문으로, 외부 쿼리가 사용할 결과를 제공합니다. 중첩 쿼리(Nested Query)라고도 부르며, WHERE, FROM, SELECT 절 등 다양한 위치에서 사용할 수 있습니다.</p>
+                <p>서브쿼리는 크게 스칼라 서브쿼리(단일 값 반환), 인라인 뷰(FROM 절에서 사용), 상관 서브쿼리(외부 쿼리 참조)로 구분됩니다. 복잡한 조건이나 계산이 필요할 때 유용하지만, 과도한 사용은 성능 저하를 유발할 수 있습니다.</p>
+                <p>일부 서브쿼리는 JOIN으로 변환하여 성능을 개선할 수 있습니다. 쿼리 옵티마이저가 자동으로 최적화하기도 하지만, 개발자가 의도적으로 변환하면 더 나은 실행 계획을 얻을 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <pre><code>-- 스칼라 서브쿼리 (SELECT 절)
+SELECT
+    name,
+    salary,
+    (SELECT AVG(salary) FROM employees) as avg_salary
+FROM employees;
+
+-- WHERE 절 서브쿼리
+SELECT name, department
+FROM employees
+WHERE department_id IN (
+    SELECT id FROM departments
+    WHERE location = 'Seoul'
+);
+
+-- 상관 서브쿼리 (Correlated Subquery)
+SELECT e.name, e.salary
+FROM employees e
+WHERE e.salary > (
+    SELECT AVG(salary)
+    FROM employees
+    WHERE department_id = e.department_id
+);
+
+-- EXISTS 서브쿼리
+SELECT c.name
+FROM customers c
+WHERE EXISTS (
+    SELECT 1 FROM orders o
+    WHERE o.customer_id = c.id
+    AND o.order_date > '2024-01-01'
+);
+
+-- 인라인 뷰 (FROM 절 서브쿼리)
+SELECT dept_name, avg_salary
+FROM (
+    SELECT d.name as dept_name, AVG(e.salary) as avg_salary
+    FROM departments d
+    JOIN employees e ON d.id = e.department_id
+    GROUP BY d.name
+) dept_stats
+WHERE avg_salary > 5000000;</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>백엔드 개발자:</strong> 이 쿼리 너무 느린데, 서브쿼리가 여러 개 중첩되어 있어요.</p>
+                <p><strong>DBA:</strong> 상관 서브쿼리네요. 외부 쿼리 행마다 서브쿼리가 실행되니까 느릴 수밖에요.</p>
+                <p><strong>백엔드 개발자:</strong> JOIN으로 바꾸면 나아질까요?</p>
+                <p><strong>DBA:</strong> 네, 대부분의 경우 JOIN이 더 효율적이에요. 옵티마이저가 실행 계획을 더 잘 세울 수 있거든요.</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> 서브쿼리와 JOIN의 차이점과 어떤 상황에서 서브쿼리를 사용하시나요?</p>
+                <p><strong>지원자:</strong> 서브쿼리는 복잡한 조건이나 단일 값을 구할 때 가독성이 좋습니다. 하지만 상관 서브쿼리는 행마다 실행되어 성능 이슈가 있어서, 가능하면 JOIN으로 변환하는 게 좋습니다. EXISTS는 데이터 존재 여부만 확인할 때 효율적입니다.</p>
+                <p><strong>면접관:</strong> 스칼라 서브쿼리의 주의점은요?</p>
+                <p><strong>지원자:</strong> 스칼라 서브쿼리는 반드시 단일 행, 단일 열을 반환해야 합니다. 여러 행이 반환되면 에러가 발생해요.</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>시니어:</strong> 이 코드에서 서브쿼리가 세 번이나 같은 테이블을 조회하네요.</p>
+                <p><strong>주니어:</strong> 네, 조건마다 필요해서요.</p>
+                <p><strong>시니어:</strong> WITH 절(CTE)로 한 번 조회해서 재사용하거나, JOIN으로 리팩토링하면 성능이 훨씬 좋아질 거예요. 서브쿼리 중복은 피해야 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">주의사항</h2>
+            <ul class="warning-list">
+                <li>상관 서브쿼리는 외부 쿼리 행 수만큼 반복 실행되어 성능 저하 가능</li>
+                <li>스칼라 서브쿼리는 반드시 단일 값만 반환해야 함</li>
+                <li>중첩이 깊어지면 가독성과 유지보수성이 떨어짐</li>
+                <li>IN 절 서브쿼리에서 NULL 값 처리에 주의 필요</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%BF%BC%EB%A6%AC/" class="related-link">쿼리</a>
+                <a href="/ko/term/%EC%A1%B0%EC%9D%B8/" class="related-link">조인</a>
+                <a href="/ko/term/%EC%8B%A4%ED%96%89%20%EA%B3%84%ED%9A%8D/" class="related-link">실행 계획</a>
+                <a href="/ko/term/%EC%BF%BC%EB%A6%AC%20%EC%98%B5%ED%8B%B0%EB%A7%88%EC%9D%B4%EC%A0%80/" class="related-link">쿼리 옵티마이저</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://dev.mysql.com/doc/refman/8.0/en/subqueries.html" target="_blank">MySQL Subquery 공식 문서</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/functions-subquery.html" target="_blank">PostgreSQL Subquery Functions</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script src="/js/term-sections.js"></script>
+</body>
+</html>

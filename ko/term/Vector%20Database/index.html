@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Database (벡터 DB) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="고차원 벡터 임베딩을 저장하고 유사도 검색을 수행하는 특화 데이터베이스. RAG, 시맨틱 검색, 추천 시스템에 활용.">
+    <meta name="keywords" content="Vector Database, 벡터 DB, 임베딩, Pinecone, Weaviate, Qdrant, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Vector%20Database/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Vector%20Database/">
+    <meta property="og:title" content="Vector Database (벡터 DB) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="고차원 벡터 임베딩을 저장하고 유사도 검색을 수행하는 특화 데이터베이스. RAG, 시맨틱 검색, 추천 시스템에 활용.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vector Database (벡터 DB) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="고차원 벡터 임베딩을 저장하고 유사도 검색을 수행하는 특화 데이터베이스. RAG, 시맨틱 검색, 추천 시스템에 활용.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Vector Database",
+        "description": "고차원 벡터 임베딩을 저장하고 유사도 검색을 수행하는 특화 데이터베이스. RAG, 시맨틱 검색, 추천 시스템에 활용.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        .section-content p {
+            margin-bottom: 1.25rem;
+        }
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Code Block */
+        .code-container {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .code-lang {
+            color: #a855f7;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .copy-btn {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #e2e8f0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.4);
+        }
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+        .code-content pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #e2e8f0;
+        }
+
+        /* Conversation Examples */
+        .conversation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .conversation-item {
+            background: rgba(168, 85, 247, 0.05);
+            border-left: 3px solid #a855f7;
+            padding: 1rem 1.25rem;
+            border-radius: 0 10px 10px 0;
+        }
+        .conversation-context {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+        .conversation-text {
+            color: #e2e8f0;
+            font-size: 1rem;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .warning-box:last-child {
+            margin-bottom: 0;
+        }
+        .warning-title {
+            color: #f59e0b;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .warning-content {
+            color: #fcd34d;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Related Terms */
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        .related-item {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            text-decoration: none;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .related-item:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Resource Links */
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #38bdf8;
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            background: rgba(56, 189, 248, 0.05);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .resource-link:hover {
+            background: rgba(56, 189, 248, 0.15);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .comparison-table th {
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            color: #e2e8f0;
+        }
+        .comparison-table tr:hover td {
+            background: rgba(168, 85, 247, 0.05);
+        }
+        .price-highlight {
+            color: #10b981;
+            font-weight: 600;
+        }
+        .feature-tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin: 0.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+            .content-section { padding: 1.5rem; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table th,
+            .comparison-table td { padding: 0.5rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">Vector Database</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">Vector Database</h1>
+            <p class="term-english">벡터 데이터베이스</p>
+            <div class="term-description">
+                <p>고차원 벡터 임베딩을 저장하고 유사도 검색을 수행하는 특화 데이터베이스. RAG, 시맨틱 검색, 추천 시스템에 활용.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- Detailed Description -->
+        <section class="content-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>
+                    벡터 데이터베이스(Vector Database)는 고차원 벡터 데이터를 효율적으로 저장하고 유사도 기반 검색을 수행하는 특화된 데이터베이스입니다. 전통적인 관계형 데이터베이스가 정확한 값 매칭에 최적화된 반면, 벡터 DB는 "의미적으로 유사한" 데이터를 찾는 데 특화되어 있습니다. 텍스트, 이미지, 오디오 등을 AI 모델이 생성한 임베딩 벡터로 변환하여 저장하고, 쿼리 벡터와 가장 가까운 벡터들을 빠르게 검색합니다.
+                </p>
+                <p>
+                    벡터 DB의 핵심 기술은 ANN(Approximate Nearest Neighbor) 알고리즘입니다. 수백만~수억 개의 고차원 벡터에서 정확한 최근접 이웃을 찾는 것은 계산적으로 매우 비싸므로, HNSW(Hierarchical Navigable Small World), IVF(Inverted File Index), PQ(Product Quantization) 같은 근사 알고리즘을 사용합니다. 이 알고리즘들은 약간의 정확도를 희생하여 검색 속도를 수백~수천 배 향상시킵니다.
+                </p>
+                <p>
+                    실무에서 벡터 DB는 RAG(Retrieval-Augmented Generation) 시스템의 핵심 구성 요소입니다. 문서를 청킹하고 임베딩하여 벡터 DB에 저장한 후, 사용자 질문과 유사한 문서 조각을 검색하여 LLM에 컨텍스트로 제공합니다. 이 외에도 시맨틱 검색, 이미지 유사도 검색, 추천 시스템, 중복 탐지 등 다양한 AI 애플리케이션에서 활용됩니다.
+                </p>
+                <p>
+                    주요 벡터 DB로는 Pinecone(완전 관리형 SaaS), Weaviate(오픈소스, GraphQL API), Qdrant(Rust 기반 고성능), Milvus(대규모 분산), Chroma(로컬 개발용) 등이 있습니다. 또한 PostgreSQL의 pgvector, Elasticsearch의 벡터 검색 기능처럼 기존 DB에 벡터 기능을 추가한 솔루션도 있습니다. 선택 시 확장성, 호스팅 옵션, 메타데이터 필터링, 하이브리드 검색 지원 여부를 고려해야 합니다.
+                </p>
+            </div>
+        </section>
+
+        <!-- Code Example -->
+        <section class="content-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <p class="section-content" style="margin-bottom: 1rem;">Pinecone과 OpenAI 임베딩을 활용한 벡터 검색 예제:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-lang">Python</span>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+                <div class="code-content">
+                    <pre><code># Vector Database 활용 예제 - Pinecone + OpenAI
+# pip install pinecone-client openai
+
+import os
+from typing import List, Dict, Any
+import hashlib
+
+# Pinecone 클라이언트 (v3.0+)
+from pinecone import Pinecone, ServerlessSpec
+
+# OpenAI 임베딩
+from openai import OpenAI
+
+
+class VectorDBManager:
+    """벡터 데이터베이스 관리 클래스"""
+
+    def __init__(self, pinecone_api_key: str, openai_api_key: str):
+        # 클라이언트 초기화
+        self.pc = Pinecone(api_key=pinecone_api_key)
+        self.openai = OpenAI(api_key=openai_api_key)
+
+        self.embedding_model = "text-embedding-3-small"
+        self.dimension = 1536  # text-embedding-3-small 차원
+
+    def create_index(self, index_name: str):
+        """인덱스 생성"""
+        # 기존 인덱스 확인
+        existing_indexes = [idx.name for idx in self.pc.list_indexes()]
+
+        if index_name not in existing_indexes:
+            self.pc.create_index(
+                name=index_name,
+                dimension=self.dimension,
+                metric="cosine",  # 코사인 유사도
+                spec=ServerlessSpec(
+                    cloud="aws",
+                    region="us-east-1"
+                )
+            )
+            print(f"Index '{index_name}' created successfully")
+        else:
+            print(f"Index '{index_name}' already exists")
+
+        return self.pc.Index(index_name)
+
+    def get_embedding(self, text: str) -> List[float]:
+        """텍스트를 임베딩 벡터로 변환"""
+        response = self.openai.embeddings.create(
+            input=text,
+            model=self.embedding_model
+        )
+        return response.data[0].embedding
+
+    def get_embeddings_batch(self, texts: List[str]) -> List[List[float]]:
+        """배치 임베딩 생성"""
+        response = self.openai.embeddings.create(
+            input=texts,
+            model=self.embedding_model
+        )
+        return [item.embedding for item in response.data]
+
+    def upsert_documents(self, index, documents: List[Dict[str, Any]]):
+        """
+        문서를 벡터 DB에 삽입/업데이트
+
+        Args:
+            index: Pinecone 인덱스
+            documents: [{"id": str, "text": str, "metadata": dict}, ...]
+        """
+        # 임베딩 생성
+        texts = [doc["text"] for doc in documents]
+        embeddings = self.get_embeddings_batch(texts)
+
+        # 벡터 준비
+        vectors = []
+        for doc, embedding in zip(documents, embeddings):
+            # ID 생성 (없으면 텍스트 해시)
+            doc_id = doc.get("id") or hashlib.md5(doc["text"].encode()).hexdigest()
+
+            vectors.append({
+                "id": doc_id,
+                "values": embedding,
+                "metadata": {
+                    "text": doc["text"][:1000],  # 메타데이터 크기 제한
+                    **doc.get("metadata", {})
+                }
+            })
+
+        # 배치 업서트 (1000개씩)
+        batch_size = 100
+        for i in range(0, len(vectors), batch_size):
+            batch = vectors[i:i + batch_size]
+            index.upsert(vectors=batch)
+
+        print(f"Upserted {len(vectors)} documents")
+
+    def search(self, index, query: str, top_k: int = 5,
+               filter: Dict = None) -> List[Dict]:
+        """
+        유사도 검색
+
+        Args:
+            index: Pinecone 인덱스
+            query: 검색 쿼리
+            top_k: 반환할 결과 수
+            filter: 메타데이터 필터
+
+        Returns:
+            검색 결과 리스트
+        """
+        # 쿼리 임베딩 생성
+        query_embedding = self.get_embedding(query)
+
+        # 검색 실행
+        results = index.query(
+            vector=query_embedding,
+            top_k=top_k,
+            include_metadata=True,
+            filter=filter
+        )
+
+        # 결과 정리
+        formatted_results = []
+        for match in results.matches:
+            formatted_results.append({
+                "id": match.id,
+                "score": match.score,
+                "text": match.metadata.get("text", ""),
+                "metadata": match.metadata
+            })
+
+        return formatted_results
+
+    def hybrid_search(self, index, query: str, keyword_filter: str = None,
+                      top_k: int = 5) -> List[Dict]:
+        """
+        하이브리드 검색 (벡터 + 키워드)
+        """
+        # 메타데이터 필터 구성
+        filter_dict = None
+        if keyword_filter:
+            filter_dict = {
+                "text": {"$contains": keyword_filter}
+            }
+
+        return self.search(index, query, top_k, filter_dict)
+
+
+class RAGPipeline:
+    """RAG (Retrieval-Augmented Generation) 파이프라인"""
+
+    def __init__(self, vector_manager: VectorDBManager, index):
+        self.vector_manager = vector_manager
+        self.index = index
+
+    def add_documents(self, texts: List[str], metadata_list: List[Dict] = None):
+        """문서 추가"""
+        documents = []
+        for i, text in enumerate(texts):
+            doc = {
+                "text": text,
+                "metadata": metadata_list[i] if metadata_list else {}
+            }
+            documents.append(doc)
+
+        self.vector_manager.upsert_documents(self.index, documents)
+
+    def retrieve_context(self, query: str, top_k: int = 3) -> str:
+        """쿼리와 관련된 컨텍스트 검색"""
+        results = self.vector_manager.search(self.index, query, top_k)
+
+        context_parts = []
+        for i, result in enumerate(results):
+            context_parts.append(f"[{i+1}] {result['text']}")
+
+        return "\n\n".join(context_parts)
+
+    def generate_answer(self, query: str, top_k: int = 3) -> str:
+        """RAG 기반 답변 생성"""
+        # 1. 관련 문서 검색
+        context = self.retrieve_context(query, top_k)
+
+        # 2. 프롬프트 구성
+        prompt = f"""다음 컨텍스트를 바탕으로 질문에 답변해주세요.
+
+컨텍스트:
+{context}
+
+질문: {query}
+
+답변:"""
+
+        # 3. LLM으로 답변 생성
+        response = self.vector_manager.openai.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7
+        )
+
+        return response.choices[0].message.content
+
+
+# 사용 예제
+if __name__ == "__main__":
+    # 환경 변수에서 API 키 로드
+    PINECONE_API_KEY = os.getenv("PINECONE_API_KEY", "your-api-key")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "your-api-key")
+
+    # 매니저 초기화
+    manager = VectorDBManager(PINECONE_API_KEY, OPENAI_API_KEY)
+
+    # 인덱스 생성
+    index = manager.create_index("knowledge-base")
+
+    # 문서 추가
+    documents = [
+        {
+            "text": "벡터 데이터베이스는 고차원 벡터를 저장하고 유사도 검색을 수행합니다.",
+            "metadata": {"category": "database", "lang": "ko"}
+        },
+        {
+            "text": "RAG는 검색과 생성을 결합하여 LLM의 답변 품질을 향상시킵니다.",
+            "metadata": {"category": "ai", "lang": "ko"}
+        },
+        {
+            "text": "Pinecone은 완전 관리형 벡터 데이터베이스 서비스입니다.",
+            "metadata": {"category": "database", "lang": "ko"}
+        }
+    ]
+
+    manager.upsert_documents(index, documents)
+
+    # 검색 테스트
+    print("\n=== 유사도 검색 ===")
+    results = manager.search(index, "벡터 DB란 무엇인가요?", top_k=2)
+    for r in results:
+        print(f"Score: {r['score']:.4f} | {r['text'][:50]}...")
+
+    # RAG 파이프라인 테스트
+    print("\n=== RAG 답변 생성 ===")
+    rag = RAGPipeline(manager, index)
+    answer = rag.generate_answer("RAG가 뭔가요?")
+    print(f"Answer: {answer}")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance & Cost -->
+        <section class="content-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>주요 벡터 데이터베이스 비교 (2025년 기준):</p>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>서비스</th>
+                            <th>가격</th>
+                            <th>특징</th>
+                            <th>적합한 사용 사례</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Pinecone</strong></td>
+                            <td class="price-highlight">사용량 기반<br>(Free tier 있음)</td>
+                            <td>
+                                <span class="feature-tag">완전 관리형</span>
+                                <span class="feature-tag">Serverless</span>
+                            </td>
+                            <td>빠른 프로토타이핑, 운영 부담 최소화</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Weaviate</strong></td>
+                            <td class="price-highlight">$25~$153/월<br>(Serverless)</td>
+                            <td>
+                                <span class="feature-tag">오픈소스</span>
+                                <span class="feature-tag">GraphQL</span>
+                                <span class="feature-tag">하이브리드 검색</span>
+                            </td>
+                            <td>복잡한 필터링, 셀프호스팅 선호</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Qdrant</strong></td>
+                            <td class="price-highlight">$102+/월<br>(Cloud)</td>
+                            <td>
+                                <span class="feature-tag">Rust 기반</span>
+                                <span class="feature-tag">SOC2 인증</span>
+                                <span class="feature-tag">고성능</span>
+                            </td>
+                            <td>대규모 프로덕션, 보안 중요</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chroma</strong></td>
+                            <td class="price-highlight">무료<br>(오픈소스)</td>
+                            <td>
+                                <span class="feature-tag">로컬 실행</span>
+                                <span class="feature-tag">간단한 API</span>
+                            </td>
+                            <td>로컬 개발, 소규모 프로젝트</td>
+                        </tr>
+                        <tr>
+                            <td><strong>pgvector</strong></td>
+                            <td class="price-highlight">PostgreSQL 비용</td>
+                            <td>
+                                <span class="feature-tag">PostgreSQL 확장</span>
+                                <span class="feature-tag">SQL 통합</span>
+                            </td>
+                            <td>기존 PostgreSQL 활용, 단일 DB</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1.5rem;">
+                    <strong>선택 가이드:</strong> 빠른 시작은 Chroma(로컬) 또는 Pinecone(클라우드), 프로덕션 규모는 Qdrant 또는 Weaviate,
+                    기존 PostgreSQL 스택이 있으면 pgvector가 경제적입니다. 대부분의 서비스가 무료 티어를 제공하므로 먼저 테스트해보세요.
+                </p>
+            </div>
+        </section>
+
+        <!-- Practical Usage -->
+        <section class="content-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conversation-list">
+                <div class="conversation-item">
+                    <div class="conversation-context">RAG 시스템 설계 회의에서</div>
+                    <div class="conversation-text">"문서를 청킹해서 임베딩 만들고 벡터 DB에 넣을 건데, Pinecone이랑 Weaviate 중에 뭐가 나을까요? 하이브리드 검색이 필요하면 Weaviate가 나을 것 같아요."</div>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-context">검색 품질 논의에서</div>
+                    <div class="conversation-text">"벡터 검색만으로는 정확도가 좀 떨어져서, 메타데이터 필터링이랑 리랭킹을 추가하면 좋을 것 같아요."</div>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-context">인프라 비용 논의에서</div>
+                    <div class="conversation-text">"1억 건 이상이면 Pinecone 비용이 꽤 나올 텐데, Qdrant 셀프호스팅으로 가는 게 어떨까요?"</div>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-context">개발 초기 단계에서</div>
+                    <div class="conversation-text">"일단 Chroma로 로컬에서 빠르게 테스트하고, 나중에 프로덕션 때 Pinecone으로 마이그레이션하죠."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Mistakes -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-box">
+                <div class="warning-title">청킹 전략 무시</div>
+                <div class="warning-content">
+                    문서를 통째로 임베딩하면 검색 품질이 떨어집니다. 의미 단위로 적절히 청킹(500-1000 토큰)하고, 청크 간 오버랩을 두어 컨텍스트 손실을 방지하세요.
+                </div>
+            </div>
+            <div class="warning-box">
+                <div class="warning-title">임베딩 모델 불일치</div>
+                <div class="warning-content">
+                    인덱싱할 때와 검색할 때 반드시 동일한 임베딩 모델을 사용해야 합니다. 모델이 바뀌면 벡터 공간이 달라져 검색 결과가 무의미해집니다.
+                </div>
+            </div>
+            <div class="warning-box">
+                <div class="warning-title">벡터 검색만 의존</div>
+                <div class="warning-content">
+                    벡터 검색은 의미적 유사성에 강하지만 정확한 키워드 매칭에는 약합니다. 제품명, 코드 등 정확한 매칭이 필요하면 하이브리드 검색(벡터 + BM25)을 사용하세요.
+                </div>
+            </div>
+            <div class="warning-box">
+                <div class="warning-title">메타데이터 설계 소홀</div>
+                <div class="warning-content">
+                    벡터만 저장하지 말고 필터링용 메타데이터(날짜, 카테고리, 출처 등)를 함께 저장하세요. 나중에 "최근 1년 문서에서만 검색" 같은 요구사항이 생기면 메타데이터 필터가 필수입니다.
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="../Embedding/" class="related-item">Embedding</a>
+                <a href="../RAG/" class="related-item">RAG</a>
+                <a href="../Semantic%20Search/" class="related-item">Semantic Search</a>
+                <a href="../Cosine%20Similarity/" class="related-item">Cosine Similarity</a>
+                <a href="../HNSW/" class="related-item">HNSW</a>
+                <a href="../LangChain/" class="related-item">LangChain</a>
+            </div>
+        </section>
+
+        <!-- Learn More -->
+        <section class="content-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="resource-list">
+                <a href="https://www.pinecone.io/learn/" target="_blank" class="resource-link">
+                    <span>📘</span> Pinecone Learning Center - 벡터 DB 기초
+                </a>
+                <a href="https://weaviate.io/developers/weaviate" target="_blank" class="resource-link">
+                    <span>📘</span> Weaviate 공식 문서
+                </a>
+                <a href="https://qdrant.tech/documentation/" target="_blank" class="resource-link">
+                    <span>📘</span> Qdrant 공식 문서
+                </a>
+                <a href="https://www.youtube.com/watch?v=klTvEwg3oJ4" target="_blank" class="resource-link">
+                    <span>🎬</span> Vector Databases Explained (Fireship)
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-container').querySelector('code');
+            const text = codeBlock.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ 복사됨';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

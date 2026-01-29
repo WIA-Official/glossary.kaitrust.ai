@@ -327,13 +327,44 @@
             font-size: 0.8rem;
         }
     </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
 </head>
 <body>
     <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
 
     <!-- Header -->
-    <div id="kaitrust-header"></div>
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
 
     <main class="term-detail-container">
         <!-- Breadcrumb -->
@@ -463,7 +494,8 @@
 
             <h3>1. Supabase 클라이언트 초기화 및 CRUD</h3>
             <div class="code-label">JavaScript/TypeScript</div>
-            <div class="code-block"><code>import { createClient } from '@supabase/supabase-js';
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
     'https://your-project.supabase.co',
@@ -552,7 +584,8 @@ async function deletePost(postId) {
 
             <h3>2. Row Level Security (RLS) 정책</h3>
             <div class="code-label">SQL (Supabase SQL Editor)</div>
-            <div class="code-block"><code>-- RLS 활성화
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>-- RLS 활성화
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
 
 -- 누구나 공개 게시글 읽기 가능
@@ -592,7 +625,8 @@ USING (
 
             <h3>3. Realtime 실시간 구독</h3>
             <div class="code-label">JavaScript</div>
-            <div class="code-block"><code>// 테이블 변경 실시간 구독
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>// 테이블 변경 실시간 구독
 function subscribeToMessages(roomId, onMessage) {
     const channel = supabase
         .channel(`room:${roomId}`)
@@ -649,7 +683,8 @@ function ChatRoom({ roomId }) {
 
             <h3>4. Supabase Auth 인증</h3>
             <div class="code-label">JavaScript</div>
-            <div class="code-block"><code>// 이메일/비밀번호 회원가입
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>// 이메일/비밀번호 회원가입
 async function signUp(email, password, metadata) {
     const { data, error } = await supabase.auth.signUp({
         email,
@@ -705,7 +740,8 @@ supabase.auth.onAuthStateChange((event, session) => {
 
             <h3>5. Edge Functions (Deno 서버리스)</h3>
             <div class="code-label">TypeScript (supabase/functions/hello/index.ts)</div>
-            <div class="code-block"><code>import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 serve(async (req) => {
@@ -762,7 +798,8 @@ serve(async (req) => {
 
             <h3>6. pgvector로 AI 임베딩 검색</h3>
             <div class="code-label">SQL + JavaScript</div>
-            <div class="code-block"><code>-- pgvector 확장 활성화
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>-- pgvector 확장 활성화
 CREATE EXTENSION IF NOT EXISTS vector;
 
 -- 임베딩 컬럼이 있는 테이블
@@ -899,13 +936,22 @@ async function searchSimilarDocuments(queryText) {
     </main>
 
     <!-- Footer -->
-    <div id="kaitrust-footer"></div>
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
-    <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
 </body>
 </html>

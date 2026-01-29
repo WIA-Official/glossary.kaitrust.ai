@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컨볼루션 (Convolution) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="이미지 처리에서 필터를 적용하는 연산. CNN의 핵심 구성 요소로 특징 추출에 사용.">
+    <meta name="keywords" content="컨볼루션, Convolution, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EC%BB%A8%EB%B3%BC%EB%A3%A8%EC%85%98/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EC%BB%A8%EB%B3%BC%EB%A3%A8%EC%85%98/">
+    <meta property="og:title" content="컨볼루션 (Convolution) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="이미지 처리에서 필터를 적용하는 연산. CNN의 핵심 구성 요소로 특징 추출에 사용.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="컨볼루션 (Convolution) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="이미지 처리에서 필터를 적용하는 연산. CNN의 핵심 구성 요소로 특징 추출에 사용.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "컨볼루션",
+        "description": "이미지 처리에서 필터를 적용하는 연산. CNN의 핵심 구성 요소로 특징 추출에 사용.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">컨볼루션</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">컨볼루션</h1>
+            <p class="term-english">Convolution</p>
+            <div class="term-description">
+                <p>이미지 처리에서 필터를 적용하는 연산. CNN의 핵심 구성 요소로 특징 추출에 사용.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>컨볼루션(Convolution)은 입력 데이터에 필터(커널)를 슬라이딩하며 적용하여 특징을 추출하는 수학적 연산입니다. 딥러닝에서는 CNN(Convolutional Neural Network)의 핵심 연산으로, 이미지의 에지, 텍스처, 패턴 등 계층적 특징을 자동으로 학습합니다.</p>
+
+                <p>컨볼루션 연산은 신호 처리 분야에서 오래전부터 사용되었지만, 딥러닝에서의 혁신은 1989년 Yann LeCun의 LeNet에서 시작되었습니다. 2012년 AlexNet이 ImageNet 대회에서 압도적 성능을 보이며 딥러닝 혁명을 촉발했고, 이후 VGGNet, ResNet, EfficientNet 등 다양한 CNN 아키텍처가 발전했습니다. 현재는 Vision Transformer(ViT)와 경쟁하지만, 여전히 효율성과 해석 가능성 측면에서 CNN이 선호되는 영역이 많습니다.</p>
+
+                <p>컨볼루션의 핵심 원리는 파라미터 공유와 지역 연결성입니다. 동일한 필터가 이미지 전체를 스캔하므로 파라미터 수가 대폭 감소하고, 학습된 필터는 위치에 관계없이 동일한 패턴을 탐지합니다(평행 이동 불변성). 필터 크기(예: 3x3, 5x5), 스트라이드(이동 간격), 패딩, 채널 수가 주요 하이퍼파라미터입니다. 다층 컨볼루션을 통해 저수준(에지)에서 고수준(물체) 특징까지 계층적으로 추출됩니다.</p>
+
+                <p>실무에서 컨볼루션은 이미지 분류, 객체 탐지, 시맨틱 분할, 의료 영상 분석 등 컴퓨터 비전의 기반 기술입니다. 2025년 현재 ConvNeXt, EfficientNetV2 같은 현대적 CNN은 ViT와 비슷한 성능을 더 적은 데이터와 연산으로 달성합니다. 1D 컨볼루션은 시계열, 음성 처리에, Graph Convolution은 분자 구조, 소셜 네트워크 분석에 활용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>PyTorch를 활용한 CNN 이미지 분류 구현:</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># CNN 이미지 분류 모델 (PyTorch)
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class SimpleCNN(nn.Module):
+    """
+    CIFAR-10 분류를 위한 CNN 모델
+    입력: 32x32x3 이미지
+    """
+    def __init__(self, num_classes=10):
+        super().__init__()
+
+        # Conv Block 1: 3 -> 32 채널
+        self.conv1 = nn.Conv2d(
+            in_channels=3,
+            out_channels=32,
+            kernel_size=3,      # 3x3 필터
+            padding=1,          # same padding
+            stride=1
+        )
+        self.bn1 = nn.BatchNorm2d(32)
+
+        # Conv Block 2: 32 -> 64 채널
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
+
+        # Conv Block 3: 64 -> 128 채널
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.bn3 = nn.BatchNorm2d(128)
+
+        # Pooling
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+
+        # Fully Connected Layers
+        # 32 -> 16 -> 8 -> 4 (3번의 pooling 후)
+        self.fc1 = nn.Linear(128 * 4 * 4, 256)
+        self.fc2 = nn.Linear(256, num_classes)
+
+        self.dropout = nn.Dropout(0.5)
+
+    def forward(self, x):
+        # Block 1: Conv -> BN -> ReLU -> Pool
+        x = self.pool(F.relu(self.bn1(self.conv1(x))))  # 32x32 -> 16x16
+
+        # Block 2
+        x = self.pool(F.relu(self.bn2(self.conv2(x))))  # 16x16 -> 8x8
+
+        # Block 3
+        x = self.pool(F.relu(self.bn3(self.conv3(x))))  # 8x8 -> 4x4
+
+        # Flatten
+        x = x.view(x.size(0), -1)  # (batch, 128*4*4)
+
+        # FC Layers
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.fc2(x)
+
+        return x
+
+# 모델 생성 및 구조 확인
+model = SimpleCNN(num_classes=10)
+print(model)
+
+# 입력 테스트
+dummy_input = torch.randn(1, 3, 32, 32)
+output = model(dummy_input)
+print(f"\n입력: {dummy_input.shape} -> 출력: {output.shape}")</code></pre>
+                </div>
+
+                <p>컨볼루션 연산의 시각적 이해:</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># 컨볼루션 연산 시각화
+import torch
+import torch.nn.functional as F
+import numpy as np
+
+# 5x5 입력 이미지 (1채널)
+input_image = torch.tensor([
+    [1, 2, 3, 4, 5],
+    [2, 3, 4, 5, 6],
+    [3, 4, 5, 6, 7],
+    [4, 5, 6, 7, 8],
+    [5, 6, 7, 8, 9]
+], dtype=torch.float32).unsqueeze(0).unsqueeze(0)  # (1, 1, 5, 5)
+
+# 3x3 에지 탐지 필터 (소벨 필터)
+sobel_x = torch.tensor([
+    [-1, 0, 1],
+    [-2, 0, 2],
+    [-1, 0, 1]
+], dtype=torch.float32).unsqueeze(0).unsqueeze(0)  # (1, 1, 3, 3)
+
+# 컨볼루션 적용
+output = F.conv2d(input_image, sobel_x, padding=1)
+
+print("입력 이미지 (5x5):")
+print(input_image.squeeze().numpy())
+
+print("\n소벨 필터 (3x3):")
+print(sobel_x.squeeze().numpy())
+
+print("\n컨볼루션 결과:")
+print(output.squeeze().numpy())
+
+# 다양한 설정 비교
+print("\n=== 컨볼루션 설정별 출력 크기 ===")
+for padding in [0, 1]:
+    for stride in [1, 2]:
+        out = F.conv2d(input_image, sobel_x, padding=padding, stride=stride)
+        print(f"padding={padding}, stride={stride} -> 출력 크기: {out.shape[-2:]})")
+
+# 출력 크기 공식: (W - K + 2P) / S + 1
+# W=5, K=3 -> padding=1, stride=1: (5-3+2)/1+1 = 5
+# W=5, K=3 -> padding=0, stride=2: (5-3+0)/2+1 = 2</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- CNN 아키텍처 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 CNN 아키텍처 비교</h2>
+            <div class="section-content">
+                <p>주요 CNN 아키텍처 성능 비교 (ImageNet 기준):</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>모델</th>
+                        <th>년도</th>
+                        <th>파라미터</th>
+                        <th>Top-1 정확도</th>
+                        <th>특징</th>
+                    </tr>
+                    <tr>
+                        <td>AlexNet</td>
+                        <td>2012</td>
+                        <td>60M</td>
+                        <td>57.1%</td>
+                        <td>딥러닝 혁명의 시작</td>
+                    </tr>
+                    <tr>
+                        <td>VGG-16</td>
+                        <td>2014</td>
+                        <td>138M</td>
+                        <td>71.5%</td>
+                        <td>3x3 필터 반복 사용</td>
+                    </tr>
+                    <tr>
+                        <td>ResNet-50</td>
+                        <td>2015</td>
+                        <td>25M</td>
+                        <td>76.1%</td>
+                        <td>Skip Connection 도입</td>
+                    </tr>
+                    <tr>
+                        <td>EfficientNet-B7</td>
+                        <td>2019</td>
+                        <td>66M</td>
+                        <td>84.4%</td>
+                        <td>복합 스케일링</td>
+                    </tr>
+                    <tr>
+                        <td>ConvNeXt-L</td>
+                        <td>2022</td>
+                        <td>198M</td>
+                        <td>87.5%</td>
+                        <td>현대화된 CNN</td>
+                    </tr>
+                </table>
+                <p>* Vision Transformer(ViT-L)는 86.4% 수준, ConvNeXt가 ViT와 경쟁 가능함을 입증</p>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말해요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <div class="conv-quote">"이미지 분류 태스크에는 EfficientNet-B3 정도면 충분합니다. B7까지 올리면 정확도는 1-2% 오르지만 추론 시간이 4배 늘어나요. 모바일 배포라면 MobileNetV3도 좋은 선택입니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <div class="conv-quote">"ResNet의 Skip Connection이 중요한 이유는 gradient vanishing 문제를 해결하기 때문입니다. 입력을 출력에 직접 더함으로써 gradient가 깊은 레이어까지 전파되고, 100층 이상의 네트워크 학습이 가능해졌습니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <div class="conv-quote">"ViT가 대용량 데이터에서 강하지만, 중소규모 데이터에서는 CNN의 inductive bias(지역성, 평행이동 불변성)가 더 효율적이에요. ConvNeXt는 Transformer의 장점을 CNN에 적용해서 두 세계의 장점을 결합했죠."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>무조건 깊은 네트워크 사용</h4>
+                        <p>태스크에 비해 너무 깊은 네트워크는 과적합되고 추론 시간이 늘어납니다. 데이터셋 크기와 복잡도에 맞는 아키텍처를 선택하세요. CIFAR-10에는 ResNet-18이면 충분합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>입력 크기 불일치</h4>
+                        <p>사전학습된 모델의 입력 크기(예: 224x224)와 실제 데이터 크기가 다르면 성능이 저하됩니다. 적절한 리사이징과 전처리(정규화 등)가 필수입니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">✅</div>
+                    <div class="warning-content">
+                        <h4>올바른 접근법</h4>
+                        <p>ImageNet 사전학습 모델로 시작하여 전이학습하세요. 작은 데이터셋에서는 특징 추출(Feature Extraction)만, 큰 데이터셋에서는 전체 파인튜닝을 권장합니다. 데이터 증강(Augmentation)도 필수입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%ED%92%80%EB%A7%81/" class="related-term-link">풀링 (Pooling)</a>
+                <a href="/ko/term/%EC%A0%84%EC%9D%B4%ED%95%99%EC%8A%B5/" class="related-term-link">전이학습</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%A6%9D%EA%B0%95/" class="related-term-link">데이터 증강</a>
+                <a href="/ko/term/%EA%B0%9D%EC%B2%B4%20%ED%83%90%EC%A7%80/" class="related-term-link">객체 탐지</a>
+                <a href="/ko/term/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B6%84%EB%A5%98/" class="related-term-link">이미지 분류</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html" target="_blank" class="learn-link">
+                    📄 PyTorch CNN 튜토리얼
+                </a>
+                <a href="https://cs231n.github.io/convolutional-networks/" target="_blank" class="learn-link">
+                    🎓 Stanford CS231n - CNN 강의 자료
+                </a>
+                <a href="https://arxiv.org/abs/2201.03545" target="_blank" class="learn-link">
+                    📝 ConvNeXt 논문 - A ConvNet for the 2020s
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

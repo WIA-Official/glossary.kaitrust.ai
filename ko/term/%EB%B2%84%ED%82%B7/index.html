@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>버킷 (Bucket) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="클라우드 객체 저장소의 컨테이너. AWS S3, Google Cloud Storage, Azure Blob Storage에서 파일을 저장하는 논리적 단위로, 데이터 레이크와 백업 시스템의 핵심 구성요소입니다.">
+    <meta name="keywords" content="버킷, Bucket, AI 용어, KAITRUST, AI 백과사전, 클라우드, S3, GCS, Azure Blob, 객체 저장소">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%B2%84%ED%82%B7/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EB%B2%84%ED%82%B7/">
+    <meta property="og:title" content="버킷 (Bucket) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="클라우드 객체 저장소의 컨테이너. AWS S3, Google Cloud Storage, Azure Blob Storage에서 파일을 저장하는 논리적 단위입니다.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="버킷 (Bucket) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="클라우드 객체 저장소의 컨테이너. AWS S3, Google Cloud Storage, Azure Blob Storage에서 파일을 저장하는 논리적 단위입니다.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "버킷",
+        "description": "클라우드 객체 저장소의 컨테이너. AWS S3, Google Cloud Storage, Azure Blob Storage에서 파일을 저장하는 논리적 단위로, 데이터 레이크와 백업 시스템의 핵심 구성요소입니다.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        .term-section { background: linear-gradient(145deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4)); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .code-block code { color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); color: #e2e8f0; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
+        .learn-link.type-official { border-left: 3px solid #3b82f6; }
+        .learn-link.type-video { border-left: 3px solid #ef4444; }
+        .learn-link.type-blog { border-left: 3px solid #22c55e; }
+        .learn-link.type-book { border-left: 3px solid #f59e0b; }
+        .learn-link.type-tool { border-left: 3px solid #8b5cf6; }
+        .learn-link.type-community { border-left: 3px solid #ec4899; }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .spec-table th { background: rgba(168, 85, 247, 0.15); color: #e2e8f0; font-weight: 600; }
+        .spec-table td { color: #cbd5e1; }
+        .spec-table tr:hover td { background: rgba(255, 255, 255, 0.05); }
+        .incident-list { display: flex; flex-direction: column; gap: 1.5rem; }
+        .incident-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.5rem; border-left: 3px solid #f59e0b; }
+        .incident-header { display: flex; gap: 1rem; align-items: center; margin-bottom: 0.75rem; }
+        .incident-company { background: rgba(168, 85, 247, 0.2); padding: 0.25rem 0.75rem; border-radius: 6px; font-weight: 600; color: #c4b5fd; font-size: 0.85rem; }
+        .incident-year { color: #94a3b8; font-size: 0.85rem; }
+        .incident-title { color: #f1f5f9; font-size: 1.1rem; margin-bottom: 1rem; font-weight: 500; }
+        .incident-body p { margin: 0.5rem 0; font-size: 0.9rem; color: #cbd5e1; }
+        .incident-body strong { color: #e2e8f0; }
+        .incident-source { display: inline-block; margin-top: 1rem; color: #a855f7; text-decoration: none; font-size: 0.85rem; }
+        .incident-source:hover { text-decoration: underline; }
+        .quiz-container { display: flex; flex-direction: column; gap: 1.5rem; }
+        .quiz-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.5rem; }
+        .quiz-question { color: #f1f5f9; margin-bottom: 1rem; font-weight: 500; }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+        .quiz-options label { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(15, 23, 42, 0.5); border-radius: 8px; cursor: pointer; transition: all 0.2s; color: #cbd5e1; }
+        .quiz-options label:hover { background: rgba(168, 85, 247, 0.1); }
+        .quiz-options input[type="radio"] { accent-color: #a855f7; }
+        .quiz-feedback { margin-top: 0.75rem; padding: 0.5rem; border-radius: 6px; font-size: 0.9rem; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+        .quiz-feedback.wrong { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .quiz-submit { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s; }
+        .quiz-submit:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(168, 85, 247, 0.3); }
+        .quiz-result { margin-top: 1rem; padding: 1rem; background: rgba(168, 85, 247, 0.1); border-radius: 8px; text-align: center; color: #e2e8f0; display: none; }
+        .quiz-result.show { display: block; }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } .term-section { padding: 1.5rem; } .spec-table { font-size: 0.8rem; } .spec-table th, .spec-table td { padding: 0.5rem; } }
+    </style>
+</head>
+<body>
+    <div class="particle-container" id="particles"></div>
+
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div><div class="logo-text">KAITRUST</div><div class="logo-sub">AI 백과사전</div></div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a><span>›</span>
+            <a href="https://glossary.kaitrust.ai/#cloud">클라우드</a><span>›</span>
+            <span class="current">버킷</span>
+        </nav>
+
+        <article class="term-detail-header">
+            <div class="term-category-badge"><span>☁️</span><span>클라우드</span></div>
+            <h1 class="term-title">버킷</h1>
+            <p class="term-english">Bucket</p>
+            <div class="term-description">
+                <p>클라우드 객체 저장소의 컨테이너. AWS S3, Google Cloud Storage, Azure Blob Storage에서 파일을 저장하는 논리적 단위로, 데이터 레이크와 백업 시스템의 핵심 구성요소입니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">📚 전체 용어 보기</a>
+                <a href="https://glossary.kaitrust.ai/#cloud" class="term-action-btn btn-secondary">☁️ 클라우드 더보기</a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>버킷(Bucket)은 클라우드 객체 저장소(Object Storage)에서 데이터를 담는 최상위 컨테이너입니다. 파일 시스템의 루트 폴더와 유사하지만, 계층 구조 없이 플랫한 네임스페이스로 객체(파일)를 관리합니다. AWS S3, Google Cloud Storage, Azure Blob Storage, MinIO 등 모든 객체 저장소에서 버킷 개념을 사용합니다.</p>
+
+                <p>버킷은 2006년 Amazon S3 출시와 함께 대중화되었습니다. 전통적인 파일 시스템과 달리 HTTP/HTTPS를 통해 접근하며, 버킷 이름은 글로벌하게 고유해야 합니다. 이 설계 덕분에 무제한에 가까운 확장성과 99.999999999%(11 nines)의 내구성을 제공합니다.</p>
+
+                <p>버킷 내 객체는 키(Key)로 식별됩니다. "logs/2024/01/app.log"처럼 슬래시로 경로를 표현하지만, 실제 폴더 구조는 없습니다. 이를 접두어(Prefix)라 부르며, 콘솔에서는 폴더처럼 보이지만 내부적으로는 플랫합니다. 버킷에는 버저닝, 수명주기 정책, 암호화, 복제 규칙 등을 설정할 수 있습니다.</p>
+
+                <p>실무에서 버킷은 데이터 레이크의 기반, 정적 웹사이트 호스팅, 로그 아카이빙, 머신러닝 데이터셋 저장, 백업/복구 시스템에 활용됩니다. AI/ML 워크로드에서 학습 데이터와 모델 아티팩트를 버킷에 저장하고, SageMaker나 Vertex AI에서 직접 읽어 사용합니다.</p>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>주요 클라우드 객체 저장소 비용 비교 (2025년 1월 기준, 서울 리전)</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>서비스</th>
+                        <th>표준 저장</th>
+                        <th>아카이브</th>
+                        <th>데이터 전송(외부)</th>
+                        <th>무료 티어</th>
+                    </tr>
+                    <tr>
+                        <td>AWS S3</td>
+                        <td>$0.025/GB</td>
+                        <td>$0.004/GB (Glacier)</td>
+                        <td>$0.126/GB</td>
+                        <td>5GB, 12개월</td>
+                    </tr>
+                    <tr>
+                        <td>GCS</td>
+                        <td>$0.023/GB</td>
+                        <td>$0.004/GB (Archive)</td>
+                        <td>$0.12/GB</td>
+                        <td>5GB, 항상 무료</td>
+                    </tr>
+                    <tr>
+                        <td>Azure Blob</td>
+                        <td>$0.0184/GB</td>
+                        <td>$0.002/GB (Archive)</td>
+                        <td>$0.138/GB</td>
+                        <td>5GB, 12개월</td>
+                    </tr>
+                    <tr>
+                        <td>Cloudflare R2</td>
+                        <td>$0.015/GB</td>
+                        <td>-</td>
+                        <td>무료</td>
+                        <td>10GB, 항상 무료</td>
+                    </tr>
+                </table>
+                <p><strong>비용 최적화 팁:</strong> 90일 이상 미접근 데이터는 자동으로 아카이브 티어로 이동하는 수명주기 정책을 설정하세요. S3 Intelligent-Tiering은 접근 패턴을 자동 분석하여 최적 티어로 이동시킵니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Python boto3를 사용한 AWS S3 버킷 작업 예제입니다.</p>
+                <div class="code-block" data-lang="python">
+                
+                    <pre><code class="language-python"># pip install boto3
+
+import boto3
+from botocore.exceptions import ClientError
+
+# S3 클라이언트 생성
+s3 = boto3.client('s3', region_name='ap-northeast-2')
+
+# 버킷 생성
+bucket_name = 'my-ml-datasets-2024'
+try:
+    s3.create_bucket(
+        Bucket=bucket_name,
+        CreateBucketConfiguration={'LocationConstraint': 'ap-northeast-2'}
+    )
+    print(f"버킷 '{bucket_name}' 생성 완료")
+except ClientError as e:
+    if e.response['Error']['Code'] == 'BucketAlreadyOwnedByYou':
+        print("이미 소유한 버킷입니다")
+    else:
+        raise
+
+# 버킷에 버저닝 활성화 (중요 데이터 보호)
+s3.put_bucket_versioning(
+    Bucket=bucket_name,
+    VersioningConfiguration={'Status': 'Enabled'}
+)
+
+# 파일 업로드 (학습 데이터)
+s3.upload_file(
+    Filename='train_data.csv',
+    Bucket=bucket_name,
+    Key='datasets/train/train_data.csv',
+    ExtraArgs={'ServerSideEncryption': 'AES256'}  # 서버측 암호화
+)
+
+# 대용량 파일 멀티파트 업로드
+from boto3.s3.transfer import TransferConfig
+
+config = TransferConfig(
+    multipart_threshold=8 * 1024 * 1024,  # 8MB 이상이면 멀티파트
+    max_concurrency=10,
+    multipart_chunksize=8 * 1024 * 1024
+)
+
+s3.upload_file(
+    'large_model.tar.gz',
+    bucket_name,
+    'models/v1/large_model.tar.gz',
+    Config=config
+)
+
+# 객체 목록 조회 (특정 접두어)
+response = s3.list_objects_v2(
+    Bucket=bucket_name,
+    Prefix='datasets/'
+)
+
+for obj in response.get('Contents', []):
+    print(f"  {obj['Key']} - {obj['Size']:,} bytes")
+
+# Presigned URL 생성 (임시 다운로드 링크)
+url = s3.generate_presigned_url(
+    'get_object',
+    Params={'Bucket': bucket_name, 'Key': 'datasets/train/train_data.csv'},
+    ExpiresIn=3600  # 1시간
+)
+print(f"다운로드 URL: {url}")</code></pre>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+
+                <p>Google Cloud Storage (GCS) 예제입니다.</p>
+                <div class="code-block" data-lang="python">
+                
+                    <pre><code class="language-python"># pip install google-cloud-storage
+
+from google.cloud import storage
+
+# 클라이언트 생성 (환경변수 GOOGLE_APPLICATION_CREDENTIALS 설정 필요)
+client = storage.Client()
+
+# 버킷 생성
+bucket_name = 'my-ml-datasets-2024'
+bucket = client.create_bucket(bucket_name, location='asia-northeast3')
+print(f"버킷 '{bucket.name}' 생성 완료 (위치: {bucket.location})")
+
+# 수명주기 정책 설정 (90일 후 아카이브)
+bucket.add_lifecycle_delete_rule(age=365)  # 365일 후 삭제
+bucket.add_lifecycle_set_storage_class_rule(
+    'ARCHIVE',
+    age=90  # 90일 후 아카이브 티어로 이동
+)
+bucket.patch()
+
+# 파일 업로드
+blob = bucket.blob('datasets/train/train_data.csv')
+blob.upload_from_filename('train_data.csv')
+
+# 객체 목록 조회
+blobs = client.list_blobs(bucket_name, prefix='datasets/')
+for blob in blobs:
+    print(f"  {blob.name} - {blob.size:,} bytes")</code></pre>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실무 대화 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <p class="conv-quote">"학습 데이터가 500GB인데, S3 Standard에 두면 월 $12.50 정도예요. 90일 지나면 Glacier로 자동 이동하는 수명주기 정책 걸면 아카이브 비용이 $2로 줄어듭니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <p class="conv-quote">"데이터 레이크를 S3 버킷 기반으로 구축했습니다. 버킷 정책으로 특정 VPC에서만 접근 가능하게 제한하고, 서버측 암호화(SSE-S3)를 기본 활성화했습니다. CloudTrail로 모든 API 호출을 감사 로그로 남기고 있습니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <p class="conv-quote">"R2가 이그레스 비용이 없어서 CDN 원본으로 좋은데, S3와 100% 호환은 아니에요. 복잡한 버킷 정책이나 이벤트 알림이 필요하면 아직 S3가 나아요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div class="warning-content">
+                        <h4>퍼블릭 액세스 방치</h4>
+                        <p>버킷을 퍼블릭으로 열어두면 데이터 유출 사고가 발생합니다. S3 Block Public Access를 계정 레벨에서 활성화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div class="warning-content">
+                        <h4>버저닝 미적용</h4>
+                        <p>버저닝 없이 덮어쓰기하면 이전 데이터가 영구 삭제됩니다. 중요 데이터 버킷은 반드시 버저닝을 활성화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div class="warning-content">
+                        <h4>이그레스 비용 무시</h4>
+                        <p>데이터 전송(외부) 비용이 저장 비용보다 클 수 있습니다. 대용량 다운로드가 잦으면 CloudFront나 R2를 고려하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div class="warning-content">
+                        <h4>올바른 방법</h4>
+                        <p>수명주기 정책으로 비용을 최적화하고, 버킷 정책으로 최소 권한 원칙을 적용하세요. CloudTrail/Cloud Audit Logs로 접근 기록을 남기고, 교차 리전 복제로 재해복구를 준비하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실제 장애 사례 -->
+        <section class="term-section" aria-labelledby="incident-title">
+            <h2 class="section-title" id="incident-title">🔥 실제 장애 사례</h2>
+            <div class="incident-list">
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">Capital One</span>
+                        <span class="incident-year">2019</span>
+                    </div>
+                    <h4 class="incident-title">S3 버킷 권한 오설정으로 1억 명 개인정보 유출</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> WAF 설정 오류로 SSRF 공격에 노출, EC2 메타데이터를 통해 IAM 자격 증명 탈취 후 S3 버킷 접근</p>
+                        <p><strong>영향:</strong> 1억 600만 명의 개인정보(SSN, 은행계좌) 유출, $80M 벌금</p>
+                        <p><strong>해결:</strong> IMDSv2 강제 적용, 버킷 정책 강화, VPC 엔드포인트 사용</p>
+                        <p><strong>교훈:</strong> 버킷 권한은 최소 권한 원칙을 철저히 지키고, EC2 인스턴스 메타데이터 서비스 버전 2를 사용해야 합니다.</p>
+                    </div>
+                    <a href="https://www.capitalone.com/digital/facts2019/" class="incident-source" target="_blank">📎 상세 보기</a>
+                </div>
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <span class="incident-company">Twitch</span>
+                        <span class="incident-year">2021</span>
+                    </div>
+                    <h4 class="incident-title">내부 Git 서버 설정 오류로 125GB 소스코드 유출</h4>
+                    <div class="incident-body">
+                        <p><strong>원인:</strong> 서버 설정 변경 중 실수로 내부 저장소가 외부에 노출</p>
+                        <p><strong>영향:</strong> 전체 소스코드, 내부 도구, 크리에이터 수익 정보 유출</p>
+                        <p><strong>해결:</strong> 모든 자격 증명 교체, 접근 제어 강화</p>
+                        <p><strong>교훈:</strong> 민감한 데이터가 있는 저장소는 VPC 내부에서만 접근 가능하도록 네트워크 격리가 필수입니다.</p>
+                    </div>
+                    <a href="https://blog.twitch.tv/en/2021/10/15/updates-on-the-twitch-security-incident/" class="incident-source" target="_blank">📎 상세 보기</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 이해도 퀴즈 -->
+        <section class="term-section" aria-labelledby="quiz-title">
+            <h2 class="section-title" id="quiz-title">📝 이해도 퀴즈</h2>
+            <div class="quiz-container" id="term-quiz">
+                <div class="quiz-item" data-correct="c">
+                    <p class="quiz-question"><strong>Q1.</strong> S3 버킷에서 "logs/2024/01/app.log" 경로의 객체가 있을 때, "logs/2024/"는 무엇인가요?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> A) 폴더(디렉토리)</label>
+                        <label><input type="radio" name="q1" value="b"> B) 버킷</label>
+                        <label><input type="radio" name="q1" value="c"> C) 접두어(Prefix)</label>
+                        <label><input type="radio" name="q1" value="d"> D) 버전 ID</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="b">
+                    <p class="quiz-question"><strong>Q2.</strong> S3 버킷의 데이터 내구성은 얼마인가요?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> A) 99.9% (3 nines)</label>
+                        <label><input type="radio" name="q2" value="b"> B) 99.999999999% (11 nines)</label>
+                        <label><input type="radio" name="q2" value="c"> C) 99.99% (4 nines)</label>
+                        <label><input type="radio" name="q2" value="d"> D) 100%</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <div class="quiz-item" data-correct="d">
+                    <p class="quiz-question"><strong>Q3.</strong> 버킷 비용 최적화를 위해 90일 이상 미접근 데이터를 자동으로 저렴한 스토리지로 이동시키는 기능은?</p>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> A) 버저닝</label>
+                        <label><input type="radio" name="q3" value="b"> B) 교차 리전 복제</label>
+                        <label><input type="radio" name="q3" value="c"> C) 버킷 정책</label>
+                        <label><input type="radio" name="q3" value="d"> D) 수명주기 정책</label>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-submit" onclick="checkQuiz()">정답 확인</button>
+                <div class="quiz-result"></div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A0%88%EC%9D%B4%ED%81%AC/" class="related-term-link">데이터 레이크</a>
+                <a href="/ko/term/%EA%B0%9D%EC%B2%B4%20%EC%A0%80%EC%9E%A5%EC%86%8C/" class="related-term-link">객체 저장소</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+                <a href="/ko/term/IAM/" class="related-term-link">IAM</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/" class="related-term-link">데이터 파이프라인</a>
+                <a href="/ko/term/%EB%B0%B1%EC%97%85/" class="related-term-link">백업</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.aws.amazon.com/s3/" target="_blank" class="learn-link type-official">
+                    📘 AWS S3 공식 문서
+                </a>
+                <a href="https://cloud.google.com/storage/docs" target="_blank" class="learn-link type-official">
+                    📘 Google Cloud Storage 공식 문서
+                </a>
+                <a href="https://www.youtube.com/watch?v=77lMCiiMilo" target="_blank" class="learn-link type-video">
+                    🎬 AWS re:Invent - S3 Deep Dive
+                </a>
+                <a href="https://techblog.woowahan.com/6217/" target="_blank" class="learn-link type-blog">
+                    📝 우아한형제들 - S3 비용 최적화 경험기
+                </a>
+                <a href="https://min.io/" target="_blank" class="learn-link type-tool">
+                    🛠️ MinIO - S3 호환 오픈소스 객체 저장소
+                </a>
+                <a href="https://www.reddit.com/r/aws/" target="_blank" class="learn-link type-community">
+                    👥 r/aws - AWS 커뮤니티
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script src="/glossary/js/term-sections.js"></script>
+
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    function checkQuiz() {
+        const container = document.getElementById('term-quiz');
+        const items = container.querySelectorAll('.quiz-item');
+        let score = 0;
+
+        items.forEach((item, index) => {
+            const correct = item.dataset.correct;
+            const selected = item.querySelector(`input[name="q${index + 1}"]:checked`);
+            const feedback = item.querySelector('.quiz-feedback');
+
+            if (selected && selected.value === correct) {
+                score++;
+                feedback.textContent = '✅ 정답입니다!';
+                feedback.className = 'quiz-feedback show correct';
+            } else {
+                feedback.textContent = `❌ 오답입니다. 정답: ${correct.toUpperCase()}`;
+                feedback.className = 'quiz-feedback show wrong';
+            }
+        });
+
+        const result = container.querySelector('.quiz-result');
+        result.innerHTML = `<strong>${score}/${items.length}</strong> 문제를 맞혔습니다!`;
+        result.className = 'quiz-result show';
+
+        // localStorage에 결과 저장
+        const termSlug = window.location.pathname.split('/').filter(Boolean).pop();
+        localStorage.setItem(`quiz_${termSlug}`, JSON.stringify({
+            score: score,
+            total: items.length,
+            date: new Date().toISOString()
+        }));
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modular Monolith (모듈러 모놀리스) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Modular Monolith는 마이크로서비스의 모듈성과 모놀리식의 단순함을 결합한 아키텍처입니다. 단일 배포 단위 내에서 명확한 모듈 경계를 유지하여 마이크로서비스로의 점진적 전환이 가능합니다.">
+    <meta name="keywords" content="Modular Monolith, 모듈러 모놀리스, 모듈 경계, Bounded Context, DDD, 마이크로서비스 전환, 단일 배포 단위, 아키텍처, AI 용어, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Modular%20Monolith/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Modular%20Monolith/">
+    <meta property="og:title" content="Modular Monolith (모듈러 모놀리스) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Modular Monolith는 마이크로서비스의 모듈성과 모놀리식의 단순함을 결합한 아키텍처입니다.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Modular Monolith (모듈러 모놀리스) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Modular Monolith는 마이크로서비스의 모듈성과 모놀리식의 단순함을 결합한 아키텍처입니다.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Modular Monolith",
+        "description": "마이크로서비스의 모듈성과 모놀리식의 단순함을 결합한 아키텍처",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 스타일 */
+        .enhanced-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .enhanced-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .enhanced-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+            color: #e2e8f0;
+        }
+        .enhanced-section p, .enhanced-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .enhanced-section ul, .enhanced-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhanced-section li {
+            margin-bottom: 0.5rem;
+        }
+        .enhanced-section code {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e879f9;
+        }
+        .enhanced-section pre {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0 1.5rem;
+        }
+        .enhanced-section pre code {
+            background: none;
+            padding: 0;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .comparison-table th {
+            background: rgba(168, 85, 247, 0.2);
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            color: #cbd5e1;
+        }
+        .conversation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #a855f7;
+            padding: 1.25rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .conversation-box .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .conversation-box p {
+            margin: 0;
+            color: #e2e8f0;
+        }
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .warning-box p {
+            color: #fca5a5;
+            margin: 0;
+        }
+        .tip-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .tip-box p {
+            color: #86efac;
+            margin: 0;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-tag {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .related-term-tag:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #fff;
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#arch">아키텍처</a>
+            <span>›</span>
+            <span class="current">Modular Monolith</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🏗️</span>
+                <span>아키텍처</span>
+            </div>
+            <h1 class="term-title">Modular Monolith</h1>
+            <p class="term-english">모듈러 모놀리스</p>
+            <div class="term-description">
+                <p>Modular Monolith는 마이크로서비스의 모듈성과 모놀리식의 단순함을 결합한 아키텍처입니다. 단일 배포 단위 내에서 명확한 모듈 경계를 유지하여 마이크로서비스로의 점진적 전환이 가능합니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#arch" class="term-action-btn btn-secondary">
+                    🏗️ 아키텍처 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="enhanced-section">
+            <h2>📖 상세 설명</h2>
+            <p><strong>Modular Monolith</strong>는 전통적인 모놀리식의 장점(단순한 배포, 로컬 함수 호출)을 유지하면서 마이크로서비스의 장점(모듈 독립성, 명확한 경계)을 취하는 아키텍처입니다. "잘 설계된 모놀리스"라고도 불립니다.</p>
+
+            <h3>아키텍처 비교</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>특성</th>
+                        <th>Traditional Monolith</th>
+                        <th>Modular Monolith</th>
+                        <th>Microservices</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>배포 단위</td>
+                        <td>1개</td>
+                        <td>1개</td>
+                        <td>N개 (서비스별)</td>
+                    </tr>
+                    <tr>
+                        <td>모듈 경계</td>
+                        <td>없거나 약함</td>
+                        <td>명확함</td>
+                        <td>물리적 분리</td>
+                    </tr>
+                    <tr>
+                        <td>통신 방식</td>
+                        <td>함수 호출</td>
+                        <td>인터페이스 통한 호출</td>
+                        <td>네트워크 (HTTP/gRPC)</td>
+                    </tr>
+                    <tr>
+                        <td>데이터베이스</td>
+                        <td>공유</td>
+                        <td>논리적 분리 (스키마)</td>
+                        <td>물리적 분리</td>
+                    </tr>
+                    <tr>
+                        <td>운영 복잡도</td>
+                        <td>낮음</td>
+                        <td>낮음</td>
+                        <td>높음</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>핵심 원칙</h3>
+            <ul>
+                <li><strong>모듈 독립성</strong>: 각 모듈은 자체 도메인 로직, 데이터 접근, API를 가짐</li>
+                <li><strong>명시적 의존성</strong>: 모듈 간 의존은 public interface를 통해서만</li>
+                <li><strong>데이터 캡슐화</strong>: 다른 모듈의 DB 테이블 직접 접근 금지</li>
+                <li><strong>독립적 발전</strong>: 모듈별로 독립적인 리팩토링 가능</li>
+            </ul>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="enhanced-section">
+            <h2>💻 코드 예제</h2>
+
+            <h3>프로젝트 구조</h3>
+            <pre><code>src/
+├── modules/
+│   ├── catalog/                 # 상품 카탈로그 모듈
+│   │   ├── api/                 # Public API (다른 모듈이 사용)
+│   │   │   ├── CatalogApi.ts
+│   │   │   └── types.ts
+│   │   ├── domain/
+│   │   │   ├── Product.ts
+│   │   │   └── Category.ts
+│   │   ├── infrastructure/
+│   │   │   └── CatalogRepository.ts
+│   │   └── index.ts             # 모듈 진입점
+│   │
+│   ├── orders/                  # 주문 모듈
+│   │   ├── api/
+│   │   │   ├── OrderApi.ts
+│   │   │   └── types.ts
+│   │   ├── domain/
+│   │   │   ├── Order.ts
+│   │   │   └── OrderItem.ts
+│   │   ├── application/
+│   │   │   └── PlaceOrderUseCase.ts
+│   │   ├── infrastructure/
+│   │   │   └── OrderRepository.ts
+│   │   └── index.ts
+│   │
+│   └── payments/                # 결제 모듈
+│       ├── api/
+│       ├── domain/
+│       ├── infrastructure/
+│       └── index.ts
+│
+├── shared/                      # 공유 인프라 (최소화)
+│   ├── database/
+│   └── messaging/
+│
+└── main.ts                      # 애플리케이션 진입점</code></pre>
+
+            <h3>모듈 Public API 정의</h3>
+            <pre><code>// modules/catalog/api/CatalogApi.ts
+// 다른 모듈이 사용할 수 있는 공개 인터페이스
+
+export interface ProductDTO {
+  id: string;
+  name: string;
+  price: number;
+  stockQuantity: number;
+}
+
+export interface CatalogApi {
+  getProduct(productId: string): Promise&lt;ProductDTO | null&gt;;
+  getProducts(productIds: string[]): Promise&lt;ProductDTO[]&gt;;
+  checkAvailability(productId: string, quantity: number): Promise&lt;boolean&gt;;
+  reserveStock(productId: string, quantity: number): Promise&lt;boolean&gt;;
+}
+
+// modules/catalog/index.ts (모듈 진입점)
+// 외부에 공개할 것만 export
+export type { CatalogApi, ProductDTO } from './api/CatalogApi';
+export { createCatalogModule } from './CatalogModule';</code></pre>
+
+            <h3>모듈 구현</h3>
+            <pre><code>// modules/catalog/CatalogModule.ts
+import { CatalogApi, ProductDTO } from './api/CatalogApi';
+import { ProductRepository } from './infrastructure/ProductRepository';
+
+export function createCatalogModule(db: Database): CatalogApi {
+  const repository = new ProductRepository(db);
+
+  return {
+    async getProduct(productId: string): Promise&lt;ProductDTO | null&gt; {
+      const product = await repository.findById(productId);
+      if (!product) return null;
+
+      // Domain → DTO 변환 (내부 구현 숨김)
+      return {
+        id: product.id,
+        name: product.name,
+        price: product.price.amount,
+        stockQuantity: product.stock.quantity,
+      };
+    },
+
+    async getProducts(productIds: string[]): Promise&lt;ProductDTO[]&gt; {
+      const products = await repository.findByIds(productIds);
+      return products.map(p => ({
+        id: p.id,
+        name: p.name,
+        price: p.price.amount,
+        stockQuantity: p.stock.quantity,
+      }));
+    },
+
+    async checkAvailability(productId: string, quantity: number): Promise&lt;boolean&gt; {
+      const product = await repository.findById(productId);
+      return product ? product.stock.isAvailable(quantity) : false;
+    },
+
+    async reserveStock(productId: string, quantity: number): Promise&lt;boolean&gt; {
+      const product = await repository.findById(productId);
+      if (!product || !product.stock.isAvailable(quantity)) {
+        return false;
+      }
+      product.stock.reserve(quantity);
+      await repository.save(product);
+      return true;
+    }
+  };
+}</code></pre>
+
+            <h3>모듈 간 통신 (인터페이스 통해)</h3>
+            <pre><code>// modules/orders/application/PlaceOrderUseCase.ts
+import { CatalogApi } from '../../catalog'; // 모듈 public API만 import
+import { OrderRepository } from '../infrastructure/OrderRepository';
+import { Order } from '../domain/Order';
+
+export class PlaceOrderUseCase {
+  constructor(
+    private catalogApi: CatalogApi,  // 인터페이스에 의존
+    private orderRepository: OrderRepository
+  ) {}
+
+  async execute(input: PlaceOrderInput): Promise&lt;PlaceOrderResult&gt; {
+    // 1. 상품 정보 조회 (Catalog 모듈 API 통해)
+    const products = await this.catalogApi.getProducts(
+      input.items.map(i => i.productId)
+    );
+
+    // 2. 재고 확인
+    for (const item of input.items) {
+      const available = await this.catalogApi.checkAvailability(
+        item.productId,
+        item.quantity
+      );
+      if (!available) {
+        throw new Error(`Product ${item.productId} out of stock`);
+      }
+    }
+
+    // 3. 주문 생성 (Order 모듈 내부 도메인 로직)
+    const order = Order.create({
+      customerId: input.customerId,
+      items: input.items.map(item => {
+        const product = products.find(p => p.id === item.productId)!;
+        return {
+          productId: item.productId,
+          productName: product.name,
+          quantity: item.quantity,
+          unitPrice: product.price,
+        };
+      }),
+    });
+
+    // 4. 재고 예약 (Catalog 모듈 API 통해)
+    for (const item of input.items) {
+      await this.catalogApi.reserveStock(item.productId, item.quantity);
+    }
+
+    // 5. 주문 저장
+    await this.orderRepository.save(order);
+
+    return { orderId: order.id, total: order.calculateTotal() };
+  }
+}</code></pre>
+
+            <h3>모듈 조립 (Composition Root)</h3>
+            <pre><code>// main.ts
+import { createCatalogModule } from './modules/catalog';
+import { createOrderModule } from './modules/orders';
+import { createPaymentModule } from './modules/payments';
+import { Database } from './shared/database';
+
+async function bootstrap() {
+  const db = new Database(process.env.DATABASE_URL);
+
+  // 모듈 생성 (의존성 주입)
+  const catalogApi = createCatalogModule(db);
+  const paymentApi = createPaymentModule(db);
+  const orderApi = createOrderModule(db, catalogApi, paymentApi);
+
+  // Express 라우터 설정
+  const app = express();
+  app.use('/api/catalog', createCatalogRoutes(catalogApi));
+  app.use('/api/orders', createOrderRoutes(orderApi));
+  app.use('/api/payments', createPaymentRoutes(paymentApi));
+
+  app.listen(3000);
+}
+
+bootstrap();</code></pre>
+
+            <h3>모듈 경계 검증 (Architecture Tests)</h3>
+            <pre><code>// tests/architecture.test.ts
+import { filesOfProject } from 'ts-arch';
+
+describe('Module Boundaries', () => {
+  it('Orders module should not access Catalog internals', async () => {
+    const rule = filesOfProject()
+      .inFolder('modules/orders')
+      .shouldNot()
+      .dependOnFiles()
+      .inFolder('modules/catalog/domain')
+      .inFolder('modules/catalog/infrastructure');
+
+    await expect(rule).toPassAsync();
+  });
+
+  it('Modules should only import from public API', async () => {
+    const rule = filesOfProject()
+      .inFolder('modules/orders')
+      .should()
+      .onlyDependOn()
+      .filesMatching('modules/catalog/index.ts')
+      .or()
+      .filesMatching('modules/catalog/api/*');
+
+    await expect(rule).toPassAsync();
+  });
+});</code></pre>
+        </section>
+
+        <!-- 현업 대화 예시 -->
+        <section class="enhanced-section">
+            <h2>💬 현업 대화 예시</h2>
+
+            <div class="conversation-box">
+                <div class="speaker">👨‍💼 CTO</div>
+                <p>"마이크로서비스로 가고 싶은데 팀 규모가 작아서 고민이에요. 운영 복잡도를 감당할 수 있을까요?"</p>
+            </div>
+            <div class="conversation-box">
+                <div class="speaker">👩‍💻 아키텍트</div>
+                <p>"Modular Monolith로 시작하시죠. 모듈 경계를 잘 정의해두면 나중에 팀이 커졌을 때 필요한 모듈만 마이크로서비스로 분리할 수 있어요. 지금은 단일 배포로 운영 부담을 줄이면서 마이크로서비스 전환을 준비하는 거예요."</p>
+            </div>
+
+            <div class="conversation-box">
+                <div class="speaker">👨‍💻 주니어 개발자</div>
+                <p>"주문 모듈에서 상품 테이블을 JOIN해서 조회하면 더 빠르지 않나요?"</p>
+            </div>
+            <div class="conversation-box">
+                <div class="speaker">👩‍💻 시니어 개발자</div>
+                <p>"모듈 경계 위반이에요. Catalog 모듈의 DB는 Catalog만 접근해야 해요. 나중에 Catalog를 별도 서비스로 분리할 때 JOIN이 있으면 분리가 불가능해져요. CatalogApi를 통해 데이터를 가져오세요."</p>
+            </div>
+
+            <div class="conversation-box">
+                <div class="speaker">👨‍💼 PM</div>
+                <p>"이번 주문 기능 개발에 결제팀 작업이 필요한가요?"</p>
+            </div>
+            <div class="conversation-box">
+                <div class="speaker">👩‍💻 백엔드 개발자</div>
+                <p>"아니요, PaymentApi 인터페이스는 이미 정의되어 있어서 저희 Orders 모듈에서 독립적으로 개발 가능해요. 모듈 경계가 명확해서 팀 간 의존성이 최소화됩니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="enhanced-section">
+            <h2>⚠️ 주의사항</h2>
+
+            <div class="warning-box">
+                <p><strong>경계 침범 주의:</strong> 모듈 경계가 무너지면 그냥 모놀리스가 됩니다. 다른 모듈의 internal 코드를 import하거나 DB를 직접 접근하면 안 됩니다. Architecture Test로 경계를 지속적으로 검증하세요.</p>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>순환 의존성 금지:</strong> Module A → Module B → Module A 형태의 순환 의존은 모듈 분리를 불가능하게 합니다. 의존 방향을 단방향으로 유지하세요.</p>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>공유 커널 최소화:</strong> shared 폴더의 코드가 커지면 모듈 독립성이 약해집니다. 정말 필요한 인프라 코드만 공유하세요.</p>
+            </div>
+
+            <div class="tip-box">
+                <p><strong>팁:</strong> DDD의 Bounded Context를 모듈 경계로 사용하면 자연스럽게 좋은 모듈 설계가 됩니다. Event Storming으로 도메인을 분석한 뒤 모듈을 정의하세요.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhanced-section">
+            <h2>🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EB%AA%A8%EB%86%80%EB%A6%AC%EC%8B%9D/" class="related-term-tag">모놀리식</a>
+                <a href="/ko/term/%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EC%84%9C%EB%B9%84%EC%8A%A4/" class="related-term-tag">마이크로서비스</a>
+                <a href="/ko/term/DDD/" class="related-term-tag">DDD</a>
+                <a href="/ko/term/Clean%20Architecture/" class="related-term-tag">Clean Architecture</a>
+                <a href="/ko/term/Hexagonal%20Architecture/" class="related-term-tag">Hexagonal Architecture</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhanced-section">
+            <h2>📚 더 배우기</h2>
+            <ul>
+                <li><strong>Modular Monolith Primer (Kamil Grzybek)</strong> - 실무 구현 가이드</li>
+                <li><strong>Monolith First (Martin Fowler)</strong> - 왜 모놀리스로 시작해야 하는가</li>
+                <li><strong>Building Microservices (Sam Newman)</strong> - 마이크로서비스 전환 전략</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

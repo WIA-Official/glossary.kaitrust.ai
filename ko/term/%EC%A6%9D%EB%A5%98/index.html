@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>증류 (Knowledge Distillation) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="큰 모델의 지식을 작은 모델로 전이하는 기법. 모델 경량화에 활용.">
+    <meta name="keywords" content="증류, Knowledge Distillation, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EC%A6%9D%EB%A5%98/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EC%A6%9D%EB%A5%98/">
+    <meta property="og:title" content="증류 (Knowledge Distillation) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="큰 모델의 지식을 작은 모델로 전이하는 기법. 모델 경량화에 활용.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="증류 (Knowledge Distillation) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="큰 모델의 지식을 작은 모델로 전이하는 기법. 모델 경량화에 활용.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "증류",
+        "description": "큰 모델의 지식을 작은 모델로 전이하는 기법. 모델 경량화에 활용.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">증류</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">증류</h1>
+            <p class="term-english">Knowledge Distillation</p>
+            <div class="term-description">
+                <p>큰 모델의 지식을 작은 모델로 전이하는 기법. 모델 경량화에 활용.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>증류(Knowledge Distillation)는 대규모 모델(Teacher)의 지식을 작고 효율적인 모델(Student)로 전달하는 모델 압축 기법입니다. Teacher 모델의 출력 확률 분포(soft labels)를 Student 모델이 학습함으로써, 단순히 정답만 학습하는 것보다 더 풍부한 정보를 전달받습니다.</p>
+
+                <p>증류 개념은 2015년 Geoffrey Hinton의 논문 "Distilling the Knowledge in a Neural Network"에서 처음 제안되었습니다. 이후 BERT를 6배 작게 압축한 DistilBERT(2019), GPT를 경량화한 다양한 시도들이 이어졌습니다. 2024-2025년에는 DeepSeek-R1, Llama 3.2, Phi-4 등이 대형 모델에서 증류한 소형 모델로 주목받으며, 증류가 LLM 시대의 핵심 기술로 자리잡았습니다.</p>
+
+                <p>증류의 핵심 원리는 "soft labels"에 있습니다. 예를 들어 고양이 이미지를 분류할 때, hard label은 "고양이=1, 개=0"이지만, Teacher의 soft label은 "고양이=0.9, 개=0.08, 호랑이=0.02"처럼 클래스 간 유사성 정보를 포함합니다. Temperature 파라미터로 확률 분포를 부드럽게 만들어 이 정보를 더 효과적으로 전달합니다. 최근에는 중간 레이어의 표현(intermediate representations)까지 증류하는 기법이 발전했습니다.</p>
+
+                <p>실무에서 증류는 모델 배포 비용 절감의 핵심입니다. 70B 파라미터 모델을 7B로 증류하면 GPU 비용을 90% 이상 절감하면서 원본 성능의 85-95%를 유지할 수 있습니다. 특히 엣지 디바이스, 모바일 앱, 실시간 서비스에서 지연시간과 비용을 줄이는 데 필수적입니다. 2025년 현재 대부분의 상용 LLM 서비스는 증류된 모델을 함께 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>PyTorch를 활용한 기본 지식 증류 구현:</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># 지식 증류 (Knowledge Distillation) 기본 구현
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class DistillationLoss(nn.Module):
+    """
+    Knowledge Distillation Loss
+    - alpha: soft/hard loss 비율
+    - temperature: 확률 분포 smoothing
+    """
+    def __init__(self, alpha=0.5, temperature=4.0):
+        super().__init__()
+        self.alpha = alpha
+        self.temperature = temperature
+        self.ce_loss = nn.CrossEntropyLoss()
+        self.kl_loss = nn.KLDivLoss(reduction='batchmean')
+
+    def forward(self, student_logits, teacher_logits, labels):
+        # Hard Loss: Student vs 실제 정답
+        hard_loss = self.ce_loss(student_logits, labels)
+
+        # Soft Loss: Student vs Teacher (temperature scaling)
+        T = self.temperature
+        soft_student = F.log_softmax(student_logits / T, dim=1)
+        soft_teacher = F.softmax(teacher_logits / T, dim=1)
+        soft_loss = self.kl_loss(soft_student, soft_teacher) * (T * T)
+
+        # 총 손실: alpha로 가중 평균
+        total_loss = self.alpha * soft_loss + (1 - self.alpha) * hard_loss
+        return total_loss
+
+# 사용 예시
+def train_with_distillation(student, teacher, dataloader, optimizer):
+    teacher.eval()  # Teacher는 학습하지 않음
+    student.train()
+    criterion = DistillationLoss(alpha=0.7, temperature=4.0)
+
+    for inputs, labels in dataloader:
+        optimizer.zero_grad()
+
+        # Teacher 추론 (gradient 계산 안 함)
+        with torch.no_grad():
+            teacher_logits = teacher(inputs)
+
+        # Student 학습
+        student_logits = student(inputs)
+        loss = criterion(student_logits, teacher_logits, labels)
+
+        loss.backward()
+        optimizer.step()
+
+    print(f"Distillation 학습 완료!")</code></pre>
+                </div>
+
+                <p>Hugging Face를 활용한 LLM 증류 예제:</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># Hugging Face 기반 LLM 증류 (DistilBERT 스타일)
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments
+)
+from datasets import load_dataset
+
+# Teacher: 대형 모델 (예: BERT-large)
+teacher_name = "klue/roberta-large"
+teacher = AutoModelForSequenceClassification.from_pretrained(
+    teacher_name, num_labels=2
+)
+
+# Student: 소형 모델 (예: DistilBERT)
+student_name = "monologg/distilkobert"
+student = AutoModelForSequenceClassification.from_pretrained(
+    student_name, num_labels=2
+)
+tokenizer = AutoTokenizer.from_pretrained(student_name)
+
+# 커스텀 Trainer for Distillation
+class DistillationTrainer(Trainer):
+    def __init__(self, teacher_model, alpha=0.5, temperature=4.0, **kwargs):
+        super().__init__(**kwargs)
+        self.teacher = teacher_model
+        self.teacher.eval()
+        self.alpha = alpha
+        self.temperature = temperature
+
+    def compute_loss(self, model, inputs, return_outputs=False):
+        labels = inputs.pop("labels")
+
+        # Student forward
+        student_outputs = model(**inputs)
+        student_logits = student_outputs.logits
+
+        # Teacher forward
+        with torch.no_grad():
+            teacher_outputs = self.teacher(**inputs)
+            teacher_logits = teacher_outputs.logits
+
+        # Distillation loss 계산
+        loss = distillation_loss(
+            student_logits, teacher_logits, labels,
+            self.alpha, self.temperature
+        )
+
+        return (loss, student_outputs) if return_outputs else loss
+
+print("Student 모델 파라미터:", sum(p.numel() for p in student.parameters()))
+print("Teacher 모델 파라미터:", sum(p.numel() for p in teacher.parameters()))
+# 출력: Student가 Teacher 대비 약 40-60% 크기</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>주요 증류 모델 성능 비교 (2025년 기준):</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>모델</th>
+                        <th>파라미터</th>
+                        <th>원본 대비 크기</th>
+                        <th>성능 유지율</th>
+                        <th>추론 속도</th>
+                    </tr>
+                    <tr>
+                        <td>BERT-base</td>
+                        <td>110M</td>
+                        <td>100% (원본)</td>
+                        <td>100%</td>
+                        <td>1x</td>
+                    </tr>
+                    <tr>
+                        <td>DistilBERT</td>
+                        <td>66M</td>
+                        <td>60%</td>
+                        <td>97%</td>
+                        <td>1.6x</td>
+                    </tr>
+                    <tr>
+                        <td>Llama 3.1 70B</td>
+                        <td>70B</td>
+                        <td>100% (원본)</td>
+                        <td>100%</td>
+                        <td>1x</td>
+                    </tr>
+                    <tr>
+                        <td>Llama 3.2 8B (증류)</td>
+                        <td>8B</td>
+                        <td>11%</td>
+                        <td>~90%</td>
+                        <td>8x+</td>
+                    </tr>
+                    <tr>
+                        <td>DeepSeek-R1-Distill-Qwen-7B</td>
+                        <td>7B</td>
+                        <td>1% (671B 대비)</td>
+                        <td>~85%</td>
+                        <td>100x+</td>
+                    </tr>
+                </table>
+                <p>* 성능 유지율은 벤치마크 평균 기준, 추론 속도는 동일 하드웨어 기준 상대값</p>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말해요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <div class="conv-quote">"GPT-4 수준의 응답이 필요한데 비용이 문제라면, 먼저 GPT-4로 합성 데이터를 생성하고 이를 기반으로 Llama 8B를 파인튜닝하는 방식의 증류를 고려해보세요. 품질의 80-90%를 유지하면서 비용을 1/50로 줄일 수 있습니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <div class="conv-quote">"증류에서 temperature는 핵심 하이퍼파라미터입니다. T=1이면 원래 확률 분포, T가 높아지면 분포가 평탄해져서 클래스 간 관계 정보가 더 많이 전달됩니다. 보통 T=3~6 사이에서 최적 성능이 나옵니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <div class="conv-quote">"DeepSeek-R1이 671B를 7B로 증류해서 o1 수준의 추론 능력을 보여준 건 큰 돌파구예요. 핵심은 CoT(Chain of Thought) 출력까지 함께 증류한 거죠. 단순히 최종 답만 증류하는 것보다 추론 과정을 함께 학습시키는 게 중요합니다."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>Student 모델이 너무 작음</h4>
+                        <p>Teacher 대비 Student가 너무 작으면 지식을 담을 용량이 부족합니다. 일반적으로 Teacher의 20-40% 크기가 적당하며, 10% 이하로 줄이면 성능 저하가 급격해집니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">❌</div>
+                    <div class="warning-content">
+                        <h4>Temperature 설정 무시</h4>
+                        <p>T=1로 두면 hard label 학습과 비슷해져서 증류 효과가 감소합니다. 대부분의 경우 T=3~6이 최적이며, 작업에 따라 튜닝이 필요합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <div class="warning-icon">✅</div>
+                    <div class="warning-content">
+                        <h4>올바른 접근법</h4>
+                        <p>중간 레이어 증류(Intermediate Layer Distillation)를 함께 사용하세요. 최종 출력만 증류하는 것보다 hidden states까지 증류하면 성능이 크게 향상됩니다. TinyBERT, MiniLM이 이 방식으로 성공했습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EC%A0%84%EC%9D%B4%ED%95%99%EC%8A%B5/" class="related-term-link">전이학습</a>
+                <a href="/ko/term/%EC%96%91%EC%9E%90%ED%99%94/" class="related-term-link">양자화 (Quantization)</a>
+                <a href="/ko/term/%ED%94%84%EB%A3%A8%EB%8B%9D/" class="related-term-link">프루닝 (Pruning)</a>
+                <a href="/ko/term/%EB%8C%80%EA%B7%9C%EB%AA%A8%20%EC%96%B8%EC%96%B4%20%EB%AA%A8%EB%8D%B8/" class="related-term-link">대규모 언어 모델 (LLM)</a>
+                <a href="/ko/term/%ED%8C%8C%EC%9D%B8%ED%8A%9C%EB%8B%9D/" class="related-term-link">파인튜닝</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/1503.02531" target="_blank" class="learn-link">
+                    📝 원본 논문: Distilling the Knowledge in a Neural Network (Hinton, 2015)
+                </a>
+                <a href="https://huggingface.co/docs/transformers/model_doc/distilbert" target="_blank" class="learn-link">
+                    📄 DistilBERT 공식 문서
+                </a>
+                <a href="https://github.com/deepseek-ai/DeepSeek-R1" target="_blank" class="learn-link">
+                    🎓 DeepSeek-R1 증류 모델 가이드
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

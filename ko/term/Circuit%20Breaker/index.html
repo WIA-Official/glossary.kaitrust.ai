@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circuit Breaker (서킷 브레이커 패턴) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Circuit Breaker는 마이크로서비스 장애 전파를 방지하는 핵심 패턴입니다. 실패 임계값 도달 시 요청을 차단하고, 시스템 복구 후 자동으로 재개합니다.">
+    <meta name="keywords" content="Circuit Breaker, 서킷 브레이커, 장애 전파 방지, 마이크로서비스, Resilience4j, Hystrix, 분산 시스템, AI 용어, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Circuit%20Breaker/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Circuit%20Breaker/">
+    <meta property="og:title" content="Circuit Breaker (서킷 브레이커 패턴) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Circuit Breaker는 마이크로서비스 장애 전파를 방지하는 핵심 패턴입니다.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Circuit Breaker (서킷 브레이커 패턴) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Circuit Breaker는 마이크로서비스 장애 전파를 방지하는 핵심 패턴입니다.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Circuit Breaker",
+        "alternateName": "서킷 브레이커 패턴",
+        "description": "Circuit Breaker는 마이크로서비스 장애 전파를 방지하는 핵심 패턴입니다.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#arch">아키텍처</a>
+            <span>›</span>
+            <span class="current">Circuit Breaker</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🏗️</span>
+                <span>아키텍처</span>
+            </div>
+            <h1 class="term-title">Circuit Breaker</h1>
+            <p class="term-english">서킷 브레이커 패턴</p>
+            <div class="term-description">
+                <p>마이크로서비스 아키텍처에서 장애 전파를 방지하는 핵심 패턴입니다. 연속된 실패가 임계값에 도달하면 요청을 즉시 차단하고, 시스템 복구 후 자동으로 트래픽을 재개합니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#arch" class="term-action-btn btn-secondary">
+                    🏗️ 아키텍처 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Circuit Breaker(서킷 브레이커)</strong>는 전기 회로의 차단기에서 영감을 받은 분산 시스템 패턴입니다. 과전류가 흐르면 차단기가 회로를 끊어 화재를 방지하듯, 서비스 호출이 반복적으로 실패하면 자동으로 요청을 차단하여 전체 시스템의 연쇄 장애(Cascading Failure)를 방지합니다.</p>
+                <p><strong>3가지 상태(State)</strong>로 동작합니다. <strong>Closed(닫힘)</strong> 상태에서는 정상적으로 요청을 전달하며 실패율을 모니터링합니다. 실패가 임계값을 초과하면 <strong>Open(열림)</strong> 상태로 전환되어 모든 요청을 즉시 실패 처리(Fail Fast)합니다. 일정 시간이 지나면 <strong>Half-Open(반열림)</strong> 상태가 되어 제한된 요청으로 서비스 복구 여부를 확인합니다.</p>
+                <p><strong>주요 파라미터</strong>로는 실패 임계값(Failure Threshold), 타임아웃(Timeout), 재시도 대기 시간(Wait Duration), 반열림 시 허용 요청 수(Permitted Calls in Half-Open) 등이 있습니다. 이 값들은 서비스 특성과 SLA에 맞게 튜닝해야 합니다.</p>
+                <p><strong>폴백(Fallback)</strong> 전략과 함께 사용됩니다. 서킷이 Open 상태일 때 캐시된 데이터 반환, 기본값 제공, 대체 서비스 호출 등의 우아한 성능 저하(Graceful Degradation)를 구현할 수 있습니다. 이를 통해 사용자 경험을 유지하면서 시스템을 보호합니다.</p>
+                <p><strong>주요 구현체</strong>로는 Java의 Resilience4j, Netflix Hystrix(현재 유지보수 모드), Python의 pybreaker, Node.js의 opossum 등이 있습니다. Kubernetes 환경에서는 Istio, Envoy 같은 서비스 메시에서 인프라 수준의 서킷 브레이커를 제공합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (pybreaker)</button>
+                <button class="code-tab" data-lang="node">Node.js (opossum)</button>
+                <button class="code-tab" data-lang="java">Java (Resilience4j)</button>
+            </div>
+            <div class="code-block active" data-lang="python">
+                <pre><code class="language-python"># Circuit Breaker 패턴 - Python + pybreaker
+import pybreaker
+import requests
+from functools import wraps
+
+# 서킷 브레이커 설정
+payment_breaker = pybreaker.CircuitBreaker(
+    fail_max=5,              # 5번 실패 시 Open
+    reset_timeout=30,        # 30초 후 Half-Open
+    exclude=[ValueError]     # ValueError는 실패로 카운트 안함
+)
+
+# 상태 변경 리스너
+class BreakerListener(pybreaker.CircuitBreakerListener):
+    def state_change(self, cb, old_state, new_state):
+        print(f"🔄 Circuit Breaker 상태 변경: {old_state.name} → {new_state.name}")
+        if new_state.name == "open":
+            # 알림 발송 (Slack, PagerDuty 등)
+            send_alert(f"결제 서비스 서킷 Open! 즉시 확인 필요")
+
+    def failure(self, cb, exc):
+        print(f"❌ 실패 감지: {exc}, 현재 실패 횟수: {cb.fail_counter}")
+
+    def success(self, cb):
+        print(f"✅ 성공, 실패 카운터 리셋")
+
+payment_breaker.add_listener(BreakerListener())
+
+
+class PaymentService:
+    """결제 서비스 - Circuit Breaker 적용"""
+
+    def __init__(self, base_url: str):
+        self.base_url = base_url
+        self.cache = {}  # 폴백용 캐시
+
+    @payment_breaker
+    def process_payment(self, order_id: str, amount: int) -> dict:
+        """
+        결제 처리 - 서킷 브레이커로 보호됨
+        """
+        response = requests.post(
+            f"{self.base_url}/payments",
+            json={"order_id": order_id, "amount": amount},
+            timeout=5
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def process_payment_with_fallback(self, order_id: str, amount: int) -> dict:
+        """
+        폴백이 있는 결제 처리
+        """
+        try:
+            result = self.process_payment(order_id, amount)
+            # 성공 시 캐시 갱신
+            self.cache[order_id] = result
+            return result
+
+        except pybreaker.CircuitBreakerError:
+            # 서킷 Open 상태 - 즉시 폴백
+            print(f"⚡ 서킷 Open 상태, 폴백 실행")
+            return self._fallback_payment(order_id, amount)
+
+        except requests.exceptions.RequestException as e:
+            # 네트워크 에러 - 실패로 카운트됨
+            print(f"🌐 네트워크 에러: {e}")
+            raise
+
+    def _fallback_payment(self, order_id: str, amount: int) -> dict:
+        """
+        폴백: 결제를 큐에 저장하고 나중에 처리
+        """
+        pending_payment = {
+            "order_id": order_id,
+            "amount": amount,
+            "status": "pending",
+            "message": "결제 서비스 일시 불가. 잠시 후 자동 처리됩니다."
+        }
+        # 메시지 큐에 저장 (실제로는 Redis, RabbitMQ 등)
+        self._save_to_queue(pending_payment)
+        return pending_payment
+
+    def _save_to_queue(self, payment: dict):
+        print(f"📥 결제 대기열에 저장: {payment['order_id']}")
+
+
+# 수동 서킷 제어 (점검 모드 등)
+def maintenance_mode():
+    """점검 모드 - 수동으로 서킷 열기"""
+    payment_breaker.open()
+    print("🔧 점검 모드: 서킷을 수동으로 열었습니다")
+
+def resume_service():
+    """서비스 재개 - 서킷 닫기"""
+    payment_breaker.close()
+    print("✅ 서비스 재개: 서킷을 닫았습니다")
+
+
+# 사용 예시
+if __name__ == "__main__":
+    service = PaymentService("http://payment-api.internal")
+
+    # 정상 결제 처리
+    result = service.process_payment_with_fallback("ORDER-001", 50000)
+    print(f"결제 결과: {result}")
+
+    # 서킷 상태 확인
+    print(f"현재 상태: {payment_breaker.current_state}")
+    print(f"실패 횟수: {payment_breaker.fail_counter}")
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="node">
+                
+                <pre><code class="language-javascript">// Circuit Breaker 패턴 - Node.js + opossum
+const CircuitBreaker = require('opossum');
+const axios = require('axios');
+
+// 외부 서비스 호출 함수
+async function callPaymentService(orderId, amount) {
+    const response = await axios.post('http://payment-api/payments', {
+        orderId,
+        amount
+    }, { timeout: 5000 });
+    return response.data;
+}
+
+// Circuit Breaker 옵션 설정
+const circuitOptions = {
+    timeout: 5000,           // 5초 타임아웃
+    errorThresholdPercentage: 50,  // 50% 실패 시 Open
+    resetTimeout: 30000,     // 30초 후 Half-Open
+    volumeThreshold: 10,     // 최소 10개 요청 후 판단
+    rollingCountTimeout: 10000,    // 10초 윈도우
+    rollingCountBuckets: 10        // 통계 버킷 수
+};
+
+// Circuit Breaker 생성
+const paymentBreaker = new CircuitBreaker(callPaymentService, circuitOptions);
+
+// 폴백 함수 등록
+paymentBreaker.fallback((orderId, amount) => {
+    console.log(`⚡ 폴백 실행: 결제 ${orderId}를 대기열에 저장`);
+    return {
+        orderId,
+        amount,
+        status: 'pending',
+        message: '결제 서비스 일시 불가. 잠시 후 자동 처리됩니다.'
+    };
+});
+
+// 이벤트 리스너
+paymentBreaker.on('open', () => {
+    console.log('🔴 Circuit OPEN - 결제 서비스 차단');
+    // 알림 발송
+    sendSlackAlert('결제 서비스 Circuit Breaker OPEN!');
+});
+
+paymentBreaker.on('halfOpen', () => {
+    console.log('🟡 Circuit HALF-OPEN - 복구 테스트 중');
+});
+
+paymentBreaker.on('close', () => {
+    console.log('🟢 Circuit CLOSED - 정상 운영');
+});
+
+paymentBreaker.on('fallback', (result) => {
+    console.log('📥 폴백 결과:', result);
+});
+
+paymentBreaker.on('timeout', () => {
+    console.log('⏰ 타임아웃 발생');
+});
+
+// 통계 모니터링
+paymentBreaker.on('snapshot', (stats) => {
+    console.log('📊 통계:', {
+        failures: stats.failures,
+        successes: stats.successes,
+        fallbacks: stats.fallbacks,
+        latencyMean: stats.latencyMean
+    });
+});
+
+
+// 결제 서비스 클래스
+class PaymentService {
+    /**
+     * 결제 처리 (Circuit Breaker 적용)
+     */
+    async processPayment(orderId, amount) {
+        try {
+            const result = await paymentBreaker.fire(orderId, amount);
+            console.log(`✅ 결제 성공: ${orderId}`);
+            return result;
+        } catch (error) {
+            console.error(`❌ 결제 실패: ${error.message}`);
+            throw error;
+        }
+    }
+
+    /**
+     * 서킷 상태 확인
+     */
+    getStatus() {
+        return {
+            state: paymentBreaker.opened ? 'OPEN' :
+                   paymentBreaker.halfOpen ? 'HALF-OPEN' : 'CLOSED',
+            stats: paymentBreaker.stats
+        };
+    }
+
+    /**
+     * 헬스체크 엔드포인트용
+     */
+    isHealthy() {
+        return !paymentBreaker.opened;
+    }
+}
+
+// Express 라우터 예시
+const express = require('express');
+const router = express.Router();
+const paymentService = new PaymentService();
+
+router.post('/payments', async (req, res) => {
+    const { orderId, amount } = req.body;
+
+    try {
+        const result = await paymentService.processPayment(orderId, amount);
+        res.json(result);
+    } catch (error) {
+        res.status(503).json({
+            error: 'Service temporarily unavailable',
+            message: error.message
+        });
+    }
+});
+
+// 서킷 상태 모니터링 엔드포인트
+router.get('/health/circuit', (req, res) => {
+    res.json(paymentService.getStatus());
+});
+
+module.exports = { PaymentService, paymentBreaker };
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="java">
+                
+                <pre><code class="language-java">// Circuit Breaker 패턴 - Java + Resilience4j
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.circuitbreaker.event.CircuitBreakerOnStateTransitionEvent;
+import io.vavr.control.Try;
+
+import java.time.Duration;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Supplier;
+
+public class PaymentServiceWithCircuitBreaker {
+
+    private final CircuitBreaker circuitBreaker;
+    private final PaymentClient paymentClient;
+
+    public PaymentServiceWithCircuitBreaker() {
+        // Circuit Breaker 설정
+        CircuitBreakerConfig config = CircuitBreakerConfig.custom()
+            .failureRateThreshold(50)           // 50% 실패 시 Open
+            .slowCallRateThreshold(50)          // 50% 느린 호출 시 Open
+            .slowCallDurationThreshold(Duration.ofSeconds(2))  // 2초 이상 = 느린 호출
+            .waitDurationInOpenState(Duration.ofSeconds(30))   // 30초 후 Half-Open
+            .permittedNumberOfCallsInHalfOpenState(5)          // Half-Open에서 5개 테스트
+            .minimumNumberOfCalls(10)           // 최소 10개 호출 후 판단
+            .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
+            .slidingWindowSize(20)              // 최근 20개 요청 기준
+            .recordExceptions(IOException.class, TimeoutException.class)  // 실패로 기록할 예외
+            .ignoreExceptions(BusinessException.class)  // 무시할 예외
+            .build();
+
+        // Registry에서 Circuit Breaker 생성
+        CircuitBreakerRegistry registry = CircuitBreakerRegistry.of(config);
+        this.circuitBreaker = registry.circuitBreaker("paymentService");
+        this.paymentClient = new PaymentClient();
+
+        // 상태 변경 이벤트 리스너
+        circuitBreaker.getEventPublisher()
+            .onStateTransition(this::handleStateTransition)
+            .onError(event -> log.error("Circuit Breaker 에러: {}", event.getThrowable().getMessage()))
+            .onSuccess(event -> log.debug("호출 성공, 응답시간: {}ms", event.getElapsedDuration().toMillis()));
+    }
+
+    private void handleStateTransition(CircuitBreakerOnStateTransitionEvent event) {
+        log.warn("🔄 Circuit Breaker 상태 변경: {} → {}",
+            event.getStateTransition().getFromState(),
+            event.getStateTransition().getToState());
+
+        if (event.getStateTransition().getToState() == CircuitBreaker.State.OPEN) {
+            // 알림 발송
+            alertService.sendAlert("결제 서비스 Circuit Breaker OPEN!");
+        }
+    }
+
+    /**
+     * 결제 처리 - Circuit Breaker + 폴백
+     */
+    public PaymentResult processPayment(String orderId, BigDecimal amount) {
+        // Circuit Breaker로 감싼 Supplier
+        Supplier<PaymentResult> decoratedSupplier = CircuitBreaker
+            .decorateSupplier(circuitBreaker,
+                () -> paymentClient.processPayment(orderId, amount));
+
+        // 실행 + 폴백
+        return Try.ofSupplier(decoratedSupplier)
+            .recover(CallNotPermittedException.class,
+                ex -> fallbackPayment(orderId, amount, "Circuit Open"))
+            .recover(TimeoutException.class,
+                ex -> fallbackPayment(orderId, amount, "Timeout"))
+            .recover(IOException.class,
+                ex -> fallbackPayment(orderId, amount, "Network Error"))
+            .get();
+    }
+
+    /**
+     * 폴백: 결제를 큐에 저장
+     */
+    private PaymentResult fallbackPayment(String orderId, BigDecimal amount, String reason) {
+        log.info("⚡ 폴백 실행 ({}): 결제 {}를 대기열에 저장", reason, orderId);
+
+        // 메시지 큐에 저장
+        PendingPayment pending = new PendingPayment(orderId, amount);
+        messageQueue.send("pending-payments", pending);
+
+        return PaymentResult.pending(orderId,
+            "결제가 대기열에 저장되었습니다. 잠시 후 자동 처리됩니다.");
+    }
+
+    /**
+     * 서킷 상태 확인
+     */
+    public CircuitBreakerStatus getStatus() {
+        CircuitBreaker.Metrics metrics = circuitBreaker.getMetrics();
+        return new CircuitBreakerStatus(
+            circuitBreaker.getState().name(),
+            metrics.getFailureRate(),
+            metrics.getNumberOfFailedCalls(),
+            metrics.getNumberOfSuccessfulCalls(),
+            metrics.getSlowCallRate()
+        );
+    }
+
+    /**
+     * 수동 서킷 제어 (점검 모드)
+     */
+    public void enableMaintenanceMode() {
+        circuitBreaker.transitionToOpenState();
+        log.info("🔧 점검 모드: 서킷을 수동으로 열었습니다");
+    }
+
+    public void disableMaintenanceMode() {
+        circuitBreaker.transitionToClosedState();
+        log.info("✅ 서비스 재개: 서킷을 닫았습니다");
+    }
+}
+
+// Spring Boot 설정 (application.yml)
+/*
+resilience4j:
+  circuitbreaker:
+    instances:
+      paymentService:
+        register-health-indicator: true
+        sliding-window-size: 20
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+*/
+</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "결제 서비스 지연이 발생했는데 주문 서비스까지 영향을 받았습니다. Circuit Breaker를 적용하면 결제 서비스가 느려질 때 즉시 폴백으로 전환되어 주문 서비스의 연쇄 장애를 막을 수 있습니다. 실패율 50% 이상이면 30초간 서킷을 열도록 설정하죠."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 아키텍처 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "외부 API 연동 부분에 서킷 브레이커가 없네요. 써드파티 서비스가 불안정해지면 우리 서비스 전체가 느려질 수 있어요. Resilience4j 적용하고, 서킷 Open 시 캐시된 데이터를 반환하는 폴백을 추가합시다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 모니터링 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "서킷 브레이커 상태를 Grafana 대시보드에 추가했습니다. Open 상태로 전환되면 즉시 Slack 알림이 오고, Half-Open에서 성공률도 추적됩니다. 이 메트릭으로 외부 서비스의 안정성 SLA를 측정할 수 있어요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>적절한 임계값 설정 필수</strong>
+                        <p>임계값이 너무 낮으면 일시적 에러에도 서킷이 열리고, 너무 높으면 장애 전파를 막지 못합니다. 서비스 특성에 맞게 실패율, 타임아웃, 슬라이딩 윈도우를 튜닝하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>폴백 없는 서킷 브레이커 금지</strong>
+                        <p>서킷이 열렸을 때 단순 에러만 반환하면 사용자 경험이 나빠집니다. 캐시 데이터, 기본값, 대체 서비스 등 의미 있는 폴백 전략을 반드시 구현하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>모니터링/알림 연동 필수</strong>
+                        <p>서킷 상태 변화를 모니터링하지 않으면 장애 원인 파악이 어렵습니다. Open/Close 상태 변경, 실패율, 응답 시간을 대시보드와 알림 시스템에 연동하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>서킷 브레이커 베스트 프랙티스</strong>
+                        <p>서비스별 독립 서킷 설정, 타임아웃과 함께 사용, 점검 모드용 수동 제어 API 제공, Bulkhead 패턴과 조합하여 리소스 격리, 주기적인 임계값 검토 및 조정.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Saga/" class="related-term-link">Saga</a>
+                <a href="/ko/term/Message%20Queue/" class="related-term-link">Message Queue</a>
+                <a href="/ko/term/Microservices/" class="related-term-link">Microservices</a>
+                <a href="/ko/term/Service%20Mesh/" class="related-term-link">Service Mesh</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+                <a href="/ko/term/API%20Gateway/" class="related-term-link">API Gateway</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://resilience4j.readme.io/docs/circuitbreaker" target="_blank" class="learn-link">
+                    📄 Resilience4j - Circuit Breaker 공식 문서
+                </a>
+                <a href="https://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" class="learn-link">
+                    🎓 Martin Fowler - Circuit Breaker 패턴
+                </a>
+                <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker" target="_blank" class="learn-link">
+                    📖 Microsoft - Circuit Breaker 패턴 가이드
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

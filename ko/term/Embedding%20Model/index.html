@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedding Model | KAITRUST AI 백과사전</title>
+    <meta name="description" content="텍스트를 벡터로 변환하는 모델">
+    <meta name="keywords" content="Embedding Model, , AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Embedding%20Model/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Embedding%20Model/">
+    <meta property="og:title" content="Embedding Model | KAITRUST AI 백과사전">
+    <meta property="og:description" content="텍스트를 벡터로 변환하는 모델">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Embedding Model | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="텍스트를 벡터로 변환하는 모델">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Embedding Model",
+        "description": "텍스트를 벡터로 변환하는 모델",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">Embedding Model</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">Embedding Model</h1>
+            
+            <div class="term-description">
+                <p>텍스트를 벡터로 변환하는 모델</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Embedding Model은 텍스트, 이미지, 오디오 등 비정형 데이터를 고정 길이의 수치 벡터(임베딩)로 변환하는 AI 모델입니다. 이 벡터는 원본 데이터의 의미적 특성을 수학적으로 인코딩하여, 컴퓨터가 유사도 계산, 검색, 분류 등을 수행할 수 있게 합니다.</p>
+                <p>초기에는 Word2Vec, GloVe 같은 정적 임베딩이 주류였지만, 2018년 BERT 등장 이후 Transformer 기반 모델이 대세가 되었습니다. 현재는 OpenAI text-embedding-3, Cohere Embed v3, Google Gecko 등 상용 API와 BGE, E5, GTE 같은 오픈소스 모델이 경쟁하고 있습니다.</p>
+                <p>임베딩 모델은 텍스트를 입력받아 보통 256~3072차원의 실수 벡터를 출력합니다. 의미가 비슷한 텍스트는 벡터 공간에서 가깝게, 다른 텍스트는 멀리 위치합니다. 이 특성 덕분에 코사인 유사도나 유클리드 거리로 의미적 유사성을 수치화할 수 있습니다.</p>
+                <p>실무에서 Embedding Model은 RAG(검색 증강 생성), 시맨틱 검색, 추천 시스템, 중복 탐지, 클러스터링의 핵심 컴포넌트입니다. Vector Database(Pinecone, Weaviate, Milvus)와 결합하여 수억 건의 문서에서 밀리초 내에 관련 정보를 찾아냅니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                
+                <pre><code class="language-python"># Embedding Model 활용 예제
+from openai import OpenAI
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+client = OpenAI()
+
+# 1. OpenAI text-embedding-3-small 사용 ($0.02/1M tokens)
+def get_embedding(text: str, model="text-embedding-3-small"):
+    response = client.embeddings.create(input=text, model=model)
+    return response.data[0].embedding
+
+# 임베딩 생성
+texts = [
+    "Python은 데이터 분석에 많이 사용됩니다",
+    "파이썬은 머신러닝 분야에서 인기가 높습니다",
+    "자바스크립트는 웹 개발에 필수입니다",
+    "오늘 날씨가 좋네요"
+]
+embeddings = [get_embedding(t) for t in texts]
+
+# 2. 유사도 계산
+similarity_matrix = cosine_similarity(embeddings)
+print("텍스트 유사도 행렬:")
+print(np.round(similarity_matrix, 2))
+# Python-파이썬: 0.92 (높음), Python-날씨: 0.31 (낮음)
+
+# 3. 시맨틱 검색 구현
+query = "데이터 사이언스 프로그래밍 언어"
+query_emb = get_embedding(query)
+
+scores = cosine_similarity([query_emb], embeddings)[0]
+ranked_results = sorted(zip(texts, scores), key=lambda x: x[1], reverse=True)
+
+print("\n검색 결과:")
+for text, score in ranked_results:
+    print(f"  {score:.3f}: {text}")
+
+# 4. 오픈소스 모델 (sentence-transformers)
+from sentence_transformers import SentenceTransformer
+
+# BGE 모델 - 한국어 지원, 무료
+model = SentenceTransformer('BAAI/bge-m3')  # 다국어 지원
+
+embeddings = model.encode(texts)
+print(f"\n임베딩 차원: {embeddings.shape}")  # (4, 1024)
+
+# 5. 배치 처리 + Vector DB 저장 (Chroma 예시)
+import chromadb
+from chromadb.utils import embedding_functions
+
+chroma_client = chromadb.Client()
+openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+    model_name="text-embedding-3-small"
+)
+
+collection = chroma_client.create_collection(
+    name="documents",
+    embedding_function=openai_ef
+)
+
+# 문서 추가 (임베딩 자동 생성)
+collection.add(
+    documents=texts,
+    ids=[f"doc_{i}" for i in range(len(texts))]
+)
+
+# 유사 문서 검색
+results = collection.query(
+    query_texts=["AI 프로그래밍"],
+    n_results=2
+)
+print(f"\n검색된 문서: {results['documents']}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"RAG 파이프라인의 검색 품질이 낮은 건 임베딩 모델 문제일 수 있어요. text-embedding-ada에서 text-embedding-3-large로 바꾸면 MTEB 벤치마크 기준 15% 정도 성능이 올라갑니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"임베딩 모델 선택 시 고려하는 건 세 가지입니다. 첫째 차원 수(검색 속도 vs 정확도 트레이드오프), 둘째 max token 길이(긴 문서 처리 가능 여부), 셋째 다국어 지원(한국어 성능) 입니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"도메인 특화 검색이라면 Fine-tuning을 고려해보세요. 법률 문서에 일반 임베딩 모델 쓰면 전문 용어를 못 잡는데, 법률 코퍼스로 contrastive learning 하면 recall이 30% 이상 오릅니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>임베딩 모델 변경 시 기존 벡터 재사용</strong>
+                        <p>모델마다 벡터 공간이 완전히 다릅니다. 모델을 바꾸면 기존에 저장된 모든 임베딩을 다시 생성해야 합니다. 그렇지 않으면 검색 결과가 엉망이 됩니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>긴 문서를 그대로 임베딩</strong>
+                        <p>대부분의 임베딩 모델은 512~8192 토큰 제한이 있습니다. 긴 문서는 청크로 분할하고, 각 청크를 별도 임베딩한 뒤 검색 시 조합해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법: 쿼리와 문서 임베딩 구분</strong>
+                        <p>일부 모델(E5, BGE)은 쿼리 앞에 "query: ", 문서 앞에 "passage: " 프리픽스를 붙여야 최적 성능이 나옵니다. 모델 문서를 반드시 확인하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Embedding/" class="related-term-link">Embedding</a>
+                <a href="/ko/term/Vector%20Database/" class="related-term-link">Vector Database</a>
+                <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                <a href="/ko/term/GloVe/" class="related-term-link">GloVe</a>
+                <a href="/ko/term/Word2Vec/" class="related-term-link">Word2Vec</a>
+                <a href="/ko/term/Semantic%20Search/" class="related-term-link">Semantic Search</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://platform.openai.com/docs/guides/embeddings" target="_blank" class="learn-link">📄 OpenAI Embeddings 공식 가이드</a>
+                <a href="https://huggingface.co/spaces/mteb/leaderboard" target="_blank" class="learn-link">📊 MTEB 임베딩 모델 벤치마크 리더보드</a>
+                <a href="https://www.sbert.net/" target="_blank" class="learn-link">🎓 Sentence Transformers 라이브러리 문서</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

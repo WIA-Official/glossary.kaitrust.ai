@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Long Polling (Long Polling) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Long Polling은 서버가 새 데이터를 보유할 때까지 연결을 유지하는 HTTP 기반 실시간 통신 기법. WebSocket/SSE 이전 기술로 타임아웃 처리가 핵심.">
+    <meta name="keywords" content="Long Polling, 롱 폴링, HTTP 롱 폴링, 실시간 통신, Comet, 서버 푸시, 타임아웃, WebSocket 대안, SSE 대안, AJAX 폴링, 네트워크, AI 용어, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Long%20Polling/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Long%20Polling/">
+    <meta property="og:title" content="Long Polling (Long Polling) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Long Polling은 서버가 새 데이터를 보유할 때까지 연결을 유지하는 HTTP 기반 실시간 통신 기법. WebSocket/SSE 이전 기술로 타임아웃 처리가 핵심.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Long Polling (Long Polling) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Long Polling은 서버가 새 데이터를 보유할 때까지 연결을 유지하는 HTTP 기반 실시간 통신 기법. WebSocket/SSE 이전 기술로 타임아웃 처리가 핵심.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Long Polling",
+        "description": "Long Polling은 서버가 새 데이터를 보유할 때까지 연결을 유지하는 HTTP 기반 실시간 통신 기법. WebSocket/SSE 이전 기술로 타임아웃 처리가 핵심.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        /* 비교표 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .comparison-table th {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            color: #cbd5e1;
+        }
+        .comparison-table tr:hover td {
+            background: rgba(168, 85, 247, 0.05);
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#net">네트워크</a>
+            <span>›</span>
+            <span class="current">Long Polling</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🌍</span>
+                <span>네트워크</span>
+            </div>
+            <h1 class="term-title">Long Polling</h1>
+            <p class="term-english">Long Polling</p>
+            <div class="term-description">
+                <p>Long Polling은 서버가 새 데이터를 보유할 때까지 연결을 유지하는 HTTP 기반 실시간 통신 기법. WebSocket/SSE 이전 기술로 타임아웃 처리가 핵심.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#net" class="term-action-btn btn-secondary">
+                    🌍 네트워크 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Long Polling(롱 폴링)은 HTTP 프로토콜 위에서 실시간에 가까운 통신을 구현하기 위한 기법입니다. 클라이언트가 서버에 요청을 보내면, 서버는 새로운 데이터가 있을 때까지 응답을 보류하고 연결을 유지합니다. 데이터가 준비되면 응답을 보내고, 클라이언트는 즉시 다시 새로운 요청을 시작합니다. 이 사이클이 반복되면서 실시간 통신 효과를 얻습니다.</p>
+                <p>일반 Polling과의 차이점이 중요합니다. 일반 Polling은 클라이언트가 주기적으로(예: 1초마다) 서버에 요청을 보내 새 데이터가 있는지 확인합니다. 반면 Long Polling은 서버가 데이터를 가질 때까지 연결을 유지하므로, 불필요한 요청을 줄이고 데이터 전달 지연시간을 최소화합니다. 2005년경 Gmail, Google Maps 등에서 채택되면서 널리 알려졌습니다.</p>
+                <p>Long Polling의 핵심은 타임아웃 처리입니다. 서버는 영원히 연결을 유지할 수 없으므로, 일정 시간(보통 20~30초) 후 빈 응답이나 heartbeat를 보내고 연결을 종료합니다. 클라이언트는 이를 받으면 즉시 새 요청을 시작합니다. 이 타임아웃은 방화벽, 프록시 서버의 연결 종료를 방지하고, 끊어진 연결을 감지하는 역할을 합니다.</p>
+                <p>WebSocket과 SSE(Server-Sent Events)가 등장하면서 Long Polling의 사용은 줄었지만, 여전히 레거시 시스템이나 HTTP만 지원하는 환경(일부 기업 방화벽, 오래된 프록시)에서 사용됩니다. Facebook 메신저가 2010년대 초까지 Long Polling을 사용했던 대표적인 사례입니다.</p>
+            </div>
+        </section>
+
+        <!-- 통신 방식 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 실시간 통신 방식 비교</h2>
+            <div class="section-content">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>방식</th>
+                            <th>연결 유지</th>
+                            <th>지연시간</th>
+                            <th>서버 부하</th>
+                            <th>브라우저 지원</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Polling</strong></td>
+                            <td>매 요청마다 새 연결</td>
+                            <td>폴링 간격만큼</td>
+                            <td>높음 (불필요한 요청)</td>
+                            <td>모든 브라우저</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Long Polling</strong></td>
+                            <td>데이터까지 유지</td>
+                            <td>거의 실시간</td>
+                            <td>중간</td>
+                            <td>모든 브라우저</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SSE</strong></td>
+                            <td>단방향 지속 연결</td>
+                            <td>실시간</td>
+                            <td>낮음</td>
+                            <td>IE 제외 대부분</td>
+                        </tr>
+                        <tr>
+                            <td><strong>WebSocket</strong></td>
+                            <td>양방향 지속 연결</td>
+                            <td>실시간</td>
+                            <td>낮음</td>
+                            <td>모던 브라우저</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="javascript">JavaScript (클라이언트)</button>
+                <button class="code-tab" data-lang="nodejs">Node.js (서버)</button>
+                <button class="code-tab" data-lang="python">Python (서버)</button>
+            </div>
+            <div class="code-block active" data-lang="javascript">
+                <pre><code class="language-javascript">// Long Polling 클라이언트 구현
+class LongPollingClient {
+    constructor(url) {
+        this.url = url;
+        this.isRunning = false;
+        this.retryDelay = 1000;  // 에러 시 재시도 지연
+        this.maxRetries = 5;
+        this.retryCount = 0;
+    }
+
+    // 폴링 시작
+    async start() {
+        this.isRunning = true;
+        this.poll();
+    }
+
+    // 폴링 중지
+    stop() {
+        this.isRunning = false;
+    }
+
+    async poll() {
+        if (!this.isRunning) return;
+
+        try {
+            // 타임아웃 설정 (서버보다 길게)
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 35000);
+
+            const response = await fetch(this.url, {
+                method: 'GET',
+                signal: controller.signal,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            clearTimeout(timeout);
+
+            if (response.ok) {
+                const data = await response.json();
+                this.retryCount = 0;  // 성공 시 재시도 카운트 리셋
+
+                if (data.type !== 'timeout') {
+                    this.onMessage(data);  // 새 데이터 처리
+                }
+            }
+
+            // 즉시 다음 폴링 시작
+            this.poll();
+
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log('요청 타임아웃, 재연결...');
+                this.poll();
+            } else {
+                console.error('폴링 에러:', error);
+                this.handleError();
+            }
+        }
+    }
+
+    handleError() {
+        if (this.retryCount < this.maxRetries) {
+            this.retryCount++;
+            const delay = this.retryDelay * Math.pow(2, this.retryCount);
+            console.log(`${delay}ms 후 재시도 (${this.retryCount}/${this.maxRetries})`);
+            setTimeout(() => this.poll(), delay);
+        } else {
+            console.error('최대 재시도 횟수 초과');
+            this.onError('연결 실패');
+        }
+    }
+
+    onMessage(data) { console.log('새 메시지:', data); }
+    onError(error) { console.error('에러:', error); }
+}
+
+// 사용 예시
+const client = new LongPollingClient('/api/events');
+client.onMessage = (data) => {
+    document.getElementById('messages').innerHTML += `<p>${data.message}</p>`;
+};
+client.start();</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="nodejs">
+                
+                <pre><code class="language-javascript">const express = require('express');
+const app = express();
+
+// 대기 중인 클라이언트들
+const waitingClients = new Map();
+let clientId = 0;
+
+// Long Polling 엔드포인트
+app.get('/api/events', (req, res) => {
+    const id = ++clientId;
+    const timeout = 30000;  // 30초 타임아웃
+
+    console.log(`클라이언트 ${id} 연결`);
+
+    // 타임아웃 설정
+    const timer = setTimeout(() => {
+        waitingClients.delete(id);
+        res.json({ type: 'timeout', message: 'No new data' });
+    }, timeout);
+
+    // 클라이언트 등록
+    waitingClients.set(id, { res, timer });
+
+    // 연결 종료 시 정리
+    req.on('close', () => {
+        clearTimeout(timer);
+        waitingClients.delete(id);
+        console.log(`클라이언트 ${id} 연결 종료`);
+    });
+});
+
+// 새 메시지 발행 (모든 대기 클라이언트에게 전송)
+app.post('/api/broadcast', express.json(), (req, res) => {
+    const message = req.body;
+
+    // 모든 대기 클라이언트에게 메시지 전송
+    waitingClients.forEach((client, id) => {
+        clearTimeout(client.timer);
+        client.res.json({
+            type: 'message',
+            data: message,
+            timestamp: Date.now()
+        });
+    });
+
+    const count = waitingClients.size;
+    waitingClients.clear();
+
+    res.json({ success: true, deliveredTo: count });
+});
+
+// 서버 상태 확인
+app.get('/api/status', (req, res) => {
+    res.json({
+        waitingClients: waitingClients.size,
+        uptime: process.uptime()
+    });
+});
+
+app.listen(3000, () => {
+    console.log('Long Polling 서버 실행 중 (포트 3000)');
+});</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                
+                <pre><code class="language-python">from flask import Flask, request, jsonify
+import time
+import threading
+from queue import Queue, Empty
+
+app = Flask(__name__)
+
+# 메시지 큐 (실제로는 Redis Pub/Sub 등 사용)
+message_queues = {}
+lock = threading.Lock()
+
+@app.route('/api/events')
+def long_poll():
+    """Long Polling 엔드포인트"""
+    client_id = request.args.get('client_id', str(time.time()))
+    timeout = 30  # 30초 타임아웃
+
+    # 클라이언트별 큐 생성
+    with lock:
+        if client_id not in message_queues:
+            message_queues[client_id] = Queue()
+
+    queue = message_queues[client_id]
+
+    try:
+        # 타임아웃까지 메시지 대기
+        message = queue.get(timeout=timeout)
+        return jsonify({
+            'type': 'message',
+            'data': message,
+            'timestamp': time.time()
+        })
+    except Empty:
+        # 타임아웃 - 빈 응답 반환
+        return jsonify({
+            'type': 'timeout',
+            'message': 'No new data'
+        })
+
+@app.route('/api/broadcast', methods=['POST'])
+def broadcast():
+    """모든 대기 클라이언트에게 메시지 전송"""
+    data = request.json
+
+    delivered = 0
+    with lock:
+        for client_id, queue in message_queues.items():
+            queue.put(data)
+            delivered += 1
+
+    return jsonify({
+        'success': True,
+        'delivered_to': delivered
+    })
+
+@app.route('/api/status')
+def status():
+    """서버 상태 확인"""
+    with lock:
+        return jsonify({
+            'active_clients': len(message_queues)
+        })
+
+if __name__ == '__main__':
+    app.run(port=3000, threaded=True)</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 선택 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "실시간 알림 기능인데, 고객사 방화벽이 WebSocket을 막고 있어요. Long Polling으로 구현하면 HTTP만 사용하니까 방화벽 문제를 피할 수 있습니다. 타임아웃은 30초로 설정하고, 프록시 타임아웃보다 짧게 유지하면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "Long Polling은 서버가 데이터를 가질 때까지 HTTP 연결을 열어두는 Comet 기법의 하나입니다. WebSocket이 없던 시절 Gmail이 이 방식으로 실시간 메일 알림을 구현했습니다. 핵심은 타임아웃 처리와 재연결 로직인데, 클라이언트는 응답을 받자마자 새 요청을 시작해야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 성능 최적화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "현재 Long Polling으로 동시 1만 명 처리 중인데, 각 연결이 서버 스레드를 점유하고 있어서 리소스 효율이 낮습니다. Node.js나 Python asyncio처럼 비동기 I/O를 사용하거나, SSE로 마이그레이션하면 동일 서버로 10배 더 많은 연결을 처리할 수 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>타임아웃 설정 무시</strong>
+                        <p>서버 타임아웃 없이 영원히 연결을 유지하면 프록시/방화벽이 연결을 끊거나 좀비 연결이 누적됩니다. 반드시 20~30초 타임아웃을 설정하고, 클라이언트 타임아웃은 서버보다 길게(예: 35초) 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>재연결 로직 누락</strong>
+                        <p>네트워크 에러나 서버 재시작 시 폴링이 멈춥니다. 지수 백오프(exponential backoff)를 적용한 재연결 로직을 반드시 구현하세요. 첫 재시도 1초, 이후 2, 4, 8초... 최대 30초까지.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>동기 서버에서 스레드 고갈</strong>
+                        <p>Apache/PHP 같은 스레드 기반 서버에서 Long Polling을 구현하면, 각 연결이 스레드를 점유해 서버가 금방 마비됩니다. Node.js, Python asyncio, Go 등 비동기 I/O 기반 서버를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 Long Polling 구현</strong>
+                        <p>서버 타임아웃 30초, 클라이언트 타임아웃 35초 설정. 지수 백오프 재연결 로직 필수. 비동기 서버 사용. 연결 수 제한과 모니터링 필수. 가능하다면 WebSocket이나 SSE로 마이그레이션 검토.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/WebSocket/" class="related-term-link">WebSocket</a>
+                <a href="/ko/term/HTTP/" class="related-term-link">HTTP</a>
+                <a href="/ko/term/REST%20API/" class="related-term-link">REST API</a>
+                <a href="/ko/term/Latency/" class="related-term-link">Latency</a>
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://javascript.info/long-polling" target="_blank" class="learn-link">
+                    📄 JavaScript.info - Long Polling 상세 설명
+                </a>
+                <a href="https://developer.mozilla.org/ko/docs/Web/API/WebSockets_API" target="_blank" class="learn-link">
+                    🎓 MDN - WebSocket API (Long Polling 대체 기술)
+                </a>
+                <a href="https://socket.io/docs/v4/" target="_blank" class="learn-link">
+                    📖 Socket.IO - 실시간 통신 라이브러리 (Long Polling 폴백 지원)
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

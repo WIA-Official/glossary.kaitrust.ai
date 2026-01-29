@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Sourcing (이벤트 소싱) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Event Sourcing은 상태 변경을 이벤트 스트림으로 저장하는 아키텍처 패턴입니다. 현재 상태 대신 발생한 모든 이벤트를 순서대로 기록하고, 이를 재생(replay)하여 상태를 복원합니다. 완전한 감사 추적과 시간 여행 디버깅이 가능합니다.">
+    <meta name="keywords" content="Event Sourcing, 이벤트 소싱, Event Store, Snapshot, Projection, CQRS, Event Replay, Temporal Query, 감사 추적, 아키텍처, AI 용어, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Event%20Sourcing/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Event%20Sourcing/">
+    <meta property="og:title" content="Event Sourcing (이벤트 소싱) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="상태 변경을 이벤트로 저장하는 패턴. CQRS와 함께 사용. 감사 추적에 유용.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Event Sourcing (이벤트 소싱) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="상태 변경을 이벤트로 저장하는 패턴. CQRS와 함께 사용. 감사 추적에 유용.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Event Sourcing",
+        "description": "상태 변경을 이벤트로 저장하는 패턴. CQRS와 함께 사용. 감사 추적에 유용.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 스타일 */
+        .enhanced-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .enhanced-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .enhanced-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+            color: #e2e8f0;
+        }
+        .enhanced-section p, .enhanced-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .enhanced-section ul, .enhanced-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhanced-section li {
+            margin-bottom: 0.5rem;
+        }
+        .enhanced-section code {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e879f9;
+        }
+        .enhanced-section pre {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0 1.5rem;
+        }
+        .enhanced-section pre code {
+            background: none;
+            padding: 0;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .comparison-table th {
+            background: rgba(168, 85, 247, 0.2);
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            color: #cbd5e1;
+        }
+        .conversation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #a855f7;
+            padding: 1.25rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .conversation-box .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .conversation-box p {
+            margin: 0;
+            color: #e2e8f0;
+        }
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .warning-box p {
+            color: #fca5a5;
+            margin: 0;
+        }
+        .tip-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .tip-box p {
+            color: #86efac;
+            margin: 0;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-tag {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .related-term-tag:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #fff;
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#arch">아키텍처</a>
+            <span>›</span>
+            <span class="current">Event Sourcing</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🏗️</span>
+                <span>아키텍처</span>
+            </div>
+            <h1 class="term-title">Event Sourcing</h1>
+            <p class="term-english">이벤트 소싱</p>
+            <div class="term-description">
+                <p>Event Sourcing은 상태 변경을 이벤트 스트림으로 저장하는 아키텍처 패턴입니다. 현재 상태 대신 발생한 모든 이벤트를 순서대로 기록하고, 이를 재생(replay)하여 상태를 복원합니다. 완전한 감사 추적과 시간 여행 디버깅이 가능합니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#arch" class="term-action-btn btn-secondary">
+                    🏗️ 아키텍처 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="enhanced-section">
+            <h2>📖 상세 설명</h2>
+            <p><strong>Event Sourcing</strong>은 전통적인 CRUD 방식과 달리, 데이터의 현재 상태가 아닌 <strong>상태 변경 이벤트의 시퀀스</strong>를 저장합니다. 은행 원장이 잔액만 기록하는 것이 아니라 모든 입출금 내역을 기록하는 것과 같은 원리입니다.</p>
+
+            <h3>전통적 방식 vs Event Sourcing</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>전통적 CRUD</th>
+                        <th>Event Sourcing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>현재 상태만 저장 (balance: 10000)</td>
+                        <td>모든 이벤트 저장 (입금 5000, 출금 3000, ...)</td>
+                    </tr>
+                    <tr>
+                        <td>과거 상태 복원 불가</td>
+                        <td>특정 시점의 상태로 복원 가능 (Time Travel)</td>
+                    </tr>
+                    <tr>
+                        <td>변경 이력 추적 어려움</td>
+                        <td>완전한 감사 추적 (Audit Trail)</td>
+                    </tr>
+                    <tr>
+                        <td>데이터 손실 가능</td>
+                        <td>이벤트는 불변, 삭제 없음</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>핵심 개념</h3>
+            <ul>
+                <li><strong>Event Store</strong>: 이벤트를 append-only로 저장하는 특수 저장소</li>
+                <li><strong>Event Stream</strong>: 특정 Aggregate에 대한 이벤트 시퀀스</li>
+                <li><strong>Replay</strong>: 이벤트를 순서대로 재생하여 현재 상태 복원</li>
+                <li><strong>Snapshot</strong>: 특정 시점의 상태를 캐싱하여 재생 시간 단축</li>
+                <li><strong>Projection</strong>: 이벤트를 다른 형태(Read Model)로 변환</li>
+            </ul>
+
+            <h3>Event Sourcing의 장점</h3>
+            <ul>
+                <li><strong>완전한 감사 추적</strong>: 언제, 무엇이, 왜 변경되었는지 추적</li>
+                <li><strong>시간 여행</strong>: 특정 시점의 상태로 복원 가능</li>
+                <li><strong>디버깅</strong>: 버그 발생 시점의 상태 재현</li>
+                <li><strong>이벤트 리플레이</strong>: 새로운 요구사항에 맞게 데이터 재처리</li>
+                <li><strong>동시성 처리</strong>: 이벤트 버전으로 낙관적 잠금 구현</li>
+            </ul>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="enhanced-section">
+            <h2>💻 코드 예제</h2>
+
+            <h3>Domain Event 정의</h3>
+            <pre><code>// domain/events/AccountEvents.ts
+interface DomainEvent {
+  readonly eventId: string;
+  readonly aggregateId: string;
+  readonly version: number;
+  readonly occurredAt: Date;
+  readonly eventType: string;
+}
+
+export class AccountOpened implements DomainEvent {
+  readonly eventType = 'AccountOpened';
+
+  constructor(
+    public readonly eventId: string,
+    public readonly aggregateId: string,
+    public readonly version: number,
+    public readonly occurredAt: Date,
+    public readonly ownerId: string,
+    public readonly initialBalance: number
+  ) {}
+}
+
+export class MoneyDeposited implements DomainEvent {
+  readonly eventType = 'MoneyDeposited';
+
+  constructor(
+    public readonly eventId: string,
+    public readonly aggregateId: string,
+    public readonly version: number,
+    public readonly occurredAt: Date,
+    public readonly amount: number,
+    public readonly description: string
+  ) {}
+}
+
+export class MoneyWithdrawn implements DomainEvent {
+  readonly eventType = 'MoneyWithdrawn';
+
+  constructor(
+    public readonly eventId: string,
+    public readonly aggregateId: string,
+    public readonly version: number,
+    public readonly occurredAt: Date,
+    public readonly amount: number,
+    public readonly description: string
+  ) {}
+}
+
+type AccountEvent = AccountOpened | MoneyDeposited | MoneyWithdrawn;</code></pre>
+
+            <h3>Event Sourced Aggregate</h3>
+            <pre><code>// domain/aggregates/Account.ts
+import { AccountOpened, MoneyDeposited, MoneyWithdrawn } from '../events/AccountEvents';
+
+export class Account {
+  private _id: string = '';
+  private _ownerId: string = '';
+  private _balance: number = 0;
+  private _version: number = 0;
+  private _uncommittedEvents: DomainEvent[] = [];
+
+  private constructor() {}
+
+  // Factory: 새 계좌 생성
+  static open(ownerId: string, initialDeposit: number = 0): Account {
+    const account = new Account();
+
+    // 이벤트 발생 (상태 변경 아님)
+    account.apply(new AccountOpened(
+      crypto.randomUUID(),
+      crypto.randomUUID(),
+      1,
+      new Date(),
+      ownerId,
+      initialDeposit
+    ));
+
+    return account;
+  }
+
+  // 이벤트 스트림에서 Aggregate 재구성
+  static fromHistory(events: DomainEvent[]): Account {
+    const account = new Account();
+    for (const event of events) {
+      account.applyFromHistory(event);
+    }
+    return account;
+  }
+
+  get id(): string { return this._id; }
+  get balance(): number { return this._balance; }
+  get version(): number { return this._version; }
+
+  // 명령: 입금
+  deposit(amount: number, description: string): void {
+    if (amount <= 0) {
+      throw new Error('Deposit amount must be positive');
+    }
+
+    this.apply(new MoneyDeposited(
+      crypto.randomUUID(),
+      this._id,
+      this._version + 1,
+      new Date(),
+      amount,
+      description
+    ));
+  }
+
+  // 명령: 출금
+  withdraw(amount: number, description: string): void {
+    if (amount <= 0) {
+      throw new Error('Withdrawal amount must be positive');
+    }
+    if (this._balance < amount) {
+      throw new Error('Insufficient balance');
+    }
+
+    this.apply(new MoneyWithdrawn(
+      crypto.randomUUID(),
+      this._id,
+      this._version + 1,
+      new Date(),
+      amount,
+      description
+    ));
+  }
+
+  // 이벤트 적용 (새 이벤트)
+  private apply(event: DomainEvent): void {
+    this.mutate(event);
+    this._uncommittedEvents.push(event);
+  }
+
+  // 이벤트 적용 (히스토리 재생)
+  private applyFromHistory(event: DomainEvent): void {
+    this.mutate(event);
+  }
+
+  // 상태 변경 (이벤트 타입별 처리)
+  private mutate(event: DomainEvent): void {
+    if (event instanceof AccountOpened) {
+      this._id = event.aggregateId;
+      this._ownerId = event.ownerId;
+      this._balance = event.initialBalance;
+      this._version = event.version;
+    } else if (event instanceof MoneyDeposited) {
+      this._balance += event.amount;
+      this._version = event.version;
+    } else if (event instanceof MoneyWithdrawn) {
+      this._balance -= event.amount;
+      this._version = event.version;
+    }
+  }
+
+  // 커밋되지 않은 이벤트 가져오기
+  getUncommittedEvents(): DomainEvent[] {
+    return [...this._uncommittedEvents];
+  }
+
+  clearUncommittedEvents(): void {
+    this._uncommittedEvents = [];
+  }
+}</code></pre>
+
+            <h3>Event Store 인터페이스 및 구현</h3>
+            <pre><code>// infrastructure/eventstore/EventStore.ts
+interface IEventStore {
+  append(streamId: string, events: DomainEvent[], expectedVersion: number): Promise&lt;void&gt;;
+  getStream(streamId: string): Promise&lt;DomainEvent[]&gt;;
+  getStreamFromVersion(streamId: string, fromVersion: number): Promise&lt;DomainEvent[]&gt;;
+}
+
+// PostgreSQL 기반 Event Store 구현
+export class PostgresEventStore implements IEventStore {
+  constructor(private db: Pool) {}
+
+  async append(
+    streamId: string,
+    events: DomainEvent[],
+    expectedVersion: number
+  ): Promise&lt;void&gt; {
+    const client = await this.db.connect();
+
+    try {
+      await client.query('BEGIN');
+
+      // 낙관적 동시성 제어
+      const currentVersion = await this.getCurrentVersion(client, streamId);
+      if (currentVersion !== expectedVersion) {
+        throw new Error(`Concurrency conflict: expected ${expectedVersion}, got ${currentVersion}`);
+      }
+
+      // 이벤트 append (INSERT only, never UPDATE)
+      for (const event of events) {
+        await client.query(
+          `INSERT INTO event_store
+           (event_id, stream_id, version, event_type, payload, occurred_at)
+           VALUES ($1, $2, $3, $4, $5, $6)`,
+          [
+            event.eventId,
+            streamId,
+            event.version,
+            event.eventType,
+            JSON.stringify(event),
+            event.occurredAt
+          ]
+        );
+      }
+
+      await client.query('COMMIT');
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
+  async getStream(streamId: string): Promise&lt;DomainEvent[]&gt; {
+    const result = await this.db.query(
+      `SELECT payload FROM event_store
+       WHERE stream_id = $1
+       ORDER BY version ASC`,
+      [streamId]
+    );
+    return result.rows.map(row => this.deserialize(row.payload));
+  }
+
+  private deserialize(payload: any): DomainEvent {
+    // Event Type에 따라 적절한 클래스로 역직렬화
+    const eventType = payload.eventType;
+    switch (eventType) {
+      case 'AccountOpened':
+        return new AccountOpened(
+          payload.eventId, payload.aggregateId, payload.version,
+          new Date(payload.occurredAt), payload.ownerId, payload.initialBalance
+        );
+      case 'MoneyDeposited':
+        return new MoneyDeposited(
+          payload.eventId, payload.aggregateId, payload.version,
+          new Date(payload.occurredAt), payload.amount, payload.description
+        );
+      // ... 다른 이벤트 타입들
+      default:
+        throw new Error(`Unknown event type: ${eventType}`);
+    }
+  }
+}</code></pre>
+
+            <h3>Snapshot을 활용한 최적화</h3>
+            <pre><code>// infrastructure/snapshot/SnapshotStore.ts
+interface Snapshot&lt;T&gt; {
+  aggregateId: string;
+  version: number;
+  state: T;
+  createdAt: Date;
+}
+
+export class AccountRepository {
+  private readonly SNAPSHOT_INTERVAL = 100; // 100개 이벤트마다 스냅샷
+
+  constructor(
+    private eventStore: IEventStore,
+    private snapshotStore: ISnapshotStore
+  ) {}
+
+  async getById(accountId: string): Promise&lt;Account&gt; {
+    // 1. 스냅샷 조회
+    const snapshot = await this.snapshotStore.get&lt;AccountState&gt;(accountId);
+
+    let account: Account;
+    let fromVersion = 0;
+
+    if (snapshot) {
+      // 2. 스냅샷에서 시작
+      account = Account.fromSnapshot(snapshot.state);
+      fromVersion = snapshot.version;
+    } else {
+      account = new Account();
+    }
+
+    // 3. 스냅샷 이후 이벤트만 재생
+    const events = await this.eventStore.getStreamFromVersion(accountId, fromVersion);
+    for (const event of events) {
+      account.applyFromHistory(event);
+    }
+
+    return account;
+  }
+
+  async save(account: Account): Promise&lt;void&gt; {
+    const events = account.getUncommittedEvents();
+    if (events.length === 0) return;
+
+    const expectedVersion = account.version - events.length;
+
+    // 이벤트 저장
+    await this.eventStore.append(account.id, events, expectedVersion);
+    account.clearUncommittedEvents();
+
+    // 스냅샷 생성 여부 확인
+    if (account.version % this.SNAPSHOT_INTERVAL === 0) {
+      await this.snapshotStore.save({
+        aggregateId: account.id,
+        version: account.version,
+        state: account.toSnapshot(),
+        createdAt: new Date()
+      });
+    }
+  }
+}</code></pre>
+
+            <h3>Projection (Read Model)</h3>
+            <pre><code>// infrastructure/projections/AccountBalanceProjection.ts
+// 이벤트를 구독하여 Read Model 업데이트
+
+export class AccountBalanceProjection {
+  constructor(private db: Pool) {}
+
+  // 이벤트 핸들러
+  async handle(event: DomainEvent): Promise&lt;void&gt; {
+    if (event instanceof AccountOpened) {
+      await this.db.query(
+        `INSERT INTO account_balances (account_id, owner_id, balance, updated_at)
+         VALUES ($1, $2, $3, $4)`,
+        [event.aggregateId, event.ownerId, event.initialBalance, event.occurredAt]
+      );
+    } else if (event instanceof MoneyDeposited) {
+      await this.db.query(
+        `UPDATE account_balances
+         SET balance = balance + $1, updated_at = $2
+         WHERE account_id = $3`,
+        [event.amount, event.occurredAt, event.aggregateId]
+      );
+    } else if (event instanceof MoneyWithdrawn) {
+      await this.db.query(
+        `UPDATE account_balances
+         SET balance = balance - $1, updated_at = $2
+         WHERE account_id = $3`,
+        [event.amount, event.occurredAt, event.aggregateId]
+      );
+    }
+  }
+
+  // Projection 리빌드 (모든 이벤트 재처리)
+  async rebuild(): Promise&lt;void&gt; {
+    await this.db.query('TRUNCATE account_balances');
+
+    const allEvents = await this.eventStore.getAllEvents();
+    for (const event of allEvents) {
+      await this.handle(event);
+    }
+  }
+}</code></pre>
+        </section>
+
+        <!-- 현업 대화 예시 -->
+        <section class="enhanced-section">
+            <h2>💬 현업 대화 예시</h2>
+
+            <div class="conversation-box">
+                <div class="speaker">👨‍💼 PM</div>
+                <p>"고객이 지난달 15일에 왜 출금이 실패했는지 확인해달라고 하는데요, 그 당시 잔액이 얼마였는지 알 수 있나요?"</p>
+            </div>
+            <div class="conversation-box">
+                <div class="speaker">👩‍💻 백엔드 개발자</div>
+                <p>"Event Sourcing이라 가능해요. 15일 기준으로 이벤트를 재생하면 그 시점의 정확한 잔액을 알 수 있습니다. 'MoneyWithdrawn 실패' 이벤트도 기록되어 있어서 왜 실패했는지도 추적 가능해요."</p>
+            </div>
+
+            <div class="conversation-box">
+                <div class="speaker">👨‍💻 주니어 개발자</div>
+                <p>"이벤트가 계속 쌓이면 재생 시간이 너무 오래 걸리지 않나요? 계좌 조회할 때마다 수천 개 이벤트를 다 읽어야 하면..."</p>
+            </div>
+            <div class="conversation-box">
+                <div class="speaker">👩‍💻 시니어 개발자</div>
+                <p>"Snapshot을 사용해요. 100개 이벤트마다 현재 상태를 저장해두고, 그 이후 이벤트만 재생하면 됩니다. 그리고 읽기용 Read Model은 Projection으로 별도 관리하니까 조회 성능은 문제없어요."</p>
+            </div>
+
+            <div class="conversation-box">
+                <div class="speaker">👨‍💼 아키텍트</div>
+                <p>"새로운 대시보드에 '일별 거래량' 통계가 필요하다고요? Event Sourcing 덕분에 쉬워요. 기존 이벤트를 새로운 Projection으로 리플레이하면 과거 데이터도 모두 채워넣을 수 있습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="enhanced-section">
+            <h2>⚠️ 주의사항</h2>
+
+            <div class="warning-box">
+                <p><strong>이벤트 스키마 변경:</strong> 이미 저장된 이벤트의 구조를 변경하기 어렵습니다. 새 필드 추가는 쉽지만, 기존 필드 변경은 마이그레이션이 복잡합니다. 이벤트 버전 관리가 필수입니다.</p>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>저장 공간:</strong> 모든 이벤트를 영구 저장하므로 데이터가 계속 증가합니다. 스토리지 비용과 아카이빙 전략을 고려해야 합니다.</p>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>복잡성:</strong> 단순 CRUD 시스템에 Event Sourcing은 과도한 복잡성입니다. 감사 추적, 시간 여행이 필수인 도메인(금융, 의료)에 적합합니다.</p>
+            </div>
+
+            <div class="tip-box">
+                <p><strong>팁:</strong> Event Sourcing은 CQRS와 함께 사용하면 효과적입니다. 쓰기는 이벤트 스트림, 읽기는 최적화된 Projection으로 분리하세요.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhanced-section">
+            <h2>🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/CQRS/" class="related-term-tag">CQRS</a>
+                <a href="/ko/term/DDD/" class="related-term-tag">DDD</a>
+                <a href="/ko/term/Saga/" class="related-term-tag">Saga Pattern</a>
+                <a href="/ko/term/Apache%20Kafka/" class="related-term-tag">Apache Kafka</a>
+                <a href="/ko/term/%EC%9D%B4%EB%B2%A4%ED%8A%B8%20%EB%93%9C%EB%A6%AC%EB%B8%90/" class="related-term-tag">이벤트 드리븐</a>
+                <a href="/ko/term/%EB%A9%94%EC%8B%9C%EC%A7%80%20%ED%81%90/" class="related-term-tag">메시지 큐</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhanced-section">
+            <h2>📚 더 배우기</h2>
+            <ul>
+                <li><strong>EventStoreDB</strong> - Event Sourcing 전용 데이터베이스</li>
+                <li><strong>Axon Framework</strong> - Java 기반 Event Sourcing 프레임워크</li>
+                <li><strong>NEventStore</strong> - .NET Event Sourcing 라이브러리</li>
+                <li><strong>Martin Fowler - Event Sourcing</strong> - 개념 설명 원문</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Architecture (Clean Architecture) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Clean Architecture는 Robert C. Martin(Uncle Bob)이 제안한 소프트웨어 아키텍처 원칙으로, 의존성 방향을 항상 안쪽(비즈니스 로직)으로 향하게 하여 프레임워크나 데이터베이스로부터 독립적인 코드를 작성할 수 있게 합니다.">
+    <meta name="keywords" content="Clean Architecture, 클린 아키텍처, Uncle Bob, 의존성 규칙, Entities, Use Cases, Interface Adapters, Frameworks, DIP, 아키텍처, AI 용어, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Clean%20Architecture/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Clean%20Architecture/">
+    <meta property="og:title" content="Clean Architecture (Clean Architecture) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Robert Martin의 아키텍처 원칙. 의존성 방향을 안쪽으로.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Clean Architecture (Clean Architecture) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Robert Martin의 아키텍처 원칙. 의존성 방향을 안쪽으로.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Clean Architecture",
+        "description": "Robert Martin의 아키텍처 원칙. 의존성 방향을 안쪽으로.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 스타일 */
+        .enhanced-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .enhanced-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .enhanced-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+            color: #e2e8f0;
+        }
+        .enhanced-section p, .enhanced-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .enhanced-section ul, .enhanced-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhanced-section li {
+            margin-bottom: 0.5rem;
+        }
+        .enhanced-section code {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e879f9;
+        }
+        .enhanced-section pre {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0 1.5rem;
+        }
+        .enhanced-section pre code {
+            background: none;
+            padding: 0;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .layer-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+        .layer-box {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 280px;
+        }
+        .layer-entities { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e293b; }
+        .layer-usecases { background: linear-gradient(135deg, #fb923c, #ea580c); color: white; }
+        .layer-adapters { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
+        .layer-frameworks { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+        .layer-arrow {
+            font-size: 1.5rem;
+            color: #a855f7;
+        }
+        .conversation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #a855f7;
+            padding: 1.25rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .conversation-box .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .conversation-box p {
+            margin: 0;
+            color: #e2e8f0;
+        }
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .warning-box p {
+            color: #fca5a5;
+            margin: 0;
+        }
+        .tip-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .tip-box p {
+            color: #86efac;
+            margin: 0;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-tag {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .related-term-tag:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #fff;
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#arch">아키텍처</a>
+            <span>›</span>
+            <span class="current">Clean Architecture</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🏗️</span>
+                <span>아키텍처</span>
+            </div>
+            <h1 class="term-title">Clean Architecture</h1>
+            <p class="term-english">Clean Architecture</p>
+            <div class="term-description">
+                <p>Clean Architecture는 Robert C. Martin(Uncle Bob)이 제안한 소프트웨어 아키텍처 원칙으로, 의존성 방향을 항상 안쪽(비즈니스 로직)으로 향하게 하여 프레임워크나 데이터베이스로부터 독립적인 코드를 작성할 수 있게 합니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#arch" class="term-action-btn btn-secondary">
+                    🏗️ 아키텍처 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="enhanced-section">
+            <h2>📖 상세 설명</h2>
+            <p><strong>Clean Architecture</strong>는 2012년 Robert C. Martin이 발표한 아키텍처 패턴으로, Hexagonal Architecture, Onion Architecture 등 기존 아키텍처의 핵심 원칙을 통합한 것입니다. 핵심 아이디어는 <strong>"의존성은 항상 안쪽으로"</strong>라는 의존성 규칙(Dependency Rule)입니다.</p>
+
+            <div class="layer-diagram">
+                <div class="layer-box layer-frameworks">Frameworks & Drivers (UI, DB, Web)</div>
+                <div class="layer-arrow">↓</div>
+                <div class="layer-box layer-adapters">Interface Adapters (Controllers, Gateways)</div>
+                <div class="layer-arrow">↓</div>
+                <div class="layer-box layer-usecases">Use Cases (Application Business Rules)</div>
+                <div class="layer-arrow">↓</div>
+                <div class="layer-box layer-entities">Entities (Enterprise Business Rules)</div>
+            </div>
+
+            <h3>4개의 동심원 레이어</h3>
+            <ul>
+                <li><strong>Entities (엔티티)</strong>: 핵심 비즈니스 규칙. 어떤 외부 변화에도 변경되지 않는 가장 순수한 도메인 객체</li>
+                <li><strong>Use Cases (유스케이스)</strong>: 애플리케이션 비즈니스 규칙. 엔티티를 조합하여 특정 비즈니스 목표를 달성</li>
+                <li><strong>Interface Adapters (인터페이스 어댑터)</strong>: 데이터 변환 레이어. Controller, Presenter, Gateway 등</li>
+                <li><strong>Frameworks & Drivers</strong>: 외부 세계. DB, Web Framework, UI 등 세부사항</li>
+            </ul>
+
+            <h3>의존성 규칙 (Dependency Rule)</h3>
+            <p>소스 코드 의존성은 <strong>안쪽으로만</strong> 향해야 합니다. 안쪽 원은 바깥쪽 원에 대해 아무것도 몰라야 합니다. 이를 통해:</p>
+            <ul>
+                <li>비즈니스 로직이 프레임워크로부터 독립</li>
+                <li>UI, 데이터베이스 교체가 비즈니스 로직에 영향 없음</li>
+                <li>테스트가 용이한 구조</li>
+                <li>프레임워크에 결합되지 않는 유연한 시스템</li>
+            </ul>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="enhanced-section">
+            <h2>💻 코드 예제</h2>
+
+            <h3>프로젝트 구조</h3>
+            <pre><code>src/
+├── domain/                    # Entities (핵심 비즈니스 규칙)
+│   ├── entities/
+│   │   ├── User.ts
+│   │   └── Order.ts
+│   └── repositories/          # Repository 인터페이스
+│       ├── IUserRepository.ts
+│       └── IOrderRepository.ts
+├── application/               # Use Cases (애플리케이션 규칙)
+│   ├── usecases/
+│   │   ├── CreateUserUseCase.ts
+│   │   └── PlaceOrderUseCase.ts
+│   └── dto/
+│       ├── CreateUserDTO.ts
+│       └── OrderDTO.ts
+├── infrastructure/            # Frameworks & Drivers
+│   ├── database/
+│   │   ├── UserRepository.ts  # Repository 구현
+│   │   └── OrderRepository.ts
+│   └── web/
+│       ├── express/
+│       └── controllers/
+└── interfaces/                # Interface Adapters
+    ├── controllers/
+    │   ├── UserController.ts
+    │   └── OrderController.ts
+    └── presenters/
+        └── UserPresenter.ts</code></pre>
+
+            <h3>Entity 레이어</h3>
+            <pre><code>// domain/entities/User.ts
+export class User {
+  private constructor(
+    public readonly id: string,
+    public readonly email: string,
+    private _name: string,
+    private _isActive: boolean = true
+  ) {
+    this.validateEmail(email);
+  }
+
+  static create(props: { email: string; name: string }): User {
+    return new User(
+      crypto.randomUUID(),
+      props.email,
+      props.name
+    );
+  }
+
+  static reconstitute(props: {
+    id: string; email: string; name: string; isActive: boolean;
+  }): User {
+    return new User(props.id, props.email, props.name, props.isActive);
+  }
+
+  get name(): string { return this._name; }
+  get isActive(): boolean { return this._isActive; }
+
+  changeName(newName: string): void {
+    if (!newName || newName.length < 2) {
+      throw new Error('Name must be at least 2 characters');
+    }
+    this._name = newName;
+  }
+
+  deactivate(): void {
+    this._isActive = false;
+  }
+
+  private validateEmail(email: string): void {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new Error('Invalid email format');
+    }
+  }
+}</code></pre>
+
+            <h3>Repository 인터페이스 (Domain Layer)</h3>
+            <pre><code>// domain/repositories/IUserRepository.ts
+import { User } from '../entities/User';
+
+export interface IUserRepository {
+  findById(id: string): Promise&lt;User | null&gt;;
+  findByEmail(email: string): Promise&lt;User | null&gt;;
+  save(user: User): Promise&lt;void&gt;;
+  delete(id: string): Promise&lt;void&gt;;
+}
+
+// 의존성 규칙: 도메인은 인터페이스만 정의
+// 실제 구현은 infrastructure에서 담당</code></pre>
+
+            <h3>Use Case 레이어</h3>
+            <pre><code>// application/usecases/CreateUserUseCase.ts
+import { User } from '../../domain/entities/User';
+import { IUserRepository } from '../../domain/repositories/IUserRepository';
+
+export interface CreateUserDTO {
+  email: string;
+  name: string;
+}
+
+export interface CreateUserOutputDTO {
+  id: string;
+  email: string;
+  name: string;
+}
+
+export class CreateUserUseCase {
+  // 의존성 주입: 인터페이스에 의존
+  constructor(private userRepository: IUserRepository) {}
+
+  async execute(input: CreateUserDTO): Promise&lt;CreateUserOutputDTO&gt; {
+    // 비즈니스 규칙: 이메일 중복 검사
+    const existingUser = await this.userRepository.findByEmail(input.email);
+    if (existingUser) {
+      throw new Error('Email already exists');
+    }
+
+    // 엔티티 생성 (도메인 규칙 적용)
+    const user = User.create({
+      email: input.email,
+      name: input.name,
+    });
+
+    // 영속화
+    await this.userRepository.save(user);
+
+    // Output DTO 반환
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    };
+  }
+}</code></pre>
+
+            <h3>Repository 구현 (Infrastructure Layer)</h3>
+            <pre><code>// infrastructure/database/UserRepository.ts
+import { User } from '../../domain/entities/User';
+import { IUserRepository } from '../../domain/repositories/IUserRepository';
+import { PrismaClient } from '@prisma/client';
+
+export class PrismaUserRepository implements IUserRepository {
+  constructor(private prisma: PrismaClient) {}
+
+  async findById(id: string): Promise&lt;User | null&gt; {
+    const data = await this.prisma.user.findUnique({ where: { id } });
+    if (!data) return null;
+
+    return User.reconstitute({
+      id: data.id,
+      email: data.email,
+      name: data.name,
+      isActive: data.isActive,
+    });
+  }
+
+  async findByEmail(email: string): Promise&lt;User | null&gt; {
+    const data = await this.prisma.user.findUnique({ where: { email } });
+    if (!data) return null;
+
+    return User.reconstitute({
+      id: data.id,
+      email: data.email,
+      name: data.name,
+      isActive: data.isActive,
+    });
+  }
+
+  async save(user: User): Promise&lt;void&gt; {
+    await this.prisma.user.upsert({
+      where: { id: user.id },
+      update: { name: user.name, isActive: user.isActive },
+      create: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        isActive: user.isActive,
+      },
+    });
+  }
+
+  async delete(id: string): Promise&lt;void&gt; {
+    await this.prisma.user.delete({ where: { id } });
+  }
+}</code></pre>
+
+            <h3>Controller (Interface Adapter)</h3>
+            <pre><code>// interfaces/controllers/UserController.ts
+import { Request, Response } from 'express';
+import { CreateUserUseCase } from '../../application/usecases/CreateUserUseCase';
+
+export class UserController {
+  constructor(private createUserUseCase: CreateUserUseCase) {}
+
+  async createUser(req: Request, res: Response): Promise&lt;void&gt; {
+    try {
+      const { email, name } = req.body;
+
+      const result = await this.createUserUseCase.execute({ email, name });
+
+      res.status(201).json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).json({
+          success: false,
+          error: error.message,
+        });
+      }
+    }
+  }
+}</code></pre>
+
+            <h3>의존성 주입 설정</h3>
+            <pre><code>// main.ts (Composition Root)
+import { PrismaClient } from '@prisma/client';
+import { PrismaUserRepository } from './infrastructure/database/UserRepository';
+import { CreateUserUseCase } from './application/usecases/CreateUserUseCase';
+import { UserController } from './interfaces/controllers/UserController';
+
+// 의존성 조립 (바깥에서 안쪽으로 주입)
+const prisma = new PrismaClient();
+const userRepository = new PrismaUserRepository(prisma);
+const createUserUseCase = new CreateUserUseCase(userRepository);
+const userController = new UserController(createUserUseCase);
+
+// Express 라우터 설정
+app.post('/users', (req, res) => userController.createUser(req, res));</code></pre>
+        </section>
+
+        <!-- 현업 대화 예시 -->
+        <section class="enhanced-section">
+            <h2>💬 현업 대화 예시</h2>
+
+            <div class="conversation-box">
+                <div class="speaker">👨‍💼 PM</div>
+                <p>"우리 서비스 데이터베이스를 MySQL에서 PostgreSQL로 바꿔야 하는데, 얼마나 걸릴까요?"</p>
+            </div>
+            <div class="conversation-box">
+                <div class="speaker">👩‍💻 백엔드 개발자</div>
+                <p>"Clean Architecture로 설계해서 Repository 구현체만 바꾸면 됩니다. 비즈니스 로직은 건드릴 필요 없어요. 인터페이스가 동일하니까 새 PostgresUserRepository만 만들고 DI 설정만 변경하면 됩니다."</p>
+            </div>
+
+            <div class="conversation-box">
+                <div class="speaker">👨‍💻 주니어 개발자</div>
+                <p>"Use Case에서 직접 Prisma를 호출하면 안 되나요? 코드가 더 간단해질 것 같은데..."</p>
+            </div>
+            <div class="conversation-box">
+                <div class="speaker">👩‍💻 시니어 개발자</div>
+                <p>"의존성 규칙 위반이에요. Use Case가 Prisma에 직접 의존하면 DB 변경 시 비즈니스 로직까지 수정해야 해요. Repository 인터페이스를 통해 추상화하면 테스트 시 Mock으로 대체도 쉽고, ORM 변경도 자유로워져요."</p>
+            </div>
+
+            <div class="conversation-box">
+                <div class="speaker">👨‍💼 아키텍트</div>
+                <p>"이번 프로젝트는 도메인이 복잡하니까 Clean Architecture로 가져가죠. Entity와 Use Case를 분리해서 비즈니스 규칙을 명확하게 정의하고, 나중에 프레임워크 교체가 필요해도 핵심 로직은 보호할 수 있어요."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="enhanced-section">
+            <h2>⚠️ 주의사항</h2>
+
+            <div class="warning-box">
+                <p><strong>과도한 추상화 경계:</strong> 작은 프로젝트에 Clean Architecture를 적용하면 오버엔지니어링이 됩니다. CRUD 위주의 간단한 서비스에는 오히려 생산성을 떨어뜨릴 수 있습니다.</p>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>레이어 간 데이터 변환 비용:</strong> Entity → DTO → Response 등 여러 번의 매핑이 필요합니다. 이 과정이 번거롭고 보일러플레이트 코드가 늘어날 수 있습니다.</p>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>의존성 규칙 위반 주의:</strong> 안쪽 레이어(Entity, Use Case)에서 바깥쪽(Infrastructure)을 import하면 의존성 규칙 위반입니다. 항상 인터페이스를 통해 추상화해야 합니다.</p>
+            </div>
+
+            <div class="tip-box">
+                <p><strong>팁:</strong> 프로젝트 복잡도에 맞게 레이어를 조정하세요. 모든 프로젝트에 4개 레이어가 필요한 건 아닙니다. 핵심은 "의존성 방향"을 지키는 것입니다.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhanced-section">
+            <h2>🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Hexagonal%20Architecture/" class="related-term-tag">Hexagonal Architecture</a>
+                <a href="/ko/term/DDD/" class="related-term-tag">DDD</a>
+                <a href="/ko/term/%EC%9D%98%EC%A1%B4%EC%84%B1%20%EC%A3%BC%EC%9E%85/" class="related-term-tag">의존성 주입</a>
+                <a href="/ko/term/SOLID/" class="related-term-tag">SOLID</a>
+                <a href="/ko/term/CQRS/" class="related-term-tag">CQRS</a>
+                <a href="/ko/term/Event%20Sourcing/" class="related-term-tag">Event Sourcing</a>
+                <a href="/ko/term/Modular%20Monolith/" class="related-term-tag">Modular Monolith</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhanced-section">
+            <h2>📚 더 배우기</h2>
+            <ul>
+                <li><strong>Clean Architecture (Robert C. Martin)</strong> - 원작자의 책, 아키텍처 원칙 상세 설명</li>
+                <li><strong>The Clean Architecture Blog Post</strong> - Uncle Bob의 블로그 원문</li>
+                <li><strong>Hexagonal Architecture (Alistair Cockburn)</strong> - Ports and Adapters 패턴 원문</li>
+                <li><strong>Domain-Driven Design (Eric Evans)</strong> - 도메인 중심 설계의 기초</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

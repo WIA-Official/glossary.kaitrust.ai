@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edge Computing (엣지 컴퓨팅) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Edge Computing은 데이터 소스 가까이에서 컴퓨팅을 수행하는 분산 컴퓨팅 패러다임입니다. 지연 시간 감소, 대역폭 절약, 실시간 처리를 위해 중앙 서버 대신 네트워크 가장자리에서 데이터를 처리합니다.">
+    <meta name="keywords" content="Edge Computing, 엣지 컴퓨팅, CDN, IoT, 분산 컴퓨팅, 실시간 처리, Cloudflare Workers, AI 용어, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Edge%20Computing/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Edge%20Computing/">
+    <meta property="og:title" content="Edge Computing (엣지 컴퓨팅) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Edge Computing은 데이터 소스 가까이에서 컴퓨팅을 수행하는 분산 컴퓨팅 패러다임입니다.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Edge Computing (엣지 컴퓨팅) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Edge Computing은 데이터 소스 가까이에서 컴퓨팅을 수행하는 분산 컴퓨팅 패러다임입니다.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Edge Computing",
+        "alternateName": "엣지 컴퓨팅",
+        "description": "Edge Computing은 데이터 소스 가까이에서 컴퓨팅을 수행하는 분산 컴퓨팅 패러다임입니다.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#arch">아키텍처</a>
+            <span>›</span>
+            <span class="current">Edge Computing</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🏗️</span>
+                <span>아키텍처</span>
+            </div>
+            <h1 class="term-title">Edge Computing</h1>
+            <p class="term-english">엣지 컴퓨팅</p>
+            <div class="term-description">
+                <p>데이터 소스 가까이에서 컴퓨팅을 수행하는 분산 컴퓨팅 패러다임입니다. 중앙 데이터센터로 데이터를 전송하지 않고 네트워크 가장자리(Edge)에서 처리하여 지연 시간을 줄이고 대역폭을 절약합니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#arch" class="term-action-btn btn-secondary">
+                    🏗️ 아키텍처 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Edge Computing의 핵심 원리</strong>는 "데이터가 생성되는 곳에서 처리한다"입니다. 전통적인 클라우드 모델에서는 모든 데이터가 중앙 데이터센터로 전송되어 처리되지만, 엣지 컴퓨팅에서는 사용자 가까운 곳(CDN 노드, IoT 게이트웨이, 기지국 등)에서 데이터를 처리합니다.</p>
+                <p><strong>지연 시간(Latency) 감소</strong>가 가장 큰 장점입니다. 서울에서 미국 데이터센터까지 왕복하면 100-200ms가 걸리지만, 서울의 엣지 서버에서 처리하면 10-20ms로 줄어듭니다. 실시간 게임, 화상회의, 자율주행 같은 지연에 민감한 서비스에서 필수적입니다.</p>
+                <p><strong>대역폭 비용 절감</strong>도 중요한 이점입니다. IoT 센서가 초당 수천 개의 데이터를 생성할 때, 모든 데이터를 클라우드로 전송하면 비용이 급증합니다. 엣지에서 필터링하고 집계한 후 요약 데이터만 전송하면 네트워크 비용을 90% 이상 줄일 수 있습니다.</p>
+                <p><strong>오프라인 처리 능력</strong>을 제공합니다. 네트워크 연결이 불안정한 공장, 선박, 원격지에서도 엣지 디바이스는 독립적으로 동작할 수 있습니다. 연결이 복구되면 데이터를 동기화합니다.</p>
+                <p><strong>활용 사례</strong>는 다양합니다. CDN(Cloudflare, Akamai)은 정적 콘텐츠를 엣지에 캐싱하고, 엣지 함수로 동적 처리도 수행합니다. 스마트 팩토리에서는 센서 데이터를 실시간 분석하여 불량을 즉시 감지합니다. 자율주행차는 센서 데이터를 차량 내에서 처리하여 밀리초 단위 의사결정을 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="cloudflare">Cloudflare Workers</button>
+                <button class="code-tab" data-lang="vercel">Vercel Edge</button>
+                <button class="code-tab" data-lang="architecture">아키텍처 비교</button>
+            </div>
+            <div class="code-block active" data-lang="cloudflare">
+                <pre><code class="language-javascript">// Cloudflare Workers - 엣지에서 실행되는 코드
+// 전 세계 200+ 엣지 로케이션에서 실행
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+
+    // 1. 지역 기반 콘텐츠 제공
+    const country = request.cf?.country || 'US';
+    const city = request.cf?.city || 'Unknown';
+
+    // 2. 엣지 캐싱 - KV Store 활용
+    const cacheKey = `content:${country}:${url.pathname}`;
+    let cachedContent = await env.EDGE_CACHE.get(cacheKey);
+
+    if (cachedContent) {
+      return new Response(cachedContent, {
+        headers: {
+          'Content-Type': 'text/html',
+          'X-Edge-Cache': 'HIT',
+          'X-Edge-Location': city,
+        },
+      });
+    }
+
+    // 3. 캐시 미스 시 오리진 서버 요청
+    const originResponse = await fetch(`https://origin.example.com${url.pathname}`);
+    const content = await originResponse.text();
+
+    // 4. 엣지에 캐싱 (TTL: 1시간)
+    ctx.waitUntil(
+      env.EDGE_CACHE.put(cacheKey, content, { expirationTtl: 3600 })
+    );
+
+    return new Response(content, {
+      headers: {
+        'Content-Type': 'text/html',
+        'X-Edge-Cache': 'MISS',
+        'X-Edge-Location': city,
+      },
+    });
+  },
+};
+
+// wrangler.toml 설정
+/*
+name = "edge-app"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "EDGE_CACHE"
+id = "abc123"
+*/</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="vercel">
+                
+                <pre><code class="language-typescript">// Vercel Edge Functions - Next.js 엣지 런타임
+// middleware.ts
+
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+export const config = {
+  matcher: ['/api/:path*', '/dashboard/:path*'],
+};
+
+export function middleware(request: NextRequest) {
+  // 엣지에서 실행 - 오리진 서버 도달 전 처리
+
+  // 1. 지역 기반 라우팅
+  const country = request.geo?.country || 'US';
+  const region = request.geo?.region || 'unknown';
+
+  // 2. A/B 테스트 - 쿠키 기반
+  const bucket = request.cookies.get('ab-bucket')?.value
+    || (Math.random() < 0.5 ? 'control' : 'experiment');
+
+  // 3. 인증 체크 (엣지에서 빠르게 거부)
+  const authToken = request.headers.get('Authorization');
+  if (request.nextUrl.pathname.startsWith('/api/protected')) {
+    if (!authToken) {
+      return new NextResponse(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+  }
+
+  // 4. 요청 헤더 수정
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('X-User-Country', country);
+  requestHeaders.set('X-User-Region', region);
+  requestHeaders.set('X-AB-Bucket', bucket);
+
+  // 5. 응답에 헤더 추가
+  const response = NextResponse.next({
+    request: { headers: requestHeaders },
+  });
+
+  // A/B 테스트 쿠키 설정
+  if (!request.cookies.has('ab-bucket')) {
+    response.cookies.set('ab-bucket', bucket, {
+      maxAge: 60 * 60 * 24 * 7, // 1주일
+    });
+  }
+
+  return response;
+}
+
+
+// app/api/edge-data/route.ts - Edge API Route
+import { NextRequest } from 'next/server';
+
+export const runtime = 'edge'; // 엣지에서 실행
+
+export async function GET(request: NextRequest) {
+  const start = Date.now();
+
+  // 엣지에서 가벼운 연산 수행
+  const data = {
+    timestamp: new Date().toISOString(),
+    location: request.geo?.city || 'Unknown',
+    country: request.geo?.country || 'Unknown',
+    latency: `${Date.now() - start}ms`,
+  };
+
+  return Response.json(data, {
+    headers: {
+      'Cache-Control': 'public, s-maxage=60',
+    },
+  });
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="architecture">
+                
+                <pre><code class="language-text">┌─────────────────────────────────────────────────────────────────┐
+│                    Edge Computing 아키텍처                        │
+└─────────────────────────────────────────────────────────────────┘
+
+전통적 클라우드 모델:
+┌──────────┐       인터넷        ┌──────────────────┐
+│  사용자   │ ──────────────────▶ │   중앙 서버      │
+│  (서울)   │     100-200ms      │   (미국)         │
+└──────────┘ ◀────────────────── └──────────────────┘
+
+Edge Computing 모델:
+┌──────────┐    ┌───────────────┐    ┌──────────────────┐
+│  사용자   │    │   엣지 서버    │    │   중앙 서버       │
+│  (서울)   │───▶│   (서울)      │───▶│   (미국)          │
+└──────────┘    └───────────────┘    └──────────────────┘
+      │              │                      │
+   10-20ms       캐싱/처리              필요시만 접근
+
+
+Edge 위치별 역할:
+
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                  │
+│  Device Edge (1-5ms)         Network Edge (10-30ms)             │
+│  ┌─────────────────┐         ┌─────────────────┐                │
+│  │ - IoT 게이트웨이  │         │ - CDN 노드       │                │
+│  │ - 스마트폰 앱     │         │ - 5G 기지국      │                │
+│  │ - 차량 컴퓨터     │         │ - ISP 엣지       │                │
+│  └─────────────────┘         └─────────────────┘                │
+│                                                                  │
+│  Cloud Edge (30-100ms)       Central Cloud (100-300ms)          │
+│  ┌─────────────────┐         ┌─────────────────┐                │
+│  │ - 리전별 POP     │         │ - 메인 데이터센터 │                │
+│  │ - Edge Function  │         │ - 대용량 처리    │                │
+│  │ - 캐시 레이어     │         │ - 데이터 저장    │                │
+│  └─────────────────┘         └─────────────────┘                │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+
+
+Edge Computing 사용 사례:
+
+1. 실시간 게임
+   사용자 ──▶ 엣지서버(10ms) ──▶ 게임 상태 동기화
+              └─ 히트박스 계산, 충돌 감지
+
+2. 스마트 팩토리
+   센서 ──▶ 엣지 게이트웨이 ──▶ 클라우드
+            └─ 불량 감지        └─ 분석/저장
+            └─ 장비 제어
+
+3. CDN + Edge Functions
+   요청 ──▶ 엣지 노드 ──▶ 오리진
+            ├─ 캐시 HIT → 즉시 응답
+            ├─ A/B 테스트
+            └─ 인증 체크</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말해요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 글로벌 서비스 아키텍처 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "동남아 사용자 응답 속도가 너무 느려요. 싱가포르에 오리진 서버를 두더라도 베트남, 인도네시아까지는 100ms 이상 걸립니다. Cloudflare Workers로 엣지에서 API 응답을 캐싱하고, 사용자 인증도 엣지에서 처리하면 체감 속도가 훨씬 빨라질 거예요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 IoT 프로젝트 기획에서</div>
+                    <blockquote class="conv-quote">
+                        "공장 센서가 초당 1000개 데이터를 생성하는데 전부 AWS로 보내면 비용이 어마어마해요. 엣지 게이트웨이에서 이상 징후만 필터링하고, 정상 데이터는 1분 단위로 집계해서 보내면 대역폭 비용을 95% 절감할 수 있습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 서버리스 마이그레이션 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "Lambda@Edge랑 Cloudflare Workers 둘 다 엣지 컴퓨팅인데 특성이 달라요. Lambda@Edge는 CloudFront와 통합이 잘 되고, Workers는 KV Store로 상태 관리가 편해요. 우리 서비스는 캐싱보다 실시간 처리가 중요하니까 Workers가 더 맞을 것 같습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>엣지에서 무거운 연산 금지</strong>
+                        <p>엣지 환경은 리소스가 제한적입니다. 복잡한 ML 추론이나 대용량 데이터 처리는 중앙 서버에서 수행하고, 엣지에서는 캐싱, 라우팅, 간단한 변환만 처리하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>상태 관리 복잡성</strong>
+                        <p>엣지 노드는 수백 개가 분산되어 있어 상태 동기화가 어렵습니다. 가능하면 stateless하게 설계하고, 상태가 필요하면 KV Store나 Durable Objects 같은 엣지 전용 스토리지를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>캐시 일관성 문제</strong>
+                        <p>전 세계 엣지 노드의 캐시를 동시에 무효화하는 것은 불가능합니다. 캐시 TTL을 적절히 설정하고, 실시간 업데이트가 필요한 데이터는 캐싱하지 마세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>베스트 프랙티스</strong>
+                        <p>정적 콘텐츠 캐싱, 인증/인가 검사, 지역 기반 라우팅, A/B 테스트는 엣지의 최적 사용 사례입니다. 콜드 스타트가 없는 Workers나 Deno Deploy를 활용하면 일관된 저지연을 달성할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Edge%20Function/" class="related-term-link">Edge Function</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+                <a href="/ko/term/Serverless/" class="related-term-link">Serverless</a>
+                <a href="/ko/term/Latency/" class="related-term-link">Latency</a>
+                <a href="/ko/term/IoT/" class="related-term-link">IoT</a>
+                <a href="/ko/term/Cloudflare/" class="related-term-link">Cloudflare</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://developers.cloudflare.com/workers/" target="_blank" class="learn-link">
+                    📄 Cloudflare Workers 공식 문서
+                </a>
+                <a href="https://vercel.com/docs/functions/edge-functions" target="_blank" class="learn-link">
+                    🎓 Vercel Edge Functions 가이드
+                </a>
+                <a href="https://www.youtube.com/watch?v=yOP5-3_WFus" target="_blank" class="learn-link">
+                    📺 Edge Computing 아키텍처 설명
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) block.classList.add('active');
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

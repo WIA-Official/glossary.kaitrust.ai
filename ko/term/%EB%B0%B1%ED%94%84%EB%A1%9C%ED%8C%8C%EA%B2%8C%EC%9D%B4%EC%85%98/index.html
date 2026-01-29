@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>백프로파게이션 (Backpropagation) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="역전파. 출력 오차를 역방향으로 전파하며 가중치를 업데이트하는 신경망 학습 알고리즘.">
+    <meta name="keywords" content="백프로파게이션, Backpropagation, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%B0%B1%ED%94%84%EB%A1%9C%ED%8C%8C%EA%B2%8C%EC%9D%B4%EC%85%98/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EB%B0%B1%ED%94%84%EB%A1%9C%ED%8C%8C%EA%B2%8C%EC%9D%B4%EC%85%98/">
+    <meta property="og:title" content="백프로파게이션 (Backpropagation) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="역전파. 출력 오차를 역방향으로 전파하며 가중치를 업데이트하는 신경망 학습 알고리즘.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="백프로파게이션 (Backpropagation) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="역전파. 출력 오차를 역방향으로 전파하며 가중치를 업데이트하는 신경망 학습 알고리즘.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "백프로파게이션",
+        "description": "역전파. 출력 오차를 역방향으로 전파하며 가중치를 업데이트하는 신경망 학습 알고리즘.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">백프로파게이션</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">백프로파게이션</h1>
+            <p class="term-english">Backpropagation</p>
+            <div class="term-description">
+                <p>역전파. 출력 오차를 역방향으로 전파하며 가중치를 업데이트하는 신경망 학습 알고리즘.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>백프로파게이션(Backpropagation, 역전파)은 신경망 학습의 핵심 알고리즘으로, 출력 오차를 네트워크의 역방향으로 전파하여 각 가중치의 기울기(gradient)를 계산합니다. 이 기울기를 사용해 가중치를 업데이트함으로써 손실을 최소화하는 방향으로 모델을 학습시킵니다.</p>
+                <p>1986년 Rumelhart, Hinton, Williams가 발표한 이 알고리즘은 연쇄 법칙(Chain Rule)을 기반으로 합니다. 복합 함수의 미분을 각 구성 함수의 미분 곱으로 분해하는 원리를 활용하여, 수백 개 레이어를 가진 깊은 네트워크에서도 효율적으로 기울기를 계산할 수 있습니다.</p>
+                <p>계산 과정은 두 단계로 나뉩니다. Forward Pass에서는 입력 데이터가 레이어를 통과하며 예측값을 생성하고, Backward Pass에서는 손실 함수로부터 시작해 각 파라미터에 대한 기울기를 역방향으로 계산합니다. PyTorch의 autograd, TensorFlow의 GradientTape가 이 과정을 자동화합니다.</p>
+                <p>2024년 현재 백프로파게이션은 GPT-4, Claude, Gemini 등 수천억 파라미터 모델 학습의 기반입니다. Gradient Checkpointing, Mixed Precision Training 등의 최적화 기법과 결합되어 대규모 모델의 효율적인 학습을 가능하게 합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># PyTorch에서 백프로파게이션 이해하기
+import torch
+import torch.nn as nn
+
+# 간단한 신경망 정의
+class SimpleNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.layer1 = nn.Linear(10, 20)
+        self.relu = nn.ReLU()
+        self.layer2 = nn.Linear(20, 1)
+
+    def forward(self, x):
+        x = self.layer1(x)
+        x = self.relu(x)
+        x = self.layer2(x)
+        return x
+
+# 모델, 손실 함수, 옵티마이저 설정
+model = SimpleNetwork()
+criterion = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+
+# 데이터 준비
+x = torch.randn(32, 10)  # 배치 크기 32, 특성 10개
+y_true = torch.randn(32, 1)
+
+# === Forward Pass ===
+# 입력이 네트워크를 통과하며 예측값 생성
+y_pred = model(x)
+loss = criterion(y_pred, y_true)
+print(f"Loss: {loss.item():.4f}")
+
+# === Backward Pass (역전파) ===
+# 손실로부터 각 파라미터의 기울기 계산
+optimizer.zero_grad()  # 기존 기울기 초기화 (필수!)
+loss.backward()        # 역전파 수행 - 모든 .grad 속성 업데이트
+
+# 기울기 확인
+print(f"layer1 weight gradient shape: {model.layer1.weight.grad.shape}")
+print(f"layer1 weight gradient mean: {model.layer1.weight.grad.mean():.6f}")
+
+# === 가중치 업데이트 ===
+optimizer.step()  # w = w - lr * gradient
+
+# 수동으로 역전파 이해하기 (교육용)
+def manual_backprop_demo():
+    """
+    연쇄 법칙 시각화: dL/dw = dL/dy * dy/dz * dz/dw
+    """
+    w = torch.tensor([2.0], requires_grad=True)
+    x = torch.tensor([3.0])
+
+    # Forward: z = w*x, y = z^2, L = y
+    z = w * x           # z = 6
+    y = z ** 2          # y = 36
+    L = y               # L = 36
+
+    # Backward (연쇄 법칙)
+    L.backward()
+
+    # dL/dw = dL/dy * dy/dz * dz/dw
+    #       = 1 * 2z * x = 2 * 6 * 3 = 36
+    print(f"자동 기울기: {w.grad.item()}")
+    print(f"수동 계산: {2 * (w.item() * x.item()) * x.item()}")
+
+manual_backprop_demo()</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "모델 학습 중 Gradient가 NaN이 되는 문제가 있습니다. 역전파 과정에서 기울기 폭발이 발생한 것 같은데, Gradient Clipping을 적용하거나 학습률을 낮춰봐야 할 것 같습니다. max_grad_norm=1.0으로 설정해보겠습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "백프로파게이션은 연쇄 법칙을 사용해 손실 함수의 기울기를 각 파라미터에 대해 계산합니다. Forward pass에서 중간 활성화 값을 저장하고, Backward pass에서 이를 사용해 역방향으로 기울기를 전파합니다. 딥러닝 프레임워크의 autograd가 이를 자동화합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">
+                        "대형 모델에서는 역전파 시 메모리가 부족해지는데요, Gradient Checkpointing을 쓰면 중간 활성화 값을 저장하지 않고 필요할 때 다시 계산해서 메모리를 크게 절약할 수 있어요. 계산량은 30% 정도 증가하지만 메모리는 절반 이하로 줄어듭니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>optimizer.zero_grad() 누락</strong>
+                        <p>PyTorch에서 zero_grad()를 호출하지 않으면 기울기가 누적됩니다. 의도적으로 기울기 누적을 사용하는 경우가 아니라면, 매 반복마다 반드시 호출해야 합니다. 이를 빠뜨리면 학습이 발산합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>Vanishing/Exploding Gradient 무시</strong>
+                        <p>깊은 네트워크에서 기울기가 0에 수렴(vanishing)하거나 무한대로 발산(exploding)할 수 있습니다. ReLU 활성화 함수, BatchNorm, Residual Connection을 사용하지 않으면 50개 이상의 레이어에서 학습이 실패합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 방법: 기울기 모니터링 + 안정화 기법</strong>
+                        <p>TensorBoard로 기울기 분포를 모니터링하고, Gradient Clipping (max_norm=1.0), 적절한 가중치 초기화 (He/Xavier), 잔차 연결(ResNet)을 적용하세요. 학습률 스케줄러도 안정적인 학습에 중요합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EC%86%90%EC%8B%A4%20%ED%95%A8%EC%88%98/" class="related-term-link">손실 함수</a>
+                <a href="/ko/term/%EB%B0%B0%EC%B9%98%20%EC%A0%95%EA%B7%9C%ED%99%94/" class="related-term-link">배치 정규화</a>
+                <a href="/ko/term/%EB%89%B4%EB%9F%B4%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC/" class="related-term-link">뉴럴 네트워크</a>
+                <a href="/ko/term/%EB%94%A5%EB%9F%AC%EB%8B%9D/" class="related-term-link">딥러닝</a>
+                <a href="/ko/term/%EB%93%9C%EB%A1%AD%EC%95%84%EC%9B%83/" class="related-term-link">드롭아웃</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" target="_blank" class="learn-link">
+                    📄 PyTorch Autograd 튜토리얼
+                </a>
+                <a href="https://www.deeplearningbook.org/contents/mlp.html" target="_blank" class="learn-link">
+                    📖 Deep Learning Book - Backpropagation
+                </a>
+                <a href="https://cs231n.github.io/optimization-2/" target="_blank" class="learn-link">
+                    🎓 Stanford CS231n - Backprop 강의
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

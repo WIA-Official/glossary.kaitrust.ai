@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다중 마스터 복제 (Multi-Master Replication) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="여러 노드에서 쓰기 가능. 충돌 해결 필요.">
+    <meta name="keywords" content="다중 마스터 복제, Multi-Master Replication, AI 용어, KAITRUST, AI 백과사전, 데이터베이스">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%8B%A4%EC%A4%91%20%EB%A7%88%EC%8A%A4%ED%84%B0%20%EB%B3%B5%EC%A0%9C/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EB%8B%A4%EC%A4%91%20%EB%A7%88%EC%8A%A4%ED%84%B0%20%EB%B3%B5%EC%A0%9C/">
+    <meta property="og:title" content="다중 마스터 복제 (Multi-Master Replication) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="여러 노드에서 쓰기 가능. 충돌 해결 필요.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="다중 마스터 복제 (Multi-Master Replication) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="여러 노드에서 쓰기 가능. 충돌 해결 필요.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "다중 마스터 복제",
+        "description": "여러 노드에서 쓰기 가능. 충돌 해결 필요.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+    <link rel="stylesheet" href="/css/term-sections.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#db">데이터베이스</a>
+            <span>›</span>
+            <span class="current">다중 마스터 복제</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🗄️</span>
+                <span>데이터베이스</span>
+            </div>
+            <h1 class="term-title">다중 마스터 복제</h1>
+            <p class="term-english">Multi-Master Replication</p>
+            <div class="term-description">
+                <p>여러 노드에서 쓰기 가능. 충돌 해결 필요.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#db" class="term-action-btn btn-secondary">
+                    🗄️ 데이터베이스 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="detail-content">
+                <p><strong>다중 마스터 복제(Multi-Master Replication)</strong>는 여러 노드가 동시에 쓰기 작업을 받을 수 있는 데이터베이스 복제 방식입니다. 주-복제본 방식과 달리 모든 노드가 마스터 역할을 수행하여 쓰기 병목을 분산시킵니다.</p>
+                <p>가장 큰 도전은 <strong>충돌 해결(Conflict Resolution)</strong>입니다. 같은 데이터가 여러 노드에서 동시에 수정되면 충돌이 발생합니다. 해결 방식으로 <strong>Last Write Wins</strong>(타임스탬프 기준), <strong>Custom Resolution</strong>(애플리케이션 정의 로직), <strong>CRDT</strong>(Conflict-free Replicated Data Types) 등이 있습니다.</p>
+                <p>지리적으로 분산된 서비스에서 각 지역에서 쓰기 지연 없이 작업할 때 유용합니다. CockroachDB, YugabyteDB, Galera Cluster(MySQL) 등이 지원합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code>-- Galera Cluster (MySQL Multi-Master) 설정 예시
+-- wsrep.cnf
+[mysqld]
+wsrep_on=ON
+wsrep_cluster_name="my_cluster"
+wsrep_cluster_address="gcomm://node1,node2,node3"
+wsrep_node_name="node1"
+wsrep_provider=/usr/lib/libgalera_smm.so
+
+-- 모든 노드에서 쓰기 가능
+-- Node 1에서
+INSERT INTO users (name) VALUES ('Alice');
+
+-- Node 2에서 (동시)
+INSERT INTO users (name) VALUES ('Bob');
+
+-- 충돌 발생 시나리오
+-- Node 1: UPDATE products SET stock = 10 WHERE id = 1;
+-- Node 2: UPDATE products SET stock = 5 WHERE id = 1;
+-- Last Write Wins 또는 애플리케이션 정의 로직 필요
+
+# Python: 충돌 감지 및 재시도 패턴
+def update_with_conflict_retry(product_id, new_stock, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            with db.begin():
+                product = db.query("SELECT * FROM products WHERE id = %s FOR UPDATE", product_id)
+                # 낙관적 락: version 체크
+                db.execute("""
+                    UPDATE products
+                    SET stock = %s, version = version + 1
+                    WHERE id = %s AND version = %s
+                """, (new_stock, product_id, product['version']))
+                if db.rowcount == 0:
+                    raise ConflictError("Version mismatch")
+            return True
+        except ConflictError:
+            time.sleep(0.1 * (2 ** attempt))
+    raise Exception("Max retries exceeded")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'conv1')">회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv2')">면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'conv3')">코드 리뷰</button>
+            </div>
+            <div id="conv1" class="conv-content active">
+                <p><strong>아키텍트:</strong> "미국, 유럽, 아시아 3개 리전에서 쓰기 지연 없이 서비스해야 해요."</p>
+                <p><strong>DBA:</strong> "다중 마스터 복제가 필요하겠네요. CockroachDB나 YugabyteDB 검토해볼까요?"</p>
+                <p><strong>아키텍트:</strong> "충돌은 어떻게 처리하죠?"</p>
+                <p><strong>DBA:</strong> "사용자 프로필 같은 건 Last Write Wins로 충분하고, 재고나 결제는 분산 트랜잭션으로 강한 일관성 유지하면 됩니다."</p>
+            </div>
+            <div id="conv2" class="conv-content">
+                <p><strong>면접관:</strong> "Multi-Master와 Primary-Replica 방식의 차이점과 선택 기준을 설명해주세요."</p>
+                <p><strong>지원자:</strong> "Primary-Replica는 단일 쓰기 포인트로 간단하지만 쓰기 병목이 생깁니다. Multi-Master는 여러 노드에서 쓰기 가능해 확장성이 높지만 충돌 해결이 복잡합니다. 글로벌 서비스나 고가용성이 필요할 때 Multi-Master를 선택합니다."</p>
+                <p><strong>면접관:</strong> "충돌 해결 경험이 있나요?"</p>
+                <p><strong>지원자:</strong> "사용자 설정은 LWW, 재고는 CRDT의 Counter 타입, 주문은 분산 트랜잭션으로 처리했습니다."</p>
+            </div>
+            <div id="conv3" class="conv-content">
+                <p><strong>리뷰어:</strong> "이 로직 보면 두 노드에서 동시에 같은 쿠폰을 사용하면 둘 다 성공할 수 있어요."</p>
+                <p><strong>개발자:</strong> "아, Multi-Master라서 각 노드에서 로컬로 처리되니까요..."</p>
+                <p><strong>리뷰어:</strong> "맞아요. 쿠폰 사용은 분산 락이나 글로벌 시퀀스 필요해요. 또는 특정 쿠폰은 특정 노드에서만 처리하도록 라우팅하는 방법도 있고요."</p>
+                <p><strong>개발자:</strong> "분산 락으로 처리하고, 타임아웃 설정 추가하겠습니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li><strong>충돌 해결 복잡성:</strong> 동시 쓰기 충돌 시 데이터 손실 또는 불일치 가능</li>
+                <li><strong>네트워크 지연:</strong> 노드 간 동기화로 인한 쓰기 지연 증가</li>
+                <li><strong>스플릿 브레인:</strong> 네트워크 분리 시 각 파티션이 독립 운영되어 불일치 발생</li>
+                <li><strong>운영 복잡성:</strong> 모니터링, 백업, 복구 절차가 단일 마스터보다 복잡</li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-grid">
+                <a href="/ko/term/%EC%A3%BC-%EB%B3%B5%EC%A0%9C%EB%B3%B8%20%EB%B3%B5%EC%A0%9C/" class="related-link">주-복제본 복제</a>
+                <a href="/ko/term/%EB%A0%88%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98/" class="related-link">레플리케이션</a>
+                <a href="/ko/term/%EC%83%A4%EB%94%A9/" class="related-link">샤딩</a>
+                <a href="/ko/term/YugabyteDB/" class="related-link">YugabyteDB</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AC%B4%EA%B2%B0%EC%84%B1/" class="related-link">데이터 무결성</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://galeracluster.com/documentation/" target="_blank">Galera Cluster 문서</a></li>
+                <li><a href="https://www.cockroachlabs.com/docs/stable/architecture/replication-layer.html" target="_blank">CockroachDB Replication</a></li>
+                <li><a href="https://jepsen.io/analyses" target="_blank">Jepsen: 분산 시스템 일관성 분석</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script src="/js/term-sections.js"></script>
+</body>
+</html>

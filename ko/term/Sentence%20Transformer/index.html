@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentence Transformer | KAITRUST AI 백과사전</title>
+    <meta name="description" content="문장 단위 임베딩 생성 모델. 시맨틱 검색, 클러스터링, 유사도 계산에 최적화된 문장 인코더.">
+    <meta name="keywords" content="Sentence Transformer, SBERT, 문장 임베딩, Semantic Search, 임베딩, NLP, AI 용어, KAITRUST, AI 백과사전">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Sentence%20Transformer/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Sentence%20Transformer/">
+    <meta property="og:title" content="Sentence Transformer | KAITRUST AI 백과사전">
+    <meta property="og:description" content="문장 단위 임베딩 생성 모델. 시맨틱 검색, 클러스터링, 유사도 계산에 최적화된 문장 인코더.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sentence Transformer | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="문장 단위 임베딩 생성 모델. 시맨틱 검색, 클러스터링, 유사도 계산에 최적화된 문장 인코더.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Sentence Transformer",
+        "description": "문장 단위 임베딩 생성 모델. 시맨틱 검색, 클러스터링, 유사도 계산에 최적화된 문장 인코더.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Content Sections */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-title .emoji {
+            font-size: 1.5rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* Code Block */
+        .code-block-wrapper {
+            position: relative;
+            margin: 1.5rem 0;
+        }
+        .code-block {
+            background: #0f172a;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .code-block code {
+            font-family: inherit;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+
+        /* Dialogue */
+        .dialogue-box {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 4px solid #22c55e;
+            border-radius: 0 12px 12px 0;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .dialogue-box.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border-left-color: #ef4444;
+        }
+        .dialogue-label {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .dialogue-box.incorrect .dialogue-label { color: #ef4444; }
+        .dialogue-box:not(.incorrect) .dialogue-label { color: #22c55e; }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .warning-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .warning-box li {
+            margin-bottom: 0.5rem;
+            color: #fbbf24;
+        }
+
+        /* Tags */
+        .related-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-tag:hover {
+            background: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Links */
+        .resource-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 12px;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .resource-link:hover {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.3);
+            color: #c4b5fd;
+        }
+
+        /* Pricing Table */
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        .pricing-table th,
+        .pricing-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+        }
+        .pricing-table th {
+            background: rgba(168, 85, 247, 0.2);
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+        .pricing-table td {
+            color: #cbd5e1;
+        }
+        .pricing-table tr:hover td {
+            background: rgba(168, 85, 247, 0.05);
+        }
+        .badge-free {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge-best {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge-fast {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+            .term-section { padding: 1.5rem; }
+            .pricing-table { font-size: 0.85rem; }
+            .pricing-table th,
+            .pricing-table td { padding: 0.75rem 0.5rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">Sentence Transformer</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">Sentence Transformer</h1>
+            <p class="term-english">SBERT (Sentence-BERT)</p>
+            <div class="term-description">
+                <p>문장 전체를 고정 크기의 밀집 벡터(Dense Vector)로 변환하는 임베딩 모델입니다. 시맨틱 검색, 문장 유사도 계산, 클러스터링, RAG 파이프라인 구축에 널리 활용됩니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p><strong>Sentence Transformer</strong>는 2019년 Reimers와 Gurevych가 발표한 "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks" 논문에서 제안된 문장 임베딩 프레임워크입니다. 기존 BERT 모델은 문장 유사도를 계산하려면 두 문장을 함께 입력해야 해서 N개 문장의 모든 쌍을 비교하는 데 O(N^2) 시간이 걸렸습니다. Sentence Transformer는 각 문장을 독립적으로 임베딩하여 코사인 유사도로 빠르게 비교할 수 있게 만들어, 대규모 시맨틱 검색을 실용적으로 가능하게 했습니다.</p>
+
+                <p>Sentence Transformer의 핵심 아키텍처는 <strong>Siamese/Triplet Network</strong> 구조입니다. 동일한 BERT(또는 다른 Transformer) 모델을 공유하면서, 두 문장이 유사하면 임베딩이 가까워지고 다르면 멀어지도록 학습합니다. 학습에는 NLI(Natural Language Inference) 데이터셋과 STS(Semantic Textual Similarity) 벤치마크가 주로 사용됩니다. 출력 임베딩은 [CLS] 토큰 또는 Mean Pooling을 통해 생성되며, 일반적으로 384~1024 차원의 밀집 벡터입니다.</p>
+
+                <p>현재 가장 널리 사용되는 모델은 <strong>all-MiniLM-L6-v2</strong>와 <strong>all-mpnet-base-v2</strong>입니다. MiniLM 모델은 6개 레이어, 384차원 임베딩으로 매우 빠르며(CPU에서 초당 5,000~14,000 문장), 품질도 실용적인 수준입니다. MPNet 모델은 12개 레이어, 768차원으로 MTEB(Massive Text Embedding Benchmark) 리더보드에서 최고 수준의 품질을 제공하지만 4~5배 느립니다. 공식 문서에 따르면 "mpnet이 최고 품질, MiniLM이 5배 빠르면서도 좋은 품질"이라고 설명합니다.</p>
+
+                <p>Sentence Transformer의 주요 활용 사례는 <strong>시맨틱 검색</strong>(키워드가 아닌 의미 기반 검색), <strong>RAG(Retrieval-Augmented Generation)</strong> 파이프라인의 Retriever, <strong>중복 문서 탐지</strong>, <strong>클러스터링</strong>(뉴스 기사 그룹화 등), <strong>추천 시스템</strong>입니다. LangChain, LlamaIndex 등 LLM 프레임워크에서 기본 임베딩 모델로 자주 사용되며, FAISS, Pinecone, Weaviate 등 벡터 데이터베이스와 결합하여 수억 건의 문서에서도 밀리초 단위 검색이 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Sentence Transformer를 사용한 문장 임베딩 및 유사도 계산 예제입니다.</p>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre class="code-block"><code># pip install sentence-transformers
+from sentence_transformers import SentenceTransformer, util
+import numpy as np
+
+# 모델 로드 (첫 실행 시 자동 다운로드)
+# 빠른 모델: all-MiniLM-L6-v2 (384차원, 빠름)
+# 고품질 모델: all-mpnet-base-v2 (768차원, 느리지만 정확)
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# 문장 리스트
+sentences = [
+    "인공지능이 세상을 바꾸고 있습니다.",
+    "AI 기술이 우리의 삶을 혁신하고 있습니다.",
+    "오늘 날씨가 매우 좋습니다.",
+    "머신러닝은 데이터에서 패턴을 학습합니다.",
+]
+
+# 문장 임베딩 생성
+embeddings = model.encode(sentences, convert_to_tensor=True)
+print(f"임베딩 shape: {embeddings.shape}")  # (4, 384)
+
+# 코사인 유사도 계산
+cosine_scores = util.cos_sim(embeddings, embeddings)
+print("\n유사도 행렬:")
+print(cosine_scores.numpy().round(3))
+
+# 쿼리와 가장 유사한 문장 찾기
+query = "딥러닝 기술의 발전"
+query_embedding = model.encode(query, convert_to_tensor=True)
+
+# 모든 문장과의 유사도 계산
+similarities = util.cos_sim(query_embedding, embeddings)[0]
+
+# 결과 정렬 및 출력
+print(f"\n쿼리: '{query}'")
+print("유사한 문장 순위:")
+for idx in similarities.argsort(descending=True):
+    print(f"  {similarities[idx]:.3f}: {sentences[idx]}")</code></pre>
+                </div>
+
+                <p style="margin-top: 1.5rem;"><strong>대규모 시맨틱 검색 (FAISS 연동)</strong></p>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre class="code-block"><code># pip install sentence-transformers faiss-cpu
+from sentence_transformers import SentenceTransformer
+import faiss
+import numpy as np
+
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# 대규모 문서 코퍼스 (예시)
+corpus = [
+    "Python은 인기 있는 프로그래밍 언어입니다.",
+    "JavaScript는 웹 개발에 필수적입니다.",
+    "딥러닝은 신경망을 사용한 머신러닝 기법입니다.",
+    "자연어 처리는 텍스트 데이터를 분석합니다.",
+    "컴퓨터 비전은 이미지를 이해하는 AI 분야입니다.",
+    # ... 수백만 개의 문서
+]
+
+# 코퍼스 임베딩 (한 번만 실행, 저장해두고 재사용)
+corpus_embeddings = model.encode(corpus, convert_to_numpy=True)
+corpus_embeddings = corpus_embeddings.astype('float32')
+
+# FAISS 인덱스 생성 (L2 거리 기반)
+dimension = corpus_embeddings.shape[1]  # 384
+index = faiss.IndexFlatIP(dimension)  # Inner Product (코사인 유사도용 정규화 필요)
+
+# 정규화 후 인덱스에 추가
+faiss.normalize_L2(corpus_embeddings)
+index.add(corpus_embeddings)
+
+# 검색 함수
+def search(query: str, top_k: int = 3):
+    query_embedding = model.encode([query], convert_to_numpy=True).astype('float32')
+    faiss.normalize_L2(query_embedding)
+
+    scores, indices = index.search(query_embedding, top_k)
+
+    results = []
+    for score, idx in zip(scores[0], indices[0]):
+        results.append({
+            'document': corpus[idx],
+            'score': float(score)
+        })
+    return results
+
+# 검색 테스트
+query = "AI가 이미지를 분석하는 방법"
+results = search(query, top_k=3)
+
+print(f"검색 쿼리: '{query}'")
+for i, result in enumerate(results, 1):
+    print(f"{i}. [{result['score']:.3f}] {result['document']}")</code></pre>
+                </div>
+
+                <p style="margin-top: 1.5rem;"><strong>커스텀 모델 파인튜닝</strong></p>
+                <div class="code-block-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre class="code-block"><code># pip install sentence-transformers datasets
+from sentence_transformers import SentenceTransformer, InputExample, losses
+from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator
+from torch.utils.data import DataLoader
+
+# 기본 모델 로드
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# 학습 데이터 준비 (문장 쌍 + 유사도 점수)
+train_examples = [
+    InputExample(texts=["문장 A1", "문장 B1"], label=0.9),  # 매우 유사
+    InputExample(texts=["문장 A2", "문장 B2"], label=0.1),  # 다름
+    # ... 더 많은 데이터
+]
+
+train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=16)
+
+# 손실 함수: CosineSimilarityLoss (연속 점수용)
+train_loss = losses.CosineSimilarityLoss(model)
+
+# 평가 데이터 (선택적)
+evaluator = EmbeddingSimilarityEvaluator.from_input_examples(
+    train_examples[:100],
+    name='dev'
+)
+
+# 파인튜닝
+model.fit(
+    train_objectives=[(train_dataloader, train_loss)],
+    epochs=3,
+    warmup_steps=100,
+    evaluator=evaluator,
+    evaluation_steps=500,
+    output_path='./my-finetuned-model'
+)
+
+# 파인튜닝된 모델 로드
+model = SentenceTransformer('./my-finetuned-model')</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 📊 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>Sentence Transformers는 <span class="badge-free">오픈소스 무료</span>입니다. Apache 2.0 라이선스로 상업적 사용이 가능합니다.</p>
+
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>모델</th>
+                            <th>차원</th>
+                            <th>속도 (CPU)</th>
+                            <th>MTEB 점수</th>
+                            <th>특징</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>all-MiniLM-L6-v2</strong></td>
+                            <td>384</td>
+                            <td>~14,000 sent/s</td>
+                            <td>~56</td>
+                            <td><span class="badge-fast">5x 빠름</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>all-MiniLM-L12-v2</strong></td>
+                            <td>384</td>
+                            <td>~7,500 sent/s</td>
+                            <td>~57</td>
+                            <td>L6보다 약간 정확</td>
+                        </tr>
+                        <tr>
+                            <td><strong>all-mpnet-base-v2</strong></td>
+                            <td>768</td>
+                            <td>~2,800 sent/s</td>
+                            <td>~59</td>
+                            <td><span class="badge-best">최고 품질</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>paraphrase-MiniLM-L6-v2</strong></td>
+                            <td>384</td>
+                            <td>~14,000 sent/s</td>
+                            <td>~55</td>
+                            <td>패러프레이즈 특화</td>
+                        </tr>
+                        <tr>
+                            <td><strong>multi-qa-MiniLM-L6-cos-v1</strong></td>
+                            <td>384</td>
+                            <td>~14,000 sent/s</td>
+                            <td>~53</td>
+                            <td>QA 검색 특화</td>
+                        </tr>
+                        <tr>
+                            <td><strong>distiluse-base-multilingual-cased-v2</strong></td>
+                            <td>512</td>
+                            <td>~4,000 sent/s</td>
+                            <td>~51</td>
+                            <td>다국어 (50+ 언어)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem;">* 속도는 CPU(i7) 기준, GPU 사용 시 10배+ 빨라짐</p>
+
+                <p style="margin-top: 1.5rem;"><strong>용도별 추천 모델</strong></p>
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>용도</th>
+                            <th>추천 모델</th>
+                            <th>이유</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>프로덕션 시맨틱 검색</td>
+                            <td>all-MiniLM-L6-v2</td>
+                            <td>속도/품질 균형, 낮은 메모리</td>
+                        </tr>
+                        <tr>
+                            <td>최고 정확도 필요</td>
+                            <td>all-mpnet-base-v2</td>
+                            <td>MTEB 최고 점수</td>
+                        </tr>
+                        <tr>
+                            <td>한국어 지원</td>
+                            <td>distiluse-base-multilingual</td>
+                            <td>다국어 지원</td>
+                        </tr>
+                        <tr>
+                            <td>RAG 파이프라인</td>
+                            <td>multi-qa-MiniLM-L6</td>
+                            <td>질문-문서 매칭 특화</td>
+                        </tr>
+                        <tr>
+                            <td>중복 탐지</td>
+                            <td>paraphrase-MiniLM-L6</td>
+                            <td>패러프레이즈 인식 특화</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="dialogue-box">
+                    <div class="dialogue-label">올바른 표현</div>
+                    <p>"검색 품질보다 속도가 중요하면 MiniLM, 정확도가 더 중요하면 mpnet 모델을 쓰세요. MiniLM이 5배 빠르지만 품질 차이는 크지 않아요."</p>
+                </div>
+                <div class="dialogue-box">
+                    <div class="dialogue-label">올바른 표현</div>
+                    <p>"RAG 시스템에서 chunk 임베딩할 때 Sentence Transformer 써서 FAISS에 넣으면 밀리초 단위로 검색됩니다."</p>
+                </div>
+                <div class="dialogue-box incorrect">
+                    <div class="dialogue-label">부정확한 표현</div>
+                    <p>"Sentence Transformer로 GPT처럼 텍스트 생성할 수 있어요." → Sentence Transformer는 임베딩 전용 모델입니다. 텍스트 생성은 못 합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <ul>
+                        <li><strong>Max Sequence Length 확인:</strong> 대부분의 모델은 256~512 토큰이 최대입니다. 긴 문서는 chunking 후 임베딩하세요.</li>
+                        <li><strong>벤치마크 ≠ 실제 성능:</strong> MTEB 점수가 높아도 내 도메인에서 성능이 다를 수 있습니다. 반드시 자체 데이터로 평가하세요.</li>
+                        <li><strong>임베딩 정규화:</strong> 코사인 유사도를 쓰려면 벡터를 L2 정규화해야 합니다. FAISS IndexFlatIP 사용 시 필수입니다.</li>
+                        <li><strong>다국어 모델 선택:</strong> 한국어가 포함된 경우 multilingual 모델을 사용하세요. 영어 전용 모델은 한국어 성능이 매우 낮습니다.</li>
+                        <li><strong>배치 처리:</strong> encode() 호출 시 문장 리스트를 한 번에 전달하세요. 개별 호출은 매우 비효율적입니다.</li>
+                        <li><strong>GPU 메모리:</strong> 대량 임베딩 시 batch_size를 조절하세요. OOM 에러가 나면 batch_size를 줄이세요.</li>
+                        <li><strong>모델 캐싱:</strong> 모델 로드는 한 번만 하고 재사용하세요. 매번 로드하면 수 초의 오버헤드가 발생합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-tags">
+                <a href="/ko/term/Embedding/" class="related-tag">Embedding</a>
+                <a href="/ko/term/BERT/" class="related-tag">BERT</a>
+                <a href="/ko/term/Vector%20Database/" class="related-tag">Vector Database</a>
+                <a href="/ko/term/RAG/" class="related-tag">RAG</a>
+                <a href="/ko/term/Semantic%20Search/" class="related-tag">Semantic Search</a>
+                <a href="/ko/term/FAISS/" class="related-tag">FAISS</a>
+                <a href="/ko/term/Cosine%20Similarity/" class="related-tag">Cosine Similarity</a>
+                <a href="/ko/term/Transformer/" class="related-tag">Transformer</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="resource-links">
+                <a href="https://www.sbert.net/" target="_blank" rel="noopener" class="resource-link">
+                    <span>🔗</span> SBERT 공식 문서
+                </a>
+                <a href="https://github.com/UKPLab/sentence-transformers" target="_blank" rel="noopener" class="resource-link">
+                    <span>🔗</span> Sentence Transformers GitHub
+                </a>
+                <a href="https://huggingface.co/sentence-transformers" target="_blank" rel="noopener" class="resource-link">
+                    <span>🤗</span> HuggingFace 모델 허브
+                </a>
+                <a href="https://arxiv.org/abs/1908.10084" target="_blank" rel="noopener" class="resource-link">
+                    <span>📄</span> Sentence-BERT 논문 (2019)
+                </a>
+                <a href="https://www.sbert.net/docs/pretrained_models.html" target="_blank" rel="noopener" class="resource-link">
+                    <span>📖</span> Pretrained Models 문서
+                </a>
+                <a href="https://huggingface.co/spaces/mteb/leaderboard" target="_blank" rel="noopener" class="resource-link">
+                    <span>🏆</span> MTEB Leaderboard
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(button) {
+        const codeBlock = button.nextElementSibling.querySelector('code');
+        const text = codeBlock.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            button.textContent = '완료!';
+            setTimeout(() => { button.textContent = '📋 복사'; }, 2000);
+        });
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

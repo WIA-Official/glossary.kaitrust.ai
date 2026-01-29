@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>방화벽 (Firewall) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="네트워크 트래픽을 필터링하는 보안 장치. 인바운드/아웃바운드 규칙으로 접근 제어. 패킷 필터링부터 차세대 방화벽(NGFW)까지의 발전 과정과 실무 구성 방법을 설명합니다.">
+    <meta name="keywords" content="방화벽, Firewall, 네트워크 보안, iptables, UFW, Security Group, NGFW, WAF, 패킷 필터링, AI 용어, KAITRUST, AI 백과사전, 보안">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%B0%A9%ED%99%94%EB%B2%BD/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EB%B0%A9%ED%99%94%EB%B2%BD/">
+    <meta property="og:title" content="방화벽 (Firewall) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="네트워크 트래픽을 필터링하는 보안 장치. 인바운드/아웃바운드 규칙으로 접근 제어. 패킷 필터링부터 NGFW까지.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="방화벽 (Firewall) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="네트워크 트래픽을 필터링하는 보안 장치. 인바운드/아웃바운드 규칙으로 접근 제어.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "방화벽",
+        "description": "네트워크 트래픽을 필터링하는 보안 장치. 인바운드/아웃바운드 규칙으로 접근 제어. 패킷 필터링, 상태 기반 검사, 애플리케이션 레벨 게이트웨이, 차세대 방화벽(NGFW) 등 다양한 유형이 있다.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Enhanced Content Styles */
+        .content-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .content-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .content-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+            color: #e2e8f0;
+        }
+        .content-section p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .content-section ul, .content-section ol {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        .content-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Network Diagram */
+        .network-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            margin: 1.5rem 0;
+        }
+        .network-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .network-zone {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            min-width: 120px;
+        }
+        .zone-internet {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        .zone-firewall {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 1.5rem 2rem;
+        }
+        .zone-dmz {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        .zone-internal {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+        .arrow-down {
+            font-size: 2rem;
+            color: #64748b;
+        }
+
+        /* Firewall Types Grid */
+        .firewall-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .firewall-type-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .firewall-type-card h4 {
+            color: #a855f7;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .firewall-type-card .layer {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+        }
+        .firewall-type-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+        }
+        .firewall-type-card .pros-cons {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+        }
+        .pros-cons .pros { color: #22c55e; }
+        .pros-cons .cons { color: #ef4444; }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        .comparison-table th {
+            background: rgba(168, 85, 247, 0.2);
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            color: #cbd5e1;
+        }
+        .comparison-table tr:hover td {
+            background: rgba(168, 85, 247, 0.1);
+        }
+
+        /* Code Tabs */
+        .code-tabs {
+            margin: 1.5rem 0;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+        .tab-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            color: #e2e8f0;
+        }
+        .tab-btn.active {
+            background: rgba(168, 85, 247, 0.3);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .code-block {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .code-block .comment { color: #64748b; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .string { color: #86efac; }
+        .code-block .flag { color: #38bdf8; }
+        .code-block .value { color: #fbbf24; }
+
+        /* Conversation Box */
+        .conversation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .conversation-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .conversation-item:last-child {
+            margin-bottom: 0;
+        }
+        .conversation-role {
+            font-weight: 600;
+            min-width: 80px;
+        }
+        .role-junior { color: #60a5fa; }
+        .role-senior { color: #a855f7; }
+        .conversation-text {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .warning-box h4 {
+            color: #fbbf24;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .warning-box p {
+            color: #fcd34d;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Case Study */
+        .case-study {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .case-study h4 {
+            color: #f87171;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .case-study p {
+            color: #fca5a5;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .case-study .lesson {
+            color: #86efac;
+            font-weight: 500;
+            margin-top: 0.75rem;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-question {
+            color: #e2e8f0;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .quiz-option {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+        .quiz-option.correct {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #22c55e;
+            color: #86efac;
+        }
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #fca5a5;
+        }
+        .quiz-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+        .quiz-result.show { display: block; }
+        .quiz-result.correct {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+        .quiz-result.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        /* Related Terms */
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        .related-term {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #e2e8f0;
+        }
+
+        /* Resources */
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .resource-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .resource-item:hover {
+            background: rgba(168, 85, 247, 0.2);
+        }
+        .resource-icon { font-size: 1.2rem; }
+        .resource-type {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-left: auto;
+        }
+
+        /* OSI Layer Diagram */
+        .osi-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        .osi-layer {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .osi-layer .layer-num {
+            width: 30px;
+            font-weight: 700;
+            color: #a855f7;
+        }
+        .osi-layer .layer-name {
+            width: 100px;
+            font-weight: 500;
+        }
+        .osi-layer .layer-desc {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        .osi-layer.active {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        .osi-layer.inactive {
+            background: rgba(0, 0, 0, 0.2);
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+            .content-section { padding: 1.5rem; }
+            .firewall-types-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.8rem; }
+            .network-zone { min-width: 100px; padding: 0.75rem 1rem; font-size: 0.85rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#security">보안</a>
+            <span>›</span>
+            <span class="current">방화벽</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🔒</span>
+                <span>보안</span>
+            </div>
+            <h1 class="term-title">방화벽</h1>
+            <p class="term-english">Firewall</p>
+            <div class="term-description">
+                <p>네트워크 트래픽을 필터링하는 보안 장치. 인바운드/아웃바운드 규칙으로 접근 제어. 허가되지 않은 접근을 차단하고 신뢰할 수 있는 트래픽만 허용하여 네트워크를 보호합니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#security" class="term-action-btn btn-secondary">
+                    🔒 보안 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- Detailed Explanation -->
+        <section class="content-section">
+            <h2>📖 상세 설명</h2>
+
+            <p>
+                <strong>방화벽(Firewall)</strong>은 네트워크 보안의 첫 번째 방어선으로, 신뢰할 수 있는 내부 네트워크와
+                신뢰할 수 없는 외부 네트워크(주로 인터넷) 사이의 트래픽을 모니터링하고 제어하는 보안 시스템입니다.
+            </p>
+
+            <p>
+                "방화벽"이라는 이름은 건축에서 유래했습니다. 건물에서 화재가 번지는 것을 막는 내화벽처럼,
+                네트워크 방화벽은 악성 트래픽이 내부 네트워크로 침투하는 것을 막습니다.
+                1988년 모리스 웜(Morris Worm) 사건 이후 네트워크 보안의 필요성이 대두되면서
+                최초의 상용 방화벽이 등장했습니다.
+            </p>
+
+            <h3>방화벽의 핵심 원리</h3>
+            <ul>
+                <li><strong>기본 거부(Default Deny)</strong>: 명시적으로 허용하지 않은 모든 트래픽을 차단</li>
+                <li><strong>규칙 기반 필터링</strong>: IP 주소, 포트 번호, 프로토콜 등을 기준으로 트래픽 허용/거부</li>
+                <li><strong>상태 추적</strong>: 연결의 상태(신규, 확립됨, 관련됨)를 기억하여 응답 트래픽 자동 허용</li>
+                <li><strong>양방향 보호</strong>: 인바운드(외부→내부)와 아웃바운드(내부→외부) 트래픽 모두 제어</li>
+            </ul>
+
+            <h3>네트워크 보안 아키텍처</h3>
+            <div class="network-diagram">
+                <div class="network-row">
+                    <div class="network-zone zone-internet">🌐 인터넷<br><small>신뢰할 수 없는 영역</small></div>
+                </div>
+                <div class="network-row">
+                    <div class="arrow-down">⬇️</div>
+                </div>
+                <div class="network-row">
+                    <div class="network-zone zone-firewall">🔥 방화벽<br><small>트래픽 필터링</small></div>
+                </div>
+                <div class="network-row">
+                    <div class="arrow-down">⬇️</div>
+                </div>
+                <div class="network-row">
+                    <div class="network-zone zone-dmz">🖥️ DMZ<br><small>웹 서버, 메일 서버</small></div>
+                </div>
+                <div class="network-row">
+                    <div class="arrow-down">⬇️</div>
+                </div>
+                <div class="network-row">
+                    <div class="network-zone zone-internal">🏢 내부 네트워크<br><small>사내 시스템, DB</small></div>
+                </div>
+            </div>
+
+            <h3>OSI 계층과 방화벽</h3>
+            <div class="osi-layers">
+                <div class="osi-layer active">
+                    <span class="layer-num">L7</span>
+                    <span class="layer-name">애플리케이션</span>
+                    <span class="layer-desc">WAF, NGFW - HTTP, SQL, 악성코드 검사</span>
+                </div>
+                <div class="osi-layer inactive">
+                    <span class="layer-num">L6</span>
+                    <span class="layer-name">표현</span>
+                    <span class="layer-desc">SSL/TLS 복호화 (NGFW)</span>
+                </div>
+                <div class="osi-layer inactive">
+                    <span class="layer-num">L5</span>
+                    <span class="layer-name">세션</span>
+                    <span class="layer-desc">-</span>
+                </div>
+                <div class="osi-layer active">
+                    <span class="layer-num">L4</span>
+                    <span class="layer-name">전송</span>
+                    <span class="layer-desc">상태 기반 방화벽 - TCP/UDP 포트 기반</span>
+                </div>
+                <div class="osi-layer active">
+                    <span class="layer-num">L3</span>
+                    <span class="layer-name">네트워크</span>
+                    <span class="layer-desc">패킷 필터링 - IP 주소 기반</span>
+                </div>
+                <div class="osi-layer inactive">
+                    <span class="layer-num">L2</span>
+                    <span class="layer-name">데이터 링크</span>
+                    <span class="layer-desc">MAC 필터링 (스위치)</span>
+                </div>
+                <div class="osi-layer inactive">
+                    <span class="layer-num">L1</span>
+                    <span class="layer-name">물리</span>
+                    <span class="layer-desc">-</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Firewall Types -->
+        <section class="content-section">
+            <h2>🔥 방화벽 유형</h2>
+
+            <div class="firewall-types-grid">
+                <div class="firewall-type-card">
+                    <h4>패킷 필터링 방화벽</h4>
+                    <div class="layer">OSI L3-L4 (네트워크/전송)</div>
+                    <p>IP 주소, 포트 번호, 프로토콜을 기준으로 개별 패킷을 검사하고 차단합니다. 가장 기본적인 형태입니다.</p>
+                    <div class="pros-cons">
+                        <span class="pros">✓ 빠른 속도</span>
+                        <span class="cons">✗ 상태 비인식</span>
+                    </div>
+                </div>
+
+                <div class="firewall-type-card">
+                    <h4>상태 기반 검사 방화벽</h4>
+                    <div class="layer">OSI L3-L4 (상태 추적)</div>
+                    <p>연결 상태를 추적하여 합법적인 세션에 속하는 패킷만 허용합니다. 현재 가장 일반적인 형태입니다.</p>
+                    <div class="pros-cons">
+                        <span class="pros">✓ 동적 규칙</span>
+                        <span class="cons">✗ L7 미검사</span>
+                    </div>
+                </div>
+
+                <div class="firewall-type-card">
+                    <h4>애플리케이션 게이트웨이</h4>
+                    <div class="layer">OSI L7 (애플리케이션)</div>
+                    <p>프록시 서버로 동작하며 애플리케이션 프로토콜(HTTP, FTP 등)의 내용까지 검사합니다.</p>
+                    <div class="pros-cons">
+                        <span class="pros">✓ 심층 검사</span>
+                        <span class="cons">✗ 성능 저하</span>
+                    </div>
+                </div>
+
+                <div class="firewall-type-card">
+                    <h4>차세대 방화벽 (NGFW)</h4>
+                    <div class="layer">OSI L3-L7 (통합)</div>
+                    <p>기존 방화벽 + IPS + 애플리케이션 인식 + SSL 검사 + 위협 인텔리전스를 통합한 최신 솔루션입니다.</p>
+                    <div class="pros-cons">
+                        <span class="pros">✓ 통합 보안</span>
+                        <span class="cons">✗ 고비용</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>방화벽 비교표</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>유형</th>
+                        <th>검사 수준</th>
+                        <th>성능</th>
+                        <th>보안 수준</th>
+                        <th>사용 사례</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>패킷 필터링</td>
+                        <td>IP, 포트</td>
+                        <td>매우 높음</td>
+                        <td>기본</td>
+                        <td>라우터 ACL</td>
+                    </tr>
+                    <tr>
+                        <td>상태 기반</td>
+                        <td>연결 상태</td>
+                        <td>높음</td>
+                        <td>중간</td>
+                        <td>일반 기업</td>
+                    </tr>
+                    <tr>
+                        <td>WAF</td>
+                        <td>HTTP/SQL</td>
+                        <td>중간</td>
+                        <td>높음 (웹)</td>
+                        <td>웹 애플리케이션</td>
+                    </tr>
+                    <tr>
+                        <td>NGFW</td>
+                        <td>L3-L7 전체</td>
+                        <td>중간</td>
+                        <td>매우 높음</td>
+                        <td>엔터프라이즈</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Code Examples -->
+        <section class="content-section">
+            <h2>💻 코드 예제</h2>
+
+            <div class="code-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="iptables">iptables (Linux)</button>
+                    <button class="tab-btn" data-tab="ufw">UFW (Ubuntu)</button>
+                    <button class="tab-btn" data-tab="aws">AWS Security Group</button>
+                </div>
+
+                <div class="tab-content active" id="iptables">
+                    <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+<pre><span class="comment">#!/bin/bash</span>
+<span class="comment"># Linux iptables 방화벽 설정 예제</span>
+
+<span class="comment"># 기본 정책: 모든 INPUT 거부, OUTPUT 허용</span>
+<span class="keyword">iptables</span> <span class="flag">-P</span> INPUT DROP
+<span class="keyword">iptables</span> <span class="flag">-P</span> FORWARD DROP
+<span class="keyword">iptables</span> <span class="flag">-P</span> OUTPUT ACCEPT
+
+<span class="comment"># 로컬호스트 허용</span>
+<span class="keyword">iptables</span> <span class="flag">-A</span> INPUT <span class="flag">-i</span> lo <span class="flag">-j</span> ACCEPT
+
+<span class="comment"># 확립된 연결 허용 (상태 기반)</span>
+<span class="keyword">iptables</span> <span class="flag">-A</span> INPUT <span class="flag">-m</span> conntrack <span class="flag">--ctstate</span> ESTABLISHED,RELATED <span class="flag">-j</span> ACCEPT
+
+<span class="comment"># SSH 허용 (포트 22, 특정 IP만)</span>
+<span class="keyword">iptables</span> <span class="flag">-A</span> INPUT <span class="flag">-p</span> tcp <span class="flag">--dport</span> <span class="value">22</span> <span class="flag">-s</span> <span class="value">10.0.0.0/8</span> <span class="flag">-j</span> ACCEPT
+
+<span class="comment"># HTTP/HTTPS 허용 (모든 IP)</span>
+<span class="keyword">iptables</span> <span class="flag">-A</span> INPUT <span class="flag">-p</span> tcp <span class="flag">--dport</span> <span class="value">80</span> <span class="flag">-j</span> ACCEPT
+<span class="keyword">iptables</span> <span class="flag">-A</span> INPUT <span class="flag">-p</span> tcp <span class="flag">--dport</span> <span class="value">443</span> <span class="flag">-j</span> ACCEPT
+
+<span class="comment"># MySQL 허용 (내부 네트워크만)</span>
+<span class="keyword">iptables</span> <span class="flag">-A</span> INPUT <span class="flag">-p</span> tcp <span class="flag">--dport</span> <span class="value">3306</span> <span class="flag">-s</span> <span class="value">192.168.0.0/16</span> <span class="flag">-j</span> ACCEPT
+
+<span class="comment"># ICMP (ping) 제한 (초당 1회)</span>
+<span class="keyword">iptables</span> <span class="flag">-A</span> INPUT <span class="flag">-p</span> icmp <span class="flag">--icmp-type</span> echo-request \
+    <span class="flag">-m</span> limit <span class="flag">--limit</span> <span class="value">1/second</span> <span class="flag">-j</span> ACCEPT
+
+<span class="comment"># 나머지 모두 로깅 후 거부</span>
+<span class="keyword">iptables</span> <span class="flag">-A</span> INPUT <span class="flag">-j</span> LOG <span class="flag">--log-prefix</span> <span class="string">"DROPPED: "</span>
+<span class="keyword">iptables</span> <span class="flag">-A</span> INPUT <span class="flag">-j</span> DROP</pre>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="ufw">
+                    <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+<pre><span class="comment"># Ubuntu UFW (Uncomplicated Firewall) 설정</span>
+<span class="comment"># iptables의 간편한 래퍼</span>
+
+<span class="comment"># UFW 활성화</span>
+<span class="keyword">sudo</span> ufw enable
+
+<span class="comment"># 기본 정책 설정</span>
+<span class="keyword">sudo</span> ufw default deny incoming
+<span class="keyword">sudo</span> ufw default allow outgoing
+
+<span class="comment"># SSH 허용 (기본 포트)</span>
+<span class="keyword">sudo</span> ufw allow ssh
+<span class="comment"># 또는 특정 포트 지정</span>
+<span class="keyword">sudo</span> ufw allow <span class="value">22/tcp</span>
+
+<span class="comment"># 웹 서버 허용</span>
+<span class="keyword">sudo</span> ufw allow <span class="string">'Nginx Full'</span>
+<span class="comment"># 또는</span>
+<span class="keyword">sudo</span> ufw allow <span class="value">80/tcp</span>
+<span class="keyword">sudo</span> ufw allow <span class="value">443/tcp</span>
+
+<span class="comment"># 특정 IP에서만 MySQL 허용</span>
+<span class="keyword">sudo</span> ufw allow from <span class="value">192.168.1.0/24</span> to any port <span class="value">3306</span>
+
+<span class="comment"># 특정 IP 완전 차단</span>
+<span class="keyword">sudo</span> ufw deny from <span class="value">203.0.113.100</span>
+
+<span class="comment"># 포트 범위 허용</span>
+<span class="keyword">sudo</span> ufw allow <span class="value">6000:6007/tcp</span>
+
+<span class="comment"># 상태 확인</span>
+<span class="keyword">sudo</span> ufw status verbose
+
+<span class="comment"># 규칙 번호로 삭제</span>
+<span class="keyword">sudo</span> ufw status numbered
+<span class="keyword">sudo</span> ufw delete <span class="value">3</span></pre>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="aws">
+                    <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+<pre><span class="comment"># Terraform으로 AWS Security Group 정의</span>
+<span class="comment"># 클라우드 방화벽의 대표적인 예</span>
+
+<span class="keyword">resource</span> <span class="string">"aws_security_group"</span> <span class="string">"web_server"</span> {
+  name        = <span class="string">"web-server-sg"</span>
+  description = <span class="string">"Security group for web servers"</span>
+  vpc_id      = aws_vpc.main.id
+
+  <span class="comment"># 인바운드 규칙: HTTP/HTTPS 허용</span>
+  <span class="keyword">ingress</span> {
+    description = <span class="string">"HTTPS from anywhere"</span>
+    from_port   = <span class="value">443</span>
+    to_port     = <span class="value">443</span>
+    protocol    = <span class="string">"tcp"</span>
+    cidr_blocks = [<span class="string">"0.0.0.0/0"</span>]
+  }
+
+  <span class="keyword">ingress</span> {
+    description = <span class="string">"HTTP from anywhere"</span>
+    from_port   = <span class="value">80</span>
+    to_port     = <span class="value">80</span>
+    protocol    = <span class="string">"tcp"</span>
+    cidr_blocks = [<span class="string">"0.0.0.0/0"</span>]
+  }
+
+  <span class="comment"># SSH는 VPN/배스천에서만 허용</span>
+  <span class="keyword">ingress</span> {
+    description     = <span class="string">"SSH from bastion"</span>
+    from_port       = <span class="value">22</span>
+    to_port         = <span class="value">22</span>
+    protocol        = <span class="string">"tcp"</span>
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  <span class="comment"># 아웃바운드: 모든 트래픽 허용</span>
+  <span class="keyword">egress</span> {
+    from_port   = <span class="value">0</span>
+    to_port     = <span class="value">0</span>
+    protocol    = <span class="string">"-1"</span>
+    cidr_blocks = [<span class="string">"0.0.0.0/0"</span>]
+  }
+
+  <span class="keyword">tags</span> = {
+    Name        = <span class="string">"web-server-sg"</span>
+    Environment = <span class="string">"production"</span>
+  }
+}
+
+<span class="comment"># DB용 Security Group (웹 서버에서만 접근)</span>
+<span class="keyword">resource</span> <span class="string">"aws_security_group"</span> <span class="string">"database"</span> {
+  name   = <span class="string">"database-sg"</span>
+  vpc_id = aws_vpc.main.id
+
+  <span class="keyword">ingress</span> {
+    description     = <span class="string">"MySQL from web servers"</span>
+    from_port       = <span class="value">3306</span>
+    to_port         = <span class="value">3306</span>
+    protocol        = <span class="string">"tcp"</span>
+    security_groups = [aws_security_group.web_server.id]
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Conversation -->
+        <section class="content-section">
+            <h2>💬 실무 대화 예시</h2>
+
+            <div class="conversation-box">
+                <div class="conversation-item">
+                    <span class="conversation-role role-junior">주니어:</span>
+                    <span class="conversation-text">개발 서버에 SSH 접속이 안 돼요. 방화벽 문제인 것 같은데 어떻게 확인하죠?</span>
+                </div>
+                <div class="conversation-item">
+                    <span class="conversation-role role-senior">시니어:</span>
+                    <span class="conversation-text">먼저 `telnet 서버IP 22`로 포트가 열려있는지 확인해봐. 연결 안 되면 방화벽 문제야. 서버에서 `iptables -L -n`이나 `ufw status`로 현재 규칙 확인하고.</span>
+                </div>
+                <div class="conversation-item">
+                    <span class="conversation-role role-junior">주니어:</span>
+                    <span class="conversation-text">확인해보니 SSH 포트가 열려있지 않네요. 열어도 될까요?</span>
+                </div>
+                <div class="conversation-item">
+                    <span class="conversation-role role-senior">시니어:</span>
+                    <span class="conversation-text">모든 IP에 열면 안 돼. 사무실 IP나 VPN IP만 허용하고, fail2ban 설치해서 무차별 대입 공격도 막아야 해. 클라우드면 Security Group에서 소스 IP를 제한해.</span>
+                </div>
+                <div class="conversation-item">
+                    <span class="conversation-role role-junior">주니어:</span>
+                    <span class="conversation-text">아웃바운드도 제한해야 하나요?</span>
+                </div>
+                <div class="conversation-item">
+                    <span class="conversation-role role-senior">시니어:</span>
+                    <span class="conversation-text">보안 수준에 따라 달라. 일반적으로는 HTTP/HTTPS, DNS 정도만 허용해. 만약 서버가 해킹당해도 외부로 데이터 유출하거나 C2 서버 연결하는 걸 막을 수 있거든.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Warnings -->
+        <section class="content-section">
+            <h2>⚠️ 주의사항</h2>
+
+            <div class="warning-box">
+                <h4>⚠️ 규칙 순서가 중요하다</h4>
+                <p>방화벽 규칙은 위에서 아래로 순차적으로 적용됩니다. 상위에 있는 규칙이 먼저 매칭되므로, 구체적인 규칙을 먼저, 일반적인 규칙을 나중에 배치해야 합니다. 실수로 상단에 전체 차단 규칙을 넣으면 이후 규칙이 무시됩니다.</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ 자신을 잠그지 마라 (Lock-out)</h4>
+                <p>원격 서버에서 방화벽 설정 시, 현재 SSH 연결을 차단하는 규칙을 적용하면 서버에 접속할 수 없게 됩니다. 항상 SSH 규칙을 먼저 확보하고, 테스트 후 적용하세요. 클라우드에서는 콘솔 접속이 가능하지만, 온프레미스는 물리적 접근이 필요합니다.</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ 방화벽만으로는 부족하다</h4>
+                <p>방화벽은 허용된 포트로 들어오는 악성 트래픽(SQL Injection, XSS 등)을 막지 못합니다. 웹 애플리케이션은 WAF, 코드 레벨 보안, 정기적인 취약점 점검이 함께 필요합니다. 방화벽은 보안의 한 레이어일 뿐입니다.</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ 로깅과 모니터링은 필수</h4>
+                <p>방화벽 로그를 수집하고 분석하지 않으면 공격 시도를 탐지할 수 없습니다. 차단된 트래픽 로그를 SIEM에 전송하고, 비정상 패턴을 알림으로 설정하세요. 사후 분석에도 로그가 반드시 필요합니다.</p>
+            </div>
+        </section>
+
+        <!-- Case Studies -->
+        <section class="content-section">
+            <h2>📋 실제 사례</h2>
+
+            <div class="case-study">
+                <h4>🔴 Capital One 데이터 유출 (2019)</h4>
+                <p>AWS 방화벽(Security Group) 설정 오류로 1억 명 이상의 고객 데이터가 유출되었습니다. 공격자는 잘못 구성된 WAF를 통해 메타데이터 서비스에 접근, IAM 자격증명을 탈취하여 S3 버킷 데이터를 유출했습니다.</p>
+                <p class="lesson">💡 교훈: 최소 권한 원칙 적용, 정기적인 구성 감사, SSRF 방어 필수</p>
+            </div>
+
+            <div class="case-study">
+                <h4>🔴 MongoDB 랜섬웨어 공격 (2017)</h4>
+                <p>기본 설정으로 인터넷에 노출된 수만 대의 MongoDB 서버가 랜섬웨어 공격을 받았습니다. 방화벽 없이 27017 포트가 전 세계에 공개되어 있었고, 인증도 비활성화된 상태였습니다.</p>
+                <p class="lesson">💡 교훈: 데이터베이스 포트는 절대 인터넷에 공개하지 말 것, 기본 포트 변경, 인증 필수</p>
+            </div>
+
+            <div class="case-study">
+                <h4>🔴 SSH 무차별 대입 공격</h4>
+                <p>인터넷에 공개된 SSH(22번 포트)에 분당 수백 번의 로그인 시도가 발생합니다. 약한 비밀번호를 사용하면 몇 시간 내에 뚫릴 수 있으며, 이후 봇넷에 편입되거나 암호화폐 채굴에 악용됩니다.</p>
+                <p class="lesson">💡 교훈: SSH 포트 변경, IP 화이트리스트, 키 기반 인증, fail2ban 사용</p>
+            </div>
+        </section>
+
+        <!-- Quiz -->
+        <section class="content-section">
+            <h2>🧠 이해도 퀴즈</h2>
+
+            <div class="quiz-container">
+                <p class="quiz-question">상태 기반(Stateful) 방화벽의 핵심 장점은 무엇인가요?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-correct="false">패킷의 내용(payload)까지 검사할 수 있다</div>
+                    <div class="quiz-option" data-correct="true">연결 상태를 추적하여 응답 트래픽을 자동으로 허용한다</div>
+                    <div class="quiz-option" data-correct="false">SQL Injection 같은 애플리케이션 공격을 막는다</div>
+                    <div class="quiz-option" data-correct="false">암호화된 트래픽을 복호화하여 검사한다</div>
+                </div>
+                <div class="quiz-result"></div>
+            </div>
+        </section>
+
+        <!-- Related Terms -->
+        <section class="content-section">
+            <h2>🔗 관련 용어</h2>
+
+            <div class="related-terms">
+                <a href="/ko/term/DMZ/" class="related-term">DMZ</a>
+                <a href="/ko/term/VPN/" class="related-term">VPN</a>
+                <a href="/ko/term/IDS/" class="related-term">IDS/IPS</a>
+                <a href="/ko/term/WAF/" class="related-term">WAF</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term">Zero Trust</a>
+                <a href="/ko/term/SASE/" class="related-term">SASE</a>
+                <a href="/ko/term/%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%85%8C%EC%9D%B4%EC%85%98/" class="related-term">네트워크 세그멘테이션</a>
+                <a href="/ko/term/NAT/" class="related-term">NAT</a>
+                <a href="/ko/term/%ED%94%84%EB%A1%9D%EC%8B%9C/" class="related-term">프록시</a>
+            </div>
+        </section>
+
+        <!-- Learning Resources -->
+        <section class="content-section">
+            <h2>📚 학습 자료</h2>
+
+            <div class="resource-list">
+                <a href="https://www.netfilter.org/documentation/" class="resource-item" target="_blank" rel="noopener">
+                    <span class="resource-icon">📖</span>
+                    <span>Netfilter/iptables 공식 문서</span>
+                    <span class="resource-type">공식 문서</span>
+                </a>
+                <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html" class="resource-item" target="_blank" rel="noopener">
+                    <span class="resource-icon">☁️</span>
+                    <span>AWS Security Groups 가이드</span>
+                    <span class="resource-type">클라우드</span>
+                </a>
+                <a href="https://ubuntu.com/server/docs/security-firewall" class="resource-item" target="_blank" rel="noopener">
+                    <span class="resource-icon">🐧</span>
+                    <span>Ubuntu UFW 가이드</span>
+                    <span class="resource-type">튜토리얼</span>
+                </a>
+                <a href="https://www.paloaltonetworks.com/cyberpedia/what-is-a-next-generation-firewall-ngfw" class="resource-item" target="_blank" rel="noopener">
+                    <span class="resource-icon">🔥</span>
+                    <span>NGFW 개요 (Palo Alto)</span>
+                    <span class="resource-type">개념 설명</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+
+                // Update buttons
+                btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Update content
+                const tabContainer = btn.closest('.code-tabs');
+                tabContainer.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                tabContainer.querySelector(`#${tabId}`).classList.add('active');
+            });
+        });
+
+        // Quiz functionality
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const container = option.closest('.quiz-container');
+                const result = container.querySelector('.quiz-result');
+                const isCorrect = option.dataset.correct === 'true';
+
+                // Disable all options
+                container.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.add('correct');
+                    }
+                });
+
+                if (!isCorrect) {
+                    option.classList.add('incorrect');
+                }
+
+                // Show result
+                result.classList.add('show');
+                if (isCorrect) {
+                    result.classList.add('correct');
+                    result.textContent = '정답입니다! 상태 기반 방화벽은 연결 상태(세션 테이블)를 유지하여, 나가는 요청에 대한 응답 트래픽을 자동으로 허용합니다. 이를 통해 복잡한 규칙 없이도 동적으로 트래픽을 관리할 수 있습니다.';
+                } else {
+                    result.classList.add('incorrect');
+                    result.textContent = '아쉽습니다. 상태 기반 방화벽은 연결 상태를 추적하여 응답 트래픽을 자동 허용하는 것이 핵심입니다. 페이로드 검사(L7)나 SQL Injection 방어는 WAF/NGFW의 영역입니다.';
+                }
+            });
+        });
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

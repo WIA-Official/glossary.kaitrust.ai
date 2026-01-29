@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambassador Pattern (앰배서더 패턴) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Ambassador Pattern은 원격 서비스에 대한 프록시 역할을 하는 헬퍼 서비스를 사이드카로 배포하는 패턴입니다. 로깅, 모니터링, 인증, 재시도 등 교차 관심사를 애플리케이션 코드에서 분리하여 서비스 메시의 기반이 됩니다.">
+    <meta name="keywords" content="Ambassador Pattern, 앰배서더 패턴, Sidecar, Service Mesh, Envoy, 프록시, 마이크로서비스, Kubernetes, 아키텍처, AI 용어, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Ambassador%20Pattern/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Ambassador%20Pattern/">
+    <meta property="og:title" content="Ambassador Pattern (앰배서더 패턴) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="원격 서비스 프록시 패턴. 로깅, 모니터링, 인증 등 교차 관심사를 분리하는 사이드카 아키텍처.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ambassador Pattern (앰배서더 패턴) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="원격 서비스 프록시 패턴. 로깅, 모니터링, 인증 등 교차 관심사를 분리하는 사이드카 아키텍처.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Ambassador Pattern",
+        "description": "원격 서비스에 대한 프록시 역할을 하는 헬퍼 서비스를 사이드카로 배포하는 패턴. 교차 관심사 분리.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 스타일 */
+        .enhanced-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .enhanced-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .enhanced-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+            color: #e2e8f0;
+        }
+        .enhanced-section p, .enhanced-section li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .enhanced-section ul, .enhanced-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .enhanced-section li {
+            margin-bottom: 0.5rem;
+        }
+        .enhanced-section code {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e879f9;
+        }
+        .enhanced-section pre {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0 1.5rem;
+        }
+        .enhanced-section pre code {
+            background: none;
+            padding: 0;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .concept-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .concept-card h4 {
+            color: #a855f7;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .concept-card p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        .conversation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #a855f7;
+            padding: 1.25rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .conversation-box .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .conversation-box p {
+            margin: 0;
+            color: #e2e8f0;
+        }
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .warning-box p {
+            color: #fca5a5;
+            margin: 0;
+        }
+        .tip-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .tip-box p {
+            color: #86efac;
+            margin: 0;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .comparison-table th {
+            background: rgba(168, 85, 247, 0.2);
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            color: #cbd5e1;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .related-term-tag {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .related-term-tag:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #fff;
+        }
+        .resource-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .resource-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .resource-item:hover {
+            background: rgba(168, 85, 247, 0.1);
+        }
+        .resource-icon {
+            font-size: 1.5rem;
+        }
+        .resource-content h4 {
+            color: #f1f5f9;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        .resource-content p {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#arch">아키텍처</a>
+            <span>›</span>
+            <span class="current">Ambassador Pattern</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🏗️</span>
+                <span>아키텍처</span>
+            </div>
+            <h1 class="term-title">Ambassador Pattern</h1>
+            <p class="term-english">앰배서더 패턴 / 대사 패턴</p>
+            <div class="term-description">
+                <p>원격 서비스에 대한 프록시 역할을 하는 헬퍼 서비스를 사이드카로 배포하는 패턴입니다. 애플리케이션과 같은 Pod 또는 컨테이너 내에서 실행되며, 로깅, 모니터링, 인증, 재시도, Circuit Breaker 등 교차 관심사(Cross-Cutting Concerns)를 애플리케이션 코드에서 분리합니다. Istio, Linkerd 같은 Service Mesh의 핵심 구현 원리입니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#arch" class="term-action-btn btn-secondary">
+                    🏗️ 아키텍처 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="enhanced-section">
+            <h2>📖 상세 설명</h2>
+
+            <p><strong>Ambassador Pattern</strong>은 마이크로서비스 아키텍처에서 서비스가 외부 리소스(다른 서비스, 데이터베이스, 메시지 큐 등)와 통신할 때 발생하는 교차 관심사를 처리하기 위한 프록시 패턴입니다. "대사(Ambassador)"라는 이름처럼 서비스를 대신하여 외부와의 통신을 중재하고 관리합니다.</p>
+
+            <p>이 패턴은 2005년 Microsoft의 Cloud Design Patterns에서 처음 체계화되었으며, Kubernetes와 컨테이너 오케스트레이션의 발전과 함께 급격히 보편화되었습니다. Sidecar Pattern의 특수한 형태로, 프록시 기능에 특화되어 있습니다. 애플리케이션 컨테이너 옆에서 함께 실행되면서 모든 아웃바운드 트래픽을 가로채 처리합니다.</p>
+
+            <p>Ambassador의 핵심 역할은 네트워킹 관련 복잡성을 추상화하는 것입니다. 재시도 로직, 타임아웃 설정, Circuit Breaker, TLS 종료, 로드 밸런싱, 서비스 디스커버리 등을 애플리케이션 코드 변경 없이 적용할 수 있습니다. 특히 레거시 애플리케이션에 현대적인 네트워킹 기능을 추가할 때 유용합니다.</p>
+
+            <p>실무에서 Ambassador Pattern은 Envoy Proxy를 기반으로 한 Istio, Linkerd 같은 Service Mesh의 데이터 플레인을 구성합니다. AWS App Mesh, Consul Connect도 동일한 원리를 사용합니다. 각 서비스마다 사이드카 프록시가 배포되어 서비스 간 통신의 관찰성(Observability)과 보안을 일관되게 제공합니다.</p>
+
+            <h3>Ambassador가 처리하는 교차 관심사</h3>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>재시도 & 타임아웃</h4>
+                    <p>일시적 실패에 대한 자동 재시도, 지수 백오프, 요청별 타임아웃 설정. 애플리케이션 코드 수정 불필요.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Circuit Breaker</h4>
+                    <p>연속 실패 시 회로 차단하여 장애 전파 방지. 반개방 상태에서 점진적 복구 시도.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>mTLS (상호 TLS)</h4>
+                    <p>서비스 간 암호화 통신 자동화. 인증서 발급/갱신/검증을 투명하게 처리.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>관찰성 (Observability)</h4>
+                    <p>분산 트레이싱, 메트릭 수집, 접근 로깅. Jaeger, Prometheus 연동.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="enhanced-section">
+            <h2>💻 코드 예제</h2>
+
+            <h3>Kubernetes - Envoy Sidecar Ambassador</h3>
+            <pre><code># ambassador-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+      # 메인 애플리케이션 컨테이너
+      - name: order-service
+        image: myapp/order-service:v1.2
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PAYMENT_SERVICE_URL
+          value: "http://localhost:9000"  # Ambassador를 통해 접근
+        - name: INVENTORY_SERVICE_URL
+          value: "http://localhost:9001"
+
+      # Ambassador (Envoy Sidecar)
+      - name: envoy-ambassador
+        image: envoyproxy/envoy:v1.28-latest
+        ports:
+        - containerPort: 9000  # Payment service proxy
+        - containerPort: 9001  # Inventory service proxy
+        - containerPort: 9901  # Envoy admin
+        volumeMounts:
+        - name: envoy-config
+          mountPath: /etc/envoy
+        args:
+        - "-c"
+        - "/etc/envoy/envoy.yaml"
+        - "--service-cluster"
+        - "order-service"
+
+      volumes:
+      - name: envoy-config
+        configMap:
+          name: envoy-ambassador-config</code></pre>
+
+            <h3>Envoy Ambassador 설정</h3>
+            <pre><code># envoy-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envoy-ambassador-config
+data:
+  envoy.yaml: |
+    static_resources:
+      listeners:
+      # Payment Service 프록시
+      - name: payment_proxy
+        address:
+          socket_address:
+            address: 0.0.0.0
+            port_value: 9000
+        filter_chains:
+        - filters:
+          - name: envoy.filters.network.http_connection_manager
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+              stat_prefix: payment_http
+              route_config:
+                name: payment_route
+                virtual_hosts:
+                - name: payment_backend
+                  domains: ["*"]
+                  routes:
+                  - match:
+                      prefix: "/"
+                    route:
+                      cluster: payment_cluster
+                      timeout: 5s
+                      retry_policy:
+                        retry_on: "5xx,reset,connect-failure"
+                        num_retries: 3
+                        per_try_timeout: 2s
+              http_filters:
+              - name: envoy.filters.http.router
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+      clusters:
+      - name: payment_cluster
+        connect_timeout: 1s
+        type: STRICT_DNS
+        lb_policy: ROUND_ROBIN
+        load_assignment:
+          cluster_name: payment_cluster
+          endpoints:
+          - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: payment-service.default.svc.cluster.local
+                    port_value: 80
+        # Circuit Breaker 설정
+        circuit_breakers:
+          thresholds:
+          - max_connections: 100
+            max_pending_requests: 100
+            max_requests: 100
+            max_retries: 3
+        # 헬스 체크
+        health_checks:
+        - timeout: 1s
+          interval: 5s
+          unhealthy_threshold: 3
+          healthy_threshold: 2
+          http_health_check:
+            path: "/health"</code></pre>
+
+            <h3>Go - 간단한 Ambassador 구현</h3>
+            <pre><code>package main
+
+import (
+    "fmt"
+    "io"
+    "log"
+    "net/http"
+    "net/http/httputil"
+    "net/url"
+    "time"
+    "sync/atomic"
+)
+
+// CircuitBreaker 상태
+type CircuitBreaker struct {
+    failures     int32
+    threshold    int32
+    state        int32 // 0: closed, 1: open, 2: half-open
+    lastFailure  time.Time
+    resetTimeout time.Duration
+}
+
+func NewCircuitBreaker(threshold int32, resetTimeout time.Duration) *CircuitBreaker {
+    return &CircuitBreaker{
+        threshold:    threshold,
+        resetTimeout: resetTimeout,
+    }
+}
+
+func (cb *CircuitBreaker) AllowRequest() bool {
+    state := atomic.LoadInt32(&cb.state)
+
+    if state == 0 { // closed
+        return true
+    }
+    if state == 1 { // open
+        if time.Since(cb.lastFailure) > cb.resetTimeout {
+            atomic.StoreInt32(&cb.state, 2) // half-open
+            return true
+        }
+        return false
+    }
+    return true // half-open: 한 번 시도 허용
+}
+
+func (cb *CircuitBreaker) RecordSuccess() {
+    atomic.StoreInt32(&cb.failures, 0)
+    atomic.StoreInt32(&cb.state, 0) // closed
+}
+
+func (cb *CircuitBreaker) RecordFailure() {
+    failures := atomic.AddInt32(&cb.failures, 1)
+    cb.lastFailure = time.Now()
+
+    if failures >= cb.threshold {
+        atomic.StoreInt32(&cb.state, 1) // open
+        log.Printf("🔴 Circuit OPEN: %d consecutive failures", failures)
+    }
+}
+
+// Ambassador Proxy
+type Ambassador struct {
+    target         *url.URL
+    proxy          *httputil.ReverseProxy
+    circuitBreaker *CircuitBreaker
+    retryCount     int
+    timeout        time.Duration
+}
+
+func NewAmbassador(targetURL string, retries int, timeout time.Duration) *Ambassador {
+    target, _ := url.Parse(targetURL)
+    proxy := httputil.NewSingleHostReverseProxy(target)
+
+    // Transport 커스터마이징 (타임아웃, 연결 풀)
+    proxy.Transport = &http.Transport{
+        MaxIdleConns:        100,
+        MaxIdleConnsPerHost: 10,
+        IdleConnTimeout:     90 * time.Second,
+    }
+
+    return &Ambassador{
+        target:         target,
+        proxy:          proxy,
+        circuitBreaker: NewCircuitBreaker(5, 30*time.Second),
+        retryCount:     retries,
+        timeout:        timeout,
+    }
+}
+
+func (a *Ambassador) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    start := time.Now()
+
+    // Circuit Breaker 체크
+    if !a.circuitBreaker.AllowRequest() {
+        log.Printf("🚫 Circuit open, rejecting request: %s", r.URL.Path)
+        http.Error(w, "Service temporarily unavailable", http.StatusServiceUnavailable)
+        return
+    }
+
+    // 재시도 로직
+    var lastErr error
+    for attempt := 0; attempt <= a.retryCount; attempt++ {
+        if attempt > 0 {
+            backoff := time.Duration(attempt*attempt) * 100 * time.Millisecond
+            time.Sleep(backoff)
+            log.Printf("🔄 Retry attempt %d for %s", attempt, r.URL.Path)
+        }
+
+        // 요청 복제 (재시도를 위해)
+        reqCopy := r.Clone(r.Context())
+
+        // 타임아웃 적용
+        client := &http.Client{Timeout: a.timeout}
+        resp, err := client.Do(reqCopy)
+
+        if err != nil {
+            lastErr = err
+            a.circuitBreaker.RecordFailure()
+            continue
+        }
+
+        if resp.StatusCode >= 500 {
+            lastErr = fmt.Errorf("server error: %d", resp.StatusCode)
+            a.circuitBreaker.RecordFailure()
+            resp.Body.Close()
+            continue
+        }
+
+        // 성공
+        a.circuitBreaker.RecordSuccess()
+
+        // 응답 복사
+        for k, v := range resp.Header {
+            w.Header()[k] = v
+        }
+        w.WriteHeader(resp.StatusCode)
+        io.Copy(w, resp.Body)
+        resp.Body.Close()
+
+        log.Printf("✅ %s %s -> %d (%v)", r.Method, r.URL.Path, resp.StatusCode, time.Since(start))
+        return
+    }
+
+    log.Printf("❌ All retries failed for %s: %v", r.URL.Path, lastErr)
+    http.Error(w, "Service unavailable after retries", http.StatusBadGateway)
+}
+
+func main() {
+    // 각 외부 서비스에 대한 Ambassador
+    paymentAmbassador := NewAmbassador(
+        "http://payment-service:8080",
+        3,              // 3회 재시도
+        5*time.Second,  // 5초 타임아웃
+    )
+
+    inventoryAmbassador := NewAmbassador(
+        "http://inventory-service:8080",
+        2,
+        3*time.Second,
+    )
+
+    // 포트별 프록시
+    go func() {
+        log.Println("🚀 Payment Ambassador on :9000")
+        http.ListenAndServe(":9000", paymentAmbassador)
+    }()
+
+    log.Println("🚀 Inventory Ambassador on :9001")
+    http.ListenAndServe(":9001", inventoryAmbassador)
+}</code></pre>
+
+            <h3>Istio Service Mesh - Ambassador 자동 주입</h3>
+            <pre><code># istio-virtual-service.yaml
+# Istio가 Envoy sidecar를 자동으로 주입
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: payment-service
+spec:
+  hosts:
+  - payment-service
+  http:
+  - route:
+    - destination:
+        host: payment-service
+        port:
+          number: 80
+    timeout: 5s
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: "5xx,reset,connect-failure,retriable-4xx"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: payment-service
+spec:
+  host: payment-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        h2UpgradePolicy: UPGRADE
+        http1MaxPendingRequests: 100
+        http2MaxRequests: 100
+    outlierDetection:  # Circuit Breaker
+      consecutive5xxErrors: 5
+      interval: 10s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50</code></pre>
+        </section>
+
+        <!-- 비교 섹션 -->
+        <section class="enhanced-section">
+            <h2>📊 관련 패턴 비교</h2>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>특성</th>
+                    <th>Ambassador</th>
+                    <th>Sidecar</th>
+                    <th>API Gateway</th>
+                </tr>
+                <tr>
+                    <td>배포 위치</td>
+                    <td>서비스와 같은 Pod</td>
+                    <td>서비스와 같은 Pod</td>
+                    <td>중앙 집중형</td>
+                </tr>
+                <tr>
+                    <td>주요 역할</td>
+                    <td>아웃바운드 프록시</td>
+                    <td>기능 확장 전반</td>
+                    <td>인바운드 프록시</td>
+                </tr>
+                <tr>
+                    <td>트래픽 방향</td>
+                    <td>→ 외부 서비스</td>
+                    <td>양방향</td>
+                    <td>외부 → 내부</td>
+                </tr>
+                <tr>
+                    <td>예시</td>
+                    <td>Envoy, linkerd-proxy</td>
+                    <td>로그 수집기, 설정 동기화</td>
+                    <td>Kong, NGINX Ingress</td>
+                </tr>
+                <tr>
+                    <td>장애 영향</td>
+                    <td>해당 서비스만</td>
+                    <td>해당 서비스만</td>
+                    <td>전체 시스템</td>
+                </tr>
+            </table>
+
+            <div class="tip-box">
+                <p>✅ <strong>선택 기준:</strong> 서비스 간 통신(East-West)에는 Ambassador/Service Mesh, 외부 클라이언트 진입점(North-South)에는 API Gateway를 사용합니다. 둘을 함께 사용하는 것이 일반적입니다.</p>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="enhanced-section">
+            <h2>🗣️ 실무 대화 예시</h2>
+
+            <div class="conversation-box">
+                <div class="speaker">💬 아키텍처 설계 회의에서</div>
+                <p>"레거시 결제 서비스에 재시도 로직을 추가해야 하는데, 코드 수정이 어렵습니다. Ambassador 패턴으로 Envoy sidecar를 붙이면 애플리케이션 변경 없이 재시도, Circuit Breaker, mTLS까지 적용할 수 있어요. Istio 도입하면 선언적으로 관리됩니다."</p>
+            </div>
+
+            <div class="conversation-box">
+                <div class="speaker">💬 기술 면접에서</div>
+                <p>"Ambassador 패턴은 Sidecar의 특수한 형태로, 외부 서비스에 대한 프록시 역할을 합니다. Service Mesh에서 각 Pod에 주입되는 Envoy가 대표적인 예입니다. 교차 관심사를 인프라 레이어로 분리해서 개발자가 비즈니스 로직에 집중할 수 있게 해줍니다."</p>
+            </div>
+
+            <div class="conversation-box">
+                <div class="speaker">💬 장애 대응 리뷰에서</div>
+                <p>"이번 결제 서비스 장애가 주문 서비스로 전파된 건 Circuit Breaker가 없었기 때문입니다. Ambassador에 outlierDetection 설정을 추가하면, 연속 5xx 오류 발생 시 해당 엔드포인트를 자동으로 격리합니다."</p>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="enhanced-section">
+            <h2>⚠️ 주의사항</h2>
+
+            <div class="warning-box">
+                <p>❌ <strong>리소스 오버헤드:</strong> 모든 Pod에 sidecar가 추가되면 메모리/CPU 사용량이 증가합니다. Envoy는 Pod당 약 50-100MB 메모리를 사용합니다. 소규모 서비스에서는 과한 수 있습니다.</p>
+            </div>
+
+            <div class="warning-box">
+                <p>❌ <strong>레이턴시 증가:</strong> 모든 요청이 Ambassador를 거치므로 약간의 지연이 추가됩니다. 일반적으로 1ms 미만이지만, 지연에 민감한 시스템에서는 고려가 필요합니다.</p>
+            </div>
+
+            <div class="warning-box">
+                <p>❌ <strong>복잡성 증가:</strong> 디버깅 시 Ambassador 설정까지 확인해야 합니다. 로그와 메트릭을 제대로 수집하지 않으면 문제 원인 파악이 어려워집니다.</p>
+            </div>
+
+            <div class="tip-box">
+                <p>✅ <strong>권장 사항:</strong> Service Mesh 도입 전 1-2개 서비스에 Ambassador를 먼저 적용해 효과와 오버헤드를 측정하세요. Istio의 경우 <code>istioctl analyze</code>로 설정 오류를 사전에 점검할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="enhanced-section">
+            <h2>🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Sidecar/" class="related-term-tag">Sidecar Pattern</a>
+                <a href="/ko/term/Circuit%20Breaker/" class="related-term-tag">Circuit Breaker</a>
+                <a href="/ko/term/Envoy/" class="related-term-tag">Envoy</a>
+                <a href="/ko/term/Istio/" class="related-term-tag">Istio</a>
+                <a href="/ko/term/Service%20Mesh/" class="related-term-tag">Service Mesh</a>
+                <a href="/ko/term/Microservices/" class="related-term-tag">Microservices</a>
+                <a href="/ko/term/%EB%A6%AC%EB%B2%84%EC%8A%A4%20%ED%94%84%EB%A1%9D%EC%8B%9C/" class="related-term-tag">리버스 프록시</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="enhanced-section">
+            <h2>📚 더 배우기</h2>
+            <div class="resource-list">
+                <a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/ambassador" class="resource-item" target="_blank" rel="noopener">
+                    <span class="resource-icon">📘</span>
+                    <div class="resource-content">
+                        <h4>Microsoft - Ambassador Pattern</h4>
+                        <p>Azure 아키텍처 센터의 공식 패턴 문서</p>
+                    </div>
+                </a>
+                <a href="https://www.envoyproxy.io/docs/envoy/latest/" class="resource-item" target="_blank" rel="noopener">
+                    <span class="resource-icon">🛠️</span>
+                    <div class="resource-content">
+                        <h4>Envoy Proxy 공식 문서</h4>
+                        <p>Ambassador 구현에 가장 많이 사용되는 프록시</p>
+                    </div>
+                </a>
+                <a href="https://istio.io/latest/docs/concepts/what-is-istio/" class="resource-item" target="_blank" rel="noopener">
+                    <span class="resource-icon">🌐</span>
+                    <div class="resource-content">
+                        <h4>Istio 공식 문서</h4>
+                        <p>Ambassador를 활용한 Service Mesh 플랫폼</p>
+                    </div>
+                </a>
+                <a href="https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/" class="resource-item" target="_blank" rel="noopener">
+                    <span class="resource-icon">☸️</span>
+                    <div class="resource-content">
+                        <h4>Kubernetes Sidecar Containers</h4>
+                        <p>K8s 1.28+의 네이티브 사이드카 지원</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

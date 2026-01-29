@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교차 검증 (Cross-Validation) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="데이터를 나눠 모델 성능 평가. K-fold가 대표적.">
+    <meta name="keywords" content="교차 검증, Cross-Validation, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EA%B5%90%EC%B0%A8%20%EA%B2%80%EC%A6%9D/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EA%B5%90%EC%B0%A8%20%EA%B2%80%EC%A6%9D/">
+    <meta property="og:title" content="교차 검증 (Cross-Validation) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="데이터를 나눠 모델 성능 평가. K-fold가 대표적.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="교차 검증 (Cross-Validation) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="데이터를 나눠 모델 성능 평가. K-fold가 대표적.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "교차 검증",
+        "description": "데이터를 나눠 모델 성능 평가. K-fold가 대표적.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .content-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.9;
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+        .conversation-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+        }
+        .conversation-box .speaker {
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .warning-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: #fbbf24;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            margin-bottom: 0.75rem;
+        }
+        .resource-list a {
+            color: #67e8f9;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+            .content-section { padding: 1.5rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">교차 검증</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">교차 검증</h1>
+            <p class="term-english">Cross-Validation</p>
+            <div class="term-description">
+                <p>데이터를 나눠 모델 성능 평가. K-fold가 대표적.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- Detailed Explanation Section -->
+        <section class="content-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>교차 검증(Cross-Validation)은 한정된 데이터에서 모델의 일반화 성능을 더 신뢰성 있게 평가하기 위한 기법입니다. 단순히 데이터를 학습/테스트로 한 번 나누는 것과 달리, 여러 번의 분할과 평가를 수행하여 성능의 평균과 분산을 측정합니다. 이를 통해 특정 데이터 분할에 의한 우연한 결과를 방지하고 모델 성능을 보다 정확하게 추정할 수 있습니다.</p>
+
+                <p>가장 널리 사용되는 방법은 K-Fold 교차 검증입니다. 전체 데이터를 K개의 동일한 크기의 폴드(fold)로 나누고, 각 반복에서 1개 폴드를 검증용으로, 나머지 K-1개를 학습용으로 사용합니다. K번의 학습과 평가를 반복하여 K개의 성능 점수를 얻고, 이들의 평균을 최종 성능으로 사용합니다. 일반적으로 K=5 또는 K=10이 많이 사용됩니다.</p>
+
+                <p>교차 검증의 변형으로 Stratified K-Fold, Leave-One-Out(LOO), Time Series Split 등이 있습니다. Stratified K-Fold는 분류 문제에서 각 폴드에 클래스 비율을 동일하게 유지합니다. LOO는 K를 데이터 개수와 같게 설정하여 하나의 샘플만 검증에 사용하는 극단적인 방식입니다. Time Series Split은 시계열 데이터에서 미래 데이터가 과거를 학습하는 데이터 누수를 방지합니다.</p>
+
+                <p>교차 검증은 하이퍼파라미터 튜닝에도 활용됩니다. GridSearchCV나 RandomizedSearchCV는 여러 하이퍼파라미터 조합에 대해 교차 검증을 수행하여 최적 조합을 찾습니다. 다만 교차 검증은 모델을 K번 학습해야 하므로 계산 비용이 증가합니다. 데이터가 충분히 크다면 단순 홀드아웃(train/valid/test split)도 유효한 대안입니다.</p>
+            </div>
+        </section>
+
+        <!-- Code Example Section -->
+        <section class="content-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>Scikit-learn의 다양한 교차 검증 기법과 하이퍼파라미터 튜닝 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <code># pip install scikit-learn
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import (
+    cross_val_score, KFold, StratifiedKFold,
+    GridSearchCV, cross_validate
+)
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+import numpy as np
+
+# 데이터 로드
+X, y = load_iris(return_X_y=True)
+
+# 1. 기본 K-Fold 교차 검증
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+scores = cross_val_score(model, X, y, cv=5, scoring='accuracy')
+print("=== K-Fold 교차 검증 (K=5) ===")
+print(f"각 폴드 점수: {scores}")
+print(f"평균 정확도: {scores.mean():.4f} (+/- {scores.std() * 2:.4f})")
+
+# 2. Stratified K-Fold (분류 문제에 권장)
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+scores_stratified = cross_val_score(model, X, y, cv=skf, scoring='accuracy')
+print("\n=== Stratified K-Fold 교차 검증 ===")
+print(f"평균 정확도: {scores_stratified.mean():.4f} (+/- {scores_stratified.std() * 2:.4f})")
+
+# 3. 다중 메트릭 평가
+scoring = ['accuracy', 'precision_macro', 'recall_macro', 'f1_macro']
+results = cross_validate(model, X, y, cv=5, scoring=scoring, return_train_score=True)
+print("\n=== 다중 메트릭 교차 검증 ===")
+for metric in scoring:
+    test_key = f'test_{metric}'
+    print(f"{metric}: {results[test_key].mean():.4f} (+/- {results[test_key].std() * 2:.4f})")
+
+# 4. GridSearchCV로 하이퍼파라미터 튜닝
+param_grid = {
+    'C': [0.1, 1, 10],
+    'kernel': ['rbf', 'linear'],
+    'gamma': ['scale', 'auto']
+}
+svc = SVC(random_state=42)
+grid_search = GridSearchCV(svc, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+grid_search.fit(X, y)
+
+print("\n=== GridSearchCV 결과 ===")
+print(f"최적 하이퍼파라미터: {grid_search.best_params_}")
+print(f"최고 교차 검증 점수: {grid_search.best_score_:.4f}")
+
+# 5. 각 폴드별 상세 결과
+print("\n=== 폴드별 상세 결과 ===")
+cv_results = grid_search.cv_results_
+best_idx = grid_search.best_index_
+for i in range(5):
+    print(f"Fold {i+1}: {cv_results[f'split{i}_test_score'][best_idx]:.4f}")
+
+# 결과 예시:
+# === K-Fold 교차 검증 (K=5) ===
+# 각 폴드 점수: [0.967 0.967 0.933 0.967 1.0]
+# 평균 정확도: 0.9667 (+/- 0.0422)</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Conversation Section -->
+        <section class="content-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-box">
+                    <div class="speaker">PM:</div>
+                    <div>"모델 정확도가 95%라고 했는데, 테스트 데이터 하나로만 평가한 거 아닌가요? 신뢰할 수 있나요?"</div>
+                </div>
+                <div class="conversation-box">
+                    <div class="speaker">ML 엔지니어:</div>
+                    <div>"5-Fold Stratified CV로 평가했습니다. 각 폴드 정확도가 93%~96% 범위이고 표준편차 1.5%라서 꽤 안정적이에요. 클래스 불균형이 있어서 Stratified로 했고, 최종 테스트 세트는 CV에 전혀 사용 안 했으니 데이터 누수 걱정은 없습니다."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Mistakes Section -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>전체 데이터로 전처리(스케일링, 피처 선택) 후 교차 검증 수행</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>각 폴드 내에서 학습 데이터만으로 전처리 파이프라인 구축 (Pipeline 사용)</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>시계열 데이터에 일반 K-Fold 사용 (미래 데이터 누수)</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>TimeSeriesSplit 또는 시간 순서를 고려한 분할 사용</span>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-item">
+                        <span>❌</span>
+                        <span>교차 검증 점수로 모델을 선택한 후 같은 데이터로 최종 성능 보고</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>✅</span>
+                        <span>별도로 분리해둔 테스트 세트로 최종 성능 평가</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms Section -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%EA%B3%BC%EC%A0%81%ED%95%A9/" class="related-term-link">과적합</a>
+                <a href="/ko/term/%ED%95%98%EC%9D%B4%ED%8D%BC%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0/" class="related-term-link">하이퍼파라미터</a>
+                <a href="/ko/term/%ED%99%80%EB%93%9C%EC%95%84%EC%9B%83/" class="related-term-link">홀드아웃</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%88%84%EC%88%98/" class="related-term-link">데이터 누수</a>
+                <a href="/ko/term/%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80/" class="related-term-link">모델 평가</a>
+            </div>
+        </section>
+
+        <!-- Learn More Section -->
+        <section class="content-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li><a href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank">📄 Scikit-learn 교차 검증 가이드</a></li>
+                <li><a href="https://machinelearningmastery.com/k-fold-cross-validation/" target="_blank">📄 K-Fold 교차 검증 완벽 가이드</a></li>
+                <li><a href="https://www.youtube.com/watch?v=fSytzGwwBVw" target="_blank">🎬 교차 검증 시각적 설명 (StatQuest)</a></li>
+                <li><a href="https://neptune.ai/blog/cross-validation-in-machine-learning-how-to-do-it-right" target="_blank">📄 교차 검증 모범 사례 (Neptune.ai)</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

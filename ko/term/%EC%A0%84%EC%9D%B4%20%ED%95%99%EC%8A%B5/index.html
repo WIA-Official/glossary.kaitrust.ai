@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전이 학습 (Transfer Learning) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="사전 학습된 모델을 새 작업에 적용하는 기법. 적은 데이터로 높은 성능. 파인튜닝의 기반.">
+    <meta name="keywords" content="전이 학습, Transfer Learning, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EC%A0%84%EC%9D%B4%20%ED%95%99%EC%8A%B5/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EC%A0%84%EC%9D%B4%20%ED%95%99%EC%8A%B5/">
+    <meta property="og:title" content="전이 학습 (Transfer Learning) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="사전 학습된 모델을 새 작업에 적용하는 기법. 적은 데이터로 높은 성능. 파인튜닝의 기반.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="전이 학습 (Transfer Learning) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="사전 학습된 모델을 새 작업에 적용하는 기법. 적은 데이터로 높은 성능. 파인튜닝의 기반.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "전이 학습",
+        "description": "사전 학습된 모델을 새 작업에 적용하는 기법. 적은 데이터로 높은 성능. 파인튜닝의 기반.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .spec-table tr:hover { background: rgba(168, 85, 247, 0.05); }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">전이 학습</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">전이 학습</h1>
+            <p class="term-english">Transfer Learning</p>
+            <div class="term-description">
+                <p>사전 학습된 모델을 새 작업에 적용하는 기법. 적은 데이터로 높은 성능. 파인튜닝의 기반.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>전이 학습(Transfer Learning)은 한 도메인에서 학습된 지식을 다른 관련 도메인의 문제 해결에 활용하는 머신러닝 기법입니다. 대규모 데이터셋으로 사전 학습된 모델의 가중치를 새로운 작업에 재사용함으로써, 적은 데이터로도 높은 성능을 달성할 수 있습니다. 현대 딥러닝의 핵심 패러다임으로, GPT, BERT, ResNet 등 거의 모든 최신 AI 모델이 전이 학습을 기반으로 합니다.</p>
+
+                <p>전이 학습의 핵심 원리는 저수준 특징의 범용성입니다. 이미지 모델의 초기 레이어는 엣지, 텍스처 같은 범용 특징을 학습하고, 언어 모델은 문법과 의미 구조를 학습합니다. 이러한 범용 지식은 새로운 작업에도 유용하며, 최종 레이어만 교체하거나 전체를 미세조정(Fine-tuning)하여 특정 작업에 적응시킵니다.</p>
+
+                <p>전이 학습의 주요 방식은 세 가지입니다: (1) Feature Extraction - 사전학습 모델을 고정하고 최종 분류 레이어만 학습, (2) Fine-tuning - 사전학습 가중치를 초기값으로 전체 모델을 낮은 학습률로 재학습, (3) Domain Adaptation - 소스 도메인과 타겟 도메인의 분포 차이를 줄이는 기법. 데이터가 적을수록 Feature Extraction이, 충분하면 Fine-tuning이 효과적입니다.</p>
+
+                <p>2025년 현재, 전이 학습은 Foundation Model 시대의 기본 전략입니다. GPT-4, Claude, Gemini 같은 LLM은 수조 토큰으로 사전학습된 후 특정 도메인에 파인튜닝됩니다. LoRA, QLoRA 같은 효율적 파인튜닝 기법이 발전하면서, 소규모 조직도 대형 모델을 자사 데이터에 적응시킬 수 있게 되었습니다. 훈련 비용을 90% 이상 절감하면서도 scratch 학습 대비 성능이 우수합니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>PyTorch를 사용한 전이 학습 (ResNet → 커스텀 분류기):</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code>import torch
+import torch.nn as nn
+from torchvision import models
+from transformers import AutoModel, AutoTokenizer
+
+# 방법 1: 이미지 분류 - ResNet 전이 학습
+def create_transfer_model(num_classes, freeze_backbone=True):
+    """
+    ResNet50 사전학습 모델을 커스텀 분류기로 전이
+    """
+    # 사전학습된 가중치 로드
+    model = models.resnet50(weights='IMAGENET1K_V2')
+
+    # Feature Extraction: backbone 동결
+    if freeze_backbone:
+        for param in model.parameters():
+            param.requires_grad = False
+
+    # 최종 분류 레이어 교체
+    num_features = model.fc.in_features
+    model.fc = nn.Sequential(
+        nn.Dropout(0.3),
+        nn.Linear(num_features, 256),
+        nn.ReLU(),
+        nn.Linear(256, num_classes)
+    )
+    return model
+
+# 방법 2: NLP - BERT Fine-tuning
+class BertClassifier(nn.Module):
+    def __init__(self, num_classes):
+        super().__init__()
+        self.bert = AutoModel.from_pretrained('bert-base-multilingual-cased')
+        self.classifier = nn.Linear(768, num_classes)
+
+    def forward(self, input_ids, attention_mask):
+        outputs = self.bert(input_ids, attention_mask=attention_mask)
+        pooled = outputs.last_hidden_state[:, 0]  # [CLS] 토큰
+        return self.classifier(pooled)
+
+# 방법 3: LoRA 효율적 파인튜닝 (2024년 표준)
+from peft import LoraConfig, get_peft_model
+
+def apply_lora_finetuning(model):
+    """대형 LLM을 0.1%의 파라미터만으로 파인튜닝"""
+    lora_config = LoraConfig(
+        r=8,              # Low-rank 차원
+        lora_alpha=16,    # 스케일링 팩터
+        target_modules=["q_proj", "v_proj"],
+        lora_dropout=0.1
+    )
+    return get_peft_model(model, lora_config)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>학습 방식</th>
+                            <th>필요 데이터</th>
+                            <th>학습 시간</th>
+                            <th>GPU 비용 (예시)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Scratch 학습</td>
+                            <td>100만+ 샘플</td>
+                            <td>100% (기준)</td>
+                            <td>$10,000+</td>
+                        </tr>
+                        <tr>
+                            <td>Feature Extraction</td>
+                            <td>1,000-10,000 샘플</td>
+                            <td>1-5%</td>
+                            <td>$10-50</td>
+                        </tr>
+                        <tr>
+                            <td>Full Fine-tuning</td>
+                            <td>10,000-100,000 샘플</td>
+                            <td>5-15%</td>
+                            <td>$50-500</td>
+                        </tr>
+                        <tr>
+                            <td>LoRA Fine-tuning</td>
+                            <td>1,000-10,000 샘플</td>
+                            <td>1-3%</td>
+                            <td>$10-100</td>
+                        </tr>
+                        <tr>
+                            <td>Prompt Tuning</td>
+                            <td>100-1,000 샘플</td>
+                            <td>0.1-1%</td>
+                            <td>$1-10</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #94a3b8;">※ 비용은 클라우드 GPU(A100 기준) 예상치이며, 모델 크기와 데이터에 따라 변동</p>
+            </div>
+        </section>
+
+        <!-- 실무에서 이렇게 말하세요 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 프로젝트 기획에서</div>
+                    <blockquote class="conv-quote">
+                        "데이터가 5천 건밖에 없으니 scratch 학습은 무리입니다. BERT-base를 가져와서 파인튜닝하면 2주 안에 90% 이상 정확도를 달성할 수 있어요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 모델 리뷰에서</div>
+                    <blockquote class="conv-quote">
+                        "LLM 파인튜닝에 LoRA를 적용했습니다. 전체 파라미터의 0.1%만 학습해서 메모리 사용량을 80% 줄였고, A100 1장으로도 7B 모델 학습이 가능해졌습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "전이 학습은 소스 도메인의 지식을 타겟 도메인에 전달하는 기법입니다. Negative Transfer를 방지하려면 도메인 유사성을 평가하고, 적절한 학습률과 동결 전략을 선택해야 합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 흔한 실수 & 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>높은 학습률로 파인튜닝</strong>
+                        <p>사전학습 가중치가 급격히 변하면 "catastrophic forgetting"이 발생합니다. 파인튜닝 시 학습률은 사전학습의 1/10 이하로 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>도메인 불일치 무시</strong>
+                        <p>ImageNet 모델을 의료 이미지에 바로 적용하면 성능이 떨어집니다. 도메인 특화 사전학습 모델(예: MedCLIP)을 우선 검토하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>라이선스 확인 누락</strong>
+                        <p>일부 사전학습 모델은 상업적 사용에 제한이 있습니다. Llama 2, Mistral 등의 라이선스 조건을 반드시 확인하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 접근법</strong>
+                        <p>데이터가 적으면 Feature Extraction부터, 충분하면 점진적 언프리징으로 파인튜닝하세요. 항상 검증 세트로 과적합을 모니터링합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%ED%8C%8C%EC%9D%B8%ED%8A%9C%EB%8B%9D/" class="related-term-link">파인튜닝</a>
+                <a href="/ko/term/%EC%82%AC%EC%A0%84%20%ED%95%99%EC%8A%B5/" class="related-term-link">사전 학습</a>
+                <a href="/ko/term/%EB%8C%80%EA%B7%9C%EB%AA%A8%20%EC%96%B8%EC%96%B4%20%EB%AA%A8%EB%8D%B8/" class="related-term-link">대규모 언어 모델</a>
+                <a href="/ko/term/%EC%9E%84%EB%B2%A0%EB%94%A9/" class="related-term-link">임베딩</a>
+                <a href="/ko/term/%EB%94%A5%EB%9F%AC%EB%8B%9D/" class="related-term-link">딥러닝</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://arxiv.org/abs/1411.1792" target="_blank" class="learn-link">
+                    📄 How Transferable Are Features in Deep Neural Networks?
+                </a>
+                <a href="https://huggingface.co/docs/transformers/training" target="_blank" class="learn-link">
+                    🎓 Hugging Face Fine-tuning Tutorial
+                </a>
+                <a href="https://arxiv.org/abs/2106.09685" target="_blank" class="learn-link">
+                    📖 LoRA: Low-Rank Adaptation 논문
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

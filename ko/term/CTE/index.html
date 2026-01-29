@@ -300,13 +300,44 @@
             background: rgba(168, 85, 247, 0.05);
         }
     </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
 </head>
 <body>
     <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
 
     <!-- Header -->
-    <div id="kaitrust-header"></div>
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
 
     <main class="term-detail-container">
         <!-- Breadcrumb -->
@@ -411,6 +442,7 @@
 
             <div class="code-label">기본 CTE - 여러 번 참조</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>-- 월별 매출 집계를 CTE로 정의
 WITH monthly_sales AS (
     SELECT
@@ -434,6 +466,7 @@ ORDER BY month;</code>
 
             <div class="code-label">다중 CTE - 복잡한 분석</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>WITH
 -- 1단계: 고객별 주문 집계
 customer_orders AS (
@@ -481,6 +514,7 @@ ORDER BY c.segment, c.total_spent DESC;</code>
 
             <div class="code-label">재귀 CTE - 조직도 (직원 계층 구조)</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>-- 직원 테이블 구조: id, name, manager_id
 WITH RECURSIVE org_tree AS (
     -- 기준 멤버 (Base Case): 최상위 관리자
@@ -517,6 +551,7 @@ ORDER BY path;</code>
 
             <div class="code-label">재귀 CTE - 카테고리 트리</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>-- 카테고리 무한 뎁스 조회
 WITH RECURSIVE category_tree AS (
     -- 루트 카테고리
@@ -552,6 +587,7 @@ ORDER BY sort_path;</code>
 
             <div class="code-label">재귀 CTE - 날짜 시리즈 생성</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>-- 연속된 날짜 시리즈 생성 (30일)
 WITH RECURSIVE date_series AS (
     SELECT CURRENT_DATE - INTERVAL '29 days' AS date
@@ -575,6 +611,7 @@ ORDER BY d.date;</code>
 
             <div class="code-label">재귀 CTE - BOM (Bill of Materials) 전개</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>-- 제품 BOM 전개 (부품 구성표)
 WITH RECURSIVE bom_explosion AS (
     -- 최상위 제품
@@ -684,13 +721,22 @@ ORDER BY path;</code>
     </main>
 
     <!-- Footer -->
-    <div id="kaitrust-footer"></div>
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
-    <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
 </body>
 </html>

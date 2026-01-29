@@ -299,13 +299,44 @@
             margin: 0.25rem;
         }
     </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
 </head>
 <body>
     <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
 
     <!-- Header -->
-    <div id="kaitrust-header"></div>
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
 
     <main class="term-detail-container">
         <!-- Breadcrumb -->
@@ -391,6 +422,7 @@
 
             <div class="code-label">노드 및 관계 생성 (CREATE)</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>// 사용자 노드 생성
 CREATE (u:User {
     id: 'user-001',
@@ -412,6 +444,7 @@ RETURN alice, bob, post;</code>
 
             <div class="code-label">기본 조회 (MATCH + WHERE + RETURN)</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>// 특정 사용자의 팔로워 조회
 MATCH (u:User {name: 'Alice'})<-[:FOLLOWS]-(follower:User)
 RETURN follower.name, follower.email;
@@ -427,6 +460,7 @@ LIMIT 10;</code>
 
             <div class="code-label">가변 길이 경로 탐색</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>// 친구의 친구 (2홉 관계)
 MATCH (me:User {name: 'Alice'})-[:FOLLOWS*2]->(fof:User)
 WHERE me <> fof  // 자기 자신 제외
@@ -445,6 +479,7 @@ RETURN path, length(path) AS hops;</code>
 
             <div class="code-label">집계 및 그룹화</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>// 사용자별 팔로워 수
 MATCH (u:User)<-[:FOLLOWS]-(follower)
 RETURN u.name, count(follower) AS follower_count
@@ -464,6 +499,7 @@ RETURN u.name, collect(friend.name) AS friends;</code>
 
             <div class="code-label">MERGE - 있으면 조회, 없으면 생성</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>// 사용자가 없으면 생성, 있으면 기존 노드 사용
 MERGE (u:User {email: 'new@example.com'})
 ON CREATE SET
@@ -482,6 +518,7 @@ RETURN r;</code>
 
             <div class="code-label">추천 시스템 쿼리</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>// 친구가 좋아요한 게시물 추천 (내가 아직 안 본 것)
 MATCH (me:User {name: 'Alice'})-[:FOLLOWS]->(friend:User)
 MATCH (friend)-[:LIKED]->(post:Post)
@@ -505,6 +542,7 @@ ORDER BY common_interests DESC;</code>
 
             <div class="code-label">Python에서 Cypher 사용 (neo4j 드라이버)</div>
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
 <code>from neo4j import GraphDatabase
 
 class Neo4jService:
@@ -625,13 +663,22 @@ recommendations = service.recommend_users("Alice", 5)</code>
     </main>
 
     <!-- Footer -->
-    <div id="kaitrust-footer"></div>
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
-    <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
 </body>
 </html>

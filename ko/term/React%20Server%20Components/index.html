@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Server Components (RSC) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="서버에서 렌더링되는 React 컴포넌트. 번들 크기 감소, 직접 DB 접근.">
+    <meta name="keywords" content="React Server Components, RSC, Server Components, 서버 컴포넌트, Next.js App Router, 번들 크기, async 컴포넌트, 웹개발">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/React%20Server%20Components/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/React%20Server%20Components/">
+    <meta property="og:title" content="React Server Components (RSC) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="서버에서 렌더링되는 React 컴포넌트. 번들 크기 감소, 직접 DB 접근.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="React Server Components (RSC) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="서버에서 렌더링되는 React 컴포넌트. 번들 크기 감소, 직접 DB 접근.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "React Server Components",
+        "description": "서버에서 렌더링되는 React 컴포넌트. 번들 크기 감소, 직접 DB 접근.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container { max-width: 900px; margin: 0 auto; padding: 120px 2rem 4rem; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem; flex-wrap: wrap; }
+        .breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 3rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .term-category-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.85rem; color: #a855f7; margin-bottom: 1rem; }
+        .term-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .term-english { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .term-description { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; }
+        .term-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .term-action-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.9rem; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        .content-section { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; display: flex; align-items: center; gap: 0.5rem; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-container { position: relative; background: #1e293b; border-radius: 12px; margin: 1rem 0; overflow: hidden; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(168, 85, 247, 0.2); border-bottom: 1px solid rgba(168, 85, 247, 0.3); }
+        .code-lang { color: #a855f7; font-size: 0.85rem; font-weight: 500; }
+        .copy-btn { background: rgba(168, 85, 247, 0.3); border: none; color: #e2e8f0; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .code-container pre { margin: 0; padding: 1rem; overflow-x: auto; }
+        .code-container code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; }
+        .dialogue-box { background: rgba(30, 41, 59, 0.8); border-left: 4px solid #a855f7; padding: 1.5rem; border-radius: 0 12px 12px 0; margin: 1rem 0; }
+        .dialogue-title { color: #a855f7; font-weight: 600; margin-bottom: 0.75rem; }
+        .dialogue-content { color: #cbd5e1; font-style: italic; }
+        .warning-box { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .warning-box ul { margin: 0; padding-left: 1.5rem; color: #fbbf24; }
+        .warning-box li { margin-bottom: 0.5rem; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+        .related-term-link { background: rgba(168, 85, 247, 0.2); color: #a855f7; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.4); transform: translateY(-2px); }
+        .learn-more-list { list-style: none; padding: 0; margin: 0; }
+        .learn-more-list li { margin-bottom: 0.75rem; }
+        .learn-more-list a { color: #38bdf8; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .learn-more-list a:hover { text-decoration: underline; }
+        @media (max-width: 768px) { .term-detail-container { padding: 100px 1rem 2rem; } .term-detail-header { padding: 2rem 1.5rem; } .term-title { font-size: 1.8rem; } }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#web">웹개발</a>
+            <span>›</span>
+            <span class="current">React Server Components</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🌐</span>
+                <span>웹개발</span>
+            </div>
+            <h1 class="term-title">React Server Components</h1>
+            <p class="term-english">RSC</p>
+            <div class="term-description">
+                <p>서버에서 렌더링되는 React 컴포넌트. 번들 크기 감소, 직접 DB 접근.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#web" class="term-action-btn btn-secondary">
+                    🌐 웹개발 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- Detailed Description -->
+        <section class="content-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>React Server Components(RSC)는 React 팀이 개발한 새로운 컴포넌트 패러다임으로, 컴포넌트를 서버에서만 실행하고 렌더링 결과만 클라이언트로 전송합니다. 기존 SSR(Server-Side Rendering)과 달리 RSC는 JavaScript 번들에 포함되지 않아 번들 크기가 획기적으로 줄어듭니다. 무거운 라이브러리(moment.js, lodash 등)를 서버 컴포넌트에서만 사용하면 클라이언트로 전송되지 않습니다.</p>
+
+                <p>RSC의 핵심 특징은 async/await를 컴포넌트에서 직접 사용할 수 있다는 점입니다. 서버 컴포넌트는 데이터베이스, 파일 시스템, 내부 API에 직접 접근할 수 있으며 useEffect나 React Query 없이 데이터를 가져옵니다. 이는 Waterfall 요청 문제를 해결하고, 서버와 데이터베이스 간 낮은 레이턴시를 활용할 수 있게 합니다.</p>
+
+                <p>Server Components와 Client Components는 명확히 구분됩니다. 클라이언트 컴포넌트는 파일 상단에 'use client' 지시어를 추가해야 하며, useState, useEffect, 이벤트 핸들러, 브라우저 API 사용이 필요할 때 사용합니다. 서버 컴포넌트는 기본값이며, 클라이언트 컴포넌트를 자식으로 포함할 수 있지만 그 반대는 불가능합니다(props로 전달은 가능).</p>
+
+                <p>Next.js 13+ App Router가 RSC의 대표적 구현체입니다. page.tsx, layout.tsx, loading.tsx, error.tsx가 기본적으로 서버 컴포넌트로 동작하며, Streaming SSR과 결합하여 점진적 렌더링이 가능합니다. React 19에서는 Server Actions도 도입되어 form 제출과 mutation을 서버에서 직접 처리할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- Code Example -->
+        <section class="content-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Server Component (Next.js App Router)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre><code>// app/posts/page.tsx - 서버 컴포넌트 (기본값)
+// 'use client' 없으면 서버 컴포넌트
+import { prisma } from '@/lib/prisma';
+import { formatDate } from 'date-fns'; // 이 라이브러리는 번들에 포함 안 됨!
+
+// async 컴포넌트 - 서버에서만 가능
+export default async function PostsPage() {
+    // DB 직접 접근 (API 불필요)
+    const posts = await prisma.post.findMany({
+        include: { author: true },
+        orderBy: { createdAt: 'desc' },
+        take: 10,
+    });
+
+    // 무거운 데이터 처리도 서버에서
+    const processedPosts = posts.map(post =&gt; ({
+        ...post,
+        excerpt: post.content.slice(0, 150),
+        formattedDate: formatDate(post.createdAt, 'yyyy년 M월 d일'),
+    }));
+
+    return (
+        &lt;main className="container mx-auto py-8"&gt;
+            &lt;h1 className="text-3xl font-bold mb-6"&gt;최신 게시글&lt;/h1&gt;
+
+            &lt;div className="grid gap-4"&gt;
+                {processedPosts.map(post =&gt; (
+                    &lt;article key={post.id} className="p-6 border rounded-lg"&gt;
+                        &lt;h2 className="text-xl font-semibold"&gt;{post.title}&lt;/h2&gt;
+                        &lt;p className="text-gray-600 mt-2"&gt;{post.excerpt}...&lt;/p&gt;
+                        &lt;div className="mt-4 text-sm text-gray-500"&gt;
+                            &lt;span&gt;{post.author.name}&lt;/span&gt;
+                            &lt;span className="mx-2"&gt;•&lt;/span&gt;
+                            &lt;span&gt;{post.formattedDate}&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/article&gt;
+                ))}
+            &lt;/div&gt;
+        &lt;/main&gt;
+    );
+}
+
+// 메타데이터도 서버에서 생성
+export async function generateMetadata() {
+    const totalPosts = await prisma.post.count();
+
+    return {
+        title: `게시글 목록 (${totalPosts}개)`,
+        description: '최신 게시글을 확인하세요',
+    };
+}</code></pre>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Client Component + Server Actions</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre><code>// app/posts/actions.ts - Server Actions
+'use server';
+
+import { prisma } from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
+
+export async function createPost(formData: FormData) {
+    const title = formData.get('title') as string;
+    const content = formData.get('content') as string;
+
+    await prisma.post.create({
+        data: { title, content, authorId: 1 }
+    });
+
+    // 캐시 무효화 - 목록 페이지 갱신
+    revalidatePath('/posts');
+}
+
+export async function deletePost(id: number) {
+    await prisma.post.delete({ where: { id } });
+    revalidatePath('/posts');
+}
+
+// -------------------------------------------------
+
+// components/CreatePostForm.tsx - 클라이언트 컴포넌트
+'use client';
+
+import { useFormStatus } from 'react-dom';
+import { createPost } from '@/app/posts/actions';
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+
+    return (
+        &lt;button
+            type="submit"
+            disabled={pending}
+            className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
+        &gt;
+            {pending ? '저장 중...' : '게시글 작성'}
+        &lt;/button&gt;
+    );
+}
+
+export function CreatePostForm() {
+    return (
+        &lt;form action={createPost} className="space-y-4"&gt;
+            &lt;input
+                name="title"
+                placeholder="제목"
+                required
+                className="w-full border p-2 rounded"
+            /&gt;
+            &lt;textarea
+                name="content"
+                placeholder="내용"
+                required
+                rows={5}
+                className="w-full border p-2 rounded"
+            /&gt;
+            &lt;SubmitButton /&gt;
+        &lt;/form&gt;
+    );
+}
+
+// -------------------------------------------------
+
+// app/posts/new/page.tsx - 서버 컴포넌트에서 클라이언트 컴포넌트 사용
+import { CreatePostForm } from '@/components/CreatePostForm';
+
+export default function NewPostPage() {
+    return (
+        &lt;main className="max-w-2xl mx-auto py-8"&gt;
+            &lt;h1 className="text-2xl font-bold mb-6"&gt;새 게시글 작성&lt;/h1&gt;
+            {/* 클라이언트 컴포넌트 삽입 */}
+            &lt;CreatePostForm /&gt;
+        &lt;/main&gt;
+    );
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-world Dialogue -->
+        <section class="content-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="section-content">
+                <div class="dialogue-box">
+                    <div class="dialogue-title">💼 아키텍처 논의</div>
+                    <div class="dialogue-content">
+                        "기존 React + API 구조에서 Next.js App Router로 전환하면 뭐가 좋아져요?"<br><br>
+                        "API 엔드포인트 만들고 fetch하는 보일러플레이트가 사라져요. 서버 컴포넌트에서 DB 직접 쿼리하니까 N+1 문제도 쉽게 해결되고, Prisma 같은 ORM을 프론트엔드 코드에서 바로 쓸 수 있어요. 번들 크기도 30-50% 줄어들 수 있습니다."
+                    </div>
+                </div>
+
+                <div class="dialogue-box">
+                    <div class="dialogue-title">🔍 코드 리뷰</div>
+                    <div class="dialogue-content">
+                        "이 컴포넌트에서 useState 쓰려는데 'use client'가 없다고 에러나요."<br><br>
+                        "서버 컴포넌트에서는 Hooks 사용 못 해요. 상태가 필요한 부분만 작은 클라이언트 컴포넌트로 분리하세요. 예를 들어 목록은 서버에서, 좋아요 버튼만 클라이언트로 하면 번들 크기 최소화하면서 인터랙션도 가능해요."
+                    </div>
+                </div>
+
+                <div class="dialogue-box">
+                    <div class="dialogue-title">📱 기술 면접</div>
+                    <div class="dialogue-content">
+                        "SSR과 React Server Components의 차이점이 뭔가요?"<br><br>
+                        "SSR은 서버에서 HTML을 생성하지만 컴포넌트 JavaScript도 클라이언트로 보내서 Hydration합니다. RSC는 서버 컴포넌트의 JavaScript를 아예 보내지 않아요. 클라이언트에는 렌더링 결과(React Tree)만 전송되어 번들 크기가 획기적으로 줄어듭니다."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Warnings -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-box">
+                    <ul>
+                        <li><strong>직렬화 가능한 props만</strong> - 서버 컴포넌트에서 클라이언트 컴포넌트로 전달하는 props는 JSON 직렬화 가능해야 합니다. 함수, Date 객체, Map/Set 등은 전달할 수 없습니다.</li>
+                        <li><strong>'use client' 경계 이해</strong> - 클라이언트 컴포넌트가 import하는 모든 것도 클라이언트 번들에 포함됩니다. 클라이언트 컴포넌트는 필요한 최소 범위로 분리하세요.</li>
+                        <li><strong>캐싱 전략 필수</strong> - 서버 컴포넌트가 매 요청마다 DB 쿼리하면 성능이 떨어집니다. revalidate, cache, unstable_cache 등으로 적절히 캐싱하세요.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/Next.js/" class="related-term-link">Next.js</a>
+                    <a href="/ko/term/Server%20Actions/" class="related-term-link">Server Actions</a>
+                    <a href="/ko/term/SSR/" class="related-term-link">SSR</a>
+                    <a href="/ko/term/Streaming%20SSR/" class="related-term-link">Streaming SSR</a>
+                    <a href="/ko/term/React/" class="related-term-link">React</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learn More -->
+        <section class="content-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <ul class="learn-more-list">
+                    <li>📄 <a href="https://react.dev/reference/rsc/server-components" target="_blank" rel="noopener">React 공식 - Server Components →</a></li>
+                    <li>📘 <a href="https://nextjs.org/docs/app/building-your-application/rendering/server-components" target="_blank" rel="noopener">Next.js Server Components 가이드 →</a></li>
+                    <li>📗 <a href="https://github.com/reactwg/server-components/discussions" target="_blank" rel="noopener">React Server Components Working Group →</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-container').querySelector('code');
+            navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+                button.textContent = '복사됨!';
+                setTimeout(() => button.textContent = '복사', 2000);
+            });
+        }
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

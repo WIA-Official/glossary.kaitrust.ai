@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데코레이터 (Decorator) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="함수나 클래스의 동작을 수정하는 래퍼. Python의 @decorator 문법. 메타프로그래밍에 활용.">
+    <meta name="keywords" content="데코레이터, Decorator, AI 용어, KAITRUST, AI 백과사전, 프로그래밍">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EB%8D%B0%EC%BD%94%EB%A0%88%EC%9D%B4%ED%84%B0/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EB%8D%B0%EC%BD%94%EB%A0%88%EC%9D%B4%ED%84%B0/">
+    <meta property="og:title" content="데코레이터 (Decorator) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="함수나 클래스의 동작을 수정하는 래퍼. Python의 @decorator 문법. 메타프로그래밍에 활용.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="데코레이터 (Decorator) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="함수나 클래스의 동작을 수정하는 래퍼. Python의 @decorator 문법. 메타프로그래밍에 활용.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "데코레이터",
+        "description": "함수나 클래스의 동작을 수정하는 래퍼. Python의 @decorator 문법. 메타프로그래밍에 활용.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 CSS */
+        .term-section {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            position: relative;
+            background: #1e293b;
+            border-radius: 12px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .code-lang {
+            color: #a855f7;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .copy-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .code-block pre {
+            padding: 1rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .conv-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .conv-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .conv-tab.active, .conv-tab:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.4);
+            color: #a855f7;
+        }
+        .conv-content { display: none; }
+        .conv-content.active { display: block; }
+        .conv-item {
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+        .conv-speaker {
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .conv-quote {
+            color: #cbd5e1;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .warning-list, .resource-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .warning-list li, .resource-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #cbd5e1;
+        }
+        .warning-list li:last-child, .resource-list li:last-child {
+            border-bottom: none;
+        }
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .related-term {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term:hover {
+            background: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+        .resource-list a {
+            color: #a855f7;
+            text-decoration: none;
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#prog">프로그래밍</a>
+            <span>›</span>
+            <span class="current">데코레이터</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>💻</span>
+                <span>프로그래밍</span>
+            </div>
+            <h1 class="term-title">데코레이터</h1>
+            <p class="term-english">Decorator</p>
+            <div class="term-description">
+                <p>함수나 클래스의 동작을 수정하는 래퍼. Python의 @decorator 문법. 메타프로그래밍에 활용.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#prog" class="term-action-btn btn-secondary">
+                    💻 프로그래밍 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>데코레이터는 함수나 클래스의 동작을 수정하거나 확장하는 디자인 패턴이자 문법입니다. Python에서는 @decorator 문법으로, JavaScript/TypeScript에서는 실험적 데코레이터 기능으로 널리 사용됩니다.</p>
+                <p>Python의 데코레이터는 본질적으로 함수를 인자로 받아 새 함수를 반환하는 고차 함수입니다. @log_time으로 함수를 꾸미면, 해당 함수 호출 전후에 시간을 측정하는 로직을 추가할 수 있습니다. 원본 함수 코드를 수정하지 않고도 기능을 확장하는 것입니다.</p>
+                <p>데코레이터는 횡단 관심사(cross-cutting concerns)를 처리하는 데 유용합니다. 로깅, 인증, 캐싱, 재시도 로직, 입력 검증 등 여러 함수에 공통으로 적용되는 기능을 데코레이터로 추출하면 코드 중복을 줄이고 관심사를 분리할 수 있습니다.</p>
+                <p>클래스 데코레이터는 클래스 전체를 감싸거나 수정합니다. Python의 @dataclass는 클래스에 __init__, __repr__ 등을 자동 생성합니다. 여러 데코레이터를 쌓아서 사용할 수 있으며, 아래에서 위로 적용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Python</span>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                </div>
+                <pre><code>import functools
+import time
+
+# 기본 데코레이터: 실행 시간 측정
+def timer(func):
+    @functools.wraps(func)  # 원본 함수의 메타데이터 보존
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} 실행 시간: {end - start:.4f}초")
+        return result
+    return wrapper
+
+# 인자를 받는 데코레이터
+def retry(max_attempts=3):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    print(f"시도 {attempt + 1} 실패: {e}")
+            raise Exception(f"{max_attempts}번 시도 모두 실패")
+        return wrapper
+    return decorator
+
+# 데코레이터 적용
+@timer
+@retry(max_attempts=3)
+def fetch_data(url):
+    print(f"데이터 가져오는 중: {url}")
+    return {"data": "결과"}
+
+# 클래스 메서드 데코레이터
+class API:
+    @staticmethod
+    def require_auth(func):
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):
+            if not self.is_authenticated:
+                raise PermissionError("인증 필요")
+            return func(self, *args, **kwargs)
+        return wrapper
+
+# 사용
+result = fetch_data("https://api.example.com")</code></pre>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무 대화 예시</h2>
+            <div class="conv-tabs">
+                <button class="conv-tab active" onclick="showConv(this, 'meeting')">💼 회의</button>
+                <button class="conv-tab" onclick="showConv(this, 'interview')">👔 면접</button>
+                <button class="conv-tab" onclick="showConv(this, 'review')">🔍 코드 리뷰</button>
+            </div>
+            <div id="meeting" class="conv-content active">
+                <div class="conv-item">
+                    <div class="conv-speaker">백엔드 개발자</div>
+                    <div class="conv-quote">"모든 API 엔드포인트에 인증 체크 코드가 중복되고 있어요. 데코레이터로 빼면 어떨까요?"</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-speaker">시니어 개발자</div>
+                    <div class="conv-quote">"좋아요. @require_auth 데코레이터를 만들면 각 핸들러에 한 줄만 추가하면 되니까 훨씬 깔끔해질 거예요."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-speaker">백엔드 개발자</div>
+                    <div class="conv-quote">"권한 레벨별로 다른 데코레이터를 만들어서 @require_admin, @require_user로 구분하면 더 좋겠네요."</div>
+                </div>
+            </div>
+            <div id="interview" class="conv-content">
+                <div class="conv-item">
+                    <div class="conv-speaker">면접관</div>
+                    <div class="conv-quote">"Python에서 데코레이터가 어떻게 동작하는지 설명해주세요."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-speaker">지원자</div>
+                    <div class="conv-quote">"데코레이터는 함수를 인자로 받아 새 함수를 반환하는 고차 함수입니다. @decorator는 func = decorator(func)와 동일합니다. 원본 함수를 감싸서 전처리나 후처리 로직을 추가합니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-speaker">면접관</div>
+                    <div class="conv-quote">"functools.wraps를 사용하는 이유는 무엇인가요?"</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-speaker">지원자</div>
+                    <div class="conv-quote">"데코레이터로 감싸면 원본 함수의 __name__, __doc__ 등 메타데이터가 래퍼 함수의 것으로 대체됩니다. wraps를 사용하면 원본 함수의 메타데이터가 보존되어 디버깅과 문서화에 유리합니다."</div>
+                </div>
+            </div>
+            <div id="review" class="conv-content">
+                <div class="conv-item">
+                    <div class="conv-speaker">리뷰어</div>
+                    <div class="conv-quote">"이 데코레이터에 functools.wraps가 빠져있네요. 추가하지 않으면 함수 이름이 wrapper로 보여서 디버깅이 어려워져요."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-speaker">작성자</div>
+                    <div class="conv-quote">"아, 맞아요. 프로덕션 로그에서 함수명을 추적해야 하는데 중요한 부분이네요. 바로 추가하겠습니다."</div>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-speaker">리뷰어</div>
+                    <div class="conv-quote">"그리고 데코레이터 순서도 확인해주세요. @cache 다음에 @timer를 붙이면 캐시 히트 시에도 시간이 측정돼서 의미 없는 로그가 남아요."</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+            <ul class="warning-list">
+                <li>⚠️ <strong>데코레이터 순서:</strong> 여러 데코레이터를 쌓을 때 순서가 중요합니다. 아래에서 위로 적용되므로 의도한 순서인지 확인하세요.</li>
+                <li>⚠️ <strong>테스트 어려움:</strong> 데코레이터로 감싼 함수는 직접 테스트하기 어려울 수 있습니다. 핵심 로직은 별도 함수로 분리하는 것을 고려하세요.</li>
+                <li>⚠️ <strong>과도한 사용:</strong> 너무 많은 데코레이터는 코드 흐름을 파악하기 어렵게 만듭니다. 정말 필요한 경우에만 사용하세요.</li>
+            </ul>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/%ED%81%B4%EB%A1%9C%EC%A0%80/" class="related-term">클로저</a>
+                <a href="/ko/term/%ED%95%A8%EC%88%98%ED%98%95%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D/" class="related-term">함수형 프로그래밍</a>
+                <a href="/ko/term/%EB%A9%94%EC%84%9C%EB%93%9C/" class="related-term">메서드</a>
+                <a href="/ko/term/%EC%BD%9C%EB%B0%B1/" class="related-term">콜백</a>
+                <a href="/ko/term/%ED%83%80%EC%9E%85/" class="related-term">타입</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <ul class="resource-list">
+                <li>📄 <a href="https://docs.python.org/ko/3/glossary.html#term-decorator" target="_blank" rel="noopener">Python 공식 문서 - 데코레이터</a></li>
+                <li>📘 <a href="https://realpython.com/primer-on-python-decorators/" target="_blank" rel="noopener">Real Python - Python 데코레이터 입문</a></li>
+                <li>🎬 <a href="https://www.youtube.com/results?search_query=python+decorator+tutorial" target="_blank" rel="noopener">YouTube - Python 데코레이터 튜토리얼</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+        function copyCode(btn) {
+            const code = btn.closest('.code-block').querySelector('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = '✅ 복사됨';
+                setTimeout(() => btn.textContent = originalText, 2000);
+            });
+        }
+        function showConv(btn, id) {
+            document.querySelectorAll('.conv-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.conv-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(id).classList.add('active');
+        }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Actions | Next.js 서버 함수 | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Server Actions는 Next.js의 서버 함수 기능으로, 'use server' 디렉티브로 클라이언트에서 직접 서버 함수를 호출합니다. 폼 제출, 데이터 뮤테이션을 API 없이 간소화합니다.">
+    <meta name="keywords" content="Server Actions, 서버 액션, Next.js, use server, 서버 함수, Form Action, 데이터 뮤테이션, revalidatePath, React 19, Progressive Enhancement, RPC, 웹개발">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Server%20Actions/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Server%20Actions/">
+    <meta property="og:title" content="Server Actions (Server Actions) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="Next.js의 서버 함수 호출 기능. 폼 제출, 데이터 변경 간소화.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Server Actions (Server Actions) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="Next.js의 서버 함수 호출 기능. 폼 제출, 데이터 변경 간소화.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Server Actions",
+        "description": "Next.js의 서버 함수 호출 기능. 폼 제출, 데이터 변경 간소화.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#web">웹개발</a>
+            <span>›</span>
+            <span class="current">Server Actions</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🌐</span>
+                <span>웹개발</span>
+            </div>
+            <h1 class="term-title">Server Actions</h1>
+            <p class="term-english">Server Actions</p>
+            <div class="term-description">
+                <p>Next.js의 서버 함수 호출 기능. 폼 제출, 데이터 변경 간소화.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#web" class="term-action-btn btn-secondary">
+                    🌐 웹개발 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📖 상세 설명</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">Server Actions는 Next.js 13.4부터 도입된 기능으로, 클라이언트 컴포넌트에서 직접 서버 함수를 호출할 수 있게 해줍니다. 'use server' 지시어를 사용하여 함수가 서버에서만 실행되도록 표시하며, API 라우트를 만들지 않고도 데이터 변경이 가능합니다.</p>
+                <p style="margin-bottom: 1rem;">Server Actions의 가장 큰 장점은 폼 처리의 단순화입니다. form의 action 속성에 서버 함수를 직접 전달하면, JavaScript가 비활성화된 환경에서도 동작하는 Progressive Enhancement를 자동으로 지원합니다.</p>
+                <p style="margin-bottom: 1rem;">Server Actions는 RPC(Remote Procedure Call) 패턴을 React에 자연스럽게 통합합니다. 클라이언트 번들에 서버 코드가 포함되지 않아 보안이 강화되며, 데이터베이스 쿼리나 외부 API 호출을 컴포넌트와 같은 파일에서 정의할 수 있습니다.</p>
+                <p>revalidatePath나 revalidateTag와 함께 사용하면 mutation 후 캐시를 자동으로 갱신할 수 있습니다. useFormStatus, useFormState 훅과 결합하여 로딩 상태 표시나 낙관적 업데이트도 구현할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">💻 코드 예제</h2>
+            <div style="position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+                <button onclick="copyCode(this)" style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(168, 85, 247, 0.3); border: none; border-radius: 8px; padding: 0.5rem 1rem; color: #e2e8f0; cursor: pointer; font-size: 0.8rem;">복사</button>
+                <pre style="margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;"><code>// app/actions.ts - Server Actions 정의
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
+import { db } from '@/lib/db';
+
+// 스키마 검증
+const PostSchema = z.object({
+  title: z.string().min(1, '제목을 입력하세요'),
+  content: z.string().min(10, '내용은 10자 이상이어야 합니다'),
+});
+
+// 폼 상태 타입
+type FormState = {
+  errors?: { title?: string[]; content?: string[] };
+  message?: string;
+};
+
+// 게시글 생성 Action
+export async function createPost(
+  prevState: FormState,
+  formData: FormData
+): Promise&lt;FormState&gt; {
+  // 유효성 검사
+  const validatedFields = PostSchema.safeParse({
+    title: formData.get('title'),
+    content: formData.get('content'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: '입력값을 확인해주세요.',
+    };
+  }
+
+  try {
+    await db.post.create({
+      data: validatedFields.data,
+    });
+  } catch (error) {
+    return { message: '게시글 작성에 실패했습니다.' };
+  }
+
+  revalidatePath('/posts');
+  redirect('/posts');
+}
+
+// 삭제 Action
+export async function deletePost(id: string) {
+  await db.post.delete({ where: { id } });
+  revalidatePath('/posts');
+}
+
+// app/posts/new/page.tsx - 폼 컴포넌트
+'use client';
+
+import { useFormState, useFormStatus } from 'react-dom';
+import { createPost } from '../actions';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    &lt;button type="submit" disabled={pending}&gt;
+      {pending ? '저장 중...' : '게시하기'}
+    &lt;/button&gt;
+  );
+}
+
+export default function NewPostForm() {
+  const [state, formAction] = useFormState(createPost, {});
+
+  return (
+    &lt;form action={formAction}&gt;
+      &lt;input name="title" placeholder="제목" /&gt;
+      {state.errors?.title &amp;&amp; &lt;p&gt;{state.errors.title[0]}&lt;/p&gt;}
+
+      &lt;textarea name="content" placeholder="내용" /&gt;
+      {state.errors?.content &amp;&amp; &lt;p&gt;{state.errors.content[0]}&lt;/p&gt;}
+
+      &lt;SubmitButton /&gt;
+      {state.message &amp;&amp; &lt;p&gt;{state.message}&lt;/p&gt;}
+    &lt;/form&gt;
+  );
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🗣️ 실무 대화 예시</h2>
+            <div style="color: #e2e8f0; line-height: 1.8;">
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #a855f7; font-weight: 600; margin-bottom: 0.5rem;">기술 미팅에서:</p>
+                    <p>"폼 제출용 API 라우트 따로 안 만들어도 돼요. Server Actions로 컴포넌트 파일에서 바로 서버 함수 정의하면 됩니다. 타입도 자동으로 공유되고요."</p>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <p style="color: #06b6d4; font-weight: 600; margin-bottom: 0.5rem;">기술 면접에서:</p>
+                    <p>"Server Actions의 보안상 장점은요?" - "'use server' 함수는 클라이언트 번들에 포함되지 않습니다. 서버에서만 실행되어 DB 연결 정보나 API 키가 노출되지 않아요."</p>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; padding: 1.5rem;">
+                    <p style="color: #22c55e; font-weight: 600; margin-bottom: 0.5rem;">코드 리뷰에서:</p>
+                    <p>"Server Action에서 에러 throw하면 클라이언트에 에러 메시지 그대로 노출돼요. 에러 객체 반환하는 패턴으로 바꾸고, 민감한 정보는 로깅만 하세요."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">⚠️ 주의사항</h2>
+            <ul style="color: #fbbf24; list-style: none; padding: 0;">
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">Server Action의 인자는 직렬화 가능해야 합니다. 함수, 클래스 인스턴스, 순환 참조 객체는 전달할 수 없습니다.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">인증/인가 검사를 반드시 Server Action 내부에서 수행하세요. 클라이언트에서 호출 가능하므로 권한 확인 없이 민감한 작업을 하면 안 됩니다.</span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #e2e8f0;">revalidatePath 없이 mutation하면 캐시된 데이터가 그대로 표시됩니다. 데이터 변경 후 관련 경로를 반드시 재검증하세요.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">🔗 관련 용어</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="/ko/term/React%20Server%20Components/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">React Server Components</a>
+                <a href="/ko/term/Next.js/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Next.js</a>
+                <a href="/ko/term/Form%20Validation/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Form Validation</a>
+                <a href="/ko/term/REST%20API/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">REST API</a>
+                <a href="/ko/term/Progressive%20Enhancement/" style="background: rgba(168, 85, 247, 0.2); color: #e2e8f0; padding: 0.75rem 1.25rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">Progressive Enhancement</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-detail-section" style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #f1f5f9;">📚 더 배우기</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Next.js 공식 문서 - Server Actions and Mutations
+                </a>
+                <a href="https://react.dev/reference/rsc/use-server" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> React 공식 문서 - 'use server'
+                </a>
+                <a href="https://nextjs.org/docs/app/building-your-application/data-fetching/forms-and-mutations" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span> Next.js - Forms and Mutations
+                </a>
+            </div>
+        </section>
+
+        <script>
+        function copyCode(button) { const code = button.parentElement.querySelector('code').innerText; navigator.clipboard.writeText(code).then(() => { button.textContent = '복사됨!'; setTimeout(() => button.textContent = '복사', 2000); }); }
+        </script>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

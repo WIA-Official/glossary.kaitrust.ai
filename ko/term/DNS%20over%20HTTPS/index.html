@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS over HTTPS | KAITRUST AI 백과사전</title>
+    <meta name="description" content="HTTPS로 DNS 쿼리를 암호화하는 프로토콜">
+    <meta name="keywords" content="DNS over HTTPS, , AI 용어, KAITRUST, AI 백과사전, 네트워크">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/DNS%20over%20HTTPS/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/DNS%20over%20HTTPS/">
+    <meta property="og:title" content="DNS over HTTPS | KAITRUST AI 백과사전">
+    <meta property="og:description" content="HTTPS로 DNS 쿼리를 암호화하는 프로토콜">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DNS over HTTPS | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="HTTPS로 DNS 쿼리를 암호화하는 프로토콜">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "DNS over HTTPS",
+        "description": "HTTPS로 DNS 쿼리를 암호화하는 프로토콜",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 비교 테이블 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .comparison-table th {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            background: rgba(0, 0, 0, 0.2);
+            color: #cbd5e1;
+        }
+        .comparison-table tr:hover td {
+            background: rgba(168, 85, 247, 0.1);
+        }
+
+        /* DNS 제공자 카드 */
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .provider-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .provider-name {
+            font-weight: 600;
+            color: #a855f7;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .provider-ip {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00f5ff;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .provider-url {
+            font-family: 'JetBrains Mono', monospace;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+        .provider-features {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#net">네트워크</a>
+            <span>›</span>
+            <span class="current">DNS over HTTPS</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🌍</span>
+                <span>네트워크</span>
+            </div>
+            <h1 class="term-title">DNS over HTTPS</h1>
+            
+            <div class="term-description">
+                <p>HTTPS로 DNS 쿼리를 암호화하는 프로토콜</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#net" class="term-action-btn btn-secondary">
+                    🌍 네트워크 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>DNS over HTTPS(DoH)는 HTTPS 프로토콜을 통해 DNS 쿼리를 암호화하여 전송하는 보안 프로토콜입니다. 기존 DNS는 평문으로 쿼리를 전송하기 때문에 ISP나 네트워크 관리자가 사용자가 어떤 웹사이트에 접속하는지 감청할 수 있었습니다. DoH는 이 문제를 해결하여 DNS 프라이버시를 보장합니다.</p>
+                <p>DoH는 2018년 RFC 8484로 표준화되었으며, Cloudflare와 Google이 선도적으로 도입했습니다. HTTPS 443 포트를 사용하기 때문에 일반 웹 트래픽과 구분이 불가능해서 검열을 우회할 수 있습니다. Firefox는 2020년부터 미국에서 DoH를 기본 활성화했고, Chrome, Edge, Safari 등 주요 브라우저도 지원합니다.</p>
+                <p>DoH와 유사한 프로토콜로 DoT(DNS over TLS)가 있습니다. DoT는 853 포트를 사용하며, 전용 포트 덕분에 네트워크 관리자가 DNS 트래픽을 별도로 관리할 수 있습니다. 반면 DoH는 웹 트래픽과 섞여서 블로킹이 어렵습니다. 기업 환경에서는 DoT, 개인 프라이버시가 중요한 경우 DoH가 선호됩니다.</p>
+                <p>대표적인 DoH 서버로는 Cloudflare 1.1.1.1(가장 빠름), Google 8.8.8.8(안정성), Quad9 9.9.9.9(보안 특화, 멀웨어 도메인 차단) 등이 있습니다. 한국에서는 1.1.1.1이 평균 10-20ms로 가장 빠른 응답 시간을 보여줍니다.</p>
+            </div>
+        </section>
+
+        <!-- DoH vs DoT 비교 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 DoH vs DoT 비교</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>DoH (DNS over HTTPS)</th>
+                        <th>DoT (DNS over TLS)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>포트</strong></td>
+                        <td>443 (HTTPS)</td>
+                        <td>853 (전용)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>프로토콜</strong></td>
+                        <td>HTTPS/HTTP2</td>
+                        <td>TLS 직접 연결</td>
+                    </tr>
+                    <tr>
+                        <td><strong>검열 우회</strong></td>
+                        <td>쉬움 (웹 트래픽과 구분 불가)</td>
+                        <td>어려움 (전용 포트 차단 가능)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>기업 관리</strong></td>
+                        <td>어려움 (모니터링 불가)</td>
+                        <td>쉬움 (포트 기반 정책 적용)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>성능</strong></td>
+                        <td>HTTP/2 오버헤드 존재</td>
+                        <td>더 빠름 (단순 TLS)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>브라우저 지원</strong></td>
+                        <td>Chrome, Firefox, Edge, Safari</td>
+                        <td>OS 레벨 설정 필요</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 주요 DoH 제공자 -->
+        <section class="term-section">
+            <h2 class="section-title">🌐 주요 DoH 제공자</h2>
+            <div class="provider-grid">
+                <div class="provider-card">
+                    <div class="provider-name">Cloudflare</div>
+                    <div class="provider-ip">1.1.1.1 / 1.0.0.1</div>
+                    <div class="provider-url">https://cloudflare-dns.com/dns-query</div>
+                    <div class="provider-features">가장 빠른 응답 속도, 개인정보 보호 중점, 24시간 로그 삭제</div>
+                </div>
+                <div class="provider-card">
+                    <div class="provider-name">Google Public DNS</div>
+                    <div class="provider-ip">8.8.8.8 / 8.8.4.4</div>
+                    <div class="provider-url">https://dns.google/dns-query</div>
+                    <div class="provider-features">높은 안정성, 전 세계 인프라, ECS 지원</div>
+                </div>
+                <div class="provider-card">
+                    <div class="provider-name">Quad9</div>
+                    <div class="provider-ip">9.9.9.9 / 149.112.112.112</div>
+                    <div class="provider-url">https://dns.quad9.net/dns-query</div>
+                    <div class="provider-features">보안 특화, 멀웨어/피싱 도메인 자동 차단, 비영리 재단</div>
+                </div>
+                <div class="provider-card">
+                    <div class="provider-name">NextDNS</div>
+                    <div class="provider-ip">개인 설정 IP 제공</div>
+                    <div class="provider-url">https://dns.nextdns.io/[설정ID]</div>
+                    <div class="provider-features">커스텀 필터링, 광고/트래커 차단, 상세 통계</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="curl">cURL</button>
+                <button class="code-tab" data-lang="python">Python</button>
+                <button class="code-tab" data-lang="javascript">JavaScript</button>
+            </div>
+            <div class="code-block active" data-lang="curl">
+                <pre><code class="language-bash"># DoH 쿼리 (Cloudflare) - JSON 형식
+curl -H "accept: application/dns-json" \
+  "https://cloudflare-dns.com/dns-query?name=google.com&type=A"
+
+# DoH 쿼리 (Google) - JSON 형식
+curl "https://dns.google/resolve?name=google.com&type=A"
+
+# DoH 쿼리 - DNS 와이어 형식 (바이너리)
+curl -H "accept: application/dns-message" \
+  "https://cloudflare-dns.com/dns-query?dns=AAABAAABAAAAAAAAB2dvb2dsZQNjb20AAAEAAQ"
+
+# 응답 시간 측정
+curl -w "DNS: %{time_namelookup}s, Total: %{time_total}s\n" -o /dev/null -s \
+  "https://cloudflare-dns.com/dns-query?name=example.com&type=A"
+
+# DoT 테스트 (853 포트, openssl 사용)
+echo -e '\x00\x1d\x01\x00\x00\x01\x00\x00\x00\x00\x00\x00\x07google\x03com\x00\x00\x01\x00\x01' | \
+  openssl s_client -connect 1.1.1.1:853 -quiet 2>/dev/null | xxd
+
+# 시스템 DoH 설정 (systemd-resolved, Linux)
+# /etc/systemd/resolved.conf 수정
+# [Resolve]
+# DNS=1.1.1.1#cloudflare-dns.com
+# DNSOverTLS=yes</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                
+                <pre><code class="language-python">import httpx  # pip install httpx
+import json
+
+# DoH 쿼리 (JSON API)
+def doh_query_json(domain: str, record_type: str = "A") -> dict:
+    """Cloudflare DoH JSON API로 DNS 쿼리"""
+    url = "https://cloudflare-dns.com/dns-query"
+    params = {"name": domain, "type": record_type}
+    headers = {"accept": "application/dns-json"}
+
+    response = httpx.get(url, params=params, headers=headers)
+    return response.json()
+
+# 사용 예시
+result = doh_query_json("google.com", "A")
+print(f"도메인: {result['Question'][0]['name']}")
+for answer in result.get('Answer', []):
+    print(f"  {answer['type']}: {answer['data']} (TTL: {answer['TTL']}s)")
+
+# Google DoH 쿼리
+def google_doh_query(domain: str) -> dict:
+    """Google DoH JSON API"""
+    url = f"https://dns.google/resolve?name={domain}&type=A"
+    response = httpx.get(url)
+    return response.json()
+
+# DoH 서버 응답 속도 비교
+import time
+
+DOH_SERVERS = {
+    "Cloudflare": "https://cloudflare-dns.com/dns-query?name=example.com&type=A",
+    "Google": "https://dns.google/resolve?name=example.com&type=A",
+    "Quad9": "https://dns.quad9.net:5053/dns-query?name=example.com&type=A"
+}
+
+for name, url in DOH_SERVERS.items():
+    start = time.time()
+    httpx.get(url, headers={"accept": "application/dns-json"})
+    latency = (time.time() - start) * 1000
+    print(f"{name}: {latency:.1f}ms")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="javascript">
+                
+                <pre><code class="language-javascript">// DoH 쿼리 (브라우저 / Node.js)
+async function dohQuery(domain, type = 'A') {
+    const url = `https://cloudflare-dns.com/dns-query?name=${domain}&type=${type}`;
+
+    const response = await fetch(url, {
+        headers: { 'accept': 'application/dns-json' }
+    });
+
+    return response.json();
+}
+
+// 사용 예시
+const result = await dohQuery('google.com', 'A');
+console.log('DNS 응답:', result);
+
+result.Answer?.forEach(record => {
+    console.log(`${record.name} -> ${record.data} (TTL: ${record.TTL}s)`);
+});
+
+// 여러 레코드 타입 조회
+async function fullDnsLookup(domain) {
+    const types = ['A', 'AAAA', 'MX', 'TXT', 'NS'];
+    const results = {};
+
+    await Promise.all(types.map(async type => {
+        try {
+            const data = await dohQuery(domain, type);
+            results[type] = data.Answer || [];
+        } catch (e) {
+            results[type] = [];
+        }
+    }));
+
+    return results;
+}
+
+// DNS 응답 시간 측정
+async function measureDohLatency(server, domain) {
+    const start = performance.now();
+    await fetch(`${server}?name=${domain}&type=A`, {
+        headers: { 'accept': 'application/dns-json' }
+    });
+    return performance.now() - start;
+}
+
+// 여러 DoH 서버 비교
+const servers = {
+    'Cloudflare': 'https://cloudflare-dns.com/dns-query',
+    'Google': 'https://dns.google/resolve',
+};
+
+for (const [name, url] of Object.entries(servers)) {
+    const latency = await measureDohLatency(url, 'example.com');
+    console.log(`${name}: ${latency.toFixed(1)}ms`);
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 팀 미팅에서</div>
+                    <blockquote class="conv-quote">
+                        "카페나 공항 같은 퍼블릭 와이파이에서 DNS 스누핑 위험이 있습니다. 회사 기기에 DoH를 기본 활성화하면 직원들의 웹 브라우징 프라이버시를 보호할 수 있어요. Cloudflare 1.1.1.1이나 NextDNS로 설정하면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 네트워크 팀과 논의할 때</div>
+                    <blockquote class="conv-quote">
+                        "DoH를 도입하면 기존 DNS 기반 보안 솔루션이 무력화될 수 있어요. 기업 환경에서는 DoT(853 포트)를 사용하거나, 내부 DoH 프록시를 구축해서 DNS 트래픽을 모니터링할 수 있게 해야 합니다. 아니면 Umbrella 같은 에이전트 기반 솔루션을 검토해보세요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "DoH와 DoT 모두 DNS 암호화 프로토콜이지만, DoH는 443 포트를 사용해서 일반 HTTPS 트래픽과 구분이 안 되고, DoT는 853 전용 포트를 사용해서 네트워크 관리가 가능합니다. 개인 프라이버시 목적이면 DoH가, 기업 보안 정책과 병행하려면 DoT가 적합합니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>기업 보안 정책과 충돌</strong>
+                        <p>DoH는 DNS 기반 콘텐츠 필터링, DLP 솔루션을 우회합니다. 기업 환경에서는 Firefox의 canary domain 체크를 활용하거나, 그룹 정책으로 DoH를 비활성화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>단일 DoH 서버 의존</strong>
+                        <p>DoH 서버 장애 시 DNS 해석이 불가능해집니다. Cloudflare + Google처럼 복수의 DoH 서버를 폴백으로 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>완전한 익명성 오해</strong>
+                        <p>DoH는 DNS 쿼리만 암호화합니다. SNI(Server Name Indication)를 통해 접속 도메인이 노출될 수 있습니다. 완전한 프라이버시를 원하면 ECH(Encrypted Client Hello)도 함께 사용해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 DoH 설정</strong>
+                        <p>브라우저별 설정: Chrome(설정 > 개인정보 > 보안 DNS), Firefox(설정 > 네트워크 설정 > HTTPS를 통한 DNS 활성화). OS 레벨은 Windows 11, iOS 14+, Android 9+에서 네이티브 지원합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/DNS/" class="related-term-link">DNS</a>
+                <a href="/ko/term/HTTPS/" class="related-term-link">HTTPS</a>
+                <a href="/ko/term/TLS/" class="related-term-link">TLS</a>
+                <a href="/ko/term/VPN/" class="related-term-link">VPN</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/" target="_blank" class="learn-link">
+                    📄 Cloudflare DoH 공식 문서
+                </a>
+                <a href="https://developers.google.com/speed/public-dns/docs/doh" target="_blank" class="learn-link">
+                    📖 Google Public DNS DoH 가이드
+                </a>
+                <a href="https://datatracker.ietf.org/doc/html/rfc8484" target="_blank" class="learn-link">
+                    📜 RFC 8484 - DNS over HTTPS 표준 명세
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Bedrock | KAITRUST AI 백과사전</title>
+    <meta name="description" content="AWS의 생성형 AI 서비스 플랫폼. Claude, Titan, Llama 등 다양한 FM 모델을 API로 제공.">
+    <meta name="keywords" content="AWS Bedrock, 생성형 AI, AI 용어, KAITRUST, AI 백과사전, 클라우드">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/AWS%20Bedrock/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/AWS%20Bedrock/">
+    <meta property="og:title" content="AWS Bedrock | KAITRUST AI 백과사전">
+    <meta property="og:description" content="AWS의 생성형 AI 서비스 플랫폼. Claude, Titan, Llama 등 다양한 FM 모델을 API로 제공.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AWS Bedrock | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="AWS의 생성형 AI 서비스 플랫폼. Claude, Titan, Llama 등 다양한 FM 모델을 API로 제공.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "AWS Bedrock",
+        "description": "AWS의 생성형 AI 서비스 플랫폼. Claude, Titan, Llama 등 다양한 FM 모델을 API로 제공.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#cloud">클라우드</a>
+            <span>›</span>
+            <span class="current">AWS Bedrock</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>☁️</span>
+                <span>클라우드</span>
+            </div>
+            <h1 class="term-title">AWS Bedrock</h1>
+            <p class="term-english">Amazon Bedrock</p>
+            <div class="term-description">
+                <p>AWS의 생성형 AI 서비스 플랫폼. Claude, Titan, Llama 등 다양한 FM 모델을 API로 제공.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#cloud" class="term-action-btn btn-secondary">
+                    ☁️ 클라우드 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>AWS Bedrock은 Amazon Web Services에서 제공하는 완전 관리형 생성형 AI 서비스입니다. Anthropic의 Claude, Meta의 Llama, Mistral AI, Amazon의 Titan 등 다양한 Foundation Model(FM)을 단일 API로 제공하여, 기업이 자체 인프라 구축 없이 최신 LLM을 활용한 애플리케이션을 개발할 수 있게 해줍니다.</p>
+                <p>2023년 9월 GA(정식 출시)되었으며, AWS의 기존 서비스들과 긴밀하게 통합됩니다. IAM으로 접근 제어, CloudWatch로 모니터링, S3에서 데이터 로드, Lambda/ECS에서 호출하는 등 AWS 생태계 내에서 자연스럽게 생성형 AI를 도입할 수 있습니다. 데이터가 AWS 리전 내에서 처리되어 규정 준수가 용이합니다.</p>
+                <p>Bedrock의 핵심 기능으로는 Knowledge Bases(RAG 자동화), Agents(도구 사용 및 워크플로우 자동화), Guardrails(콘텐츠 필터링 및 안전장치), Model Customization(미세 조정) 등이 있습니다. 특히 Knowledge Bases를 사용하면 S3의 문서를 벡터화하여 검색 증강 생성(RAG)을 코드 몇 줄로 구현할 수 있습니다.</p>
+                <p>실무에서 Bedrock은 기존 AWS 인프라를 사용하는 기업이 생성형 AI를 도입할 때 가장 빠른 경로입니다. 온디맨드 요금제로 사용한 토큰만큼만 비용을 지불하며, Provisioned Throughput으로 예약하면 처리량을 보장받고 비용도 절감할 수 있습니다. Claude 모델의 경우 Anthropic API 직접 사용 대비 AWS의 엔터프라이즈 지원을 받을 수 있다는 장점이 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python (boto3)</button>
+                <button class="code-tab" data-lang="streaming">스트리밍 응답</button>
+                <button class="code-tab" data-lang="rag">Knowledge Base RAG</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                
+                <pre><code class="language-python">import boto3
+import json
+
+# Bedrock Runtime 클라이언트 생성
+bedrock = boto3.client(
+    service_name='bedrock-runtime',
+    region_name='us-east-1'  # Bedrock 지원 리전
+)
+
+# Claude 3.5 Sonnet 호출
+def invoke_claude(prompt: str) -> str:
+    response = bedrock.invoke_model(
+        modelId='anthropic.claude-3-5-sonnet-20241022-v2:0',
+        contentType='application/json',
+        accept='application/json',
+        body=json.dumps({
+            "anthropic_version": "bedrock-2023-05-31",
+            "max_tokens": 4096,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        })
+    )
+
+    result = json.loads(response['body'].read())
+    return result['content'][0]['text']
+
+# 사용 예시
+response = invoke_claude("Python으로 퀵소트 알고리즘을 구현해줘")
+print(response)
+
+# Amazon Titan Text 호출
+def invoke_titan(prompt: str) -> str:
+    response = bedrock.invoke_model(
+        modelId='amazon.titan-text-premier-v1:0',
+        contentType='application/json',
+        accept='application/json',
+        body=json.dumps({
+            "inputText": prompt,
+            "textGenerationConfig": {
+                "maxTokenCount": 2048,
+                "temperature": 0.7,
+                "topP": 0.9
+            }
+        })
+    )
+
+    result = json.loads(response['body'].read())
+    return result['results'][0]['outputText']
+
+# Llama 3 호출
+def invoke_llama(prompt: str) -> str:
+    response = bedrock.invoke_model(
+        modelId='meta.llama3-70b-instruct-v1:0',
+        body=json.dumps({
+            "prompt": prompt,
+            "max_gen_len": 2048,
+            "temperature": 0.7
+        })
+    )
+
+    result = json.loads(response['body'].read())
+    return result['generation']</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="streaming" style="display: none;">
+                
+                <pre><code class="language-python">import boto3
+import json
+
+bedrock = boto3.client('bedrock-runtime', region_name='us-east-1')
+
+def stream_claude_response(prompt: str):
+    """Claude 응답을 스트리밍으로 받기"""
+    response = bedrock.invoke_model_with_response_stream(
+        modelId='anthropic.claude-3-5-sonnet-20241022-v2:0',
+        contentType='application/json',
+        accept='application/json',
+        body=json.dumps({
+            "anthropic_version": "bedrock-2023-05-31",
+            "max_tokens": 4096,
+            "messages": [
+                {"role": "user", "content": prompt}
+            ]
+        })
+    )
+
+    # 스트리밍 응답 처리
+    for event in response['body']:
+        chunk = json.loads(event['chunk']['bytes'])
+
+        if chunk['type'] == 'content_block_delta':
+            # 텍스트 델타 출력
+            text = chunk['delta'].get('text', '')
+            print(text, end='', flush=True)
+
+        elif chunk['type'] == 'message_stop':
+            # 응답 완료
+            print()  # 줄바꿈
+            break
+
+# 대화형 사용 예시
+def chat_with_history(messages: list, new_message: str):
+    """대화 히스토리를 유지하면서 채팅"""
+    messages.append({"role": "user", "content": new_message})
+
+    response = bedrock.invoke_model(
+        modelId='anthropic.claude-3-5-sonnet-20241022-v2:0',
+        body=json.dumps({
+            "anthropic_version": "bedrock-2023-05-31",
+            "max_tokens": 4096,
+            "system": "당신은 친절한 AI 어시스턴트입니다.",
+            "messages": messages
+        })
+    )
+
+    result = json.loads(response['body'].read())
+    assistant_message = result['content'][0]['text']
+    messages.append({"role": "assistant", "content": assistant_message})
+
+    return assistant_message
+
+# 사용
+conversation = []
+print(chat_with_history(conversation, "안녕하세요!"))
+print(chat_with_history(conversation, "AWS Bedrock에 대해 설명해주세요"))</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="rag" style="display: none;">
+                
+                <pre><code class="language-python">import boto3
+import json
+
+# Bedrock Agent Runtime (Knowledge Base용)
+bedrock_agent = boto3.client(
+    'bedrock-agent-runtime',
+    region_name='us-east-1'
+)
+
+def query_knowledge_base(
+    knowledge_base_id: str,
+    query: str,
+    model_arn: str = 'arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-5-sonnet-20241022-v2:0'
+):
+    """Knowledge Base에서 RAG 검색 후 응답 생성"""
+
+    response = bedrock_agent.retrieve_and_generate(
+        input={'text': query},
+        retrieveAndGenerateConfiguration={
+            'type': 'KNOWLEDGE_BASE',
+            'knowledgeBaseConfiguration': {
+                'knowledgeBaseId': knowledge_base_id,
+                'modelArn': model_arn,
+                'retrievalConfiguration': {
+                    'vectorSearchConfiguration': {
+                        'numberOfResults': 5  # 검색할 문서 수
+                    }
+                }
+            }
+        }
+    )
+
+    # 생성된 응답
+    generated_text = response['output']['text']
+
+    # 인용된 소스 문서
+    citations = response.get('citations', [])
+    sources = []
+    for citation in citations:
+        for ref in citation.get('retrievedReferences', []):
+            sources.append({
+                'content': ref['content']['text'][:200],
+                'location': ref['location']
+            })
+
+    return {
+        'answer': generated_text,
+        'sources': sources
+    }
+
+# 사용 예시
+result = query_knowledge_base(
+    knowledge_base_id='XXXXXXXXXX',  # AWS 콘솔에서 생성한 KB ID
+    query='회사 휴가 정책은 어떻게 되나요?'
+)
+
+print(f"답변: {result['answer']}")
+print(f"\n참조 문서: {len(result['sources'])}개")
+for src in result['sources']:
+    print(f"  - {src['location']}")
+
+# Knowledge Base 없이 직접 벡터 검색만
+def retrieve_only(knowledge_base_id: str, query: str):
+    """생성 없이 검색만 수행"""
+    response = bedrock_agent.retrieve(
+        knowledgeBaseId=knowledge_base_id,
+        retrievalQuery={'text': query},
+        retrievalConfiguration={
+            'vectorSearchConfiguration': {
+                'numberOfResults': 10
+            }
+        }
+    )
+
+    return [
+        {
+            'text': r['content']['text'],
+            'score': r['score'],
+            'location': r['location']
+        }
+        for r in response['retrievalResults']
+    ]</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 AI 도입 기획 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "Bedrock으로 가면 모델 호스팅 인프라 신경 안 써도 되고, Claude랑 Llama 같이 테스트해보면서 우리 유스케이스에 맞는 모델을 고를 수 있어요. Knowledge Base 기능 쓰면 S3에 있는 문서들로 RAG도 바로 구현됩니다. 데이터가 AWS 내에서만 처리되니까 보안팀 검토도 수월할 거예요."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">
+                        "Bedrock을 활용해서 사내 문서 검색 챗봇을 구축했습니다. Knowledge Base에 Confluence 문서를 동기화하고 Claude 3.5 Sonnet으로 응답을 생성했는데, Guardrails를 적용해서 민감 정보 노출을 방지했습니다. Lambda에서 호출하고 API Gateway로 노출해서 Slack 봇과 연동했고, 월 비용은 약 $200 수준이었습니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 비용 최적화 논의에서</div>
+                    <blockquote class="conv-quote">
+                        "Bedrock 비용이 예상보다 높은데, 로그 분석해보니까 프롬프트가 너무 길어요. 시스템 프롬프트를 캐싱하고, 대화 히스토리 요약으로 토큰을 줄여야 해요. 그리고 단순 질문은 Claude Haiku로 라우팅하고 복잡한 건 Sonnet으로 보내는 모델 라우터를 만들면 70% 정도 절감할 수 있습니다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>모델 액세스 요청 누락</strong>
+                        <p>Bedrock 모델은 AWS 콘솔에서 명시적으로 액세스를 요청해야 사용할 수 있습니다. "Model access" 메뉴에서 원하는 모델을 활성화하지 않으면 AccessDeniedException이 발생합니다. 일부 모델은 승인까지 시간이 걸릴 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>리전 제한 미확인</strong>
+                        <p>모든 Bedrock 모델이 모든 리전에서 사용 가능한 것은 아닙니다. Claude 최신 버전은 us-east-1, us-west-2 등 일부 리전에서만 지원됩니다. 서울 리전(ap-northeast-2) 지원 여부를 꼭 확인하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>프로덕션 모범 사례</strong>
+                        <p>Guardrails로 입출력 필터링을 적용하고, CloudWatch Logs로 모든 호출을 로깅하세요. 비용 알람을 설정하고, 고정 트래픽이 예상되면 Provisioned Throughput을 검토하세요. 민감 데이터는 PII 필터를 활성화하거나 호출 전에 마스킹 처리하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Lambda/" class="related-term-link">AWS Lambda</a>
+                <a href="/ko/term/AWS%20ECS/" class="related-term-link">AWS ECS</a>
+                <a href="/ko/term/S3/" class="related-term-link">S3</a>
+                <a href="/ko/term/IAM/" class="related-term-link">IAM</a>
+                <a href="/ko/term/Azure%20OpenAI/" class="related-term-link">Azure OpenAI</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html" target="_blank" class="learn-link">
+                    📄 AWS Bedrock 공식 문서
+                </a>
+                <a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" class="learn-link">
+                    💰 Bedrock 가격 정책 (모델별 토큰 단가)
+                </a>
+                <a href="https://github.com/aws-samples/amazon-bedrock-samples" target="_blank" class="learn-link">
+                    💻 Amazon Bedrock 샘플 코드 (GitHub)
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

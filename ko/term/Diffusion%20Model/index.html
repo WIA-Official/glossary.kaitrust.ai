@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diffusion Model | KAITRUST AI 백과사전</title>
+    <meta name="description" content="노이즈를 점진적으로 제거하여 이미지를 생성하는 생성 모델">
+    <meta name="keywords" content="Diffusion Model, , AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Diffusion%20Model/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Diffusion%20Model/">
+    <meta property="og:title" content="Diffusion Model | KAITRUST AI 백과사전">
+    <meta property="og:description" content="노이즈를 점진적으로 제거하여 이미지를 생성하는 생성 모델">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Diffusion Model | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="노이즈를 점진적으로 제거하여 이미지를 생성하는 생성 모델">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Diffusion Model",
+        "description": "노이즈를 점진적으로 제거하여 이미지를 생성하는 생성 모델",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">Diffusion Model</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">Diffusion Model</h1>
+            
+            <div class="term-description">
+                <p>노이즈를 점진적으로 제거하여 이미지를 생성하는 생성 모델</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Diffusion Model(확산 모델)은 데이터에 노이즈를 점진적으로 추가하는 과정을 학습한 뒤, 그 역과정을 통해 순수 노이즈에서 새로운 데이터를 생성하는 생성 모델입니다. 2020년 DDPM(Denoising Diffusion Probabilistic Models) 발표 이후 이미지 생성 분야에서 GAN을 대체하는 주류 패러다임이 되었습니다.</p>
+                <p>Diffusion Model의 발전 과정은 2015년 비평형 열역학 기반 이론 제시, 2020년 DDPM의 실용적 구현, 2021년 Latent Diffusion(Stable Diffusion의 기반), 2022년 DALL-E 2와 Imagen 발표로 이어집니다. 2023년 이후에는 ControlNet, IP-Adapter 등 제어 가능한 생성 기법과 DiT(Diffusion Transformer) 아키텍처가 등장하며 빠르게 진화 중입니다.</p>
+                <p>핵심 구성요소는 노이즈 스케줄러(Scheduler), 노이즈 예측 네트워크(U-Net 또는 Transformer), 조건부 임베딩(텍스트 인코더)입니다. 학습 시 무작위 타임스텝 t에서 노이즈가 추가된 이미지와 조건을 입력받아 추가된 노이즈를 예측합니다. 추론 시에는 순수 노이즈에서 시작해 예측 노이즈를 제거하는 스텝을 반복하여 이미지를 생성합니다.</p>
+                <p>실무에서 Diffusion Model은 Stable Diffusion, Midjourney, DALL-E 3 등 대표적인 이미지 생성 서비스의 핵심 엔진입니다. 텍스트-이미지 생성 외에도 이미지 편집(inpainting), 이미지 확장(outpainting), 스타일 변환, 비디오 생성(Sora) 등 다양한 응용이 가능합니다. 오픈소스 Stable Diffusion은 파인튜닝과 LoRA 학습을 통해 특정 도메인에 맞춤화할 수 있어 기업 활용도가 높습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                <pre><code># Hugging Face Diffusers로 이미지 생성
+from diffusers import StableDiffusionPipeline
+import torch
+
+# Stable Diffusion 모델 로드
+pipe = StableDiffusionPipeline.from_pretrained(
+    "stabilityai/stable-diffusion-2-1",
+    torch_dtype=torch.float16
+).to("cuda")
+
+# 메모리 최적화 (선택)
+pipe.enable_attention_slicing()
+pipe.enable_vae_slicing()
+
+# 텍스트-이미지 생성
+prompt = "A serene mountain landscape at sunset, photorealistic, 8k"
+negative_prompt = "blurry, low quality, distorted"
+
+image = pipe(
+    prompt=prompt,
+    negative_prompt=negative_prompt,
+    num_inference_steps=30,    # 샘플링 스텝 수
+    guidance_scale=7.5,         # CFG 강도
+    height=768,
+    width=768
+).images[0]
+
+image.save("generated_image.png")
+
+# 다양한 스케줄러 사용
+from diffusers import DPMSolverMultistepScheduler
+
+# 빠른 DPM-Solver 스케줄러로 교체 (20스텝으로 품질 유지)
+pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+fast_image = pipe(prompt, num_inference_steps=20).images[0]
+
+print("이미지 생성 완료!")</code></pre>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">AI 서비스 기획 회의에서</div>
+                    <p class="conv-quote">"이미지 생성 기능을 위해 Stable Diffusion XL 도입을 검토했습니다. 기본 SDXL은 1024x1024 네이티브 해상도를 지원하고, Refiner 모델로 디테일을 보강할 수 있어요. API 비용은 이미지당 약 0.02달러 수준입니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">기술 면접에서</div>
+                    <p class="conv-quote">"Latent Diffusion은 픽셀 공간 대신 VAE로 압축된 잠재 공간에서 디퓨전을 수행합니다. 512x512 이미지를 64x64 latent로 압축하면 연산량이 64배 줄어들어, 소비자 GPU에서도 고해상도 생성이 가능해진 핵심 혁신입니다."</p>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">모델 최적화 논의에서</div>
+                    <p class="conv-quote">"프로덕션 배포 시 속도가 중요하면 LCM(Latent Consistency Model) 적용을 권장합니다. 기본 50스텝이 4스텝으로 줄어들어 추론 시간이 90% 감소하면서도 품질 저하가 미미합니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div>
+                        <strong>저작권 및 라이선스 확인 필수</strong>
+                        <p>Stable Diffusion은 CreativeML Open RAIL-M 라이선스로 상업적 사용이 가능하지만, 학습 데이터 출처 논란이 있습니다. 기업 서비스에서는 Adobe Firefly처럼 학습 데이터 출처가 명확한 모델 사용을 검토하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div>
+                        <strong>NSFW 콘텐츠 필터링</strong>
+                        <p>Diffusion Model은 부적절한 콘텐츠를 생성할 수 있습니다. Safety Checker 모듈을 반드시 활성화하고, 프롬프트 필터링과 생성 이미지 검수 파이프라인을 구축해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">⚠️</span>
+                    <div>
+                        <strong>하드웨어 요구사항</strong>
+                        <p>SDXL 추론에는 최소 8GB VRAM, 학습에는 24GB 이상의 GPU가 필요합니다. 클라우드 배포 시 A10G(24GB) 또는 A100(40/80GB) 인스턴스 비용을 예산에 반영하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Diffusion/" class="related-term-link">Diffusion</a>
+                <a href="/ko/term/Stable%20Diffusion/" class="related-term-link">Stable Diffusion</a>
+                <a href="/ko/term/DiT/" class="related-term-link">DiT</a>
+                <a href="/ko/term/VAE/" class="related-term-link">VAE</a>
+                <a href="/ko/term/LoRA/" class="related-term-link">LoRA</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://huggingface.co/docs/diffusers" target="_blank" class="learn-link">
+                    <span>🤗</span> Hugging Face Diffusers 공식 문서
+                </a>
+                <a href="https://stability.ai/stable-diffusion" target="_blank" class="learn-link">
+                    <span>🎨</span> Stability AI - Stable Diffusion 공식 페이지
+                </a>
+                <a href="https://arxiv.org/abs/2112.10752" target="_blank" class="learn-link">
+                    <span>📄</span> Latent Diffusion Models 논문 (Stable Diffusion 기반)
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.style.display = block.dataset.lang === lang ? 'block' : 'none';
+            });
+        });
+    });
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

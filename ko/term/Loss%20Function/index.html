@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loss Function (손실 함수) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="예측과 실제 차이 측정. MSE, Cross-Entropy. 최적화 대상.">
+    <meta name="keywords" content="Loss Function, 손실 함수, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Loss%20Function/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Loss%20Function/">
+    <meta property="og:title" content="Loss Function (손실 함수) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="예측과 실제 차이 측정. MSE, Cross-Entropy. 최적화 대상.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Loss Function (손실 함수) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="예측과 실제 차이 측정. MSE, Cross-Entropy. 최적화 대상.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Loss Function",
+        "description": "예측과 실제 차이 측정. MSE, Cross-Entropy. 최적화 대상.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+        /* 고도화 섹션 스타일 */
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.4rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .section-content p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+        .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .code-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #94a3b8; cursor: pointer; }
+        .code-tab.active { background: rgba(168,85,247,0.2); border-color: #a855f7; color: #a855f7; }
+        .code-block { position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; }
+        .code-block pre { padding: 1.5rem; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168,85,247,0.3); border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.25rem; }
+        .conv-context { font-size: 0.9rem; color: #a855f7; font-weight: 500; margin-bottom: 0.75rem; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.7; margin: 0; padding-left: 1rem; border-left: 3px solid #a855f7; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { padding: 0.5rem 1rem; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 20px; color: #a855f7; text-decoration: none; }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 10px; color: #00f5ff; text-decoration: none; }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">Loss Function</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">Loss Function</h1>
+            <p class="term-english">손실 함수</p>
+            <div class="term-description">
+                <p>예측과 실제 차이 측정. MSE, Cross-Entropy. 최적화 대상.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 📖 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>손실 함수(Loss Function)는 모델의 예측값과 실제 정답 간의 차이를 수치화하는 함수입니다. 머신러닝과 딥러닝에서 모델 학습의 목표는 이 손실 함수 값을 최소화하는 것이며, 최적화 알고리즘(SGD, Adam 등)이 이를 달성합니다.</p>
+                <p>손실 함수의 역사는 통계학의 최소제곱법(1805년, Legendre)까지 거슬러 올라갑니다. 현대 딥러닝에서는 문제 유형에 따라 다양한 손실 함수를 사용하며, 적절한 손실 함수 선택이 모델 성능에 결정적인 영향을 미칩니다.</p>
+                <p>회귀 문제에는 MSE(Mean Squared Error), MAE(Mean Absolute Error), Huber Loss를 사용합니다. 분류 문제에는 Cross-Entropy Loss, Binary Cross-Entropy, Focal Loss를 사용합니다. 손실 함수는 미분 가능해야 역전파(Backpropagation)로 학습할 수 있습니다.</p>
+                <p>실무에서 손실 함수는 모델 학습 모니터링의 핵심 지표입니다. 학습/검증 손실 그래프를 통해 과적합을 탐지하고, 다중 목표에는 여러 손실 함수를 가중 합산하여 사용합니다. 커스텀 손실 함수로 비즈니스 목표에 맞는 최적화도 가능합니다.</p>
+            </div>
+        </section>
+
+        <!-- 💻 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="python">Python</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                
+                <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+# ===== 회귀 문제 손실 함수 =====
+y_true = torch.tensor([3.0, -0.5, 2.0, 7.0])
+y_pred = torch.tensor([2.5, 0.0, 2.0, 8.0])
+
+# MSE: Mean Squared Error (평균 제곱 오차)
+mse_loss = nn.MSELoss()
+print(f"MSE Loss: {mse_loss(y_pred, y_true):.4f}")  # 0.3750
+
+# MAE: Mean Absolute Error (평균 절대 오차)
+mae_loss = nn.L1Loss()
+print(f"MAE Loss: {mae_loss(y_pred, y_true):.4f}")  # 0.5000
+
+# Huber Loss: MSE와 MAE의 장점 결합 (이상치에 강건)
+huber_loss = nn.HuberLoss(delta=1.0)
+print(f"Huber Loss: {huber_loss(y_pred, y_true):.4f}")
+
+# ===== 분류 문제 손실 함수 =====
+# 이진 분류
+y_true_binary = torch.tensor([1.0, 0.0, 1.0, 0.0])
+y_pred_logits = torch.tensor([0.9, -0.5, 0.8, -1.0])
+
+bce_loss = nn.BCEWithLogitsLoss()
+print(f"Binary CE Loss: {bce_loss(y_pred_logits, y_true_binary):.4f}")
+
+# 다중 클래스 분류
+y_true_class = torch.tensor([0, 2, 1])  # 클래스 인덱스
+y_pred_logits = torch.tensor([
+    [2.0, 0.5, 0.3],   # 클래스 0 예측
+    [0.1, 0.2, 3.0],   # 클래스 2 예측
+    [0.5, 2.5, 0.1]    # 클래스 1 예측
+])
+
+ce_loss = nn.CrossEntropyLoss()
+print(f"Cross-Entropy Loss: {ce_loss(y_pred_logits, y_true_class):.4f}")
+
+# ===== 커스텀 손실 함수 =====
+class FocalLoss(nn.Module):
+    """클래스 불균형 문제에 효과적인 Focal Loss"""
+    def __init__(self, alpha=0.25, gamma=2.0):
+        super().__init__()
+        self.alpha = alpha
+        self.gamma = gamma
+
+    def forward(self, inputs, targets):
+        bce = F.binary_cross_entropy_with_logits(inputs, targets, reduction='none')
+        pt = torch.exp(-bce)
+        focal_loss = self.alpha * (1 - pt) ** self.gamma * bce
+        return focal_loss.mean()
+
+focal = FocalLoss()
+print(f"Focal Loss: {focal(y_pred_logits[:, 0], y_true_binary[:3]):.4f}")</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 🗣️ 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 회의에서</div>
+                    <blockquote class="conv-quote">"학습 Loss가 에폭 10에서 0.5로 수렴했는데, 검증 Loss는 0.8에서 더 이상 내려가지 않습니다. 과적합 징후로 보여서 Early Stopping을 적용하거나 Dropout을 높여야 할 것 같습니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 면접에서</div>
+                    <blockquote class="conv-quote">"분류 문제에 MSE 대신 Cross-Entropy를 쓰는 이유는 확률 분포 간의 차이를 더 잘 측정하기 때문입니다. MSE는 정답에 가까워질수록 그래디언트가 작아지지만, CE는 확률이 낮을 때 더 큰 페널티를 줘서 학습이 빠릅니다."</blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 기술 토론에서</div>
+                    <blockquote class="conv-quote">"사기 탐지처럼 클래스 불균형이 심한 문제에는 Focal Loss를 쓰거나, 클래스 가중치를 주는 Weighted Cross-Entropy가 효과적입니다. gamma=2로 설정하면 쉬운 샘플의 영향을 줄이고 어려운 샘플에 집중합니다."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⚠️ 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>분류에 MSE 사용</strong>
+                        <p>분류 문제에 MSE를 쓰면 확률 출력이 [0,1] 범위를 벗어나고, 학습 속도도 느립니다. 분류에는 Cross-Entropy를 사용해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 선택</strong>
+                        <p>회귀는 MSE/MAE, 분류는 CE를 기본으로 사용하세요. 이상치가 많으면 Huber Loss, 클래스 불균형에는 Focal Loss나 가중치 적용을 고려하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔗 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Cross-Entropy%20Loss/" class="related-term-link">Cross-Entropy Loss</a>
+                <a href="/ko/term/Gradient%20Descent/" class="related-term-link">Gradient Descent</a>
+                <a href="/ko/term/Backpropagation/" class="related-term-link">Backpropagation</a>
+                <a href="/ko/term/Optimizer/" class="related-term-link">Optimizer</a>
+                <a href="/ko/term/Overfitting/" class="related-term-link">Overfitting</a>
+            </div>
+        </section>
+
+        <!-- 📚 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://pytorch.org/docs/stable/nn.html#loss-functions" target="_blank" class="learn-link">📄 PyTorch 손실 함수 문서</a>
+                <a href="https://www.tensorflow.org/api_docs/python/tf/keras/losses" target="_blank" class="learn-link">🎓 TensorFlow Losses API</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

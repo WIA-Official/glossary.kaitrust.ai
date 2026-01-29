@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSL 종료 (SSL Termination) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="로드밸런서에서 SSL 복호화. 백엔드 부하 감소.">
+    <meta name="keywords" content="SSL 종료, SSL Termination, AI 용어, KAITRUST, AI 백과사전, 네트워크">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/SSL%20%EC%A2%85%EB%A3%8C/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/SSL%20%EC%A2%85%EB%A3%8C/">
+    <meta property="og:title" content="SSL 종료 (SSL Termination) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="로드밸런서에서 SSL 복호화. 백엔드 부하 감소.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SSL 종료 (SSL Termination) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="로드밸런서에서 SSL 복호화. 백엔드 부하 감소.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "SSL 종료",
+        "description": "로드밸런서에서 SSL 복호화. 백엔드 부하 감소.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#net">네트워크</a>
+            <span>›</span>
+            <span class="current">SSL 종료</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🌍</span>
+                <span>네트워크</span>
+            </div>
+            <h1 class="term-title">SSL 종료</h1>
+            <p class="term-english">SSL Termination</p>
+            <div class="term-description">
+                <p>로드밸런서에서 SSL 복호화. 백엔드 부하 감소.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#net" class="term-action-btn btn-secondary">
+                    🌍 네트워크 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>SSL 종료(SSL Termination, 또는 TLS Termination)는 로드밸런서나 리버스 프록시에서 암호화된 HTTPS 연결을 복호화하고, 백엔드 서버와는 평문 HTTP로 통신하는 아키텍처 패턴입니다. 클라이언트 → 로드밸런서 구간만 암호화되고, 로드밸런서 → 백엔드 서버 구간은 암호화되지 않습니다.</p>
+                <p>SSL/TLS 암호화와 복호화는 CPU 집약적인 작업입니다. 특히 TLS 핸드셰이크 과정에서 RSA 2048비트 키 교환은 단일 연결당 수 밀리초의 CPU 시간을 소모합니다. SSL 종료를 적용하면 이 부하가 전용 로드밸런서로 집중되어, 백엔드 서버는 비즈니스 로직에만 집중할 수 있습니다. AWS ALB에서는 초당 수만 개의 TLS 연결을 처리할 수 있습니다.</p>
+                <p>인증서 관리도 대폭 간소화됩니다. SSL 종료 없이는 모든 백엔드 서버에 인증서를 설치하고 갱신해야 하지만, SSL 종료를 사용하면 로드밸런서 한 곳에서만 인증서를 관리하면 됩니다. Let's Encrypt 자동 갱신이나 AWS Certificate Manager 같은 서비스와 결합하면 인증서 만료로 인한 장애 위험을 크게 줄일 수 있습니다.</p>
+                <p>보안 관점에서 SSL 종료는 트레이드오프가 있습니다. 내부 네트워크 구간이 평문으로 노출되므로, 신뢰할 수 있는 프라이빗 네트워크(VPC) 내에서만 사용해야 합니다. 금융, 의료 등 규제가 엄격한 환경에서는 end-to-end 암호화를 요구하는 경우가 있어, SSL Passthrough나 Re-encryption을 고려해야 할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="nginx">Nginx</button>
+                <button class="code-tab" data-lang="haproxy">HAProxy</button>
+                <button class="code-tab" data-lang="aws">AWS ALB</button>
+            </div>
+            <div class="code-block active" data-lang="nginx">
+                <pre><code class="language-nginx"># Nginx SSL 종료 설정
+# /etc/nginx/conf.d/ssl-termination.conf
+
+upstream backend_servers {
+    server 10.0.1.10:8080;  # 백엔드는 HTTP (8080)
+    server 10.0.1.11:8080;
+    server 10.0.1.12:8080;
+    keepalive 32;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name example.com;
+
+    # SSL 인증서 (Let's Encrypt 또는 상용 인증서)
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
+    # 최신 TLS 보안 설정
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256;
+    ssl_prefer_server_ciphers off;
+
+    # OCSP Stapling (인증서 유효성 검증 가속화)
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    # 백엔드로 HTTP 평문 전달
+    location / {
+        proxy_pass http://backend_servers;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+
+        # 원본 클라이언트 정보 전달
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;  # https
+    }
+}
+
+# HTTP → HTTPS 리다이렉트
+server {
+    listen 80;
+    server_name example.com;
+    return 301 https://$host$request_uri;
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="haproxy">
+                
+                <pre><code class="language-haproxy"># HAProxy SSL 종료 설정
+# /etc/haproxy/haproxy.cfg
+
+global
+    ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256
+    ssl-default-bind-options ssl-min-ver TLSv1.2
+    tune.ssl.default-dh-param 2048
+    maxconn 50000
+
+defaults
+    mode http
+    timeout connect 5s
+    timeout client 30s
+    timeout server 30s
+    option httplog
+
+# HTTPS 프론트엔드 (SSL 종료 지점)
+frontend https_front
+    bind *:443 ssl crt /etc/haproxy/certs/example.com.pem
+
+    # HSTS 헤더 추가
+    http-response set-header Strict-Transport-Security "max-age=31536000"
+
+    # 원본 정보 헤더 추가
+    http-request set-header X-Forwarded-Proto https
+    http-request set-header X-Real-IP %[src]
+
+    default_backend http_back
+
+# HTTP 리다이렉트
+frontend http_front
+    bind *:80
+    redirect scheme https code 301
+
+# 백엔드 (평문 HTTP)
+backend http_back
+    balance roundrobin
+    option httpchk GET /health
+
+    server web1 10.0.1.10:8080 check
+    server web2 10.0.1.11:8080 check
+    server web3 10.0.1.12:8080 check</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="aws">
+                
+                <pre><code class="language-yaml"># AWS ALB SSL 종료 - Terraform 설정
+# main.tf
+
+# ACM 인증서 (자동 갱신)
+resource "aws_acm_certificate" "main" {
+  domain_name       = "example.com"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+# Application Load Balancer
+resource "aws_lb" "main" {
+  name               = "main-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb.id]
+  subnets            = var.public_subnets
+}
+
+# HTTPS 리스너 (SSL 종료)
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = aws_acm_certificate.main.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.main.arn
+  }
+}
+
+# HTTP → HTTPS 리다이렉트
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+# 타겟 그룹 (백엔드는 HTTP)
+resource "aws_lb_target_group" "main" {
+  name     = "main-tg"
+  port     = 8080      # 백엔드는 평문 HTTP
+  protocol = "HTTP"    # SSL 없음
+  vpc_id   = var.vpc_id
+
+  health_check {
+    path                = "/health"
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+  }
+}</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 아키텍처 설계 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "SSL 종료를 ALB에서 처리하면 백엔드 EC2의 CPU 부하를 20-30% 줄일 수 있습니다. 인증서 관리도 ACM에서 자동 갱신되니까 운영 부담이 크게 줄어요. 다만 ALB와 백엔드 간 통신은 평문이니까 VPC 내부에서만 트래픽이 흐르도록 보안 그룹 설정을 확실히 해야 합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 검토 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "규제 요건상 end-to-end 암호화가 필요하다면 SSL Passthrough나 Re-encryption을 써야 합니다. Passthrough는 로드밸런서가 암호화를 건드리지 않고 그대로 전달하는 방식이고, Re-encryption은 로드밸런서에서 복호화 후 다시 암호화해서 백엔드로 보내는 방식입니다. 성능과 보안 사이의 트레이드오프를 고려해서 선택하시면 됩니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 장애 대응 상황에서</div>
+                    <blockquote class="conv-quote">
+                        "백엔드에서 X-Forwarded-Proto 헤더를 확인해보세요. SSL 종료 후 프록시가 이 헤더를 설정해줘야 앱에서 HTTPS 요청인지 알 수 있습니다. 이 헤더가 없으면 앱이 HTTP로 인식해서 무한 리다이렉트 루프가 발생할 수 있어요."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>내부 네트워크 보안 무시</strong>
+                        <p>SSL 종료 후 백엔드 구간이 평문이므로, 반드시 VPC/프라이빗 네트워크 내에서만 통신해야 합니다. 퍼블릭 네트워크에서 평문 통신은 중간자 공격(MITM) 위험이 있습니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>X-Forwarded 헤더 미설정</strong>
+                        <p>SSL 종료 후 X-Forwarded-Proto, X-Forwarded-For 헤더를 설정하지 않으면 백엔드에서 원본 클라이언트 IP와 프로토콜을 알 수 없습니다. 로깅, 보안 정책, HTTPS 리다이렉트 로직이 오작동합니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>인증서 만료 모니터링 부재</strong>
+                        <p>SSL 종료 지점의 인증서가 만료되면 전체 서비스가 다운됩니다. ACM 자동 갱신을 사용하거나, certbot 자동화와 함께 만료 30일 전 알림을 설정하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>올바른 SSL 종료 구성</strong>
+                        <p>TLS 1.2 이상만 허용, HSTS 헤더 설정, 강력한 암호화 스위트 사용. AWS라면 ELBSecurityPolicy-TLS13-1-2-2021-06 이상의 정책을 적용하고, CloudWatch로 SSL 핸드셰이크 오류를 모니터링하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/Load%20Balancer/" class="related-term-link">Load Balancer</a>
+                <a href="/ko/term/HTTPS/" class="related-term-link">HTTPS</a>
+                <a href="/ko/term/TLS/" class="related-term-link">TLS</a>
+                <a href="/ko/term/Reverse%20Proxy/" class="related-term-link">Reverse Proxy</a>
+                <a href="/ko/term/CDN/" class="related-term-link">CDN</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.nginx.com/resources/glossary/ssl-termination/" target="_blank" class="learn-link">
+                    📄 Nginx - SSL Termination 공식 가이드
+                </a>
+                <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html" target="_blank" class="learn-link">
+                    📖 AWS ALB HTTPS 리스너 설정 문서
+                </a>
+                <a href="https://www.cloudflare.com/learning/ssl/what-is-ssl-termination/" target="_blank" class="learn-link">
+                    🎓 Cloudflare - SSL Termination 설명
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

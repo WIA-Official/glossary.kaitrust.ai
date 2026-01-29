@@ -303,13 +303,44 @@
             font-size: 0.8rem;
         }
     </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
 </head>
 <body>
     <!-- Particle Background -->
     <div class="particle-container" id="particles"></div>
 
     <!-- Header -->
-    <div id="kaitrust-header"></div>
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
 
     <main class="term-detail-container">
         <!-- Breadcrumb -->
@@ -385,7 +416,8 @@
 
             <h3>1. SurrealDB 시작 및 기본 CRUD</h3>
             <div class="code-label">SurrealQL</div>
-            <div class="code-block"><code>-- SurrealDB 서버 시작 (메모리 모드)
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>-- SurrealDB 서버 시작 (메모리 모드)
 -- surreal start memory --user root --pass root
 
 -- 네임스페이스와 데이터베이스 선택
@@ -424,7 +456,8 @@ DELETE user:john;</code></div>
 
             <h3>2. 그래프 관계 (Record Links)</h3>
             <div class="code-label">SurrealQL</div>
-            <div class="code-block"><code>-- 사용자와 게시글 생성
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>-- 사용자와 게시글 생성
 CREATE user:alice SET name = 'Alice';
 CREATE user:bob SET name = 'Bob';
 CREATE user:charlie SET name = 'Charlie';
@@ -459,7 +492,8 @@ FROM user;</code></div>
 
             <h3>3. JavaScript/TypeScript 클라이언트</h3>
             <div class="code-label">TypeScript</div>
-            <div class="code-block"><code>import Surreal from 'surrealdb.js';
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>import Surreal from 'surrealdb.js';
 
 const db = new Surreal();
 
@@ -515,7 +549,8 @@ async function subscribeToMessages(roomId: string, onMessage: (msg: Message) => 
 
             <h3>4. 스키마 정의와 권한</h3>
             <div class="code-label">SurrealQL</div>
-            <div class="code-block"><code>-- 테이블 스키마 정의
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>-- 테이블 스키마 정의
 DEFINE TABLE user SCHEMAFULL;
 DEFINE FIELD name ON user TYPE string;
 DEFINE FIELD email ON user TYPE string ASSERT string::is::email($value);
@@ -552,7 +587,8 @@ DEFINE SCOPE user_scope
 
             <h3>5. 실시간 구독 (Live Queries)</h3>
             <div class="code-label">TypeScript</div>
-            <div class="code-block"><code>// 실시간 변경 감지
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">복사</button><code>// 실시간 변경 감지
 async function setupRealtimeChat(roomId: string) {
     const db = new Surreal();
     await db.connect('ws://localhost:8000/rpc');
@@ -664,13 +700,22 @@ async function sendMessage(roomId: string, content: string, userId: string) {
     </main>
 
     <!-- Footer -->
-    <div id="kaitrust-footer"></div>
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
 
     <!-- Scripts -->
     <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
     <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
     <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
     <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
-    <script src="https://kaitrust.ai/components/site-kit/kaitrust-site-kit.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
 </body>
 </html>

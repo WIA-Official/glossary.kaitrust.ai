@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>토큰 (Token) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="LLM이 처리하는 텍스트의 기본 단위. 단어나 서브워드. 컨텍스트 윈도우 크기 결정.">
+    <meta name="keywords" content="토큰, Token, AI 용어, KAITRUST, AI 백과사전, AI/ML">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%ED%86%A0%ED%81%B0/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%ED%86%A0%ED%81%B0/">
+    <meta property="og:title" content="토큰 (Token) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="LLM이 처리하는 텍스트의 기본 단위. 단어나 서브워드. 컨텍스트 윈도우 크기 결정.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="토큰 (Token) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="LLM이 처리하는 텍스트의 기본 단위. 단어나 서브워드. 컨텍스트 윈도우 크기 결정.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "토큰",
+        "description": "LLM이 처리하는 텍스트의 기본 단위. 단어나 서브워드. 컨텍스트 윈도우 크기 결정.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .related-section {
+            margin-top: 3rem;
+        }
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+        .term-section { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: #f1f5f9; }
+        .section-content { color: #cbd5e1; line-height: 1.8; }
+        .section-content p { margin-bottom: 1rem; }
+        .code-block { position: relative; background: #1e293b; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+        .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.3); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 6px; color: #e2e8f0; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+        .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .spec-table th, .spec-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+        .spec-table th { background: rgba(168, 85, 247, 0.1); color: #a855f7; font-weight: 600; }
+        .conversation-examples { display: flex; flex-direction: column; gap: 1rem; }
+        .conv-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 1.25rem; border-left: 3px solid #a855f7; }
+        .conv-context { font-size: 0.85rem; color: #a855f7; margin-bottom: 0.5rem; font-weight: 500; }
+        .conv-quote { color: #e2e8f0; font-style: italic; line-height: 1.6; }
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; }
+        .warning-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .warning-content h4 { color: #f1f5f9; margin-bottom: 0.25rem; font-size: 1rem; }
+        .warning-content p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link { display: inline-block; padding: 0.5rem 1rem; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; color: #c4b5fd; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .related-term-link:hover { background: rgba(168, 85, 247, 0.3); transform: translateY(-2px); }
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link { display: flex; align-items: center; gap: 0.75rem; color: #94a3b8; text-decoration: none; padding: 0.75rem; background: rgba(30, 41, 59, 0.3); border-radius: 8px; transition: all 0.2s; }
+        .learn-link:hover { background: rgba(30, 41, 59, 0.6); color: #e2e8f0; }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#ai">AI/ML</a>
+            <span>›</span>
+            <span class="current">토큰</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🤖</span>
+                <span>AI/ML</span>
+            </div>
+            <h1 class="term-title">토큰</h1>
+            <p class="term-english">Token</p>
+            <div class="term-description">
+                <p>LLM이 처리하는 텍스트의 기본 단위. 단어나 서브워드. 컨텍스트 윈도우 크기 결정.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#ai" class="term-action-btn btn-secondary">
+                    🤖 AI/ML 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>토큰(Token)은 대규모 언어 모델(LLM)이 텍스트를 처리하는 기본 단위입니다. 모델은 텍스트를 단어, 서브워드(subword), 또는 문자 수준의 조각으로 분할하여 처리하는데, 이 각각의 조각이 토큰입니다. 영어에서는 평균적으로 1개 토큰이 약 4글자(0.75단어)에 해당하고, 한국어는 형태소 특성상 1글자당 1-2토큰이 사용되는 경우가 많습니다.</p>
+
+                <p>토큰화(Tokenization)의 역사는 자연어 처리의 발전과 함께합니다. 초기에는 공백 기반 단어 분리나 문자 단위 분리가 사용되었지만, 2016년 BPE(Byte Pair Encoding)가 등장하면서 서브워드 토큰화가 표준이 되었습니다. 이후 WordPiece(BERT), SentencePiece(T5), Tiktoken(GPT) 등 다양한 토크나이저가 개발되었습니다. 2024-2025년에는 Llama 3의 128K 어휘와 Claude의 개선된 다국어 토큰화가 주목받고 있습니다.</p>
+
+                <p>토큰화는 LLM의 성능과 비용에 직접적인 영향을 미칩니다. 어휘 크기(vocabulary size)가 클수록 더 적은 토큰으로 같은 텍스트를 표현할 수 있어 효율적이지만, 임베딩 테이블 크기도 커집니다. GPT-4는 약 100K 어휘를 사용하고, Llama 3는 128K 어휘로 다국어 효율성을 높였습니다. 토큰 수는 API 비용(입력/출력 토큰당 과금), 컨텍스트 윈도우 한계, 응답 속도에 모두 영향을 줍니다.</p>
+
+                <p>실무에서 토큰은 프롬프트 엔지니어링과 비용 최적화의 핵심입니다. 긴 문서를 처리할 때는 토큰 수를 미리 계산하여 컨텍스트 윈도우를 초과하지 않도록 해야 하고, 청킹(chunking) 전략을 수립해야 합니다. 또한 특수 토큰(BOS, EOS, PAD 등)의 역할을 이해해야 모델을 올바르게 활용할 수 있습니다. OpenAI의 tiktoken, Hugging Face의 tokenizers 라이브러리가 실무에서 널리 사용됩니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="section-content">
+                <p>다양한 토크나이저 활용 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># OpenAI tiktoken 토크나이저
+# pip install tiktoken
+
+import tiktoken
+
+# GPT-4 토크나이저 로드
+enc = tiktoken.encoding_for_model("gpt-4")
+
+# 텍스트 토큰화
+text = "안녕하세요, 인공지능 토큰화를 알아봅시다!"
+tokens = enc.encode(text)
+
+print(f"원본 텍스트: {text}")
+print(f"토큰 수: {len(tokens)}")
+print(f"토큰 ID: {tokens}")
+
+# 각 토큰을 텍스트로 디코딩
+for token_id in tokens:
+    token_text = enc.decode([token_id])
+    print(f"  {token_id} -> '{token_text}'")
+
+# 토큰 수 미리 계산 (비용 예측용)
+def estimate_tokens(text, model="gpt-4"):
+    enc = tiktoken.encoding_for_model(model)
+    return len(enc.encode(text))
+
+long_text = "..." * 100
+print(f"\n긴 텍스트 토큰 수: {estimate_tokens(long_text)}")
+
+# 토큰 제한에 맞게 텍스트 자르기
+def truncate_to_tokens(text, max_tokens, model="gpt-4"):
+    enc = tiktoken.encoding_for_model(model)
+    tokens = enc.encode(text)
+    if len(tokens) > max_tokens:
+        tokens = tokens[:max_tokens]
+    return enc.decode(tokens)
+
+truncated = truncate_to_tokens(text, 10)
+print(f"잘린 텍스트: {truncated}")</code></pre>
+                </div>
+
+                <p>Hugging Face Transformers 토크나이저 예제입니다.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+                    <pre><code># Hugging Face 토크나이저
+# pip install transformers
+
+from transformers import AutoTokenizer
+
+# 다양한 모델의 토크나이저
+models = {
+    "GPT-2": "gpt2",
+    "BERT": "bert-base-uncased",
+    "Llama": "meta-llama/Llama-2-7b-hf",
+    "Korean": "beomi/kcbert-base"
+}
+
+text_en = "Hello, this is a tokenization example."
+text_ko = "안녕하세요, 토큰화 예제입니다."
+
+for name, model_id in models.items():
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_id)
+        tokens_en = tokenizer.encode(text_en)
+        tokens_ko = tokenizer.encode(text_ko)
+
+        print(f"\n{name} 모델:")
+        print(f"  영어 토큰 수: {len(tokens_en)}")
+        print(f"  한국어 토큰 수: {len(tokens_ko)}")
+        print(f"  어휘 크기: {tokenizer.vocab_size:,}")
+    except:
+        print(f"\n{name} 모델: 로드 실패 (인증 필요)")
+
+# 특수 토큰 확인
+tokenizer = AutoTokenizer.from_pretrained("gpt2")
+print(f"\n특수 토큰:")
+print(f"  BOS (시작): {tokenizer.bos_token}")
+print(f"  EOS (종료): {tokenizer.eos_token}")
+print(f"  PAD (패딩): {tokenizer.pad_token}")
+print(f"  UNK (미지): {tokenizer.unk_token}")
+
+# 배치 토큰화 (패딩 포함)
+texts = ["짧은 문장", "이것은 조금 더 긴 문장입니다."]
+encoded = tokenizer(texts, padding=True, return_tensors="pt")
+print(f"\n배치 토큰화 결과:")
+print(f"  input_ids shape: {encoded['input_ids'].shape}")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 성능 & 비용 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📊 성능 & 비용</h2>
+            <div class="section-content">
+                <p>2025년 1월 기준 주요 LLM API 토큰 가격입니다.</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>모델</th>
+                        <th>입력 (1M 토큰)</th>
+                        <th>출력 (1M 토큰)</th>
+                        <th>컨텍스트</th>
+                    </tr>
+                    <tr>
+                        <td>GPT-4o</td>
+                        <td>$2.50</td>
+                        <td>$10.00</td>
+                        <td>128K</td>
+                    </tr>
+                    <tr>
+                        <td>GPT-4o-mini</td>
+                        <td>$0.15</td>
+                        <td>$0.60</td>
+                        <td>128K</td>
+                    </tr>
+                    <tr>
+                        <td>Claude 3.5 Sonnet</td>
+                        <td>$3.00</td>
+                        <td>$15.00</td>
+                        <td>200K</td>
+                    </tr>
+                    <tr>
+                        <td>Gemini 1.5 Pro</td>
+                        <td>$1.25</td>
+                        <td>$5.00</td>
+                        <td>2M</td>
+                    </tr>
+                </table>
+                <p>언어별 토큰 효율성 비교 (같은 의미의 문장):</p>
+                <table class="spec-table">
+                    <tr>
+                        <th>언어</th>
+                        <th>GPT-4 토큰</th>
+                        <th>Llama 3 토큰</th>
+                        <th>효율성</th>
+                    </tr>
+                    <tr>
+                        <td>영어</td>
+                        <td>~15</td>
+                        <td>~12</td>
+                        <td>가장 효율적</td>
+                    </tr>
+                    <tr>
+                        <td>한국어</td>
+                        <td>~35</td>
+                        <td>~25</td>
+                        <td>영어 대비 2-3배</td>
+                    </tr>
+                    <tr>
+                        <td>일본어</td>
+                        <td>~40</td>
+                        <td>~30</td>
+                        <td>영어 대비 2-3배</td>
+                    </tr>
+                    <tr>
+                        <td>중국어</td>
+                        <td>~25</td>
+                        <td>~20</td>
+                        <td>영어 대비 1.5-2배</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="section-content">
+                <div class="conversation-examples">
+                    <div class="conv-item">
+                        <div class="conv-context">💬 회의에서</div>
+                        <div class="conv-quote">"RAG 시스템에서 문서를 500토큰 단위로 청킹하고 있는데, 한국어는 토큰 효율이 낮아서 실제 텍스트 양은 영어의 절반 정도입니다. 청크 사이즈를 조정하거나 문자 수 기준으로 변경하는 것을 검토 중입니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 면접에서</div>
+                        <div class="conv-quote">"BPE 토크나이저의 작동 원리를 설명하면, 먼저 개별 문자로 시작해서 가장 빈번한 문자 쌍을 반복적으로 병합합니다. 이렇게 하면 자주 나오는 단어는 하나의 토큰이 되고, 희귀 단어는 여러 서브워드로 분리됩니다."</div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-context">💬 기술 토론에서</div>
+                        <div class="conv-quote">"토큰 수 최적화가 비용에 직결됩니다. 시스템 프롬프트를 500토큰에서 200토큰으로 줄이면, 하루 100만 요청 기준으로 GPT-4 비용이 월 수백 달러 절감돼요. 의미 손실 없이 압축하는 게 핵심입니다."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 흔한 실수 & 주의사항</h2>
+            <div class="section-content">
+                <div class="warning-list">
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>토큰 수 = 단어 수로 착각</h4>
+                            <p>토큰과 단어는 다릅니다. "tokenization"은 1단어지만 3토큰일 수 있고, 한국어 "안녕하세요"는 1단어지만 3-5토큰으로 분리됩니다. 항상 토크나이저로 실제 토큰 수를 확인하세요.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">❌</div>
+                        <div class="warning-content">
+                            <h4>모델별 토크나이저 차이 무시</h4>
+                            <p>GPT, Claude, Llama는 각각 다른 토크나이저를 사용합니다. 같은 텍스트도 모델마다 토큰 수가 다르므로, 사용하는 모델의 토크나이저로 계산해야 정확합니다.</p>
+                        </div>
+                    </div>
+                    <div class="warning-item">
+                        <div class="warning-icon">✅</div>
+                        <div class="warning-content">
+                            <h4>올바른 접근법</h4>
+                            <p>tiktoken(OpenAI)이나 transformers 라이브러리로 사전에 토큰 수를 계산하세요. 컨텍스트 윈도우의 80% 이내로 유지하고, 긴 문서는 의미 단위로 청킹하여 처리하세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="section-content">
+                <div class="related-terms">
+                    <a href="/ko/term/%ED%86%A0%ED%81%B0%20%EC%9C%88%EB%8F%84%EC%9A%B0/" class="related-term-link">토큰 윈도우</a>
+                    <a href="/ko/term/Embedding/" class="related-term-link">임베딩 (Embedding)</a>
+                    <a href="/ko/term/LLM/" class="related-term-link">LLM (대규모 언어 모델)</a>
+                    <a href="/ko/term/Prompt%20Engineering/" class="related-term-link">프롬프트 엔지니어링</a>
+                    <a href="/ko/term/RAG/" class="related-term-link">RAG</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 더 배우기 섹션 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="section-content">
+                <div class="learn-more">
+                    <a href="https://github.com/openai/tiktoken" target="_blank" class="learn-link">
+                        📄 OpenAI tiktoken - GPT 토크나이저 라이브러리
+                    </a>
+                    <a href="https://huggingface.co/docs/transformers/tokenizer_summary" target="_blank" class="learn-link">
+                        🎓 Hugging Face 토크나이저 가이드
+                    </a>
+                    <a href="https://platform.openai.com/tokenizer" target="_blank" class="learn-link">
+                        🔧 OpenAI Tokenizer 웹 도구
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> | 
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

