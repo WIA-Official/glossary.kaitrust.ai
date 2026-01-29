@@ -836,7 +836,7 @@ PB AI 백과사전`;
         // Listen for language change
         window.addEventListener('wia-language-changed', () => {
             // Refresh UI with new language
-            location.reload();
+            // location.reload(); // 비활성화 - 무한 루프 방지
         });
     }
 
