@@ -1,17 +1,20 @@
 /**
  * KAITRUST AI 백과사전 - 용어 상세 섹션 스타일
- * @version 2.0.0
- * @description 고도화된 용어 페이지 6개 섹션 스타일링
+ * @version 3.0.0
+ * @description 고도화된 용어 페이지 6개 섹션 스타일링 - 다크/라이트 모드 완전 지원
  */
 
-/* ===== 기본 섹션 컨테이너 ===== */
+/* ===== 다크 모드 기본 (DEFAULT) ===== */
+
+/* 기본 섹션 컨테이너 */
 .term-section {
-    background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
-    border: 1px solid rgba(168, 85, 247, 0.2);
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.8)) !important;
+    border: 1px solid rgba(168, 85, 247, 0.3) !important;
     border-radius: 20px;
     padding: 2rem;
     margin-bottom: 2rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #f1f5f9 !important;
 }
 
 .term-section:hover {
@@ -19,19 +22,57 @@
     box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15);
 }
 
-.section-title {
+/* 섹션 제목 - 다크 모드에서 밝은 색 */
+.section-title,
+.term-section h2,
+.term-section h3,
+.term-section h4 {
     font-size: 1.4rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
-    color: #f1f5f9;
+    color: #ffffff !important;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
+.term-section h3 {
+    font-size: 1.2rem;
+}
+
+.term-section h4 {
+    font-size: 1.1rem;
+}
+
+/* 모든 텍스트 - 다크 모드에서 밝은 색 */
+.term-section p,
+.term-section li,
+.term-section span,
+.term-section div,
+.detail-content p,
+.detail-content li,
+.detail-content span {
+    color: #e2e8f0 !important;
+    line-height: 1.8;
+}
+
+.term-section p {
+    margin-bottom: 1rem;
+}
+
+.term-section li {
+    margin-bottom: 0.5rem;
+}
+
+/* 강조 텍스트 */
+.term-section strong {
+    color: #c4b5fd !important;
+    font-weight: 600;
+}
+
 /* ===== 상세 설명 섹션 ===== */
 .detail-content p {
-    color: #cbd5e1;
+    color: #e2e8f0 !important;
     line-height: 1.8;
     margin-bottom: 1rem;
 }
@@ -715,24 +756,49 @@
     }
 }
 
-/* ===== 라이트 모드 지원 ===== */
+/* ===== 라이트 모드 완전 지원 (body.light-mode) ===== */
+
+/* 기본 섹션 컨테이너 - 라이트 모드 */
 body.light-mode .term-section {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
+    color: #1e293b !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
 }
 
-body.light-mode .section-title {
+body.light-mode .term-section:hover {
+    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.15) !important;
+    border-color: #c4b5fd !important;
+}
+
+/* 섹션 제목 - 라이트 모드 */
+body.light-mode .section-title,
+body.light-mode .term-section h2,
+body.light-mode .term-section h3,
+body.light-mode .term-section h4 {
     color: #1e293b !important;
 }
 
-body.light-mode .detail-content p,
+/* 모든 텍스트 - 라이트 모드 */
 body.light-mode .term-section p,
-body.light-mode .term-section li {
+body.light-mode .term-section li,
+body.light-mode .term-section span,
+body.light-mode .term-section div,
+body.light-mode .detail-content p,
+body.light-mode .detail-content li,
+body.light-mode .detail-content span {
     color: #334155 !important;
 }
 
+/* 강조 텍스트 - 라이트 모드 */
+body.light-mode .term-section strong {
+    color: #7c3aed !important;
+}
+
+/* 코드 블록 - 라이트 모드 (다크 유지) */
 body.light-mode .code-block {
     background: #1e293b !important;
+    border: 1px solid #334155 !important;
 }
 
 body.light-mode .code-block code,
@@ -740,94 +806,511 @@ body.light-mode .code-block pre {
     color: #e2e8f0 !important;
 }
 
-body.light-mode .copy-btn {
-    background: rgba(168, 85, 247, 0.2) !important;
+body.light-mode .code-label {
     color: #7c3aed !important;
 }
 
+/* 복사 버튼 - 라이트 모드 */
+body.light-mode .copy-btn {
+    background: rgba(124, 58, 237, 0.3) !important;
+    color: #ffffff !important;
+}
+
+body.light-mode .copy-btn:hover {
+    background: rgba(124, 58, 237, 0.5) !important;
+}
+
+/* 하이라이트 박스 - 라이트 모드 */
 body.light-mode .highlight-box,
-body.light-mode .concept-box {
-    background: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
-}
-
-body.light-mode .highlight-box h4,
-body.light-mode .concept-box h4 {
-    color: #1e293b !important;
-}
-
-body.light-mode .use-case-grid .use-case-item {
+body.light-mode .concept-box,
+body.light-mode .feature-card {
     background: #f8fafc !important;
     border: 1px solid #e2e8f0 !important;
 }
 
-body.light-mode .use-case-item h4 {
+body.light-mode .highlight-box h4,
+body.light-mode .concept-box h4,
+body.light-mode .feature-card h4 {
     color: #7c3aed !important;
 }
 
-body.light-mode .use-case-item p {
+body.light-mode .highlight-box p,
+body.light-mode .concept-box p,
+body.light-mode .feature-card p,
+body.light-mode .feature-card li {
+    color: #334155 !important;
+}
+
+/* 유스케이스 그리드 - 라이트 모드 */
+body.light-mode .use-case-grid .use-case-item,
+body.light-mode .use-case-item {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+body.light-mode .use-case-item h4,
+body.light-mode .use-case-item .title {
+    color: #7c3aed !important;
+}
+
+body.light-mode .use-case-item p,
+body.light-mode .use-case-item .desc {
     color: #475569 !important;
 }
 
+/* 경고 박스 - 라이트 모드 */
+body.light-mode .warning-box,
 body.light-mode .warning-item {
-    background: rgba(251, 191, 36, 0.1) !important;
-    border-left-color: #f59e0b !important;
+    background: rgba(251, 191, 36, 0.15) !important;
+    border: 1px solid rgba(245, 158, 11, 0.4) !important;
 }
 
+body.light-mode .warning-box .warning-title,
+body.light-mode .warning-item .warning-title {
+    color: #b45309 !important;
+}
+
+body.light-mode .warning-box p,
 body.light-mode .warning-item p {
     color: #92400e !important;
 }
 
+/* 대화 탭 - 라이트 모드 */
 body.light-mode .conv-tab {
     background: #f1f5f9 !important;
     color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+body.light-mode .conv-tab:hover {
+    background: #e2e8f0 !important;
+    color: #1e293b !important;
 }
 
 body.light-mode .conv-tab.active {
     background: #7c3aed !important;
     color: white !important;
+    border-color: #7c3aed !important;
 }
 
-body.light-mode .conv-content {
+/* 대화 콘텐츠 - 라이트 모드 */
+body.light-mode .conv-content,
+body.light-mode .conversation-box {
     background: #f8fafc !important;
     border: 1px solid #e2e8f0 !important;
+    border-left: 3px solid #7c3aed !important;
 }
 
-body.light-mode .conv-content p {
+body.light-mode .conv-content p,
+body.light-mode .conversation-box .text {
     color: #334155 !important;
 }
 
-body.light-mode .related-term-link {
+body.light-mode .conversation-box .speaker {
+    color: #7c3aed !important;
+}
+
+/* 관련 용어 태그 - 라이트 모드 */
+body.light-mode .related-term-link,
+body.light-mode .related-term-tag {
     background: #f1f5f9 !important;
     color: #7c3aed !important;
     border: 1px solid #e2e8f0 !important;
 }
 
-body.light-mode .learn-more-item a {
+body.light-mode .related-term-link:hover,
+body.light-mode .related-term-tag:hover {
+    background: #ede9fe !important;
+    border-color: #c4b5fd !important;
+}
+
+/* 더 배우기 링크 - 라이트 모드 */
+body.light-mode .learn-more-item a,
+body.light-mode .term-section a {
     color: #7c3aed !important;
 }
 
+body.light-mode .term-section a:hover {
+    color: #5b21b6 !important;
+}
+
+/* 용어 상세 헤더 - 라이트 모드 */
 body.light-mode .term-detail-header {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
 }
 
-body.light-mode .term-detail-header h1 {
+body.light-mode .term-detail-header h1,
+body.light-mode .term-title {
     color: #1e293b !important;
+    background: linear-gradient(135deg, #1e293b, #7c3aed) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
 }
 
-body.light-mode .term-detail-header p {
-    color: #475569 !important;
+body.light-mode .term-detail-header p,
+body.light-mode .term-english {
+    color: #64748b !important;
 }
 
 body.light-mode .term-description p {
     color: #334155 !important;
 }
 
+/* 브레드크럼 - 라이트 모드 */
 body.light-mode .breadcrumb a {
     color: #7c3aed !important;
 }
 
 body.light-mode .breadcrumb span {
     color: #64748b !important;
+}
+
+body.light-mode .breadcrumb .current {
+    color: #1e293b !important;
+}
+
+/* 카테고리 배지 - 라이트 모드 */
+body.light-mode .term-category-badge {
+    background: rgba(124, 58, 237, 0.1) !important;
+    color: #7c3aed !important;
+}
+
+/* 그래프 비주얼 - 라이트 모드 */
+body.light-mode .graph-visual {
+    background: #1e293b !important;
+    color: #00f5ff !important;
+}
+
+/* 경고 리스트 - 라이트 모드 */
+body.light-mode .warning-list li {
+    background: rgba(251, 191, 36, 0.1) !important;
+    color: #92400e !important;
+}
+
+/* 리소스 리스트 - 라이트 모드 */
+body.light-mode .resource-list li {
+    border-bottom-color: #e2e8f0 !important;
+}
+
+body.light-mode .resource-list a {
+    color: #7c3aed !important;
+}
+
+body.light-mode .resource-meta {
+    color: #64748b !important;
+}
+
+/* 관련 용어 그리드 - 라이트 모드 */
+body.light-mode .related-grid .related-link {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #7c3aed !important;
+}
+
+body.light-mode .related-grid .related-link:hover {
+    background: #ede9fe !important;
+    border-color: #c4b5fd !important;
+}
+
+/* 장애 사례 - 라이트 모드 */
+body.light-mode .incident-item {
+    background: rgba(239, 68, 68, 0.05) !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+body.light-mode .incident-title {
+    color: #1e293b !important;
+}
+
+body.light-mode .incident-body p {
+    color: #475569 !important;
+}
+
+/* 퀴즈 - 라이트 모드 */
+body.light-mode .quiz-item {
+    background: rgba(99, 102, 241, 0.05) !important;
+    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+
+body.light-mode .quiz-question {
+    color: #1e293b !important;
+}
+
+body.light-mode .quiz-options label {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
+}
+
+body.light-mode .quiz-options label:hover {
+    background: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* 커뮤니티 버튼 - 라이트 모드 */
+body.light-mode .community-btn {
+    border: 1px solid currentColor !important;
+}
+
+body.light-mode .community-note {
+    color: #64748b !important;
+}
+
+/* ASCII 다이어그램 - 라이트 모드 (다크 유지) */
+body.light-mode .ascii-diagram,
+body.light-mode .scope-diagram,
+body.light-mode .annex-diagram,
+body.light-mode [class*="-diagram"] {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+    border: 1px solid #334155 !important;
+}
+
+/* 액션 버튼 - 라이트 모드 */
+body.light-mode .btn-secondary {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #475569 !important;
+}
+
+body.light-mode .btn-secondary:hover {
+    background: #f1f5f9 !important;
+    border-color: #c4b5fd !important;
+    color: #7c3aed !important;
+}
+
+/* ===== 추가 누락 클래스 - 라이트 모드 ===== */
+
+/* section-content 클래스 */
+body.light-mode .section-content,
+body.light-mode .section-content p,
+body.light-mode .section-content li,
+body.light-mode .section-content span {
+    color: #334155 !important;
+}
+
+body.light-mode .section-content ul,
+body.light-mode .section-content ol {
+    color: #334155 !important;
+}
+
+/* 대화 아이템 (고영향 AI 등에서 사용) */
+body.light-mode .conv-item {
+    background: #f8fafc !important;
+    border-left: 3px solid #7c3aed !important;
+}
+
+body.light-mode .conv-context {
+    color: #7c3aed !important;
+}
+
+body.light-mode .conv-quote {
+    color: #334155 !important;
+}
+
+/* 케이스 스터디 */
+body.light-mode .case-study {
+    background: #f8fafc !important;
+    border-left: 4px solid #7c3aed !important;
+}
+
+body.light-mode .case-study-title {
+    color: #1e293b !important;
+}
+
+body.light-mode .case-study-meta {
+    color: #64748b !important;
+}
+
+body.light-mode .case-study-content {
+    color: #334155 !important;
+}
+
+body.light-mode .case-study-impact {
+    background: rgba(124, 58, 237, 0.1) !important;
+}
+
+body.light-mode .case-study-impact strong {
+    color: #7c3aed !important;
+}
+
+/* 퀴즈 옵션 */
+body.light-mode .quiz-option {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
+}
+
+body.light-mode .quiz-option:hover {
+    border-color: #c4b5fd !important;
+    background: #ede9fe !important;
+}
+
+body.light-mode .quiz-explanation {
+    background: #f8fafc !important;
+}
+
+body.light-mode .quiz-explanation p {
+    color: #475569 !important;
+}
+
+/* 체크리스트 */
+body.light-mode .checklist-container {
+    background: #f8fafc !important;
+}
+
+body.light-mode .checklist-item {
+    border-bottom-color: #e2e8f0 !important;
+}
+
+body.light-mode .checklist-icon {
+    color: #7c3aed !important;
+}
+
+body.light-mode .checklist-text {
+    color: #334155 !important;
+}
+
+/* 코드 탭 */
+body.light-mode .code-tab {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #475569 !important;
+}
+
+body.light-mode .code-tab:hover,
+body.light-mode .code-tab.active {
+    background: rgba(124, 58, 237, 0.2) !important;
+    color: #7c3aed !important;
+    border-color: rgba(124, 58, 237, 0.3) !important;
+}
+
+/* 비교 테이블 */
+body.light-mode .comparison-table {
+    border-color: #e2e8f0 !important;
+}
+
+body.light-mode .comparison-table th {
+    background: rgba(124, 58, 237, 0.1) !important;
+    color: #7c3aed !important;
+    border-color: #e2e8f0 !important;
+}
+
+body.light-mode .comparison-table td {
+    background: #ffffff !important;
+    color: #334155 !important;
+    border-color: #e2e8f0 !important;
+}
+
+body.light-mode .comparison-table tr:hover td {
+    background: #f8fafc !important;
+}
+
+/* 더 배우기 링크 */
+body.light-mode .learn-link {
+    background: #f8fafc !important;
+    color: #475569 !important;
+}
+
+body.light-mode .learn-link:hover {
+    background: #f1f5f9 !important;
+    color: #7c3aed !important;
+}
+
+/* 난이도 배지 - 라이트 모드 */
+body.light-mode .difficulty-badge {
+    border: 1px solid currentColor !important;
+}
+
+body.light-mode .difficulty-beginner {
+    background: rgba(34, 197, 94, 0.15) !important;
+    color: #15803d !important;
+}
+
+body.light-mode .difficulty-intermediate {
+    background: rgba(59, 130, 246, 0.15) !important;
+    color: #1d4ed8 !important;
+}
+
+body.light-mode .difficulty-advanced {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #dc2626 !important;
+}
+
+/* 장애 사례 추가 스타일 */
+body.light-mode .incident-company {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #dc2626 !important;
+}
+
+body.light-mode .incident-year {
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+}
+
+body.light-mode .incident-source {
+    color: #7c3aed !important;
+}
+
+/* 역할별 색상 - 라이트 모드 */
+body.light-mode .conv-content .role-senior { color: #b45309 !important; }
+body.light-mode .conv-content .role-junior { color: #0369a1 !important; }
+body.light-mode .conv-content .role-interviewer { color: #7c3aed !important; }
+body.light-mode .conv-content .role-candidate { color: #059669 !important; }
+body.light-mode .conv-content .role-pm { color: #db2777 !important; }
+body.light-mode .conv-content .role-dba { color: #ea580c !important; }
+
+/* 퀴즈 결과 - 라이트 모드 */
+body.light-mode .quiz-result {
+    background: rgba(34, 197, 94, 0.1) !important;
+    border: 1px solid rgba(34, 197, 94, 0.3) !important;
+    color: #15803d !important;
+}
+
+/* 퀴즈 제출 버튼 - 라이트 모드 (유지) */
+body.light-mode .quiz-submit {
+    background: linear-gradient(135deg, #7c3aed, #6366f1) !important;
+    color: white !important;
+}
+
+/* 커뮤니티 버튼 색상 - 라이트 모드 */
+body.light-mode .btn-question {
+    background: rgba(59, 130, 246, 0.15) !important;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    color: #1d4ed8 !important;
+}
+
+body.light-mode .btn-suggest {
+    background: rgba(34, 197, 94, 0.15) !important;
+    border: 1px solid rgba(34, 197, 94, 0.3) !important;
+    color: #15803d !important;
+}
+
+/* 댓글 시스템 - 라이트 모드 */
+body.light-mode .comment-form textarea {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #1e293b !important;
+}
+
+body.light-mode .comment-form textarea:focus {
+    border-color: #7c3aed !important;
+}
+
+body.light-mode .comment-item {
+    background: #f8fafc !important;
+}
+
+body.light-mode .comment-author {
+    color: #7c3aed !important;
+}
+
+body.light-mode .comment-date {
+    color: #64748b !important;
+}
+
+body.light-mode .comment-content {
+    color: #334155 !important;
 }
