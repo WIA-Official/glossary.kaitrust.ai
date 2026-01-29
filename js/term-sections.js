@@ -7,9 +7,14 @@
 (function() {
     'use strict';
 
-    // ===== 코드 복사 기능 =====
+    // ===== 코드 복사 기능 (폴백 포함) =====
     window.copyCode = function(btn) {
         const codeBlock = btn.closest('.code-block');
+        if (!codeBlock) {
+            console.error('코드 블록을 찾을 수 없습니다.');
+            return;
+        }
+
         // code 태그가 없으면 pre 태그에서 텍스트 가져오기
         const codeElement = codeBlock.querySelector('code') || codeBlock.querySelector('pre');
         if (!codeElement) {
@@ -17,29 +22,62 @@
             return;
         }
         const code = codeElement.textContent;
+        const originalText = btn.textContent;
+        const originalClass = btn.className;
 
-        navigator.clipboard.writeText(code).then(() => {
-            // 성공 피드백
-            const originalText = btn.textContent;
-            const originalClass = btn.className;
-
+        // 복사 성공 시 피드백
+        function showSuccess() {
             btn.textContent = '✓ 복사됨';
             btn.classList.add('copied');
-
-            // 접근성: 스크린 리더 알림
             announceToScreenReader('코드가 클립보드에 복사되었습니다');
-
             setTimeout(() => {
                 btn.textContent = originalText;
                 btn.className = originalClass;
             }, 2000);
-        }).catch(err => {
-            console.error('복사 실패:', err);
+        }
+
+        // 복사 실패 시 피드백
+        function showError() {
             btn.textContent = '✗ 실패';
             setTimeout(() => {
-                btn.textContent = '복사';
+                btn.textContent = originalText;
             }, 2000);
-        });
+        }
+
+        // 폴백: execCommand 사용 (구형 브라우저 지원)
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0;';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                if (successful) {
+                    showSuccess();
+                } else {
+                    showError();
+                }
+            } catch (err) {
+                document.body.removeChild(textarea);
+                console.error('execCommand 복사 실패:', err);
+                showError();
+            }
+        }
+
+        // Clipboard API 시도 (우선), 실패 시 폴백
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(showSuccess).catch(err => {
+                console.warn('Clipboard API 실패, 폴백 사용:', err);
+                fallbackCopy(code);
+            });
+        } else {
+            // Clipboard API 미지원 시 폴백
+            fallbackCopy(code);
+        }
     };
 
     // ===== 대화 탭 전환 =====
