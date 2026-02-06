@@ -182,9 +182,9 @@ class KaiTrustAI {
     }
 
     bindEvents() {
-        document.getElementById('ktAiFab').onclick = () => this.open();
-        document.getElementById('ktThemeToggle').onclick = () => this.toggleTheme();
-        document.getElementById('ktFullscreenBtn').onclick = () => this.toggleFullscreen();
+        const fabBtn = document.getElementById('ktAiFab'); if(fabBtn) fabBtn.onclick = () => this.open();
+        const themeBtn = document.getElementById('ktThemeToggle'); if(themeBtn) themeBtn.onclick = () => this.toggleTheme();
+        const fullscreenBtn = document.getElementById('ktFullscreenBtn'); if(fullscreenBtn) fullscreenBtn.onclick = () => this.toggleFullscreen();
         
         this.initDrag();
         this.initResize();
