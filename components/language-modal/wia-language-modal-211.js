@@ -12,6 +12,36 @@ class WIALanguageModal {
         this.currentLang = localStorage.getItem('kaitrust_language') || document.documentElement.lang || 'en';
         this.modalId = 'wiaLanguageModal211';
         this.initialized = false;
+        // All 212 fully translated languages
+        this.translatedLangs = [
+            'af','ak','am','an','ar','arn','as','ast','aue','ay','az',
+            'be','bg','bi','bm','bn','bo','br','bs',
+            'ca','cdo','chk','chr','ckb','co','cs','cy',
+            'da','de','djk','dz',
+            'ee','el','eml','en','en-AU','en-CA','en-GB','en-NZ','en-US','eo','es','es-AR','es-CL','es-CO','es-MX','es-PE','et','eu','ext',
+            'fa','ff','fi','fil','fj','fo','fr','fr-CA','fur',
+            'ga','gan','gd','gil','gl','gn','gsw','gu','gv',
+            'ha','hak','haw','he','hi','hr','hsn','ht','hu','hy',
+            'ia','id','ig','is','it','iu','izh',
+            'ja','jbo',
+            'ka','kg','kk','km','kn','ko','kos','krl','ks','ku','kw','ky',
+            'la','lad','lb','lg','lij','liv','lmo','ln','lo','lt','lv',
+            'me','mg','mh','mi','mk','ml','mn','mr','ms','mt','mwl','my',
+            'nah','nan','nap','nau','ne','niu','nl','no','nr','nso','ny',
+            'oc','om','or',
+            'pa','pap','pau','pgl','pl','pms','pon','ps','pt','pt-BR',
+            'qu',
+            'rar','rgn','rm','rn','ro','ru','rw',
+            'sa','sa-Deva','sc','scn','sd','sg','si','sk','sl','sm','sn','so','sq','sr','srd','srn','ss','st','sv','sw',
+            'ta','te','tg','th','ti','tk','tkl','tl','tn','to','tok','tpi','tr','ts','tvl','tw','ty',
+            'ug','uk','ur','uz',
+            've','vec','vi','vo','vot','vro',
+            'wa','wo','wuu',
+            'xh',
+            'yap','yo','yue',
+            'zh-CN','zh-HK','zh-TW','zu'
+        ];
+        this.translatedLangsSet = new Set([...this.translatedLangs, 'zh']); // zh alias
     }
 
     async init() {
@@ -180,7 +210,7 @@ class WIALanguageModal {
             .wia-modal-body {
                 padding: 35px 35px !important;
                 overflow-y: auto;
-                max-height: calc(95vh - 350px);
+                max-height: 440px;  /* 4행만 표시, 나머지 스크롤 */
             }
             
             .wia-lang-grid {
@@ -218,11 +248,40 @@ class WIALanguageModal {
                 .wia-lang-grid {
                     grid-template-columns: repeat(2, 1fr);
                 }
+                .wia-modal-body {
+                    max-height: 280px !important;  /* 3행만 표시 */
+                    padding: 20px !important;
+                }
+                /* 헤더 컴팩트 */
+                .wia-modal-header {
+                    padding: 12px 15px !important;
+                    border-radius: 16px 16px 0 0 !important;
+                }
+                .wia-modal-header h2 {
+                    font-size: 1.4rem !important;
+                }
+                .wia-modal-header p {
+                    font-size: 0.75rem !important;
+                    margin: 3px 0 0 0 !important;
+                }
+                .wia-modal-subtitle {
+                    font-size: 0.65rem !important;
+                }
+                /* Showing 211 languages 숨김 */
+                .wia-lang-count {
+                    display: none !important;
+                }
+                /* 검색창 컴팩트 */
+                .wia-lang-search {
+                    padding: 12px !important;
+                    margin-bottom: 12px !important;
+                    font-size: 0.9rem !important;
+                }
             }
             
             .wia-lang-item {
                 color: #1f2937 !important;  /* 텍스트 색상 명시 */
-                padding: 15px !important;  /* 더 큰 패딩 */
+                padding: 12px !important;  /* 더 큰 패딩 */
                 background: white !important;
                 border: 2px solid #d1d5db;  /* 테두리 추가 */
                 border-radius: 12px;
@@ -231,7 +290,7 @@ class WIALanguageModal {
                 transition: all 0.2s;
                 font-size: 1.1rem;  /* 더 큰 폰트! */
                 font-weight: 500;
-                min-height: 60px;  /* 최소 높이 */
+                min-height: 45px;  /* 최소 높이 */
                 display: flex;
                 align-items: center !important;
                 /* padding-top: 3vh; */ /* 제거 - 중앙 정렬 */
@@ -839,23 +898,43 @@ class WIALanguageModal {
     renderGrid(languages) {
         const grid = document.getElementById('wiaLangGrid');
         const count = document.getElementById('wiaLangCount');
-        
+
         if (!grid) return;
-        
+
         const langArray = Object.entries(languages);
         count.textContent = `Showing ${langArray.length} languages`;
-        
-        grid.innerHTML = langArray.map(([code, lang]) => {
+
+        // Reorder: translated languages first, then the rest
+        const sorted = [];
+        const usedCodes = new Set();
+
+        // Add translated languages first (in defined order)
+        for (const code of this.translatedLangs) {
+            const entry = langArray.find(([c]) => c === code);
+            if (entry) {
+                sorted.push(entry);
+                usedCodes.add(code);
+            }
+        }
+
+        // Add remaining languages in original order
+        for (const entry of langArray) {
+            if (!usedCodes.has(entry[0])) {
+                sorted.push(entry);
+            }
+        }
+
+        grid.innerHTML = sorted.map(([code, lang]) => {
             const name = lang.native || lang.name || code;
             const isSelected = code === this.currentLang;
             return `
-                <div class="wia-lang-item ${isSelected ? 'selected' : ''}" 
+                <div class="wia-lang-item ${isSelected ? 'selected' : ''}"
                      data-code="${code}">
                     ${name}
                 </div>
             `;
         }).join('');
-        
+
         grid.querySelectorAll('.wia-lang-item').forEach(item => {
             item.addEventListener('click', () => {
                 this.selectLanguage(item.dataset.code);
